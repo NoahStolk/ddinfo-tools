@@ -259,7 +259,13 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+# CoreBase folder links
 DevilDaggersWebsite/wwwroot/css-src
 DevilDaggersWebsite/wwwroot/js-src
+DevilDaggersWebsite/Pages/SharedPartials
+
+# Minified content
 DevilDaggersWebsite/wwwroot/css/site.min.css
 DevilDaggersWebsite/wwwroot/js/site.min.js
+
