@@ -269,3 +269,5 @@ DevilDaggersWebsite/Pages/SharedPartials
 DevilDaggersWebsite/wwwroot/css/site.min.css
 DevilDaggersWebsite/wwwroot/js/site.min.js
 
+# Publishing
+published/
