@@ -271,3 +271,6 @@ DevilDaggersWebsite/wwwroot/js/site.min.js
 
 # Publishing
 published/
+
+# User files
+DevilDaggersWebsite/wwwroot/user
