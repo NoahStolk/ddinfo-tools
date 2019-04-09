@@ -272,5 +272,5 @@ DevilDaggersWebsite/wwwroot/js/site.min.js
 # Publishing
 published/
 
-# User files
-DevilDaggersWebsite/wwwroot/user
+# User files (just remember to never upload these files and regularly get them from the server to update them here)
+#DevilDaggersWebsite/wwwroot/user
