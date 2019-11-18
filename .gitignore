@@ -274,3 +274,4 @@ published/
 
 # User files (just remember to never upload these files and regularly get them from the server to update them here)
 #DevilDaggersWebsite/wwwroot/user
+*.botToken
