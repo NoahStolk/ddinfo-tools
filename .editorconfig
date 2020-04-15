@@ -56,6 +56,21 @@ dotnet_style_prefer_is_null_check_over_reference_equality_method         = true 
 dotnet_naming_style.instance_field_style.capitalization                  = camel_case
 dotnet_naming_style.pascal_case_style.capitalization                     = pascal_case
 
+# Use PascalCase with I prefix for interfaces
+dotnet_naming_symbols.interface_type_symbol.applicable_kinds             = interface
+dotnet_naming_style.interface_type_style.capitalization                  = pascal_case
+dotnet_naming_style.interface_type_style.required_prefix                 = I
+dotnet_naming_rule.interface_types_must_be_prefixed_with_I.severity      = warning
+dotnet_naming_rule.interface_types_must_be_prefixed_with_I.symbols       = interface_type_symbol
+dotnet_naming_rule.interface_types_must_be_prefixed_with_I.style         = interface_type_style
+
+# Use camelCase for parameters
+dotnet_naming_symbols.parameter_symbol.applicable_kinds                  = parameter
+dotnet_naming_style.parameter_style.capitalization                       = camel_case
+dotnet_naming_rule.parameters_are_camel_case.severity                    = warning
+dotnet_naming_rule.parameters_are_camel_case.symbols                     = parameter_symbol
+dotnet_naming_rule.parameters_are_camel_case.style                       = parameter_style
+
 # Use PascalCase for constant fields with an accessibility of internal or higher
 dotnet_naming_rule.constant_fields_should_be_pascal_case.severity        = warning
 dotnet_naming_rule.constant_fields_should_be_pascal_case.style           = pascal_case_style
