@@ -1,4 +1,4 @@
-# CSharp.editorconfig 2020-04-06
+# CSharp.editorconfig 2020-07-14
 root = true
 
 # All files
@@ -70,6 +70,13 @@ dotnet_naming_style.parameter_style.capitalization                       = camel
 dotnet_naming_rule.parameters_are_camel_case.severity                    = warning
 dotnet_naming_rule.parameters_are_camel_case.symbols                     = parameter_symbol
 dotnet_naming_rule.parameters_are_camel_case.style                       = parameter_style
+
+# Use PascalCase for methods
+dotnet_naming_symbols.method_symbol.applicable_kinds                     = method
+dotnet_naming_style.method_style.capitalization                          = pascal_case
+dotnet_naming_rule.methods_are_pascal_case.severity                      = warning
+dotnet_naming_rule.methods_are_pascal_case.symbols                       = method_symbol
+dotnet_naming_rule.methods_are_pascal_case.style                         = method_style
 
 # Use PascalCase for constant fields with an accessibility of internal or higher
 dotnet_naming_rule.constant_fields_should_be_pascal_case.severity        = warning
