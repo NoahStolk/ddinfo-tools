@@ -275,3 +275,6 @@ published/
 # Discord bot secret
 *.botToken
 DevilDaggersWebsite/Secrets.cs
+
+# Database backups
+Database Exports/
