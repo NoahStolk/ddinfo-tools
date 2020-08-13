@@ -168,6 +168,12 @@ csharp_space_between_parentheses                                         = false
 csharp_preserve_single_line_blocks                                       = true
 csharp_preserve_single_line_statements                                   = true
 
+# CSC warning suppressions when XML documentation is enabled
+
+# CS1591: Missing XML comment for publicly visible type or member.
+
+dotnet_diagnostic.CS1591.severity = none
+
 # FxCopAnalyzers suppressions
 
 # CA1031: Modify method to catch a more specific allowed exception type, or rethrow the exception.
