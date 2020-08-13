@@ -167,3 +167,65 @@ csharp_space_between_parentheses                                         = false
 # Wrapping preferences
 csharp_preserve_single_line_blocks                                       = true
 csharp_preserve_single_line_statements                                   = true
+
+# FxCopAnalyzers suppressions
+
+# CA1031: Modify method to catch a more specific allowed exception type, or rethrow the exception.
+# CA1303: Method passes a literal string as parameter. Retrieve the string(s) from a resource table instead.
+# CA1308: Normalize strings to uppercase.
+
+dotnet_diagnostic.CA1031.severity = none
+dotnet_diagnostic.CA1303.severity = none
+dotnet_diagnostic.CA1308.severity = none
+
+# StyleCopAnalyzers suppressions
+
+# SA1000: The keyword 'new' should be followed by a space.
+# SA1027: Replace tabs with spaces.
+# SA1101: Prefix local calls with this.
+# SA1124: Do not use regions.
+# SA1200: Using directive should appear within a namespace declaration.
+# SA1201: Elements should appear in the correct order.
+# SA1202: Elements should be ordered by access.
+# SA1204: Static members should appear before non-static members.
+# SA1208: Using directive for 'System' should appear first.
+# SA1214: Readonly fields should appear before non-readonly fields.
+# SA1303: Const field names should begin with upper-case letter.
+# SA1311: Static readonly fields should begin with upper-case letter.
+# SA1407: Arithmetic expressions should declare precedence.
+# SA1408: Conditional expressions should declare precedence.
+# SA1503: Braces should not be omitted.
+# SA1516: Elements should be separated by blank line.
+# SA1600: Elements should be documented.
+# SA1601: Partial elements should be documented.
+# SA1602: Enumeration items should be documented.
+# SA1611: Element parameters value should be documented.
+# SA1615: Element return value should be documented.
+# SA1623: The property's documentation summary text should begin with: 'Gets'.
+# SA1633: The file header is missing or not located at the top of the file.
+# SA1642: Constructor summary documentation should begin with standard text.
+
+dotnet_diagnostic.SA1000.severity = none
+dotnet_diagnostic.SA1027.severity = none
+dotnet_diagnostic.SA1101.severity = none
+dotnet_diagnostic.SA1124.severity = none
+dotnet_diagnostic.SA1200.severity = none
+#dotnet_diagnostic.SA1201.severity = none
+dotnet_diagnostic.SA1202.severity = none
+dotnet_diagnostic.SA1204.severity = none
+dotnet_diagnostic.SA1208.severity = none
+dotnet_diagnostic.SA1214.severity = none
+dotnet_diagnostic.SA1303.severity = none
+dotnet_diagnostic.SA1311.severity = none
+dotnet_diagnostic.SA1407.severity = none
+dotnet_diagnostic.SA1408.severity = none
+dotnet_diagnostic.SA1503.severity = none
+dotnet_diagnostic.SA1516.severity = none
+dotnet_diagnostic.SA1600.severity = none
+dotnet_diagnostic.SA1601.severity = none
+dotnet_diagnostic.SA1602.severity = none
+dotnet_diagnostic.SA1611.severity = none
+dotnet_diagnostic.SA1615.severity = none
+dotnet_diagnostic.SA1623.severity = none
+dotnet_diagnostic.SA1633.severity = none
+dotnet_diagnostic.SA1642.severity = none
