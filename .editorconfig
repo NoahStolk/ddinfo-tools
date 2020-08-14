@@ -184,6 +184,12 @@ dotnet_diagnostic.CA1031.severity = none
 dotnet_diagnostic.CA1303.severity = none
 dotnet_diagnostic.CA1308.severity = none
 
+# FxCopAnalyzers suppressions with nullable reference context enabled
+
+# CA1062: Validate arguments of public methods (conflicts with nullable reference context).
+
+dotnet_diagnostic.CA1062.severity = none
+
 # StyleCopAnalyzers suppressions
 
 # SA1000: The keyword 'new' should be followed by a space.
