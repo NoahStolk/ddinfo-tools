@@ -93,7 +93,7 @@ dotnet_naming_symbols.static_fields.applicable_accessibilities           = publi
 dotnet_naming_symbols.static_fields.applicable_kinds                     = field
 dotnet_naming_symbols.static_fields.required_modifiers                   = static
 
-# Use camelCase for instance fields
+# Use camelCase with _ prefix for instance fields
 dotnet_naming_rule.instance_fields_should_be_camel_case.severity         = warning
 dotnet_naming_rule.instance_fields_should_be_camel_case.style            = instance_field_style
 dotnet_naming_rule.instance_fields_should_be_camel_case.symbols          = instance_fields
@@ -102,6 +102,7 @@ dotnet_naming_symbols.instance_fields.applicable_kinds                   = field
 dotnet_naming_rule.public_members_must_be_capitalized.severity           = warning
 dotnet_naming_rule.public_members_must_be_capitalized.style              = first_word_upper_case_style
 dotnet_naming_style.first_word_upper_case_style.capitalization           = first_word_upper
+dotnet_naming_style.instance_field_style.required_prefix                 = _
 dotnet_naming_symbols.public_symbols.applicable_accessibilities          = public
 dotnet_naming_symbols.public_symbols.applicable_kinds                    = property,method,field,event,delegate
 dotnet_naming_symbols.public_symbols.required_modifiers                  = readonly
@@ -205,6 +206,7 @@ dotnet_diagnostic.CA1062.severity = none
 # SA1208: Using directive for 'System' should appear first.
 # SA1214: Readonly fields should appear before non-readonly fields.
 # SA1303: Const field names should begin with upper-case letter.
+# SA1309: Field names should not begin with underscore
 # SA1311: Static readonly fields should begin with upper-case letter.
 # SA1407: Arithmetic expressions should declare precedence.
 # SA1408: Conditional expressions should declare precedence.
@@ -230,6 +232,7 @@ dotnet_diagnostic.SA1204.severity = none
 dotnet_diagnostic.SA1208.severity = none
 dotnet_diagnostic.SA1214.severity = none
 dotnet_diagnostic.SA1303.severity = none
+dotnet_diagnostic.SA1309.severity = none
 dotnet_diagnostic.SA1311.severity = none
 dotnet_diagnostic.SA1407.severity = none
 dotnet_diagnostic.SA1408.severity = none
