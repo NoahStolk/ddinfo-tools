@@ -270,7 +270,9 @@ DevilDaggersWebsite/publish.bat
 
 # Discord bot secret
 *.botToken
-DevilDaggersWebsite/Secrets.cs
+
+# Custom leaderboards secret
+DevilDaggersWebsite.Core/Secrets.cs
 
 # Database backups
 Database Exports/
