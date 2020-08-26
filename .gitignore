@@ -265,7 +265,7 @@ DevilDaggersWebsite/wwwroot/css/site.min.css
 DevilDaggersWebsite/wwwroot/js/site.min.js
 
 # Publishing
-published/
+.published/
 publish.bat
 
 # Discord bot secret
