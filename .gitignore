@@ -261,8 +261,8 @@ __pycache__/
 *.pyc
 
 # Minified content
-DevilDaggersWebsite/wwwroot/css/site.min.css
-DevilDaggersWebsite/wwwroot/js/site.min.js
+DevilDaggersWebsite.Razor/wwwroot/css/site.min.css
+DevilDaggersWebsite.Razor/wwwroot/js/site.min.js
 
 # Publishing
 .published/
