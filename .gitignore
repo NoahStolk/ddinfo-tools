@@ -272,7 +272,7 @@ publish.bat
 *.botToken
 
 # Custom leaderboards secret
-DevilDaggersWebsite.Core/Secrets.cs
+DevilDaggersWebsite/Secrets.cs
 
 # Database backups
 Database Exports/
