@@ -264,10 +264,6 @@ __pycache__/
 DevilDaggersWebsite.Razor/wwwroot/css/site.min.css
 DevilDaggersWebsite.Razor/wwwroot/js/site.min.js
 
-# Publishing
-.published/
-publish.bat
-
 # Discord bot secret
 *.botToken
 
