@@ -272,3 +272,6 @@ DevilDaggersWebsite/Secrets.cs
 
 # Database backups
 Database Exports/
+
+# Mods
+DevilDaggersWebsite.Razor/wwwroot/mods
