@@ -274,5 +274,6 @@ DevilDaggersWebsite/Secrets.cs
 Database Exports/
 
 # Content
+DevilDaggersWebsite.Razor/wwwroot/leaderboard-statistics
 DevilDaggersWebsite.Razor/wwwroot/mods
 DevilDaggersWebsite.Razor/wwwroot/spawnsets
