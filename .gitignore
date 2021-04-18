@@ -273,5 +273,6 @@ DevilDaggersWebsite/Secrets.cs
 # Database backups
 Database Exports/
 
-# Mods
+# Content
 DevilDaggersWebsite.Razor/wwwroot/mods
+DevilDaggersWebsite.Razor/wwwroot/spawnsets
