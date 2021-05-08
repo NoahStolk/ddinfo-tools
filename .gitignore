@@ -276,5 +276,6 @@ Database Exports/
 # Content
 DevilDaggersWebsite.Razor/wwwroot/leaderboard-statistics
 DevilDaggersWebsite.Razor/wwwroot/mods
+DevilDaggersWebsite.Razor/wwwroot/mod-archive-cache
 DevilDaggersWebsite.Razor/wwwroot/mod-screenshots
 DevilDaggersWebsite.Razor/wwwroot/spawnsets
