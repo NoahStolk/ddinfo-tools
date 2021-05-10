@@ -242,12 +242,14 @@ dotnet_diagnostic.SA1011.severity                                        = none
 # SonarAnalyzers suppressions
 
 # S112: 'System.Exception' should not be thrown by user code.
+# S1121: Extract the assignment from this expression. (C# 9)
 # S1144: Unused private types or members should be removed. (C# 9)
 # S2368: Make this method private or simplify its parameters to not use multidimensional arrays.
 # S3358: Extract this nested ternary operation into an independent statement.
 # S3453: This class can't be instantiated; make its constructor 'public'. (C# 9)
 
 dotnet_diagnostic.S112.severity                                          = none
+dotnet_diagnostic.S1121.severity                                         = none
 dotnet_diagnostic.S1144.severity                                         = none
 dotnet_diagnostic.S2368.severity                                         = none
 dotnet_diagnostic.S3358.severity                                         = none
