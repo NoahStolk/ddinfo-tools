@@ -281,5 +281,5 @@ DevilDaggersWebsite.Razor/wwwroot/mod-screenshots
 DevilDaggersWebsite.Razor/wwwroot/spawnsets
 
 # Tailwind
-DevilDaggersWebsite.BlazorWasm/Client/wwwroot/css/tailwind.css
-DevilDaggersWebsite.BlazorWasm/Client/wwwroot/css/tailwind.css.map
+DevilDaggersWebsite.BlazorWasm/Client/wwwroot/tailwind.css
+DevilDaggersWebsite.BlazorWasm/Client/wwwroot/tailwind.css.map
