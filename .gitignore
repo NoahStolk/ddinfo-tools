@@ -269,6 +269,7 @@ DevilDaggersWebsite.Razor/wwwroot/js/site.min.js
 
 # Custom leaderboards secret
 DevilDaggersWebsite/Secrets.cs
+DevilDaggersWebsite.BlazorWasm/Server/Secrets.cs
 
 # Database backups
 Database Exports/
