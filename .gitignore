@@ -269,7 +269,7 @@ DevilDaggersWebsite.Razor/wwwroot/js/site.min.js
 
 # Custom leaderboards secret
 DevilDaggersWebsite/Secrets.cs
-DevilDaggersWebsite.BlazorWasm/Server/Secrets.cs
+DevilDaggersInfo.Web.BlazorWasm.Server/Secrets.cs
 
 # Database backups
 Database Exports/
@@ -280,12 +280,12 @@ DevilDaggersWebsite.Razor/wwwroot/mods
 DevilDaggersWebsite.Razor/wwwroot/mod-archive-cache
 DevilDaggersWebsite.Razor/wwwroot/mod-screenshots
 DevilDaggersWebsite.Razor/wwwroot/spawnsets
-DevilDaggersWebsite.BlazorWasm/Server/Data/LeaderboardStatistics
-DevilDaggersWebsite.BlazorWasm/Server/Data/Mods
-DevilDaggersWebsite.BlazorWasm/Server/Data/ModArchiveCache
-DevilDaggersWebsite.BlazorWasm/Server/Data/ModScreenshots
-DevilDaggersWebsite.BlazorWasm/Server/Data/Spawnsets
+DevilDaggersInfo.Web.BlazorWasm.Server/Data/LeaderboardStatistics
+DevilDaggersInfo.Web.BlazorWasm.Server/Data/Mods
+DevilDaggersInfo.Web.BlazorWasm.Server/Data/ModArchiveCache
+DevilDaggersInfo.Web.BlazorWasm.Server/Data/ModScreenshots
+DevilDaggersInfo.Web.BlazorWasm.Server/Data/Spawnsets
 
 # Tailwind
-DevilDaggersWebsite.BlazorWasm/Client/wwwroot/tailwind.css
-DevilDaggersWebsite.BlazorWasm/Client/wwwroot/tailwind.css.map
+DevilDaggersInfo.Web.BlazorWasm.Client/wwwroot/tailwind.css
+DevilDaggersInfo.Web.BlazorWasm.Client/wwwroot/tailwind.css.map
