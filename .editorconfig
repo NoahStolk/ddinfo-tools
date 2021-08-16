@@ -190,6 +190,7 @@ dotnet_diagnostic.CS1591.severity                                        = none
 # SA1214: Readonly fields should appear before non-readonly fields.
 # SA1303: Const field names should begin with upper-case letter.
 # SA1309: Field should not begin with an underscore.
+# SA1310: Field should not contain an underscore.
 # SA1311: Static readonly fields should begin with upper-case letter.
 # SA1407: Arithmetic expressions should declare precedence.
 # SA1408: Conditional expressions should declare precedence.
@@ -217,6 +218,7 @@ dotnet_diagnostic.SA1208.severity                                        = none
 dotnet_diagnostic.SA1214.severity                                        = none
 dotnet_diagnostic.SA1303.severity                                        = none
 dotnet_diagnostic.SA1309.severity                                        = none
+dotnet_diagnostic.SA1310.severity                                        = none
 dotnet_diagnostic.SA1311.severity                                        = none
 dotnet_diagnostic.SA1407.severity                                        = none
 dotnet_diagnostic.SA1408.severity                                        = none
@@ -241,7 +243,8 @@ dotnet_diagnostic.SA1011.severity                                        = none
 
 # SonarAnalyzers suppressions
 
-# S112: 'System.Exception' should not be thrown by user code.
+# S101:  Rename class to match pascal case naming rules.
+# S112:  'System.Exception' should not be thrown by user code.
 # S1121: Extract the assignment from this expression. (C# 9)
 # S1135: Complete the task associated to this 'TODO' comment.
 # S1144: Unused private types or members should be removed. (C# 9)
@@ -250,6 +253,7 @@ dotnet_diagnostic.SA1011.severity                                        = none
 # S3453: This class can't be instantiated; make its constructor 'public'. (C# 9)
 # S3903: Move class into a named namespace. (C# 10)
 
+dotnet_diagnostic.S101.severity                                          = none
 dotnet_diagnostic.S112.severity                                          = none
 dotnet_diagnostic.S1121.severity                                         = none
 dotnet_diagnostic.S1135.severity                                         = suggestion
