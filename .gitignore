@@ -275,11 +275,13 @@ DevilDaggersInfo.Web.BlazorWasm.Server/Secrets.cs
 Database Exports/
 
 # Content
+DevilDaggersWebsite.Razor/wwwroot/custom-entry-replays
 DevilDaggersWebsite.Razor/wwwroot/leaderboard-statistics
 DevilDaggersWebsite.Razor/wwwroot/mods
 DevilDaggersWebsite.Razor/wwwroot/mod-archive-cache
 DevilDaggersWebsite.Razor/wwwroot/mod-screenshots
 DevilDaggersWebsite.Razor/wwwroot/spawnsets
+DevilDaggersInfo.Web.BlazorWasm.Server/Data/CustomEntryReplays
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/LeaderboardStatistics
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/Mods
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/ModArchiveCache
