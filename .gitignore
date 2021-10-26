@@ -269,18 +269,17 @@ __pycache__/
 
 # Custom leaderboards secret
 *Secrets.cs
-DevilDaggersInfo.Web.BlazorWasm.Server/Secrets.cs
 
 # Database backups
 Database Exports/
 
 # Content
-*DevilDaggersWebsite.Razor/wwwroot/custom-entry-replays
-*DevilDaggersWebsite.Razor/wwwroot/leaderboard-statistics
-*DevilDaggersWebsite.Razor/wwwroot/mods
-*DevilDaggersWebsite.Razor/wwwroot/mod-archive-cache
-*DevilDaggersWebsite.Razor/wwwroot/mod-screenshots
-*DevilDaggersWebsite.Razor/wwwroot/spawnsets
+*/**/wwwroot/custom-entry-replays
+*/**/wwwroot/leaderboard-statistics
+*/**/wwwroot/mods
+*/**/wwwroot/mod-archive-cache
+*/**/wwwroot/mod-screenshots
+*/**/wwwroot/spawnsets
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/CustomEntryReplays
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/LeaderboardStatistics
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/Mods
