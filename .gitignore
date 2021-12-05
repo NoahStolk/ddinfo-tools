@@ -283,12 +283,14 @@ Database Exports/
 */**/wwwroot/mod-archive-cache
 */**/wwwroot/mod-screenshots
 */**/wwwroot/spawnsets
+*/**/wwwroot/tools
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/CustomEntryReplays
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/LeaderboardStatistics
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/Mods
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/ModArchiveCache
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/ModScreenshots
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/Spawnsets
+DevilDaggersInfo.Web.BlazorWasm.Server/Data/Tools
 
 # Tailwind
 DevilDaggersInfo.Web.BlazorWasm.Client/wwwroot/tailwind.css
