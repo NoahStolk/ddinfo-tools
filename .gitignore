@@ -295,3 +295,6 @@ DevilDaggersInfo.Web.BlazorWasm.Server/Data/Tools
 # Tailwind
 DevilDaggersInfo.Web.BlazorWasm.Client/wwwroot/tailwind.css
 DevilDaggersInfo.Web.BlazorWasm.Client/wwwroot/tailwind.css.map
+
+# Data protection
+DevilDaggersInfo.Web.BlazorWasm.Server/keys
