@@ -264,8 +264,9 @@ __pycache__/
 *site.min.css
 *site.min.js
 
-# Production settings
+# App settings
 appsettings.json
+appsettings.Development.json
 
 # Discord bot secret
 *.botToken
