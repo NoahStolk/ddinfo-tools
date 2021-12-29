@@ -278,6 +278,7 @@ Database Exports/
 
 # Content
 */**/wwwroot/custom-entry-replays
+*/**/wwwroot/leaderboard-history
 */**/wwwroot/leaderboard-statistics
 */**/wwwroot/mods
 */**/wwwroot/mod-archive-cache
@@ -285,6 +286,7 @@ Database Exports/
 */**/wwwroot/spawnsets
 */**/wwwroot/tools
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/CustomEntryReplays
+DevilDaggersInfo.Web.BlazorWasm.Server/Data/LeaderboardHistory
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/LeaderboardStatistics
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/Mods
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/ModArchiveCache
