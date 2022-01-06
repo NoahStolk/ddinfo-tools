@@ -268,24 +268,10 @@ __pycache__/
 appsettings.json
 appsettings.Development.json
 
-# Discord bot secret
-*.botToken
-
-# Custom leaderboards secret
-*Secrets.cs
-
 # Database backups
 Database Exports/
 
 # Content
-*/**/wwwroot/custom-entry-replays
-*/**/wwwroot/leaderboard-history
-*/**/wwwroot/leaderboard-statistics
-*/**/wwwroot/mods
-*/**/wwwroot/mod-archive-cache
-*/**/wwwroot/mod-screenshots
-*/**/wwwroot/spawnsets
-*/**/wwwroot/tools
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/CustomEntryReplays
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/LeaderboardHistory
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/LeaderboardStatistics
