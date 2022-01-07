@@ -1,12 +1,14 @@
 # DevilDaggersInfo
 
-DevilDaggersInfo is a website created specifically for the game Devil Daggers. It is hosted on [devildaggers.info](https://devildaggers.info/).
+DevilDaggersInfo consists of a website and some tools created specifically for the game Devil Daggers. The website is hosted on [devildaggers.info](https://devildaggers.info/).
 
-Special thanks to the community for all the support throughout the years, and to the developer for making the game, as well as continuing to update the game to make working with its internals a lot easier.
+Special thanks to the community for all the support throughout the years, and to the developer for making the game, as well as continuing to update the game to make working with its internals a lot easier! It has been a lot of fun.
+
+The project is written in C# and currently runs on .NET 6.0. The goal is to rewrite everything to be cross-platform, which means eventually replacing all the other Devil Daggers related repositories such as the (currently Windows-only) editors.
 
 ## Structure Of Projects
 
-The project is written in C# and currently runs on .NET 6.0. There are multiple types of projects in the repository:
+There are multiple types of projects in the repository:
 
 ### DevilDaggersInfo.Cmd
 
