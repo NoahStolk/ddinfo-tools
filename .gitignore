@@ -278,6 +278,7 @@ DevilDaggersInfo.Web.BlazorWasm.Server/Data/LeaderboardStatistics
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/Mods
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/ModArchiveCache
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/ModScreenshots
+DevilDaggersInfo.Web.BlazorWasm.Server/Data/ResponseTimes
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/Spawnsets
 DevilDaggersInfo.Web.BlazorWasm.Server/Data/Tools
 
