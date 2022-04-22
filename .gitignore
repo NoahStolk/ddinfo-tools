@@ -272,21 +272,21 @@ appsettings.Development.json
 Database Exports/
 
 # Content
-DevilDaggersInfo.Web.Server/Data/CustomEntryReplays
-DevilDaggersInfo.Web.Server/Data/LeaderboardHistory
-DevilDaggersInfo.Web.Server/Data/LeaderboardStatistics
-DevilDaggersInfo.Web.Server/Data/Mods
-DevilDaggersInfo.Web.Server/Data/ModArchiveCache
-DevilDaggersInfo.Web.Server/Data/ModScreenshots
-DevilDaggersInfo.Web.Server/Data/ResponseTimes
-DevilDaggersInfo.Web.Server/Data/Spawnsets
-DevilDaggersInfo.Web.Server/Data/Tools/DevilDaggersAssetEditor
-DevilDaggersInfo.Web.Server/Data/Tools/DevilDaggersCustomLeaderboards
-DevilDaggersInfo.Web.Server/Data/Tools/DevilDaggersSurvivalEditor
+*/**/DevilDaggersInfo.Web.Server/Data/CustomEntryReplays
+*/**/DevilDaggersInfo.Web.Server/Data/LeaderboardHistory
+*/**/DevilDaggersInfo.Web.Server/Data/LeaderboardStatistics
+*/**/DevilDaggersInfo.Web.Server/Data/Mods
+*/**/DevilDaggersInfo.Web.Server/Data/ModArchiveCache
+*/**/DevilDaggersInfo.Web.Server/Data/ModScreenshots
+*/**/DevilDaggersInfo.Web.Server/Data/ResponseTimes
+*/**/DevilDaggersInfo.Web.Server/Data/Spawnsets
+*/**/DevilDaggersInfo.Web.Server/Data/Tools/DevilDaggersAssetEditor
+*/**/DevilDaggersInfo.Web.Server/Data/Tools/DevilDaggersCustomLeaderboards
+*/**/DevilDaggersInfo.Web.Server/Data/Tools/DevilDaggersSurvivalEditor
 
 # Tailwind
-DevilDaggersInfo.Web.Client/wwwroot/tailwind.css
-DevilDaggersInfo.Web.Client/wwwroot/tailwind.css.map
+*/**/DevilDaggersInfo.Web.Client/wwwroot/tailwind.css
+*/**/DevilDaggersInfo.Web.Client/wwwroot/tailwind.css.map
 
 # Data protection
-DevilDaggersInfo.Web.Server/keys
+*/**/DevilDaggersInfo.Web.Server/keys
