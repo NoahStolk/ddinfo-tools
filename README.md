@@ -7,12 +7,12 @@ DevilDaggersInfo consists of a website and some tools created specifically for t
 - Viewing and searching the official leaderboards
 - Viewing individual player data
 - Parsing and creating survival files (spawnsets)
-- Parsing and creating mod files (rewrite in progress)
 - Parsing and creating replay files (work in progress)
+- Parsing and creating mod files (rewrite in progress)
 - Reading game memory
 - Hosting custom spawnsets
-- Hosting mods
 - Hosting custom leaderboards
+- Hosting mods
 - Wiki pages
 - Various leaderboard statistics
 - Leaderboard history that updates every day
@@ -23,6 +23,7 @@ DevilDaggersInfo consists of a website and some tools created specifically for t
 	- [DDAE](https://github.com/NoahStolk/DevilDaggersAssetEditor)
 	- [ddstats-rust](https://github.com/lsaa/ddstats-rust)
 	- [DDLIVE](https://github.com/rotisseriechicken/DDLIVE)
+	- Devil Daggers itself
 
 And much more, all of which can be seen at [devildaggers.info](https://devildaggers.info/).
 
