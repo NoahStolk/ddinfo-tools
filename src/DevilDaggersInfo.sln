@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		NuGet.Config = NuGet.Config
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.AssetEditor.Wpf", "editor\DevilDaggersInfo.AssetEditor.Wpf\DevilDaggersInfo.AssetEditor.Wpf.csproj", "{24E952C9-B74C-4F60-9DFC-7EF30B1FB3E2}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Cmd.ExtractMod", "cmd\DevilDaggersInfo.Cmd.ExtractMod\DevilDaggersInfo.Cmd.ExtractMod.csproj", "{8A747382-EEA6-433F-B61A-85ABD0706E54}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Cmd.CreateReplay", "cmd\DevilDaggersInfo.Cmd.CreateReplay\DevilDaggersInfo.Cmd.CreateReplay.csproj", "{6BEED33C-F8F8-4884-85A3-FDD48C7C63E8}"
@@ -47,6 +49,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Wiki.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Wiki.Tests", "tests\DevilDaggersInfo.Core.Wiki.Tests\DevilDaggersInfo.Core.Wiki.Tests.csproj", "{07BBEC96-50D3-49A2-934F-AC8BB7E8BB0D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.AssetEditor", "razor\DevilDaggersInfo.Razor.Core.AssetEditor\DevilDaggersInfo.Razor.Core.AssetEditor.csproj", "{620FA9AC-8E7E-42AF-B145-28FBB728EA92}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.CanvasChart", "razor\DevilDaggersInfo.Razor.Core.CanvasChart\DevilDaggersInfo.Razor.Core.CanvasChart.csproj", "{AFE93FD3-7CB5-43AC-816E-987D75F98DDF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.Unmarshalled", "razor\DevilDaggersInfo.Razor.Core.Unmarshalled\DevilDaggersInfo.Razor.Core.Unmarshalled.csproj", "{AE5DAE4E-61EE-4BA6-B21B-2828DF7EEBE3}"
@@ -66,10 +70,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server.Tests", "tests\DevilDaggersInfo.Web.Server.Tests\DevilDaggersInfo.Web.Server.Tests.csproj", "{CB715CD9-FB6A-4E79-B9C0-830833223D91}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Shared", "web\DevilDaggersInfo.Web.Shared\DevilDaggersInfo.Web.Shared.csproj", "{B73F0FEF-0D3B-4B41-8920-34134012F5C8}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.AssetEditor.Wpf", "editor\DevilDaggersInfo.AssetEditor.Wpf\DevilDaggersInfo.AssetEditor.Wpf.csproj", "{24E952C9-B74C-4F60-9DFC-7EF30B1FB3E2}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.AssetEditor", "razor\DevilDaggersInfo.Razor.Core.AssetEditor\DevilDaggersInfo.Razor.Core.AssetEditor.csproj", "{620FA9AC-8E7E-42AF-B145-28FBB728EA92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
