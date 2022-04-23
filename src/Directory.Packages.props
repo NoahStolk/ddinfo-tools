@@ -54,4 +54,7 @@
 	<ItemGroup Label="JSON">
 		<PackageVersion Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
+	<ItemGroup Label="WPF">
+		<PackageVersion Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+	</ItemGroup>
 </Project>
