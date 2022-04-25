@@ -266,9 +266,6 @@ dotnet_diagnostic.S3358.severity                                         = none
 dotnet_diagnostic.S3453.severity                                         = none
 dotnet_diagnostic.S3903.severity                                         = none
 
-# False positives
-dotnet_diagnostic.S1172.severity                                         = none
-
 # RoslynatorAnalyzers suppressions
 
 # RCS1090: Call 'ConfigureAwait(false)'.
