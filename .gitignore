@@ -280,9 +280,7 @@ Database Exports/
 */**/DevilDaggersInfo.Web.Server/Data/ModScreenshots
 */**/DevilDaggersInfo.Web.Server/Data/ResponseTimes
 */**/DevilDaggersInfo.Web.Server/Data/Spawnsets
-*/**/DevilDaggersInfo.Web.Server/Data/Tools/DevilDaggersAssetEditor
-*/**/DevilDaggersInfo.Web.Server/Data/Tools/DevilDaggersCustomLeaderboards
-*/**/DevilDaggersInfo.Web.Server/Data/Tools/DevilDaggersSurvivalEditor
+*/**/DevilDaggersInfo.Web.Server/Data/Tools/*.zip
 
 # Tailwind
 */**/DevilDaggersInfo.Web.Client/wwwroot/tailwind.css
