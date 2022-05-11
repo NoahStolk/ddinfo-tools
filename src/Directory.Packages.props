@@ -60,4 +60,7 @@
 	<ItemGroup Label="WPF">
 		<PackageVersion Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
 	</ItemGroup>
+	<ItemGroup Label="Logging">
+		<PackageVersion Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+	</ItemGroup>
 </Project>
