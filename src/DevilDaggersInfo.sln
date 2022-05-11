@@ -4,8 +4,14 @@ VisualStudioVersion = 17.0.31606.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9AE54BA2-750F-42CC-97EC-4DD29A452100}"
 	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
+		..\.gitattributes = ..\.gitattributes
+		..\.gitignore = ..\.gitignore
+		..\docs\architecture.md = ..\docs\architecture.md
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.AssetEditor.Wpf", "editor\DevilDaggersInfo.AssetEditor.Wpf\DevilDaggersInfo.AssetEditor.Wpf.csproj", "{24E952C9-B74C-4F60-9DFC-7EF30B1FB3E2}"
