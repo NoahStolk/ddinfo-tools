@@ -9,6 +9,7 @@
 		<ImplicitUsings>true</ImplicitUsings>
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 		<InvariantGlobalization>true</InvariantGlobalization>
+		<WarningsAsErrors>nullable</WarningsAsErrors>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Roslynator.Analyzers">
