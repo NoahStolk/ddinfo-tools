@@ -34,8 +34,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Asset
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Encryption", "core\DevilDaggersInfo.Core.Encryption\DevilDaggersInfo.Core.Encryption.csproj", "{6F010EA4-496C-49C5-B947-82BA4EDA2648}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Memory", "core\DevilDaggersInfo.Core.Memory\DevilDaggersInfo.Core.Memory.csproj", "{4E6B8A02-5C01-4BF4-B398-C3AA588B3940}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Mod", "core\DevilDaggersInfo.Core.Mod\DevilDaggersInfo.Core.Mod.csproj", "{1C25E368-6E37-4144-AAC7-EBA5475BD833}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Mod.Tests", "tests\DevilDaggersInfo.Core.Mod.Tests\DevilDaggersInfo.Core.Mod.Tests.csproj", "{4E3108DD-0F00-45E6-89E9-4F27BCAEF08E}"
@@ -122,10 +120,6 @@ Global
 		{6F010EA4-496C-49C5-B947-82BA4EDA2648}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F010EA4-496C-49C5-B947-82BA4EDA2648}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F010EA4-496C-49C5-B947-82BA4EDA2648}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4E6B8A02-5C01-4BF4-B398-C3AA588B3940}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4E6B8A02-5C01-4BF4-B398-C3AA588B3940}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4E6B8A02-5C01-4BF4-B398-C3AA588B3940}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4E6B8A02-5C01-4BF4-B398-C3AA588B3940}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1C25E368-6E37-4144-AAC7-EBA5475BD833}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1C25E368-6E37-4144-AAC7-EBA5475BD833}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C25E368-6E37-4144-AAC7-EBA5475BD833}.Release|Any CPU.ActiveCfg = Release|Any CPU
