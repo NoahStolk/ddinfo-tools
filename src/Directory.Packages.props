@@ -1,7 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="Current">
 	<ItemGroup Label="Static code analysis">
 		<PackageVersion Include="Roslynator.Analyzers" Version="4.1.0" />
-		<PackageVersion Include="SonarAnalyzer.CSharp" Version="8.38.0.46746" />
+		<PackageVersion Include="SonarAnalyzer.CSharp" Version="8.39.0.47922" />
 		<PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.435" />
 	</ItemGroup>
 	<ItemGroup Label="Image processing">
@@ -9,7 +9,7 @@
 	</ItemGroup>
 	<ItemGroup Label="Source generators">
 		<PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3" />
-		<PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.1.0" />
+		<PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.2.0" />
 	</ItemGroup>
 	<ItemGroup Label="Unit tests">
 		<PackageVersion Include="coverlet.collector" Version="3.1.2" />
@@ -18,7 +18,7 @@
 		<PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.5" />
 		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
 		<PackageVersion Include="MockQueryable.Moq" Version="6.0.1" />
-		<PackageVersion Include="Moq" Version="4.17.2" />
+		<PackageVersion Include="Moq" Version="4.18.1" />
 		<PackageVersion Include="MSTest.TestAdapter" Version="2.2.10" />
 		<PackageVersion Include="MSTest.TestFramework" Version="2.2.10" />
 	</ItemGroup>
@@ -27,7 +27,7 @@
 		<PackageVersion Include="Microsoft.AspNetCore.Components" Version="6.0.5" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="6.0.5" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.WebView" Version="6.0.5" />
-		<PackageVersion Include="Microsoft.AspNetCore.Components.WebView.Wpf" Version="6.0.300-rc.1.5355" />
+		<PackageVersion Include="Microsoft.AspNetCore.Components.WebView.Wpf" Version="6.0.312" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.5" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.5" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.5" />
@@ -41,12 +41,12 @@
 		<PackageVersion Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.5" />
 		<PackageVersion Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
 		<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.5" />
-		<PackageVersion Include="NSwag.AspNetCore" Version="13.15.10" />
+		<PackageVersion Include="NSwag.AspNetCore" Version="13.16.0" />
 		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.1" />
 	</ItemGroup>
 	<ItemGroup Label="JWT">
 		<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
-		<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.17.0" />
+		<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.18.0" />
 	</ItemGroup>
 	<ItemGroup Label="Discord integration">
 		<PackageVersion Include="DSharpPlus" Version="4.2.0" />
