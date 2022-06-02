@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Common.Exceptions;
 using DevilDaggersInfo.Core.Asset.Enums;
 using DevilDaggersInfo.Core.Asset.Extensions;
 using DevilDaggersInfo.Razor.Core.AssetEditor.Services;
@@ -23,7 +24,7 @@ public class FileSystemService : IFileSystemService
 			AssetType.Mesh => "Mesh",
 			AssetType.ObjectBinding => "Text",
 			AssetType.Texture => "Texture",
-			_ => throw new NotSupportedException($"Asset type '{assetType}' is not supported."),
+			_ => throw new InvalidEnumConversionException(assetType),
 		};
 
 		return BuildFilter(fileTypeName, false, $"*{assetType.GetFileExtension()}");
