@@ -88,6 +88,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Client
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server", "web\DevilDaggersInfo.Web.Server\DevilDaggersInfo.Web.Server.csproj", "{595CAB68-C85D-4AAD-B78F-4CC499921E61}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Web.Server.Domain", "web\DevilDaggersInfo.Web.Server.Domain\DevilDaggersInfo.Web.Server.Domain.csproj", "{FA23F585-CF8F-49ED-8E47-D1B9235774CD}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server.Tests", "tests\DevilDaggersInfo.Web.Server.Tests\DevilDaggersInfo.Web.Server.Tests.csproj", "{CB715CD9-FB6A-4E79-B9C0-830833223D91}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Shared", "web\DevilDaggersInfo.Web.Shared\DevilDaggersInfo.Web.Shared.csproj", "{B73F0FEF-0D3B-4B41-8920-34134012F5C8}"
@@ -250,6 +252,10 @@ Global
 		{B73F0FEF-0D3B-4B41-8920-34134012F5C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B73F0FEF-0D3B-4B41-8920-34134012F5C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B73F0FEF-0D3B-4B41-8920-34134012F5C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA23F585-CF8F-49ED-8E47-D1B9235774CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA23F585-CF8F-49ED-8E47-D1B9235774CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA23F585-CF8F-49ED-8E47-D1B9235774CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA23F585-CF8F-49ED-8E47-D1B9235774CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
