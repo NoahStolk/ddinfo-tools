@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Wpf" />
     <PackageReference Include="Ookii.Dialogs.Wpf" />
-    <ProjectReference Include="..\..\razor\DevilDaggersInfo.Razor.Core.AssetEditor\DevilDaggersInfo.Razor.Core.AssetEditor.csproj" />
+    <ProjectReference Include="..\..\razor-core\DevilDaggersInfo.Razor.Core.AssetEditor\DevilDaggersInfo.Razor.Core.AssetEditor.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="wwwroot\index.html">

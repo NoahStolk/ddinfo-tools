@@ -70,11 +70,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Wiki.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Wiki.Tests", "tests\DevilDaggersInfo.Core.Wiki.Tests\DevilDaggersInfo.Core.Wiki.Tests.csproj", "{07BBEC96-50D3-49A2-934F-AC8BB7E8BB0D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.AssetEditor", "razor\DevilDaggersInfo.Razor.Core.AssetEditor\DevilDaggersInfo.Razor.Core.AssetEditor.csproj", "{620FA9AC-8E7E-42AF-B145-28FBB728EA92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.AssetEditor", "razor-core\DevilDaggersInfo.Razor.Core.AssetEditor\DevilDaggersInfo.Razor.Core.AssetEditor.csproj", "{620FA9AC-8E7E-42AF-B145-28FBB728EA92}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.CanvasChart", "razor\DevilDaggersInfo.Razor.Core.CanvasChart\DevilDaggersInfo.Razor.Core.CanvasChart.csproj", "{AFE93FD3-7CB5-43AC-816E-987D75F98DDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.CanvasChart", "razor-core\DevilDaggersInfo.Razor.Core.CanvasChart\DevilDaggersInfo.Razor.Core.CanvasChart.csproj", "{AFE93FD3-7CB5-43AC-816E-987D75F98DDF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.Unmarshalled", "razor\DevilDaggersInfo.Razor.Core.Unmarshalled\DevilDaggersInfo.Razor.Core.Unmarshalled.csproj", "{AE5DAE4E-61EE-4BA6-B21B-2828DF7EEBE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.Unmarshalled", "razor-core\DevilDaggersInfo.Razor.Core.Unmarshalled\DevilDaggersInfo.Razor.Core.Unmarshalled.csproj", "{AE5DAE4E-61EE-4BA6-B21B-2828DF7EEBE3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Tool.CleanBuild", "tool\DevilDaggersInfo.Tool.CleanBuild\DevilDaggersInfo.Tool.CleanBuild.csproj", "{A0CC71FC-5AF0-4946-8575-605A02213B08}"
 EndProject
@@ -86,7 +86,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Tool.Gener
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Client", "web\DevilDaggersInfo.Web.Client\DevilDaggersInfo.Web.Client.csproj", "{0F9B44AE-52A6-4BCD-8AC1-72FE4235E356}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Core.Claims", "web\DevilDaggersInfo.Web.Core.Claims\DevilDaggersInfo.Web.Core.Claims.csproj", "{296837AA-47C6-4679-AE63-39EFA4C98675}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Core.Claims", "web-core\DevilDaggersInfo.Web.Core.Claims\DevilDaggersInfo.Web.Core.Claims.csproj", "{296837AA-47C6-4679-AE63-39EFA4C98675}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server", "web\DevilDaggersInfo.Web.Server\DevilDaggersInfo.Web.Server.csproj", "{595CAB68-C85D-4AAD-B78F-4CC499921E61}"
 EndProject
