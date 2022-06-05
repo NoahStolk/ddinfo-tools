@@ -96,6 +96,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server.Domain.Tests", "tests\DevilDaggersInfo.Web.Server.Domain.Tests\DevilDaggersInfo.Web.Server.Domain.Tests.csproj", "{CB715CD9-FB6A-4E79-B9C0-830833223D91}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.CustomLeaderboards", "core\DevilDaggersInfo.Core.CustomLeaderboards\DevilDaggersInfo.Core.CustomLeaderboards.csproj", "{E8796D9F-5B68-491E-B5CE-7C22321CDFF4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -262,6 +264,10 @@ Global
 		{632A2501-8B00-4F03-AD6F-6A57DA030E6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{632A2501-8B00-4F03-AD6F-6A57DA030E6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{632A2501-8B00-4F03-AD6F-6A57DA030E6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8796D9F-5B68-491E-B5CE-7C22321CDFF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8796D9F-5B68-491E-B5CE-7C22321CDFF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8796D9F-5B68-491E-B5CE-7C22321CDFF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8796D9F-5B68-491E-B5CE-7C22321CDFF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
