@@ -6,7 +6,7 @@ using Microsoft.Win32;
 using Ookii.Dialogs.Wpf;
 using System.IO;
 
-namespace DevilDaggersInfo.AssetEditor.Wpf.Services;
+namespace DevilDaggersInfo.App.AssetEditor.Wpf.Services;
 
 /// <summary>
 /// Platform-specific code for interacting with the OS file system.

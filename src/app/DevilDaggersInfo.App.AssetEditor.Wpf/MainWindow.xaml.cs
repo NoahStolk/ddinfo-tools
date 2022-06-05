@@ -1,4 +1,4 @@
-using DevilDaggersInfo.AssetEditor.Wpf.Services;
+using DevilDaggersInfo.App.AssetEditor.Wpf.Services;
 using DevilDaggersInfo.Razor.Core.AssetEditor.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;

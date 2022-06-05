@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Api.Admin", "api\DevilDaggersInfo.Api.Admin\DevilDaggersInfo.Api.Admin.csproj", "{EC97F9DE-B1B3-412D-A3EE-ED5C050BFE4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Api.Clubber", "api\DevilDaggersInfo.Api.Clubber\DevilDaggersInfo.Api.Clubber.csproj", "{632A2501-8B00-4F03-AD6F-6A57DA030E6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Api.Clubber", "api\DevilDaggersInfo.Api.Clubber\DevilDaggersInfo.Api.Clubber.csproj", "{632A2501-8B00-4F03-AD6F-6A57DA030E6D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Api.Dd", "api\DevilDaggersInfo.Api.Dd\DevilDaggersInfo.Api.Dd.csproj", "{486AB9D9-E175-4258-8D4D-11D70C7AA6BC}"
 EndProject
@@ -34,7 +34,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Api.Ddstat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Api.Main", "api\DevilDaggersInfo.Api.Main\DevilDaggersInfo.Api.Main.csproj", "{9B6A9C2A-69BF-4936-A4CA-0F54C298317C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.AssetEditor.Wpf", "app\DevilDaggersInfo.AssetEditor.Wpf\DevilDaggersInfo.AssetEditor.Wpf.csproj", "{24E952C9-B74C-4F60-9DFC-7EF30B1FB3E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.AssetEditor.Wpf", "app\DevilDaggersInfo.App.AssetEditor.Wpf\DevilDaggersInfo.App.AssetEditor.Wpf.csproj", "{24E952C9-B74C-4F60-9DFC-7EF30B1FB3E2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Cmd.ExtractMod", "cmd\DevilDaggersInfo.Cmd.ExtractMod\DevilDaggersInfo.Cmd.ExtractMod.csproj", "{8A747382-EEA6-433F-B61A-85ABD0706E54}"
 EndProject
@@ -51,6 +51,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Asset", "core\DevilDaggersInfo.Core.Asset\DevilDaggersInfo.Core.Asset.csproj", "{E855606F-5DFB-407F-979B-C2F25DC05C5D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Asset.SourceGen", "core\DevilDaggersInfo.Core.Asset.SourceGen\DevilDaggersInfo.Core.Asset.SourceGen.csproj", "{2BE3E7C9-DEAF-4D2C-ADFC-40EA3FE3D325}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.CustomLeaderboards", "core\DevilDaggersInfo.Core.CustomLeaderboards\DevilDaggersInfo.Core.CustomLeaderboards.csproj", "{E8796D9F-5B68-491E-B5CE-7C22321CDFF4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Encryption", "core\DevilDaggersInfo.Core.Encryption\DevilDaggersInfo.Core.Encryption.csproj", "{6F010EA4-496C-49C5-B947-82BA4EDA2648}"
 EndProject
@@ -96,8 +98,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server.Domain.Tests", "tests\DevilDaggersInfo.Web.Server.Domain.Tests\DevilDaggersInfo.Web.Server.Domain.Tests.csproj", "{CB715CD9-FB6A-4E79-B9C0-830833223D91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.CustomLeaderboards", "core\DevilDaggersInfo.Core.CustomLeaderboards\DevilDaggersInfo.Core.CustomLeaderboards.csproj", "{E8796D9F-5B68-491E-B5CE-7C22321CDFF4}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -108,6 +108,10 @@ Global
 		{EC97F9DE-B1B3-412D-A3EE-ED5C050BFE4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC97F9DE-B1B3-412D-A3EE-ED5C050BFE4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC97F9DE-B1B3-412D-A3EE-ED5C050BFE4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{632A2501-8B00-4F03-AD6F-6A57DA030E6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{632A2501-8B00-4F03-AD6F-6A57DA030E6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{632A2501-8B00-4F03-AD6F-6A57DA030E6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{632A2501-8B00-4F03-AD6F-6A57DA030E6D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{486AB9D9-E175-4258-8D4D-11D70C7AA6BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{486AB9D9-E175-4258-8D4D-11D70C7AA6BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{486AB9D9-E175-4258-8D4D-11D70C7AA6BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -172,6 +176,10 @@ Global
 		{2BE3E7C9-DEAF-4D2C-ADFC-40EA3FE3D325}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BE3E7C9-DEAF-4D2C-ADFC-40EA3FE3D325}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BE3E7C9-DEAF-4D2C-ADFC-40EA3FE3D325}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8796D9F-5B68-491E-B5CE-7C22321CDFF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8796D9F-5B68-491E-B5CE-7C22321CDFF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8796D9F-5B68-491E-B5CE-7C22321CDFF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8796D9F-5B68-491E-B5CE-7C22321CDFF4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6F010EA4-496C-49C5-B947-82BA4EDA2648}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6F010EA4-496C-49C5-B947-82BA4EDA2648}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F010EA4-496C-49C5-B947-82BA4EDA2648}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -260,14 +268,6 @@ Global
 		{CB715CD9-FB6A-4E79-B9C0-830833223D91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB715CD9-FB6A-4E79-B9C0-830833223D91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB715CD9-FB6A-4E79-B9C0-830833223D91}.Release|Any CPU.Build.0 = Release|Any CPU
-		{632A2501-8B00-4F03-AD6F-6A57DA030E6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{632A2501-8B00-4F03-AD6F-6A57DA030E6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{632A2501-8B00-4F03-AD6F-6A57DA030E6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{632A2501-8B00-4F03-AD6F-6A57DA030E6D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8796D9F-5B68-491E-B5CE-7C22321CDFF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8796D9F-5B68-491E-B5CE-7C22321CDFF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E8796D9F-5B68-491E-B5CE-7C22321CDFF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E8796D9F-5B68-491E-B5CE-7C22321CDFF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Razor.Core.AssetEditor.Services;
 using System.Windows;
 
-namespace DevilDaggersInfo.AssetEditor.Wpf.Services;
+namespace DevilDaggersInfo.App.AssetEditor.Wpf.Services;
 
 public class ErrorReporter : IErrorReporter
 {
