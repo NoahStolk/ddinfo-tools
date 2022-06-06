@@ -52,7 +52,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Asset
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Asset.SourceGen", "core\DevilDaggersInfo.Core.Asset.SourceGen\DevilDaggersInfo.Core.Asset.SourceGen.csproj", "{2BE3E7C9-DEAF-4D2C-ADFC-40EA3FE3D325}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.CustomLeaderboards", "core\DevilDaggersInfo.Core.CustomLeaderboards\DevilDaggersInfo.Core.CustomLeaderboards.csproj", "{E8796D9F-5B68-491E-B5CE-7C22321CDFF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.CustomLeaderboard", "core\DevilDaggersInfo.Core.CustomLeaderboard\DevilDaggersInfo.Core.CustomLeaderboard.csproj", "{E8796D9F-5B68-491E-B5CE-7C22321CDFF4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Encryption", "core\DevilDaggersInfo.Core.Encryption\DevilDaggersInfo.Core.Encryption.csproj", "{6F010EA4-496C-49C5-B947-82BA4EDA2648}"
 EndProject
