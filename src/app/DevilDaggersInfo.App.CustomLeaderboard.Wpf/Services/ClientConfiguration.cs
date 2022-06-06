@@ -1,17 +1,15 @@
 using DevilDaggersInfo.Api.Ddcl.ProcessMemory;
 using DevilDaggersInfo.Api.Ddcl.Tools;
+using DevilDaggersInfo.App.CustomLeaderboard.Wpf.Utils;
 using DevilDaggersInfo.Core.CustomLeaderboard.Services;
 
 namespace DevilDaggersInfo.App.CustomLeaderboard.Wpf.Services;
 
 public class ClientConfiguration : IClientConfiguration
 {
-	public string GetApplicationName() => "Devil Daggers Custom Leaderboards";
+	public string GetApplicationName() => "DevilDaggersCustomLeaderboards";
 
-	public string GetApplicationVersion()
-	{
-		throw new NotImplementedException();
-	}
+	public string GetApplicationVersion() => VersionUtils.WpfVersion;
 
 	public string GetBuildMode()
 	{
