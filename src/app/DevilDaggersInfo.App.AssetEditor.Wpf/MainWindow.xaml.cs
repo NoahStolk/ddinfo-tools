@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using System.Windows;
 
-namespace DevilDaggersInfo.AssetEditor.Wpf;
+namespace DevilDaggersInfo.App.AssetEditor.Wpf;
 
 public partial class MainWindow : Window
 {
