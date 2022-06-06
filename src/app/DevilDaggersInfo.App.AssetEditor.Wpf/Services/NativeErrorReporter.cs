@@ -1,9 +1,9 @@
-using DevilDaggersInfo.Razor.Core.AssetEditor.Services;
+using DevilDaggersInfo.Core.NativeInterface;
 using System.Windows;
 
 namespace DevilDaggersInfo.App.AssetEditor.Wpf.Services;
 
-public class ErrorReporter : IErrorReporter
+public class NativeErrorReporter : INativeErrorReporter
 {
 	public void ReportError(Exception exception)
 	{

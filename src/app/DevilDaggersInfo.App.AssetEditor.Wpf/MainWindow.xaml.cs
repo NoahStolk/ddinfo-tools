@@ -1,4 +1,5 @@
 using DevilDaggersInfo.App.AssetEditor.Wpf.Services;
+using DevilDaggersInfo.Core.NativeInterface;
 using DevilDaggersInfo.Razor.Core.AssetEditor.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -12,8 +13,9 @@ public partial class MainWindow : Window
 	{
 		ServiceCollection serviceCollection = new();
 		serviceCollection.AddWpfBlazorWebView();
-		serviceCollection.AddSingleton<IErrorReporter, ErrorReporter>();
-		serviceCollection.AddSingleton<IFileSystemService, FileSystemService>();
+		serviceCollection.AddSingleton<INativeErrorReporter, NativeErrorReporter>();
+		serviceCollection.AddSingleton<INativeFileSystemService, NativeFileSystemService>();
+		serviceCollection.AddSingleton<IAssetEditorFileFilterService, AssetEditorFileFilterService>();
 		serviceCollection.AddSingleton<BinaryState>();
 		Resources.Add("services", serviceCollection.BuildServiceProvider());
 
