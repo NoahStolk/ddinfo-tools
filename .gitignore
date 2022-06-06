@@ -287,6 +287,8 @@ Database Exports/
 */**/DevilDaggersInfo.Web.Client/wwwroot/tailwind.css.map
 */**/DevilDaggersInfo.Razor.Core.AssetEditor/wwwroot/tailwind.css
 */**/DevilDaggersInfo.Razor.Core.AssetEditor/wwwroot/tailwind.css.map
+*/**/DevilDaggersInfo.Razor.Core.CustomLeaderboard/wwwroot/tailwind.css
+*/**/DevilDaggersInfo.Razor.Core.CustomLeaderboard/wwwroot/tailwind.css.map
 
 # Data protection
 */**/DevilDaggersInfo.Web.Server/keys
