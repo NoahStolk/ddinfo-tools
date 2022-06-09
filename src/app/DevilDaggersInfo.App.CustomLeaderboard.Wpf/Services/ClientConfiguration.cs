@@ -1,6 +1,6 @@
 using DevilDaggersInfo.Api.Ddcl.ProcessMemory;
 using DevilDaggersInfo.Api.Ddcl.Tools;
-using DevilDaggersInfo.App.CustomLeaderboard.Wpf.Utils;
+using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.CustomLeaderboard.Services;
 
 namespace DevilDaggersInfo.App.CustomLeaderboard.Wpf.Services;
@@ -9,7 +9,7 @@ public class ClientConfiguration : IClientConfiguration
 {
 	public string GetApplicationName() => "DevilDaggersCustomLeaderboards";
 
-	public string GetApplicationVersion() => VersionUtils.WpfVersion;
+	public string GetApplicationVersion() => VersionUtils.EntryAssemblyVersion;
 
 	public string GetBuildMode()
 	{

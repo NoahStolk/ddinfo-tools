@@ -1,5 +1,5 @@
 using DevilDaggersInfo.App.CustomLeaderboard.Wpf.Services;
-using DevilDaggersInfo.App.CustomLeaderboard.Wpf.Utils;
+using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.CustomLeaderboard.Services;
 using DevilDaggersInfo.Core.NativeInterface;
 using Microsoft.Extensions.Configuration;
@@ -31,7 +31,7 @@ public partial class MainWindow : Window
 
 		InitializeComponent();
 
-		Title = $"Devil Daggers Custom Leaderboards {VersionUtils.WpfVersion}";
+		Title = $"Devil Daggers Custom Leaderboards {VersionUtils.EntryAssemblyVersion}";
 		Width = SystemParameters.WorkArea.Width * 0.6;
 		Height = SystemParameters.WorkArea.Height * 0.6;
 	}

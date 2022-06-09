@@ -1,8 +1,8 @@
 using DevilDaggersInfo.App.AssetEditor.Wpf.Services;
+using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.NativeInterface;
 using DevilDaggersInfo.Razor.Core.AssetEditor.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 using System.Windows;
 
 namespace DevilDaggersInfo.App.AssetEditor.Wpf;
@@ -21,8 +21,7 @@ public partial class MainWindow : Window
 
 		InitializeComponent();
 
-		string? wpfVersion = Assembly.GetExecutingAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
-		Title = $"Devil Daggers Asset Editor {wpfVersion}";
+		Title = $"Devil Daggers Asset Editor {VersionUtils.EntryAssemblyVersion}";
 		Width = SystemParameters.WorkArea.Width * 0.6;
 		Height = SystemParameters.WorkArea.Height * 0.6;
 	}
