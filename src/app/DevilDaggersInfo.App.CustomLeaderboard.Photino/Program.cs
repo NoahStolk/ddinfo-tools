@@ -1,4 +1,5 @@
 using DevilDaggersInfo.App.CustomLeaderboard.Photino.Services;
+using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.CustomLeaderboard.Services;
 using DevilDaggersInfo.Core.NativeInterface;
 using Microsoft.Extensions.Configuration;
@@ -35,7 +36,7 @@ public static class Program
 
 		app.MainWindow
 			.SetIconFile("Icon.ico")
-			.SetTitle("Devil Daggers Custom Leaderboards");
+			.SetTitle($"Devil Daggers Custom Leaderboards {VersionUtils.EntryAssemblyVersion}");
 
 		AppDomain.CurrentDomain.UnhandledException += (sender, error) => app.MainWindow.OpenAlertWindow("Fatal exception", error.ExceptionObject.ToString());
 
