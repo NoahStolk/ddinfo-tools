@@ -57,10 +57,12 @@
 	<ItemGroup Label="JSON">
 		<PackageVersion Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
-	<ItemGroup Label="WPF">
+	<ItemGroup Label="App">
 		<PackageVersion Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+		<PackageVersion Include="Photino.Blazor" Version="2.1.7" />
 	</ItemGroup>
 	<ItemGroup Label="Logging">
 		<PackageVersion Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+		<PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
 	</ItemGroup>
 </Project>
