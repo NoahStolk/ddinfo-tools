@@ -34,7 +34,7 @@ public static class Program
 		PhotinoBlazorApp app = appBuilder.Build();
 
 		app.MainWindow
-			//.SetIconFile("favicon.ico")
+			.SetIconFile("Icon.ico")
 			.SetTitle("Devil Daggers Custom Leaderboards");
 
 		AppDomain.CurrentDomain.UnhandledException += (sender, error) => app.MainWindow.OpenAlertWindow("Fatal exception", error.ExceptionObject.ToString());

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <!--<ApplicationIcon>favicon.ico</ApplicationIcon>-->
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,10 +20,10 @@
     </Content>
   </ItemGroup>
 
-  <!--<ItemGroup>
-    <None Update="favicon.ico">
+  <ItemGroup>
+    <None Update="Icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>-->
+  </ItemGroup>
 
 </Project>
