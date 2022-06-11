@@ -4,6 +4,7 @@ using DevilDaggersInfo.Core.CustomLeaderboard.Services;
 using DevilDaggersInfo.Core.NativeInterface;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Photino.Blazor;
 
 namespace DevilDaggersInfo.App.CustomLeaderboard.Photino;
@@ -14,7 +15,7 @@ public static class Program
 	public static void Main(string[] args)
 	{
 		PhotinoBlazorAppBuilder appBuilder = PhotinoBlazorAppBuilder.CreateDefault(args);
-		appBuilder.Services.AddLogging();
+		appBuilder.Services.AddLogging(builder => builder.AddConsole());
 
 		IConfiguration configuration = new ConfigurationBuilder()
 			.AddJsonFile("appsettings.json")
