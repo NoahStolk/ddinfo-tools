@@ -37,11 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Api.Main",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.AssetEditor.Photino", "app\DevilDaggersInfo.App.AssetEditor.Photino\DevilDaggersInfo.App.AssetEditor.Photino.csproj", "{FDD9817A-0B83-428D-AE15-A3E886B3E83B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.AssetEditor.Wpf", "app\DevilDaggersInfo.App.AssetEditor.Wpf\DevilDaggersInfo.App.AssetEditor.Wpf.csproj", "{24E952C9-B74C-4F60-9DFC-7EF30B1FB3E2}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.CustomLeaderboard.Photino", "app\DevilDaggersInfo.App.CustomLeaderboard.Photino\DevilDaggersInfo.App.CustomLeaderboard.Photino.csproj", "{959D393E-D56C-4C30-8E69-F3657781F010}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.CustomLeaderboard.Wpf", "app\DevilDaggersInfo.App.CustomLeaderboard.Wpf\DevilDaggersInfo.App.CustomLeaderboard.Wpf.csproj", "{4A95766C-4B09-4DD2-8C39-57E38148554F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Cmd.ExtractMod", "cmd\DevilDaggersInfo.Cmd.ExtractMod\DevilDaggersInfo.Cmd.ExtractMod.csproj", "{8A747382-EEA6-433F-B61A-85ABD0706E54}"
 EndProject
@@ -155,18 +151,10 @@ Global
 		{FDD9817A-0B83-428D-AE15-A3E886B3E83B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDD9817A-0B83-428D-AE15-A3E886B3E83B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDD9817A-0B83-428D-AE15-A3E886B3E83B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{24E952C9-B74C-4F60-9DFC-7EF30B1FB3E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{24E952C9-B74C-4F60-9DFC-7EF30B1FB3E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{24E952C9-B74C-4F60-9DFC-7EF30B1FB3E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{24E952C9-B74C-4F60-9DFC-7EF30B1FB3E2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{959D393E-D56C-4C30-8E69-F3657781F010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{959D393E-D56C-4C30-8E69-F3657781F010}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{959D393E-D56C-4C30-8E69-F3657781F010}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{959D393E-D56C-4C30-8E69-F3657781F010}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A95766C-4B09-4DD2-8C39-57E38148554F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A95766C-4B09-4DD2-8C39-57E38148554F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A95766C-4B09-4DD2-8C39-57E38148554F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A95766C-4B09-4DD2-8C39-57E38148554F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8A747382-EEA6-433F-B61A-85ABD0706E54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8A747382-EEA6-433F-B61A-85ABD0706E54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A747382-EEA6-433F-B61A-85ABD0706E54}.Release|Any CPU.ActiveCfg = Release|Any CPU
