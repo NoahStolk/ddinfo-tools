@@ -73,6 +73,7 @@
 	<ItemGroup Label="Logging">
 		<PackageVersion Include="Microsoft.Extensions.Logging" Version="6.0.0" />
 		<PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
+		<PackageVersion Include="Sentry.AspNetCore" Version="3.17.1" />
 	</ItemGroup>
 
 </Project>
