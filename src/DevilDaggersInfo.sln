@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.AssetE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.CustomLeaderboard.Photino", "app\DevilDaggersInfo.App.CustomLeaderboard.Photino\DevilDaggersInfo.App.CustomLeaderboard.Photino.csproj", "{959D393E-D56C-4C30-8E69-F3657781F010}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.ReplayEditor.Photino", "app\DevilDaggersInfo.App.ReplayEditor.Photino\DevilDaggersInfo.App.ReplayEditor.Photino.csproj", "{CA612879-D0A8-41AD-9265-78BADEF2BA84}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Cmd.ExtractMod", "cmd\DevilDaggersInfo.Cmd.ExtractMod\DevilDaggersInfo.Cmd.ExtractMod.csproj", "{8A747382-EEA6-433F-B61A-85ABD0706E54}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Cmd.CreateReplay", "cmd\DevilDaggersInfo.Cmd.CreateReplay\DevilDaggersInfo.Cmd.CreateReplay.csproj", "{6BEED33C-F8F8-4884-85A3-FDD48C7C63E8}"
@@ -85,7 +87,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.CustomLeaderboard", "razor-core\DevilDaggersInfo.Razor.Core.CustomLeaderboard\DevilDaggersInfo.Razor.Core.CustomLeaderboard.csproj", "{181B288B-6B66-4F4D-8227-892B2561B2A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Razor.Core.ReplayEditor", "razor-core\DevilDaggersInfo.Razor.Core.ReplayEditor\DevilDaggersInfo.Razor.Core.ReplayEditor.csproj", "{36ECBB72-2034-4196-AE05-DC92F9BB2856}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.ReplayEditor", "razor-core\DevilDaggersInfo.Razor.Core.ReplayEditor\DevilDaggersInfo.Razor.Core.ReplayEditor.csproj", "{36ECBB72-2034-4196-AE05-DC92F9BB2856}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.Unmarshalled", "razor-core\DevilDaggersInfo.Razor.Core.Unmarshalled\DevilDaggersInfo.Razor.Core.Unmarshalled.csproj", "{AE5DAE4E-61EE-4BA6-B21B-2828DF7EEBE3}"
 EndProject
@@ -293,6 +295,10 @@ Global
 		{CB715CD9-FB6A-4E79-B9C0-830833223D91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB715CD9-FB6A-4E79-B9C0-830833223D91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB715CD9-FB6A-4E79-B9C0-830833223D91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA612879-D0A8-41AD-9265-78BADEF2BA84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA612879-D0A8-41AD-9265-78BADEF2BA84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA612879-D0A8-41AD-9265-78BADEF2BA84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA612879-D0A8-41AD-9265-78BADEF2BA84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

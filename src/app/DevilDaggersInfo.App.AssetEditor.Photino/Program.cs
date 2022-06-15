@@ -20,7 +20,6 @@ public static class Program
 		appBuilder.Services.AddSingleton<IAssetEditorFileFilterService, AssetEditorFileFilterService>();
 		appBuilder.Services.AddSingleton<BinaryState>();
 
-		// register root component
 		appBuilder.RootComponents.Add<Razor.Core.AssetEditor.App>("app");
 
 		PhotinoBlazorApp app = appBuilder.Build();
