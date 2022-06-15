@@ -85,6 +85,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.CustomLeaderboard", "razor-core\DevilDaggersInfo.Razor.Core.CustomLeaderboard\DevilDaggersInfo.Razor.Core.CustomLeaderboard.csproj", "{181B288B-6B66-4F4D-8227-892B2561B2A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Razor.Core.ReplayEditor", "razor-core\DevilDaggersInfo.Razor.Core.ReplayEditor\DevilDaggersInfo.Razor.Core.ReplayEditor.csproj", "{36ECBB72-2034-4196-AE05-DC92F9BB2856}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.Unmarshalled", "razor-core\DevilDaggersInfo.Razor.Core.Unmarshalled\DevilDaggersInfo.Razor.Core.Unmarshalled.csproj", "{AE5DAE4E-61EE-4BA6-B21B-2828DF7EEBE3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Tool.CleanBuild", "tool\DevilDaggersInfo.Tool.CleanBuild\DevilDaggersInfo.Tool.CleanBuild.csproj", "{A0CC71FC-5AF0-4946-8575-605A02213B08}"
@@ -247,6 +249,10 @@ Global
 		{181B288B-6B66-4F4D-8227-892B2561B2A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{181B288B-6B66-4F4D-8227-892B2561B2A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{181B288B-6B66-4F4D-8227-892B2561B2A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36ECBB72-2034-4196-AE05-DC92F9BB2856}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36ECBB72-2034-4196-AE05-DC92F9BB2856}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36ECBB72-2034-4196-AE05-DC92F9BB2856}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36ECBB72-2034-4196-AE05-DC92F9BB2856}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AE5DAE4E-61EE-4BA6-B21B-2828DF7EEBE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AE5DAE4E-61EE-4BA6-B21B-2828DF7EEBE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE5DAE4E-61EE-4BA6-B21B-2828DF7EEBE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
