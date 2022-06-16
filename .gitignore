@@ -269,7 +269,7 @@ appsettings.json
 appsettings.Development.json
 
 # Database backups
-Database Exports/
+database-exports/
 
 # Content
 */**/DevilDaggersInfo.Web.Server/Data/CustomEntryReplays
