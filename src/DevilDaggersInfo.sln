@@ -81,15 +81,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Wiki.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Wiki.Tests", "tests\DevilDaggersInfo.Core.Wiki.Tests\DevilDaggersInfo.Core.Wiki.Tests.csproj", "{07BBEC96-50D3-49A2-934F-AC8BB7E8BB0D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.AssetEditor", "razor-core\DevilDaggersInfo.Razor.Core.AssetEditor\DevilDaggersInfo.Razor.Core.AssetEditor.csproj", "{620FA9AC-8E7E-42AF-B145-28FBB728EA92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.AssetEditor", "razor\DevilDaggersInfo.Razor.AssetEditor\DevilDaggersInfo.Razor.AssetEditor.csproj", "{620FA9AC-8E7E-42AF-B145-28FBB728EA92}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.CanvasChart", "razor-core\DevilDaggersInfo.Razor.Core.CanvasChart\DevilDaggersInfo.Razor.Core.CanvasChart.csproj", "{AFE93FD3-7CB5-43AC-816E-987D75F98DDF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.CustomLeaderboard", "razor-core\DevilDaggersInfo.Razor.Core.CustomLeaderboard\DevilDaggersInfo.Razor.Core.CustomLeaderboard.csproj", "{181B288B-6B66-4F4D-8227-892B2561B2A1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.ReplayEditor", "razor-core\DevilDaggersInfo.Razor.Core.ReplayEditor\DevilDaggersInfo.Razor.Core.ReplayEditor.csproj", "{36ECBB72-2034-4196-AE05-DC92F9BB2856}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.Core.Unmarshalled", "razor-core\DevilDaggersInfo.Razor.Core.Unmarshalled\DevilDaggersInfo.Razor.Core.Unmarshalled.csproj", "{AE5DAE4E-61EE-4BA6-B21B-2828DF7EEBE3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.CustomLeaderboard", "razor\DevilDaggersInfo.Razor.CustomLeaderboard\DevilDaggersInfo.Razor.CustomLeaderboard.csproj", "{181B288B-6B66-4F4D-8227-892B2561B2A1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.ReplayEditor", "razor\DevilDaggersInfo.Razor.ReplayEditor\DevilDaggersInfo.Razor.ReplayEditor.csproj", "{36ECBB72-2034-4196-AE05-DC92F9BB2856}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Tool.CleanBuild", "tool\DevilDaggersInfo.Tool.CleanBuild\DevilDaggersInfo.Tool.CleanBuild.csproj", "{A0CC71FC-5AF0-4946-8575-605A02213B08}"
 EndProject
