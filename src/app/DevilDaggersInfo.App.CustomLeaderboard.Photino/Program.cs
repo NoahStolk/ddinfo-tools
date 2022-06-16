@@ -30,7 +30,7 @@ public static class Program
 		appBuilder.Services.AddSingleton<UploadService>();
 		appBuilder.Services.AddSingleton(configuration);
 
-		appBuilder.RootComponents.Add<Razor.Core.CustomLeaderboard.App>("app");
+		appBuilder.RootComponents.Add<Razor.CustomLeaderboard.App>("app");
 
 		PhotinoBlazorApp app = appBuilder.Build();
 

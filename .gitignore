@@ -285,12 +285,12 @@ Database Exports/
 # Tailwind
 */**/DevilDaggersInfo.Web.Client/wwwroot/tailwind.css
 */**/DevilDaggersInfo.Web.Client/wwwroot/tailwind.css.map
-*/**/DevilDaggersInfo.Razor.Core.AssetEditor/wwwroot/tailwind.css
-*/**/DevilDaggersInfo.Razor.Core.AssetEditor/wwwroot/tailwind.css.map
-*/**/DevilDaggersInfo.Razor.Core.CustomLeaderboard/wwwroot/tailwind.css
-*/**/DevilDaggersInfo.Razor.Core.CustomLeaderboard/wwwroot/tailwind.css.map
-*/**/DevilDaggersInfo.Razor.Core.ReplayEditor/wwwroot/tailwind.css
-*/**/DevilDaggersInfo.Razor.Core.ReplayEditor/wwwroot/tailwind.css.map
+*/**/DevilDaggersInfo.Razor.AssetEditor/wwwroot/tailwind.css
+*/**/DevilDaggersInfo.Razor.AssetEditor/wwwroot/tailwind.css.map
+*/**/DevilDaggersInfo.Razor.CustomLeaderboard/wwwroot/tailwind.css
+*/**/DevilDaggersInfo.Razor.CustomLeaderboard/wwwroot/tailwind.css.map
+*/**/DevilDaggersInfo.Razor.ReplayEditor/wwwroot/tailwind.css
+*/**/DevilDaggersInfo.Razor.ReplayEditor/wwwroot/tailwind.css.map
 
 # Data protection
 */**/DevilDaggersInfo.Web.Server/keys

@@ -13,7 +13,7 @@ public static class Program
 		PhotinoBlazorAppBuilder appBuilder = PhotinoBlazorAppBuilder.CreateDefault(args);
 		appBuilder.Services.AddLogging(builder => builder.AddConsole());
 
-		appBuilder.RootComponents.Add<Razor.Core.ReplayEditor.App>("app");
+		appBuilder.RootComponents.Add<Razor.ReplayEditor.App>("app");
 
 		PhotinoBlazorApp app = appBuilder.Build();
 

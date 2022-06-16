@@ -9,7 +9,7 @@
     <PackageReference Include="Photino.Blazor" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\razor-core\DevilDaggersInfo.Razor.Core.ReplayEditor\DevilDaggersInfo.Razor.Core.ReplayEditor.csproj" />
+    <ProjectReference Include="..\..\razor\DevilDaggersInfo.Razor.ReplayEditor\DevilDaggersInfo.Razor.ReplayEditor.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="wwwroot\**">

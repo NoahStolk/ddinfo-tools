@@ -1,7 +1,7 @@
 using DevilDaggersInfo.App.AssetEditor.Photino.Services;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.NativeInterface;
-using DevilDaggersInfo.Razor.Core.AssetEditor.Services;
+using DevilDaggersInfo.Razor.AssetEditor.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Photino.Blazor;
 
@@ -20,7 +20,7 @@ public static class Program
 		appBuilder.Services.AddSingleton<IAssetEditorFileFilterService, AssetEditorFileFilterService>();
 		appBuilder.Services.AddSingleton<BinaryState>();
 
-		appBuilder.RootComponents.Add<Razor.Core.AssetEditor.App>("app");
+		appBuilder.RootComponents.Add<Razor.AssetEditor.App>("app");
 
 		PhotinoBlazorApp app = appBuilder.Build();
 
