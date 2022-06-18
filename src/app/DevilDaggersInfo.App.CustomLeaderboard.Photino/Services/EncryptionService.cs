@@ -1,5 +1,5 @@
-using DevilDaggersInfo.Core.CustomLeaderboard.Services;
 using DevilDaggersInfo.Core.Encryption;
+using DevilDaggersInfo.Razor.CustomLeaderboard.Services;
 using Microsoft.Extensions.Configuration;
 
 namespace DevilDaggersInfo.App.CustomLeaderboard.Photino.Services;
