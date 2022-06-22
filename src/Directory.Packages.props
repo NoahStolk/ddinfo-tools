@@ -47,7 +47,7 @@
 	</ItemGroup>
 	<ItemGroup Label="JWT">
 		<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.6" />
-		<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.19.0" />
+		<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.20.0" />
 	</ItemGroup>
 	<ItemGroup Label="Discord integration">
 		<PackageVersion Include="DSharpPlus" Version="4.2.0" />
