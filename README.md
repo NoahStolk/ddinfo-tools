@@ -7,8 +7,8 @@ DevilDaggersInfo consists of a website and some tools created specifically for t
 - Viewing and searching the official leaderboards
 - Viewing individual player data
 - Parsing and creating survival files (spawnsets)
-- Parsing and creating replay files (work in progress)
-- Parsing and creating mod files (rewrite in progress)
+- Parsing and creating replay files
+- Parsing and creating mod files
 - Reading game memory
 - Hosting custom spawnsets
 - Hosting custom leaderboards
@@ -27,4 +27,12 @@ DevilDaggersInfo consists of a website and some tools created specifically for t
 
 And much more, all of which can be seen at [devildaggers.info](https://devildaggers.info/).
 
-Special thanks to the community for all the support throughout the years, and to the developer for making the game, as well as continuing to update the game to make working with its internals a lot easier. It has been a lot of fun.
+### Apps
+
+The current (legacy) apps are not included in this repository. Visit these repositories:
+
+- [DDSE 2](https://github.com/NoahStolk/DevilDaggersSurvivalEditor)
+- [DDCL 1](https://github.com/NoahStolk/DevilDaggersCustomLeaderboards)
+- [DDAE 1](https://github.com/NoahStolk/DevilDaggersAssetEditor)
+
+The project aims to be a fully cross-platform monorepo. The current apps do not fit in this architecture and porting them is not worth the effort. They're also pretty old and only work on Windows. New cross-platform apps are in development and will be announced in the future.
