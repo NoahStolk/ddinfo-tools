@@ -29,9 +29,9 @@ public class ClientConfiguration : IClientConfiguration
 #endif
 	}
 
-	public SupportedOperatingSystem GetOperatingSystem() => SupportedOperatingSystem.Windows;
+	public SupportedOperatingSystem GetOperatingSystem() => SupportedOperatingSystem.Windows; // TODO: Get whether Linux is used from build.
 
-	public ToolBuildType GetToolBuildType() => ToolBuildType.WindowsWpf; // TODO
+	public ToolBuildType GetToolBuildType() => ToolBuildType.WindowsPhotino; // TODO: Get whether Linux is used from build.
 
 	public ToolPublishMethod GetToolPublishMethod()
 	{
