@@ -2,6 +2,7 @@ using DevilDaggersInfo.App.CustomLeaderboard.Photino.Services;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.CustomLeaderboard.Services;
 using DevilDaggersInfo.Core.NativeInterface;
+using DevilDaggersInfo.Core.NativeInterface.Windows;
 using DevilDaggersInfo.Razor.CustomLeaderboard.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,8 @@ public static class Program
 
 		appBuilder.Services.AddSingleton<IClientConfiguration, ClientConfiguration>();
 		appBuilder.Services.AddSingleton<IEncryptionService, EncryptionService>();
+
+		// TODO: Register Linux services on Linux.
 		appBuilder.Services.AddSingleton<INativeErrorReporter, NativeErrorReporter>();
 		appBuilder.Services.AddSingleton<INativeMemoryService, NativeMemoryService>();
 		appBuilder.Services.AddSingleton<NetworkService>();

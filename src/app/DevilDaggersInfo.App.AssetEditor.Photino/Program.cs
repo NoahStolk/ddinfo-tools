@@ -1,6 +1,7 @@
 using DevilDaggersInfo.App.AssetEditor.Photino.Services;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.NativeInterface;
+using DevilDaggersInfo.Core.NativeInterface.Windows;
 using DevilDaggersInfo.Razor.AssetEditor.Services;
 using Fluxor;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,7 @@ public static class Program
 		PhotinoBlazorAppBuilder appBuilder = PhotinoBlazorAppBuilder.CreateDefault(args);
 		appBuilder.Services.AddLogging();
 
+		// TODO: Register Linux services on Linux.
 		appBuilder.Services.AddSingleton<INativeErrorReporter, NativeErrorReporter>();
 		appBuilder.Services.AddSingleton<INativeFileSystemService, NativeFileSystemService>();
 		appBuilder.Services.AddSingleton<IAssetEditorFileFilterService, AssetEditorFileFilterService>();
