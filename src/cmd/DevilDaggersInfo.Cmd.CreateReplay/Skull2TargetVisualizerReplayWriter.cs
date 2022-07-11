@@ -5,12 +5,11 @@ public class Skull2TargetVisualizerReplayWriter : IReplayWriter
 	public ReplayBinary Write()
 	{
 		ReplayBinary original = new(File.ReadAllBytes(Path.Combine("Resources", "Replays", "Skull2Analysis.ddreplay")));
-		List<IEvent> originalEvents = ReplayEventsParser.ParseCompressedEvents(original.CompressedEvents).SelectMany(e => e).ToList();
 		List<IEvent> newEvents = new();
 		int skull2EntityId = -1;
 
 		int visualizerEntityId = 100;
-		foreach (IEvent e in originalEvents)
+		foreach (IEvent e in original.EventsPerTick.SelectMany(e => e))
 		{
 			if (skull2EntityId == -1 && e is BoidSpawnEvent boidSpawn && boidSpawn.BoidType == BoidType.Skull2)
 				skull2EntityId = boidSpawn.EntityId;
