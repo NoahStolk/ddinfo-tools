@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace DevilDaggersInfo.Cmd.CreateReplay;
 
 public class RandomReplayWriter : IReplayWriter
@@ -29,7 +22,7 @@ public class RandomReplayWriter : IReplayWriter
 			if (i == 80)
 			{
 				for (int j = 0; j < 100; j++)
-					events.Add(new DaggerSpawnEvent(20000 + j, -1, new((short)Math.Sin(j), 30, (short)Math.Cos(j)), Int16Mat3x3.Identity, true, 6));
+					events.Add(new DaggerSpawnEvent(20000 + j, -1, new((short)Math.Sin(j), 30, (short)Math.Cos(j)), Int16Mat3x3.Identity, true, DaggerType.Level4Homing));
 			}
 
 			if (i == 170)
