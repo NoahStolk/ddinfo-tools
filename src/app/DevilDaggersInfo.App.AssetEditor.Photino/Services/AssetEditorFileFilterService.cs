@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Common.Exceptions;
 using DevilDaggersInfo.Core.Asset.Enums;
 using DevilDaggersInfo.Core.Asset.Extensions;
+using DevilDaggersInfo.Core.NativeInterface.Utils;
 using DevilDaggersInfo.Razor.AssetEditor.Services;
 
 namespace DevilDaggersInfo.App.AssetEditor.Photino.Services;
@@ -21,16 +22,10 @@ public class AssetEditorFileFilterService : IAssetEditorFileFilterService
 			_ => throw new InvalidEnumConversionException(assetType),
 		};
 
-		return BuildFilter(fileTypeName, false, $"*{assetType.GetFileExtension()}");
+		return FileDialogFilterUtils.BuildFilter(fileTypeName, false, $"*{assetType.GetFileExtension()}");
 	}
 
-	public string GetVertexShaderFilter() => BuildFilter("Vertex shader", true, "*.vert", "*.glsl");
+	public string GetVertexShaderFilter() => FileDialogFilterUtils.BuildFilter("Vertex shader", true, "*.vert", "*.glsl");
 
-	public string GetFragmentShaderFilter() => BuildFilter("Fragment shader", true, "*.frag", "*.glsl");
-
-	private static string BuildFilter(string fileTypeName, bool includeAllFiles, params string[] fileExtensionPatterns)
-	{
-		string patterns = string.Join(";", fileExtensionPatterns);
-		return $"{fileTypeName} files ({patterns})|{patterns}{(includeAllFiles ? "|All files (*.*)|*.*" : null)}";
-	}
+	public string GetFragmentShaderFilter() => FileDialogFilterUtils.BuildFilter("Fragment shader", true, "*.frag", "*.glsl");
 }
