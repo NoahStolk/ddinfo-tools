@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -97,7 +98,9 @@ public class RandomReplayWriter : IReplayWriter
 
 		events.Add(new EndEvent());
 
-		return new(1, 2, events.Count(e => e is InputsEvent) / 60f, 0, 0, 0, 0, 0, 0, 999999, "test", File.ReadAllBytes(Path.Combine("Resources", "Spawnsets", "EmptySpawnset")), ReplayEventsParser.CompileEvents(events));
+		byte[] spawnsetBuffer = File.ReadAllBytes(Path.Combine("Resources", "Spawnsets", "EmptySpawnset"));
+		ReplayBinaryHeader header = new(1, 2, events.Count(e => e is InputsEvent) / 60f, 0, 0, 0, 0, 0, 0, 999999, "test", spawnsetBuffer);
+		return new(header, ReplayEventsParser.CompileEvents(events));
 
 		void EndTick(Movement movement, JumpType jump, bool lmb, bool rmb, int mouseX, int mouseY)
 		{

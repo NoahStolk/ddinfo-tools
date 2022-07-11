@@ -4,10 +4,7 @@ public class Skull2TargetVisualizerReplayWriter : IReplayWriter
 {
 	public ReplayBinary Write()
 	{
-		ReplayBinary original = new(File.ReadAllBytes(Path.Combine("Resources", "Replays", "Skull2Analysis.ddreplay")), ReplayBinaryReadComprehensiveness.All);
-		if (original.SpawnsetBuffer == null || original.CompressedEvents == null)
-			throw new InvalidOperationException("Must read replay binary entirely by setting ReplayBinaryReadComprehensiveness to All.");
-
+		ReplayBinary original = new(File.ReadAllBytes(Path.Combine("Resources", "Replays", "Skull2Analysis.ddreplay")));
 		List<IEvent> originalEvents = ReplayEventsParser.ParseCompressedEvents(original.CompressedEvents).SelectMany(e => e).ToList();
 		List<IEvent> newEvents = new();
 		int skull2EntityId = -1;
@@ -27,19 +24,22 @@ public class Skull2TargetVisualizerReplayWriter : IReplayWriter
 			newEvents.Add(e);
 		}
 
+		ReplayBinaryHeader header = new(
+			version: original.Header.Version,
+			timestampSinceGameRelease: original.Header.TimestampSinceGameRelease,
+			time: original.Header.Time,
+			startTime: original.Header.StartTime,
+			daggersFired: original.Header.DaggersFired,
+			deathType: original.Header.DeathType,
+			gems: original.Header.Gems,
+			daggersHit: original.Header.DaggersHit,
+			kills: original.Header.Kills,
+			playerId: original.Header.PlayerId,
+			username: original.Header.Username,
+			spawnsetBuffer: original.Header.SpawnsetBuffer);
+
 		return new(
-			version: original.Version,
-			timestampSinceGameRelease: original.TimestampSinceGameRelease,
-			time: original.Time,
-			startTime: original.StartTime,
-			daggersFired: original.DaggersFired,
-			deathType: original.DeathType,
-			gems: original.Gems,
-			daggersHit: original.DaggersHit,
-			kills: original.Kills,
-			playerId: original.PlayerId,
-			username: original.Username,
-			spawnsetBuffer: original.SpawnsetBuffer,
+			header: header,
 			compressedEvents: ReplayEventsParser.CompileEvents(newEvents));
 	}
 
