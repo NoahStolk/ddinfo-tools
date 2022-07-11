@@ -27,8 +27,8 @@ public static class Program
 		appBuilder.Services.AddSingleton<IEncryptionService, EncryptionService>();
 
 		// TODO: Register Linux services on Linux.
-		appBuilder.Services.AddSingleton<INativeErrorReporter, NativeErrorReporter>();
-		appBuilder.Services.AddSingleton<INativeMemoryService, NativeMemoryService>();
+		appBuilder.Services.AddSingleton<INativeErrorReporter, WindowsErrorReporter>();
+		appBuilder.Services.AddSingleton<INativeMemoryService, WindowsMemoryService>();
 		appBuilder.Services.AddSingleton<NetworkService>();
 		appBuilder.Services.AddSingleton<ReaderService>();
 		appBuilder.Services.AddSingleton<UploadService>();
