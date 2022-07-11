@@ -19,6 +19,7 @@ public static class Program
 
 		// TODO: Register Linux services on Linux.
 		appBuilder.Services.AddSingleton<INativeFileSystemService, WindowsFileSystemService>();
+		appBuilder.Services.AddSingleton<INativeMemoryService, WindowsMemoryService>();
 
 		appBuilder.Services.AddScoped<StateFacade>();
 
