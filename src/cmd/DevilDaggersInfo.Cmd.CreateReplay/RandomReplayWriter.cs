@@ -29,7 +29,7 @@ public class RandomReplayWriter : IReplayWriter
 			if (i == 80)
 			{
 				for (int j = 0; j < 100; j++)
-					events.Add(new DaggerSpawnEvent(20000 + j, -1, new((short)Math.Sin(j), 30, (short)Math.Cos(j)), Int16Mat3x3.Identity, 10, 6));
+					events.Add(new DaggerSpawnEvent(20000 + j, -1, new((short)Math.Sin(j), 30, (short)Math.Cos(j)), Int16Mat3x3.Identity, true, 6));
 			}
 
 			if (i == 170)

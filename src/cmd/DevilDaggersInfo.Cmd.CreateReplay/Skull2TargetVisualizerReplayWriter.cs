@@ -46,7 +46,7 @@ public class Skull2TargetVisualizerReplayWriter : IReplayWriter
 	{
 		for (int i = 0; i < 10; i++)
 		{
-			newEvents.Add(new DaggerSpawnEvent(visualizerEntityId, 0, targetEvent.TargetPosition with { Y = 50 }, new(158, -11, 201, -201, 3, -159, 5, -256, -10), 0, 1));
+			newEvents.Add(new DaggerSpawnEvent(visualizerEntityId, 0, targetEvent.TargetPosition with { Y = 50 }, new(158, -11, 201, -201, 3, -159, 5, -256, -10), false, 1));
 		}
 	}
 }
