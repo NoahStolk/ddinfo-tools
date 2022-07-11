@@ -23,6 +23,7 @@ DevilDaggersInfo consists of a website and some tools created specifically for t
 	- [DDAE](https://github.com/NoahStolk/DevilDaggersAssetEditor)
 	- [ddstats-rust](https://github.com/lsaa/ddstats-rust)
 	- [DDLIVE](https://github.com/rotisseriechicken/DDLIVE)
+	- [Clubber](https://github.com/Spoertm/Clubber)
 	- Devil Daggers itself
 
 And much more, all of which can be seen at [devildaggers.info](https://devildaggers.info/).
