@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Photino.Blazor;
 
-namespace DevilDaggersInfo.App.CustomLeaderboard.Photino;
+namespace DevilDaggersInfo.App.ReplayEditor.Photino;
 
 public static class Program
 {
