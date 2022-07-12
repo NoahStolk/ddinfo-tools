@@ -1,7 +1,7 @@
 using DevilDaggersInfo.App.AssetEditor.Photino.Services;
 using DevilDaggersInfo.Common.Utils;
-using DevilDaggersInfo.Core.NativeInterface;
-using DevilDaggersInfo.Core.NativeInterface.Windows;
+using DevilDaggersInfo.Core.NativeInterface.Services;
+using DevilDaggersInfo.Core.NativeInterface.Services.Windows;
 using DevilDaggersInfo.Razor.AssetEditor.Services;
 using Fluxor;
 using Microsoft.Extensions.DependencyInjection;

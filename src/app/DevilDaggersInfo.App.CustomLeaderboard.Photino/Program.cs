@@ -1,8 +1,8 @@
 using DevilDaggersInfo.App.CustomLeaderboard.Photino.Services;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.CustomLeaderboard.Services;
-using DevilDaggersInfo.Core.NativeInterface;
-using DevilDaggersInfo.Core.NativeInterface.Windows;
+using DevilDaggersInfo.Core.NativeInterface.Services;
+using DevilDaggersInfo.Core.NativeInterface.Services.Windows;
 using DevilDaggersInfo.Razor.CustomLeaderboard.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
