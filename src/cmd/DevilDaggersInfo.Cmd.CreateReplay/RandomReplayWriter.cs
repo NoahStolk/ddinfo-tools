@@ -86,7 +86,7 @@ public class RandomReplayWriter : IReplayWriter
 				movement |= Movement.Left;
 			}
 
-			EndTick(movement, i == 0 || i > 740 && i % 52 == 0 ? JumpType.PreciseHop : JumpType.None, false, false, i < 90 || i > 430 && i < 465 ? 8 : i > 740 ? 6 : 0, i > 800 ? (int)Math.Sin(i / 6f) * 15 : 0);
+			EndTick(movement, i == 0 || i > 740 && i % 52 == 0 ? JumpType.StartedPress : JumpType.None, false, false, i < 90 || i > 430 && i < 465 ? 8 : i > 740 ? 6 : 0, i > 800 ? (int)Math.Sin(i / 6f) * 15 : 0);
 		}
 
 		events.Add(new EndEvent());
