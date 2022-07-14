@@ -6,7 +6,7 @@ public class DeathsReplayWriter : IReplayWriter
 	{
 		List<IEvent> events = new();
 		events.Add(new HitEvent(353333333, 353333333, 353333333));
-		events.Add(new InitialInputsEvent(false, false, false, false, 0, false, false, 0, 0, 0.005f));
+		events.Add(new InitialInputsEvent(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0, 0.005f));
 
 		for (int i = 0; i < 60; i++)
 		{
@@ -14,9 +14,9 @@ public class DeathsReplayWriter : IReplayWriter
 				events.Add(new DeathEvent(1));
 
 			if (i == 45)
-				events.Add(new InputsEvent(false, false, false, false, JumpType.None, true, false, 0, 0));
+				events.Add(new InputsEvent(false, false, false, false, JumpType.None, ShootType.Hold, ShootType.None, 0, 0));
 			else
-				events.Add(new InputsEvent(false, false, false, false, JumpType.None, false, false, 0, 0));
+				events.Add(new InputsEvent(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0));
 		}
 
 		events.Add(new EndEvent());
