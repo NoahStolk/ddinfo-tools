@@ -6,7 +6,7 @@ public class RandomReplayWriter : IReplayWriter
 	{
 		List<IEvent> events = new();
 		events.Add(new HitEvent(353333333, 353333333, 353333333));
-		events.Add(new InitialInputsEvent(false, false, false, false, 0, false, false, 0, 0, 0.005f));
+		events.Add(new InitialInputsEvent(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0, 0.005f));
 
 		for (int i = 0; i < 1200; i++)
 		{
@@ -86,7 +86,7 @@ public class RandomReplayWriter : IReplayWriter
 				movement |= Movement.Left;
 			}
 
-			EndTick(movement, i == 0 || i > 740 && i % 52 == 0 ? JumpType.StartedPress : JumpType.None, false, false, i < 90 || i > 430 && i < 465 ? 8 : i > 740 ? 6 : 0, i > 800 ? (int)Math.Sin(i / 6f) * 15 : 0);
+			EndTick(movement, i == 0 || i > 740 && i % 52 == 0 ? JumpType.StartedPress : JumpType.None, ShootType.None, ShootType.None, i < 90 || i > 430 && i < 465 ? 8 : i > 740 ? 6 : 0, i > 800 ? (int)Math.Sin(i / 6f) * 15 : 0);
 		}
 
 		events.Add(new EndEvent());
@@ -95,7 +95,7 @@ public class RandomReplayWriter : IReplayWriter
 		ReplayBinaryHeader header = new(1, 2, events.Count(e => e is InputsEvent) / 60f, 0, 0, 0, 0, 0, 0, 999999, "test", spawnsetBuffer);
 		return new(header, ReplayEventsParser.CompileEvents(events));
 
-		void EndTick(Movement movement, JumpType jump, bool lmb, bool rmb, int mouseX, int mouseY)
+		void EndTick(Movement movement, JumpType jump, ShootType lmb, ShootType rmb, int mouseX, int mouseY)
 		{
 			events.Add(new InputsEvent(movement.HasFlag(Movement.Left), movement.HasFlag(Movement.Right), movement.HasFlag(Movement.Forward), movement.HasFlag(Movement.Backward), jump, lmb, rmb, (short)mouseX, (short)mouseY));
 		}
