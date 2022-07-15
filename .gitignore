@@ -285,6 +285,8 @@ database-exports/
 # Tailwind
 */**/DevilDaggersInfo.Web.Client/wwwroot/tailwind.css
 */**/DevilDaggersInfo.Web.Client/wwwroot/tailwind.css.map
+*/**/DevilDaggersInfo.Razor.AppManager/wwwroot/tailwind.css
+*/**/DevilDaggersInfo.Razor.AppManager/wwwroot/tailwind.css.map
 */**/DevilDaggersInfo.Razor.AssetEditor/wwwroot/tailwind.css
 */**/DevilDaggersInfo.Razor.AssetEditor/wwwroot/tailwind.css.map
 */**/DevilDaggersInfo.Razor.CustomLeaderboard/wwwroot/tailwind.css
