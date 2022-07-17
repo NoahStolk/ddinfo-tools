@@ -4,18 +4,15 @@ public class Skull2TargetVisualizerReplayWriter : IReplayWriter
 {
 	public ReplayBinary Write()
 	{
-		ReplayBinary original = new(File.ReadAllBytes(Path.Combine("Resources", "Replays", "Skull2Analysis.ddreplay")));
+		ReplayBinary original = new(File.ReadAllBytes(/*Path.Combine("Resources", "Replays", "Skull2Analysis.ddreplay")*/@"C:\Users\NOAH\AppData\Roaming\DevilDaggers\replays\111-ninja-skull2_335.77-Derkan-0c0e40f3.ddreplay"));
 		List<IEvent> newEvents = new();
-		int skull2EntityId = -1;
 
 		int visualizerEntityId = 100;
 		foreach (IEvent e in original.EventsPerTick.SelectMany(e => e))
 		{
-			if (skull2EntityId == -1 && e is BoidSpawnEvent boidSpawn && boidSpawn.BoidType == BoidType.Skull2)
-				skull2EntityId = boidSpawn.EntityId;
-
-			if (e is EntityTargetEvent targetEvent && targetEvent.EntityId == skull2EntityId)
+			if (e is EntityTargetEvent targetEvent && original.EntityTypes[targetEvent.EntityId] == EntityType.Skull2)
 			{
+				// TODO: Shift all existing entity IDs forward.
 				AddVisualizer(newEvents, visualizerEntityId, targetEvent);
 				visualizerEntityId++;
 			}
