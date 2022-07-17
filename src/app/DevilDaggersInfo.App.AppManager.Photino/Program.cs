@@ -20,6 +20,7 @@ public static class Program
 		// TODO: Register Linux services on Linux.
 		appBuilder.Services.AddSingleton<INativeFileSystemService, WindowsFileSystemService>();
 
+		appBuilder.Services.AddSingleton<NetworkService>();
 		appBuilder.Services.AddScoped<StateFacade>();
 
 		appBuilder.Services.AddFluxor(options => options.ScanAssemblies(typeof(Program).Assembly, typeof(Razor.AppManager.App).Assembly));
