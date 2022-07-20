@@ -2,9 +2,9 @@ namespace DevilDaggersInfo.Cmd.CreateReplay;
 
 public class Skull2TargetVisualizerReplayWriter : IReplayWriter
 {
-	public ReplayBinary Write()
+	public ReplayBinary<LocalReplayBinaryHeader> Write()
 	{
-		ReplayBinary original = new(File.ReadAllBytes(/*Path.Combine("Resources", "Replays", "Skull2Analysis.ddreplay")*/@"C:\Users\NOAH\AppData\Roaming\DevilDaggers\replays\111-ninja-skull2_335.77-Derkan-0c0e40f3.ddreplay"));
+		ReplayBinary<LocalReplayBinaryHeader> original = new(File.ReadAllBytes(/*Path.Combine("Resources", "Replays", "Skull2Analysis.ddreplay")*/@"C:\Users\NOAH\AppData\Roaming\DevilDaggers\replays\111-ninja-skull2_335.77-Derkan-0c0e40f3.ddreplay"));
 		List<IEvent> newEvents = new();
 
 		int visualizerEntityId = 100;

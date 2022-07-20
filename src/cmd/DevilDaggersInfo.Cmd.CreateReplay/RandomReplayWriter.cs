@@ -2,7 +2,7 @@ namespace DevilDaggersInfo.Cmd.CreateReplay;
 
 public class RandomReplayWriter : IReplayWriter
 {
-	public ReplayBinary Write()
+	public ReplayBinary<LocalReplayBinaryHeader> Write()
 	{
 		List<IEvent> events = new();
 		events.Add(new HitEvent(353333333, 353333333, 353333333));
