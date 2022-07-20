@@ -20,7 +20,7 @@ public class Skull2TargetVisualizerReplayWriter : IReplayWriter
 			newEvents.Add(e);
 		}
 
-		ReplayBinaryHeader header = new(
+		LocalReplayBinaryHeader header = new(
 			version: original.Header.Version,
 			timestampSinceGameRelease: original.Header.TimestampSinceGameRelease,
 			time: original.Header.Time,

@@ -92,7 +92,7 @@ public class RandomReplayWriter : IReplayWriter
 		events.Add(new EndEvent());
 
 		byte[] spawnsetBuffer = File.ReadAllBytes(Path.Combine("Resources", "Spawnsets", "EmptySpawnset"));
-		ReplayBinaryHeader header = new(1, 2, events.Count(e => e is InputsEvent) / 60f, 0, 0, 0, 0, 0, 0, 999999, "test", spawnsetBuffer);
+		LocalReplayBinaryHeader header = new(1, 2, events.Count(e => e is InputsEvent) / 60f, 0, 0, 0, 0, 0, 0, 999999, "test", spawnsetBuffer);
 		return new(header, ReplayEventsParser.CompileEvents(events));
 
 		void EndTick(Movement movement, JumpType jump, ShootType lmb, ShootType rmb, int mouseX, int mouseY)

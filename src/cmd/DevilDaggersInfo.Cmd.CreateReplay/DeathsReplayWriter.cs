@@ -22,7 +22,7 @@ public class DeathsReplayWriter : IReplayWriter
 		events.Add(new EndEvent());
 
 		byte[] spawnsetBuffer = File.ReadAllBytes(Path.Combine("Resources", "Spawnsets", "EmptySpawnset"));
-		ReplayBinaryHeader header = new(
+		LocalReplayBinaryHeader header = new(
 			version: 1,
 			timestampSinceGameRelease: 0,
 			time: 1,
