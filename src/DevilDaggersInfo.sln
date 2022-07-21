@@ -42,7 +42,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.AppMan
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.AssetEditor.Photino", "app\DevilDaggersInfo.App.AssetEditor.Photino\DevilDaggersInfo.App.AssetEditor.Photino.csproj", "{FDD9817A-0B83-428D-AE15-A3E886B3E83B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.Core.CustomLeaderboard", "app-core\DevilDaggersInfo.App.Core.CustomLeaderboard\DevilDaggersInfo.App.Core.CustomLeaderboard.csproj", "{F8DCF34B-4EF0-43AB-B578-D18B1417BD93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.Core.GameMemory", "app-core\DevilDaggersInfo.App.Core.GameMemory\DevilDaggersInfo.App.Core.GameMemory.csproj", "{F8DCF34B-4EF0-43AB-B578-D18B1417BD93}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.Core.NativeInterface", "app-core\DevilDaggersInfo.App.Core.NativeInterface\DevilDaggersInfo.App.Core.NativeInterface.csproj", "{6D7EE612-55E1-4609-ADA1-B612193232AD}"
 EndProject
