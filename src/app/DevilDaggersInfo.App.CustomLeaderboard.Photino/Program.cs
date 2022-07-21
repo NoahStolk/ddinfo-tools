@@ -1,4 +1,4 @@
-using DevilDaggersInfo.App.Core.CustomLeaderboard.Services;
+using DevilDaggersInfo.App.Core.CustomLeaderboard;
 using DevilDaggersInfo.App.Core.NativeInterface.Services;
 using DevilDaggersInfo.App.Core.NativeInterface.Services.Windows;
 using DevilDaggersInfo.App.CustomLeaderboard.Photino.Services;
