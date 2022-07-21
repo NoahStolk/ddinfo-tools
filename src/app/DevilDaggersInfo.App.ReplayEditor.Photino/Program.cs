@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Core.GameMemory;
 using DevilDaggersInfo.App.Core.NativeInterface.Services;
 using DevilDaggersInfo.App.Core.NativeInterface.Services.Windows;
 using DevilDaggersInfo.Common.Utils;
@@ -20,6 +21,7 @@ public static class Program
 		// TODO: Register Linux services on Linux.
 		appBuilder.Services.AddSingleton<INativeFileSystemService, WindowsFileSystemService>();
 		appBuilder.Services.AddSingleton<INativeMemoryService, WindowsMemoryService>();
+		appBuilder.Services.AddSingleton<GameMemoryReaderService>();
 
 		appBuilder.Services.AddScoped<StateFacade>();
 
