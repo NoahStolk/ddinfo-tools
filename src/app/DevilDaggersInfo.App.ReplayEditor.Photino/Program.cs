@@ -19,6 +19,7 @@ public static class Program
 		appBuilder.Services.AddLogging(builder => builder.AddConsole());
 
 		// TODO: Register Linux services on Linux.
+		appBuilder.Services.AddSingleton<INativeErrorReporter, WindowsErrorReporter>();
 		appBuilder.Services.AddSingleton<INativeFileSystemService, WindowsFileSystemService>();
 		appBuilder.Services.AddSingleton<INativeMemoryService, WindowsMemoryService>();
 		appBuilder.Services.AddSingleton<GameMemoryReaderService>();
