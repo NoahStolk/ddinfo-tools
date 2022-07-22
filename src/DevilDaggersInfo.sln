@@ -8,7 +8,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_root", "_root", "{9AE54BA2
 		..\.gitattributes = ..\.gitattributes
 		..\.gitignore = ..\.gitignore
 		tests\.runsettings = tests\.runsettings
-		..\docs\architecture.md = ..\docs\architecture.md
 		..\.github\workflows\ci.yml = ..\.github\workflows\ci.yml
 		..\.github\dependabot.yml = ..\.github\dependabot.yml
 		Directory.Build.props = Directory.Build.props
@@ -145,6 +144,23 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web", "web", "{2CA07E38-90F7-49D4-B4E5-46E92B7E862B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web-core", "web-core", "{E46A7074-2772-4B70-A0A6-F4431CC99F4C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "architecture", "architecture", "{0232E034-4C66-4B0E-A2F4-847BAABEC89D}"
+	ProjectSection(SolutionItems) = preProject
+		..\docs\architecture\communication.md = ..\docs\architecture\communication.md
+		..\docs\architecture\core-libraries.md = ..\docs\architecture\core-libraries.md
+		..\docs\architecture\project-types-and-dependencies.md = ..\docs\architecture\project-types-and-dependencies.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "game-formats", "game-formats", "{9FBE0CA2-67F4-4379-B3F8-52070C0926BA}"
+	ProjectSection(SolutionItems) = preProject
+		..\docs\game-formats\game-memory.md = ..\docs\game-formats\game-memory.md
+		..\docs\game-formats\leaderboard-replay-binary.md = ..\docs\game-formats\leaderboard-replay-binary.md
+		..\docs\game-formats\local-replay-binary.md = ..\docs\game-formats\local-replay-binary.md
+		..\docs\game-formats\mod-binary.md = ..\docs\game-formats\mod-binary.md
+		..\docs\game-formats\replay-events.md = ..\docs\game-formats\replay-events.md
+		..\docs\game-formats\spawnset-binary.md = ..\docs\game-formats\spawnset-binary.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -417,6 +433,8 @@ Global
 		{595CAB68-C85D-4AAD-B78F-4CC499921E61} = {2CA07E38-90F7-49D4-B4E5-46E92B7E862B}
 		{FA23F585-CF8F-49ED-8E47-D1B9235774CD} = {2CA07E38-90F7-49D4-B4E5-46E92B7E862B}
 		{CB715CD9-FB6A-4E79-B9C0-830833223D91} = {139163CB-F521-45E4-B022-780DF7322293}
+		{0232E034-4C66-4B0E-A2F4-847BAABEC89D} = {9AE54BA2-750F-42CC-97EC-4DD29A452100}
+		{9FBE0CA2-67F4-4379-B3F8-52070C0926BA} = {9AE54BA2-750F-42CC-97EC-4DD29A452100}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E27EC676-81BF-4099-BFC9-20E860CE83A5}
