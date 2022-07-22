@@ -23,6 +23,7 @@ public static class Program
 		appBuilder.Services.AddSingleton<INativeMemoryService, WindowsMemoryService>();
 		appBuilder.Services.AddSingleton<GameMemoryReaderService>();
 
+		appBuilder.Services.AddSingleton<NetworkService>();
 		appBuilder.Services.AddScoped<StateFacade>();
 
 		appBuilder.Services.AddFluxor(options => options.ScanAssemblies(typeof(Program).Assembly, typeof(Razor.ReplayEditor.App).Assembly));
