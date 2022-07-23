@@ -1,3 +1,5 @@
+using DevilDaggersInfo.Core.Replay.Events.Interfaces;
+
 namespace DevilDaggersInfo.Cmd.CreateReplay;
 
 public class Skull2TargetVisualizerReplayWriter : IReplayWriter
