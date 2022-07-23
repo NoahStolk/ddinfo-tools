@@ -1,3 +1,5 @@
+using DevilDaggersInfo.Core.Replay.Events.Interfaces;
+
 namespace DevilDaggersInfo.Cmd.CreateReplay;
 
 public class DeathsReplayWriter : IReplayWriter
@@ -38,7 +40,7 @@ public class DeathsReplayWriter : IReplayWriter
 
 		return new(
 			header: header,
-			compressedEvents: ReplayEventsParser.CompileEvents(events));
+			compressedEvents: ReplayEventsCompiler.CompileEvents(events));
 	}
 
 	private static void AddVisualizer(List<IEvent> newEvents, int visualizerEntityId, EntityTargetEvent targetEvent)
