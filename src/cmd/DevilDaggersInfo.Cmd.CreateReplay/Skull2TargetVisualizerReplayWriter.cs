@@ -10,9 +10,9 @@ public class Skull2TargetVisualizerReplayWriter : IReplayWriter
 		List<IEvent> newEvents = new();
 
 		int visualizerEntityId = 100;
-		foreach (IEvent e in original.EventsPerTick.SelectMany(e => e))
+		foreach (IEvent e in original.EventsData.Events)
 		{
-			if (e is EntityTargetEvent targetEvent && original.EntityTypes[targetEvent.EntityId] == EntityType.Skull2)
+			if (e is EntityTargetEvent targetEvent && original.EventsData.EntityTypes[targetEvent.EntityId] == EntityType.Skull2)
 			{
 				// TODO: Shift all existing entity IDs forward.
 				AddVisualizer(newEvents, visualizerEntityId, targetEvent);
@@ -38,7 +38,7 @@ public class Skull2TargetVisualizerReplayWriter : IReplayWriter
 
 		return new(
 			header: header,
-			compressedEvents: ReplayEventsParser.CompileEvents(newEvents));
+			compressedEvents: ReplayEventsCompiler.CompileEvents(newEvents));
 	}
 
 	private static void AddVisualizer(List<IEvent> newEvents, int visualizerEntityId, EntityTargetEvent targetEvent)
