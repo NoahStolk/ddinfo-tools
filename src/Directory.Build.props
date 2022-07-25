@@ -19,6 +19,9 @@
 		<DebugSymbols>False</DebugSymbols>
 		<GenerateDocumentationFile>false</GenerateDocumentationFile>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(CI)' == 'true'">
+		<TailwindBuild>false</TailwindBuild>
+	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Roslynator.Analyzers">
 			<PrivateAssets>all</PrivateAssets>
