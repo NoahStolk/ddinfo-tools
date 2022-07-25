@@ -12,6 +12,7 @@
 		<WarningsAsErrors>nullable</WarningsAsErrors>
 		<EnablePreviewFeatures>true</EnablePreviewFeatures>
 		<LangVersion>preview</LangVersion>
+		<TailwindBuild>true</TailwindBuild>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<DebugType>None</DebugType>
