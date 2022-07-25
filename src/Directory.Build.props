@@ -12,11 +12,15 @@
 		<WarningsAsErrors>nullable</WarningsAsErrors>
 		<EnablePreviewFeatures>true</EnablePreviewFeatures>
 		<LangVersion>preview</LangVersion>
+		<TailwindBuild>true</TailwindBuild>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<DebugType>None</DebugType>
 		<DebugSymbols>False</DebugSymbols>
 		<GenerateDocumentationFile>false</GenerateDocumentationFile>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(CI)' == 'true'">
+		<TailwindBuild>false</TailwindBuild>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Roslynator.Analyzers">
