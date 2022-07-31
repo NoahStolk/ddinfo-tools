@@ -29,7 +29,7 @@ public static class Program
 		appBuilder.Services.AddSingleton<NetworkService>();
 		appBuilder.Services.AddScoped<StateFacade>();
 
-		appBuilder.Services.AddSingleton<IJSRuntimeWrapper, InProcessRuntimeWrapper>(serviceProvider => new((IJSInProcessRuntime)serviceProvider.GetRequiredService<IJSRuntime>()));
+		appBuilder.Services.AddSingleton<IJSRuntimeWrapper, WebViewRuntimeWrapper>(serviceProvider => new(serviceProvider.GetRequiredService<IJSRuntime>()));
 
 		appBuilder.Services.AddFluxor(options => options.ScanAssemblies(typeof(Program).Assembly, typeof(Razor.ReplayEditor.App).Assembly));
 
