@@ -2,12 +2,10 @@ using DevilDaggersInfo.App.Core.GameMemory;
 using DevilDaggersInfo.App.Core.NativeInterface.Services;
 using DevilDaggersInfo.App.Core.NativeInterface.Services.Windows;
 using DevilDaggersInfo.Common.Utils;
-using DevilDaggersInfo.Razor.Core.Canvas.JSRuntime;
 using DevilDaggersInfo.Razor.ReplayEditor.Services;
 using Fluxor;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.JSInterop;
 using Photino.Blazor;
 
 namespace DevilDaggersInfo.App.ReplayEditor.Photino;
@@ -28,8 +26,6 @@ public static class Program
 
 		appBuilder.Services.AddSingleton<NetworkService>();
 		appBuilder.Services.AddScoped<StateFacade>();
-
-		appBuilder.Services.AddSingleton<IJSRuntimeWrapper, WebViewRuntimeWrapper>(serviceProvider => new(serviceProvider.GetRequiredService<IJSRuntime>()));
 
 		appBuilder.Services.AddFluxor(options => options.ScanAssemblies(typeof(Program).Assembly, typeof(Razor.ReplayEditor.App).Assembly));
 
