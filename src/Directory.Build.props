@@ -1,4 +1,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="Current">
+
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
@@ -14,14 +15,17 @@
 		<LangVersion>preview</LangVersion>
 		<TailwindBuild>true</TailwindBuild>
 	</PropertyGroup>
+
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<DebugType>None</DebugType>
 		<DebugSymbols>False</DebugSymbols>
 		<GenerateDocumentationFile>false</GenerateDocumentationFile>
 	</PropertyGroup>
+
 	<PropertyGroup Condition="'$(CI)' == 'true'">
 		<TailwindBuild>false</TailwindBuild>
 	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Roslynator.Analyzers">
 			<PrivateAssets>all</PrivateAssets>
@@ -36,4 +40,5 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
+
 </Project>
