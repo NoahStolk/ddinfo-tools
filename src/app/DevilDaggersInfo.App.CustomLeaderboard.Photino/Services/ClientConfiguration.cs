@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Api.Ddcl.ProcessMemory;
-using DevilDaggersInfo.Api.Ddcl.Tools;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Razor.CustomLeaderboard.Services;
+using DevilDaggersInfo.Types.Web;
 
 namespace DevilDaggersInfo.App.CustomLeaderboard.Photino.Services;
 

@@ -1,8 +1,8 @@
 using DevilDaggersInfo.App.Core.NativeInterface.Utils;
 using DevilDaggersInfo.Common.Exceptions;
-using DevilDaggersInfo.Core.Asset.Enums;
 using DevilDaggersInfo.Core.Asset.Extensions;
 using DevilDaggersInfo.Razor.AssetEditor.Services;
+using DevilDaggersInfo.Types.Core.Assets;
 
 namespace DevilDaggersInfo.App.AssetEditor.Photino.Services;
 
