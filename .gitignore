@@ -293,6 +293,8 @@ database-exports/
 */**/DevilDaggersInfo.Razor.CustomLeaderboard/wwwroot/tailwind.css.map
 */**/DevilDaggersInfo.Razor.ReplayEditor/wwwroot/tailwind.css
 */**/DevilDaggersInfo.Razor.ReplayEditor/wwwroot/tailwind.css.map
+*/**/DevilDaggersInfo.Razor.Core.Components/wwwroot/tailwind.css
+*/**/DevilDaggersInfo.Razor.Core.Components/wwwroot/tailwind.css.map
 
 # Data protection
 */**/DevilDaggersInfo.Web.Server/keys
