@@ -4,6 +4,7 @@ using DevilDaggersInfo.App.Core.NativeInterface.Services.Windows;
 using DevilDaggersInfo.App.CustomLeaderboard.Photino.Services;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Razor.CustomLeaderboard.Services;
+using Fluxor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -33,6 +34,9 @@ public static class Program
 		appBuilder.Services.AddSingleton<GameMemoryReaderService>();
 		appBuilder.Services.AddSingleton<UploadService>();
 		appBuilder.Services.AddSingleton(configuration);
+		appBuilder.Services.AddScoped<StateFacade>();
+
+		appBuilder.Services.AddFluxor(options => options.ScanAssemblies(typeof(Program).Assembly, typeof(Razor.CustomLeaderboard.App).Assembly));
 
 		appBuilder.RootComponents.Add<Razor.CustomLeaderboard.App>("app");
 
