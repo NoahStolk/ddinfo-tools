@@ -7,9 +7,11 @@ public class DeathsReplayWriter : IReplayWriter
 {
 	public ReplayBinary<LocalReplayBinaryHeader> Write()
 	{
-		List<IEvent> events = new();
-		events.Add(new HitEvent(353333333, 353333333, 353333333));
-		events.Add(new InitialInputsEvent(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0, 0.005f));
+		List<IEvent> events = new()
+		{
+			new HitEvent(353333333, 353333333, 353333333),
+			new InitialInputsEvent(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0, 0.005f),
+		};
 
 		for (int i = 0; i < 60; i++)
 		{
