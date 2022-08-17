@@ -16,13 +16,10 @@ public class DeathsReplayWriter : IReplayWriter
 			if (i == 30)
 				events.Add(new DeathEvent(1));
 
-			if (i == 45)
-				events.Add(new InputsEvent(false, false, false, false, JumpType.None, ShootType.Hold, ShootType.None, 0, 0));
-			else
-				events.Add(new InputsEvent(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0));
+			events.Add(new InputsEvent(false, false, false, false, JumpType.None, i == 45 ? ShootType.Hold : ShootType.None, ShootType.None, 0, 0));
 		}
 
-		events.Add(new EndEvent());
+		events.Add(default(EndEvent));
 
 		byte[] spawnsetBuffer = File.ReadAllBytes(Path.Combine("Resources", "Spawnsets", "EmptySpawnset"));
 		LocalReplayBinaryHeader header = new(
