@@ -37,7 +37,7 @@ public static class Program
 			.SetIconFile("Icon.ico")
 			.SetTitle($"Devil Daggers Replay Editor {VersionUtils.EntryAssemblyVersion}");
 
-		AppDomain.CurrentDomain.UnhandledException += (sender, error) => app.MainWindow.OpenAlertWindow("Fatal exception", error.ExceptionObject.ToString());
+		AppDomain.CurrentDomain.UnhandledException += (_, error) => app.MainWindow.OpenAlertWindow("Fatal exception", error.ExceptionObject.ToString());
 
 		app.Run();
 	}

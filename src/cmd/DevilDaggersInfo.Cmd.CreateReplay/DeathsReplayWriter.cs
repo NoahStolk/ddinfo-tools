@@ -7,22 +7,21 @@ public class DeathsReplayWriter : IReplayWriter
 {
 	public ReplayBinary<LocalReplayBinaryHeader> Write()
 	{
-		List<IEvent> events = new();
-		events.Add(new HitEvent(353333333, 353333333, 353333333));
-		events.Add(new InitialInputsEvent(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0, 0.005f));
+		List<IEvent> events = new()
+		{
+			new HitEvent(353333333, 353333333, 353333333),
+			new InitialInputsEvent(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0, 0.005f),
+		};
 
 		for (int i = 0; i < 60; i++)
 		{
 			if (i == 30)
 				events.Add(new DeathEvent(1));
 
-			if (i == 45)
-				events.Add(new InputsEvent(false, false, false, false, JumpType.None, ShootType.Hold, ShootType.None, 0, 0));
-			else
-				events.Add(new InputsEvent(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0));
+			events.Add(new InputsEvent(false, false, false, false, JumpType.None, i == 45 ? ShootType.Hold : ShootType.None, ShootType.None, 0, 0));
 		}
 
-		events.Add(new EndEvent());
+		events.Add(default(EndEvent));
 
 		byte[] spawnsetBuffer = File.ReadAllBytes(Path.Combine("Resources", "Spawnsets", "EmptySpawnset"));
 		LocalReplayBinaryHeader header = new(

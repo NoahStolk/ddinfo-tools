@@ -7,9 +7,11 @@ public class RandomReplayWriter : IReplayWriter
 {
 	public ReplayBinary<LocalReplayBinaryHeader> Write()
 	{
-		List<IEvent> events = new();
-		events.Add(new HitEvent(353333333, 353333333, 353333333));
-		events.Add(new InitialInputsEvent(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0, 0.005f));
+		List<IEvent> events = new()
+		{
+			new HitEvent(353333333, 353333333, 353333333),
+			new InitialInputsEvent(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0, 0.005f),
+		};
 
 		for (int i = 0; i < 1200; i++)
 		{
@@ -19,7 +21,7 @@ public class RandomReplayWriter : IReplayWriter
 			if (i == 30)
 				events.Add(new SquidSpawnEvent(1, SquidType.Squid2, -1, new(0, 0, 20), new(0, 2, 0), -549.1759f));
 
-			if (i >= 60 && i <= 70)
+			if (i is >= 60 and <= 70)
 				events.Add(new BoidSpawnEvent(i - 58, 1, BoidType.Skull2, new(20, 20, 20), Int16Vec3.Zero, Int16Vec3.Zero, Int16Vec3.Zero, Vector3.Zero, 4));
 
 			if (i == 80)
@@ -46,7 +48,7 @@ public class RandomReplayWriter : IReplayWriter
 			if (i is 450 or 460 or 470)
 				events.Add(new SpiderSpawnEvent(666, SpiderType.Spider1, -1, new((i - 540) / 4f, (i - 370) / 4f, -15 + (i - 460) / 2f)));
 
-			if (i > 530 && i < 630)
+			if (i is > 530 and < 630)
 			{
 				if (i < 570 && i % 4 == 0)
 					events.Add(new GemEvent());
@@ -89,7 +91,7 @@ public class RandomReplayWriter : IReplayWriter
 				movement |= Movement.Left;
 			}
 
-			EndTick(movement, i == 0 || i > 740 && i % 52 == 0 ? JumpType.StartedPress : JumpType.None, ShootType.None, ShootType.None, i < 90 || i > 430 && i < 465 ? 8 : i > 740 ? 6 : 0, i > 800 ? (int)Math.Sin(i / 6f) * 15 : 0);
+			EndTick(movement, i == 0 || i > 740 && i % 52 == 0 ? JumpType.StartedPress : JumpType.None, ShootType.None, ShootType.None, i < 90 || i is > 430 and < 465 ? 8 : i > 740 ? 6 : 0, i > 800 ? (int)Math.Sin(i / 6f) * 15 : 0);
 		}
 
 		events.Add(new EndEvent());
