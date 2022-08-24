@@ -55,6 +55,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.Custom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.ReplayEditor.Photino", "app\DevilDaggersInfo.App.ReplayEditor.Photino\DevilDaggersInfo.App.ReplayEditor.Photino.csproj", "{CA612879-D0A8-41AD-9265-78BADEF2BA84}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.SurvivalEditor.Photino", "app\DevilDaggersInfo.App.SurvivalEditor.Photino\DevilDaggersInfo.App.SurvivalEditor.Photino.csproj", "{432BC52E-587D-4DB8-9903-68D802B8F8A6}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Cmd.ExtractMod", "cmd\DevilDaggersInfo.Cmd.ExtractMod\DevilDaggersInfo.Cmd.ExtractMod.csproj", "{8A747382-EEA6-433F-B61A-85ABD0706E54}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Cmd.CreateReplay", "cmd\DevilDaggersInfo.Cmd.CreateReplay\DevilDaggersInfo.Cmd.CreateReplay.csproj", "{6BEED33C-F8F8-4884-85A3-FDD48C7C63E8}"
@@ -110,6 +112,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.CustomLeaderboard", "razor\DevilDaggersInfo.Razor.CustomLeaderboard\DevilDaggersInfo.Razor.CustomLeaderboard.csproj", "{181B288B-6B66-4F4D-8227-892B2561B2A1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.ReplayEditor", "razor\DevilDaggersInfo.Razor.ReplayEditor\DevilDaggersInfo.Razor.ReplayEditor.csproj", "{36ECBB72-2034-4196-AE05-DC92F9BB2856}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Razor.SurvivalEditor", "razor\DevilDaggersInfo.Razor.SurvivalEditor\DevilDaggersInfo.Razor.SurvivalEditor.csproj", "{4E6FA315-B97F-4753-8336-57AF26741A47}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Tool.CleanBuild", "tool\DevilDaggersInfo.Tool.CleanBuild\DevilDaggersInfo.Tool.CleanBuild.csproj", "{A0CC71FC-5AF0-4946-8575-605A02213B08}"
 EndProject
@@ -443,6 +447,14 @@ Global
 		{8D02A724-024B-4ED3-B64B-EA6B350926F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D02A724-024B-4ED3-B64B-EA6B350926F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D02A724-024B-4ED3-B64B-EA6B350926F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E6FA315-B97F-4753-8336-57AF26741A47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E6FA315-B97F-4753-8336-57AF26741A47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E6FA315-B97F-4753-8336-57AF26741A47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E6FA315-B97F-4753-8336-57AF26741A47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{432BC52E-587D-4DB8-9903-68D802B8F8A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{432BC52E-587D-4DB8-9903-68D802B8F8A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{432BC52E-587D-4DB8-9903-68D802B8F8A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{432BC52E-587D-4DB8-9903-68D802B8F8A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -512,6 +524,8 @@ Global
 		{9FBE0CA2-67F4-4379-B3F8-52070C0926BA} = {9AE54BA2-750F-42CC-97EC-4DD29A452100}
 		{E80EC34D-4FC7-44D1-BD96-857DD3700AED} = {E46A7074-2772-4B70-A0A6-F4431CC99F4C}
 		{8D02A724-024B-4ED3-B64B-EA6B350926F0} = {139163CB-F521-45E4-B022-780DF7322293}
+		{4E6FA315-B97F-4753-8336-57AF26741A47} = {92D3A378-C41A-497C-B488-DA4D12189A62}
+		{432BC52E-587D-4DB8-9903-68D802B8F8A6} = {D980D7F3-20FC-46AB-A443-3238FE1FAEC0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E27EC676-81BF-4099-BFC9-20E860CE83A5}
