@@ -109,6 +109,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Razor.Surv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Tool.CleanBuild", "tool\DevilDaggersInfo.Tool.CleanBuild\DevilDaggersInfo.Tool.CleanBuild.csproj", "{A0CC71FC-5AF0-4946-8575-605A02213B08}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "DevilDaggersInfo.Tool.DistributeApp", "tool\DevilDaggersInfo.Tool.DistributeApp\DevilDaggersInfo.Tool.DistributeApp.fsproj", "{E92850D5-DB99-4799-9A5D-9D8A6A52F04F}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Tool.DistributeHistoryStats", "tool\DevilDaggersInfo.Tool.DistributeHistoryStats\DevilDaggersInfo.Tool.DistributeHistoryStats.csproj", "{B11627A5-9A22-4E5F-8B35-C27869339BA7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Tool.FetchLeaderboard", "tool\DevilDaggersInfo.Tool.FetchLeaderboard\DevilDaggersInfo.Tool.FetchLeaderboard.csproj", "{17BA3EE7-7067-4A07-A978-27D05E8D0CCE}"
