@@ -3,7 +3,7 @@
   <PropertyGroup>
     <!--TODO: Use WinExe on Windows to hide console.-->
     <OutputType>Exe</OutputType>
-    <Version>0.0.0-alpha.0</Version>
+    <Version>0.1.0-alpha.0</Version>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <AssemblyName>DevilDaggersReplayEditor</AssemblyName>
   </PropertyGroup>
