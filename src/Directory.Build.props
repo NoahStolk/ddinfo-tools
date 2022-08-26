@@ -13,7 +13,11 @@
 		<WarningsAsErrors>nullable</WarningsAsErrors>
 		<EnablePreviewFeatures>true</EnablePreviewFeatures>
 		<LangVersion>preview</LangVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Custom properties">
 		<TailwindBuild>true</TailwindBuild>
+		<SCA>true</SCA>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
@@ -26,7 +30,7 @@
 		<TailwindBuild>false</TailwindBuild>
 	</PropertyGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition="'$(SCA)' == 'true'">
 		<PackageReference Include="Roslynator.Analyzers">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
