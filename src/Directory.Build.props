@@ -3,7 +3,6 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
 		<NoWarn>SA1633</NoWarn>
@@ -23,7 +22,6 @@
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<DebugType>None</DebugType>
 		<DebugSymbols>False</DebugSymbols>
-		<GenerateDocumentationFile>false</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(CI)' == 'true'">
