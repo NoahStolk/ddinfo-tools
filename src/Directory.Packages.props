@@ -32,11 +32,11 @@
 	<ItemGroup Label="Web client">
 		<PackageVersion Include="Blazored.LocalStorage" Version="4.2.0" />
 		<PackageVersion Include="Fluxor.Blazor.Web" Version="5.4.0" />
-		<PackageVersion Include="Microsoft.AspNetCore.Components" Version="6.0.8" />
+		<PackageVersion Include="Microsoft.AspNetCore.Components" Version="6.0.9" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="6.0.8" />
-		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.8" />
-		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.8" />
-		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.8" />
+		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.9" />
+		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.9" />
+		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.9" />
 		<PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
 		<PackageVersion Include="Microsoft.Extensions.Http" Version="6.0.0" />
 		<PackageVersion Include="Microsoft.JSInterop.WebAssembly" Version="6.0.8" />
@@ -45,7 +45,7 @@
 
 	<ItemGroup Label="Web server">
 		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.8" />
-		<PackageVersion Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.8" />
+		<PackageVersion Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.9" />
 		<PackageVersion Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
 		<PackageVersion Include="Microsoft.EntityFrameworkCore" Version="6.0.8" />
 		<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.8" />
@@ -55,7 +55,7 @@
 	</ItemGroup>
 
 	<ItemGroup Label="JWT">
-		<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
+		<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.9" />
 		<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.23.1" />
 	</ItemGroup>
 
