@@ -57,9 +57,10 @@ public partial class Game : GameBase, IDependencyContainer
 	public IUiRenderer UiRenderer { get; private set; } = null!;
 
 	public Layout MainLayout { get; } = new Layouts.MainLayout();
-	public ISurvivalEditorMainLayout SurvivalEditorMainLayout { get; } = new MainLayout();
-	public Layout OpenLayout { get; } = new OpenLayout();
-	public Layout SaveLayout { get; } = new SaveLayout();
+
+	public ISurvivalEditorMainLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
+	public Layout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();
+	public Layout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
 
 	public string? CursorText { get; set; }
 
