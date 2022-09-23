@@ -56,7 +56,8 @@ public partial class Game : GameBase, IDependencyContainer
 	public IMonoSpaceFontRenderer MonoSpaceSmallFontRenderer { get; private set; } = null!;
 	public IUiRenderer UiRenderer { get; private set; } = null!;
 
-	public ISurvivalEditorMainLayout MainLayout { get; } = new MainLayout();
+	public Layout MainLayout { get; } = new Layouts.MainLayout();
+	public ISurvivalEditorMainLayout SurvivalEditorMainLayout { get; } = new MainLayout();
 	public Layout OpenLayout { get; } = new OpenLayout();
 	public Layout SaveLayout { get; } = new SaveLayout();
 
@@ -124,7 +125,9 @@ public partial class Game : GameBase, IDependencyContainer
 		Shaders.Ui.Use();
 		Shaders.Ui.SetMatrix4x4("projection", _projectionMatrix);
 
-		UiRenderer.RenderTopLeft(new(WindowWidth, WindowHeight), default, -100, new(0.1f));
+		// TODO: Refactor.
+		if (ActiveLayout == SurvivalEditorMainLayout)
+			UiRenderer.RenderTopLeft(new(WindowWidth, WindowHeight), default, -100, new(0.1f));
 
 		ActiveLayout?.NestingContext.Render(default);
 
