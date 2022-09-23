@@ -1,6 +1,10 @@
-using DevilDaggersInfo.App.Tools.Enums;
-using DevilDaggersInfo.App.Tools.Layouts;
-using DevilDaggersInfo.App.Tools.States;
+using DevilDaggersInfo.App.Tools.Renderers;
+using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
+using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion;
+using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.SurvivalEditor;
+using DevilDaggersInfo.App.Ui.Base.Enums;
+using DevilDaggersInfo.App.Ui.SurvivalEditor.Layouts;
+using DevilDaggersInfo.App.Ui.SurvivalEditor.States;
 using DevilDaggersInfo.Core.Spawnset;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
@@ -13,7 +17,7 @@ using Warp.Ui;
 
 namespace DevilDaggersInfo.App.Tools;
 
-public partial class Game : GameBase
+public partial class Game : GameBase, IDependencyContainer
 {
 	private readonly Matrix4x4 _projectionMatrix;
 
@@ -21,17 +25,19 @@ public partial class Game : GameBase
 	private int _leftOffset;
 	private int _bottomOffset;
 
+	private ILayout? _activeLayout;
+
 	public Game()
 		: base("DevilDaggers.info Tools", 1920, 1080, false)
 	{
+		Root.Game = this; // TODO: Move to Program.cs once source generator is optional.
 		_projectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, InitialWindowWidth, InitialWindowHeight, 0, -1024, 1024);
 	}
 
 	public Vector2 ViewportOffset => new(_leftOffset, _bottomOffset);
 	private Vector2 MousePositionWithOffset => Input.GetMousePosition() - ViewportOffset;
 
-	private Layout? _activeLayout;
-	public Layout? ActiveLayout
+	public ILayout? ActiveLayout
 	{
 		get => _activeLayout;
 		set
@@ -43,16 +49,16 @@ public partial class Game : GameBase
 		}
 	}
 
-	public MainLayout MainLayout { get; } = new();
-	public OpenLayout OpenLayout { get; } = new();
-	public SaveLayout SaveLayout { get; } = new();
-
 	public MonoSpaceFont Font { get; private set; } = null!;
 	public MonoSpaceFont FontSmall { get; private set; } = null!;
 
-	public Renderers.MonoSpaceFontRenderer MonoSpaceFontRenderer { get; private set; } = null!;
-	public Renderers.MonoSpaceFontRenderer MonoSpaceSmallFontRenderer { get; private set; } = null!;
-	public Renderers.UiRenderer UiRenderer { get; private set; } = null!;
+	public IMonoSpaceFontRenderer MonoSpaceFontRenderer { get; private set; } = null!;
+	public IMonoSpaceFontRenderer MonoSpaceSmallFontRenderer { get; private set; } = null!;
+	public IUiRenderer UiRenderer { get; private set; } = null!;
+
+	public ISurvivalEditorMainLayout MainLayout { get; } = new MainLayout();
+	public Layout OpenLayout { get; } = new OpenLayout();
+	public Layout SaveLayout { get; } = new SaveLayout();
 
 	public string? CursorText { get; set; }
 
@@ -60,9 +66,9 @@ public partial class Game : GameBase
 	{
 		InitializeContent();
 
-		MonoSpaceFontRenderer = new();
-		MonoSpaceSmallFontRenderer = new();
-		UiRenderer = new();
+		MonoSpaceFontRenderer = new MonoSpaceFontRenderer();
+		MonoSpaceSmallFontRenderer = new MonoSpaceFontRenderer();
+		UiRenderer = new UiRenderer();
 
 		Font = new(Textures.Font, @" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?:()[]{}<>|@^$%#&/\+*`,'=~;.-_  ");
 		FontSmall = new(Textures.FontSmall, " 0123456789.-");
@@ -70,7 +76,7 @@ public partial class Game : GameBase
 		MonoSpaceSmallFontRenderer.SetFont(FontSmall);
 
 		StateManager.SetSpawnset("(untitled)", SpawnsetBinary.CreateDefault());
-		Base.Game.ActiveLayout = Base.Game.MainLayout;
+		ActiveLayout = MainLayout;
 
 		Gl.Enable(EnableCap.DepthTest);
 		Gl.Enable(EnableCap.Blend);
@@ -96,7 +102,7 @@ public partial class Game : GameBase
 	{
 		base.Update();
 
-		Base.Game.CursorText = null;
+		CursorText = null;
 		MouseUiContext.Reset(MousePositionWithOffset);
 
 		ActiveLayout?.NestingContext.Update(default);

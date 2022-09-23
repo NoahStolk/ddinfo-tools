@@ -1,8 +1,9 @@
-﻿using Silk.NET.OpenGL;
+using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion;
+using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.App.Tools.Renderers;
 
-public class UiRenderer
+public class UiRenderer : IUiRenderer
 {
 	private readonly uint _vao;
 

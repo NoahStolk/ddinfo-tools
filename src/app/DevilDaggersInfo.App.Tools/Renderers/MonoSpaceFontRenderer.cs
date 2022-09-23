@@ -1,14 +1,16 @@
-using DevilDaggersInfo.App.Tools.Enums;
+using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion;
+using DevilDaggersInfo.App.Ui.Base.Enums;
 using Silk.NET.OpenGL;
 using Warp.Text;
 
 namespace DevilDaggersInfo.App.Tools.Renderers;
 
-public class MonoSpaceFontRenderer
+public class MonoSpaceFontRenderer : IMonoSpaceFontRenderer
 {
 	private uint _vao;
 	private MonoSpaceFont? _font;
 
+	// TODO: Ctor and non-nullable _font.
 	public unsafe void SetFont(MonoSpaceFont font)
 	{
 		_font = font;
@@ -78,5 +80,13 @@ public class MonoSpaceFontRenderer
 		}
 
 		Gl.BindVertexArray(0);
+	}
+
+	public int GetCharWidthInPixels()
+	{
+		if (_font == null)
+			throw new InvalidOperationException("Font is not set.");
+
+		return _font.Texture.Width / _font.CharAmount;
 	}
 }

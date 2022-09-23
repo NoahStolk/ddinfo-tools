@@ -21,13 +21,12 @@
     <AdditionalFiles Include="Content\Content" />
   </ItemGroup>
 
-<!--  <ItemGroup>-->
-<!--    <ProjectReference Include="..\..\app-ui\DevilDaggersInfo.App.Ui.SurvivalEditor\DevilDaggersInfo.App.Ui.SurvivalEditor.csproj" />-->
-<!--  </ItemGroup>-->
+  <ItemGroup>
+    <ProjectReference Include="..\..\app-ui\DevilDaggersInfo.App.Ui.SurvivalEditor\DevilDaggersInfo.App.Ui.SurvivalEditor.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Warp.SourceGenerators" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-    <PackageReference Include="Warp.Ui" />
   </ItemGroup>
 
   <ItemGroup>
