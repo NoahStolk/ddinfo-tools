@@ -1,8 +1,8 @@
 using DevilDaggersInfo.App.Tools.Renderers;
-using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion;
-using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.SurvivalEditor;
+using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
+using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.SurvivalEditor;
 using DevilDaggersInfo.App.Ui.Base.Enums;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.States;
@@ -57,7 +57,8 @@ public partial class Game : GameBase, IDependencyContainer
 	public IMonoSpaceFontRenderer MonoSpaceSmallFontRenderer { get; private set; } = null!;
 	public IUiRenderer UiRenderer { get; private set; } = null!;
 
-	public IExtendedLayout MainLayout { get; } = new Layouts.MainLayout();
+	public IExtendedLayout ConfigLayout { get; } = new Layouts.ConfigLayout();
+	public IMainLayout MainLayout { get; } = new Layouts.MainLayout();
 
 	public ISurvivalEditorMainLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
 	public IExtendedLayout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();
@@ -79,7 +80,7 @@ public partial class Game : GameBase, IDependencyContainer
 		MonoSpaceSmallFontRenderer.SetFont(_fontSmall);
 
 		StateManager.SetSpawnset("(untitled)", SpawnsetBinary.CreateDefault());
-		ActiveLayout = MainLayout;
+		ActiveLayout = ConfigLayout;
 
 		Gl.Enable(EnableCap.DepthTest);
 		Gl.Enable(EnableCap.Blend);
