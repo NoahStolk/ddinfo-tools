@@ -1,9 +1,9 @@
 using DevilDaggersInfo.App.Core.AssetInterop;
-using DevilDaggersInfo.App.Tools.States;
 using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.Enums;
+using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.Core.Mod;
 using DevilDaggersInfo.Core.Mod.Enums;
 using DevilDaggersInfo.Types.Core.Assets;
@@ -38,7 +38,7 @@ public class MainLayout : Layout, IMainLayout
 
 	public void InitializeScene()
 	{
-		ModBinary mb = new(File.ReadAllBytes(Path.Combine(ConfigStateManager.DevilDaggersInstallationDirectory, "res", "dd")), ModBinaryReadComprehensiveness.All);
+		ModBinary mb = new(File.ReadAllBytes(Path.Combine(UserSettings.DevilDaggersInstallationDirectory, "res", "dd")), ModBinaryReadComprehensiveness.All);
 		if (!mb.AssetMap.TryGetValue(new(AssetType.Mesh, "boid4"), out AssetData? tileMeshData) || !mb.AssetMap.TryGetValue(new(AssetType.Texture, "boid4"), out AssetData? tileTextureData))
 			return; // Assets not found in DD res.
 

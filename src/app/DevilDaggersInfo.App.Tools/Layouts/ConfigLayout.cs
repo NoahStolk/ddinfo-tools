@@ -1,8 +1,8 @@
-using DevilDaggersInfo.App.Tools.States;
 using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.Enums;
+using DevilDaggersInfo.App.Ui.Base.Settings;
 using Warp.Ui;
 
 namespace DevilDaggersInfo.App.Tools.Layouts;
@@ -17,16 +17,16 @@ public class ConfigLayout : Layout, IExtendedLayout
 	public ConfigLayout()
 		: base(new(0, 0, 1920, 1080))
 	{
-		_textInput = new(Rectangle.At(256, 320, 960, 32), false, Color.Black, Color.White, Color.Purple, Color.White, Color.White, Color.White, Color.White, 2, 2);
-		_textInput.SetText(ConfigStateManager.DevilDaggersInstallationDirectory);
+		_textInput = new(Rectangle.At(256, 320, 960, 32), false, Color.Black, Color.White, Color.Gray(64), Color.White, Color.White, Color.White, Color.White, 2, 2);
+		_textInput.SetText(UserSettings.DevilDaggersInstallationDirectory);
 		NestingContext.Add(_textInput);
 
-		NestingContext.Add(new Button(Rectangle.At(256, 420, 128, 32), Check, Color.Black, Color.White, Color.Purple, Color.White, "Check", TextAlign.Middle, 10, false));
+		NestingContext.Add(new Button(Rectangle.At(256, 420, 128, 32), Check, Color.Black, Color.White, Color.Gray(64), Color.White, "Check", TextAlign.Middle, 2, false));
 	}
 
 	private void Check()
 	{
-		ConfigStateManager.DevilDaggersInstallationDirectory = _textInput.Value.ToString();
+		UserSettings.DevilDaggersInstallationDirectory = _textInput.Value.ToString();
 		_errors.Clear();
 		_errors.AddRange(GetErrors());
 		ProceedIfOk();
@@ -34,7 +34,7 @@ public class ConfigLayout : Layout, IExtendedLayout
 
 	private static IEnumerable<string> GetErrors()
 	{
-		string dir = ConfigStateManager.DevilDaggersInstallationDirectory;
+		string dir = UserSettings.DevilDaggersInstallationDirectory;
 		if (!Directory.Exists(dir))
 			yield return "Installation directory does not exist.";
 
