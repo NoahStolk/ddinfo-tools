@@ -19,7 +19,8 @@ public class MainLayout : Layout, IMainLayout
 {
 	private readonly Camera _camera = new();
 
-	private Rendering? _rendering;
+	private MeshObject? _skull4;
+	private List<MeshObject> _tiles = new();
 
 	public MainLayout()
 		: base(new(0, 0, 1920, 1080))
@@ -38,41 +39,42 @@ public class MainLayout : Layout, IMainLayout
 
 	public void InitializeScene()
 	{
-		ModBinary mb = new(File.ReadAllBytes(Path.Combine(UserSettings.DevilDaggersInstallationDirectory, "res", "dd")), ModBinaryReadComprehensiveness.All);
-		if (!mb.AssetMap.TryGetValue(new(AssetType.Mesh, "boid4"), out AssetData? tileMeshData) || !mb.AssetMap.TryGetValue(new(AssetType.Texture, "boid4"), out AssetData? tileTextureData))
-			return; // Assets not found in DD res.
+		ModBinary modBinary = new(File.ReadAllBytes(Path.Combine(UserSettings.DevilDaggersInstallationDirectory, "res", "dd")), ModBinaryReadComprehensiveness.All);
+		Mesh? skull4Mesh = GetMesh(modBinary, "boid4");
+		Texture? skull4Texture = GetTexture(modBinary, "boid4");
+		Mesh? tileMesh = GetMesh(modBinary, "tile");
+		Texture? tileTexture = GetTexture(modBinary, "tile");
 
-		Mesh mesh = MeshConverter.ToWarpMesh(tileMeshData.Buffer);
-		Texture texture = TextureConverter.ToWarpTexture(tileTextureData.Buffer);
-		texture.Load();
-		SetMesh(mesh, texture);
+		if (skull4Mesh == null || skull4Texture == null || tileMesh == null || tileTexture == null)
+			return;
+
+		_skull4 = new(skull4Mesh, skull4Texture, Vector3.One, Quaternion.Identity, new(0, 3, 0));
+		for (int i = -2; i < 3; i++)
+		{
+			for (int j = -2; j < 3; j++)
+			{
+				_tiles.Add(new(tileMesh, tileTexture, Vector3.One, Quaternion.Identity, new(i * 4, 0, j * 4)));
+			}
+		}
 	}
 
-	private unsafe void SetMesh(Mesh mesh, Texture texture)
+	private static Mesh? GetMesh(ModBinary modBinary, string meshName)
 	{
-		uint vao = Gl.GenVertexArray();
-		_rendering = new(vao, mesh, texture);
+		if (!modBinary.AssetMap.TryGetValue(new(AssetType.Mesh, meshName), out AssetData? meshData))
+			return null; // Asset not found in binary.
 
-		Gl.BindVertexArray(_rendering.Vao);
+		Mesh mesh = MeshConverter.ToWarpMesh(meshData.Buffer);
+		return mesh;
+	}
 
-		uint vbo = Gl.GenBuffer();
-		Gl.BindBuffer(BufferTargetARB.ArrayBuffer, vbo);
+	private static Texture? GetTexture(ModBinary modBinary, string textureName)
+	{
+		if (!modBinary.AssetMap.TryGetValue(new(AssetType.Texture, textureName), out AssetData? textureData))
+			return null; // Asset not found in binary.
 
-		fixed (Vertex* v = &mesh.Vertices[0])
-			Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint)(mesh.Vertices.Length * sizeof(Vertex)), v, BufferUsageARB.StaticDraw);
-
-		Gl.EnableVertexAttribArray(0);
-		Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, (uint)sizeof(Vertex), (void*)0);
-
-		Gl.EnableVertexAttribArray(1);
-		Gl.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, (uint)sizeof(Vertex), (void*)(3 * sizeof(float)));
-
-		Gl.EnableVertexAttribArray(2);
-		Gl.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, (uint)sizeof(Vertex), (void*)(5 * sizeof(float)));
-
-		Gl.BindVertexArray(0);
-
-		Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
+		Texture texture = TextureConverter.ToWarpTexture(textureData.Buffer);
+		texture.Load();
+		return texture;
 	}
 
 	public void Update()
@@ -80,30 +82,17 @@ public class MainLayout : Layout, IMainLayout
 		_camera.Update();
 	}
 
-	public unsafe void Render3d()
+	public void Render3d()
 	{
-		if (_rendering == null)
-			return;
-
 		_camera.PreRender();
 
 		Shaders.Mesh.Use();
 		Shaders.Mesh.SetMatrix4x4("view", _camera.ViewMatrix);
 		Shaders.Mesh.SetMatrix4x4("projection", _camera.Projection);
 
-		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(Vector3.One);
-		Matrix4x4 rotationMatrix = Matrix4x4.CreateFromQuaternion(Quaternion.Identity);
-		Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(Vector3.Zero);
-
-		Shaders.Mesh.SetMatrix4x4("model", scaleMatrix * rotationMatrix * translationMatrix);
-
-		Shaders.Mesh.SetInt("textureDiffuse", 0);
-		_rendering.Texture.Use();
-
-		Gl.BindVertexArray(_rendering.Vao);
-		fixed (uint* i = &_rendering.Mesh.Indices[0])
-			Gl.DrawElements(PrimitiveType.Triangles, (uint)_rendering.Mesh.Indices.Length, DrawElementsType.UnsignedInt, i);
-		Gl.BindVertexArray(0);
+		_skull4?.Render();
+		foreach (MeshObject tile in _tiles)
+			tile.Render();
 	}
 
 	public void Render()
@@ -114,18 +103,57 @@ public class MainLayout : Layout, IMainLayout
 	{
 	}
 
-	private sealed class Rendering
+	private sealed class MeshObject
 	{
-		public Rendering(uint vao, Mesh mesh, Texture texture)
+		private readonly Mesh _mesh;
+		private readonly Texture _texture;
+		private readonly Matrix4x4 _modelMatrix;
+		private readonly uint _vao;
+
+		public unsafe MeshObject(Mesh mesh, Texture texture, Vector3 scale, Quaternion rotation, Vector3 position)
 		{
-			Vao = vao;
-			Mesh = mesh;
-			Texture = texture;
+			_mesh = mesh;
+			_texture = texture;
+
+			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(scale);
+			Matrix4x4 rotationMatrix = Matrix4x4.CreateFromQuaternion(rotation);
+			Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(position);
+			_modelMatrix = scaleMatrix * rotationMatrix * translationMatrix;
+
+			_vao = Gl.GenVertexArray();
+			Gl.BindVertexArray(_vao);
+
+			uint vbo = Gl.GenBuffer();
+			Gl.BindBuffer(BufferTargetARB.ArrayBuffer, vbo);
+
+			fixed (Vertex* v = &mesh.Vertices[0])
+				Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint)(mesh.Vertices.Length * sizeof(Vertex)), v, BufferUsageARB.StaticDraw);
+
+			Gl.EnableVertexAttribArray(0);
+			Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, (uint)sizeof(Vertex), (void*)0);
+
+			Gl.EnableVertexAttribArray(1);
+			Gl.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, (uint)sizeof(Vertex), (void*)(3 * sizeof(float)));
+
+			Gl.EnableVertexAttribArray(2);
+			Gl.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, (uint)sizeof(Vertex), (void*)(5 * sizeof(float)));
+
+			Gl.BindVertexArray(0);
+
+			Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
 		}
 
-		public uint Vao { get; }
-		public Mesh Mesh { get; }
-		public Texture Texture { get; }
+		public unsafe void Render()
+		{
+			Shaders.Mesh.SetMatrix4x4("model", _modelMatrix);
+			Shaders.Mesh.SetInt("textureDiffuse", 0);
+			_texture.Use();
+
+			Gl.BindVertexArray(_vao);
+			fixed (uint* i = &_mesh.Indices[0])
+				Gl.DrawElements(PrimitiveType.Triangles, (uint)_mesh.Indices.Length, DrawElementsType.UnsignedInt, i);
+			Gl.BindVertexArray(0);
+		}
 	}
 
 	private sealed class Camera
@@ -141,7 +169,7 @@ public class MainLayout : Layout, IMainLayout
 			_positionState.PrepareUpdate();
 			_rotationState.PrepareUpdate();
 
-			_positionState.Physics = new(MathF.Sin(Base.Game.Tt) * 5, 2.5f, MathF.Cos(Base.Game.Tt) * 5);
+			_positionState.Physics = new(MathF.Sin(Base.Game.Tt) * 5, 4, MathF.Cos(Base.Game.Tt) * 5);
 			_rotationState.Physics = Quaternion.CreateFromRotationMatrix(SetRotationFromDirectionalVector(-_positionState.Physics));
 
 			static Matrix4x4 SetRotationFromDirectionalVector(Vector3 direction)
