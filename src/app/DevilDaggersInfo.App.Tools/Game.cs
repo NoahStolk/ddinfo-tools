@@ -62,7 +62,7 @@ public partial class Game : GameBase, IDependencyContainer
 	public IExtendedLayout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();
 	public IExtendedLayout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
 
-	public string? CursorText { get; set; }
+	public string? TooltipText { get; set; }
 
 	protected override void LoadContent()
 	{
@@ -104,7 +104,7 @@ public partial class Game : GameBase, IDependencyContainer
 	{
 		base.Update();
 
-		CursorText = null;
+		TooltipText = null;
 		MouseUiContext.Reset(MousePositionWithOffset);
 
 		ActiveLayout?.Update();
@@ -122,10 +122,10 @@ public partial class Game : GameBase, IDependencyContainer
 		ActiveLayout?.Render();
 		ActiveLayout?.NestingContext.Render(default);
 
-		if (!string.IsNullOrWhiteSpace(CursorText))
+		if (!string.IsNullOrWhiteSpace(TooltipText))
 		{
 			Vector2i<int> tooltipPosition = MousePositionWithOffset.RoundToVector2Int32() + new Vector2i<int>(16, 16);
-			Vector2i<int> textSize = Font.MeasureText(CursorText);
+			Vector2i<int> textSize = Font.MeasureText(TooltipText);
 			UiRenderer.RenderTopLeft(textSize, tooltipPosition, 1000, Color.Black);
 		}
 
@@ -138,7 +138,7 @@ public partial class Game : GameBase, IDependencyContainer
 		MonoSpaceFontRenderer.Render(Vector2i<int>.One, new(1792, 1016), 500, Color.Green, $"{Fps} FPS", TextAlign.Left);
 		MonoSpaceFontRenderer.Render(Vector2i<int>.One, new(1792, 1048), 500, Color.Green, $"{Tps} TPS", TextAlign.Left);
 
-		if (!string.IsNullOrWhiteSpace(CursorText))
-			MonoSpaceFontRenderer.Render(Vector2i<int>.One, MousePositionWithOffset.RoundToVector2Int32() + new Vector2i<int>(16, 16), 1001, Color.White, CursorText, TextAlign.Left);
+		if (!string.IsNullOrWhiteSpace(TooltipText))
+			MonoSpaceFontRenderer.Render(Vector2i<int>.One, MousePositionWithOffset.RoundToVector2Int32() + new Vector2i<int>(16, 16), 1001, Color.White, TooltipText, TextAlign.Left);
 	}
 }
