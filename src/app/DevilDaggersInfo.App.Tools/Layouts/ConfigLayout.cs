@@ -12,15 +12,16 @@ public class ConfigLayout : Layout, IExtendedLayout
 	private readonly TextInput _textInput;
 	private readonly List<string> _errors = GetErrors().ToList();
 
+	private bool _initialTryDone;
+
 	public ConfigLayout()
 		: base(new(0, 0, 1920, 1080))
 	{
-		_textInput = new(Rectangle.At(256, 320, 320, 32), false, Color.Black, Color.White, Color.Purple, Color.White, Color.White, Color.White, Color.White, 2, 2);
+		_textInput = new(Rectangle.At(256, 320, 960, 32), false, Color.Black, Color.White, Color.Purple, Color.White, Color.White, Color.White, Color.White, 2, 2);
 		_textInput.SetText(ConfigStateManager.DevilDaggersInstallationDirectory);
 		NestingContext.Add(_textInput);
 
-		NestingContext.Add(new Button(Rectangle.At(256, 420, 320, 32), Check, Color.Black, Color.White, Color.Purple, Color.White, "Check", TextAlign.Middle, 10, false));
-		NestingContext.Add(new Button(Rectangle.At(256, 480, 320, 32), GoToMain, Color.Black, Color.White, Color.Purple, Color.White, "OK", TextAlign.Middle, 10, false));
+		NestingContext.Add(new Button(Rectangle.At(256, 420, 128, 32), Check, Color.Black, Color.White, Color.Purple, Color.White, "Check", TextAlign.Middle, 10, false));
 	}
 
 	private void Check()
@@ -28,6 +29,7 @@ public class ConfigLayout : Layout, IExtendedLayout
 		ConfigStateManager.DevilDaggersInstallationDirectory = _textInput.Value.ToString();
 		_errors.Clear();
 		_errors.AddRange(GetErrors());
+		ProceedIfOk();
 	}
 
 	private static IEnumerable<string> GetErrors()
@@ -57,7 +59,7 @@ public class ConfigLayout : Layout, IExtendedLayout
 		// TODO: Might also want to check if the files themselves are actually valid.
 	}
 
-	private void GoToMain()
+	private void ProceedIfOk()
 	{
 		if (_errors.Count > 0)
 			return;
@@ -68,6 +70,11 @@ public class ConfigLayout : Layout, IExtendedLayout
 
 	public void Update()
 	{
+		if (_initialTryDone)
+			return;
+
+		ProceedIfOk();
+		_initialTryDone = true;
 	}
 
 	public void Render3d()
@@ -80,7 +87,14 @@ public class ConfigLayout : Layout, IExtendedLayout
 
 	public void RenderText()
 	{
-		string text = _errors.Count == 0 ? "OK!" : string.Join("\n", _errors);
-		Root.Game.MonoSpaceFontRenderer.Render(Vector2i<int>.One, new(640, 640), 0, _errors.Count == 0 ? Color.Green : Color.Red, text, TextAlign.Left);
+		const string text = """
+			Please configure your Devil Daggers installation directory.
+
+			This is the directory containing the executable.
+
+			Example: C:\Program Files (x86)\Steam\steamapps\common\devildaggers
+			""";
+		Root.Game.MonoSpaceFontRenderer.Render(Vector2i<int>.One, new(256, 128), 0, Color.White, text, TextAlign.Left);
+		Root.Game.MonoSpaceFontRenderer.Render(Vector2i<int>.One, new(256, 640), 0, Color.Red, string.Join("\n", _errors), TextAlign.Left);
 	}
 }
