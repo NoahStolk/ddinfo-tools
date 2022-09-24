@@ -19,9 +19,10 @@ namespace DevilDaggersInfo.App.Tools;
 
 public partial class Game : GameBase, IDependencyContainer
 {
-	private readonly Matrix4x4 _projectionMatrix;
+	private readonly Matrix4x4 _uiProjectionMatrix;
 
-	private Viewport _viewport;
+	private Viewport _viewportUi;
+	private Viewport _viewport3d;
 	private int _leftOffset;
 	private int _bottomOffset;
 
@@ -34,7 +35,7 @@ public partial class Game : GameBase, IDependencyContainer
 		: base("DevilDaggers.info Tools", 1920, 1080, false)
 	{
 		Root.Game = this; // TODO: Move to Program.cs once source generator is optional.
-		_projectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, InitialWindowWidth, InitialWindowHeight, 0, -1024, 1024);
+		_uiProjectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, InitialWindowWidth, InitialWindowHeight, 0, -1024, 1024);
 	}
 
 	public Vector2 ViewportOffset => new(_leftOffset, _bottomOffset);
@@ -89,15 +90,10 @@ public partial class Game : GameBase, IDependencyContainer
 	{
 		base.OnChangeWindowSize(width, height);
 
+		_viewport3d = new(0, 0, width, height);
 		_leftOffset = (width - InitialWindowWidth) / 2;
 		_bottomOffset = (height - InitialWindowHeight) / 2;
-		SetViewport(_leftOffset, _bottomOffset, InitialWindowWidth, InitialWindowHeight);
-
-		void SetViewport(float x, float y, float w, float h)
-		{
-			_viewport = new((int)x, (int)y, (int)w, (int)h);
-			Gl.Viewport(_viewport.X, _viewport.Y, (uint)_viewport.Width, (uint)_viewport.Height);
-		}
+		_viewportUi = new(_leftOffset, _bottomOffset, InitialWindowWidth, InitialWindowHeight);
 	}
 
 	protected override void Update()
@@ -116,8 +112,12 @@ public partial class Game : GameBase, IDependencyContainer
 		Gl.ClearColor(0, 0, 0, 1);
 		Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+		ActivateViewport(_viewport3d);
+		ActiveLayout?.Render3d();
+
+		ActivateViewport(_viewportUi);
 		Shaders.Ui.Use();
-		Shaders.Ui.SetMatrix4x4("projection", _projectionMatrix);
+		Shaders.Ui.SetMatrix4x4("projection", _uiProjectionMatrix);
 
 		ActiveLayout?.Render();
 		ActiveLayout?.NestingContext.Render(default);
@@ -130,8 +130,9 @@ public partial class Game : GameBase, IDependencyContainer
 		}
 
 		Shaders.Font.Use();
-		Shaders.Font.SetMatrix4x4("projection", _projectionMatrix);
+		Shaders.Font.SetMatrix4x4("projection", _uiProjectionMatrix);
 
+		ActiveLayout?.RenderText();
 		ActiveLayout?.NestingContext.RenderText(default);
 
 		MonoSpaceFontRenderer.Render(Vector2i<int>.One, new(0, 640), 500, Color.Green, DebugStack.GetString(), TextAlign.Left);
@@ -140,5 +141,10 @@ public partial class Game : GameBase, IDependencyContainer
 
 		if (!string.IsNullOrWhiteSpace(TooltipText))
 			MonoSpaceFontRenderer.Render(Vector2i<int>.One, MousePositionWithOffset.RoundToVector2Int32() + new Vector2i<int>(16, 16), 1001, Color.White, TooltipText, TextAlign.Left);
+
+		static void ActivateViewport(Viewport viewport)
+		{
+			Gl.Viewport(viewport.X, viewport.Y, (uint)viewport.Width, (uint)viewport.Height);
+		}
 	}
 }
