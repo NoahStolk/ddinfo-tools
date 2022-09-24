@@ -40,14 +40,15 @@ public class MainLayout : Layout, IExtendedLayout
 
 	private void ExtractAsset()
 	{
-		const string path = @"C:\Program Files (x86)\Steam\steamapps\common\devildaggers\res\dd";
-		ModBinary mb = new(File.ReadAllBytes(path), ModBinaryReadComprehensiveness.All);
-		if (!mb.AssetMap.TryGetValue(new(AssetType.Mesh, "boid4"), out AssetData? tileMeshData) || !mb.AssetMap.TryGetValue(new(AssetType.Texture, "tile"), out AssetData? tileTextureData))
-			return; // Assets not found in DD res.
-
-		Mesh mesh = MeshConverter.ToWarpMesh(tileMeshData.Buffer);
-		Texture texture = TextureConverter.ToWarpTexture(tileTextureData.Buffer);
-		SetMesh(mesh, texture);
+		SetMesh(Meshes.Cube, Textures.Font);
+		// const string path = @"C:\Program Files (x86)\Steam\steamapps\common\devildaggers\res\dd";
+		// ModBinary mb = new(File.ReadAllBytes(path), ModBinaryReadComprehensiveness.All);
+		// if (!mb.AssetMap.TryGetValue(new(AssetType.Mesh, "boid4"), out AssetData? tileMeshData) || !mb.AssetMap.TryGetValue(new(AssetType.Texture, "tile"), out AssetData? tileTextureData))
+		// 	return; // Assets not found in DD res.
+		//
+		// Mesh mesh = MeshConverter.ToWarpMesh(tileMeshData.Buffer);
+		// Texture texture = TextureConverter.ToWarpTexture(tileTextureData.Buffer);
+		// SetMesh(mesh, texture);
 	}
 
 	private unsafe void SetMesh(Mesh mesh, Texture texture)
@@ -95,7 +96,7 @@ public class MainLayout : Layout, IExtendedLayout
 
 		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(Vector3.One);
 		Matrix4x4 rotationMatrix = Matrix4x4.CreateFromQuaternion(Quaternion.Identity);
-		Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(default);
+		Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(Vector3.Zero);
 
 		Shaders.Mesh.SetMatrix4x4("model", scaleMatrix * rotationMatrix * translationMatrix);
 
@@ -133,7 +134,7 @@ public class MainLayout : Layout, IExtendedLayout
 
 	private sealed class Camera
 	{
-		private readonly Vector3State _positionState = new(new(0, 0, -6));
+		private readonly Vector3State _positionState = new(default);
 		private readonly QuaternionState _rotationState = new(Quaternion.Identity);
 
 		public Matrix4x4 Projection { get; private set; }
@@ -144,11 +145,31 @@ public class MainLayout : Layout, IExtendedLayout
 			_positionState.PrepareUpdate();
 			_rotationState.PrepareUpdate();
 
-			// _positionState.Physics = new(MathF.Sin(Base.Game.Tt) * 10, 1, MathF.Cos(Base.Game.Tt) * 10);
-			// _rotationState.Physics = Quaternion.CreateFromRotationMatrix(Matrix4x4.CreateLookAt(_positionState.Physics, default, Vector3.UnitY));
+			_positionState.Physics = new(MathF.Sin(Base.Game.Tt) * 5, 2.5f, MathF.Cos(Base.Game.Tt) * 5);
+			_rotationState.Physics = Quaternion.CreateFromRotationMatrix(SetRotationFromDirectionalVector(-_positionState.Physics));
 
-			DebugStack.Add("cam pos", _positionState.Physics.ToString(), Base.Game.Dt);
-			DebugStack.Add("cam rot", _rotationState.Physics.ToString(), Base.Game.Dt);
+			static Matrix4x4 SetRotationFromDirectionalVector(Vector3 direction)
+			{
+				Vector3 m3 = Vector3.Normalize(direction);
+				Vector3 m1 = Vector3.Normalize(Vector3.Cross(Vector3.UnitY, m3));
+				Vector3 m2 = Vector3.Normalize(Vector3.Cross(m3, m1));
+
+				Matrix4x4 matrix = Matrix4x4.Identity;
+
+				matrix.M11 = m1.X;
+				matrix.M12 = m1.Y;
+				matrix.M13 = m1.Z;
+
+				matrix.M21 = m2.X;
+				matrix.M22 = m2.Y;
+				matrix.M23 = m2.Z;
+
+				matrix.M31 = m3.X;
+				matrix.M32 = m3.Y;
+				matrix.M33 = m3.Z;
+
+				return matrix;
+			}
 		}
 
 		public void PreRender()
