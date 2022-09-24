@@ -17,11 +17,11 @@ public class ConfigLayout : Layout, IExtendedLayout
 	public ConfigLayout()
 		: base(new(0, 0, 1920, 1080))
 	{
-		_textInput = new(Rectangle.At(256, 320, 960, 32), false, Color.Black, Color.White, Color.Gray(64), Color.White, Color.White, Color.White, Color.White, 2, 2);
+		_textInput = new(Rectangle.At(256, 320, 960, 32), false, Color.Black, Color.White, Color.Gray(32), Color.White, Color.White, Color.White, Color.Gray(64), 2, 2);
 		_textInput.SetText(UserSettings.DevilDaggersInstallationDirectory);
 		NestingContext.Add(_textInput);
 
-		NestingContext.Add(new Button(Rectangle.At(256, 420, 128, 32), Check, Color.Black, Color.White, Color.Gray(64), Color.White, "Check", TextAlign.Middle, 2, false));
+		NestingContext.Add(new Button(Rectangle.At(256, 420, 256, 32), Check, Color.Black, Color.White, Color.Gray(32), Color.White, "Save and continue", TextAlign.Middle, 2, false));
 	}
 
 	private void Check()
