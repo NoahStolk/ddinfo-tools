@@ -27,6 +27,9 @@ public partial class Game : GameBase, IDependencyContainer
 
 	private IExtendedLayout? _activeLayout;
 
+	private MonoSpaceFont _font = null!;
+	private MonoSpaceFont _fontSmall = null!;
+
 	public Game()
 		: base("DevilDaggers.info Tools", 1920, 1080, false)
 	{
@@ -49,9 +52,6 @@ public partial class Game : GameBase, IDependencyContainer
 		}
 	}
 
-	public MonoSpaceFont Font { get; private set; } = null!;
-	public MonoSpaceFont FontSmall { get; private set; } = null!;
-
 	public IMonoSpaceFontRenderer MonoSpaceFontRenderer { get; private set; } = null!;
 	public IMonoSpaceFontRenderer MonoSpaceSmallFontRenderer { get; private set; } = null!;
 	public IUiRenderer UiRenderer { get; private set; } = null!;
@@ -72,10 +72,10 @@ public partial class Game : GameBase, IDependencyContainer
 		MonoSpaceSmallFontRenderer = new MonoSpaceFontRenderer();
 		UiRenderer = new UiRenderer();
 
-		Font = new(Textures.Font, @" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?:()[]{}<>|@^$%#&/\+*`,'=~;.-_  ");
-		FontSmall = new(Textures.FontSmall, " 0123456789.-");
-		MonoSpaceFontRenderer.SetFont(Font);
-		MonoSpaceSmallFontRenderer.SetFont(FontSmall);
+		_font = new(Textures.Font, @" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?:()[]{}<>|@^$%#&/\+*`,'=~;.-_  ");
+		_fontSmall = new(Textures.FontSmall, " 0123456789.-");
+		MonoSpaceFontRenderer.SetFont(_font);
+		MonoSpaceSmallFontRenderer.SetFont(_fontSmall);
 
 		StateManager.SetSpawnset("(untitled)", SpawnsetBinary.CreateDefault());
 		ActiveLayout = MainLayout;
@@ -125,7 +125,7 @@ public partial class Game : GameBase, IDependencyContainer
 		if (!string.IsNullOrWhiteSpace(TooltipText))
 		{
 			Vector2i<int> tooltipPosition = MousePositionWithOffset.RoundToVector2Int32() + new Vector2i<int>(16, 16);
-			Vector2i<int> textSize = Font.MeasureText(TooltipText);
+			Vector2i<int> textSize = _font.MeasureText(TooltipText);
 			UiRenderer.RenderTopLeft(textSize, tooltipPosition, 1000, Color.Black);
 		}
 
