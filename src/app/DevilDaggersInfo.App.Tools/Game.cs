@@ -1,4 +1,5 @@
 using DevilDaggersInfo.App.Tools.Renderers;
+using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.SurvivalEditor;
@@ -6,7 +7,6 @@ using DevilDaggersInfo.App.Ui.Base.Enums;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.States;
 using DevilDaggersInfo.Core.Spawnset;
-using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 using Warp;
 using Warp.Debugging;
@@ -25,7 +25,7 @@ public partial class Game : GameBase, IDependencyContainer
 	private int _leftOffset;
 	private int _bottomOffset;
 
-	private ILayout? _activeLayout;
+	private IExtendedLayout? _activeLayout;
 
 	public Game()
 		: base("DevilDaggers.info Tools", 1920, 1080, false)
@@ -37,7 +37,7 @@ public partial class Game : GameBase, IDependencyContainer
 	public Vector2 ViewportOffset => new(_leftOffset, _bottomOffset);
 	private Vector2 MousePositionWithOffset => Input.GetMousePosition() - ViewportOffset;
 
-	public ILayout? ActiveLayout
+	public IExtendedLayout? ActiveLayout
 	{
 		get => _activeLayout;
 		set
@@ -56,11 +56,11 @@ public partial class Game : GameBase, IDependencyContainer
 	public IMonoSpaceFontRenderer MonoSpaceSmallFontRenderer { get; private set; } = null!;
 	public IUiRenderer UiRenderer { get; private set; } = null!;
 
-	public Layout MainLayout { get; } = new Layouts.MainLayout();
+	public IExtendedLayout MainLayout { get; } = new Layouts.MainLayout();
 
 	public ISurvivalEditorMainLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
-	public Layout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();
-	public Layout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
+	public IExtendedLayout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();
+	public IExtendedLayout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
 
 	public string? CursorText { get; set; }
 
@@ -107,15 +107,8 @@ public partial class Game : GameBase, IDependencyContainer
 		CursorText = null;
 		MouseUiContext.Reset(MousePositionWithOffset);
 
+		ActiveLayout?.Update();
 		ActiveLayout?.NestingContext.Update(default);
-
-		if (Input.IsKeyHeld(Keys.ControlLeft) || Input.IsKeyHeld(Keys.ControlRight))
-		{
-			if (Input.IsKeyPressed(Keys.Z))
-				SpawnsetHistoryManager.Undo();
-			else if (Input.IsKeyPressed(Keys.Y))
-				SpawnsetHistoryManager.Redo();
-		}
 	}
 
 	protected override void Render()
@@ -126,10 +119,7 @@ public partial class Game : GameBase, IDependencyContainer
 		Shaders.Ui.Use();
 		Shaders.Ui.SetMatrix4x4("projection", _projectionMatrix);
 
-		// TODO: Refactor.
-		if (ActiveLayout == SurvivalEditorMainLayout)
-			UiRenderer.RenderTopLeft(new(WindowWidth, WindowHeight), default, -100, new(0.1f));
-
+		ActiveLayout?.Render();
 		ActiveLayout?.NestingContext.Render(default);
 
 		if (!string.IsNullOrWhiteSpace(CursorText))
