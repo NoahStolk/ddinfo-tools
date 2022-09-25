@@ -45,16 +45,7 @@ public class MainLayout : Layout, IMainLayout
 
 	public void InitializeScene()
 	{
-		ModBinary modBinary = new(File.ReadAllBytes(Path.Combine(UserSettings.DevilDaggersInstallationDirectory, "res", "dd")), ModBinaryReadComprehensiveness.All);
-		Mesh? skull4Mesh = GetMesh(modBinary, "boid4");
-		Texture? skull4Texture = GetTexture(modBinary, "boid4");
-		Mesh? tileMesh = GetMesh(modBinary, "tile");
-		Texture? tileTexture = GetTexture(modBinary, "tile");
-
-		if (skull4Mesh == null || skull4Texture == null || tileMesh == null || tileTexture == null)
-			return;
-
-		_skull4 = new(skull4Mesh, skull4Texture, Vector3.One, Quaternion.Identity, _origin);
+		_skull4 = new(ContentManager.Content.Skull4Mesh, ContentManager.Content.Skull4Texture, Vector3.One, Quaternion.Identity, _origin);
 		const int tileDimension = 3;
 		const int start = -tileDimension / 2;
 		const int end = tileDimension / 2;
@@ -62,28 +53,9 @@ public class MainLayout : Layout, IMainLayout
 		{
 			for (int j = start; j <= end; j++)
 			{
-				_tiles.Add(new(tileMesh, tileTexture, Vector3.One, Quaternion.Identity, new(i * 4, 0, j * 4)));
+				_tiles.Add(new(ContentManager.Content.TileMesh, ContentManager.Content.TileTexture, Vector3.One, Quaternion.Identity, new(i * 4, 0, j * 4)));
 			}
 		}
-	}
-
-	private static Mesh? GetMesh(ModBinary modBinary, string meshName)
-	{
-		if (!modBinary.AssetMap.TryGetValue(new(AssetType.Mesh, meshName), out AssetData? meshData))
-			return null;
-
-		Mesh mesh = MeshConverter.ToWarpMesh(meshData.Buffer);
-		return mesh;
-	}
-
-	private static Texture? GetTexture(ModBinary modBinary, string textureName)
-	{
-		if (!modBinary.AssetMap.TryGetValue(new(AssetType.Texture, textureName), out AssetData? textureData))
-			return null;
-
-		Texture texture = TextureConverter.ToWarpTexture(textureData.Buffer);
-		texture.Load();
-		return texture;
 	}
 
 	public void Update()

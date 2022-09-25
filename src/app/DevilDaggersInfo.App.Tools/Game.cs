@@ -6,7 +6,6 @@ using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.SurvivalE
 using DevilDaggersInfo.App.Ui.Base.Enums;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.States;
-using DevilDaggersInfo.Core.Spawnset;
 using Silk.NET.OpenGL;
 using Warp;
 using Warp.Debugging;
@@ -67,7 +66,7 @@ public partial class Game : GameBase, IDependencyContainer
 	public IMonoSpaceFontRenderer FontRenderer4X6 { get; private set; } = null!;
 	public IUiRenderer UiRenderer { get; private set; } = null!;
 
-	public IExtendedLayout ConfigLayout { get; } = new Layouts.ConfigLayout();
+	public IConfigLayout ConfigLayout { get; } = new Layouts.ConfigLayout();
 	public IMainLayout MainLayout { get; } = new Layouts.MainLayout();
 
 	public ISurvivalEditorMainLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
@@ -92,8 +91,9 @@ public partial class Game : GameBase, IDependencyContainer
 		FontRenderer8X8.SetFont(_font8X8);
 		FontRenderer4X6.SetFont(_font4X6);
 
-		StateManager.SetSpawnset("(untitled)", SpawnsetBinary.CreateDefault());
+		StateManager.NewSpawnset();
 		ActiveLayout = ConfigLayout;
+		ConfigLayout.ValidateInstallation();
 
 		Gl.Enable(EnableCap.DepthTest);
 		Gl.Enable(EnableCap.Blend);
