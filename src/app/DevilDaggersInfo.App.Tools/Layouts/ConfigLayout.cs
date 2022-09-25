@@ -17,7 +17,7 @@ public class ConfigLayout : Layout, IConfigLayout
 	public ConfigLayout()
 		: base(Constants.Full)
 	{
-		_textInput = ComponentBuilder.CreateTextInput(Rectangle.At(32, 128, 960, 16));
+		_textInput = ComponentBuilder.CreateTextInput(Rectangle.At(32, 128, 960, 16), false);
 		_textInput.SetText(UserSettings.DevilDaggersInstallationDirectory);
 		NestingContext.Add(_textInput);
 
