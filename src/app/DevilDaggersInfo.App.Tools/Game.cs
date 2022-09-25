@@ -19,12 +19,18 @@ namespace DevilDaggersInfo.App.Tools;
 
 public partial class Game : GameBase, IDependencyContainer
 {
+	private const int _nativeWidth = 1024;
+	private const int _nativeHeight = 768;
+	private const float _nativeAspectRatio = _nativeWidth / (float)_nativeHeight;
+
 	private readonly Matrix4x4 _uiProjectionMatrix;
 
 	private Viewport _viewportUi;
-	private Viewport _viewport3d;
+	private Vector2 _uiScale;
 	private int _leftOffset;
 	private int _bottomOffset;
+
+	private Viewport _viewport3d;
 
 	private IExtendedLayout? _activeLayout;
 
@@ -33,14 +39,16 @@ public partial class Game : GameBase, IDependencyContainer
 	private MonoSpaceFont _font4X6 = null!;
 
 	public Game()
-		: base("DevilDaggers.info Tools", 1024, 768, false)
+		: base("DevilDaggers.info Tools", _nativeWidth, _nativeHeight, false)
 	{
 		Root.Game = this; // TODO: Move to Program.cs once source generator is optional.
-		_uiProjectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, InitialWindowWidth, InitialWindowHeight, 0, -1024, 1024);
+		const int depthMax = 1024;
+		_uiProjectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, InitialWindowWidth, InitialWindowHeight, 0, -depthMax, depthMax);
 	}
 
 	public Vector2 ViewportOffset => new(_leftOffset, _bottomOffset);
-	private Vector2 MousePositionWithOffset => Input.GetMousePosition() - ViewportOffset;
+	public Vector2 UiScale => _uiScale;
+	private Vector2 MousePositionWithOffset => (Input.GetMousePosition() - ViewportOffset) / _uiScale;
 
 	public IExtendedLayout? ActiveLayout
 	{
@@ -97,9 +105,18 @@ public partial class Game : GameBase, IDependencyContainer
 		base.OnChangeWindowSize(width, height);
 
 		_viewport3d = new(0, 0, width, height);
-		_leftOffset = (width - InitialWindowWidth) / 2;
-		_bottomOffset = (height - InitialWindowHeight) / 2;
-		_viewportUi = new(_leftOffset, _bottomOffset, InitialWindowWidth, InitialWindowHeight);
+
+		const int breakpoint = _nativeHeight;
+		int minDimension = (int)Math.Min(height, width / _nativeAspectRatio);
+		int clampedHeight = Math.Max(_nativeHeight, minDimension / breakpoint * breakpoint);
+
+		float originalAspectRatio = InitialWindowWidth / (float)InitialWindowHeight;
+		float adjustedWidth = clampedHeight * originalAspectRatio; // Adjusted for aspect ratio
+		_leftOffset = (int)((width - adjustedWidth) / 2);
+		_bottomOffset = (height - clampedHeight) / 2;
+		_viewportUi = new(_leftOffset, _bottomOffset, (int)adjustedWidth, clampedHeight); // Fix viewport to maintain aspect ratio
+
+		_uiScale = new(_viewportUi.Width / (float)InitialWindowWidth, _viewportUi.Height / (float)InitialWindowHeight);
 	}
 
 	protected override void Update()
@@ -142,7 +159,7 @@ public partial class Game : GameBase, IDependencyContainer
 		ActiveLayout?.NestingContext.RenderText(default);
 
 		FontRenderer8X8.Render(Vector2i<int>.One, new(0, 640), 500, Color.Green, DebugStack.GetString(), TextAlign.Left);
-		FontRenderer8X8.Render(Vector2i<int>.One, new(960, 640), 500, Color.Green, $"{Fps} FPS\n{Tps} TPS", TextAlign.Left);
+		FontRenderer8X8.Render(Vector2i<int>.One, new(960, 736), 500, Color.Green, $"{Fps} FPS\n{Tps} TPS", TextAlign.Left);
 
 		if (!string.IsNullOrWhiteSpace(TooltipText))
 			FontRenderer8X8.Render(Vector2i<int>.One, MousePositionWithOffset.RoundToVector2Int32() + new Vector2i<int>(16, 16), 1001, Color.White, TooltipText, TextAlign.Left);
