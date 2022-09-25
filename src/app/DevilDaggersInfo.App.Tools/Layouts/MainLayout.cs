@@ -18,7 +18,8 @@ namespace DevilDaggersInfo.App.Tools.Layouts;
 
 public class MainLayout : Layout, IMainLayout
 {
-	private readonly Camera _camera = new();
+	private static readonly Vector3 _origin = new(0, 3, 0);
+	private readonly Camera _camera = new(_origin);
 
 	private MeshObject? _skull4;
 	private readonly List<MeshObject> _tiles = new();
@@ -49,10 +50,13 @@ public class MainLayout : Layout, IMainLayout
 		if (skull4Mesh == null || skull4Texture == null || tileMesh == null || tileTexture == null)
 			return;
 
-		_skull4 = new(skull4Mesh, skull4Texture, Vector3.One, Quaternion.Identity, new(0, 3, 0));
-		for (int i = -2; i < 3; i++)
+		_skull4 = new(skull4Mesh, skull4Texture, Vector3.One, Quaternion.Identity, _origin);
+		const int tileDimension = 3;
+		const int start = -tileDimension / 2;
+		const int end = tileDimension / 2;
+		for (int i = start; i <= end; i++)
 		{
-			for (int j = -2; j < 3; j++)
+			for (int j = start; j <= end; j++)
 			{
 				_tiles.Add(new(tileMesh, tileTexture, Vector3.One, Quaternion.Identity, new(i * 4, 0, j * 4)));
 			}
@@ -159,8 +163,14 @@ public class MainLayout : Layout, IMainLayout
 
 	private sealed class Camera
 	{
+		private readonly Vector3 _origin;
 		private readonly Vector3State _positionState = new(default);
 		private readonly QuaternionState _rotationState = new(Quaternion.Identity);
+
+		public Camera(Vector3 origin)
+		{
+			_origin = origin;
+		}
 
 		public Matrix4x4 Projection { get; private set; }
 		public Matrix4x4 ViewMatrix { get; private set; }
@@ -171,7 +181,7 @@ public class MainLayout : Layout, IMainLayout
 			_rotationState.PrepareUpdate();
 
 			_positionState.Physics = new(MathF.Sin(Base.Game.Tt) * 5, 4, MathF.Cos(Base.Game.Tt) * 5);
-			_rotationState.Physics = Quaternion.CreateFromRotationMatrix(SetRotationFromDirectionalVector(-_positionState.Physics));
+			_rotationState.Physics = Quaternion.CreateFromRotationMatrix(SetRotationFromDirectionalVector(_origin - _positionState.Physics));
 
 			static Matrix4x4 SetRotationFromDirectionalVector(Vector3 direction)
 			{

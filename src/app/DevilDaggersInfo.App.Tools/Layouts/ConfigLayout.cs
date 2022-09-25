@@ -19,7 +19,7 @@ public class ConfigLayout : Layout, IExtendedLayout
 	public ConfigLayout()
 		: base(Constants.Full)
 	{
-		_textInput = new(Rectangle.At(256, 320, 960, 32), false, Color.Black, Color.White, Color.Gray(32), Color.White, Color.White, Color.White, Color.Gray(64), 2, 2, FontSize.F8X8);
+		_textInput = new(Rectangle.At(256, 320, 960, 32), false, Color.Black, Color.White, Color.Gray(32), Color.White, Color.White, Color.White, Color.Gray(64), 2, FontSize.F8X8);
 		_textInput.SetText(UserSettings.DevilDaggersInstallationDirectory);
 		NestingContext.Add(_textInput);
 

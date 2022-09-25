@@ -148,7 +148,7 @@ public partial class Game : GameBase, IDependencyContainer
 		if (!string.IsNullOrWhiteSpace(TooltipText))
 		{
 			Vector2i<int> tooltipPosition = MousePositionWithOffset.RoundToVector2Int32() + new Vector2i<int>(16, 16);
-			Vector2i<int> textSize = _font12X12.MeasureText(TooltipText);
+			Vector2i<int> textSize = _font8X8.MeasureText(TooltipText);
 			UiRenderer.RenderTopLeft(textSize, tooltipPosition, 1000, Color.Black);
 		}
 
