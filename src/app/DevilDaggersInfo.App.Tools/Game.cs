@@ -25,7 +25,6 @@ public partial class Game : GameBase, IDependencyContainer
 	private readonly Matrix4x4 _uiProjectionMatrix;
 
 	private Viewport _viewportUi;
-	private Vector2 _uiScale;
 	private int _leftOffset;
 	private int _bottomOffset;
 
@@ -46,8 +45,8 @@ public partial class Game : GameBase, IDependencyContainer
 	}
 
 	public Vector2 ViewportOffset => new(_leftOffset, _bottomOffset);
-	public Vector2 UiScale => _uiScale;
-	private Vector2 MousePositionWithOffset => (Input.GetMousePosition() - ViewportOffset) / _uiScale;
+	public Vector2 UiScale { get; private set; }
+	public Vector2 MousePositionWithOffset => (Input.GetMousePosition() - ViewportOffset) / UiScale;
 
 	public IExtendedLayout? ActiveLayout
 	{
@@ -116,7 +115,7 @@ public partial class Game : GameBase, IDependencyContainer
 		_bottomOffset = (height - clampedHeight) / 2;
 		_viewportUi = new(_leftOffset, _bottomOffset, (int)adjustedWidth, clampedHeight); // Fix viewport to maintain aspect ratio
 
-		_uiScale = new(_viewportUi.Width / (float)InitialWindowWidth, _viewportUi.Height / (float)InitialWindowHeight);
+		UiScale = new(_viewportUi.Width / (float)InitialWindowWidth, _viewportUi.Height / (float)InitialWindowHeight);
 	}
 
 	protected override void Update()
@@ -145,7 +144,7 @@ public partial class Game : GameBase, IDependencyContainer
 		ActiveLayout?.Render();
 		ActiveLayout?.NestingContext.Render(default);
 
-		Vector2i<int> tooltipOffset = new Vector2i<int>(16, 16) / _uiScale.FloorToVector2Int32();
+		Vector2i<int> tooltipOffset = new Vector2i<int>(16, 16) / UiScale.FloorToVector2Int32();
 		if (!string.IsNullOrWhiteSpace(TooltipText))
 		{
 			Vector2i<int> tooltipPosition = MousePositionWithOffset.RoundToVector2Int32() + tooltipOffset;
