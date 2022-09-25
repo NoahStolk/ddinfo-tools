@@ -23,7 +23,7 @@ public class ConfigLayout : Layout, IExtendedLayout
 		_textInput.SetText(UserSettings.DevilDaggersInstallationDirectory);
 		NestingContext.Add(_textInput);
 
-		NestingContext.Add(new Button(Rectangle.At(256, 420, 256, 32), Check, Color.Black, Color.White, Color.Gray(32), Color.White, "Save and continue", TextAlign.Middle, 2, false));
+		NestingContext.Add(new Button(Rectangle.At(256, 420, 256, 32), Check, Color.Black, Color.White, Color.Gray(32), Color.White, "Save and continue", TextAlign.Middle, 2, FontSize.F8X8));
 	}
 
 	private void Check()
@@ -96,7 +96,7 @@ public class ConfigLayout : Layout, IExtendedLayout
 
 			Example: C:\Program Files (x86)\Steam\steamapps\common\devildaggers
 			""";
-		Root.Game.MonoSpaceFontRenderer.Render(Vector2i<int>.One, new(256, 128), 0, Color.White, text, TextAlign.Left);
-		Root.Game.MonoSpaceFontRenderer.Render(Vector2i<int>.One, new(256, 640), 0, Color.Red, string.Join("\n", _errors), TextAlign.Left);
+		Root.Game.FontRenderer12X12.Render(Vector2i<int>.One, new(256, 128), 0, Color.White, text, TextAlign.Left);
+		Root.Game.FontRenderer12X12.Render(Vector2i<int>.One, new(256, 640), 0, Color.Red, string.Join("\n", _errors), TextAlign.Left);
 	}
 }

@@ -1,7 +1,6 @@
 using DevilDaggersInfo.App.Core.AssetInterop;
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.Components;
-using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.Enums;
 using DevilDaggersInfo.App.Ui.Base.Settings;
@@ -33,10 +32,10 @@ public class MainLayout : Layout, IMainLayout
 		Color ddcl = Color.FromHsv(270, 1, 1);
 
 		const int border = 10;
-		NestingContext.Add(new Button(Rectangle.At(0256, 256, 320, 128), LayoutManager.ToSurvivalEditorMainLayout, ddse.Intensify(64), ddse, ddse.Intensify(96), Color.White, "Survival Editor", TextAlign.Middle, border, false));
-		NestingContext.Add(new Button(Rectangle.At(1344, 256, 320, 128), LayoutManager.ToSurvivalEditorMainLayout, ddcl.Intensify(64), ddcl, ddcl.Intensify(96), Color.White, "Custom Leaderboards", TextAlign.Middle, border, false));
-		NestingContext.Add(new Button(Rectangle.At(0256, 768, 320, 128), LayoutManager.ToSurvivalEditorMainLayout, ddae.Intensify(64), ddae, ddae.Intensify(96), Color.White, "Asset Editor", TextAlign.Middle, border, false));
-		NestingContext.Add(new Button(Rectangle.At(1344, 768, 320, 128), LayoutManager.ToSurvivalEditorMainLayout, ddre.Intensify(64), ddre, ddre.Intensify(96), Color.White, "Replay Editor", TextAlign.Middle, border, false));
+		NestingContext.Add(new Button(Rectangle.At(128, 128, 256, 128), LayoutManager.ToSurvivalEditorMainLayout, ddse.Intensify(64), ddse, ddse.Intensify(96), Color.White, "Survival Editor", TextAlign.Middle, border, FontSize.F12X12));
+		NestingContext.Add(new Button(Rectangle.At(640, 128, 256, 128), LayoutManager.ToSurvivalEditorMainLayout, ddcl.Intensify(64), ddcl, ddcl.Intensify(96), Color.White, "Custom Leaderboards", TextAlign.Middle, border, FontSize.F12X12));
+		NestingContext.Add(new Button(Rectangle.At(128, 512, 256, 128), LayoutManager.ToSurvivalEditorMainLayout, ddae.Intensify(64), ddae, ddae.Intensify(96), Color.White, "Asset Editor", TextAlign.Middle, border, FontSize.F12X12));
+		NestingContext.Add(new Button(Rectangle.At(640, 512, 256, 128), LayoutManager.ToSurvivalEditorMainLayout, ddre.Intensify(64), ddre, ddre.Intensify(96), Color.White, "Replay Editor", TextAlign.Middle, border, FontSize.F12X12));
 	}
 
 	public void InitializeScene()
@@ -63,7 +62,7 @@ public class MainLayout : Layout, IMainLayout
 	private static Mesh? GetMesh(ModBinary modBinary, string meshName)
 	{
 		if (!modBinary.AssetMap.TryGetValue(new(AssetType.Mesh, meshName), out AssetData? meshData))
-			return null; // Asset not found in binary.
+			return null;
 
 		Mesh mesh = MeshConverter.ToWarpMesh(meshData.Buffer);
 		return mesh;
@@ -72,7 +71,7 @@ public class MainLayout : Layout, IMainLayout
 	private static Texture? GetTexture(ModBinary modBinary, string textureName)
 	{
 		if (!modBinary.AssetMap.TryGetValue(new(AssetType.Texture, textureName), out AssetData? textureData))
-			return null; // Asset not found in binary.
+			return null;
 
 		Texture texture = TextureConverter.ToWarpTexture(textureData.Buffer);
 		texture.Load();
