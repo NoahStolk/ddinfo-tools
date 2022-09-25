@@ -145,9 +145,10 @@ public partial class Game : GameBase, IDependencyContainer
 		ActiveLayout?.Render();
 		ActiveLayout?.NestingContext.Render(default);
 
+		Vector2i<int> tooltipOffset = new Vector2i<int>(16, 16) / _uiScale.FloorToVector2Int32();
 		if (!string.IsNullOrWhiteSpace(TooltipText))
 		{
-			Vector2i<int> tooltipPosition = MousePositionWithOffset.RoundToVector2Int32() + new Vector2i<int>(16, 16);
+			Vector2i<int> tooltipPosition = MousePositionWithOffset.RoundToVector2Int32() + tooltipOffset;
 			Vector2i<int> textSize = _font8X8.MeasureText(TooltipText);
 			UiRenderer.RenderTopLeft(textSize, tooltipPosition, 1000, Color.Black);
 		}
@@ -162,7 +163,7 @@ public partial class Game : GameBase, IDependencyContainer
 		FontRenderer8X8.Render(Vector2i<int>.One, new(960, 736), 500, Color.Green, $"{Fps} FPS\n{Tps} TPS", TextAlign.Left);
 
 		if (!string.IsNullOrWhiteSpace(TooltipText))
-			FontRenderer8X8.Render(Vector2i<int>.One, MousePositionWithOffset.RoundToVector2Int32() + new Vector2i<int>(16, 16), 1001, Color.White, TooltipText, TextAlign.Left);
+			FontRenderer8X8.Render(Vector2i<int>.One, MousePositionWithOffset.RoundToVector2Int32() + tooltipOffset, 1001, Color.White, TooltipText, TextAlign.Left);
 
 		static void ActivateViewport(Viewport viewport)
 		{
