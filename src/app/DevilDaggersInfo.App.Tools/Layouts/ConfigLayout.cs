@@ -19,11 +19,11 @@ public class ConfigLayout : Layout, IExtendedLayout
 	public ConfigLayout()
 		: base(Constants.Full)
 	{
-		_textInput = new(Rectangle.At(256, 320, 960, 32), false, Color.Black, Color.White, Color.Gray(32), Color.White, Color.White, Color.White, Color.Gray(64), 2, FontSize.F8X8);
+		_textInput = new(Rectangle.At(32, 128, 960, 16), false, Color.Black, Color.White, Color.Gray(32), Color.White, Color.White, Color.White, Color.Gray(64), 2, FontSize.F8X8);
 		_textInput.SetText(UserSettings.DevilDaggersInstallationDirectory);
 		NestingContext.Add(_textInput);
 
-		NestingContext.Add(new Button(Rectangle.At(256, 420, 256, 32), Check, Color.Black, Color.White, Color.Gray(32), Color.White, "Save and continue", TextAlign.Middle, 2, FontSize.F8X8));
+		NestingContext.Add(new Button(Rectangle.At(32, 320, 256, 32), Check, Color.Black, Color.White, Color.Gray(32), Color.White, "Save and continue", TextAlign.Middle, 2, FontSize.F8X8));
 	}
 
 	private void Check()
@@ -85,18 +85,22 @@ public class ConfigLayout : Layout, IExtendedLayout
 
 	public void Render()
 	{
+		Root.Game.UiRenderer.RenderTopLeft(new(WindowWidth, WindowHeight), default, -100, new(0.1f));
 	}
 
 	public void RenderText()
 	{
-		const string text = """
-			Please configure your Devil Daggers installation directory.
+		Root.Game.FontRenderer12X12.Render(Vector2i<int>.One, new(32, 32), 0, Color.White, "SETTINGS", TextAlign.Left);
 
-			This is the directory containing the executable.
-
-			Example: C:\Program Files (x86)\Steam\steamapps\common\devildaggers
-			""";
-		Root.Game.FontRenderer12X12.Render(Vector2i<int>.One, new(256, 128), 0, Color.White, text, TextAlign.Left);
-		Root.Game.FontRenderer12X12.Render(Vector2i<int>.One, new(256, 640), 0, Color.Red, string.Join("\n", _errors), TextAlign.Left);
+// 		const string text = """
+// 			Please configure your Devil Daggers installation directory.
+//
+// 			This is the directory containing the executable.
+//
+// 			Example: C:\Program Files (x86)\Steam\steamapps\common\devildaggers
+// 			""";
+		const string text = "Please configure your Devil Daggers installation directory.\n\nThis is the directory containing the executable.\n\nExample: C:\\Program Files (x86)\\Steam\\steamapps\\common\\devildaggers";
+		Root.Game.FontRenderer8X8.Render(Vector2i<int>.One, new(32, 64), 0, Color.White, text, TextAlign.Left);
+		Root.Game.FontRenderer8X8.Render(Vector2i<int>.One, new(32, 160), 0, Color.Red, string.Join("\n\n", _errors), TextAlign.Left);
 	}
 }

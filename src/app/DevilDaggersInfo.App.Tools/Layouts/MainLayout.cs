@@ -31,12 +31,16 @@ public class MainLayout : Layout, IMainLayout
 		Color ddae = Color.FromHsv(130, 1, 0.6f);
 		Color ddre = Color.FromHsv(220, 1, 1);
 		Color ddcl = Color.FromHsv(270, 1, 1);
+		Color settings = Color.Gray(0.5f);
+		Color exit = Color.Gray(0.3f);
 
 		const int border = 10;
-		NestingContext.Add(new Button(Rectangle.At(128, 128, 256, 128), LayoutManager.ToSurvivalEditorMainLayout, ddse.Intensify(64), ddse, ddse.Intensify(96), Color.White, "Survival Editor", TextAlign.Middle, border, FontSize.F12X12));
-		NestingContext.Add(new Button(Rectangle.At(640, 128, 256, 128), LayoutManager.ToSurvivalEditorMainLayout, ddcl.Intensify(64), ddcl, ddcl.Intensify(96), Color.White, "Custom Leaderboards", TextAlign.Middle, border, FontSize.F12X12));
-		NestingContext.Add(new Button(Rectangle.At(128, 512, 256, 128), LayoutManager.ToSurvivalEditorMainLayout, ddae.Intensify(64), ddae, ddae.Intensify(96), Color.White, "Asset Editor", TextAlign.Middle, border, FontSize.F12X12));
-		NestingContext.Add(new Button(Rectangle.At(640, 512, 256, 128), LayoutManager.ToSurvivalEditorMainLayout, ddre.Intensify(64), ddre, ddre.Intensify(96), Color.White, "Replay Editor", TextAlign.Middle, border, FontSize.F12X12));
+		NestingContext.Add(new Button(Rectangle.At(128, 128, 256, 96), LayoutManager.ToSurvivalEditorMainLayout, ddse.Intensify(64), ddse, ddse.Intensify(96), Color.White, "Survival Editor", TextAlign.Middle, border, FontSize.F12X12));
+		NestingContext.Add(new Button(Rectangle.At(640, 128, 256, 96), () => { }, ddcl.Intensify(64), ddcl, ddcl.Intensify(96), Color.White, "Custom Leaderboards", TextAlign.Middle, border, FontSize.F12X12));
+		NestingContext.Add(new Button(Rectangle.At(128, 320, 256, 96), () => { }, ddae.Intensify(64), ddae, ddae.Intensify(96), Color.White, "Asset Editor", TextAlign.Middle, border, FontSize.F12X12));
+		NestingContext.Add(new Button(Rectangle.At(640, 320, 256, 96), () => { }, ddre.Intensify(64), ddre, ddre.Intensify(96), Color.White, "Replay Editor", TextAlign.Middle, border, FontSize.F12X12));
+		NestingContext.Add(new Button(Rectangle.At(128, 512, 256, 96), LayoutManager.ToConfigLayout, settings.Intensify(64), settings, settings.Intensify(96), Color.White, "Configuration", TextAlign.Middle, border, FontSize.F12X12));
+		NestingContext.Add(new Button(Rectangle.At(640, 512, 256, 96), () => Environment.Exit(0), exit.Intensify(64), exit, exit.Intensify(96), Color.White, "Exit", TextAlign.Middle, border, FontSize.F12X12));
 	}
 
 	public void InitializeScene()
