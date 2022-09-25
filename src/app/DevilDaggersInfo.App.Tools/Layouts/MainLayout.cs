@@ -1,9 +1,11 @@
 using DevilDaggersInfo.App.Core.AssetInterop;
+using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.Enums;
 using DevilDaggersInfo.App.Ui.Base.Settings;
+using DevilDaggersInfo.App.Ui.Base.States;
 using DevilDaggersInfo.Core.Mod;
 using DevilDaggersInfo.Core.Mod.Enums;
 using DevilDaggersInfo.Types.Core.Assets;
@@ -20,10 +22,10 @@ public class MainLayout : Layout, IMainLayout
 	private readonly Camera _camera = new();
 
 	private MeshObject? _skull4;
-	private List<MeshObject> _tiles = new();
+	private readonly List<MeshObject> _tiles = new();
 
 	public MainLayout()
-		: base(new(0, 0, 1920, 1080))
+		: base(Constants.Full)
 	{
 		Color ddse = Color.FromHsv(0, 1, 0.8f);
 		Color ddae = Color.FromHsv(130, 1, 0.6f);
@@ -31,10 +33,10 @@ public class MainLayout : Layout, IMainLayout
 		Color ddcl = Color.FromHsv(270, 1, 1);
 
 		const int border = 10;
-		NestingContext.Add(new Button(Rectangle.At(0256, 256, 320, 128), () => Root.Game.ActiveLayout = Root.Game.SurvivalEditorMainLayout, ddse.Intensify(64), ddse, ddse.Intensify(96), Color.White, "Survival Editor", TextAlign.Middle, border, false));
-		NestingContext.Add(new Button(Rectangle.At(1344, 256, 320, 128), () => Root.Game.ActiveLayout = Root.Game.SurvivalEditorMainLayout, ddcl.Intensify(64), ddcl, ddcl.Intensify(96), Color.White, "Custom Leaderboards", TextAlign.Middle, border, false));
-		NestingContext.Add(new Button(Rectangle.At(0256, 768, 320, 128), () => Root.Game.ActiveLayout = Root.Game.SurvivalEditorMainLayout, ddae.Intensify(64), ddae, ddae.Intensify(96), Color.White, "Asset Editor", TextAlign.Middle, border, false));
-		NestingContext.Add(new Button(Rectangle.At(1344, 768, 320, 128), () => Root.Game.ActiveLayout = Root.Game.SurvivalEditorMainLayout, ddre.Intensify(64), ddre, ddre.Intensify(96), Color.White, "Replay Editor", TextAlign.Middle, border, false));
+		NestingContext.Add(new Button(Rectangle.At(0256, 256, 320, 128), LayoutManager.ToSurvivalEditorMainLayout, ddse.Intensify(64), ddse, ddse.Intensify(96), Color.White, "Survival Editor", TextAlign.Middle, border, false));
+		NestingContext.Add(new Button(Rectangle.At(1344, 256, 320, 128), LayoutManager.ToSurvivalEditorMainLayout, ddcl.Intensify(64), ddcl, ddcl.Intensify(96), Color.White, "Custom Leaderboards", TextAlign.Middle, border, false));
+		NestingContext.Add(new Button(Rectangle.At(0256, 768, 320, 128), LayoutManager.ToSurvivalEditorMainLayout, ddae.Intensify(64), ddae, ddae.Intensify(96), Color.White, "Asset Editor", TextAlign.Middle, border, false));
+		NestingContext.Add(new Button(Rectangle.At(1344, 768, 320, 128), LayoutManager.ToSurvivalEditorMainLayout, ddre.Intensify(64), ddre, ddre.Intensify(96), Color.White, "Replay Editor", TextAlign.Middle, border, false));
 	}
 
 	public void InitializeScene()

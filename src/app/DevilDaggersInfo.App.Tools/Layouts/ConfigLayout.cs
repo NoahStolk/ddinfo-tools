@@ -1,8 +1,10 @@
+using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.Enums;
 using DevilDaggersInfo.App.Ui.Base.Settings;
+using DevilDaggersInfo.App.Ui.Base.States;
 using Warp.Ui;
 
 namespace DevilDaggersInfo.App.Tools.Layouts;
@@ -15,7 +17,7 @@ public class ConfigLayout : Layout, IExtendedLayout
 	private bool _initialTryDone;
 
 	public ConfigLayout()
-		: base(new(0, 0, 1920, 1080))
+		: base(Constants.Full)
 	{
 		_textInput = new(Rectangle.At(256, 320, 960, 32), false, Color.Black, Color.White, Color.Gray(32), Color.White, Color.White, Color.White, Color.Gray(64), 2, 2);
 		_textInput.SetText(UserSettings.DevilDaggersInstallationDirectory);
@@ -64,7 +66,7 @@ public class ConfigLayout : Layout, IExtendedLayout
 		if (_errors.Count > 0)
 			return;
 
-		Root.Game.ActiveLayout = Root.Game.MainLayout;
+		LayoutManager.ToMainLayout();
 		Root.Game.MainLayout.InitializeScene();
 	}
 
