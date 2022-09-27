@@ -1,13 +1,8 @@
-using DevilDaggersInfo.App.Core.AssetInterop;
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.Enums;
-using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.Base.States;
-using DevilDaggersInfo.Core.Mod;
-using DevilDaggersInfo.Core.Mod.Enums;
-using DevilDaggersInfo.Types.Core.Assets;
 using Silk.NET.OpenGL;
 using Warp.Content;
 using Warp.InterpolationStates;
@@ -116,6 +111,7 @@ public class MainLayout : Layout, IMainLayout
 			Gl.EnableVertexAttribArray(1);
 			Gl.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, (uint)sizeof(Vertex), (void*)(3 * sizeof(float)));
 
+			// TODO: We don't do anything with normals here.
 			Gl.EnableVertexAttribArray(2);
 			Gl.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, (uint)sizeof(Vertex), (void*)(5 * sizeof(float)));
 
