@@ -76,7 +76,7 @@ public class UiRenderer : IUiRenderer
 		Gl.BindVertexArray(0);
 	}
 
-	public void RenderCircle(Vector2i<int> center, int radius, float depth, Vector3 color)
+	public void RenderCircle(Vector2i<int> center, float radius, float depth, Vector3 color)
 	{
 		Gl.BindVertexArray(_vaoCircle);
 
