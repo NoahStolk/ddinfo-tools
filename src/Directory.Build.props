@@ -7,7 +7,6 @@
 		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
 		<NoWarn>SA1633</NoWarn>
 		<ImplicitUsings>true</ImplicitUsings>
-		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 		<InvariantGlobalization>true</InvariantGlobalization>
 		<WarningsAsErrors>nullable</WarningsAsErrors>
 		<EnablePreviewFeatures>true</EnablePreviewFeatures>
@@ -29,15 +28,15 @@
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(SCA)' == 'true'">
-		<PackageReference Include="Roslynator.Analyzers">
+		<PackageReference Include="Roslynator.Analyzers" Version="4.1.1" >
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="SonarAnalyzer.CSharp">
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.45.0.54064">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="StyleCop.Analyzers">
+		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

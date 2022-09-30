@@ -192,7 +192,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7B0D34B1-407
 		release-ddre.bat = release-ddre.bat
 		DevilDaggersInfo.sln.DotSettings = DevilDaggersInfo.sln.DotSettings
 		Directory.Build.props = Directory.Build.props
-		Directory.Packages.props = Directory.Packages.props
 		nuget.config = nuget.config
 		DevilDaggersInfo.sln = DevilDaggersInfo.sln
 	EndProjectSection
