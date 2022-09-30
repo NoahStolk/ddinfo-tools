@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion;
 using Silk.NET.OpenGL;
 
@@ -7,36 +8,15 @@ public class UiRenderer : IUiRenderer
 {
 	private const int _circleSubdivisionCount = 40;
 
-	private readonly uint _vaoRectangle;
-	private readonly uint _vaoCircle;
+	private readonly uint _vaoRectangleTriangles;
+	private readonly uint _vaoCircleLines;
+	private readonly uint _vaoRectangleLines;
 
 	public unsafe UiRenderer()
 	{
-		float[] rectangle =
-		{
-			-0.5f, +0.5f, // top left
-			+0.5f, +0.5f, // top right
-			-0.5f, -0.5f, // bottom left
-
-			+0.5f, +0.5f, // top right
-			+0.5f, -0.5f, // bottom right
-			-0.5f, -0.5f, // bottom left
-		};
-		_vaoRectangle = CreateVao(rectangle);
-		_vaoCircle = CreateVao(Circle());
-
-		float[] Circle()
-		{
-			float[] vertices = new float[(_circleSubdivisionCount + 2) * 2];
-			for (uint i = 0; i <= _circleSubdivisionCount; i++)
-			{
-				float angle = i * (MathF.PI * 2) / _circleSubdivisionCount;
-				vertices[i * 2] = MathF.Cos(angle);
-				vertices[i * 2 + 1] = MathF.Sin(angle);
-			}
-
-			return vertices;
-		}
+		_vaoRectangleTriangles = CreateVao(VertexBuilder.RectangleTriangles());
+		_vaoCircleLines = CreateVao(VertexBuilder.CircleLines(_circleSubdivisionCount));
+		_vaoRectangleLines = CreateVao(VertexBuilder.RectangleLines());
 
 		uint CreateVao(float[] vertices)
 		{
@@ -60,31 +40,44 @@ public class UiRenderer : IUiRenderer
 		}
 	}
 
-	public void RenderTopLeft(Vector2i<int> scale, Vector2i<int> topLeft, float depth, Vector3 color)
-		=> RenderCenter(scale, topLeft + scale / 2, depth, color);
+	public void RenderRectangleTopLeft(Vector2i<int> scale, Vector2i<int> topLeft, float depth, Vector3 color)
+		=> RenderRectangleCenter(scale, topLeft + scale / 2, depth, color);
 
-	public void RenderCenter(Vector2i<int> scale, Vector2i<int> center, float depth, Vector3 color)
+	public void RenderRectangleCenter(Vector2i<int> scale, Vector2i<int> center, float depth, Vector3 color)
 	{
-		Gl.BindVertexArray(_vaoRectangle);
+		Gl.BindVertexArray(_vaoRectangleTriangles);
 
 		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(scale.X, scale.Y, 1);
 
 		Shaders.Ui.SetMatrix4x4("model", scaleMatrix * Matrix4x4.CreateTranslation(center.X, center.Y, depth));
 		Shaders.Ui.SetVector3("color", color);
-		Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
+		Gl.DrawArrays(PrimitiveType.Triangles, 0, 6); // TODO: TriangleStrip
 
 		Gl.BindVertexArray(0);
 	}
 
-	public void RenderCircle(Vector2i<int> center, float radius, float depth, Vector3 color)
+	public void RenderCircleCenter(Vector2i<int> center, float radius, float depth, Vector3 color)
 	{
-		Gl.BindVertexArray(_vaoCircle);
+		Gl.BindVertexArray(_vaoCircleLines);
 
 		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(radius, radius, 1);
 
 		Shaders.Ui.SetMatrix4x4("model", scaleMatrix * Matrix4x4.CreateTranslation(center.X, center.Y, depth));
 		Shaders.Ui.SetVector3("color", color);
 		Gl.DrawArrays(PrimitiveType.LineStrip, 0, _circleSubdivisionCount + 1);
+
+		Gl.BindVertexArray(0);
+	}
+
+	public void RenderHollowRectangleTopLeft(Vector2 scale, Vector2 topLeft, float depth, Vector3 color)
+	{
+		Gl.BindVertexArray(_vaoRectangleLines);
+
+		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(scale.X, scale.Y, 1);
+
+		Shaders.Ui.SetMatrix4x4("model", scaleMatrix * Matrix4x4.CreateTranslation(topLeft.X, topLeft.Y, depth));
+		Shaders.Ui.SetVector3("color", color);
+		Gl.DrawArrays(PrimitiveType.LineStrip, 0, 5);
 
 		Gl.BindVertexArray(0);
 	}

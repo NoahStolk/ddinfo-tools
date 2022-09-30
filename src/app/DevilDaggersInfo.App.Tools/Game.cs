@@ -149,7 +149,7 @@ public partial class Game : GameBase, IDependencyContainer
 		{
 			Vector2i<int> tooltipPosition = MousePositionWithOffset.RoundToVector2Int32() + tooltipOffset;
 			Vector2i<int> textSize = _font8X8.MeasureText(TooltipText);
-			UiRenderer.RenderTopLeft(textSize, tooltipPosition, 1000, Color.Black);
+			UiRenderer.RenderRectangleTopLeft(textSize, tooltipPosition, 1000, Color.Black);
 		}
 
 		Shaders.Font.Use();
