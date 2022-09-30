@@ -2,13 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UsePreviewFeatures>true</UsePreviewFeatures>
-    <LangVersion>preview</LangVersion>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>SA1633</NoWarn>
-    <ImplicitUsings>enable</ImplicitUsings>
     <OutputType>WinExe</OutputType>
   </PropertyGroup>
 
