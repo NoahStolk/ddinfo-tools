@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Warp.SourceGenerators" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <PackageReference Include="Warp.SourceGenerators" Version="4.3.0" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
