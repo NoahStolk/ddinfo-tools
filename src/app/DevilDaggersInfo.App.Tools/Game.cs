@@ -132,6 +132,9 @@ public partial class Game : GameBase, IDependencyContainer
 	{
 		base.PrepareRender();
 
+		ActiveLayout?.Render();
+		ActiveLayout?.NestingContext.Render(default);
+
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, Vector2i<int>.One, new(0, 640), 500, Color.Green, DebugStack.GetString(), TextAlign.Left);
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, Vector2i<int>.One, new(960, 736), 500, Color.Green, $"{Fps} FPS\n{Tps} TPS", TextAlign.Left);
 
@@ -153,9 +156,6 @@ public partial class Game : GameBase, IDependencyContainer
 		ActivateViewport(_viewport3d);
 		ActiveLayout?.Render3d();
 
-		ActiveLayout?.Render();
-		ActiveLayout?.NestingContext.Render(default);
-
 		ActivateViewport(_viewportUi);
 		Shaders.Ui.Use();
 		Shaders.Ui.SetMatrix4x4("projection", _uiProjectionMatrix);
@@ -164,7 +164,6 @@ public partial class Game : GameBase, IDependencyContainer
 
 		Shaders.Font.Use();
 		Shaders.Font.SetMatrix4x4("projection", _uiProjectionMatrix);
-
 		FontRenderer4X6.Render(RenderBatchCollector.MonoSpaceTexts4X6);
 		FontRenderer8X8.Render(RenderBatchCollector.MonoSpaceTexts8X8);
 		FontRenderer12X12.Render(RenderBatchCollector.MonoSpaceTexts12X12);
