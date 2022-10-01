@@ -51,7 +51,7 @@ public class UiRenderer : IUiRenderer
 
 		Shaders.Ui.SetMatrix4x4("model", scaleMatrix * Matrix4x4.CreateTranslation(center.X, center.Y, depth));
 		Shaders.Ui.SetVector3("color", color);
-		Gl.DrawArrays(PrimitiveType.Triangles, 0, 6); // TODO: TriangleStrip
+		Gl.DrawArrays(PrimitiveType.Triangles, 0, 6); // TODO: TriangleStrip? Or maybe not because this probably won't work for batching.
 
 		Gl.BindVertexArray(0);
 	}
@@ -69,13 +69,13 @@ public class UiRenderer : IUiRenderer
 		Gl.BindVertexArray(0);
 	}
 
-	public void RenderHollowRectangleTopLeft(Vector2 scale, Vector2 topLeft, float depth, Vector3 color)
+	public void RenderHollowRectangleCenter(Vector2 scale, Vector2 center, float depth, Vector3 color)
 	{
 		Gl.BindVertexArray(_vaoRectangleLines);
 
 		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(scale.X, scale.Y, 1);
 
-		Shaders.Ui.SetMatrix4x4("model", scaleMatrix * Matrix4x4.CreateTranslation(topLeft.X, topLeft.Y, depth));
+		Shaders.Ui.SetMatrix4x4("model", scaleMatrix * Matrix4x4.CreateTranslation(center.X, center.Y, depth));
 		Shaders.Ui.SetVector3("color", color);
 		Gl.DrawArrays(PrimitiveType.LineStrip, 0, 5);
 
