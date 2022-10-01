@@ -61,6 +61,7 @@ public partial class Game : GameBase, IDependencyContainer
 	}
 
 	public UiRenderer UiRenderer { get; private set; } = null!;
+	public SpriteRenderer SpriteRenderer { get; private set; } = null!;
 	public MonoSpaceFontRenderer FontRenderer12X12 { get; private set; } = null!;
 	public MonoSpaceFontRenderer FontRenderer8X8 { get; private set; } = null!;
 	public MonoSpaceFontRenderer FontRenderer4X6 { get; private set; } = null!;
@@ -79,6 +80,7 @@ public partial class Game : GameBase, IDependencyContainer
 		InitializeContent();
 
 		UiRenderer = new();
+		SpriteRenderer = new();
 		FontRenderer12X12 = new();
 		FontRenderer8X8 = new();
 		FontRenderer4X6 = new();
@@ -154,9 +156,11 @@ public partial class Game : GameBase, IDependencyContainer
 		Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 		ActivateViewport(_viewport3d);
+
 		ActiveLayout?.Render3d();
 
 		ActivateViewport(_viewportUi);
+
 		Shaders.Ui.Use();
 		Shaders.Ui.SetMatrix4x4("projection", _uiProjectionMatrix);
 		UiRenderer.RenderRectangleTriangles();
@@ -167,6 +171,10 @@ public partial class Game : GameBase, IDependencyContainer
 		FontRenderer4X6.Render(RenderBatchCollector.MonoSpaceTexts4X6);
 		FontRenderer8X8.Render(RenderBatchCollector.MonoSpaceTexts8X8);
 		FontRenderer12X12.Render(RenderBatchCollector.MonoSpaceTexts12X12);
+
+		Shaders.Sprite.Use();
+		Shaders.Sprite.SetMatrix4x4("projection", _uiProjectionMatrix);
+		SpriteRenderer.Render();
 
 		RenderBatchCollector.Clear();
 
