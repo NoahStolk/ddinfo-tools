@@ -52,10 +52,7 @@ public class ConfigLayout : Layout, IConfigLayout
 	public void Render()
 	{
 		RenderBatchCollector.RenderRectangleTopLeft(new(WindowWidth, WindowHeight), default, -100, Color.Gray(0.1f));
-	}
 
-	public void RenderText()
-	{
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F12X12, Vector2i<int>.One, new(32, 32), 0, Color.White, "SETTINGS", TextAlign.Left);
 
 // 		const string text = """

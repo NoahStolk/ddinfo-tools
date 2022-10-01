@@ -156,10 +156,6 @@ public partial class Game : GameBase, IDependencyContainer
 		ActiveLayout?.Render();
 		ActiveLayout?.NestingContext.Render(default);
 
-		// TODO: Merge with Render.
-		ActiveLayout?.RenderText();
-		ActiveLayout?.NestingContext.RenderText(default);
-
 		ActivateViewport(_viewportUi);
 		Shaders.Ui.Use();
 		Shaders.Ui.SetMatrix4x4("projection", _uiProjectionMatrix);

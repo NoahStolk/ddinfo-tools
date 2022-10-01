@@ -75,10 +75,6 @@ public class MainLayout : Layout, IMainLayout
 	{
 	}
 
-	public void RenderText()
-	{
-	}
-
 	private sealed class MeshObject
 	{
 		private readonly Mesh _mesh;
