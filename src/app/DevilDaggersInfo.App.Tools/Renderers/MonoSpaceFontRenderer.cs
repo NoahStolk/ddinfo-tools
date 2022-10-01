@@ -51,13 +51,11 @@ public class MonoSpaceFontRenderer
 		{
 			int charHeight = _font.Texture.Height;
 			int charWidth = _font.Texture.Width / _font.CharAmount;
-			int halfCharWidth = (int)Math.Ceiling(charWidth / 2f);
-			int halfCharHeight = (int)Math.Ceiling(charHeight / 2f);
 			int scaledCharWidth = mst.Scale.X * charWidth;
 			int scaledCharHeight = mst.Scale.Y * charHeight;
 			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(scaledCharWidth, scaledCharHeight, 1);
 
-			Vector2i<int> relativePosition = new(halfCharWidth, halfCharHeight);
+			Vector2i<int> relativePosition = new(scaledCharWidth / 2, scaledCharHeight / 2);
 			if (mst.TextAlign == TextAlign.Middle)
 			{
 				Vector2i<int> textSize = _font.MeasureText(mst.Text) * mst.Scale;
@@ -77,7 +75,7 @@ public class MonoSpaceFontRenderer
 				Shaders.Font.SetVector4("color", mst.Color);
 				Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
 
-				_font.AdvancePosition(c, ref relativePosition, halfCharHeight, scaledCharWidth, scaledCharHeight);
+				_font.AdvancePosition(c, ref relativePosition, scaledCharWidth / 2, scaledCharWidth, scaledCharHeight);
 			}
 		}
 
