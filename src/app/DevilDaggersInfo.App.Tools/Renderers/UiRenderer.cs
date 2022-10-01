@@ -60,7 +60,7 @@ public class UiRenderer
 
 	public void RenderCircleLines()
 	{
-		if (RenderBatchCollector.RectangleTriangles.Count == 0)
+		if (RenderBatchCollector.CircleLines.Count == 0)
 			return;
 
 		Gl.BindVertexArray(_vaoCircleLines);

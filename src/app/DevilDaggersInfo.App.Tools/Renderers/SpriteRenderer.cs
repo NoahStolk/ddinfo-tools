@@ -43,6 +43,9 @@ public class SpriteRenderer
 
 	public void Render()
 	{
+		if (RenderBatchCollector.Sprites.Count == 0)
+			return;
+
 		Gl.BindVertexArray(_vao);
 
 		foreach (Sprite sprite in RenderBatchCollector.Sprites)
