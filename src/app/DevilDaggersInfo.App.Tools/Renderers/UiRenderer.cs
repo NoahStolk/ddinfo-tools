@@ -1,10 +1,11 @@
 using DevilDaggersInfo.App.Ui.Base;
-using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion;
+using DevilDaggersInfo.App.Ui.Base.Rendering;
+using DevilDaggersInfo.App.Ui.Base.Rendering.Data;
 using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.App.Tools.Renderers;
 
-public class UiRenderer : IUiRenderer
+public class UiRenderer
 {
 	private const int _circleSubdivisionCount = 40;
 
@@ -38,31 +39,40 @@ public class UiRenderer : IUiRenderer
 		}
 	}
 
-	public void RenderRectangleTopLeft(Vector2i<int> scale, Vector2i<int> topLeft, float depth, Color color)
-		=> RenderRectangleCenter(scale, topLeft + scale / 2, depth, color);
-
-	public void RenderRectangleCenter(Vector2i<int> scale, Vector2i<int> center, float depth, Color color)
+	public void RenderRectangleTriangles()
 	{
+		if (RenderBatchCollector.RectangleTriangles.Count == 0)
+			return;
+
 		Gl.BindVertexArray(_vaoRectangleTriangles);
 
-		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(scale.X, scale.Y, 1);
+		foreach (RectangleTriangle rt in RenderBatchCollector.RectangleTriangles)
+		{
+			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(rt.Scale.X, rt.Scale.Y, 1);
 
-		Shaders.Ui.SetMatrix4x4("model", scaleMatrix * Matrix4x4.CreateTranslation(center.X, center.Y, depth));
-		Shaders.Ui.SetVector3("color", color);
-		Gl.DrawArrays(PrimitiveType.Triangles, 0, 6); // TODO: TriangleStrip? Or maybe not because this probably won't work for batching.
+			Shaders.Ui.SetMatrix4x4("model", scaleMatrix * Matrix4x4.CreateTranslation(rt.CenterPosition.X, rt.CenterPosition.Y, rt.Depth));
+			Shaders.Ui.SetVector3("color", rt.Color);
+			Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
+		}
 
 		Gl.BindVertexArray(0);
 	}
 
-	public void RenderCircleCenter(Vector2i<int> center, float radius, float depth, Color color)
+	public void RenderCircleLines()
 	{
+		if (RenderBatchCollector.RectangleTriangles.Count == 0)
+			return;
+
 		Gl.BindVertexArray(_vaoCircleLines);
 
-		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(radius, radius, 1);
+		foreach (CircleLine cl in RenderBatchCollector.CircleLines)
+		{
+			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(cl.Radius, cl.Radius, 1);
 
-		Shaders.Ui.SetMatrix4x4("model", scaleMatrix * Matrix4x4.CreateTranslation(center.X, center.Y, depth));
-		Shaders.Ui.SetVector3("color", color);
-		Gl.DrawArrays(PrimitiveType.LineStrip, 0, _circleSubdivisionCount + 1);
+			Shaders.Ui.SetMatrix4x4("model", scaleMatrix * Matrix4x4.CreateTranslation(cl.CenterPosition.X, cl.CenterPosition.Y, cl.Depth));
+			Shaders.Ui.SetVector3("color", cl.Color);
+			Gl.DrawArrays(PrimitiveType.LineStrip, 0, _circleSubdivisionCount + 1);
+		}
 
 		Gl.BindVertexArray(0);
 	}

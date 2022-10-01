@@ -3,6 +3,7 @@ using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.Enums;
+using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.Base.States;
 using Warp.Ui;
@@ -50,12 +51,12 @@ public class ConfigLayout : Layout, IConfigLayout
 
 	public void Render()
 	{
-		Root.Game.UiRenderer.RenderRectangleTopLeft(new(WindowWidth, WindowHeight), default, -100, Color.Gray(0.1f));
+		RenderBatchCollector.RenderRectangleTopLeft(new(WindowWidth, WindowHeight), default, -100, Color.Gray(0.1f));
 	}
 
 	public void RenderText()
 	{
-		Root.Game.FontRenderer12X12.Render(Vector2i<int>.One, new(32, 32), 0, Color.White, "SETTINGS", TextAlign.Left);
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F12X12, Vector2i<int>.One, new(32, 32), 0, Color.White, "SETTINGS", TextAlign.Left);
 
 // 		const string text = """
 // 			Please configure your Devil Daggers installation directory.
@@ -65,7 +66,7 @@ public class ConfigLayout : Layout, IConfigLayout
 // 			Example: C:\Program Files (x86)\Steam\steamapps\common\devildaggers
 // 			""";
 		const string text = "Please configure your Devil Daggers installation directory.\n\nThis is the directory containing the executable.\n\nExample: C:\\Program Files (x86)\\Steam\\steamapps\\common\\devildaggers";
-		Root.Game.FontRenderer8X8.Render(Vector2i<int>.One, new(32, 64), 0, Color.White, text, TextAlign.Left);
-		Root.Game.FontRenderer8X8.Render(Vector2i<int>.One, new(32, 160), 0, Color.Red, _error, TextAlign.Left);
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, Vector2i<int>.One, new(32, 64), 0, Color.White, text, TextAlign.Left);
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, Vector2i<int>.One, new(32, 160), 0, Color.Red, _error, TextAlign.Left);
 	}
 }

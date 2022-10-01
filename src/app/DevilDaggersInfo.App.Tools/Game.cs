@@ -1,9 +1,9 @@
 using DevilDaggersInfo.App.Tools.Renderers;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
-using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.SurvivalEditor;
 using DevilDaggersInfo.App.Ui.Base.Enums;
+using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.States;
 using Silk.NET.OpenGL;
@@ -60,10 +60,10 @@ public partial class Game : GameBase, IDependencyContainer
 		}
 	}
 
-	public IUiRenderer UiRenderer { get; private set; } = null!;
-	public IMonoSpaceFontRenderer FontRenderer12X12 { get; private set; } = null!;
-	public IMonoSpaceFontRenderer FontRenderer8X8 { get; private set; } = null!;
-	public IMonoSpaceFontRenderer FontRenderer4X6 { get; private set; } = null!;
+	public UiRenderer UiRenderer { get; private set; } = null!;
+	public MonoSpaceFontRenderer FontRenderer12X12 { get; private set; } = null!;
+	public MonoSpaceFontRenderer FontRenderer8X8 { get; private set; } = null!;
+	public MonoSpaceFontRenderer FontRenderer4X6 { get; private set; } = null!;
 
 	public IConfigLayout ConfigLayout { get; } = new Layouts.ConfigLayout();
 	public IMainLayout MainLayout { get; } = new Layouts.MainLayout();
@@ -78,10 +78,10 @@ public partial class Game : GameBase, IDependencyContainer
 	{
 		InitializeContent();
 
-		UiRenderer = new UiRenderer();
-		FontRenderer12X12 = new MonoSpaceFontRenderer();
-		FontRenderer8X8 = new MonoSpaceFontRenderer();
-		FontRenderer4X6 = new MonoSpaceFontRenderer();
+		UiRenderer = new();
+		FontRenderer12X12 = new();
+		FontRenderer8X8 = new();
+		FontRenderer4X6 = new();
 
 		_font12X12 = new(Textures.Font12x12, @" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?:()[]{}<>|@^$%#&/\+*`,'=~;.-_  ");
 		_font8X8 = new(Textures.Font8x8, @" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?:()[]{}<>|@^$%#&/\+*`,'=~;.-_  ");
@@ -128,6 +128,23 @@ public partial class Game : GameBase, IDependencyContainer
 		ActiveLayout?.NestingContext.Update(default);
 	}
 
+	protected override void PrepareRender()
+	{
+		base.PrepareRender();
+
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, Vector2i<int>.One, new(0, 640), 500, Color.Green, DebugStack.GetString(), TextAlign.Left);
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, Vector2i<int>.One, new(960, 736), 500, Color.Green, $"{Fps} FPS\n{Tps} TPS", TextAlign.Left);
+
+		Vector2i<int> tooltipOffset = new Vector2i<int>(16, 16) / UiScale.FloorToVector2Int32();
+		if (string.IsNullOrWhiteSpace(TooltipText))
+			return;
+
+		Vector2i<int> tooltipPosition = MousePositionWithOffset.RoundToVector2Int32() + tooltipOffset;
+		Vector2i<int> textSize = _font8X8.MeasureText(TooltipText);
+		RenderBatchCollector.RenderRectangleTopLeft(textSize, tooltipPosition, 1000, Color.Black);
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, Vector2i<int>.One, MousePositionWithOffset.RoundToVector2Int32() + tooltipOffset, 1001, Color.White, TooltipText, TextAlign.Left);
+	}
+
 	protected override void Render()
 	{
 		Gl.ClearColor(0, 0, 0, 1);
@@ -136,32 +153,27 @@ public partial class Game : GameBase, IDependencyContainer
 		ActivateViewport(_viewport3d);
 		ActiveLayout?.Render3d();
 
-		ActivateViewport(_viewportUi);
-		Shaders.Ui.Use();
-		Shaders.Ui.SetMatrix4x4("projection", _uiProjectionMatrix);
-
 		ActiveLayout?.Render();
 		ActiveLayout?.NestingContext.Render(default);
 
-		Vector2i<int> tooltipOffset = new Vector2i<int>(16, 16) / UiScale.FloorToVector2Int32();
-		if (!string.IsNullOrWhiteSpace(TooltipText))
-		{
-			Vector2i<int> tooltipPosition = MousePositionWithOffset.RoundToVector2Int32() + tooltipOffset;
-			Vector2i<int> textSize = _font8X8.MeasureText(TooltipText);
-			UiRenderer.RenderRectangleTopLeft(textSize, tooltipPosition, 1000, Color.Black);
-		}
+		// TODO: Merge with Render.
+		ActiveLayout?.RenderText();
+		ActiveLayout?.NestingContext.RenderText(default);
+
+		ActivateViewport(_viewportUi);
+		Shaders.Ui.Use();
+		Shaders.Ui.SetMatrix4x4("projection", _uiProjectionMatrix);
+		UiRenderer.RenderRectangleTriangles();
+		UiRenderer.RenderCircleLines();
 
 		Shaders.Font.Use();
 		Shaders.Font.SetMatrix4x4("projection", _uiProjectionMatrix);
 
-		ActiveLayout?.RenderText();
-		ActiveLayout?.NestingContext.RenderText(default);
+		FontRenderer4X6.Render(RenderBatchCollector.MonoSpaceTexts4X6);
+		FontRenderer8X8.Render(RenderBatchCollector.MonoSpaceTexts8X8);
+		FontRenderer12X12.Render(RenderBatchCollector.MonoSpaceTexts12X12);
 
-		FontRenderer8X8.Render(Vector2i<int>.One, new(0, 640), 500, Color.Green, DebugStack.GetString(), TextAlign.Left);
-		FontRenderer8X8.Render(Vector2i<int>.One, new(960, 736), 500, Color.Green, $"{Fps} FPS\n{Tps} TPS", TextAlign.Left);
-
-		if (!string.IsNullOrWhiteSpace(TooltipText))
-			FontRenderer8X8.Render(Vector2i<int>.One, MousePositionWithOffset.RoundToVector2Int32() + tooltipOffset, 1001, Color.White, TooltipText, TextAlign.Left);
+		RenderBatchCollector.Clear();
 
 		static void ActivateViewport(Viewport viewport)
 		{
