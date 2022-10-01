@@ -67,6 +67,8 @@ public class MonoSpaceFontRenderer
 				relativePosition -= textSize with { Y = 0 };
 			}
 
+			int originX = relativePosition.X;
+
 			foreach (char c in mst.Text)
 			{
 				Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(mst.Position.X + relativePosition.X, mst.Position.Y + relativePosition.Y, mst.Depth);
@@ -75,7 +77,7 @@ public class MonoSpaceFontRenderer
 				Shaders.Font.SetVector4("color", mst.Color);
 				Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
 
-				_font.AdvancePosition(c, ref relativePosition, scaledCharWidth / 2, scaledCharWidth, scaledCharHeight);
+				_font.AdvancePosition(c, ref relativePosition, originX, scaledCharWidth, scaledCharHeight);
 			}
 		}
 

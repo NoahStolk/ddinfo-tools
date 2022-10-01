@@ -37,7 +37,7 @@ public partial class Game : GameBase, IDependencyContainer
 	private MonoSpaceFont _font4X6 = null!;
 
 	public Game()
-		: base("DevilDaggers.info Tools", _nativeWidth, _nativeHeight, false)
+		: base("DEVIL DAGGERS EXTENSIONS", _nativeWidth, _nativeHeight, false)
 	{
 		Root.Game = this; // TODO: Move to Program.cs once source generator is optional.
 		const int depthMax = 1024;

@@ -2,6 +2,7 @@ using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.Enums;
+using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.Base.States;
 using Silk.NET.OpenGL;
 using Warp.Content;
@@ -30,12 +31,12 @@ public class MainLayout : Layout, IMainLayout
 		Color exit = Color.Gray(0.3f);
 
 		const int border = 10;
-		NestingContext.Add(new Button(Rectangle.At(128, 128, 256, 96), LayoutManager.ToSurvivalEditorMainLayout, ddse.Intensify(64), ddse, ddse.Intensify(96), Color.White, "Survival Editor", TextAlign.Middle, border, FontSize.F12X12));
-		NestingContext.Add(new Button(Rectangle.At(640, 128, 256, 96), () => { }, ddcl.Intensify(64), ddcl, ddcl.Intensify(96), Color.White, "Custom Leaderboards", TextAlign.Middle, border, FontSize.F12X12));
-		NestingContext.Add(new Button(Rectangle.At(128, 320, 256, 96), () => { }, ddae.Intensify(64), ddae, ddae.Intensify(96), Color.White, "Asset Editor", TextAlign.Middle, border, FontSize.F12X12));
-		NestingContext.Add(new Button(Rectangle.At(640, 320, 256, 96), () => { }, ddre.Intensify(64), ddre, ddre.Intensify(96), Color.White, "Replay Editor", TextAlign.Middle, border, FontSize.F12X12));
-		NestingContext.Add(new Button(Rectangle.At(128, 512, 256, 96), LayoutManager.ToConfigLayout, settings.Intensify(64), settings, settings.Intensify(96), Color.White, "Configuration", TextAlign.Middle, border, FontSize.F12X12));
-		NestingContext.Add(new Button(Rectangle.At(640, 512, 256, 96), () => Environment.Exit(0), exit.Intensify(64), exit, exit.Intensify(96), Color.White, "Exit", TextAlign.Middle, border, FontSize.F12X12));
+		NestingContext.Add(new Button(Rectangle.At(128, 192, 256, 96), LayoutManager.ToSurvivalEditorMainLayout, ddse.Intensify(64), ddse, ddse.Intensify(96), Color.White, "Survival Editor", TextAlign.Middle, border, FontSize.F12X12));
+		NestingContext.Add(new Button(Rectangle.At(640, 192, 256, 96), () => { }, ddcl.Intensify(64), ddcl, ddcl.Intensify(96), Color.White, "Custom Leaderboards", TextAlign.Middle, border, FontSize.F12X12));
+		NestingContext.Add(new Button(Rectangle.At(128, 384, 256, 96), () => { }, ddae.Intensify(64), ddae, ddae.Intensify(96), Color.White, "Asset Editor", TextAlign.Middle, border, FontSize.F12X12));
+		NestingContext.Add(new Button(Rectangle.At(640, 384, 256, 96), () => { }, ddre.Intensify(64), ddre, ddre.Intensify(96), Color.White, "Replay Editor", TextAlign.Middle, border, FontSize.F12X12));
+		NestingContext.Add(new Button(Rectangle.At(128, 576, 256, 96), LayoutManager.ToConfigLayout, settings.Intensify(64), settings, settings.Intensify(96), Color.White, "Configuration", TextAlign.Middle, border, FontSize.F12X12));
+		NestingContext.Add(new Button(Rectangle.At(640, 576, 256, 96), () => Environment.Exit(0), exit.Intensify(64), exit, exit.Intensify(96), Color.White, "Exit", TextAlign.Middle, border, FontSize.F12X12));
 	}
 
 	public void InitializeScene()
@@ -73,6 +74,11 @@ public class MainLayout : Layout, IMainLayout
 
 	public void Render()
 	{
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(6), new(512, 64), 0, Color.Red, "DEVIL DAGGERS", TextAlign.Middle);
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(4), new(512, 128), 0, new(255, 127, 0, 255), "EXTENSIONS", TextAlign.Middle);
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(2), new(512, 176), 0, new(255, 191, 0, 255), "0.0.0", TextAlign.Middle);
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(2), new(512, 736), 0, new(127, 127, 255, 255), "HTTPS://DEVILDAGGERS.INFO/", TextAlign.Middle);
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(1), new(512, 752), 0, new(127, 127, 255, 255), "Website and modding tools created by Noah Stolk", TextAlign.Middle);
 	}
 
 	private sealed class MeshObject
