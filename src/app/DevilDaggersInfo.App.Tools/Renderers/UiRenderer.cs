@@ -10,13 +10,11 @@ public class UiRenderer : IUiRenderer
 
 	private readonly uint _vaoRectangleTriangles;
 	private readonly uint _vaoCircleLines;
-	private readonly uint _vaoRectangleLines;
 
 	public unsafe UiRenderer()
 	{
 		_vaoRectangleTriangles = CreateVao(VertexBuilder.RectangleTriangles());
 		_vaoCircleLines = CreateVao(VertexBuilder.CircleLines(_circleSubdivisionCount));
-		_vaoRectangleLines = CreateVao(VertexBuilder.RectangleLines());
 
 		uint CreateVao(float[] vertices)
 		{
@@ -40,10 +38,10 @@ public class UiRenderer : IUiRenderer
 		}
 	}
 
-	public void RenderRectangleTopLeft(Vector2i<int> scale, Vector2i<int> topLeft, float depth, Vector3 color)
+	public void RenderRectangleTopLeft(Vector2i<int> scale, Vector2i<int> topLeft, float depth, Color color)
 		=> RenderRectangleCenter(scale, topLeft + scale / 2, depth, color);
 
-	public void RenderRectangleCenter(Vector2i<int> scale, Vector2i<int> center, float depth, Vector3 color)
+	public void RenderRectangleCenter(Vector2i<int> scale, Vector2i<int> center, float depth, Color color)
 	{
 		Gl.BindVertexArray(_vaoRectangleTriangles);
 
@@ -56,7 +54,7 @@ public class UiRenderer : IUiRenderer
 		Gl.BindVertexArray(0);
 	}
 
-	public void RenderCircleCenter(Vector2i<int> center, float radius, float depth, Vector3 color)
+	public void RenderCircleCenter(Vector2i<int> center, float radius, float depth, Color color)
 	{
 		Gl.BindVertexArray(_vaoCircleLines);
 
@@ -65,19 +63,6 @@ public class UiRenderer : IUiRenderer
 		Shaders.Ui.SetMatrix4x4("model", scaleMatrix * Matrix4x4.CreateTranslation(center.X, center.Y, depth));
 		Shaders.Ui.SetVector3("color", color);
 		Gl.DrawArrays(PrimitiveType.LineStrip, 0, _circleSubdivisionCount + 1);
-
-		Gl.BindVertexArray(0);
-	}
-
-	public void RenderHollowRectangleCenter(Vector2 scale, Vector2 center, float depth, Vector3 color)
-	{
-		Gl.BindVertexArray(_vaoRectangleLines);
-
-		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(scale.X, scale.Y, 1);
-
-		Shaders.Ui.SetMatrix4x4("model", scaleMatrix * Matrix4x4.CreateTranslation(center.X, center.Y, depth));
-		Shaders.Ui.SetVector3("color", color);
-		Gl.DrawArrays(PrimitiveType.LineStrip, 0, 5);
 
 		Gl.BindVertexArray(0);
 	}
