@@ -60,10 +60,10 @@ public partial class Game : GameBase, IDependencyContainer
 		}
 	}
 
+	public IUiRenderer UiRenderer { get; private set; } = null!;
 	public IMonoSpaceFontRenderer FontRenderer12X12 { get; private set; } = null!;
 	public IMonoSpaceFontRenderer FontRenderer8X8 { get; private set; } = null!;
 	public IMonoSpaceFontRenderer FontRenderer4X6 { get; private set; } = null!;
-	public IUiRenderer UiRenderer { get; private set; } = null!;
 
 	public IConfigLayout ConfigLayout { get; } = new Layouts.ConfigLayout();
 	public IMainLayout MainLayout { get; } = new Layouts.MainLayout();
@@ -78,10 +78,10 @@ public partial class Game : GameBase, IDependencyContainer
 	{
 		InitializeContent();
 
+		UiRenderer = new UiRenderer();
 		FontRenderer12X12 = new MonoSpaceFontRenderer();
 		FontRenderer8X8 = new MonoSpaceFontRenderer();
 		FontRenderer4X6 = new MonoSpaceFontRenderer();
-		UiRenderer = new UiRenderer();
 
 		_font12X12 = new(Textures.Font12x12, @" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?:()[]{}<>|@^$%#&/\+*`,'=~;.-_  ");
 		_font8X8 = new(Textures.Font8x8, @" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?:()[]{}<>|@^$%#&/\+*`,'=~;.-_  ");
@@ -105,9 +105,8 @@ public partial class Game : GameBase, IDependencyContainer
 
 		_viewport3d = new(0, 0, width, height);
 
-		const int breakpoint = _nativeHeight;
 		int minDimension = (int)Math.Min(height, width / _nativeAspectRatio);
-		int clampedHeight = Math.Max(_nativeHeight, minDimension / breakpoint * breakpoint);
+		int clampedHeight = Math.Max(_nativeHeight, minDimension / _nativeHeight * _nativeHeight);
 
 		float originalAspectRatio = InitialWindowWidth / (float)InitialWindowHeight;
 		float adjustedWidth = clampedHeight * originalAspectRatio; // Adjusted for aspect ratio
