@@ -3,7 +3,7 @@ using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.App.Tools.Utils;
 
-public static class ScissorUtils
+public static class ScissorRenderUtils
 {
 	private static Scissor? _cached;
 
@@ -21,6 +21,8 @@ public static class ScissorUtils
 		{
 			Gl.Disable(EnableCap.ScissorTest);
 		}
+
+		Base.Game.ScissorCalls++;
 
 		_cached = scissor;
 	}

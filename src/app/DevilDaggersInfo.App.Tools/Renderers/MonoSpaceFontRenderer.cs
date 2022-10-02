@@ -46,7 +46,7 @@ public class MonoSpaceFontRenderer
 
 		foreach (MonoSpaceText mst in texts)
 		{
-			ScissorUtils.ActivateScissor(mst.Scissor);
+			ScissorRenderUtils.ActivateScissor(mst.Scissor);
 
 			int charHeight = _font.Texture.Height;
 			int charWidth = _font.Texture.Width / _font.CharAmount;

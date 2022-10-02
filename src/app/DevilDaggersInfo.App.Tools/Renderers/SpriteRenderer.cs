@@ -51,7 +51,7 @@ public class SpriteRenderer
 
 		foreach (Sprite sprite in RenderBatchCollector.Sprites)
 		{
-			ScissorUtils.ActivateScissor(sprite.Scissor);
+			ScissorRenderUtils.ActivateScissor(sprite.Scissor);
 
 			sprite.Texture.Use();
 

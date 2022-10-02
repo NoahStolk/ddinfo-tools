@@ -49,7 +49,7 @@ public class UiRenderer
 
 		foreach (RectangleTriangle rt in RenderBatchCollector.RectangleTriangles)
 		{
-			ScissorUtils.ActivateScissor(rt.Scissor);
+			ScissorRenderUtils.ActivateScissor(rt.Scissor);
 
 			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(rt.Scale.X, rt.Scale.Y, 1);
 
@@ -70,7 +70,7 @@ public class UiRenderer
 
 		foreach (CircleLine cl in RenderBatchCollector.CircleLines)
 		{
-			ScissorUtils.ActivateScissor(cl.Scissor);
+			ScissorRenderUtils.ActivateScissor(cl.Scissor);
 
 			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(cl.Radius, cl.Radius, 1);
 
