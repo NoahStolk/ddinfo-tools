@@ -79,18 +79,15 @@ public partial class Game : GameBase, IDependencyContainer
 	{
 		InitializeContent();
 
-		UiRenderer = new();
-		SpriteRenderer = new();
-		FontRenderer12X12 = new();
-		FontRenderer8X8 = new();
-		FontRenderer4X6 = new();
-
 		_font12X12 = new(Textures.Font12x12, @" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?:()[]{}<>|@^$%#&/\+*`,'=~;.-_  ");
 		_font8X8 = new(Textures.Font8x8, @" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?:()[]{}<>|@^$%#&/\+*`,'=~;.-_  ");
 		_font4X6 = new(Textures.Font4x6, " 0123456789.-");
-		FontRenderer12X12.SetFont(_font12X12);
-		FontRenderer8X8.SetFont(_font8X8);
-		FontRenderer4X6.SetFont(_font4X6);
+
+		UiRenderer = new();
+		SpriteRenderer = new();
+		FontRenderer12X12 = new(_font12X12);
+		FontRenderer8X8 = new(_font8X8);
+		FontRenderer4X6 = new(_font4X6);
 
 		StateManager.NewSpawnset();
 		ActiveLayout = ConfigLayout;
@@ -140,10 +137,10 @@ public partial class Game : GameBase, IDependencyContainer
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, Vector2i<int>.One, new(0, 640), 500, Color.Green, DebugStack.GetString(), TextAlign.Left);
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, Vector2i<int>.One, new(960, 736), 500, Color.Green, $"{Fps} FPS\n{Tps} TPS", TextAlign.Left);
 
-		Vector2i<int> tooltipOffset = new Vector2i<int>(16, 16) / UiScale.FloorToVector2Int32();
 		if (string.IsNullOrWhiteSpace(TooltipText))
 			return;
 
+		Vector2i<int> tooltipOffset = new Vector2i<int>(16, 16) / UiScale.FloorToVector2Int32();
 		Vector2i<int> tooltipPosition = MousePositionWithOffset.RoundToVector2Int32() + tooltipOffset;
 		Vector2i<int> textSize = _font8X8.MeasureText(TooltipText);
 		RenderBatchCollector.RenderRectangleTopLeft(textSize, tooltipPosition, 1000, Color.Black);

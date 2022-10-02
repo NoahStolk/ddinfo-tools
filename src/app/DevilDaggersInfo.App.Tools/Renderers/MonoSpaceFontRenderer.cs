@@ -7,11 +7,10 @@ namespace DevilDaggersInfo.App.Tools.Renderers;
 
 public class MonoSpaceFontRenderer
 {
-	private uint _vao;
-	private MonoSpaceFont? _font;
+	private readonly uint _vao;
+	private readonly MonoSpaceFont _font;
 
-	// TODO: Ctor and non-nullable _font.
-	public unsafe void SetFont(MonoSpaceFont font)
+	public unsafe MonoSpaceFontRenderer(MonoSpaceFont font)
 	{
 		_font = font;
 
@@ -39,9 +38,6 @@ public class MonoSpaceFontRenderer
 	{
 		if (texts.Count == 0)
 			return;
-
-		if (_font == null)
-			throw new InvalidOperationException("Font is not set.");
 
 		_font.Texture.Use();
 
