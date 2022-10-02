@@ -22,8 +22,6 @@ public static class ScissorRenderUtils
 			Gl.Disable(EnableCap.ScissorTest);
 		}
 
-		Base.Game.ScissorCalls++;
-
 		_cached = scissor;
 	}
 }
