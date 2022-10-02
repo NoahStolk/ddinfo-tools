@@ -5,11 +5,15 @@ namespace DevilDaggersInfo.App.Tools.Utils;
 
 public static class ScissorUtils
 {
+	private static Scissor? _cached;
+
 	public static void ActivateScissor(Scissor? scissor)
 	{
+		if (_cached == scissor)
+			return;
+
 		if (scissor != null)
 		{
-			// TODO: Check if already active.
 			Gl.Enable(EnableCap.ScissorTest);
 			Gl.Scissor(scissor.X, scissor.Y, scissor.Width, scissor.Height);
 		}
@@ -17,5 +21,7 @@ public static class ScissorUtils
 		{
 			Gl.Disable(EnableCap.ScissorTest);
 		}
+
+		_cached = scissor;
 	}
 }
