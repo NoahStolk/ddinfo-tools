@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Tools.Utils;
 using DevilDaggersInfo.App.Ui.Base.Enums;
 using DevilDaggersInfo.App.Ui.Base.Rendering.Data;
 using Silk.NET.OpenGL;
@@ -45,6 +46,8 @@ public class MonoSpaceFontRenderer
 
 		foreach (MonoSpaceText mst in texts)
 		{
+			ScissorUtils.ActivateScissor(mst.Scissor);
+
 			int charHeight = _font.Texture.Height;
 			int charWidth = _font.Texture.Width / _font.CharAmount;
 			int scaledCharWidth = mst.Scale.X * charWidth;

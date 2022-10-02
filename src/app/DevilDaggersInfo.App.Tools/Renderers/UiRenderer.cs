@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Tools.Utils;
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.Base.Rendering.Data;
@@ -48,6 +49,8 @@ public class UiRenderer
 
 		foreach (RectangleTriangle rt in RenderBatchCollector.RectangleTriangles)
 		{
+			ScissorUtils.ActivateScissor(rt.Scissor);
+
 			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(rt.Scale.X, rt.Scale.Y, 1);
 
 			Shaders.Ui.SetMatrix4x4("model", scaleMatrix * Matrix4x4.CreateTranslation(rt.CenterPosition.X, rt.CenterPosition.Y, rt.Depth));
@@ -67,6 +70,8 @@ public class UiRenderer
 
 		foreach (CircleLine cl in RenderBatchCollector.CircleLines)
 		{
+			ScissorUtils.ActivateScissor(cl.Scissor);
+
 			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(cl.Radius, cl.Radius, 1);
 
 			Shaders.Ui.SetMatrix4x4("model", scaleMatrix * Matrix4x4.CreateTranslation(cl.CenterPosition.X, cl.CenterPosition.Y, cl.Depth));

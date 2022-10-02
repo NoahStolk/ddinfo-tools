@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Tools.Utils;
 using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.Base.Rendering.Data;
 using Silk.NET.OpenGL;
@@ -50,6 +51,8 @@ public class SpriteRenderer
 
 		foreach (Sprite sprite in RenderBatchCollector.Sprites)
 		{
+			ScissorUtils.ActivateScissor(sprite.Scissor);
+
 			sprite.Texture.Use();
 
 			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(sprite.Scale.X, -sprite.Scale.Y, 1);
