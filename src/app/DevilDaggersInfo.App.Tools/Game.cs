@@ -1,4 +1,5 @@
 using DevilDaggersInfo.App.Tools.Renderers;
+using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.SurvivalEditor;
@@ -18,9 +19,7 @@ namespace DevilDaggersInfo.App.Tools;
 
 public partial class Game : GameBase, IDependencyContainer
 {
-	private const int _nativeWidth = 1024;
-	private const int _nativeHeight = 768;
-	private const float _nativeAspectRatio = _nativeWidth / (float)_nativeHeight;
+	private const float _nativeAspectRatio = Constants.NativeWidth / (float)Constants.NativeHeight;
 
 	private readonly Matrix4x4 _uiProjectionMatrix;
 
@@ -37,7 +36,7 @@ public partial class Game : GameBase, IDependencyContainer
 	private MonoSpaceFont _font4X6 = null!;
 
 	public Game()
-		: base("DEVIL DAGGERS EXTENSIONS", _nativeWidth, _nativeHeight, false)
+		: base("DEVIL DAGGERS EXTENSIONS", Constants.NativeWidth, Constants.NativeHeight, false)
 	{
 		Root.Game = this; // TODO: Move to Program.cs once source generator is optional.
 		const int depthMax = 1024;
@@ -105,7 +104,7 @@ public partial class Game : GameBase, IDependencyContainer
 		_viewport3d = new(0, 0, width, height);
 
 		int minDimension = (int)Math.Min(height, width / _nativeAspectRatio);
-		int clampedHeight = Math.Max(_nativeHeight, minDimension / _nativeHeight * _nativeHeight);
+		int clampedHeight = Math.Max(Constants.NativeHeight, minDimension / Constants.NativeHeight * Constants.NativeHeight);
 
 		float originalAspectRatio = InitialWindowWidth / (float)InitialWindowHeight;
 		float adjustedWidth = clampedHeight * originalAspectRatio; // Adjusted for aspect ratio
