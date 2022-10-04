@@ -54,7 +54,7 @@ public class UiRenderer
 			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(rt.Scale.X, rt.Scale.Y, 1);
 
 			Shaders.Ui.SetMatrix4x4("model", scaleMatrix * Matrix4x4.CreateTranslation(rt.CenterPosition.X, rt.CenterPosition.Y, rt.Depth));
-			Shaders.Ui.SetVector3("color", rt.Color);
+			Shaders.Ui.SetVector4("color", rt.Color);
 			Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
 		}
 
@@ -75,7 +75,7 @@ public class UiRenderer
 			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(cl.Radius, cl.Radius, 1);
 
 			Shaders.Ui.SetMatrix4x4("model", scaleMatrix * Matrix4x4.CreateTranslation(cl.CenterPosition.X, cl.CenterPosition.Y, cl.Depth));
-			Shaders.Ui.SetVector3("color", cl.Color);
+			Shaders.Ui.SetVector4("color", cl.Color);
 			Gl.DrawArrays(PrimitiveType.LineStrip, 0, _circleSubdivisionCount + 1);
 		}
 

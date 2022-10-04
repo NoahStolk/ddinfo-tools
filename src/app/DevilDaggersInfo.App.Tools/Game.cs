@@ -39,8 +39,7 @@ public partial class Game : GameBase, IDependencyContainer
 		: base("DEVIL DAGGERS EXTENSIONS", Constants.NativeWidth, Constants.NativeHeight, false)
 	{
 		Root.Game = this; // TODO: Move to Program.cs once source generator is optional.
-		const int depthMax = 1024;
-		_uiProjectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, InitialWindowWidth, InitialWindowHeight, 0, -depthMax, depthMax);
+		_uiProjectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, InitialWindowWidth, InitialWindowHeight, 0, -Constants.DepthMax, Constants.DepthMax);
 	}
 
 	public Vector2 ViewportOffset => new(_leftOffset, _bottomOffset);
