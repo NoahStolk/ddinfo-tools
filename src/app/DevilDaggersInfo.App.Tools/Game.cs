@@ -114,17 +114,25 @@ public partial class Game : GameBase, IDependencyContainer
 		UiScale = new(_viewportUi.Width / (float)InitialWindowWidth, _viewportUi.Height / (float)InitialWindowHeight);
 	}
 
+	public override void OnChangeWindowIsActive(bool isActive)
+	{
+		base.OnChangeWindowIsActive(isActive);
+
+		if (IsPaused)
+			TogglePause();
+	}
+
 	protected override void Update()
 	{
 		base.Update();
+
+		if (!WindowIsActive && !IsPaused)
+			TogglePause();
 
 		TooltipText = null;
 
 		StateManager.EmptyUiQueue();
 		SpawnsetHistoryManager.EmptyUiQueue();
-
-		if (!WindowIsActive)
-			return;
 
 		MouseUiContext.Reset(MousePositionWithOffset);
 		ActiveLayout?.Update();
