@@ -119,7 +119,10 @@ public partial class Game : GameBase, IDependencyContainer
 		base.Update();
 
 		TooltipText = null;
-		MouseUiContext.Reset(MousePositionWithOffset);
+
+		if (WindowIsActive)
+			MouseUiContext.Reset(MousePositionWithOffset);
+
 		StateManager.EmptyUiQueue();
 		SpawnsetHistoryManager.EmptyUiQueue();
 
