@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.AssetE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.Core.ApiClient", "app-core\DevilDaggersInfo.App.Core.ApiClient\DevilDaggersInfo.App.Core.ApiClient.csproj", "{EFD1861B-76F2-4E80-B1A4-21127297B2AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Core.AssetInterop", "app-core\DevilDaggersInfo.App.Core.AssetInterop\DevilDaggersInfo.App.Core.AssetInterop.csproj", "{152B0F2E-D508-4E00-8988-021CA980C3E0}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.Core.GameMemory", "app-core\DevilDaggersInfo.App.Core.GameMemory\DevilDaggersInfo.App.Core.GameMemory.csproj", "{F8DCF34B-4EF0-43AB-B578-D18B1417BD93}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.Core.NativeInterface", "app-core\DevilDaggersInfo.App.Core.NativeInterface\DevilDaggersInfo.App.Core.NativeInterface.csproj", "{6D7EE612-55E1-4609-ADA1-B612193232AD}"
@@ -49,9 +51,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.Replay
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.SurvivalEditor.Photino", "app\DevilDaggersInfo.App.SurvivalEditor.Photino\DevilDaggersInfo.App.SurvivalEditor.Photino.csproj", "{432BC52E-587D-4DB8-9903-68D802B8F8A6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Cmd.ExtractMod", "cmd\DevilDaggersInfo.Cmd.ExtractMod\DevilDaggersInfo.Cmd.ExtractMod.csproj", "{8A747382-EEA6-433F-B61A-85ABD0706E54}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Tools", "app\DevilDaggersInfo.App.Tools\DevilDaggersInfo.App.Tools.csproj", "{D5903E30-558A-40DF-B7A6-E7E1D014E2A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Ui.Base", "app-ui\DevilDaggersInfo.App.Ui.Base\DevilDaggersInfo.App.Ui.Base.csproj", "{67A7C653-F20A-4688-86EF-9D09DAD12517}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Ui.SurvivalEditor", "app-ui\DevilDaggersInfo.App.Ui.SurvivalEditor\DevilDaggersInfo.App.Ui.SurvivalEditor.csproj", "{68460CC6-C011-4364-9006-281F6F5C54A0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Cmd.CreateReplay", "cmd\DevilDaggersInfo.Cmd.CreateReplay\DevilDaggersInfo.Cmd.CreateReplay.csproj", "{6BEED33C-F8F8-4884-85A3-FDD48C7C63E8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Cmd.ExtractMod", "cmd\DevilDaggersInfo.Cmd.ExtractMod\DevilDaggersInfo.Cmd.ExtractMod.csproj", "{8A747382-EEA6-433F-B61A-85ABD0706E54}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Common", "common\DevilDaggersInfo.Common\DevilDaggersInfo.Common.csproj", "{A45271DA-D8D2-4BAA-83BA-31115C4FD702}"
 EndProject
@@ -142,6 +150,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{D980D7F3-20FC-46AB-A443-3238FE1FAEC0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app-core", "app-core", "{AC2BC81C-DDCA-4412-82D3-E8D9BC10587D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app-ui", "app-ui", "{8B991433-4D58-4930-BE3A-4A33CD2BCB47}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cmd", "cmd", "{C7C1269A-F5FF-4BC3-885B-10FC693C9062}"
 EndProject
@@ -472,6 +482,22 @@ Global
 		{E92850D5-DB99-4799-9A5D-9D8A6A52F04F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E92850D5-DB99-4799-9A5D-9D8A6A52F04F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E92850D5-DB99-4799-9A5D-9D8A6A52F04F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68460CC6-C011-4364-9006-281F6F5C54A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68460CC6-C011-4364-9006-281F6F5C54A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68460CC6-C011-4364-9006-281F6F5C54A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68460CC6-C011-4364-9006-281F6F5C54A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5903E30-558A-40DF-B7A6-E7E1D014E2A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5903E30-558A-40DF-B7A6-E7E1D014E2A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5903E30-558A-40DF-B7A6-E7E1D014E2A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5903E30-558A-40DF-B7A6-E7E1D014E2A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67A7C653-F20A-4688-86EF-9D09DAD12517}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67A7C653-F20A-4688-86EF-9D09DAD12517}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67A7C653-F20A-4688-86EF-9D09DAD12517}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67A7C653-F20A-4688-86EF-9D09DAD12517}.Release|Any CPU.Build.0 = Release|Any CPU
+		{152B0F2E-D508-4E00-8988-021CA980C3E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{152B0F2E-D508-4E00-8988-021CA980C3E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{152B0F2E-D508-4E00-8988-021CA980C3E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{152B0F2E-D508-4E00-8988-021CA980C3E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -558,6 +584,11 @@ Global
 		{187CBC4C-3F78-477E-AA33-7FA956DDF4A3} = {7B0D34B1-407D-4632-80FD-877AE1BB9DB1}
 		{5C5B0BBB-04F2-467A-B708-C013543C0C31} = {7B0D34B1-407D-4632-80FD-877AE1BB9DB1}
 		{92D3A378-C41A-497C-B488-DA4D12189A62} = {7B0D34B1-407D-4632-80FD-877AE1BB9DB1}
+		{8B991433-4D58-4930-BE3A-4A33CD2BCB47} = {7B0D34B1-407D-4632-80FD-877AE1BB9DB1}
+		{68460CC6-C011-4364-9006-281F6F5C54A0} = {8B991433-4D58-4930-BE3A-4A33CD2BCB47}
+		{D5903E30-558A-40DF-B7A6-E7E1D014E2A9} = {D980D7F3-20FC-46AB-A443-3238FE1FAEC0}
+		{67A7C653-F20A-4688-86EF-9D09DAD12517} = {8B991433-4D58-4930-BE3A-4A33CD2BCB47}
+		{152B0F2E-D508-4E00-8988-021CA980C3E0} = {AC2BC81C-DDCA-4412-82D3-E8D9BC10587D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E27EC676-81BF-4099-BFC9-20E860CE83A5}

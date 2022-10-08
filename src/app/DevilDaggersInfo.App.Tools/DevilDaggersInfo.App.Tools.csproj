@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>SA1633</NoWarn>
+    <OutputType>WinExe</OutputType>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <CompilerGeneratedFilesOutputPath>obj\SourceGenOutput</CompilerGeneratedFilesOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Content\Content" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\app-core\DevilDaggersInfo.App.Core.AssetInterop\DevilDaggersInfo.App.Core.AssetInterop.csproj" />
+    <ProjectReference Include="..\..\app-ui\DevilDaggersInfo.App.Ui.SurvivalEditor\DevilDaggersInfo.App.Ui.SurvivalEditor.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Warp.SourceGenerators" Version="4.3.0" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
+    <None Include="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\core\DevilDaggersInfo.Core.Spawnset\DevilDaggersInfo.Core.Spawnset.csproj" />
+  </ItemGroup>
+
+</Project>
