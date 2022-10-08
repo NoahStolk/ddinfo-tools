@@ -5,7 +5,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>SA1633</NoWarn>
     <OutputType>WinExe</OutputType>
-    <AssemblyName>DDINFO TOOLS</AssemblyName>
+    <Version>0.0.0.0</Version>
   </PropertyGroup>
 
   <PropertyGroup>

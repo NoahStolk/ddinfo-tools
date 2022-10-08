@@ -4,6 +4,7 @@ using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.Enums;
 using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.Base.States;
+using DevilDaggersInfo.Common.Utils;
 using Silk.NET.OpenGL;
 using Warp.Content;
 using Warp.InterpolationStates;
@@ -14,6 +15,8 @@ namespace DevilDaggersInfo.App.Tools.Layouts;
 
 public class MainLayout : Layout, IMainLayout
 {
+	private static readonly string _version = VersionUtils.EntryAssemblyVersion;
+
 	private static readonly Vector3 _origin = new(0, 3, 0);
 	private readonly Camera _camera = new();
 
@@ -76,7 +79,7 @@ public class MainLayout : Layout, IMainLayout
 	{
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(6), new(512, 64), 0, Color.Red, "DDINFO", TextAlign.Middle);
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(4), new(512, 128), 0, new(255, 127, 0, 255), "TOOLS", TextAlign.Middle);
-		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(2), new(512, 176), 0, new(255, 191, 0, 255), "0.0.0", TextAlign.Middle);
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(2), new(512, 176), 0, new(255, 191, 0, 255), _version, TextAlign.Middle);
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(1), new(512, 712), 0, Color.White, "Devil Daggers is created by Sorath", TextAlign.Middle);
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(1), new(512, 728), 0, Color.White, "DevilDaggers.info is created by Noah Stolk", TextAlign.Middle);
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(2), new(512, 752), 0, new(255, 0, 31, 255), "HTTPS://DEVILDAGGERS.INFO/", TextAlign.Middle);
