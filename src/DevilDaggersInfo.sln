@@ -49,8 +49,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.Custom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.ReplayEditor.Photino", "app\DevilDaggersInfo.App.ReplayEditor.Photino\DevilDaggersInfo.App.ReplayEditor.Photino.csproj", "{CA612879-D0A8-41AD-9265-78BADEF2BA84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.SurvivalEditor.Photino", "app\DevilDaggersInfo.App.SurvivalEditor.Photino\DevilDaggersInfo.App.SurvivalEditor.Photino.csproj", "{432BC52E-587D-4DB8-9903-68D802B8F8A6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Tools", "app\DevilDaggersInfo.App.Tools\DevilDaggersInfo.App.Tools.csproj", "{D5903E30-558A-40DF-B7A6-E7E1D014E2A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Ui.Base", "app-ui\DevilDaggersInfo.App.Ui.Base\DevilDaggersInfo.App.Ui.Base.csproj", "{67A7C653-F20A-4688-86EF-9D09DAD12517}"
@@ -110,8 +108,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.CustomLeaderboard", "razor\DevilDaggersInfo.Razor.CustomLeaderboard\DevilDaggersInfo.Razor.CustomLeaderboard.csproj", "{181B288B-6B66-4F4D-8227-892B2561B2A1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Razor.ReplayEditor", "razor\DevilDaggersInfo.Razor.ReplayEditor\DevilDaggersInfo.Razor.ReplayEditor.csproj", "{36ECBB72-2034-4196-AE05-DC92F9BB2856}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Razor.SurvivalEditor", "razor\DevilDaggersInfo.Razor.SurvivalEditor\DevilDaggersInfo.Razor.SurvivalEditor.csproj", "{4E6FA315-B97F-4753-8336-57AF26741A47}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Tool.CleanBuild", "tool\DevilDaggersInfo.Tool.CleanBuild\DevilDaggersInfo.Tool.CleanBuild.csproj", "{A0CC71FC-5AF0-4946-8575-605A02213B08}"
 EndProject
@@ -470,14 +466,6 @@ Global
 		{8D02A724-024B-4ED3-B64B-EA6B350926F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D02A724-024B-4ED3-B64B-EA6B350926F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D02A724-024B-4ED3-B64B-EA6B350926F0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4E6FA315-B97F-4753-8336-57AF26741A47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4E6FA315-B97F-4753-8336-57AF26741A47}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4E6FA315-B97F-4753-8336-57AF26741A47}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4E6FA315-B97F-4753-8336-57AF26741A47}.Release|Any CPU.Build.0 = Release|Any CPU
-		{432BC52E-587D-4DB8-9903-68D802B8F8A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{432BC52E-587D-4DB8-9903-68D802B8F8A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{432BC52E-587D-4DB8-9903-68D802B8F8A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{432BC52E-587D-4DB8-9903-68D802B8F8A6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E92850D5-DB99-4799-9A5D-9D8A6A52F04F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E92850D5-DB99-4799-9A5D-9D8A6A52F04F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E92850D5-DB99-4799-9A5D-9D8A6A52F04F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -563,8 +551,6 @@ Global
 		{CB715CD9-FB6A-4E79-B9C0-830833223D91} = {139163CB-F521-45E4-B022-780DF7322293}
 		{E80EC34D-4FC7-44D1-BD96-857DD3700AED} = {E46A7074-2772-4B70-A0A6-F4431CC99F4C}
 		{8D02A724-024B-4ED3-B64B-EA6B350926F0} = {139163CB-F521-45E4-B022-780DF7322293}
-		{4E6FA315-B97F-4753-8336-57AF26741A47} = {92D3A378-C41A-497C-B488-DA4D12189A62}
-		{432BC52E-587D-4DB8-9903-68D802B8F8A6} = {D980D7F3-20FC-46AB-A443-3238FE1FAEC0}
 		{E92850D5-DB99-4799-9A5D-9D8A6A52F04F} = {3DD4B364-6321-42CA-8CF0-0C82429E5714}
 		{9FBE0CA2-67F4-4379-B3F8-52070C0926BA} = {D642FA62-0598-4A7C-94C2-4C1BE2C7B85C}
 		{0232E034-4C66-4B0E-A2F4-847BAABEC89D} = {D642FA62-0598-4A7C-94C2-4C1BE2C7B85C}
