@@ -74,11 +74,12 @@ public class MainLayout : Layout, IMainLayout
 
 	public void Render()
 	{
-		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(6), new(512, 64), 0, Color.Red, "DEVIL DAGGERS", TextAlign.Middle);
-		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(4), new(512, 128), 0, new(255, 127, 0, 255), "EXTENSIONS", TextAlign.Middle);
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(6), new(512, 64), 0, Color.Red, "DDINFO", TextAlign.Middle);
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(4), new(512, 128), 0, new(255, 127, 0, 255), "TOOLS", TextAlign.Middle);
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(2), new(512, 176), 0, new(255, 191, 0, 255), "0.0.0", TextAlign.Middle);
-		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(2), new(512, 736), 0, new(127, 127, 255, 255), "HTTPS://DEVILDAGGERS.INFO/", TextAlign.Middle);
-		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(1), new(512, 752), 0, new(127, 127, 255, 255), "Website and modding tools created by Noah Stolk", TextAlign.Middle);
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(1), new(512, 712), 0, Color.White, "Devil Daggers is created by Sorath", TextAlign.Middle);
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(1), new(512, 728), 0, Color.White, "DevilDaggers.info is created by Noah Stolk", TextAlign.Middle);
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(2), new(512, 752), 0, new(255, 0, 31, 255), "HTTPS://DEVILDAGGERS.INFO/", TextAlign.Middle);
 	}
 
 	private sealed class MeshObject

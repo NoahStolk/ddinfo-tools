@@ -36,7 +36,7 @@ public partial class Game : GameBase, IDependencyContainer
 	private MonoSpaceFont _font4X6 = null!;
 
 	public Game()
-		: base("DEVIL DAGGERS EXTENSIONS", Constants.NativeWidth, Constants.NativeHeight, false)
+		: base("DDINFO TOOLS", Constants.NativeWidth, Constants.NativeHeight, false)
 	{
 		Root.Game = this; // TODO: Move to Program.cs once source generator is optional.
 		_uiProjectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, InitialWindowWidth, InitialWindowHeight, 0, -Constants.DepthMax, Constants.DepthMax);
