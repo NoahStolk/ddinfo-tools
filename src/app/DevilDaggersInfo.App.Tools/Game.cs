@@ -1,5 +1,4 @@
 using DevilDaggersInfo.App.Tools.Renderers;
-using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.SurvivalEditor;
@@ -7,6 +6,8 @@ using DevilDaggersInfo.App.Ui.Base.Enums;
 using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.States;
+using Serilog;
+using Serilog.Core;
 using Silk.NET.OpenGL;
 using Warp;
 using Warp.Debugging;
@@ -14,12 +15,17 @@ using Warp.Extensions;
 using Warp.Games;
 using Warp.Text;
 using Warp.Ui;
+using Constants = DevilDaggersInfo.App.Ui.Base.Constants;
 
 namespace DevilDaggersInfo.App.Tools;
 
 public partial class Game : GameBase, IDependencyContainer
 {
 	private const float _nativeAspectRatio = Constants.NativeWidth / (float)Constants.NativeHeight;
+
+	private static readonly Logger _log = new LoggerConfiguration()
+		.WriteTo.File("ddinfo.log", rollingInterval: RollingInterval.Infinite)
+		.CreateLogger();
 
 	private readonly Matrix4x4 _uiProjectionMatrix;
 
@@ -40,6 +46,8 @@ public partial class Game : GameBase, IDependencyContainer
 	{
 		Root.Game = this; // TODO: Move to Program.cs once source generator is optional.
 		_uiProjectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, InitialWindowWidth, InitialWindowHeight, 0, -Constants.DepthMax, Constants.DepthMax);
+
+		AppDomain.CurrentDomain.UnhandledException += (_, args) => _log.Fatal(args.ExceptionObject.ToString());
 	}
 
 	public Vector2 ViewportOffset => new(_leftOffset, _bottomOffset);
