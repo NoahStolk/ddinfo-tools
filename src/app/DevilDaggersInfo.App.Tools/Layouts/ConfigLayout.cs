@@ -55,6 +55,14 @@ public class ConfigLayout : Layout, IConfigLayout
 
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F12X12, Vector2i<int>.One, new(32, 32), 0, Color.White, "SETTINGS", TextAlign.Left);
 
+#if LINUX
+		const string examplePath = "/home/noah/.local/share/Steam/steamapps/common/devildaggers/";
+#elif WINDOWS
+		const string examplePath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\devildaggers";
+#else
+		const string examplePath = "(no example)";
+#endif
+
 // 		const string text = """
 // 			Please configure your Devil Daggers installation directory.
 //
@@ -62,7 +70,7 @@ public class ConfigLayout : Layout, IConfigLayout
 //
 // 			Example: C:\Program Files (x86)\Steam\steamapps\common\devildaggers
 // 			""";
-		const string text = "Please configure your Devil Daggers installation directory.\n\nThis is the directory containing the executable.\n\nExample: C:\\Program Files (x86)\\Steam\\steamapps\\common\\devildaggers";
+		const string text = $"Please configure your Devil Daggers installation directory.\n\nThis is the directory containing the executable.\n\nExample: {examplePath}";
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, Vector2i<int>.One, new(32, 64), 0, Color.White, text, TextAlign.Left);
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, Vector2i<int>.One, new(32, 160), 0, Color.Red, _error, TextAlign.Left);
 	}
