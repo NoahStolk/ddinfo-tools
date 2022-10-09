@@ -189,7 +189,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "game-formats", "game-format
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7B0D34B1-407D-4632-80FD-877AE1BB9DB1}"
 	ProjectSection(SolutionItems) = preProject
-		release-ddre.bat = release-ddre.bat
 		DevilDaggersInfo.sln.DotSettings = DevilDaggersInfo.sln.DotSettings
 		Directory.Build.props = Directory.Build.props
 		nuget.config = nuget.config
