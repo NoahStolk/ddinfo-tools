@@ -83,6 +83,10 @@ public class MainLayout : Layout, IMainLayout
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(1), new(512, 712), 0, Color.White, "Devil Daggers is created by Sorath", TextAlign.Middle);
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(1), new(512, 728), 0, Color.White, "DevilDaggers.info is created by Noah Stolk", TextAlign.Middle);
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(2), new(512, 752), 0, new(255, 0, 31, 255), "HTTPS://DEVILDAGGERS.INFO/", TextAlign.Middle);
+
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F12X12, new(1), new(768, 256), 100, Color.Black, "(not implemented)", TextAlign.Middle);
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F12X12, new(1), new(768, 448), 100, Color.Black, "(not implemented)", TextAlign.Middle);
+		RenderBatchCollector.RenderMonoSpaceText(FontSize.F12X12, new(1), new(256, 448), 100, Color.Black, "(not implemented)", TextAlign.Middle);
 	}
 
 	private sealed class MeshObject
