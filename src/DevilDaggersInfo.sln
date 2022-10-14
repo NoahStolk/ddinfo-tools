@@ -45,7 +45,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.Custom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.ReplayEditor.Photino", "app\DevilDaggersInfo.App.ReplayEditor.Photino\DevilDaggersInfo.App.ReplayEditor.Photino.csproj", "{CA612879-D0A8-41AD-9265-78BADEF2BA84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Tools", "app\DevilDaggersInfo.App.Tools\DevilDaggersInfo.App.Tools.csproj", "{D5903E30-558A-40DF-B7A6-E7E1D014E2A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App", "app\DevilDaggersInfo.App\DevilDaggersInfo.App.csproj", "{D5903E30-558A-40DF-B7A6-E7E1D014E2A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Ui.Base", "app-ui\DevilDaggersInfo.App.Ui.Base\DevilDaggersInfo.App.Ui.Base.csproj", "{67A7C653-F20A-4688-86EF-9D09DAD12517}"
 EndProject

@@ -1,7 +1,7 @@
 using DevilDaggersInfo.App.Ui.Base.Rendering;
 using Silk.NET.OpenGL;
 
-namespace DevilDaggersInfo.App.Tools.Utils;
+namespace DevilDaggersInfo.App.Utils;
 
 public static class ScissorRenderUtils
 {

@@ -1,4 +1,4 @@
-using DevilDaggersInfo.App.Tools.Renderers;
+using DevilDaggersInfo.App.Renderers;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.SurvivalEditor;
@@ -17,7 +17,7 @@ using Warp.Text;
 using Warp.Ui;
 using Constants = DevilDaggersInfo.App.Ui.Base.Constants;
 
-namespace DevilDaggersInfo.App.Tools;
+namespace DevilDaggersInfo.App;
 
 public partial class Game : GameBase, IDependencyContainer
 {

@@ -8,7 +8,7 @@ using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.Base.States;
 using Warp.Ui;
 
-namespace DevilDaggersInfo.App.Tools.Layouts;
+namespace DevilDaggersInfo.App.Layouts;
 
 public class ConfigLayout : Layout, IConfigLayout
 {

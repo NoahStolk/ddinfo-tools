@@ -1,10 +1,10 @@
-using DevilDaggersInfo.App.Tools.Utils;
 using DevilDaggersInfo.App.Ui.Base.Enums;
 using DevilDaggersInfo.App.Ui.Base.Rendering.Data;
+using DevilDaggersInfo.App.Utils;
 using Silk.NET.OpenGL;
 using Warp.Text;
 
-namespace DevilDaggersInfo.App.Tools.Renderers;
+namespace DevilDaggersInfo.App.Renderers;
 
 public class MonoSpaceFontRenderer
 {

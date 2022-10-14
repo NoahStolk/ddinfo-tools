@@ -5,13 +5,14 @@ using DevilDaggersInfo.App.Ui.Base.Enums;
 using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.Base.States;
 using DevilDaggersInfo.Common.Utils;
+using DevilDaggersInfo.Core.Versioning;
 using Silk.NET.OpenGL;
 using Warp.Content;
 using Warp.InterpolationStates;
 using Warp.Ui;
 using Texture = Warp.Content.Texture;
 
-namespace DevilDaggersInfo.App.Tools.Layouts;
+namespace DevilDaggersInfo.App.Layouts;
 
 public class MainLayout : Layout, IMainLayout
 {
