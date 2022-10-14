@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Core.ApiClient;
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
@@ -6,6 +7,7 @@ using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.Base.States;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Versioning;
+using DevilDaggersInfo.Types.Web;
 using Silk.NET.OpenGL;
 using Warp.Content;
 using Warp.InterpolationStates;
@@ -41,6 +43,24 @@ public class MainLayout : Layout, IMainLayout
 		NestingContext.Add(new Button(Rectangle.At(640, 384, 256, 96), () => { }, ddre.Intensify(64), ddre, ddre.Intensify(96), Color.White, "Replay Editor", TextAlign.Middle, border, FontSize.F12X12));
 		NestingContext.Add(new Button(Rectangle.At(128, 576, 256, 96), LayoutManager.ToConfigLayout, settings.Intensify(64), settings, settings.Intensify(96), Color.White, "Configuration", TextAlign.Middle, border, FontSize.F12X12));
 		NestingContext.Add(new Button(Rectangle.At(640, 576, 256, 96), () => Environment.Exit(0), exit.Intensify(64), exit, exit.Intensify(96), Color.White, "Exit", TextAlign.Middle, border, FontSize.F12X12));
+
+#if WINDOWS
+		const ToolBuildType toolBuildType = ToolBuildType.WindowsWarp;
+#elif LINUX
+		const ToolBuildType toolBuildType = ToolBuildType.LinuxWarp;
+#endif
+
+		AsyncHandler ah = new(VersionUtils.EntryAssemblyVersion, toolBuildType);
+		ah.CheckForUpdates(ShowUpdateAvailable);
+
+		void ShowUpdateAvailable(AppVersion? appVersion)
+		{
+			if (appVersion == null)
+				return;
+
+			Popup p = new(this, $"Version {appVersion} is available.");
+			NestingContext.Add(p);
+		}
 	}
 
 	public void InitializeScene()
