@@ -37,7 +37,7 @@ public class MainLayout : Layout, IMainLayout
 
 		const int border = 10;
 		NestingContext.Add(new Button(Rectangle.At(128, 192, 256, 96), LayoutManager.ToSurvivalEditorMainLayout, ddse.Intensify(64), ddse, ddse.Intensify(96), Color.White, "Survival Editor", TextAlign.Middle, border, FontSize.F12X12));
-		NestingContext.Add(new Button(Rectangle.At(640, 192, 256, 96), () => { }, ddcl.Intensify(64), ddcl, ddcl.Intensify(96), Color.White, "Custom Leaderboards", TextAlign.Middle, border, FontSize.F12X12));
+		NestingContext.Add(new Button(Rectangle.At(640, 192, 256, 96), LayoutManager.ToCustomLeaderboardsRecorderMainLayout, ddcl.Intensify(64), ddcl, ddcl.Intensify(96), Color.White, "Custom Leaderboards", TextAlign.Middle, border, FontSize.F12X12));
 		NestingContext.Add(new Button(Rectangle.At(128, 384, 256, 96), () => { }, ddae.Intensify(64), ddae, ddae.Intensify(96), Color.White, "Asset Editor", TextAlign.Middle, border, FontSize.F12X12));
 		NestingContext.Add(new Button(Rectangle.At(640, 384, 256, 96), () => { }, ddre.Intensify(64), ddre, ddre.Intensify(96), Color.White, "Replay Editor", TextAlign.Middle, border, FontSize.F12X12));
 		NestingContext.Add(new Button(Rectangle.At(128, 576, 256, 96), LayoutManager.ToConfigLayout, settings.Intensify(64), settings, settings.Intensify(96), Color.White, "Configuration", TextAlign.Middle, border, FontSize.F12X12));
@@ -105,7 +105,6 @@ public class MainLayout : Layout, IMainLayout
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(1), new(512, 728), 0, Color.White, "DevilDaggers.info is created by Noah Stolk", TextAlign.Middle);
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(2), new(512, 752), 0, new(255, 0, 31, 255), "HTTPS://DEVILDAGGERS.INFO/", TextAlign.Middle);
 
-		RenderBatchCollector.RenderMonoSpaceText(FontSize.F12X12, new(1), new(768, 256), 100, Color.Black, "(not implemented)", TextAlign.Middle);
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F12X12, new(1), new(768, 448), 100, Color.Black, "(not implemented)", TextAlign.Middle);
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F12X12, new(1), new(256, 448), 100, Color.Black, "(not implemented)", TextAlign.Middle);
 	}

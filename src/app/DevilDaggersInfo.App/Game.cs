@@ -5,6 +5,7 @@ using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.SurvivalEditor;
 using DevilDaggersInfo.App.Ui.Base.Enums;
 using DevilDaggersInfo.App.Ui.Base.Rendering;
+using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.States;
 using DevilDaggersInfo.Common.Utils;
@@ -91,6 +92,7 @@ public partial class Game : GameBase, IDependencyContainer
 	public ISurvivalEditorMainLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
 	public IFileDialogLayout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();
 	public IFileDialogLayout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
+	public IExtendedLayout CustomLeaderboardsRecorderMainLayout { get; } = new CustomLeaderboardsRecorderMainLayout();
 
 	#endregion Dependencies
 
