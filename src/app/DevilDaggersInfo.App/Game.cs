@@ -92,6 +92,7 @@ public partial class Game : GameBase, IDependencyContainer
 	public ISurvivalEditorMainLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
 	public IFileDialogLayout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();
 	public IFileDialogLayout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
+	public ISurvivalEditor3dLayout SurvivalEditor3dLayout { get; private set; } = null!;
 	public IExtendedLayout CustomLeaderboardsRecorderMainLayout { get; } = new CustomLeaderboardsRecorderMainLayout();
 
 	#endregion Dependencies
@@ -116,8 +117,12 @@ public partial class Game : GameBase, IDependencyContainer
 		ActiveLayout = ConfigLayout;
 		ConfigLayout.ValidateInstallation();
 
+		SurvivalEditor3dLayout = new SurvivalEditor3dLayout(Shaders.Mesh);
+		SurvivalEditor3dLayout.InitializeScene();
+
 		Gl.Enable(EnableCap.DepthTest);
 		Gl.Enable(EnableCap.Blend);
+		Gl.Enable(EnableCap.CullFace);
 		Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 	}
 
