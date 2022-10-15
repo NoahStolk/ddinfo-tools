@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Core.ApiClient;
 using DevilDaggersInfo.App.Renderers;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
@@ -6,6 +7,8 @@ using DevilDaggersInfo.App.Ui.Base.Enums;
 using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.States;
+using DevilDaggersInfo.Common.Utils;
+using DevilDaggersInfo.Types.Web;
 using Serilog;
 using Serilog.Core;
 using Silk.NET.OpenGL;
@@ -22,6 +25,12 @@ namespace DevilDaggersInfo.App;
 public partial class Game : GameBase, IDependencyContainer
 {
 	private const float _nativeAspectRatio = Constants.NativeWidth / (float)Constants.NativeHeight;
+
+#if WINDOWS
+	private const ToolBuildType _toolBuildType = ToolBuildType.WindowsWarp;
+#elif LINUX
+	private const ToolBuildType _toolBuildType = ToolBuildType.LinuxWarp;
+#endif
 
 	private static readonly Logger _log = new LoggerConfiguration()
 		.WriteTo.File("ddinfo.log", rollingInterval: RollingInterval.Infinite)
@@ -66,6 +75,10 @@ public partial class Game : GameBase, IDependencyContainer
 		}
 	}
 
+	#region Dependencies
+
+	public AsyncHandler AsyncHandler { get; } = new(VersionUtils.EntryAssemblyVersion, _toolBuildType);
+
 	public UiRenderer UiRenderer { get; private set; } = null!;
 	public SpriteRenderer SpriteRenderer { get; private set; } = null!;
 	public MonoSpaceFontRenderer FontRenderer12X12 { get; private set; } = null!;
@@ -78,6 +91,8 @@ public partial class Game : GameBase, IDependencyContainer
 	public ISurvivalEditorMainLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
 	public IFileDialogLayout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();
 	public IFileDialogLayout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
+
+	#endregion Dependencies
 
 	public string? TooltipText { get; set; }
 
