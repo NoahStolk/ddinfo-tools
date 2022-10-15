@@ -31,7 +31,7 @@ public static class Program
 		appBuilder.Services.AddSingleton<INativeErrorReporter, WindowsErrorReporter>();
 		appBuilder.Services.AddSingleton<INativeMemoryService, WindowsMemoryService>();
 		appBuilder.Services.AddSingleton<NetworkService>();
-		appBuilder.Services.AddSingleton<GameMemoryReaderService>();
+		appBuilder.Services.AddSingleton<GameMemoryService>();
 		appBuilder.Services.AddSingleton<UploadService>();
 		appBuilder.Services.AddSingleton(configuration);
 		appBuilder.Services.AddScoped<StateFacade>();
