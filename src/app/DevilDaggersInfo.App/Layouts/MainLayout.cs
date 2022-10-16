@@ -1,5 +1,6 @@
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.Components;
+using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.Enums;
 using DevilDaggersInfo.App.Ui.Base.Rendering;
@@ -63,7 +64,7 @@ public class MainLayout : Layout, IMainLayout
 
 	private void CheckForUpdates()
 	{
-		Base.Game.AsyncHandler.CheckForUpdates(ShowUpdateAvailable);
+		Root.Game.AsyncHandler.CheckForUpdates(ShowUpdateAvailable);
 
 		void ShowUpdateAvailable(AppVersion? appVersion)
 		{
@@ -176,7 +177,7 @@ public class MainLayout : Layout, IMainLayout
 			_positionState.PrepareUpdate();
 			_rotationState.PrepareUpdate();
 
-			_positionState.Physics = new(MathF.Sin(Base.Game.Tt) * 5, 4, MathF.Cos(Base.Game.Tt) * 5);
+			_positionState.Physics = new(MathF.Sin(Root.Game.Tt) * 5, 4, MathF.Cos(Root.Game.Tt) * 5);
 			_rotationState.Physics = Quaternion.CreateFromRotationMatrix(SetRotationFromDirectionalVector(_origin - _positionState.Physics));
 
 			static Matrix4x4 SetRotationFromDirectionalVector(Vector3 direction)

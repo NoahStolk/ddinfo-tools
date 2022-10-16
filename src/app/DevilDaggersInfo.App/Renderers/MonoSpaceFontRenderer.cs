@@ -35,6 +35,8 @@ public class MonoSpaceFontRenderer
 		Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
 	}
 
+	public Vector2i<int> MeasureText(string text) => _font.MeasureText(text);
+
 	public void Render(List<MonoSpaceText> texts)
 	{
 		if (texts.Count == 0)
