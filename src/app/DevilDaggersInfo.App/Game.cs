@@ -105,7 +105,6 @@ public sealed partial class Game : GameBase, IGameBase<Game>, IDependencyContain
 		StateManager.NewSpawnset();
 		ActiveLayout = ConfigLayout;
 		ConfigLayout.ValidateInstallation();
-		SurvivalEditor3dLayout.InitializeScene();
 	}
 
 	protected override void Update()
