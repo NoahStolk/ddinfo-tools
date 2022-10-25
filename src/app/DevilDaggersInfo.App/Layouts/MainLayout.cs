@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Core.ApiClient.TaskHandlers;
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
@@ -64,7 +65,7 @@ public class MainLayout : Layout, IMainLayout
 
 	private void CheckForUpdates()
 	{
-		Root.Game.AsyncHandler.CheckForUpdates(ShowUpdateAvailable);
+		Root.Game.AsyncHandler.Run<FetchLatestDistribution, AppVersion>(ShowUpdateAvailable);
 
 		void ShowUpdateAvailable(AppVersion? appVersion)
 		{
