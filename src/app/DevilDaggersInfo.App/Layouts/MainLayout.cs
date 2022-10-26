@@ -13,7 +13,6 @@ using Warp.Content;
 using Warp.Debugging;
 using Warp.InterpolationStates;
 using Warp.Ui;
-using Texture = Warp.Content.Texture;
 
 namespace DevilDaggersInfo.App.Layouts;
 
@@ -90,8 +89,8 @@ public class MainLayout : Layout, IMainLayout
 		_camera.PreRender();
 
 		Shaders.Mesh.Use();
-		Shaders.Mesh.SetMatrix4x4("view", _camera.ViewMatrix);
-		Shaders.Mesh.SetMatrix4x4("projection", _camera.Projection);
+		Shader.SetMatrix4x4(MeshUniforms.View, _camera.ViewMatrix);
+		Shader.SetMatrix4x4(MeshUniforms.Projection, _camera.Projection);
 
 		_skull4?.Render();
 		foreach (MeshObject tile in _tiles)
@@ -154,8 +153,8 @@ public class MainLayout : Layout, IMainLayout
 
 		public unsafe void Render()
 		{
-			Shaders.Mesh.SetMatrix4x4("model", _modelMatrix);
-			Shaders.Mesh.SetInt("textureDiffuse", 0);
+			Shader.SetMatrix4x4(MeshUniforms.Model, _modelMatrix);
+			Shader.SetInt(MeshUniforms.TextureDiffuse, 0);
 			_texture.Use();
 
 			Gl.BindVertexArray(_vao);

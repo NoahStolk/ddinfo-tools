@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.Base.Rendering.Data;
 using DevilDaggersInfo.App.Utils;
@@ -57,8 +58,8 @@ public class SpriteRenderer
 
 			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(sprite.Scale.X, -sprite.Scale.Y, 1);
 			Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(sprite.CenterPosition.X, sprite.CenterPosition.Y, sprite.Depth);
-			Shaders.Sprite.SetMatrix4x4("model", scaleMatrix * translationMatrix);
-			Shaders.Sprite.SetVector4("spriteColor", sprite.Color);
+			Shader.SetMatrix4x4(SpriteUniforms.Model, scaleMatrix * translationMatrix);
+			Shader.SetVector4(SpriteUniforms.SpriteColor, sprite.Color);
 			Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
 		}
 

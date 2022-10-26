@@ -1,5 +1,6 @@
 using DevilDaggersInfo.App.Core.ApiClient;
 using DevilDaggersInfo.App.Renderers;
+using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.SurvivalEditor;
@@ -16,12 +17,12 @@ using Silk.NET.OpenGL;
 using Warp;
 using Warp.Debugging;
 using Warp.Extensions;
-using Warp.Games;
 using Warp.Ui;
 using Constants = DevilDaggersInfo.App.Ui.Base.Constants;
 
 namespace DevilDaggersInfo.App;
 
+[GenerateGame]
 public sealed partial class Game : GameBase, IGameBase<Game>, IDependencyContainer
 {
 #if WINDOWS
@@ -88,7 +89,7 @@ public sealed partial class Game : GameBase, IGameBase<Game>, IDependencyContain
 	public ISurvivalEditorMainLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
 	public IFileDialogLayout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();
 	public IFileDialogLayout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
-	public ISurvivalEditor3dLayout SurvivalEditor3dLayout { get; } = new SurvivalEditor3dLayout(Shaders.Mesh);
+	public ISurvivalEditor3dLayout SurvivalEditor3dLayout { get; } = new SurvivalEditor3dLayout();
 	public IExtendedLayout CustomLeaderboardsRecorderMainLayout { get; } = new CustomLeaderboardsRecorderMainLayout();
 
 	#endregion Dependencies
@@ -157,18 +158,18 @@ public sealed partial class Game : GameBase, IGameBase<Game>, IDependencyContain
 		ActivateViewport(Program.ViewportUi);
 
 		Shaders.Ui.Use();
-		Shaders.Ui.SetMatrix4x4("projection", _uiProjectionMatrix);
+		Shader.SetMatrix4x4(UiUniforms.Projection, _uiProjectionMatrix);
 		_uiRenderer.RenderRectangleTriangles();
 		_uiRenderer.RenderCircleLines();
 
 		Shaders.Font.Use();
-		Shaders.Font.SetMatrix4x4("projection", _uiProjectionMatrix);
+		Shader.SetMatrix4x4(FontUniforms.Projection, _uiProjectionMatrix);
 		_fontRenderer4X6.Render(RenderBatchCollector.MonoSpaceTexts4X6);
 		_fontRenderer8X8.Render(RenderBatchCollector.MonoSpaceTexts8X8);
 		_fontRenderer12X12.Render(RenderBatchCollector.MonoSpaceTexts12X12);
 
 		Shaders.Sprite.Use();
-		Shaders.Sprite.SetMatrix4x4("projection", _uiProjectionMatrix);
+		Shader.SetMatrix4x4(SpriteUniforms.Projection, _uiProjectionMatrix);
 		_spriteRenderer.Render();
 
 		RenderBatchCollector.Clear();

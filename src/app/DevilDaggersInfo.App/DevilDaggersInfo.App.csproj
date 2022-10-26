@@ -25,7 +25,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="Content\Content" />
+    <Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
+    <None Include="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,12 +38,7 @@
 
   <ItemGroup>
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="Warp.SourceGenerators" Version="6.0.0" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
-    <None Include="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
+    <PackageReference Include="Warp.SourceGenerators" Version="8.0.0" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
 </Project>

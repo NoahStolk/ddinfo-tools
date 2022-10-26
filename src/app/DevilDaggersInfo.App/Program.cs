@@ -1,5 +1,6 @@
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
+using System.Reflection;
 using Warp;
 
 namespace DevilDaggersInfo.App;
@@ -22,7 +23,12 @@ public static class Program
 	{
 		Graphics.OnChangeWindowSize = OnChangeWindowSize;
 
-		_game = Bootstrapper.CreateGame<Game>("DDINFO TOOLS", Constants.NativeWidth, Constants.NativeHeight, false);
+#if DEBUG
+		const string? contentRootDirectory = @"..\..\..\..\..\app-ui\DevilDaggersInfo.App.Ui.Base\Content";
+#else
+		const string? contentRootDirectory = null;
+#endif
+		_game = Bootstrapper.CreateGame<Game, ShaderUniformInitializer>("DDINFO TOOLS", Constants.NativeWidth, Constants.NativeHeight, false, contentRootDirectory, "ddinfo-tools", Assembly.GetAssembly(typeof(Root)));
 		CoreBase.Game = _game;
 		Root.Game = _game;
 
