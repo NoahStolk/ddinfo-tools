@@ -3,6 +3,7 @@ using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.Enums;
+using DevilDaggersInfo.App.Ui.Base.Exceptions;
 using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.Base.States;
@@ -33,9 +34,15 @@ public class ConfigLayout : Layout, IConfigLayout
 
 	public void ValidateInstallation()
 	{
-		_error = ContentManager.Initialize();
-		if (_error != null)
+		try
+		{
+			ContentManager.Initialize();
+		}
+		catch (MissingContentException ex)
+		{
+			_error = ex.Message;
 			return;
+		}
 
 		LayoutManager.ToMainLayout();
 		Root.Game.MainLayout.InitializeScene();
@@ -61,7 +68,7 @@ public class ConfigLayout : Layout, IConfigLayout
 #elif WINDOWS
 		const string examplePath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\devildaggers";
 #else
-		const string examplePath = "(no example)";
+		const string examplePath = "(no example for this operating system)";
 #endif
 
 // 		const string text = """
@@ -69,7 +76,7 @@ public class ConfigLayout : Layout, IConfigLayout
 //
 // 			This is the directory containing the executable.
 //
-// 			Example: C:\Program Files (x86)\Steam\steamapps\common\devildaggers
+// 			Example: {examplePath}
 // 			""";
 		const string text = $"Please configure your Devil Daggers installation directory.\n\nThis is the directory containing the executable.\n\nExample: {examplePath}";
 		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, Vector2i<int>.One, new(32, 64), 0, Color.White, text, TextAlign.Left);
