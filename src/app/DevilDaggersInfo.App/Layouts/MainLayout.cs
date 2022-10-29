@@ -20,10 +20,11 @@ public class MainLayout : Layout, IMainLayout
 {
 	private static readonly string _version = VersionUtils.EntryAssemblyVersion;
 
-	private static readonly Vector3 _origin = new(0, 3, 0);
+	private static readonly Vector3 _origin = new(0, 3.25f, 0);
 	private readonly Camera _camera = new();
 
 	private MeshObject? _skull4;
+	private MeshObject? _skull4Jaw;
 	private readonly List<MeshObject> _tiles = new();
 
 	public MainLayout()
@@ -50,6 +51,7 @@ public class MainLayout : Layout, IMainLayout
 		CheckForUpdates();
 
 		_skull4 = new(ContentManager.Content.Skull4Mesh, ContentManager.Content.Skull4Texture, Vector3.One, Quaternion.Identity, _origin);
+		_skull4Jaw = new(ContentManager.Content.Skull4JawMesh, ContentManager.Content.Skull4JawTexture, Vector3.One, Quaternion.Identity, _origin);
 		const int tileDimension = 3;
 		const int start = -tileDimension / 2;
 		const int end = tileDimension / 2;
@@ -93,6 +95,7 @@ public class MainLayout : Layout, IMainLayout
 		Shader.SetMatrix4x4(MeshUniforms.Projection, _camera.Projection);
 
 		_skull4?.Render();
+		_skull4Jaw?.Render();
 		foreach (MeshObject tile in _tiles)
 			tile.Render();
 	}
