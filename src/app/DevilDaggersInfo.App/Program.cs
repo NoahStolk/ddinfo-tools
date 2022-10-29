@@ -28,8 +28,7 @@ public static class Program
 #else
 		const string? contentRootDirectory = null;
 #endif
-		_game = Bootstrapper.CreateGame<Game, ShaderUniformInitializer>("DDINFO TOOLS", Constants.NativeWidth, Constants.NativeHeight, false, contentRootDirectory, "ddinfo-tools", Assembly.GetAssembly(typeof(Root)));
-		CoreBase.Game = _game;
+		_game = Bootstrapper.CreateGame<Game, DummyBase, ShaderUniformInitializer>("DDINFO TOOLS", Constants.NativeWidth, Constants.NativeHeight, false, contentRootDirectory, "ddinfo-tools", Assembly.GetAssembly(typeof(Root)));
 		Root.Game = _game;
 
 		Graphics.OnChangeWindowIsActive = OnChangeWindowIsActive;
@@ -58,5 +57,12 @@ public static class Program
 	{
 		if (_game.IsPaused)
 			_game.TogglePause();
+	}
+
+	// ReSharper disable once ClassNeverInstantiated.Local
+	// TODO: Remove.
+	private sealed class DummyBase : IBase<Game>
+	{
+		public static Game Game { get; set; } = null!;
 	}
 }
