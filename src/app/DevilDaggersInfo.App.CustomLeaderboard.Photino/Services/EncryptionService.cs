@@ -11,7 +11,7 @@ public class EncryptionService : IEncryptionService
 	public EncryptionService(IConfiguration configuration)
 	{
 		IConfigurationSection section = configuration.GetRequiredSection("CustomLeaderboardSecrets");
-		_encryptionWrapper = new(section["InitializationVector"], section["Password"], section["Salt"]);
+		_encryptionWrapper = new(section["InitializationVector"]!, section["Password"]!, section["Salt"]!); // TODO: Use IOptions binding and require properties.
 	}
 
 	public string EncryptAndEncode(string input)
