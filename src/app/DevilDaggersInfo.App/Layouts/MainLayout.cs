@@ -37,7 +37,7 @@ public class MainLayout : Layout, IMainLayout
 		Color settings = Color.Gray(0.5f);
 		Color exit = Color.Gray(0.3f);
 
-		const int border = 10;
+		const int border = 5;
 		NestingContext.Add(new TextButton(Rectangle.At(128, 192, 256, 96), LayoutManager.ToSurvivalEditorMainLayout, ddse.Intensify(64), ddse, ddse.Intensify(96), Color.White, "Survival Editor", TextAlign.Middle, border, FontSize.F12X12));
 		NestingContext.Add(new TextButton(Rectangle.At(640, 192, 256, 96), LayoutManager.ToCustomLeaderboardsRecorderMainLayout, ddcl.Intensify(64), ddcl, ddcl.Intensify(96), Color.White, "Custom Leaderboards", TextAlign.Middle, border, FontSize.F12X12));
 		NestingContext.Add(new TextButton(Rectangle.At(128, 384, 256, 96), () => { }, ddae.Intensify(64), ddae, ddae.Intensify(96), Color.White, "Asset Editor", TextAlign.Middle, border, FontSize.F12X12));

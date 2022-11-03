@@ -23,7 +23,7 @@ public class ConfigLayout : Layout, IConfigLayout
 		_textInput.SetText(UserSettings.DevilDaggersInstallationDirectory);
 		NestingContext.Add(_textInput);
 
-		NestingContext.Add(new TextButton(Rectangle.At(32, 320, 256, 32), Check, Color.Black, Color.White, Color.Gray(0.25f), Color.White, "Save and continue", TextAlign.Middle, 2, FontSize.F8X8));
+		NestingContext.Add(new TextButton(Rectangle.At(32, 320, 256, 32), Check, Color.Black, Color.White, Color.Gray(0.25f), Color.White, "Save and continue", TextAlign.Middle, 1, FontSize.F8X8));
 	}
 
 	private void Check()
