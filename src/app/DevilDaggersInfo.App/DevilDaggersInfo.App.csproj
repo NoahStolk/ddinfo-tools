@@ -38,7 +38,7 @@
 
   <ItemGroup>
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="Warp.SourceGenerators" Version="8.0.1" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <PackageReference Include="Warp.SourceGenerators" Version="8.0.2" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
 </Project>
