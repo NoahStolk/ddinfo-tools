@@ -8,6 +8,8 @@ using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.States;
+using DevilDaggersInfo.Common.Utils;
+using DevilDaggersInfo.Core.Versioning;
 using DevilDaggersInfo.Types.Web;
 using Serilog;
 using Serilog.Core;
@@ -59,7 +61,14 @@ public sealed partial class Game : GameBase, IGameBase<Game>, IDependencyContain
 		Gl.Enable(EnableCap.Blend);
 		Gl.Enable(EnableCap.CullFace);
 		Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
+		if (!AppVersion.TryParse(VersionUtils.EntryAssemblyVersion, out AppVersion? appVersion))
+			throw new InvalidOperationException("The current version number is invalid.");
+
+		AppVersion = appVersion;
 	}
+
+	public AppVersion AppVersion { get; }
 
 	public Vector2 ViewportOffset => new(Program.LeftOffset, Program.BottomOffset);
 	public Vector2 UiScale => Program.UiScale;

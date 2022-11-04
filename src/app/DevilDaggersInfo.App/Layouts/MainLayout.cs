@@ -24,6 +24,8 @@ public class MainLayout : Layout, IMainLayout
 	private static readonly Vector3 _origin = new(0, 3.25f, 0);
 	private readonly Camera _camera = new();
 
+	private readonly TextButton _checkForUpdatesButton;
+
 	private MeshObject? _skull4;
 	private MeshObject? _skull4Jaw;
 	private readonly List<MeshObject> _tiles = new();
@@ -31,6 +33,9 @@ public class MainLayout : Layout, IMainLayout
 	public MainLayout()
 		: base(Constants.Full)
 	{
+		_checkForUpdatesButton = new(Rectangle.At(416, 192, 192, 32), CheckForUpdates, Color.Black, Color.White, Color.Gray(0.5f), Color.White, "Check for updates", TextAlign.Middle, 1, FontSize.F8X8);
+		NestingContext.Add(_checkForUpdatesButton);
+
 		Color ddse = Color.FromHsv(0, 1, 0.8f);
 		Color ddae = Color.FromHsv(130, 1, 0.6f);
 		Color ddre = Color.FromHsv(220, 1, 1);
@@ -67,21 +72,12 @@ public class MainLayout : Layout, IMainLayout
 
 	private void CheckForUpdates()
 	{
-		if (!AppVersion.TryParse(VersionUtils.EntryAssemblyVersion, out AppVersion? currentAppVersion))
-			throw new InvalidOperationException("The current version number is invalid.");
+		_checkForUpdatesButton.Text = "Checking...";
+		AsyncHandler.Run(ShowUpdateAvailable, () => FetchLatestDistribution.HandleAsync(Root.Game.AppVersion, Game.BuildType));
 
-		AsyncHandler.Run(ShowUpdateAvailable, () => FetchLatestDistribution.HandleAsync(currentAppVersion, Game.BuildType));
-
-		void ShowUpdateAvailable(AppVersion? appVersion)
+		void ShowUpdateAvailable(AppVersion? newAppVersion)
 		{
-			if (appVersion == null)
-			{
-				DebugStack.Add("Up to date", _version, 2);
-				return;
-			}
-
-			Popup p = new(this, $"Version {appVersion} is available.");
-			NestingContext.Add(p);
+			_checkForUpdatesButton.Text = newAppVersion == null ? "Check for updates" : $"Download {newAppVersion}";
 		}
 	}
 
