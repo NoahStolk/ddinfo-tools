@@ -1,4 +1,3 @@
-using DevilDaggersInfo.App.Core.ApiClient;
 using DevilDaggersInfo.App.Renderers;
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
@@ -9,7 +8,6 @@ using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.States;
-using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Types.Web;
 using Serilog;
 using Serilog.Core;
@@ -26,9 +24,9 @@ namespace DevilDaggersInfo.App;
 public sealed partial class Game : GameBase, IGameBase<Game>, IDependencyContainer
 {
 #if WINDOWS
-	private const ToolBuildType _toolBuildType = ToolBuildType.WindowsWarp;
+	public const ToolBuildType BuildType = ToolBuildType.WindowsWarp;
 #elif LINUX
-	private const ToolBuildType _toolBuildType = ToolBuildType.LinuxWarp;
+	public const ToolBuildType BuildType = ToolBuildType.LinuxWarp;
 #endif
 
 	private static readonly Logger _log = new LoggerConfiguration()
@@ -80,8 +78,6 @@ public sealed partial class Game : GameBase, IGameBase<Game>, IDependencyContain
 	}
 
 	#region Dependencies
-
-	public AsyncHandler AsyncHandler { get; } = new(VersionUtils.EntryAssemblyVersion, _toolBuildType);
 
 	public IConfigLayout ConfigLayout { get; } = new Layouts.ConfigLayout();
 	public IMainLayout MainLayout { get; } = new Layouts.MainLayout();

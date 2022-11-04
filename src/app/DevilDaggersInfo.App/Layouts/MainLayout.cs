@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Core.ApiClient;
 using DevilDaggersInfo.App.Core.ApiClient.TaskHandlers;
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.Components;
@@ -66,7 +67,10 @@ public class MainLayout : Layout, IMainLayout
 
 	private void CheckForUpdates()
 	{
-		Root.Game.AsyncHandler.Run<FetchLatestDistribution, AppVersion>(ShowUpdateAvailable);
+		if (!AppVersion.TryParse(VersionUtils.EntryAssemblyVersion, out AppVersion? currentAppVersion))
+			throw new InvalidOperationException("The current version number is invalid.");
+
+		AsyncHandler.Run(ShowUpdateAvailable, () => FetchLatestDistribution.HandleAsync(currentAppVersion, Game.BuildType));
 
 		void ShowUpdateAvailable(AppVersion? appVersion)
 		{
