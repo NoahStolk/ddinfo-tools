@@ -2,6 +2,7 @@ using DevilDaggersInfo.App.Core.ApiClient;
 using DevilDaggersInfo.App.Core.ApiClient.TaskHandlers;
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.Components;
+using DevilDaggersInfo.App.Ui.Base.Components.Styles;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.Enums;
@@ -11,7 +12,6 @@ using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Versioning;
 using Silk.NET.OpenGL;
 using Warp.Content;
-using Warp.Debugging;
 using Warp.InterpolationStates;
 using Warp.Ui;
 
@@ -33,7 +33,7 @@ public class MainLayout : Layout, IMainLayout
 	public MainLayout()
 		: base(Constants.Full)
 	{
-		_checkForUpdatesButton = new(Rectangle.At(416, 192, 192, 32), CheckForUpdates, Color.Black, Color.White, Color.Gray(0.5f), Color.White, "Check for updates", TextAlign.Middle, 1, FontSize.F8X8);
+		_checkForUpdatesButton = new(Rectangle.At(416, 192, 192, 32), CheckForUpdates, GlobalStyles.DefaultButtonStyle, GlobalStyles.ConfigButton, "Check for updates");
 		NestingContext.Add(_checkForUpdatesButton);
 
 		Color ddse = Color.FromHsv(0, 1, 0.8f);
@@ -43,13 +43,20 @@ public class MainLayout : Layout, IMainLayout
 		Color settings = Color.Gray(0.5f);
 		Color exit = Color.Gray(0.3f);
 
-		const int border = 5;
-		NestingContext.Add(new TextButton(Rectangle.At(128, 192, 256, 96), LayoutManager.ToSurvivalEditorMainLayout, ddse.Intensify(64), ddse, ddse.Intensify(96), Color.White, "Survival Editor", TextAlign.Middle, border, FontSize.F12X12));
-		NestingContext.Add(new TextButton(Rectangle.At(640, 192, 256, 96), LayoutManager.ToCustomLeaderboardsRecorderMainLayout, ddcl.Intensify(64), ddcl, ddcl.Intensify(96), Color.White, "Custom Leaderboards", TextAlign.Middle, border, FontSize.F12X12));
-		NestingContext.Add(new TextButton(Rectangle.At(128, 384, 256, 96), () => { }, ddae.Intensify(64), ddae, ddae.Intensify(96), Color.White, "Asset Editor", TextAlign.Middle, border, FontSize.F12X12));
-		NestingContext.Add(new TextButton(Rectangle.At(640, 384, 256, 96), () => { }, ddre.Intensify(64), ddre, ddre.Intensify(96), Color.White, "Replay Editor", TextAlign.Middle, border, FontSize.F12X12));
-		NestingContext.Add(new TextButton(Rectangle.At(128, 576, 256, 96), LayoutManager.ToConfigLayout, settings.Intensify(64), settings, settings.Intensify(96), Color.White, "Configuration", TextAlign.Middle, border, FontSize.F12X12));
-		NestingContext.Add(new TextButton(Rectangle.At(640, 576, 256, 96), () => Environment.Exit(0), exit.Intensify(64), exit, exit.Intensify(96), Color.White, "Exit", TextAlign.Middle, border, FontSize.F12X12));
+		static ButtonStyle GetStyle(Color color)
+		{
+			const int border = 5;
+			return new(color.Intensify(64), color, color.Intensify(96), border);
+		}
+
+		TextButtonStyle textButtonStyle = new(Color.White, TextAlign.Middle, FontSize.F12X12);
+
+		NestingContext.Add(new TextButton(Rectangle.At(128, 192, 256, 96), LayoutManager.ToSurvivalEditorMainLayout, GetStyle(ddse), textButtonStyle, "Survival Editor"));
+		NestingContext.Add(new TextButton(Rectangle.At(640, 192, 256, 96), LayoutManager.ToCustomLeaderboardsRecorderMainLayout, GetStyle(ddcl), textButtonStyle, "Custom Leaderboards"));
+		NestingContext.Add(new TextButton(Rectangle.At(128, 384, 256, 96), () => { }, GetStyle(ddae), textButtonStyle, "Asset Editor"));
+		NestingContext.Add(new TextButton(Rectangle.At(640, 384, 256, 96), () => { }, GetStyle(ddre), textButtonStyle, "Replay Editor"));
+		NestingContext.Add(new TextButton(Rectangle.At(128, 576, 256, 96), LayoutManager.ToConfigLayout, GetStyle(settings), textButtonStyle, "Configuration"));
+		NestingContext.Add(new TextButton(Rectangle.At(640, 576, 256, 96), () => Environment.Exit(0), GetStyle(exit), textButtonStyle, "Exit"));
 	}
 
 	public void InitializeScene()
