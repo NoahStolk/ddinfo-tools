@@ -3,7 +3,7 @@ using DevilDaggersInfo.App.Ui.Base.Enums;
 using DevilDaggersInfo.App.Ui.Base.Rendering.Data;
 using DevilDaggersInfo.App.Utils;
 using Silk.NET.OpenGL;
-using Warp.Text;
+using Warp.NET.Text;
 
 namespace DevilDaggersInfo.App.Renderers;
 

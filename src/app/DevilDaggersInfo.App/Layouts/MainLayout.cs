@@ -11,9 +11,9 @@ using DevilDaggersInfo.App.Ui.Base.States;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Versioning;
 using Silk.NET.OpenGL;
-using Warp.Content;
-using Warp.InterpolationStates;
-using Warp.Ui;
+using Warp.NET.Content;
+using Warp.NET.InterpolationStates;
+using Warp.NET.Ui;
 
 namespace DevilDaggersInfo.App.Layouts;
 

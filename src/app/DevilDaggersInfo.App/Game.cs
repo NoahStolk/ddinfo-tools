@@ -14,10 +14,10 @@ using DevilDaggersInfo.Types.Web;
 using Serilog;
 using Serilog.Core;
 using Silk.NET.OpenGL;
-using Warp;
-using Warp.Debugging;
-using Warp.Extensions;
-using Warp.Ui;
+using Warp.NET;
+using Warp.NET.Debugging;
+using Warp.NET.Extensions;
+using Warp.NET.Ui;
 using Constants = DevilDaggersInfo.App.Ui.Base.Constants;
 
 namespace DevilDaggersInfo.App;
