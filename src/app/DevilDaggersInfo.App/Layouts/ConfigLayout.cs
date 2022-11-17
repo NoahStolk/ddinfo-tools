@@ -7,7 +7,7 @@ using DevilDaggersInfo.App.Ui.Base.Exceptions;
 using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.Base.States;
-using Warp.Ui;
+using Warp.NET.Ui;
 
 namespace DevilDaggersInfo.App.Layouts;
 
@@ -20,7 +20,7 @@ public class ConfigLayout : Layout, IConfigLayout
 		: base(Constants.Full)
 	{
 		_textInput = new(Rectangle.At(32, 128, 960, 16), false, null, null, null, GlobalStyles.TextInput);
-		_textInput.SetText(UserSettings.DevilDaggersInstallationDirectory);
+		_textInput.KeyboardInput.SetText(UserSettings.DevilDaggersInstallationDirectory);
 		NestingContext.Add(_textInput);
 
 		NestingContext.Add(new TextButton(Rectangle.At(32, 320, 256, 32), Check, GlobalStyles.DefaultButtonStyle, GlobalStyles.ConfigButton, "Save and continue"));
@@ -28,7 +28,7 @@ public class ConfigLayout : Layout, IConfigLayout
 
 	private void Check()
 	{
-		UserSettings.DevilDaggersInstallationDirectory = _textInput.Value.ToString();
+		UserSettings.DevilDaggersInstallationDirectory = _textInput.KeyboardInput.Value.ToString();
 		ValidateInstallation();
 	}
 
