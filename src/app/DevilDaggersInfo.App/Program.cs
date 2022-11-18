@@ -1,6 +1,5 @@
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
-using Warp.NET;
 
 namespace DevilDaggersInfo.App;
 
@@ -27,7 +26,8 @@ public static class Program
 #else
 		const string? contentRootDirectory = null;
 #endif
-		_game = Bootstrapper.CreateGame<Game, DummyBase, ShaderUniformInitializer, Models, Shaders, Sounds, Textures>("DDINFO TOOLS", Constants.NativeWidth, Constants.NativeHeight, false, contentRootDirectory, "ddinfo-tools");
+		GameParameters gameParameters = new("DDINFO TOOLS", Constants.NativeWidth, Constants.NativeHeight, false);
+		_game = Bootstrapper.CreateGame<Game, WarpShaderUniformInitializer, WarpCharsets, WarpModels, WarpShaders, WarpSounds, WarpTextures>(gameParameters, contentRootDirectory, "ddinfo-tools");
 		Root.Game = _game;
 
 		Graphics.OnChangeWindowIsActive = OnChangeWindowIsActive;
@@ -56,12 +56,5 @@ public static class Program
 	{
 		if (_game.IsPaused)
 			_game.TogglePause();
-	}
-
-	// ReSharper disable once ClassNeverInstantiated.Local
-	// TODO: Remove.
-	private sealed class DummyBase : IBase<Game>
-	{
-		public static Game Game { get; set; } = null!;
 	}
 }

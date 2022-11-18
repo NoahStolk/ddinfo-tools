@@ -7,6 +7,7 @@ using DevilDaggersInfo.App.Ui.Base.Exceptions;
 using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.Base.States;
+using Warp.NET.Text;
 using Warp.NET.Ui;
 
 namespace DevilDaggersInfo.App.Layouts;

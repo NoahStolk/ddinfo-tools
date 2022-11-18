@@ -13,6 +13,7 @@ using DevilDaggersInfo.Core.Versioning;
 using Silk.NET.OpenGL;
 using Warp.NET.Content;
 using Warp.NET.InterpolationStates;
+using Warp.NET.Text;
 using Warp.NET.Ui;
 
 namespace DevilDaggersInfo.App.Layouts;
@@ -97,7 +98,7 @@ public class MainLayout : Layout, IMainLayout
 	{
 		_camera.PreRender();
 
-		Shaders.Mesh.Use();
+		WarpShaders.Mesh.Use();
 		Shader.SetMatrix4x4(MeshUniforms.View, _camera.ViewMatrix);
 		Shader.SetMatrix4x4(MeshUniforms.Projection, _camera.Projection);
 

@@ -14,16 +14,16 @@ using DevilDaggersInfo.Types.Web;
 using Serilog;
 using Serilog.Core;
 using Silk.NET.OpenGL;
-using Warp.NET;
 using Warp.NET.Debugging;
 using Warp.NET.Extensions;
+using Warp.NET.Text;
 using Warp.NET.Ui;
 using Constants = DevilDaggersInfo.App.Ui.Base.Constants;
 
 namespace DevilDaggersInfo.App;
 
 [GenerateGame]
-public sealed partial class Game : GameBase, IGameBase<Game>, IDependencyContainer
+public sealed partial class Game : IDependencyContainer
 {
 #if WINDOWS
 	public const ToolBuildType BuildType = ToolBuildType.WindowsWarp;
@@ -44,8 +44,8 @@ public sealed partial class Game : GameBase, IGameBase<Game>, IDependencyContain
 
 	private IExtendedLayout? _activeLayout;
 
-	private Game(string initialWindowTitle, int initialWindowWidth, int initialWindowHeight, bool initialWindowFullScreen)
-		: base(initialWindowTitle, initialWindowWidth, initialWindowHeight, initialWindowFullScreen)
+	private Game(GameParameters gameParameters)
+		: base(gameParameters)
 	{
 		AppDomain.CurrentDomain.UnhandledException += (_, args) => _log.Fatal(args.ExceptionObject.ToString());
 
@@ -53,9 +53,9 @@ public sealed partial class Game : GameBase, IGameBase<Game>, IDependencyContain
 
 		_uiRenderer = new();
 		_spriteRenderer = new();
-		_fontRenderer12X12 = new(new(Textures.Font12x12, @" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?:()[]{}<>|@^$%#&/\+*`,'=~;.-_  "));
-		_fontRenderer8X8 = new(new(Textures.Font8x8, @" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?:()[]{}<>|@^$%#&/\+*`,'=~;.-_  "));
-		_fontRenderer4X6 = new(new(Textures.Font4x6, " 0123456789.-"));
+		_fontRenderer12X12 = new(new(WarpTextures.Font12x12, WarpCharsets.Font));
+		_fontRenderer8X8 = new(new(WarpTextures.Font8x8, WarpCharsets.Font));
+		_fontRenderer4X6 = new(new(WarpTextures.Font4x6, WarpCharsets.FontNumeric));
 
 		Gl.Enable(EnableCap.DepthTest);
 		Gl.Enable(EnableCap.Blend);
@@ -73,6 +73,8 @@ public sealed partial class Game : GameBase, IGameBase<Game>, IDependencyContain
 	public Vector2 ViewportOffset => new(Program.LeftOffset, Program.BottomOffset);
 	public Vector2 UiScale => Program.UiScale;
 	public Vector2 MousePositionWithOffset => (Input.GetMousePosition() - ViewportOffset) / UiScale;
+	public int InitialWindowWidth { get; } = Constants.NativeWidth;
+	public int InitialWindowHeight { get; } = Constants.NativeHeight;
 
 	public IExtendedLayout? ActiveLayout
 	{
@@ -100,11 +102,6 @@ public sealed partial class Game : GameBase, IGameBase<Game>, IDependencyContain
 	#endregion Dependencies
 
 	public string? TooltipText { get; set; }
-
-	public static Game Construct(string initialWindowTitle, int initialWindowWidth, int initialWindowHeight, bool initialWindowFullScreen)
-	{
-		return new(initialWindowTitle, initialWindowWidth, initialWindowHeight, initialWindowFullScreen);
-	}
 
 	public void Initialize()
 	{
@@ -161,18 +158,18 @@ public sealed partial class Game : GameBase, IGameBase<Game>, IDependencyContain
 
 		ActivateViewport(Program.ViewportUi);
 
-		Shaders.Ui.Use();
+		WarpShaders.Ui.Use();
 		Shader.SetMatrix4x4(UiUniforms.Projection, _uiProjectionMatrix);
 		_uiRenderer.RenderRectangleTriangles();
 		_uiRenderer.RenderCircleLines();
 
-		Shaders.Font.Use();
+		WarpShaders.Font.Use();
 		Shader.SetMatrix4x4(FontUniforms.Projection, _uiProjectionMatrix);
 		_fontRenderer4X6.Render(RenderBatchCollector.MonoSpaceTexts4X6);
 		_fontRenderer8X8.Render(RenderBatchCollector.MonoSpaceTexts8X8);
 		_fontRenderer12X12.Render(RenderBatchCollector.MonoSpaceTexts12X12);
 
-		Shaders.Sprite.Use();
+		WarpShaders.Sprite.Use();
 		Shader.SetMatrix4x4(SpriteUniforms.Projection, _uiProjectionMatrix);
 		_spriteRenderer.Render();
 
