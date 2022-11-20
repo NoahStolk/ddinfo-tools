@@ -70,13 +70,15 @@ public class ConfigLayout : Layout, IConfigLayout
 		const string examplePath = "(no example for this operating system)";
 #endif
 
-		const string text = $"""
-			Please configure your Devil Daggers installation directory.
-
-			This is the directory containing the executable.
-
-			Example: {examplePath}
-			""";
+		// TODO: Re-enable when this doesn't break hot reload in Rider.
+// 		const string text = $"""
+// 			Please configure your Devil Daggers installation directory.
+//
+// 			This is the directory containing the executable.
+//
+// 			Example: {examplePath}
+// 			""";
+		const string text = $"Please configure your Devil Daggers installation directory.\n\nThis is the directory containing the executable.\n\nExample: {examplePath}";
 		Game.Self.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(32, 64), 0, Color.White, text, TextAlign.Left);
 		if (!string.IsNullOrWhiteSpace(_error))
 			Game.Self.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(32, 160), 0, Color.Red, _error, TextAlign.Left);

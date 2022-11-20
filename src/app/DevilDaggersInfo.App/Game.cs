@@ -125,8 +125,8 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 			return;
 
 		Vector2i<int> tooltipOffset = new Vector2i<int>(16, 16) / UiScale.FloorToVector2Int32();
-		Vector2i<int> tooltipPosition = MousePositionWithOffset.RoundToVector2Int32() + tooltipOffset;
 		Vector2i<int> textSize = MonoSpaceFontRenderer12.Font.MeasureText(TooltipText);
+		Vector2i<int> tooltipPosition = MousePositionWithOffset.RoundToVector2Int32() + tooltipOffset + textSize / 2;
 		RectangleRenderer.Schedule(textSize, tooltipPosition, 1000, Color.Black);
 		MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, MousePositionWithOffset.RoundToVector2Int32() + tooltipOffset, 1001, Color.White, TooltipText, TextAlign.Left);
 	}
