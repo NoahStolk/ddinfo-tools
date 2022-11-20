@@ -13,6 +13,7 @@ using Silk.NET.OpenGL;
 using Warp.NET.Debugging;
 using Warp.NET.Extensions;
 using Warp.NET.RenderImpl.Ui;
+using Warp.NET.RenderImpl.Ui.Rendering;
 using Warp.NET.Text;
 using Warp.NET.Ui;
 using Constants = DevilDaggersInfo.App.Ui.Base.Constants;
@@ -55,10 +56,6 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 	}
 
 	public AppVersion AppVersion { get; }
-
-	public Vector2 ViewportOffset => new(Program.LeftOffset, Program.BottomOffset);
-	public Vector2 UiScale => Program.UiScale;
-	public Vector2 MousePositionWithOffset => (Input.GetMousePosition() - ViewportOffset) / UiScale;
 
 	public IExtendedLayout? ActiveLayout
 	{
@@ -106,7 +103,7 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 		StateManager.EmptyUiQueue();
 		SpawnsetHistoryManager.EmptyUiQueue();
 
-		MouseUiContext.Reset(MousePositionWithOffset);
+		MouseUiContext.Reset(ViewportState.MousePosition);
 		ActiveLayout?.Update();
 		ActiveLayout?.NestingContext.Update(default);
 	}
@@ -124,11 +121,11 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 		if (string.IsNullOrWhiteSpace(TooltipText))
 			return;
 
-		Vector2i<int> tooltipOffset = new Vector2i<int>(16, 16) / UiScale.FloorToVector2Int32();
+		Vector2i<int> tooltipOffset = new Vector2i<int>(16, 16) / ViewportState.Scale.FloorToVector2Int32();
 		Vector2i<int> textSize = MonoSpaceFontRenderer12.Font.MeasureText(TooltipText);
-		Vector2i<int> tooltipPosition = MousePositionWithOffset.RoundToVector2Int32() + tooltipOffset + textSize / 2;
+		Vector2i<int> tooltipPosition = ViewportState.MousePosition.RoundToVector2Int32() + tooltipOffset + textSize / 2;
 		RectangleRenderer.Schedule(textSize, tooltipPosition, 1000, Color.Black);
-		MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, MousePositionWithOffset.RoundToVector2Int32() + tooltipOffset, 1001, Color.White, TooltipText, TextAlign.Left);
+		MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, ViewportState.MousePosition.RoundToVector2Int32() + tooltipOffset, 1001, Color.White, TooltipText, TextAlign.Left);
 	}
 
 	protected override void Render()
@@ -140,7 +137,7 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 
 		ActiveLayout?.Render3d();
 
-		ActivateViewport(Program.ViewportUi);
+		ActivateViewport(ViewportState.Viewport);
 
 		WarpRenderImplUiShaders.Ui.Use();
 		Shader.SetMatrix4x4(UiUniforms.Projection, _uiProjectionMatrix);
