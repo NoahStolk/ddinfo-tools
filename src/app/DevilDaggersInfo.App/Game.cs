@@ -23,7 +23,7 @@ using Constants = DevilDaggersInfo.App.Ui.Base.Constants;
 namespace DevilDaggersInfo.App;
 
 [GenerateGame]
-public sealed partial class Game : IDependencyContainer
+public sealed partial class Game : GameBase, IDependencyContainer
 {
 #if WINDOWS
 	public const ToolBuildType BuildType = ToolBuildType.WindowsWarp;
