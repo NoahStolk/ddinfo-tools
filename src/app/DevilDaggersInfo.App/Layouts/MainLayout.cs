@@ -1,18 +1,17 @@
 using DevilDaggersInfo.App.Core.ApiClient;
 using DevilDaggersInfo.App.Core.ApiClient.TaskHandlers;
 using DevilDaggersInfo.App.Ui.Base;
-using DevilDaggersInfo.App.Ui.Base.Components;
-using DevilDaggersInfo.App.Ui.Base.Components.Styles;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
-using DevilDaggersInfo.App.Ui.Base.Enums;
-using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.Base.States;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Versioning;
 using Silk.NET.OpenGL;
 using Warp.NET.Content;
 using Warp.NET.InterpolationStates;
+using Warp.NET.RenderImpl.Ui.Components;
+using Warp.NET.RenderImpl.Ui.Components.Styles;
+using Warp.NET.RenderImpl.Ui.Rendering.Text;
 using Warp.NET.Text;
 using Warp.NET.Ui;
 
@@ -50,7 +49,7 @@ public class MainLayout : Layout, IMainLayout
 			return new(color.Intensify(64), color, color.Intensify(96), border);
 		}
 
-		TextButtonStyle textButtonStyle = new(Color.White, TextAlign.Middle, FontSize.F12X12);
+		TextButtonStyle textButtonStyle = new(Color.White, TextAlign.Middle, FontSize.H16);
 
 		NestingContext.Add(new TextButton(Rectangle.At(128, 192, 256, 96), LayoutManager.ToSurvivalEditorMainLayout, GetStyle(ddse), textButtonStyle, "Survival Editor"));
 		NestingContext.Add(new TextButton(Rectangle.At(640, 192, 256, 96), LayoutManager.ToCustomLeaderboardsRecorderMainLayout, GetStyle(ddcl), textButtonStyle, "Custom Leaderboards"));
@@ -98,7 +97,7 @@ public class MainLayout : Layout, IMainLayout
 	{
 		_camera.PreRender();
 
-		WarpShaders.Mesh.Use();
+		DdInfoToolsBaseShaders.Mesh.Use();
 		Shader.SetMatrix4x4(MeshUniforms.View, _camera.ViewMatrix);
 		Shader.SetMatrix4x4(MeshUniforms.Projection, _camera.Projection);
 
@@ -110,15 +109,15 @@ public class MainLayout : Layout, IMainLayout
 
 	public void Render()
 	{
-		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(6), new(512, 64), 0, Color.Red, "DDINFO", TextAlign.Middle);
-		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(4), new(512, 128), 0, new(255, 127, 0, 255), "TOOLS", TextAlign.Middle);
-		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(2), new(512, 176), 0, new(255, 191, 0, 255), _version, TextAlign.Middle);
-		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(1), new(512, 712), 0, Color.White, "Devil Daggers is created by Sorath", TextAlign.Middle);
-		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(1), new(512, 728), 0, Color.White, "DevilDaggers.info is created by Noah Stolk", TextAlign.Middle);
-		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, new(2), new(512, 752), 0, new(255, 0, 31, 255), "HTTPS://DEVILDAGGERS.INFO/", TextAlign.Middle);
+		Game.Self.MonoSpaceFontRenderer12.Schedule(new(6), new(512, 64), 0, Color.Red, "DDINFO", TextAlign.Middle);
+		Game.Self.MonoSpaceFontRenderer12.Schedule(new(4), new(512, 128), 0, new(255, 127, 0, 255), "TOOLS", TextAlign.Middle);
+		Game.Self.MonoSpaceFontRenderer12.Schedule(new(2), new(512, 176), 0, new(255, 191, 0, 255), _version, TextAlign.Middle);
+		Game.Self.MonoSpaceFontRenderer12.Schedule(new(1), new(512, 712), 0, Color.White, "Devil Daggers is created by Sorath", TextAlign.Middle);
+		Game.Self.MonoSpaceFontRenderer12.Schedule(new(1), new(512, 728), 0, Color.White, "DevilDaggers.info is created by Noah Stolk", TextAlign.Middle);
+		Game.Self.MonoSpaceFontRenderer12.Schedule(new(2), new(512, 752), 0, new(255, 0, 31, 255), "HTTPS://DEVILDAGGERS.INFO/", TextAlign.Middle);
 
-		RenderBatchCollector.RenderMonoSpaceText(FontSize.F12X12, new(1), new(768, 448), 100, Color.Black, "(not implemented)", TextAlign.Middle);
-		RenderBatchCollector.RenderMonoSpaceText(FontSize.F12X12, new(1), new(256, 448), 100, Color.Black, "(not implemented)", TextAlign.Middle);
+		Game.Self.MonoSpaceFontRenderer16.Schedule(new(1), new(768, 448), 100, Color.Black, "(not implemented)", TextAlign.Middle);
+		Game.Self.MonoSpaceFontRenderer16.Schedule(new(1), new(256, 448), 100, Color.Black, "(not implemented)", TextAlign.Middle);
 	}
 
 	private sealed class MeshObject

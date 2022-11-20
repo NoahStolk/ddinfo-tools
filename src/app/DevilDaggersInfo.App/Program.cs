@@ -1,5 +1,7 @@
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
+using Warp.NET.Content.Conversion;
+using Warp.NET.RenderImpl.Ui;
 
 namespace DevilDaggersInfo.App;
 
@@ -21,14 +23,36 @@ public static class Program
 	{
 		Graphics.OnChangeWindowSize = OnChangeWindowSize;
 
-#if DEBUG
-		const string? contentRootDirectory = @"..\..\..\..\..\app-ui\DevilDaggersInfo.App.Ui.Base\Content";
-#else
-		const string? contentRootDirectory = null;
-#endif
 		GameParameters gameParameters = new("DDINFO TOOLS", Constants.NativeWidth, Constants.NativeHeight, false);
-		_game = Bootstrapper.CreateGame<Game, WarpShaderUniformInitializer, WarpCharsets, WarpModels, WarpShaders, WarpSounds, WarpTextures>(gameParameters, contentRootDirectory, "ddinfo-tools");
+		Bootstrapper.CreateWindow(gameParameters);
+
+#if DEBUG
+		const string? ddInfoToolsContentRootDirectory = @"..\..\..\..\..\app-ui\DevilDaggersInfo.App.Ui.Base\Content";
+#else
+		const string? ddInfoToolsContentRootDirectory = null;
+#endif
+		DecompiledContentFile ddInfoToolsContent = Bootstrapper.GetDecompiledContent(ddInfoToolsContentRootDirectory, "ddinfo-tools");
+		DdInfoToolsBaseModels.Initialize(ddInfoToolsContent.Models);
+		DdInfoToolsBaseShaders.Initialize(ddInfoToolsContent.Shaders);
+		DdInfoToolsBaseTextures.Initialize(ddInfoToolsContent.Textures);
+
+		DdInfoToolsBaseShaderUniformInitializer.Initialize();
+
+#if DEBUG
+		const string? warpRenderImplUiContentRootDirectory = @"C:\Users\NOAH\source\repos\Warp.NET\src\lib\Warp.NET.RenderImpl.Ui\Content"; // TODO: Get files via NuGet package.
+#else
+		const string? warpRenderImplUiContentRootDirectory = null;
+#endif
+		DecompiledContentFile warpRenderImplUiContent = Bootstrapper.GetDecompiledContent(warpRenderImplUiContentRootDirectory, "warp-render-impl-ui");
+		WarpRenderImplUiCharsets.Initialize(warpRenderImplUiContent.Charsets);
+		WarpRenderImplUiShaders.Initialize(warpRenderImplUiContent.Shaders);
+		WarpRenderImplUiTextures.Initialize(warpRenderImplUiContent.Textures);
+
+		WarpRenderImplUiShaderUniformInitializer.Initialize();
+
+		_game = Bootstrapper.CreateGame<Game>(gameParameters);
 		Root.Game = _game;
+		RenderImplUiBase.Game = _game;
 
 		Graphics.OnChangeWindowIsActive = OnChangeWindowIsActive;
 
