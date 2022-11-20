@@ -14,10 +14,10 @@ public static class Program
 	{
 		GameParameters gameParameters = new("DDINFO TOOLS", Constants.NativeWidth, Constants.NativeHeight, false);
 
-		OnChangeWindowSize = (w, h) =>
+		Graphics.OnChangeWindowSize = (w, h) =>
 		{
 			Viewport3d = new(0, 0, w, h);
-			ViewportState.OnChangeWindowSize(w, h, gameParameters);
+			OnChangeWindowSize(w, h);
 		};
 		Bootstrapper.CreateWindow(gameParameters);
 
@@ -58,6 +58,24 @@ public static class Program
 		{
 			if (game.IsPaused)
 				game.TogglePause();
+		}
+
+		static void OnChangeWindowSize(int width, int height)
+		{
+			Viewport3d = new(0, 0, width, height);
+
+			const float nativeAspectRatio = Constants.NativeWidth / (float)Constants.NativeHeight;
+			int minDimension = (int)Math.Min(height, width / nativeAspectRatio);
+			int clampedHeight = Math.Max(Constants.NativeHeight, minDimension / Constants.NativeHeight * Constants.NativeHeight);
+
+			const float originalAspectRatio = Constants.NativeWidth / (float)Constants.NativeHeight;
+			float adjustedWidth = clampedHeight * originalAspectRatio; // Adjusted for aspect ratio
+
+			int leftOffset = (int)((width - adjustedWidth) / 2);
+			int bottomOffset = (height - clampedHeight) / 2;
+			ViewportState.Offset = new(leftOffset, bottomOffset);
+			ViewportState.Viewport = new(leftOffset, bottomOffset, (int)adjustedWidth, clampedHeight); // Fix viewport to maintain aspect ratio
+			ViewportState.Scale = new(ViewportState.Viewport.Width / (float)Constants.NativeWidth, ViewportState.Viewport.Height / (float)Constants.NativeHeight);
 		}
 	}
 }
