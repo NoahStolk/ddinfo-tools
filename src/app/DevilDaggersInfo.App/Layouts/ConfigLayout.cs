@@ -1,12 +1,10 @@
 using DevilDaggersInfo.App.Ui.Base;
-using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
-using DevilDaggersInfo.App.Ui.Base.Enums;
 using DevilDaggersInfo.App.Ui.Base.Exceptions;
-using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.Base.States;
+using Warp.NET.RenderImpl.Ui.Components;
 using Warp.NET.Text;
 using Warp.NET.Ui;
 
@@ -60,9 +58,9 @@ public class ConfigLayout : Layout, IConfigLayout
 
 	public void Render()
 	{
-		RenderBatchCollector.RenderRectangleTopLeft(new(WindowWidth, WindowHeight), default, -100, Color.Gray(0.1f));
+		Game.Self.RectangleRenderer.Schedule(new(WindowWidth, WindowHeight), default, -100, Color.Gray(0.1f));
 
-		RenderBatchCollector.RenderMonoSpaceText(FontSize.F12X12, Vector2i<int>.One, new(32, 32), 0, Color.White, "SETTINGS", TextAlign.Left);
+		Game.Self.MonoSpaceFontRenderer16.Schedule(Vector2i<int>.One, new(32, 32), 0, Color.White, "SETTINGS", TextAlign.Left);
 
 #if LINUX
 		const string examplePath = "/home/noah/.local/share/Steam/steamapps/common/devildaggers/";
@@ -72,7 +70,8 @@ public class ConfigLayout : Layout, IConfigLayout
 		const string examplePath = "(no example for this operating system)";
 #endif
 
-// 		const string text = """
+		// TODO: Re-enable when this doesn't break hot reload in Rider.
+// 		const string text = $"""
 // 			Please configure your Devil Daggers installation directory.
 //
 // 			This is the directory containing the executable.
@@ -80,7 +79,8 @@ public class ConfigLayout : Layout, IConfigLayout
 // 			Example: {examplePath}
 // 			""";
 		const string text = $"Please configure your Devil Daggers installation directory.\n\nThis is the directory containing the executable.\n\nExample: {examplePath}";
-		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, Vector2i<int>.One, new(32, 64), 0, Color.White, text, TextAlign.Left);
-		RenderBatchCollector.RenderMonoSpaceText(FontSize.F8X8, Vector2i<int>.One, new(32, 160), 0, Color.Red, _error, TextAlign.Left);
+		Game.Self.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(32, 64), 0, Color.White, text, TextAlign.Left);
+		if (!string.IsNullOrWhiteSpace(_error))
+			Game.Self.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(32, 160), 0, Color.Red, _error, TextAlign.Left);
 	}
 }
