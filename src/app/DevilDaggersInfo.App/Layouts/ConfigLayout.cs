@@ -16,13 +16,12 @@ public class ConfigLayout : Layout, IConfigLayout
 	private string? _error;
 
 	public ConfigLayout()
-		: base(Constants.Full)
 	{
-		_textInput = new(Rectangle.At(32, 128, 960, 16), false, null, null, null, GlobalStyles.TextInput);
+		_textInput = new(new PixelBounds(32, 128, 960, 16), false, null, null, null, GlobalStyles.TextInput);
 		_textInput.KeyboardInput.SetText(UserSettings.DevilDaggersInstallationDirectory);
 		NestingContext.Add(_textInput);
 
-		NestingContext.Add(new TextButton(Rectangle.At(32, 320, 256, 32), Check, GlobalStyles.DefaultButtonStyle, GlobalStyles.ConfigButton, "Save and continue"));
+		NestingContext.Add(new TextButton(new PixelBounds(32, 320, 256, 32), Check, GlobalStyles.DefaultButtonStyle, GlobalStyles.ConfigButton, "Save and continue"));
 	}
 
 	private void Check()
@@ -58,7 +57,7 @@ public class ConfigLayout : Layout, IConfigLayout
 
 	public void Render()
 	{
-		Game.Self.RectangleRenderer.Schedule(new(WindowWidth, WindowHeight), default, -100, Color.Gray(0.1f));
+		Game.Self.RectangleRenderer.Schedule(new(CurrentWindowState.Width, CurrentWindowState.Height), default, -100, Color.Gray(0.1f));
 
 		Game.Self.MonoSpaceFontRenderer16.Schedule(Vector2i<int>.One, new(32, 32), 0, Color.White, "SETTINGS", TextAlign.Left);
 

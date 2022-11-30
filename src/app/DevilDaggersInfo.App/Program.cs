@@ -12,14 +12,13 @@ public static class Program
 
 	public static void Main()
 	{
-		GameParameters gameParameters = new("DDINFO TOOLS", Constants.NativeWidth, Constants.NativeHeight, false);
-
 		Graphics.OnChangeWindowSize = (w, h) =>
 		{
 			Viewport3d = new(0, 0, w, h);
 			OnChangeWindowSize(w, h);
 		};
-		Bootstrapper.CreateWindow(gameParameters);
+		CreateWindow(new("DDINFO TOOLS", 1024, 768, false));
+		SetWindowSizeLimits(1024, 768, -1, -1);
 
 #if DEBUG
 		const string? ddInfoToolsContentRootDirectory = @"..\..\..\..\..\app-ui\DevilDaggersInfo.App.Ui.Base\Content";
@@ -45,7 +44,7 @@ public static class Program
 
 		WarpRenderImplUiShaderUniformInitializer.Initialize();
 
-		Game game = Bootstrapper.CreateGame<Game>(gameParameters);
+		Game game = Bootstrapper.CreateGame<Game>();
 		Root.Game = game;
 		RenderImplUiBase.Game = game;
 

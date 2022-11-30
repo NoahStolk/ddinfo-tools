@@ -31,9 +31,8 @@ public class MainLayout : Layout, IMainLayout
 	private readonly List<MeshObject> _tiles = new();
 
 	public MainLayout()
-		: base(Constants.Full)
 	{
-		_checkForUpdatesButton = new(Rectangle.At(416, 192, 192, 32), CheckForUpdates, GlobalStyles.DefaultButtonStyle, GlobalStyles.ConfigButton, "Check for updates");
+		_checkForUpdatesButton = new(new PixelBounds(416, 192, 192, 32), CheckForUpdates, GlobalStyles.DefaultButtonStyle, GlobalStyles.ConfigButton, "Check for updates");
 		NestingContext.Add(_checkForUpdatesButton);
 
 		Color ddse = Color.FromHsv(0, 1, 0.8f);
@@ -51,12 +50,12 @@ public class MainLayout : Layout, IMainLayout
 
 		TextButtonStyle textButtonStyle = new(Color.White, TextAlign.Middle, FontSize.H16);
 
-		NestingContext.Add(new TextButton(Rectangle.At(128, 192, 256, 96), LayoutManager.ToSurvivalEditorMainLayout, GetStyle(ddse), textButtonStyle, "Survival Editor"));
-		NestingContext.Add(new TextButton(Rectangle.At(640, 192, 256, 96), LayoutManager.ToCustomLeaderboardsRecorderMainLayout, GetStyle(ddcl), textButtonStyle, "Custom Leaderboards"));
-		NestingContext.Add(new TextButton(Rectangle.At(128, 384, 256, 96), () => { }, GetStyle(ddae), textButtonStyle, "Asset Editor"));
-		NestingContext.Add(new TextButton(Rectangle.At(640, 384, 256, 96), () => { }, GetStyle(ddre), textButtonStyle, "Replay Editor"));
-		NestingContext.Add(new TextButton(Rectangle.At(128, 576, 256, 96), LayoutManager.ToConfigLayout, GetStyle(settings), textButtonStyle, "Configuration"));
-		NestingContext.Add(new TextButton(Rectangle.At(640, 576, 256, 96), () => Environment.Exit(0), GetStyle(exit), textButtonStyle, "Exit"));
+		NestingContext.Add(new TextButton(new PixelBounds(128, 192, 256, 96), LayoutManager.ToSurvivalEditorMainLayout, GetStyle(ddse), textButtonStyle, "Survival Editor"));
+		NestingContext.Add(new TextButton(new PixelBounds(640, 192, 256, 96), LayoutManager.ToCustomLeaderboardsRecorderMainLayout, GetStyle(ddcl), textButtonStyle, "Custom Leaderboards"));
+		NestingContext.Add(new TextButton(new PixelBounds(128, 384, 256, 96), () => { }, GetStyle(ddae), textButtonStyle, "Asset Editor"));
+		NestingContext.Add(new TextButton(new PixelBounds(640, 384, 256, 96), () => { }, GetStyle(ddre), textButtonStyle, "Replay Editor"));
+		NestingContext.Add(new TextButton(new PixelBounds(128, 576, 256, 96), LayoutManager.ToConfigLayout, GetStyle(settings), textButtonStyle, "Configuration"));
+		NestingContext.Add(new TextButton(new PixelBounds(640, 576, 256, 96), () => Environment.Exit(0), GetStyle(exit), textButtonStyle, "Exit"));
 	}
 
 	public void InitializeScene()
@@ -223,7 +222,7 @@ public class MainLayout : Layout, IMainLayout
 			Vector3 lookDirection = Vector3.Transform(Vector3.UnitZ, _rotationState.Render);
 			ViewMatrix = Matrix4x4.CreateLookAt(_positionState.Render, _positionState.Render + lookDirection, upDirection);
 
-			float aspectRatio = WindowWidth / (float)WindowHeight;
+			float aspectRatio = CurrentWindowState.Width / (float)CurrentWindowState.Height;
 
 			const int fieldOfView = 2;
 			const float nearPlaneDistance = 0.05f;

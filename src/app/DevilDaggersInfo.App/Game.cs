@@ -37,12 +37,11 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 
 	private IExtendedLayout? _activeLayout;
 
-	private Game(GameParameters gameParameters)
-		: base(gameParameters)
+	private Game()
 	{
 		AppDomain.CurrentDomain.UnhandledException += (_, args) => _log.Fatal(args.ExceptionObject.ToString());
 
-		_uiProjectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, InitialWindowWidth, InitialWindowHeight, 0, -Constants.DepthMax, Constants.DepthMax);
+		_uiProjectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, InitialWindowState.Width, InitialWindowState.Height, 0, -Constants.DepthMax, Constants.DepthMax);
 
 		Gl.Enable(EnableCap.DepthTest);
 		Gl.Enable(EnableCap.Blend);
