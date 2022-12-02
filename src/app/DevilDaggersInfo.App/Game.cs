@@ -13,6 +13,7 @@ using Silk.NET.OpenGL;
 using Warp.NET.Debugging;
 using Warp.NET.Extensions;
 using Warp.NET.RenderImpl.Ui;
+using Warp.NET.RenderImpl.Ui.Rendering;
 using Warp.NET.Text;
 using Warp.NET.Ui;
 using Constants = DevilDaggersInfo.App.Ui.Base.Constants;
