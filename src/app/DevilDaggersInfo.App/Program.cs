@@ -2,7 +2,6 @@ using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using Warp.NET.Content.Conversion;
 using Warp.NET.RenderImpl.Ui;
-using Warp.NET.RenderImpl.Ui.Rendering;
 
 namespace DevilDaggersInfo.App;
 
