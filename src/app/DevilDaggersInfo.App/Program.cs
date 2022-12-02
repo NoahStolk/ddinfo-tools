@@ -17,8 +17,8 @@ public static class Program
 			Viewport3d = new(0, 0, w, h);
 			OnChangeWindowSize(w, h);
 		};
-		CreateWindow(new("DDINFO TOOLS", 1024, 768, false));
-		SetWindowSizeLimits(1024, 768, -1, -1);
+		CreateWindow(new("DDINFO TOOLS", Constants.NativeWidth, Constants.NativeHeight, false));
+		SetWindowSizeLimits(Constants.NativeWidth, Constants.NativeHeight, -1, -1);
 
 #if DEBUG
 		const string? ddInfoToolsContentRootDirectory = @"..\..\..\..\..\app-ui\DevilDaggersInfo.App.Ui.Base\Content";
@@ -48,12 +48,12 @@ public static class Program
 		Root.Game = game;
 		RenderImplUiBase.Game = game;
 
-		Graphics.OnChangeWindowIsActive = OnChangeWindowIsActive;
+		Graphics.OnChangeWindowIsActive = _ => OnChangeWindowIsActive();
 
 		game.Initialize();
 		game.Run();
 
-		void OnChangeWindowIsActive(bool isActive)
+		void OnChangeWindowIsActive()
 		{
 			if (game.IsPaused)
 				game.TogglePause();
