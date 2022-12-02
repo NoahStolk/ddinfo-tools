@@ -201,12 +201,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		..\.github\workflows\ci.yml = ..\.github\workflows\ci.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET", "..\..\Warp.NET\src\lib\Warp.NET\Warp.NET.csproj", "{A3756878-9615-452E-BE3C-FC21194E6B00}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.RenderImpl.Ui", "..\..\Warp.NET\src\lib\Warp.NET.RenderImpl.Ui\Warp.NET.RenderImpl.Ui.csproj", "{490F7B0F-DAAB-4769-8A02-A748C67954BD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.SourceGen", "..\..\Warp.NET\src\lib\Warp.NET.SourceGen\Warp.NET.SourceGen.csproj", "{5B57AFEA-3D52-42BE-ACFA-A48349F78814}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -441,18 +435,6 @@ Global
 		{32271EED-3D11-4812-8D8C-307852D3A209}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32271EED-3D11-4812-8D8C-307852D3A209}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32271EED-3D11-4812-8D8C-307852D3A209}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A3756878-9615-452E-BE3C-FC21194E6B00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3756878-9615-452E-BE3C-FC21194E6B00}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A3756878-9615-452E-BE3C-FC21194E6B00}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A3756878-9615-452E-BE3C-FC21194E6B00}.Release|Any CPU.Build.0 = Release|Any CPU
-		{490F7B0F-DAAB-4769-8A02-A748C67954BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{490F7B0F-DAAB-4769-8A02-A748C67954BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{490F7B0F-DAAB-4769-8A02-A748C67954BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{490F7B0F-DAAB-4769-8A02-A748C67954BD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5B57AFEA-3D52-42BE-ACFA-A48349F78814}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5B57AFEA-3D52-42BE-ACFA-A48349F78814}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5B57AFEA-3D52-42BE-ACFA-A48349F78814}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5B57AFEA-3D52-42BE-ACFA-A48349F78814}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
