@@ -79,7 +79,7 @@ public class MainLayout : Layout, IMainLayout
 	private void CheckForUpdates()
 	{
 		_checkForUpdatesButton.Text = "Checking...";
-		AsyncHandler.Run(ShowUpdateAvailable, () => FetchLatestDistribution.HandleAsync(Root.Game.AppVersion, Game.BuildType));
+		AsyncHandler.Run(ShowUpdateAvailable, () => FetchLatestDistribution.HandleAsync(Root.Game.AppVersion, Root.Game.BuildType));
 
 		void ShowUpdateAvailable(AppVersion? newAppVersion)
 		{

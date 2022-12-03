@@ -1,3 +1,6 @@
+using DevilDaggersInfo.Api.Ddcl.ProcessMemory;
+using DevilDaggersInfo.App.Core.GameMemory;
+using DevilDaggersInfo.App.Core.NativeInterface.Services.Windows;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.SurvivalEditor;
@@ -23,12 +26,6 @@ namespace DevilDaggersInfo.App;
 [GenerateGame]
 public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 {
-#if WINDOWS
-	public const ToolBuildType BuildType = ToolBuildType.WindowsWarp;
-#elif LINUX
-	public const ToolBuildType BuildType = ToolBuildType.LinuxWarp;
-#endif
-
 	private static readonly Logger _log = new LoggerConfiguration()
 		.WriteTo.File("ddinfo.log", rollingInterval: RollingInterval.Infinite)
 		.CreateLogger();
@@ -52,7 +49,21 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 			throw new InvalidOperationException("The current version number is invalid.");
 
 		AppVersion = appVersion;
+
+#if WINDOWS
+		GameMemoryService = new(new WindowsMemoryService());
+#elif LINUX
+		// TODO: LinuxMemoryService.
+#endif
 	}
+
+#if WINDOWS
+	public ToolBuildType BuildType => ToolBuildType.WindowsWarp;
+	public SupportedOperatingSystem SupportedOperatingSystem => SupportedOperatingSystem.Windows;
+#elif LINUX
+	public ToolBuildType BuildType => ToolBuildType.LinuxWarp;
+	public SupportedOperatingSystem SupportedOperatingSystem => SupportedOperatingSystem.Linux;
+#endif
 
 	public AppVersion AppVersion { get; }
 
@@ -78,6 +89,7 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 	public IFileDialogLayout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
 	public ISurvivalEditor3dLayout SurvivalEditor3dLayout { get; } = new SurvivalEditor3dLayout();
 	public IExtendedLayout CustomLeaderboardsRecorderMainLayout { get; } = new CustomLeaderboardsRecorderMainLayout();
+	public GameMemoryService GameMemoryService { get; }
 
 	#endregion Dependencies
 
@@ -93,9 +105,6 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 	protected override void Update()
 	{
 		base.Update();
-
-		if (!WindowIsActive && !IsPaused)
-			TogglePause();
 
 		TooltipText = null;
 

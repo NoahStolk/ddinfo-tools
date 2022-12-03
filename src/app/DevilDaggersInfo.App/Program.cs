@@ -48,16 +48,8 @@ public static class Program
 		Root.Game = game;
 		RenderImplUiBase.Game = game;
 
-		Graphics.OnChangeWindowIsActive = _ => OnChangeWindowIsActive();
-
 		game.Initialize();
 		game.Run();
-
-		void OnChangeWindowIsActive()
-		{
-			if (game.IsPaused)
-				game.TogglePause();
-		}
 
 		static void OnChangeWindowSize(int width, int height)
 		{
