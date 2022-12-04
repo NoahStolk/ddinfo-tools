@@ -1,6 +1,12 @@
 using DevilDaggersInfo.Api.Ddcl.ProcessMemory;
 using DevilDaggersInfo.App.Core.GameMemory;
+
+#if LINUX
+using DevilDaggersInfo.App.Core.NativeInterface.Services.Linux;
+#elif WINDOWS
 using DevilDaggersInfo.App.Core.NativeInterface.Services.Windows;
+#endif
+
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.CustomLeaderboardsRecorder;
@@ -54,7 +60,7 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 #if WINDOWS
 		GameMemoryService = new(new WindowsMemoryService());
 #elif LINUX
-		// TODO: LinuxMemoryService.
+		GameMemoryService = new(new LinuxMemoryService());
 #endif
 	}
 
