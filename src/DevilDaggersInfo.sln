@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_root", "_root", "{9AE54BA2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Api.Admin", "api\DevilDaggersInfo.Api.Admin\DevilDaggersInfo.Api.Admin.csproj", "{EC97F9DE-B1B3-412D-A3EE-ED5C050BFE4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Api.App", "api\DevilDaggersInfo.Api.App\DevilDaggersInfo.Api.App.csproj", "{55BB7DBD-BFD0-4489-81C0-E909BBBEAF71}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Api.Clubber", "api\DevilDaggersInfo.Api.Clubber\DevilDaggersInfo.Api.Clubber.csproj", "{632A2501-8B00-4F03-AD6F-6A57DA030E6D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Api.Dd", "api\DevilDaggersInfo.Api.Dd\DevilDaggersInfo.Api.Dd.csproj", "{486AB9D9-E175-4258-8D4D-11D70C7AA6BC}"
@@ -435,6 +437,10 @@ Global
 		{32271EED-3D11-4812-8D8C-307852D3A209}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32271EED-3D11-4812-8D8C-307852D3A209}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32271EED-3D11-4812-8D8C-307852D3A209}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55BB7DBD-BFD0-4489-81C0-E909BBBEAF71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55BB7DBD-BFD0-4489-81C0-E909BBBEAF71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55BB7DBD-BFD0-4489-81C0-E909BBBEAF71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55BB7DBD-BFD0-4489-81C0-E909BBBEAF71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -515,6 +521,7 @@ Global
 		{67A7C653-F20A-4688-86EF-9D09DAD12517} = {8B991433-4D58-4930-BE3A-4A33CD2BCB47}
 		{152B0F2E-D508-4E00-8988-021CA980C3E0} = {AC2BC81C-DDCA-4412-82D3-E8D9BC10587D}
 		{32271EED-3D11-4812-8D8C-307852D3A209} = {8B991433-4D58-4930-BE3A-4A33CD2BCB47}
+		{55BB7DBD-BFD0-4489-81C0-E909BBBEAF71} = {5C5B0BBB-04F2-467A-B708-C013543C0C31}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E27EC676-81BF-4099-BFC9-20E860CE83A5}
