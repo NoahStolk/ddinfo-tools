@@ -1,4 +1,4 @@
-using DevilDaggersInfo.Api.Ddcl.ProcessMemory;
+using DevilDaggersInfo.Api.App.ProcessMemory;
 using DevilDaggersInfo.App.Core.GameMemory;
 
 #if LINUX
