@@ -96,6 +96,7 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 	public IFileDialogLayout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
 	public ISurvivalEditor3dLayout SurvivalEditor3dLayout { get; } = new SurvivalEditor3dLayout();
 	public ICustomLeaderboardsRecorderMainLayout CustomLeaderboardsRecorderMainLayout { get; } = new CustomLeaderboardsRecorderMainLayout();
+	public IReplayViewer3dLayout CustomLeaderboardsRecorderReplayViewer3dLayout { get; } = new ReplayViewer3dLayout();
 	public GameMemoryService GameMemoryService { get; }
 
 	#endregion Dependencies
