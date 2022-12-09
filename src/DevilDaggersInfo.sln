@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Ui.Bas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder", "app-ui\DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder\DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.csproj", "{32271EED-3D11-4812-8D8C-307852D3A209}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Ui.Scene", "app-ui\DevilDaggersInfo.App.Ui.Scene\DevilDaggersInfo.App.Ui.Scene.csproj", "{2FFBA8A2-7A98-4E72-816E-273CCC22F030}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Ui.SurvivalEditor", "app-ui\DevilDaggersInfo.App.Ui.SurvivalEditor\DevilDaggersInfo.App.Ui.SurvivalEditor.csproj", "{68460CC6-C011-4364-9006-281F6F5C54A0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Cmd.CreateReplay", "cmd\DevilDaggersInfo.Cmd.CreateReplay\DevilDaggersInfo.Cmd.CreateReplay.csproj", "{6BEED33C-F8F8-4884-85A3-FDD48C7C63E8}"
@@ -441,6 +443,10 @@ Global
 		{55BB7DBD-BFD0-4489-81C0-E909BBBEAF71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55BB7DBD-BFD0-4489-81C0-E909BBBEAF71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55BB7DBD-BFD0-4489-81C0-E909BBBEAF71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FFBA8A2-7A98-4E72-816E-273CCC22F030}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FFBA8A2-7A98-4E72-816E-273CCC22F030}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FFBA8A2-7A98-4E72-816E-273CCC22F030}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FFBA8A2-7A98-4E72-816E-273CCC22F030}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -522,6 +528,7 @@ Global
 		{152B0F2E-D508-4E00-8988-021CA980C3E0} = {AC2BC81C-DDCA-4412-82D3-E8D9BC10587D}
 		{32271EED-3D11-4812-8D8C-307852D3A209} = {8B991433-4D58-4930-BE3A-4A33CD2BCB47}
 		{55BB7DBD-BFD0-4489-81C0-E909BBBEAF71} = {5C5B0BBB-04F2-467A-B708-C013543C0C31}
+		{2FFBA8A2-7A98-4E72-816E-273CCC22F030} = {8B991433-4D58-4930-BE3A-4A33CD2BCB47}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E27EC676-81BF-4099-BFC9-20E860CE83A5}
