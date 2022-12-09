@@ -2,6 +2,7 @@ using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.Exceptions;
+using DevilDaggersInfo.App.Ui.Base.GameObjects;
 using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.Base.States;
 using Warp.NET.RenderImpl.Ui.Components;
@@ -45,7 +46,7 @@ public class ConfigLayout : Layout, IConfigLayout
 		LayoutManager.ToMainLayout();
 		Root.Game.MainLayout.InitializeScene();
 		Root.Game.SurvivalEditor3dLayout.Initialize();
-		Root.Game.CustomLeaderboardsRecorderReplayViewer3dLayout.Initialize();
+		Tile.Initialize();
 	}
 
 	public void Update()
