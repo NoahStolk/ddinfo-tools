@@ -61,23 +61,23 @@ public class ConfigLayout : Layout, IConfigLayout
 
 		Game.Self.MonoSpaceFontRenderer16.Schedule(Vector2i<int>.One, new(32, 32), 0, Color.White, "SETTINGS", TextAlign.Left);
 
+ #pragma warning disable S1075
 #if LINUX
 		const string examplePath = "/home/noah/.local/share/Steam/steamapps/common/devildaggers/";
 #elif WINDOWS
-		const string examplePath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\devildaggers";
+		const string examplePath = """C:\Program Files (x86)\Steam\steamapps\common\devildaggers""";
 #else
 		const string examplePath = "(no example for this operating system)";
 #endif
+ #pragma warning restore S1075
 
-		// TODO: Re-enable when this doesn't break hot reload in Rider.
-// 		const string text = $"""
-// 			Please configure your Devil Daggers installation directory.
-//
-// 			This is the directory containing the executable.
-//
-// 			Example: {examplePath}
-// 			""";
-		const string text = $"Please configure your Devil Daggers installation directory.\n\nThis is the directory containing the executable.\n\nExample: {examplePath}";
+		const string text = $"""
+			Please configure your Devil Daggers installation directory.
+
+			This is the directory containing the executable.
+
+			Example: {examplePath}
+			""";
 		Game.Self.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(32, 64), 0, Color.White, text, TextAlign.Left);
 		if (!string.IsNullOrWhiteSpace(_error))
 			Game.Self.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(32, 160), 0, Color.Red, _error, TextAlign.Left);
