@@ -45,7 +45,6 @@ public class ConfigLayout : Layout, IConfigLayout
 
 		LayoutManager.ToMainLayout();
 		Root.Game.MainLayout.InitializeScene();
-		Root.Game.SurvivalEditor3dLayout.Initialize();
 		Tile.Initialize();
 	}
 
