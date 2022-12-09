@@ -108,15 +108,15 @@ public class MainLayout : Layout, IMainLayout
 
 	public void Render()
 	{
-		Game.Self.MonoSpaceFontRenderer12.Schedule(new(6), new(512, 64), 0, Color.Red, "DDINFO", TextAlign.Middle);
-		Game.Self.MonoSpaceFontRenderer12.Schedule(new(4), new(512, 128), 0, new(255, 127, 0, 255), "TOOLS", TextAlign.Middle);
-		Game.Self.MonoSpaceFontRenderer12.Schedule(new(2), new(512, 176), 0, new(255, 191, 0, 255), _version, TextAlign.Middle);
-		Game.Self.MonoSpaceFontRenderer12.Schedule(new(1), new(512, 712), 0, Color.White, "Devil Daggers is created by Sorath", TextAlign.Middle);
-		Game.Self.MonoSpaceFontRenderer12.Schedule(new(1), new(512, 728), 0, Color.White, "DevilDaggers.info is created by Noah Stolk", TextAlign.Middle);
-		Game.Self.MonoSpaceFontRenderer12.Schedule(new(2), new(512, 752), 0, new(255, 0, 31, 255), "HTTPS://DEVILDAGGERS.INFO/", TextAlign.Middle);
+		Game.Self.MonoSpaceFontRenderer64.Schedule(Vector2i<int>.One, new(512, 64), 0, Color.Red, "DDINFO", TextAlign.Middle);
+		Game.Self.MonoSpaceFontRenderer32.Schedule(Vector2i<int>.One, new(512, 128), 0, new(255, 127, 0, 255), "TOOLS", TextAlign.Middle);
+		Game.Self.MonoSpaceFontRenderer24.Schedule(Vector2i<int>.One, new(512, 176), 0, new(255, 191, 0, 255), _version, TextAlign.Middle);
+		Game.Self.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(512, 712), 0, Color.White, "Devil Daggers is created by Sorath", TextAlign.Middle);
+		Game.Self.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(512, 728), 0, Color.White, "DevilDaggers.info is created by Noah Stolk", TextAlign.Middle);
+		Game.Self.MonoSpaceFontRenderer24.Schedule(Vector2i<int>.One, new(512, 752), 0, new(255, 0, 31, 255), "HTTPS://DEVILDAGGERS.INFO/", TextAlign.Middle);
 
-		Game.Self.MonoSpaceFontRenderer16.Schedule(new(1), new(768, 448), 100, Color.Black, "(not implemented)", TextAlign.Middle);
-		Game.Self.MonoSpaceFontRenderer16.Schedule(new(1), new(256, 448), 100, Color.Black, "(not implemented)", TextAlign.Middle);
+		Game.Self.MonoSpaceFontRenderer16.Schedule(Vector2i<int>.One, new(768, 448), 100, Color.Black, "(not implemented)", TextAlign.Middle);
+		Game.Self.MonoSpaceFontRenderer16.Schedule(Vector2i<int>.One, new(256, 448), 100, Color.Black, "(not implemented)", TextAlign.Middle);
 	}
 
 	private sealed class MeshObject
