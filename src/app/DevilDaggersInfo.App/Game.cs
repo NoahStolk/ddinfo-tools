@@ -47,6 +47,8 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 
 		_uiProjectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, InitialWindowState.Width, InitialWindowState.Height, 0, -Constants.DepthMax, Constants.DepthMax);
 
+		Audio.Initialize();
+
 		Gl.Enable(EnableCap.DepthTest);
 		Gl.Enable(EnableCap.Blend);
 		Gl.Enable(EnableCap.CullFace);
