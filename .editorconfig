@@ -190,6 +190,7 @@ dotnet_diagnostic.CS1591.severity                                        = none
 # SA1200: Using directive should appear within a namespace declaration.
 # SA1202: Elements should be ordered by access.
 # SA1204: Static members should appear before non-static members.
+# SA1206: The 'required' modifier should appear before 'public'. (C# 11)
 # SA1208: Using directive for 'System' should appear first.
 # SA1214: Readonly fields should appear before non-readonly fields.
 # SA1303: Const field names should begin with upper-case letter.
@@ -218,6 +219,7 @@ dotnet_diagnostic.SA1124.severity                                        = none
 dotnet_diagnostic.SA1200.severity                                        = none
 dotnet_diagnostic.SA1202.severity                                        = none
 dotnet_diagnostic.SA1204.severity                                        = none
+dotnet_diagnostic.SA1206.severity                                        = none
 dotnet_diagnostic.SA1208.severity                                        = none
 dotnet_diagnostic.SA1214.severity                                        = none
 dotnet_diagnostic.SA1303.severity                                        = none
