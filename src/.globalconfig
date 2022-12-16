@@ -162,6 +162,9 @@ dotnet_diagnostic.NX0001.severity                                        = error
 # Null-forgiving operator without justification
 dotnet_diagnostic.NX0003.severity                                        = error
 
+# Found markup element with unexpected name. If this is intended to be a component, add a @using directive for its namespace.
+dotnet_diagnostic.RZ10012.severity                                       = error
+
 # Add a way to break out of this method/property's recursion.
 dotnet_diagnostic.S2190.severity                                         = error
 
