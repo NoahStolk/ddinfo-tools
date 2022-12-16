@@ -194,7 +194,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "setup", "setup", "{69AECBCE-923C-4764-87B5-CCA2F92181BC}"
 	ProjectSection(SolutionItems) = preProject
 		..\docs\setup\generating-database-migration-scripts.md = ..\docs\setup\generating-database-migration-scripts.md
-		..\docs\setup\running-apps-locally.md = ..\docs\setup\running-apps-locally.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{A12222B8-2483-46CB-83DE-443E9F32B2EC}"
