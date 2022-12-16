@@ -1,3 +1,5 @@
+is_global = true
+
 # Organize usings
 dotnet_sort_system_directives_first                                      = false
 
