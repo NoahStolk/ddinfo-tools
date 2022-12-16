@@ -24,8 +24,8 @@
 	<ItemGroup Label="EntityFrameworkCore">
 		<PackageVersion Include="Microsoft.EntityFrameworkCore" Version="7.0.1" />
 		<PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.1" />
-		<PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.0" />
-		<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0" />
+		<PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.1" />
+		<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.1" />
 	</ItemGroup>
 
 	<ItemGroup Label="Image processing">
@@ -48,7 +48,7 @@
 	</ItemGroup>
 
 	<ItemGroup Label="NSwag">
-		<PackageVersion Include="NSwag.AspNetCore" Version="13.18.0" />
+		<PackageVersion Include="NSwag.AspNetCore" Version="13.18.2" />
 	</ItemGroup>
 
 	<ItemGroup Label="Pomelo">
@@ -78,7 +78,7 @@
 	<ItemGroup Label="Tests">
 		<PackageVersion Include="coverlet.collector" Version="3.2.0" />
 		<PackageVersion Include="JetBrains.Annotations" Version="2022.3.1" />
-		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
+		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
 		<PackageVersion Include="MockQueryable.Moq" Version="7.0.0" />
 		<PackageVersion Include="Moq" Version="4.18.3" />
 		<PackageVersion Include="MSTest.TestAdapter" Version="2.2.10" />
@@ -95,7 +95,7 @@
 		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.1" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="7.0.1" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.1" />
-		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.0" />
+		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.1" />
 		<PackageVersion Include="Microsoft.JSInterop.WebAssembly" Version="7.0.1" />
 	</ItemGroup>
 
