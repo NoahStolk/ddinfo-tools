@@ -186,6 +186,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7B0D34B1-407
 		nuget.config = nuget.config
 		DevilDaggersInfo.sln = DevilDaggersInfo.sln
 		Directory.Packages.props = Directory.Packages.props
+		.globalconfig = .globalconfig
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{D642FA62-0598-4A7C-94C2-4C1BE2C7B85C}"
