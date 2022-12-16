@@ -154,11 +154,35 @@ csharp_space_between_parentheses                                         = false
 csharp_preserve_single_line_blocks                                       = true
 csharp_preserve_single_line_statements                                   = true
 
+# Severity: error
+
+# Null-forgiving operator without justification
+dotnet_diagnostic.NX0001.severity                                        = error
+
+# Null-forgiving operator without justification
+dotnet_diagnostic.NX0003.severity                                        = error
+
+# Add a way to break out of this method/property's recursion.
+dotnet_diagnostic.S2190.severity                                         = error
+
+# Severity: suggestion
+
 # CS0618: Member is obsolete.
 dotnet_diagnostic.CS0618.severity                                        = suggestion
 
+# S1135: Complete the task associated to this 'TODO' comment.
+dotnet_diagnostic.S1135.severity                                         = suggestion
+
+# Severity: none
+
 # CS1591: Missing XML comment for publicly visible type or member.
 dotnet_diagnostic.CS1591.severity                                        = none
+
+# RCS1090: Call 'ConfigureAwait(false)'.
+dotnet_diagnostic.RCS1090.severity                                       = none
+
+# RCS1123: Add parentheses when necessary.
+dotnet_diagnostic.RCS1123.severity                                       = none
 
 # SA1000: The keyword 'new' should be followed by a space. (C# 9)
 dotnet_diagnostic.SA1000.severity                                        = none
@@ -259,9 +283,6 @@ dotnet_diagnostic.S112.severity                                          = none
 # S1121: Extract the assignment from this expression. (C# 9)
 dotnet_diagnostic.S1121.severity                                         = none
 
-# S1135: Complete the task associated to this 'TODO' comment.
-dotnet_diagnostic.S1135.severity                                         = suggestion
-
 # S1144: Unused private types or members should be removed. (C# 9)
 dotnet_diagnostic.S1144.severity                                         = none
 
@@ -282,9 +303,3 @@ dotnet_diagnostic.S3903.severity                                         = none
 
 # S4581: Use 'Guid.NewGuid()' or 'Guid.Empty' or add arguments to this GUID instantiation.
 dotnet_diagnostic.S4581.severity                                         = none
-
-# RCS1090: Call 'ConfigureAwait(false)'.
-dotnet_diagnostic.RCS1090.severity                                       = none
-
-# RCS1123: Add parentheses when necessary.
-dotnet_diagnostic.RCS1123.severity                                       = none
