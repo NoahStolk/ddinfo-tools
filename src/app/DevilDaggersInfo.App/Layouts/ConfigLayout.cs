@@ -60,7 +60,8 @@ public class ConfigLayout : Layout, IConfigLayout
 
 	public void Render()
 	{
-		Game.Self.RectangleRenderer.Schedule(new(CurrentWindowState.Width, CurrentWindowState.Height), default, -100, Color.Gray(0.1f));
+		Vector2i<int> windowScale = new(CurrentWindowState.Width, CurrentWindowState.Height);
+		Game.Self.RectangleRenderer.Schedule(windowScale, windowScale / 2, -100, Color.Gray(0.1f));
 
 		Game.Self.MonoSpaceFontRenderer16.Schedule(Vector2i<int>.One, new(32, 32), 0, Color.White, "SETTINGS", TextAlign.Left);
 
