@@ -35,27 +35,29 @@ public class MainLayout : Layout, IMainLayout
 		_checkForUpdatesButton = new(new PixelBounds(416, 192, 192, 32), CheckForUpdates, GlobalStyles.DefaultButtonStyle, GlobalStyles.ConfigButton, "Check for updates");
 		NestingContext.Add(_checkForUpdatesButton);
 
-		Color ddse = Color.FromHsv(0, 1, 0.8f);
-		Color ddae = Color.FromHsv(130, 1, 0.6f);
-		Color ddre = Color.FromHsv(220, 1, 1);
-		Color ddcl = Color.FromHsv(270, 1, 1);
-		Color settings = Color.Gray(0.5f);
-		Color exit = Color.Gray(0.3f);
-
-		static ButtonStyle GetStyle(Color color)
-		{
-			const int border = 5;
-			return new(color.Intensify(64), color, color.Intensify(96), border);
-		}
-
 		TextButtonStyle textButtonStyle = new(Color.White, TextAlign.Middle, FontSize.H16);
 
-		NestingContext.Add(new TextButton(new PixelBounds(128, 192, 256, 96), LayoutManager.ToSurvivalEditorMainLayout, GetStyle(ddse), textButtonStyle, "Survival Editor"));
-		NestingContext.Add(new TextButton(new PixelBounds(640, 192, 256, 96), LayoutManager.ToCustomLeaderboardsRecorderMainLayout, GetStyle(ddcl), textButtonStyle, "Custom Leaderboards"));
-		NestingContext.Add(new TextButton(new PixelBounds(128, 384, 256, 96), () => { }, GetStyle(ddae), textButtonStyle, "Asset Editor"));
-		NestingContext.Add(new TextButton(new PixelBounds(640, 384, 256, 96), () => { }, GetStyle(ddre), textButtonStyle, "Replay Editor"));
-		NestingContext.Add(new TextButton(new PixelBounds(128, 576, 256, 96), LayoutManager.ToConfigLayout, GetStyle(settings), textButtonStyle, "Configuration"));
-		NestingContext.Add(new TextButton(new PixelBounds(640, 576, 256, 96), () => Environment.Exit(0), GetStyle(exit), textButtonStyle, "Exit"));
+		AddButton(0, 0, Color.FromHsv(000, 1, 0.8f), LayoutManager.ToSurvivalEditorMainLayout, "Survival Editor");
+		AddButton(1, 0, Color.FromHsv(032, 1, 0.8f), () => { }, "Practice (todo)");
+		AddButton(0, 1, Color.FromHsv(270, 1, 1.0f), LayoutManager.ToCustomLeaderboardsRecorderMainLayout, "Custom Leaderboards");
+		AddButton(1, 1, Color.FromHsv(300, 1, 1.0f), () => { }, "Memory (todo)");
+		AddButton(0, 2, Color.FromHsv(130, 1, 0.6f), () => { }, "Asset Editor (todo)");
+		AddButton(1, 2, Color.FromHsv(220, 1, 1.0f), () => { }, "Replay Editor (todo)");
+		AddButton(0, 3, Color.Gray(0.3f), LayoutManager.ToConfigLayout, "Configuration");
+		AddButton(1, 3, Color.Gray(0.3f), () => Environment.Exit(0), "Exit");
+
+		void AddButton(int x, int y, Color color, Action onClick, string text)
+		{
+			int xPos = x % 2 == 0 ? 128 : 640;
+			int yPos = y * 128 + 192;
+			NestingContext.Add(new TextButton(new PixelBounds(xPos, yPos, 256, 96), onClick, GetStyle(color), textButtonStyle, text));
+
+			static ButtonStyle GetStyle(Color color)
+			{
+				const int border = 5;
+				return new(color.Intensify(64), color, color.Intensify(96), border);
+			}
+		}
 	}
 
 	public void InitializeScene()
@@ -114,9 +116,6 @@ public class MainLayout : Layout, IMainLayout
 		Game.Self.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(512, 712), 0, Color.White, "Devil Daggers is created by Sorath", TextAlign.Middle);
 		Game.Self.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(512, 728), 0, Color.White, "DevilDaggers.info is created by Noah Stolk", TextAlign.Middle);
 		Game.Self.MonoSpaceFontRenderer24.Schedule(Vector2i<int>.One, new(512, 752), 0, new(255, 0, 31, 255), "HTTPS://DEVILDAGGERS.INFO/", TextAlign.Middle);
-
-		Game.Self.MonoSpaceFontRenderer16.Schedule(Vector2i<int>.One, new(768, 448), 100, Color.Black, "(not implemented)", TextAlign.Middle);
-		Game.Self.MonoSpaceFontRenderer16.Schedule(Vector2i<int>.One, new(256, 448), 100, Color.Black, "(not implemented)", TextAlign.Middle);
 	}
 
 	private sealed class MeshObject
