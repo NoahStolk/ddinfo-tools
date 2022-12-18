@@ -13,7 +13,6 @@ using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.CustomLea
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.SurvivalEditor;
 using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Layouts;
-using DevilDaggersInfo.App.Ui.SurvivalEditor.States;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Versioning;
 using DevilDaggersInfo.Types.Web;
@@ -107,7 +106,7 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 
 	public void Initialize()
 	{
-		StateManager.NewSpawnset();
+		Ui.SurvivalEditor.States.StateManager.NewSpawnset();
 		ActiveLayout = ConfigLayout;
 		ConfigLayout.ValidateInstallation();
 	}
@@ -118,8 +117,10 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 
 		TooltipText = null;
 
-		StateManager.EmptyUiQueue();
-		SpawnsetHistoryManager.EmptyUiQueue();
+		Ui.SurvivalEditor.States.StateManager.EmptyUiQueue();
+		Ui.SurvivalEditor.States.SpawnsetHistoryManager.EmptyUiQueue();
+
+		Ui.CustomLeaderboardsRecorder.States.StateManager.EmptyUiQueue();
 
 		MouseUiContext.Reset(ViewportState.MousePosition);
 		ActiveLayout?.Update();
