@@ -25,7 +25,7 @@ public static class Program
 #else
 		const string? ddInfoToolsContentRootDirectory = null;
 #endif
-		DecompiledContentFile ddInfoToolsContent = Bootstrapper.GetDecompiledContent(ddInfoToolsContentRootDirectory, "ddinfo-tools");
+		DecompiledContentFile ddInfoToolsContent = Bootstrapper.GetDecompiledContent(ddInfoToolsContentRootDirectory, "ddinfo");
 		DdInfoToolsBaseBlobs.Initialize(ddInfoToolsContent.Blobs);
 		DdInfoToolsBaseModels.Initialize(ddInfoToolsContent.Models);
 		DdInfoToolsBaseShaders.Initialize(ddInfoToolsContent.Shaders);
@@ -38,7 +38,7 @@ public static class Program
 #else
 		const string? warpRenderImplUiContentRootDirectory = null;
 #endif
-		DecompiledContentFile warpRenderImplUiContent = Bootstrapper.GetDecompiledContent(warpRenderImplUiContentRootDirectory, "warp-render-impl-ui");
+		DecompiledContentFile warpRenderImplUiContent = Bootstrapper.GetDecompiledContent(warpRenderImplUiContentRootDirectory, "ddinfo-ui");
 		WarpRenderImplUiCharsets.Initialize(warpRenderImplUiContent.Charsets);
 		WarpRenderImplUiShaders.Initialize(warpRenderImplUiContent.Shaders);
 		WarpRenderImplUiTextures.Initialize(warpRenderImplUiContent.Textures);
