@@ -1,6 +1,7 @@
 using DevilDaggersInfo.App.Core.ApiClient;
 using DevilDaggersInfo.App.Core.ApiClient.TaskHandlers;
 using DevilDaggersInfo.App.Ui.Base;
+using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.States;
@@ -85,7 +86,12 @@ public class MainLayout : Layout, IMainLayout
 
 		void ShowUpdateAvailable(AppVersion? newAppVersion)
 		{
-			_checkForUpdatesButton.Text = newAppVersion == null ? "Check for updates" : $"Download {newAppVersion}";
+			_checkForUpdatesButton.Text = "Check for updates";
+			if (newAppVersion == null)
+				return;
+
+			Prompt prompt = new(this, $"Version {newAppVersion} is available. Install?", () => { });
+			NestingContext.Add(prompt);
 		}
 	}
 
