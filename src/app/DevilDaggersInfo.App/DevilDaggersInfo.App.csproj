@@ -8,16 +8,16 @@
     <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(IsWindows)'=='true'">
+  <PropertyGroup Condition="'$(IsWindows)' == 'true'">
     <DefineConstants>WINDOWS</DefineConstants>
     <OutputType>WinExe</OutputType>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(IsLinux)'=='true'">
+  <PropertyGroup Condition="'$(IsLinux)' == 'true'">
     <DefineConstants>LINUX</DefineConstants>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <CompilerGeneratedFilesOutputPath>obj\SourceGenOutput</CompilerGeneratedFilesOutputPath>
