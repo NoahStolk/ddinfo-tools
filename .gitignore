@@ -291,3 +291,6 @@ tailwind.css.map
 
 # OBJ mesh files for unit tests
 !*.obj
+
+# Value file
+*/**/Blobs/Value.bin

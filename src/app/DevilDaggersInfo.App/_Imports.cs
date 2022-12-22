@@ -4,6 +4,7 @@ global using System.Numerics;
 global using Warp.NET;
 global using Warp.NET.Numerics;
 global using static Warp.NET.Graphics;
+global using DdInfoToolsBaseBlobs = DevilDaggersInfo.App.Ui.Base.Blobs;
 global using DdInfoToolsBaseModels = DevilDaggersInfo.App.Ui.Base.Models;
 global using DdInfoToolsBaseShaders = DevilDaggersInfo.App.Ui.Base.Shaders;
 global using DdInfoToolsBaseShaderUniformInitializer = DevilDaggersInfo.App.Ui.Base.ShaderUniformInitializer;

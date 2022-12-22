@@ -26,6 +26,7 @@ public static class Program
 		const string? ddInfoToolsContentRootDirectory = null;
 #endif
 		DecompiledContentFile ddInfoToolsContent = Bootstrapper.GetDecompiledContent(ddInfoToolsContentRootDirectory, "ddinfo-tools");
+		DdInfoToolsBaseBlobs.Initialize(ddInfoToolsContent.Blobs);
 		DdInfoToolsBaseModels.Initialize(ddInfoToolsContent.Models);
 		DdInfoToolsBaseShaders.Initialize(ddInfoToolsContent.Shaders);
 		DdInfoToolsBaseTextures.Initialize(ddInfoToolsContent.Textures);
