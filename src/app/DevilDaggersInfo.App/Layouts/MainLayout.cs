@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Api.App.Updates;
 using DevilDaggersInfo.App.Core.ApiClient;
 using DevilDaggersInfo.App.Core.ApiClient.TaskHandlers;
 using DevilDaggersInfo.App.Ui.Base;
@@ -5,9 +6,12 @@ using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.States;
+using DevilDaggersInfo.App.Update;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Versioning;
 using Silk.NET.OpenGL;
+using System.IO.Compression;
+using System.Reflection;
 using Warp.NET.Content;
 using Warp.NET.InterpolationStates;
 using Warp.NET.RenderImpl.Ui.Components;
@@ -86,12 +90,28 @@ public class MainLayout : Layout, IMainLayout
 
 		void ShowUpdateAvailable(AppVersion? newAppVersion)
 		{
-			_checkForUpdatesButton.Text = "Check for updates";
+			_checkForUpdatesButton.Text = $"{newAppVersion} available";
 			if (newAppVersion == null)
 				return;
 
-			Prompt prompt = new(this, $"Version {newAppVersion} is available. Install?", () => { });
+			Prompt prompt = new(
+				this,
+				$"Version {newAppVersion} is available. Install?",
+				() => AsyncHandler.Run(HandleInstallation, () => DownloadUpdate.HandleAsync(Root.Game.BuildType)));
 			NestingContext.Add(prompt);
+
+			void HandleInstallation(GetLatestVersionFile? latestVersionFile)
+			{
+				try
+				{
+					UpdateLogic.InstallUpdate(latestVersionFile, newAppVersion);
+				}
+				catch (UpdateException ex)
+				{
+					Popup popup = new(this, ex.Message);
+					NestingContext.Add(popup);
+				}
+			}
 		}
 	}
 
