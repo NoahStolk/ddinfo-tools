@@ -90,7 +90,8 @@ public class MainLayout : Layout, IMainLayout
 
 		void ShowUpdateAvailable(AppVersion? newAppVersion)
 		{
-			_checkForUpdatesButton.Text = $"{newAppVersion} available";
+			_checkForUpdatesButton.Text = newAppVersion == null ? "Check for updates" : $"{newAppVersion} available";
+
 			if (newAppVersion == null)
 				return;
 
