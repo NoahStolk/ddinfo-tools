@@ -10,8 +10,6 @@ using DevilDaggersInfo.App.Update;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Versioning;
 using Silk.NET.OpenGL;
-using System.IO.Compression;
-using System.Reflection;
 using Warp.NET.Content;
 using Warp.NET.InterpolationStates;
 using Warp.NET.RenderImpl.Ui.Components;
