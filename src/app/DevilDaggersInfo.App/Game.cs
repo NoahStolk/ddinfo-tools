@@ -11,6 +11,7 @@ using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.CustomLeaderboardsRecorder;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.SurvivalEditor;
+using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Layouts;
 using DevilDaggersInfo.Common.Utils;
@@ -63,6 +64,8 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 #elif LINUX
 		GameMemoryService = new(new LinuxMemoryService());
 #endif
+
+		UserSettings.Load();
 	}
 
 #if WINDOWS
