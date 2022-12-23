@@ -67,6 +67,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Asset
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Asset.SourceGen", "core\DevilDaggersInfo.Core.Asset.SourceGen\DevilDaggersInfo.Core.Asset.SourceGen.csproj", "{2BE3E7C9-DEAF-4D2C-ADFC-40EA3FE3D325}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Core.CriteriaExpression", "core\DevilDaggersInfo.Core.CriteriaExpression\DevilDaggersInfo.Core.CriteriaExpression.csproj", "{E80EC34D-4FC7-44D1-BD96-857DD3700AED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Core.CriteriaExpression.Tests", "tests\DevilDaggersInfo.Core.CriteriaExpression.Tests\DevilDaggersInfo.Core.CriteriaExpression.Tests.csproj", "{8D02A724-024B-4ED3-B64B-EA6B350926F0}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Encryption", "core\DevilDaggersInfo.Core.Encryption\DevilDaggersInfo.Core.Encryption.csproj", "{6F010EA4-496C-49C5-B947-82BA4EDA2648}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Mod", "core\DevilDaggersInfo.Core.Mod\DevilDaggersInfo.Core.Mod.csproj", "{1C25E368-6E37-4144-AAC7-EBA5475BD833}"
@@ -112,10 +116,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Client", "web-client\DevilDaggersInfo.Web.Client\DevilDaggersInfo.Web.Client.csproj", "{0F9B44AE-52A6-4BCD-8AC1-72FE4235E356}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Core.Claims", "web-core\DevilDaggersInfo.Web.Core.Claims\DevilDaggersInfo.Web.Core.Claims.csproj", "{296837AA-47C6-4679-AE63-39EFA4C98675}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Core.CriteriaExpression", "web-core\DevilDaggersInfo.Core.CriteriaExpression\DevilDaggersInfo.Core.CriteriaExpression.csproj", "{E80EC34D-4FC7-44D1-BD96-857DD3700AED}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Core.CriteriaExpression.Tests", "tests\DevilDaggersInfo.Core.CriteriaExpression.Tests\DevilDaggersInfo.Core.CriteriaExpression.Tests.csproj", "{8D02A724-024B-4ED3-B64B-EA6B350926F0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server", "web-server\DevilDaggersInfo.Web.Server\DevilDaggersInfo.Web.Server.csproj", "{595CAB68-C85D-4AAD-B78F-4CC499921E61}"
 EndProject
