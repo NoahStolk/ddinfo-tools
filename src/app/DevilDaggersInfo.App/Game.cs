@@ -123,7 +123,7 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 		Ui.SurvivalEditor.States.StateManager.EmptyUiQueue();
 		Ui.SurvivalEditor.States.SpawnsetHistoryManager.EmptyUiQueue();
 
-		Ui.CustomLeaderboardsRecorder.States.StateManager.EmptyUiQueue();
+		Ui.CustomLeaderboardsRecorder.States.StateManager.Reduce();
 
 		MouseUiContext.Reset(ViewportState.MousePosition);
 		ActiveLayout?.Update();
