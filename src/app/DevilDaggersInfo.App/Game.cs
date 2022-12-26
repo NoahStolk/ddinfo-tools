@@ -8,8 +8,6 @@ using DevilDaggersInfo.App.Core.NativeInterface.Services.Windows;
 #endif
 
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
-using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
-using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.SurvivalEditor;
 using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
@@ -96,7 +94,7 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 	public IExtendedLayout ConfigLayout { get; } = new Layouts.ConfigLayout();
 	public IExtendedLayout MainLayout { get; } = new Layouts.MainLayout();
 
-	public ISurvivalEditorMainLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
+	public IExtendedLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
 	public IExtendedLayout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();
 	public IExtendedLayout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
 	public IExtendedLayout SurvivalEditor3dLayout { get; } = new SurvivalEditor3dLayout();
@@ -110,7 +108,6 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 
 	public void Initialize()
 	{
-		Ui.SurvivalEditor.States.StateManager.NewSpawnset();
 		StateManager.Dispatch(new SetLayout(ConfigLayout));
 		StateManager.Dispatch(new ValidateInstallation());
 	}
@@ -122,9 +119,6 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 		base.Update();
 
 		TooltipText = null;
-
-		Ui.SurvivalEditor.States.StateManager.EmptyUiQueue();
-		Ui.SurvivalEditor.States.SpawnsetHistoryManager.EmptyUiQueue();
 
 		MouseUiContext.Reset(ViewportState.MousePosition);
 		ActiveLayout?.Update();
