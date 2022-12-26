@@ -11,8 +11,8 @@ using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.SurvivalEditor;
 using DevilDaggersInfo.App.Ui.Base.Settings;
-using DevilDaggersInfo.App.Ui.Base.States;
-using DevilDaggersInfo.App.Ui.Base.States.Actions;
+using DevilDaggersInfo.App.Ui.Base.StateManagement;
+using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
 using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Layouts;
 using DevilDaggersInfo.Common.Utils;
@@ -111,14 +111,13 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 	public void Initialize()
 	{
 		Ui.SurvivalEditor.States.StateManager.NewSpawnset();
-		BaseStateManager.Dispatch(new SetLayout(ConfigLayout));
-		BaseStateManager.Dispatch(new ValidateInstallation());
+		StateManager.Dispatch(new SetLayout(ConfigLayout));
+		StateManager.Dispatch(new ValidateInstallation());
 	}
 
 	protected override void Update()
 	{
-		BaseStateManager.ReduceAll();
-		Ui.CustomLeaderboardsRecorder.States.StateManager.ReduceAll();
+		StateManager.ReduceAll();
 
 		base.Update();
 

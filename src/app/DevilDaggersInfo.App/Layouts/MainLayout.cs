@@ -5,8 +5,8 @@ using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
-using DevilDaggersInfo.App.Ui.Base.States;
-using DevilDaggersInfo.App.Ui.Base.States.Actions;
+using DevilDaggersInfo.App.Ui.Base.StateManagement;
+using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
 using DevilDaggersInfo.App.Ui.Scene.GameObjects;
 using DevilDaggersInfo.App.Update;
 using DevilDaggersInfo.Common.Utils;
@@ -42,13 +42,13 @@ public class MainLayout : Layout, IExtendedLayout
 
 		TextButtonStyle textButtonStyle = new(Color.White, TextAlign.Middle, FontSize.H16);
 
-		AddButton(0, 0, Color.FromHsv(000, 1, 0.8f), () => BaseStateManager.Dispatch(new SetLayout(Root.Game.SurvivalEditorMainLayout)), "Survival Editor");
+		AddButton(0, 0, Color.FromHsv(000, 1, 0.8f), () => StateManager.Dispatch(new SetLayout(Root.Game.SurvivalEditorMainLayout)), "Survival Editor");
 		AddButton(1, 0, Color.FromHsv(032, 1, 0.8f), () => { }, "Practice (todo)");
-		AddButton(0, 1, Color.FromHsv(270, 1, 1.0f), () => BaseStateManager.Dispatch(new SetLayout(Root.Game.CustomLeaderboardsRecorderMainLayout)), "Custom Leaderboards");
+		AddButton(0, 1, Color.FromHsv(270, 1, 1.0f), () => StateManager.Dispatch(new SetLayout(Root.Game.CustomLeaderboardsRecorderMainLayout)), "Custom Leaderboards");
 		AddButton(1, 1, Color.FromHsv(300, 1, 1.0f), () => { }, "Memory (todo)");
 		AddButton(0, 2, Color.FromHsv(130, 1, 0.6f), () => { }, "Asset Editor (todo)");
 		AddButton(1, 2, Color.FromHsv(220, 1, 1.0f), () => { }, "Replay Editor (todo)");
-		AddButton(0, 3, Color.Gray(0.3f), () => BaseStateManager.Dispatch(new SetLayout(Root.Game.ConfigLayout)), "Configuration");
+		AddButton(0, 3, Color.Gray(0.3f), () => StateManager.Dispatch(new SetLayout(Root.Game.ConfigLayout)), "Configuration");
 		AddButton(1, 3, Color.Gray(0.3f), () => Environment.Exit(0), "Exit");
 
 		void AddButton(int x, int y, Color color, Action onClick, string text)
@@ -64,7 +64,7 @@ public class MainLayout : Layout, IExtendedLayout
 			}
 		}
 
-		BaseStateManager.Subscribe<InitializeContent>(_ => InitializeScene());
+		StateManager.Subscribe<InitializeContent>(_ => InitializeScene());
 	}
 
 	/// <summary>

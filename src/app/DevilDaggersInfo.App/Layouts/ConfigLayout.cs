@@ -3,8 +3,8 @@ using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.Exceptions;
 using DevilDaggersInfo.App.Ui.Base.Settings;
-using DevilDaggersInfo.App.Ui.Base.States;
-using DevilDaggersInfo.App.Ui.Base.States.Actions;
+using DevilDaggersInfo.App.Ui.Base.StateManagement;
+using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
 using Warp.NET.RenderImpl.Ui.Components;
 using Warp.NET.Text;
 using Warp.NET.Ui;
@@ -25,7 +25,7 @@ public class ConfigLayout : Layout, IExtendedLayout
 
 		NestingContext.Add(new TextButton(new PixelBounds(32, 320, 256, 32), Check, GlobalStyles.DefaultButtonStyle, GlobalStyles.ConfigButton, "Save and continue"));
 
-		BaseStateManager.Subscribe<ValidateInstallation>(_ => ValidateInstallation());
+		StateManager.Subscribe<ValidateInstallation>(_ => ValidateInstallation());
 	}
 
 	private void Check()
@@ -46,11 +46,11 @@ public class ConfigLayout : Layout, IExtendedLayout
 			return;
 		}
 
-		BaseStateManager.Dispatch(new SetLayout(Root.Game.MainLayout));
+		StateManager.Dispatch(new SetLayout(Root.Game.MainLayout));
 
 		if (!_contentInitialized)
 		{
-			BaseStateManager.Dispatch(new InitializeContent());
+			StateManager.Dispatch(new InitializeContent());
 			_contentInitialized = true;
 		}
 	}
