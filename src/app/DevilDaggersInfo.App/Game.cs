@@ -9,7 +9,6 @@ using DevilDaggersInfo.App.Core.NativeInterface.Services.Windows;
 
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
-using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.CustomLeaderboardsRecorder;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.SurvivalEditor;
 using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Layouts;
@@ -96,11 +95,11 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 	public IMainLayout MainLayout { get; } = new Layouts.MainLayout();
 
 	public ISurvivalEditorMainLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
-	public IFileDialogLayout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();
-	public IFileDialogLayout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
-	public ISurvivalEditor3dLayout SurvivalEditor3dLayout { get; } = new SurvivalEditor3dLayout();
+	public IExtendedLayout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();
+	public IExtendedLayout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
+	public IExtendedLayout SurvivalEditor3dLayout { get; } = new SurvivalEditor3dLayout();
 	public IExtendedLayout CustomLeaderboardsRecorderMainLayout { get; } = new CustomLeaderboardsRecorderMainLayout();
-	public IReplayViewer3dLayout CustomLeaderboardsRecorderReplayViewer3dLayout { get; } = new ReplayViewer3dLayout();
+	public IExtendedLayout CustomLeaderboardsRecorderReplayViewer3dLayout { get; } = new ReplayViewer3dLayout();
 	public GameMemoryService GameMemoryService { get; }
 
 	#endregion Dependencies

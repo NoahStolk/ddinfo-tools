@@ -4,6 +4,7 @@ using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.Exceptions;
 using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.Base.States;
+using DevilDaggersInfo.App.Ui.Base.States.Actions;
 using DevilDaggersInfo.App.Ui.Scene.GameObjects;
 using Warp.NET.RenderImpl.Ui.Components;
 using Warp.NET.Text;
@@ -43,7 +44,7 @@ public class ConfigLayout : Layout, IConfigLayout
 			return;
 		}
 
-		BaseStateManager.ToMainLayout();
+		BaseStateManager.Dispatch(new SetLayout(Root.Game.MainLayout));
 		Root.Game.MainLayout.InitializeScene();
 		Player.Initialize();
 		RaceDagger.Initialize();
