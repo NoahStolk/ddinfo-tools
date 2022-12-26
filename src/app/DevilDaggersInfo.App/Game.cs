@@ -11,6 +11,8 @@ using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.SurvivalEditor;
 using DevilDaggersInfo.App.Ui.Base.Settings;
+using DevilDaggersInfo.App.Ui.Base.States;
+using DevilDaggersInfo.App.Ui.Base.States.Actions;
 using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Layouts;
 using DevilDaggersInfo.Common.Utils;
@@ -91,7 +93,7 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 
 	#region Dependencies
 
-	public IConfigLayout ConfigLayout { get; } = new Layouts.ConfigLayout();
+	public IExtendedLayout ConfigLayout { get; } = new Layouts.ConfigLayout();
 	public IMainLayout MainLayout { get; } = new Layouts.MainLayout();
 
 	public ISurvivalEditorMainLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
@@ -109,13 +111,13 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 	public void Initialize()
 	{
 		Ui.SurvivalEditor.States.StateManager.NewSpawnset();
-		ActiveLayout = ConfigLayout;
-		ConfigLayout.ValidateInstallation();
+		BaseStateManager.Dispatch(new SetLayout(ConfigLayout));
+		BaseStateManager.Dispatch(new ValidateInstallation());
 	}
 
 	protected override void Update()
 	{
-		Ui.Base.States.BaseStateManager.ReduceAll();
+		BaseStateManager.ReduceAll();
 		Ui.CustomLeaderboardsRecorder.States.StateManager.ReduceAll();
 
 		base.Update();

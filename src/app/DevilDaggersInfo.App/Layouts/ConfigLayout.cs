@@ -12,7 +12,7 @@ using Warp.NET.Ui;
 
 namespace DevilDaggersInfo.App.Layouts;
 
-public class ConfigLayout : Layout, IConfigLayout
+public class ConfigLayout : Layout, IExtendedLayout
 {
 	private readonly TextInput _textInput;
 	private string? _error;
@@ -24,6 +24,8 @@ public class ConfigLayout : Layout, IConfigLayout
 		NestingContext.Add(_textInput);
 
 		NestingContext.Add(new TextButton(new PixelBounds(32, 320, 256, 32), Check, GlobalStyles.DefaultButtonStyle, GlobalStyles.ConfigButton, "Save and continue"));
+
+		BaseStateManager.Subscribe<ValidateInstallation>(_ => ValidateInstallation());
 	}
 
 	private void Check()
@@ -32,7 +34,7 @@ public class ConfigLayout : Layout, IConfigLayout
 		ValidateInstallation();
 	}
 
-	public void ValidateInstallation()
+	private void ValidateInstallation()
 	{
 		try
 		{
