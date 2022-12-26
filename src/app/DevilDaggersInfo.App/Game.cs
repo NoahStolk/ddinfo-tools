@@ -99,7 +99,7 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 	public IFileDialogLayout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();
 	public IFileDialogLayout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
 	public ISurvivalEditor3dLayout SurvivalEditor3dLayout { get; } = new SurvivalEditor3dLayout();
-	public ICustomLeaderboardsRecorderMainLayout CustomLeaderboardsRecorderMainLayout { get; } = new CustomLeaderboardsRecorderMainLayout();
+	public IExtendedLayout CustomLeaderboardsRecorderMainLayout { get; } = new CustomLeaderboardsRecorderMainLayout();
 	public IReplayViewer3dLayout CustomLeaderboardsRecorderReplayViewer3dLayout { get; } = new ReplayViewer3dLayout();
 	public GameMemoryService GameMemoryService { get; }
 
@@ -116,6 +116,7 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 
 	protected override void Update()
 	{
+		Ui.Base.States.BaseStateManager.ReduceAll();
 		Ui.CustomLeaderboardsRecorder.States.StateManager.ReduceAll();
 
 		base.Update();

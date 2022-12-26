@@ -43,7 +43,7 @@ public class ConfigLayout : Layout, IConfigLayout
 			return;
 		}
 
-		LayoutManager.ToMainLayout();
+		BaseStateManager.ToMainLayout();
 		Root.Game.MainLayout.InitializeScene();
 		Player.Initialize();
 		RaceDagger.Initialize();
