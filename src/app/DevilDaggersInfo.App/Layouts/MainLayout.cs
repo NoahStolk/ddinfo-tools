@@ -7,6 +7,7 @@ using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.States;
 using DevilDaggersInfo.App.Ui.Base.States.Actions;
+using DevilDaggersInfo.App.Ui.Scene.GameObjects;
 using DevilDaggersInfo.App.Update;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Versioning;
@@ -21,7 +22,7 @@ using Warp.NET.Ui;
 
 namespace DevilDaggersInfo.App.Layouts;
 
-public class MainLayout : Layout, IMainLayout
+public class MainLayout : Layout, IExtendedLayout
 {
 	private static readonly string _version = VersionUtils.EntryAssemblyVersion;
 
@@ -62,9 +63,15 @@ public class MainLayout : Layout, IMainLayout
 				return new(color.Intensify(64), color, color.Intensify(96), border);
 			}
 		}
+
+		BaseStateManager.Subscribe<InitializeContent>(_ => InitializeScene());
 	}
 
-	public void InitializeScene()
+	/// <summary>
+	/// Initializes the scene and some static game objects. This should only be executed once.
+	/// TODO: Maybe move the static initialization for game objects somewhere else.
+	/// </summary>
+	private void InitializeScene()
 	{
 		CheckForUpdates();
 
@@ -80,6 +87,10 @@ public class MainLayout : Layout, IMainLayout
 				_tiles.Add(new(ContentManager.Content.TileMesh, ContentManager.Content.TileTexture, Vector3.One, Quaternion.Identity, new(i * 4, 0, j * 4)));
 			}
 		}
+
+		Player.Initialize();
+		RaceDagger.Initialize();
+		Tile.Initialize();
 	}
 
 	private void CheckForUpdates()

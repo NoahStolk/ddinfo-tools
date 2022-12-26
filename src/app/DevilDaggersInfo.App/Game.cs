@@ -94,7 +94,7 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 	#region Dependencies
 
 	public IExtendedLayout ConfigLayout { get; } = new Layouts.ConfigLayout();
-	public IMainLayout MainLayout { get; } = new Layouts.MainLayout();
+	public IExtendedLayout MainLayout { get; } = new Layouts.MainLayout();
 
 	public ISurvivalEditorMainLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
 	public IExtendedLayout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();

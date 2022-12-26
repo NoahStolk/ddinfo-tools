@@ -5,7 +5,6 @@ using DevilDaggersInfo.App.Ui.Base.Exceptions;
 using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.Base.States;
 using DevilDaggersInfo.App.Ui.Base.States.Actions;
-using DevilDaggersInfo.App.Ui.Scene.GameObjects;
 using Warp.NET.RenderImpl.Ui.Components;
 using Warp.NET.Text;
 using Warp.NET.Ui;
@@ -16,6 +15,7 @@ public class ConfigLayout : Layout, IExtendedLayout
 {
 	private readonly TextInput _textInput;
 	private string? _error;
+	private bool _contentInitialized;
 
 	public ConfigLayout()
 	{
@@ -47,10 +47,12 @@ public class ConfigLayout : Layout, IExtendedLayout
 		}
 
 		BaseStateManager.Dispatch(new SetLayout(Root.Game.MainLayout));
-		Root.Game.MainLayout.InitializeScene();
-		Player.Initialize();
-		RaceDagger.Initialize();
-		Tile.Initialize();
+
+		if (!_contentInitialized)
+		{
+			BaseStateManager.Dispatch(new InitializeContent());
+			_contentInitialized = true;
+		}
 	}
 
 	public void Update()
@@ -70,7 +72,7 @@ public class ConfigLayout : Layout, IExtendedLayout
 
  #pragma warning disable S1075
 #if LINUX
-		const string examplePath = "/home/noah/.local/share/Steam/steamapps/common/devildaggers/";
+		const string examplePath = "/home/{USERNAME}/.local/share/Steam/steamapps/common/devildaggers/";
 #elif WINDOWS
 		const string examplePath = """C:\Program Files (x86)\Steam\steamapps\common\devildaggers""";
 #else
