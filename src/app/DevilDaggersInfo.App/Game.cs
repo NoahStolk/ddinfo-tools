@@ -116,14 +116,14 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 
 	protected override void Update()
 	{
+		Ui.CustomLeaderboardsRecorder.States.StateManager.ReduceAll();
+
 		base.Update();
 
 		TooltipText = null;
 
 		Ui.SurvivalEditor.States.StateManager.EmptyUiQueue();
 		Ui.SurvivalEditor.States.SpawnsetHistoryManager.EmptyUiQueue();
-
-		Ui.CustomLeaderboardsRecorder.States.StateManager.Reduce();
 
 		MouseUiContext.Reset(ViewportState.MousePosition);
 		ActiveLayout?.Update();
