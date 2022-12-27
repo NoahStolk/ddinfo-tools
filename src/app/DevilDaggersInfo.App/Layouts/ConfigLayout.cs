@@ -24,7 +24,7 @@ public class ConfigLayout : Layout, IExtendedLayout
 
 		NestingContext.Add(new TextButton(new PixelBounds(32, 320, 256, 32), Check, GlobalStyles.DefaultButtonStyle, GlobalStyles.ConfigButton, "Save and continue"));
 
-		StateManager.Subscribe<ValidateInstallation>(_ => ValidateInstallation());
+		StateManager.Subscribe<ValidateInstallation>(ValidateInstallation);
 	}
 
 	private void Check()

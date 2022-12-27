@@ -38,8 +38,6 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 
 	private readonly Matrix4x4 _uiProjectionMatrix;
 
-	private IExtendedLayout? _activeLayout;
-
 	private Game()
 	{
 		AppDomain.CurrentDomain.UnhandledException += (_, args) => _log.Fatal(args.ExceptionObject.ToString());
@@ -77,18 +75,6 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 
 	public AppVersion AppVersion { get; }
 
-	public IExtendedLayout? ActiveLayout
-	{
-		get => _activeLayout;
-		set
-		{
-			if (_activeLayout == value)
-				throw new InvalidOperationException("This layout is already active.");
-
-			_activeLayout = value;
-		}
-	}
-
 	#region Dependencies
 
 	public IExtendedLayout ConfigLayout { get; } = new Layouts.ConfigLayout();
@@ -121,16 +107,16 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 		TooltipText = null;
 
 		MouseUiContext.Reset(ViewportState.MousePosition);
-		ActiveLayout?.Update();
-		ActiveLayout?.NestingContext.Update(default);
+		StateManager.LayoutState.CurrentLayout?.Update();
+		StateManager.LayoutState.CurrentLayout?.NestingContext.Update(default);
 	}
 
 	protected override void PrepareRender()
 	{
 		base.PrepareRender();
 
-		ActiveLayout?.Render();
-		ActiveLayout?.NestingContext.Render(default);
+		StateManager.LayoutState.CurrentLayout?.Render();
+		StateManager.LayoutState.CurrentLayout?.NestingContext.Render(default);
 
 		MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(0, 640), 500, Color.Green, DebugStack.GetString(), TextAlign.Left);
 		MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(960, 736), 500, Color.Green, $"{Fps} FPS\n{Tps} TPS", TextAlign.Left);
@@ -152,7 +138,7 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 
 		ActivateViewport(Program.Viewport3d);
 
-		ActiveLayout?.Render3d();
+		StateManager.LayoutState.CurrentLayout?.Render3d();
 
 		ActivateViewport(ViewportState.Viewport);
 

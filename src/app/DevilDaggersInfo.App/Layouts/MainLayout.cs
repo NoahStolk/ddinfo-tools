@@ -63,7 +63,7 @@ public class MainLayout : Layout, IExtendedLayout
 			}
 		}
 
-		StateManager.Subscribe<InitializeContent>(_ => InitializeScene());
+		StateManager.Subscribe<InitializeContent>(InitializeScene);
 	}
 
 	/// <summary>
