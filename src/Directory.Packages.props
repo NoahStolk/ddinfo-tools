@@ -82,7 +82,7 @@
 		<PackageVersion Include="MockQueryable.Moq" Version="7.0.0" />
 		<PackageVersion Include="Moq" Version="4.18.3" />
 		<PackageVersion Include="MSTest.TestAdapter" Version="3.0.1" />
-		<PackageVersion Include="MSTest.TestFramework" Version="3.0.1" />
+		<PackageVersion Include="MSTest.TestFramework" Version="3.0.2" />
 	</ItemGroup>
 
 	<ItemGroup Label="Warp">
