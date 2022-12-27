@@ -4,8 +4,9 @@ using DevilDaggersInfo.App.Core.ApiClient.TaskHandlers;
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
-using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
-using DevilDaggersInfo.App.Ui.Base.States;
+using DevilDaggersInfo.App.Ui.Base.StateManagement;
+using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
+using DevilDaggersInfo.App.Ui.Scene.GameObjects;
 using DevilDaggersInfo.App.Update;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Versioning;
@@ -20,7 +21,7 @@ using Warp.NET.Ui;
 
 namespace DevilDaggersInfo.App.Layouts;
 
-public class MainLayout : Layout, IMainLayout
+public class MainLayout : Layout, IExtendedLayout
 {
 	private static readonly string _version = VersionUtils.EntryAssemblyVersion;
 
@@ -40,13 +41,13 @@ public class MainLayout : Layout, IMainLayout
 
 		TextButtonStyle textButtonStyle = new(Color.White, TextAlign.Middle, FontSize.H16);
 
-		AddButton(0, 0, Color.FromHsv(000, 1, 0.8f), LayoutManager.ToSurvivalEditorMainLayout, "Survival Editor");
+		AddButton(0, 0, Color.FromHsv(000, 1, 0.8f), () => StateManager.Dispatch(new SetLayout(Root.Game.SurvivalEditorMainLayout)), "Survival Editor");
 		AddButton(1, 0, Color.FromHsv(032, 1, 0.8f), () => { }, "Practice (todo)");
-		AddButton(0, 1, Color.FromHsv(270, 1, 1.0f), LayoutManager.ToCustomLeaderboardsRecorderMainLayout, "Custom Leaderboards");
+		AddButton(0, 1, Color.FromHsv(270, 1, 1.0f), () => StateManager.Dispatch(new SetLayout(Root.Game.CustomLeaderboardsRecorderMainLayout)), "Custom Leaderboards");
 		AddButton(1, 1, Color.FromHsv(300, 1, 1.0f), () => { }, "Memory (todo)");
 		AddButton(0, 2, Color.FromHsv(130, 1, 0.6f), () => { }, "Asset Editor (todo)");
 		AddButton(1, 2, Color.FromHsv(220, 1, 1.0f), () => { }, "Replay Editor (todo)");
-		AddButton(0, 3, Color.Gray(0.3f), LayoutManager.ToConfigLayout, "Configuration");
+		AddButton(0, 3, Color.Gray(0.3f), () => StateManager.Dispatch(new SetLayout(Root.Game.ConfigLayout)), "Configuration");
 		AddButton(1, 3, Color.Gray(0.3f), () => Environment.Exit(0), "Exit");
 
 		void AddButton(int x, int y, Color color, Action onClick, string text)
@@ -61,9 +62,15 @@ public class MainLayout : Layout, IMainLayout
 				return new(color.Intensify(64), color, color.Intensify(96), border);
 			}
 		}
+
+		StateManager.Subscribe<InitializeContent>(InitializeScene);
 	}
 
-	public void InitializeScene()
+	/// <summary>
+	/// Initializes the scene and some static game objects. This should only be executed once.
+	/// TODO: Maybe move the static initialization for game objects somewhere else.
+	/// </summary>
+	private void InitializeScene()
 	{
 		CheckForUpdates();
 
@@ -79,6 +86,10 @@ public class MainLayout : Layout, IMainLayout
 				_tiles.Add(new(ContentManager.Content.TileMesh, ContentManager.Content.TileTexture, Vector3.One, Quaternion.Identity, new(i * 4, 0, j * 4)));
 			}
 		}
+
+		Player.Initialize();
+		RaceDagger.Initialize();
+		Tile.Initialize();
 	}
 
 	private void CheckForUpdates()

@@ -8,10 +8,9 @@ using DevilDaggersInfo.App.Core.NativeInterface.Services.Windows;
 #endif
 
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
-using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
-using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.CustomLeaderboardsRecorder;
-using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts.SurvivalEditor;
 using DevilDaggersInfo.App.Ui.Base.Settings;
+using DevilDaggersInfo.App.Ui.Base.StateManagement;
+using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
 using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Layouts;
 using DevilDaggersInfo.Common.Utils;
@@ -38,8 +37,6 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 		.CreateLogger();
 
 	private readonly Matrix4x4 _uiProjectionMatrix;
-
-	private IExtendedLayout? _activeLayout;
 
 	private Game()
 	{
@@ -78,29 +75,17 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 
 	public AppVersion AppVersion { get; }
 
-	public IExtendedLayout? ActiveLayout
-	{
-		get => _activeLayout;
-		set
-		{
-			if (_activeLayout == value)
-				throw new InvalidOperationException("This layout is already active.");
-
-			_activeLayout = value;
-		}
-	}
-
 	#region Dependencies
 
-	public IConfigLayout ConfigLayout { get; } = new Layouts.ConfigLayout();
-	public IMainLayout MainLayout { get; } = new Layouts.MainLayout();
+	public IExtendedLayout ConfigLayout { get; } = new Layouts.ConfigLayout();
+	public IExtendedLayout MainLayout { get; } = new Layouts.MainLayout();
 
-	public ISurvivalEditorMainLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
-	public IFileDialogLayout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();
-	public IFileDialogLayout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
-	public ISurvivalEditor3dLayout SurvivalEditor3dLayout { get; } = new SurvivalEditor3dLayout();
-	public ICustomLeaderboardsRecorderMainLayout CustomLeaderboardsRecorderMainLayout { get; } = new CustomLeaderboardsRecorderMainLayout();
-	public IReplayViewer3dLayout CustomLeaderboardsRecorderReplayViewer3dLayout { get; } = new ReplayViewer3dLayout();
+	public IExtendedLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
+	public IExtendedLayout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();
+	public IExtendedLayout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
+	public IExtendedLayout SurvivalEditor3dLayout { get; } = new SurvivalEditor3dLayout();
+	public IExtendedLayout CustomLeaderboardsRecorderMainLayout { get; } = new CustomLeaderboardsRecorderMainLayout();
+	public IExtendedLayout CustomLeaderboardsRecorderReplayViewer3dLayout { get; } = new ReplayViewer3dLayout();
 	public GameMemoryService GameMemoryService { get; }
 
 	#endregion Dependencies
@@ -109,33 +94,29 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 
 	public void Initialize()
 	{
-		Ui.SurvivalEditor.States.StateManager.NewSpawnset();
-		ActiveLayout = ConfigLayout;
-		ConfigLayout.ValidateInstallation();
+		StateManager.Dispatch(new SetLayout(ConfigLayout));
+		StateManager.Dispatch(new ValidateInstallation());
 	}
 
 	protected override void Update()
 	{
+		StateManager.ReduceAll();
+
 		base.Update();
 
 		TooltipText = null;
 
-		Ui.SurvivalEditor.States.StateManager.EmptyUiQueue();
-		Ui.SurvivalEditor.States.SpawnsetHistoryManager.EmptyUiQueue();
-
-		Ui.CustomLeaderboardsRecorder.States.StateManager.EmptyUiQueue();
-
 		MouseUiContext.Reset(ViewportState.MousePosition);
-		ActiveLayout?.Update();
-		ActiveLayout?.NestingContext.Update(default);
+		StateManager.LayoutState.CurrentLayout?.Update();
+		StateManager.LayoutState.CurrentLayout?.NestingContext.Update(default);
 	}
 
 	protected override void PrepareRender()
 	{
 		base.PrepareRender();
 
-		ActiveLayout?.Render();
-		ActiveLayout?.NestingContext.Render(default);
+		StateManager.LayoutState.CurrentLayout?.Render();
+		StateManager.LayoutState.CurrentLayout?.NestingContext.Render(default);
 
 		MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(0, 640), 500, Color.Green, DebugStack.GetString(), TextAlign.Left);
 		MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(960, 736), 500, Color.Green, $"{Fps} FPS\n{Tps} TPS", TextAlign.Left);
@@ -157,7 +138,7 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 
 		ActivateViewport(Program.Viewport3d);
 
-		ActiveLayout?.Render3d();
+		StateManager.LayoutState.CurrentLayout?.Render3d();
 
 		ActivateViewport(ViewportState.Viewport);
 

@@ -1,20 +1,20 @@
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
-using DevilDaggersInfo.App.Ui.Base.DependencyPattern.Inversion.Layouts;
 using DevilDaggersInfo.App.Ui.Base.Exceptions;
 using DevilDaggersInfo.App.Ui.Base.Settings;
-using DevilDaggersInfo.App.Ui.Base.States;
-using DevilDaggersInfo.App.Ui.Scene.GameObjects;
+using DevilDaggersInfo.App.Ui.Base.StateManagement;
+using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
 using Warp.NET.RenderImpl.Ui.Components;
 using Warp.NET.Text;
 using Warp.NET.Ui;
 
 namespace DevilDaggersInfo.App.Layouts;
 
-public class ConfigLayout : Layout, IConfigLayout
+public class ConfigLayout : Layout, IExtendedLayout
 {
 	private readonly TextInput _textInput;
 	private string? _error;
+	private bool _contentInitialized;
 
 	public ConfigLayout()
 	{
@@ -23,6 +23,8 @@ public class ConfigLayout : Layout, IConfigLayout
 		NestingContext.Add(_textInput);
 
 		NestingContext.Add(new TextButton(new PixelBounds(32, 320, 256, 32), Check, GlobalStyles.DefaultButtonStyle, GlobalStyles.ConfigButton, "Save and continue"));
+
+		StateManager.Subscribe<ValidateInstallation>(ValidateInstallation);
 	}
 
 	private void Check()
@@ -31,7 +33,7 @@ public class ConfigLayout : Layout, IConfigLayout
 		ValidateInstallation();
 	}
 
-	public void ValidateInstallation()
+	private void ValidateInstallation()
 	{
 		try
 		{
@@ -43,11 +45,13 @@ public class ConfigLayout : Layout, IConfigLayout
 			return;
 		}
 
-		LayoutManager.ToMainLayout();
-		Root.Game.MainLayout.InitializeScene();
-		Player.Initialize();
-		RaceDagger.Initialize();
-		Tile.Initialize();
+		StateManager.Dispatch(new SetLayout(Root.Game.MainLayout));
+
+		if (!_contentInitialized)
+		{
+			StateManager.Dispatch(new InitializeContent());
+			_contentInitialized = true;
+		}
 	}
 
 	public void Update()
@@ -67,7 +71,7 @@ public class ConfigLayout : Layout, IConfigLayout
 
  #pragma warning disable S1075
 #if LINUX
-		const string examplePath = "/home/noah/.local/share/Steam/steamapps/common/devildaggers/";
+		const string examplePath = "/home/{USERNAME}/.local/share/Steam/steamapps/common/devildaggers/";
 #elif WINDOWS
 		const string examplePath = """C:\Program Files (x86)\Steam\steamapps\common\devildaggers""";
 #else
