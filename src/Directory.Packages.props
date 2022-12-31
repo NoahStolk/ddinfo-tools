@@ -86,9 +86,9 @@
 	</ItemGroup>
 
 	<ItemGroup Label="Warp">
-		<PackageVersion Include="NoahStolk.Warp.NET" Version="0.1.12" />
-		<PackageVersion Include="NoahStolk.Warp.NET.RenderImpl.Ui" Version="0.1.12" />
-		<PackageVersion Include="NoahStolk.Warp.NET.SourceGen" Version="0.1.12" />
+		<PackageVersion Include="NoahStolk.Warp.NET" Version="0.1.13" />
+		<PackageVersion Include="NoahStolk.Warp.NET.RenderImpl.Ui" Version="0.1.13" />
+		<PackageVersion Include="NoahStolk.Warp.NET.SourceGen" Version="0.1.13" />
 	</ItemGroup>
 
 	<ItemGroup Label="WebAssembly">
