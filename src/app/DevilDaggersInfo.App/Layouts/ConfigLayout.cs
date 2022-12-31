@@ -6,6 +6,7 @@ using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
 using DevilDaggersInfo.App.Ui.Base.Styling;
 using Warp.NET.RenderImpl.Ui.Components;
+using Warp.NET.RenderImpl.Ui.Rendering.Text;
 using Warp.NET.Text;
 using Warp.NET.Ui;
 
@@ -19,11 +20,11 @@ public class ConfigLayout : Layout, IExtendedLayout
 
 	public ConfigLayout()
 	{
-		_textInput = new(new PixelBounds(32, 128, 960, 16), false, null, null, null, GlobalStyles.TextInput);
+		_textInput = new(new PixelBounds(32, 128, 960, 16), false, null, null, null, TextInputStyles.Default);
 		_textInput.KeyboardInput.SetText(UserSettings.DevilDaggersInstallationDirectory);
 		NestingContext.Add(_textInput);
 
-		NestingContext.Add(new TextButton(new PixelBounds(32, 320, 256, 32), Check, GlobalStyles.DefaultButtonStyle, GlobalStyles.ConfigButton, "Save and continue"));
+		NestingContext.Add(new TextButton(new PixelBounds(32, 320, 256, 32), Check, ButtonStyles.Default, new(Color.White, TextAlign.Middle, FontSize.H12), "Save and continue"));
 
 		StateManager.Subscribe<ValidateInstallation>(ValidateInstallation);
 	}

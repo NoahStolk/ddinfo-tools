@@ -37,7 +37,7 @@ public class MainLayout : Layout, IExtendedLayout
 
 	public MainLayout()
 	{
-		_checkForUpdatesButton = new(new PixelBounds(416, 224, 192, 32), CheckForUpdates, GlobalStyles.DefaultButtonStyle, GlobalStyles.ConfigButton, "Check for updates");
+		_checkForUpdatesButton = new(new PixelBounds(416, 224, 192, 32), CheckForUpdates, ButtonStyles.Default, new(Color.White, TextAlign.Middle, FontSize.H12), "Check for updates");
 		NestingContext.Add(_checkForUpdatesButton);
 
 		TextButtonStyle textButtonStyle = new(Color.White, TextAlign.Middle, FontSize.H16);
