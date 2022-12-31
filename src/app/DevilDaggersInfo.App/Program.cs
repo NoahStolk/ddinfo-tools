@@ -1,5 +1,6 @@
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
+using SixLabors.ImageSharp.Processing;
 using Warp.NET.Content.Conversion;
 using Warp.NET.RenderImpl.Ui;
 using Warp.NET.RenderImpl.Ui.Rendering;
@@ -44,6 +45,8 @@ public static class Program
 		WarpRenderImplUiTextures.Initialize(warpRenderImplUiContent.Textures);
 
 		WarpRenderImplUiShaderUniformInitializer.Initialize();
+
+		Root.Dependencies = new DependencyContainer();
 
 		Game game = Bootstrapper.CreateGame<Game>();
 		Root.Game = game;

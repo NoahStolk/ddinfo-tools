@@ -1,21 +1,9 @@
-using DevilDaggersInfo.Api.App.ProcessMemory;
-using DevilDaggersInfo.App.Core.GameMemory;
-
-#if LINUX
-using DevilDaggersInfo.App.Core.NativeInterface.Services.Linux;
-#elif WINDOWS
-using DevilDaggersInfo.App.Core.NativeInterface.Services.Windows;
-#endif
-
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
-using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Layouts;
-using DevilDaggersInfo.App.Ui.SurvivalEditor.Layouts;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Versioning;
-using DevilDaggersInfo.Types.Web;
 using Serilog;
 using Serilog.Core;
 using Silk.NET.OpenGL;
@@ -30,7 +18,7 @@ using Constants = DevilDaggersInfo.App.Ui.Base.Constants;
 namespace DevilDaggersInfo.App;
 
 [GenerateGame]
-public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
+public sealed partial class Game : RenderImplUiGameBase, IGame
 {
 	private static readonly Logger _log = new LoggerConfiguration()
 		.WriteTo.File("ddinfo.log", rollingInterval: RollingInterval.Infinite)
@@ -56,45 +44,16 @@ public sealed partial class Game : RenderImplUiGameBase, IDependencyContainer
 
 		AppVersion = appVersion;
 
-#if WINDOWS
-		GameMemoryService = new(new WindowsMemoryService());
-#elif LINUX
-		GameMemoryService = new(new LinuxMemoryService());
-#endif
-
 		UserSettings.Load();
 	}
 
-#if WINDOWS
-	public ToolBuildType BuildType => ToolBuildType.WindowsWarp;
-	public SupportedOperatingSystem SupportedOperatingSystem => SupportedOperatingSystem.Windows;
-#elif LINUX
-	public ToolBuildType BuildType => ToolBuildType.LinuxWarp;
-	public SupportedOperatingSystem SupportedOperatingSystem => SupportedOperatingSystem.Linux;
-#endif
-
 	public AppVersion AppVersion { get; }
-
-	#region Dependencies
-
-	public IExtendedLayout ConfigLayout { get; } = new Layouts.ConfigLayout();
-	public IExtendedLayout MainLayout { get; } = new Layouts.MainLayout();
-
-	public IExtendedLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
-	public IExtendedLayout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();
-	public IExtendedLayout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
-	public IExtendedLayout SurvivalEditor3dLayout { get; } = new SurvivalEditor3dLayout();
-	public IExtendedLayout CustomLeaderboardsRecorderMainLayout { get; } = new CustomLeaderboardsRecorderMainLayout();
-	public IExtendedLayout CustomLeaderboardsRecorderReplayViewer3dLayout { get; } = new ReplayViewer3dLayout();
-	public GameMemoryService GameMemoryService { get; }
-
-	#endregion Dependencies
 
 	public string? TooltipText { get; set; }
 
 	public void Initialize()
 	{
-		StateManager.Dispatch(new SetLayout(ConfigLayout));
+		StateManager.Dispatch(new SetLayout(Root.Dependencies.ConfigLayout));
 		StateManager.Dispatch(new ValidateInstallation());
 	}
 

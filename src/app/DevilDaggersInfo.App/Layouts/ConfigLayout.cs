@@ -21,12 +21,12 @@ public class ConfigLayout : Layout, IExtendedLayout
 	public ConfigLayout()
 	{
 		_textInput = new(new PixelBounds(32, 128, 960, 16), false, null, null, null, TextInputStyles.Default);
-		_textInput.KeyboardInput.SetText(UserSettings.DevilDaggersInstallationDirectory);
 		NestingContext.Add(_textInput);
 
 		NestingContext.Add(new TextButton(new PixelBounds(32, 320, 256, 32), Check, ButtonStyles.Default, new(Color.White, TextAlign.Middle, FontSize.H12), "Save and continue"));
 
 		StateManager.Subscribe<ValidateInstallation>(ValidateInstallation);
+		StateManager.Subscribe<SetLayout>(SetLayout);
 	}
 
 	private void Check()
@@ -47,13 +47,21 @@ public class ConfigLayout : Layout, IExtendedLayout
 			return;
 		}
 
-		StateManager.Dispatch(new SetLayout(Root.Game.MainLayout));
+		StateManager.Dispatch(new SetLayout(Root.Dependencies.MainLayout));
 
 		if (!_contentInitialized)
 		{
 			StateManager.Dispatch(new InitializeContent());
 			_contentInitialized = true;
 		}
+	}
+
+	private void SetLayout()
+	{
+		if (StateManager.LayoutState.CurrentLayout != Root.Dependencies.ConfigLayout)
+			return;
+
+		_textInput.KeyboardInput.SetText(UserSettings.DevilDaggersInstallationDirectory);
 	}
 
 	public void Update()
