@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Api.App.Updates;
+using DevilDaggersInfo.App.AutoUpdating;
 using DevilDaggersInfo.App.Core.ApiClient;
 using DevilDaggersInfo.App.Core.ApiClient.TaskHandlers;
 using DevilDaggersInfo.App.Ui.Base;
@@ -8,7 +9,6 @@ using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
 using DevilDaggersInfo.App.Ui.Base.Styling;
 using DevilDaggersInfo.App.Ui.Scene.GameObjects;
-using DevilDaggersInfo.App.Update;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Versioning;
 using Silk.NET.OpenGL;

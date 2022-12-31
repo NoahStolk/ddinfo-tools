@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO.Compression;
 using System.Reflection;
 
-namespace DevilDaggersInfo.App.Update;
+namespace DevilDaggersInfo.App.AutoUpdating;
 
 public static class UpdateLogic
 {

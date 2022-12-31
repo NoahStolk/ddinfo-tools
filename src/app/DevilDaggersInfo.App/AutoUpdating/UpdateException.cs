@@ -1,4 +1,4 @@
-namespace DevilDaggersInfo.App.Update;
+namespace DevilDaggersInfo.App.AutoUpdating;
 
 public class UpdateException : Exception
 {
