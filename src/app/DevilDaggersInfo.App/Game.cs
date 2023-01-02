@@ -5,7 +5,6 @@ using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Versioning;
 using Serilog;
-using Serilog.Core;
 using Silk.NET.OpenGL;
 using Warp.NET.Debugging;
 using Warp.NET.Extensions;
@@ -20,15 +19,11 @@ namespace DevilDaggersInfo.App;
 [GenerateGame]
 public sealed partial class Game : RenderImplUiGameBase, IGame
 {
-	private static readonly Logger _log = new LoggerConfiguration()
-		.WriteTo.File("ddinfo.log", rollingInterval: RollingInterval.Infinite)
-		.CreateLogger();
-
 	private readonly Matrix4x4 _uiProjectionMatrix;
 
 	private Game()
 	{
-		AppDomain.CurrentDomain.UnhandledException += (_, args) => _log.Fatal(args.ExceptionObject.ToString());
+		AppDomain.CurrentDomain.UnhandledException += (_, args) => Root.Dependencies.Log.Fatal(args.ExceptionObject.ToString());
 
 		_uiProjectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, InitialWindowState.Width, InitialWindowState.Height, 0, -Constants.DepthMax, Constants.DepthMax);
 
