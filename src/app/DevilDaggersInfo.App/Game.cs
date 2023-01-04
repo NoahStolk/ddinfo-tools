@@ -4,7 +4,6 @@ using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Versioning;
-using Serilog;
 using Silk.NET.OpenGL;
 using Warp.NET.Debugging;
 using Warp.NET.Extensions;
