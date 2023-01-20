@@ -52,7 +52,7 @@
 	</ItemGroup>
 
 	<ItemGroup Label="Pomelo">
-		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0-silver.2.ci.20221214222334" />
+		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup Label="Sentry">
