@@ -2,7 +2,7 @@ global using System;
 global using System.Collections.Generic;
 global using System.Numerics;
 global using Warp.NET;
-global using Warp.NET.Numerics;
+global using Warp.NET.Common.Maths.Numerics;
 global using static Warp.NET.Graphics;
 global using DdInfoToolsBaseBlobs = DevilDaggersInfo.App.Ui.Base.Blobs;
 global using DdInfoToolsBaseModels = DevilDaggersInfo.App.Ui.Base.Models;
