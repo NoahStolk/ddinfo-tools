@@ -1,4 +1,7 @@
+using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
+using DevilDaggersInfo.App.Ui.Base.Rendering;
+using DevilDaggersInfo.App.Ui.Base.Rendering.Renderers;
 using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
@@ -7,8 +10,6 @@ using DevilDaggersInfo.Core.Versioning;
 using Silk.NET.OpenGL;
 using Warp.NET.Debugging;
 using Warp.NET.Extensions;
-using Warp.NET.RenderImpl.Ui;
-using Warp.NET.RenderImpl.Ui.Rendering;
 using Warp.NET.Text;
 using Warp.NET.Ui;
 using Constants = DevilDaggersInfo.App.Ui.Base.Constants;
@@ -16,7 +17,7 @@ using Constants = DevilDaggersInfo.App.Ui.Base.Constants;
 namespace DevilDaggersInfo.App;
 
 [GenerateGame]
-public sealed partial class Game : RenderImplUiGameBase, IGame
+public sealed partial class Game : GameBase, IGame
 {
 	private readonly Matrix4x4 _uiProjectionMatrix;
 
@@ -44,6 +45,17 @@ public sealed partial class Game : RenderImplUiGameBase, IGame
 	public AppVersion AppVersion { get; }
 
 	public string? TooltipText { get; set; }
+
+	public MonoSpaceFontRenderer MonoSpaceFontRenderer8 { get; } = new(new(DdInfoToolsBaseTextures.Spleen5x8, DdInfoToolsBaseCharsets.Ascii_32_126));
+	public MonoSpaceFontRenderer MonoSpaceFontRenderer12 { get; } = new(new(DdInfoToolsBaseTextures.Spleen6x12, DdInfoToolsBaseCharsets.Ascii_32_126));
+	public MonoSpaceFontRenderer MonoSpaceFontRenderer16 { get; } = new(new(DdInfoToolsBaseTextures.Spleen8x16, DdInfoToolsBaseCharsets.Ascii_32_126));
+	public MonoSpaceFontRenderer MonoSpaceFontRenderer24 { get; } = new(new(DdInfoToolsBaseTextures.Spleen12x24, DdInfoToolsBaseCharsets.Ascii_32_126));
+	public MonoSpaceFontRenderer MonoSpaceFontRenderer32 { get; } = new(new(DdInfoToolsBaseTextures.Spleen16x32, DdInfoToolsBaseCharsets.Ascii_32_126));
+	public MonoSpaceFontRenderer MonoSpaceFontRenderer64 { get; } = new(new(DdInfoToolsBaseTextures.Spleen32x64, DdInfoToolsBaseCharsets.Ascii_32_126));
+
+	public SpriteRenderer SpriteRenderer { get; } = new();
+	public RectangleRenderer RectangleRenderer { get; } = new();
+	public CircleRenderer CircleRenderer { get; } = new();
 
 	public void Initialize()
 	{
@@ -95,12 +107,12 @@ public sealed partial class Game : RenderImplUiGameBase, IGame
 
 		ActivateViewport(ViewportState.Viewport);
 
-		WarpRenderImplUiShaders.Ui.Use();
+		DdInfoToolsBaseShaders.Ui.Use();
 		Shader.SetMatrix4x4(UiUniforms.Projection, _uiProjectionMatrix);
 		RectangleRenderer.Render();
 		CircleRenderer.Render();
 
-		WarpRenderImplUiShaders.Font.Use();
+		DdInfoToolsBaseShaders.Font.Use();
 		Shader.SetMatrix4x4(FontUniforms.Projection, _uiProjectionMatrix);
 		MonoSpaceFontRenderer8.Render();
 		MonoSpaceFontRenderer12.Render();
@@ -109,7 +121,7 @@ public sealed partial class Game : RenderImplUiGameBase, IGame
 		MonoSpaceFontRenderer32.Render();
 		MonoSpaceFontRenderer64.Render();
 
-		WarpRenderImplUiShaders.Sprite.Use();
+		DdInfoToolsBaseShaders.Sprite.Use();
 		Shader.SetMatrix4x4(SpriteUniforms.Projection, _uiProjectionMatrix);
 		SpriteRenderer.Render();
 
