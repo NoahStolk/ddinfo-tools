@@ -45,7 +45,6 @@ public class DependencyContainer : IDependencyContainer
 	public IExtendedLayout MainLayout { get; } = new Layouts.MainLayout();
 
 	public IExtendedLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
-	public IExtendedLayout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
 	public IExtendedLayout SurvivalEditor3dLayout { get; } = new SurvivalEditor3dLayout();
 
 	public IExtendedLayout CustomLeaderboardsRecorderMainLayout { get; } = new CustomLeaderboardsRecorderMainLayout();
