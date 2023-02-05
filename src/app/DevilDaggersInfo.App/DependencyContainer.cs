@@ -5,6 +5,7 @@ using DevilDaggersInfo.App.Core.NativeInterface.Services.Windows;
 #endif
 
 using DevilDaggersInfo.App.Core.GameMemory;
+using DevilDaggersInfo.App.Core.NativeInterface.Services;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.Platforms;
 using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Layouts;
@@ -21,9 +22,13 @@ public class DependencyContainer : IDependencyContainer
 #if WINDOWS
 		GameMemoryService = new(new WindowsMemoryService());
 		PlatformSpecificValues = new WindowsValues();
+		NativeFileSystemService = new WindowsFileSystemService();
+		NativeDialogService = new WindowsDialogService();
 #elif LINUX
 		GameMemoryService = new(new LinuxMemoryService());
 		PlatformSpecificValues = new LinuxValues();
+		NativeFileSystemService = new LinuxFileSystemService();
+		NativeDialogService = new LinuxDialogService();
 #endif
 	}
 
@@ -31,15 +36,15 @@ public class DependencyContainer : IDependencyContainer
 		.WriteTo.File("ddinfo.log", rollingInterval: RollingInterval.Infinite)
 		.CreateLogger();
 
-	public IPlatformSpecificValues PlatformSpecificValues { get; }
-
 	public GameMemoryService GameMemoryService { get; }
+	public IPlatformSpecificValues PlatformSpecificValues { get; }
+	public INativeFileSystemService NativeFileSystemService { get; }
+	public INativeDialogService NativeDialogService { get; }
 
 	public IExtendedLayout ConfigLayout { get; } = new Layouts.ConfigLayout();
 	public IExtendedLayout MainLayout { get; } = new Layouts.MainLayout();
 
 	public IExtendedLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();
-	public IExtendedLayout SurvivalEditorOpenLayout { get; } = new SurvivalEditorOpenLayout();
 	public IExtendedLayout SurvivalEditorSaveLayout { get; } = new SurvivalEditorSaveLayout();
 	public IExtendedLayout SurvivalEditor3dLayout { get; } = new SurvivalEditor3dLayout();
 
