@@ -1,7 +1,9 @@
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.Rendering;
+using System.Diagnostics;
 using Warp.NET.Content;
+using Warp.NET.Debugging;
 
 namespace DevilDaggersInfo.App;
 
@@ -11,6 +13,9 @@ public static class Program
 
 	public static void Main()
 	{
+		const int debugTimeout = 5;
+		Stopwatch sw = Stopwatch.StartNew();
+
 		Graphics.OnChangeWindowSize = (w, h) =>
 		{
 			Viewport3d = new(0, 0, w, h);
@@ -18,6 +23,7 @@ public static class Program
 		};
 		CreateWindow(new("DDINFO TOOLS", Constants.NativeWidth, Constants.NativeHeight, false));
 		SetWindowSizeLimits(Constants.NativeWidth, Constants.NativeHeight, -1, -1);
+		DebugStack.Add(sw.ElapsedMilliseconds, debugTimeout, "init window");
 
 #if DEBUG
 		const string? ddInfoToolsContentRootDirectory = @"..\..\..\..\..\app-ui\DevilDaggersInfo.App.Ui.Base\Content";
@@ -30,13 +36,16 @@ public static class Program
 		DdInfoToolsBaseModels.Initialize(ddInfoToolsContent.Models);
 		DdInfoToolsBaseShaders.Initialize(ddInfoToolsContent.Shaders);
 		DdInfoToolsBaseTextures.Initialize(ddInfoToolsContent.Textures);
-
 		DdInfoToolsBaseShaderUniformInitializer.Initialize();
+		DebugStack.Add(sw.ElapsedMilliseconds, debugTimeout, "init content");
 
 		Root.Dependencies = new DependencyContainer();
+		DebugStack.Add(sw.ElapsedMilliseconds, debugTimeout, "init deps and ui");
 
 		Game game = Bootstrapper.CreateGame<Game>();
 		Root.Game = game;
+		DebugStack.Add(sw.ElapsedMilliseconds, debugTimeout, "init game");
+		sw.Stop();
 
 		game.Initialize();
 		game.Run();

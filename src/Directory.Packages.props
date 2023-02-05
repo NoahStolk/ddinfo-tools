@@ -47,6 +47,10 @@
 		<PackageVersion Include="Microsoft.Extensions.Http" Version="7.0.0" />
 	</ItemGroup>
 
+	<ItemGroup Label="Native">
+		<PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.2.188-beta" />
+	</ItemGroup>
+
 	<ItemGroup Label="NSwag">
 		<PackageVersion Include="NSwag.AspNetCore" Version="13.18.2" />
 	</ItemGroup>
