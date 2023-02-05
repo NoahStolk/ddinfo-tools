@@ -1,5 +1,3 @@
-using DevilDaggersInfo.Api.App.Updates;
-using DevilDaggersInfo.App.AutoUpdating;
 using DevilDaggersInfo.App.Core.ApiClient;
 using DevilDaggersInfo.App.Core.ApiClient.TaskHandlers;
 using DevilDaggersInfo.App.Ui.Base;
@@ -9,7 +7,6 @@ using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.Rendering.Text;
 using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
-using DevilDaggersInfo.App.Ui.Base.Styling;
 using DevilDaggersInfo.App.Ui.Scene.GameObjects;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Versioning;
@@ -28,17 +25,12 @@ public class MainLayout : Layout, IExtendedLayout
 	private static readonly Vector3 _origin = new(0, 3.25f, 0);
 	private readonly Camera _camera = new();
 
-	private readonly TextButton _checkForUpdatesButton;
-
 	private MeshObject? _skull4;
 	private MeshObject? _skull4Jaw;
 	private readonly List<MeshObject> _tiles = new();
 
 	public MainLayout()
 	{
-		_checkForUpdatesButton = new(new PixelBounds(416, 224, 192, 32), CheckForUpdates, ButtonStyles.Default, new(Color.White, TextAlign.Middle, FontSize.H12), "Check for updates");
-		NestingContext.Add(_checkForUpdatesButton);
-
 		TextButtonStyle textButtonStyle = new(Color.White, TextAlign.Middle, FontSize.H16);
 
 		AddButton(0, 0, Color.FromHsv(000, 1, 0.8f), () => StateManager.Dispatch(new SetLayout(Root.Dependencies.SurvivalEditorMainLayout)), "Survival Editor");
@@ -72,7 +64,7 @@ public class MainLayout : Layout, IExtendedLayout
 	/// </summary>
 	private void InitializeScene()
 	{
-		CheckForUpdates();
+		AsyncHandler.Run(ShowUpdateAvailable, () => FetchLatestVersion.HandleAsync(Root.Game.AppVersion, Root.Dependencies.PlatformSpecificValues.BuildType));
 
 		_skull4 = new(ContentManager.Content.Skull4Mesh, ContentManager.Content.Skull4Texture, Vector3.One, Quaternion.Identity, _origin);
 		_skull4Jaw = new(ContentManager.Content.Skull4JawMesh, ContentManager.Content.Skull4JawTexture, Vector3.One, Quaternion.Identity, _origin);
@@ -92,34 +84,10 @@ public class MainLayout : Layout, IExtendedLayout
 		Tile.Initialize();
 	}
 
-	private void CheckForUpdates()
+	private static void ShowUpdateAvailable(AppVersion? newAppVersion)
 	{
-		_checkForUpdatesButton.Text = "Checking...";
-		AsyncHandler.Run(ShowUpdateAvailable, () => FetchLatestVersion.HandleAsync(Root.Game.AppVersion, Root.Dependencies.PlatformSpecificValues.BuildType));
-
-		void ShowUpdateAvailable(AppVersion? newAppVersion)
-		{
-			_checkForUpdatesButton.Text = newAppVersion == null ? "Check for updates" : $"{newAppVersion} available";
-
-			if (newAppVersion == null)
-				return;
-
-			bool? result = Root.Dependencies.NativeDialogService.PromptYesNo($"Version {newAppVersion} is available", "Do you want to install it now?");
-			if (result == true)
-				AsyncHandler.Run(HandleInstallation, () => DownloadUpdate.HandleAsync(Root.Dependencies.PlatformSpecificValues.BuildType));
-
-			void HandleInstallation(GetLatestVersionFile? latestVersionFile)
-			{
-				try
-				{
-					UpdateLogic.InstallUpdate(latestVersionFile, newAppVersion);
-				}
-				catch (UpdateException ex)
-				{
-					Root.Dependencies.NativeDialogService.ReportError("Could not update", ex.Message);
-				}
-			}
-		}
+		if (newAppVersion != null)
+			Root.Dependencies.NativeDialogService.ReportMessage("Update available", $"Version {newAppVersion} is available. Re-run the launcher to install it.");
 	}
 
 	public void Update()
