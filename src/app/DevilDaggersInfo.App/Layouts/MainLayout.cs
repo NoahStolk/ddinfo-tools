@@ -118,8 +118,7 @@ public class MainLayout : Layout, IExtendedLayout
 				}
 				catch (UpdateException ex)
 				{
-					Popup popup = new(this, ex.Message);
-					NestingContext.Add(popup);
+					Root.Dependencies.NativeDialogService.ReportError("Could not update", ex.Message);
 				}
 			}
 		}
