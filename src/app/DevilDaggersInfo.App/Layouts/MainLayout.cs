@@ -104,11 +104,9 @@ public class MainLayout : Layout, IExtendedLayout
 			if (newAppVersion == null)
 				return;
 
-			Prompt prompt = new(
-				this,
-				$"Version {newAppVersion} is available. Install?",
-				() => AsyncHandler.Run(HandleInstallation, () => DownloadUpdate.HandleAsync(Root.Dependencies.PlatformSpecificValues.BuildType)));
-			NestingContext.Add(prompt);
+			bool? result = Root.Dependencies.NativeDialogService.PromptYesNo($"Version {newAppVersion} is available", "Do you want to install it now?");
+			if (result == true)
+				AsyncHandler.Run(HandleInstallation, () => DownloadUpdate.HandleAsync(Root.Dependencies.PlatformSpecificValues.BuildType));
 
 			void HandleInstallation(GetLatestVersionFile? latestVersionFile)
 			{
