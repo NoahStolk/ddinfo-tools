@@ -60,7 +60,7 @@
 	</ItemGroup>
 
 	<ItemGroup Label="Sentry">
-		<PackageVersion Include="Sentry.AspNetCore" Version="3.27.0" />
+		<PackageVersion Include="Sentry.AspNetCore" Version="3.27.1" />
 	</ItemGroup>
 
 	<ItemGroup Label="Serilog">
