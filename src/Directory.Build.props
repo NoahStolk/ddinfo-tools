@@ -16,7 +16,6 @@
 
 	<PropertyGroup Label="Custom properties">
 		<TailwindBuild>true</TailwindBuild>
-		<SCA>true</SCA>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
@@ -28,7 +27,7 @@
 		<TailwindBuild>false</TailwindBuild>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(SCA)' == 'true'">
+	<ItemGroup>
 		<PackageReference Include="Nullable.Extended.Analyzer">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
