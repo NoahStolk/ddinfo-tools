@@ -1,0 +1,4 @@
+<linker>
+	<!-- All API models must be preserved, otherwise trimming will remove property setters which breaks JSON deserialization. -->
+	<assembly fullname="DevilDaggersInfo.Api.App" preserve="all" />
+</linker>
