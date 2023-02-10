@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>SA1633</NoWarn>
-    <Version>0.2.0.1</Version>
+    <Version>0.2.0.2</Version>
     <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>
     <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
   </PropertyGroup>
@@ -11,6 +11,9 @@
   <PropertyGroup Condition="'$(IsWindows)' == 'true'">
     <DefineConstants>WINDOWS</DefineConstants>
     <OutputType>WinExe</OutputType>
+
+    <!-- Built-in COM interop support is necessary to P/Invoke (i.e.) native Windows file dialogs. -->
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsLinux)' == 'true'">
