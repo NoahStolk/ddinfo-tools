@@ -206,6 +206,26 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		..\.github\workflows\ci.yml = ..\.github\workflows\ci.yml
 	EndProjectSection
 EndProject
+#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Common.Content", "..\..\Warp.NET\src\common\Warp.NET.Common.Content\Warp.NET.Common.Content.csproj", "{EB59BED4-E11E-4211-AE54-5D3B11730E2E}"
+#EndProject
+#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Common.Maths", "..\..\Warp.NET\src\common\Warp.NET.Common.Maths\Warp.NET.Common.Maths.csproj", "{868BB6E4-50AE-4274-9F44-10C247566899}"
+#EndProject
+#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Common.Parsers.GameDefinition", "..\..\Warp.NET\src\common\Warp.NET.Common.Parsers.GameDefinition\Warp.NET.Common.Parsers.GameDefinition.csproj", "{FFFC8F52-CE6B-432C-9F21-B06995968946}"
+#EndProject
+#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Common.Parsers.Map", "..\..\Warp.NET\src\common\Warp.NET.Common.Parsers.Map\Warp.NET.Common.Parsers.Map.csproj", "{D40B5449-35D9-420F-B5C6-867A12B18DD9}"
+#EndProject
+#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Common.Parsers.Model", "..\..\Warp.NET\src\common\Warp.NET.Common.Parsers.Model\Warp.NET.Common.Parsers.Model.csproj", "{D28CAEF9-EAEA-4D71-A852-5CCDC78356D6}"
+#EndProject
+#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Common.Parsers.Sound", "..\..\Warp.NET\src\common\Warp.NET.Common.Parsers.Sound\Warp.NET.Common.Parsers.Sound.csproj", "{D9ED4033-9EA6-4A64-AC62-7150D5BC31B2}"
+#EndProject
+#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Common.Parsers.Texture", "..\..\Warp.NET\src\common\Warp.NET.Common.Parsers.Texture\Warp.NET.Common.Parsers.Texture.csproj", "{2C73B7CB-2BD9-4CC5-B316-D0391F15D13D}"
+#EndProject
+#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Common.Parsing", "..\..\Warp.NET\src\common\Warp.NET.Common.Parsing\Warp.NET.Common.Parsing.csproj", "{D9383703-E1A0-4D07-A273-00A933223CE7}"
+#EndProject
+#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET", "..\..\Warp.NET\src\lib\Warp.NET\Warp.NET.csproj", "{3151A06E-264A-45DF-8773-E12F48AD5BB3}"
+#EndProject
+#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.SourceGen", "..\..\Warp.NET\src\lib\Warp.NET.SourceGen\Warp.NET.SourceGen.csproj", "{59524A4E-DEE5-43B1-AD6E-C81B5147496D}"
+#EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -444,6 +464,46 @@ Global
 		{884E21EB-C4F0-4E80-9BDB-E8A28171BAF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{884E21EB-C4F0-4E80-9BDB-E8A28171BAF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{884E21EB-C4F0-4E80-9BDB-E8A28171BAF0}.Release|Any CPU.Build.0 = Release|Any CPU
+#		{EB59BED4-E11E-4211-AE54-5D3B11730E2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+#		{EB59BED4-E11E-4211-AE54-5D3B11730E2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+#		{EB59BED4-E11E-4211-AE54-5D3B11730E2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+#		{EB59BED4-E11E-4211-AE54-5D3B11730E2E}.Release|Any CPU.Build.0 = Release|Any CPU
+#		{868BB6E4-50AE-4274-9F44-10C247566899}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+#		{868BB6E4-50AE-4274-9F44-10C247566899}.Debug|Any CPU.Build.0 = Debug|Any CPU
+#		{868BB6E4-50AE-4274-9F44-10C247566899}.Release|Any CPU.ActiveCfg = Release|Any CPU
+#		{868BB6E4-50AE-4274-9F44-10C247566899}.Release|Any CPU.Build.0 = Release|Any CPU
+#		{FFFC8F52-CE6B-432C-9F21-B06995968946}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+#		{FFFC8F52-CE6B-432C-9F21-B06995968946}.Debug|Any CPU.Build.0 = Debug|Any CPU
+#		{FFFC8F52-CE6B-432C-9F21-B06995968946}.Release|Any CPU.ActiveCfg = Release|Any CPU
+#		{FFFC8F52-CE6B-432C-9F21-B06995968946}.Release|Any CPU.Build.0 = Release|Any CPU
+#		{D40B5449-35D9-420F-B5C6-867A12B18DD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+#		{D40B5449-35D9-420F-B5C6-867A12B18DD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+#		{D40B5449-35D9-420F-B5C6-867A12B18DD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+#		{D40B5449-35D9-420F-B5C6-867A12B18DD9}.Release|Any CPU.Build.0 = Release|Any CPU
+#		{D28CAEF9-EAEA-4D71-A852-5CCDC78356D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+#		{D28CAEF9-EAEA-4D71-A852-5CCDC78356D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+#		{D28CAEF9-EAEA-4D71-A852-5CCDC78356D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+#		{D28CAEF9-EAEA-4D71-A852-5CCDC78356D6}.Release|Any CPU.Build.0 = Release|Any CPU
+#		{D9ED4033-9EA6-4A64-AC62-7150D5BC31B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+#		{D9ED4033-9EA6-4A64-AC62-7150D5BC31B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+#		{D9ED4033-9EA6-4A64-AC62-7150D5BC31B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+#		{D9ED4033-9EA6-4A64-AC62-7150D5BC31B2}.Release|Any CPU.Build.0 = Release|Any CPU
+#		{2C73B7CB-2BD9-4CC5-B316-D0391F15D13D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+#		{2C73B7CB-2BD9-4CC5-B316-D0391F15D13D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+#		{2C73B7CB-2BD9-4CC5-B316-D0391F15D13D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+#		{2C73B7CB-2BD9-4CC5-B316-D0391F15D13D}.Release|Any CPU.Build.0 = Release|Any CPU
+#		{D9383703-E1A0-4D07-A273-00A933223CE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+#		{D9383703-E1A0-4D07-A273-00A933223CE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+#		{D9383703-E1A0-4D07-A273-00A933223CE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+#		{D9383703-E1A0-4D07-A273-00A933223CE7}.Release|Any CPU.Build.0 = Release|Any CPU
+#		{3151A06E-264A-45DF-8773-E12F48AD5BB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+#		{3151A06E-264A-45DF-8773-E12F48AD5BB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+#		{3151A06E-264A-45DF-8773-E12F48AD5BB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+#		{3151A06E-264A-45DF-8773-E12F48AD5BB3}.Release|Any CPU.Build.0 = Release|Any CPU
+#		{59524A4E-DEE5-43B1-AD6E-C81B5147496D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+#		{59524A4E-DEE5-43B1-AD6E-C81B5147496D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+#		{59524A4E-DEE5-43B1-AD6E-C81B5147496D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+#		{59524A4E-DEE5-43B1-AD6E-C81B5147496D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
