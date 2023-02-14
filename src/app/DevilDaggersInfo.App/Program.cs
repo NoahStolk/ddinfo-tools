@@ -1,6 +1,7 @@
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.Rendering;
+using Silk.NET.GLFW;
 using System.Diagnostics;
 using Warp.NET.Content;
 using Warp.NET.Debugging;
@@ -11,7 +12,7 @@ public static class Program
 {
 	public static Viewport Viewport3d { get; private set; }
 
-	public static void Main()
+	public static unsafe void Main()
 	{
 		const int debugTimeout = 5;
 		Stopwatch sw = Stopwatch.StartNew();
@@ -37,6 +38,18 @@ public static class Program
 		DdInfoToolsBaseShaders.Initialize(ddInfoToolsContent.Shaders);
 		DdInfoToolsBaseTextures.Initialize(ddInfoToolsContent.Textures);
 		DdInfoToolsBaseShaderUniformInitializer.Initialize();
+
+		fixed (byte* ptr = &DdInfoToolsBaseTextures.ApplicationIcon.Pixels.ToArray()[0])
+		{
+			Image image = new()
+			{
+				Width = DdInfoToolsBaseTextures.ApplicationIcon.Width,
+				Height = DdInfoToolsBaseTextures.ApplicationIcon.Height,
+				Pixels = ptr,
+			};
+			Graphics.Glfw.SetWindowIcon(Window, 1, &image);
+		}
+
 		DebugStack.Add(sw.ElapsedMilliseconds, debugTimeout, "init content");
 
 		Root.Dependencies = new DependencyContainer();
