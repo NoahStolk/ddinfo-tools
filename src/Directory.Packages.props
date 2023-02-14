@@ -98,7 +98,7 @@
 
 	<ItemGroup Label="WebAssembly">
 		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.2" />
-		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="7.0.2" />
+		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="7.0.3" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.3" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.2" />
 		<PackageVersion Include="Microsoft.JSInterop.WebAssembly" Version="7.0.2" />
