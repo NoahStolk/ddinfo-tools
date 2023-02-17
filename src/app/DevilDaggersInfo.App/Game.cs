@@ -123,10 +123,10 @@ public sealed partial class Game : GameBase, IGame
 		DdInfoToolsBaseShaders.Sprite.Use();
 		Shader.SetMatrix4x4(SpriteUniforms.Projection, _uiProjectionMatrix);
 		SpriteRenderer.Render();
+	}
 
-		static void ActivateViewport(Viewport viewport)
-		{
-			Gl.Viewport(viewport.X, viewport.Y, (uint)viewport.Width, (uint)viewport.Height);
-		}
+	private static void ActivateViewport(Viewport viewport)
+	{
+		Gl.Viewport(viewport.X, viewport.Y, (uint)viewport.Width, (uint)viewport.Height);
 	}
 }

@@ -7,6 +7,7 @@ using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
 using DevilDaggersInfo.App.Ui.Base.Styling;
+using DevilDaggersInfo.App.Ui.Scene.GameObjects;
 using Warp.NET.Text;
 using Warp.NET.Ui;
 
@@ -68,6 +69,10 @@ public class ConfigLayout : Layout, IExtendedLayout
 			return;
 
 		StateManager.Dispatch(new InitializeContent());
+		Player.Initialize();
+		RaceDagger.Initialize();
+		Tile.Initialize();
+		Skull4.Initialize();
 		_contentInitialized = true;
 	}
 
