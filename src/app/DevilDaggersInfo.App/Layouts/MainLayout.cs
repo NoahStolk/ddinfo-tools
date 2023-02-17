@@ -34,19 +34,25 @@ public class MainLayout : Layout, IExtendedLayout
 		TextButtonStyle textButtonStyle = new(Color.White, TextAlign.Middle, FontSize.H16);
 
 		AddButton(0, 0, Color.FromHsv(000, 1, 0.8f), () => StateManager.Dispatch(new SetLayout(Root.Dependencies.SurvivalEditorMainLayout)), "Survival Editor");
-		AddButton(1, 0, Color.FromHsv(032, 1, 0.8f), () => { }, "Practice (todo)");
+		AddButton(1, 0, Color.FromHsv(130, 1, 0.6f), () => { }, "Asset Editor (todo)");
+		AddButton(2, 0, Color.FromHsv(220, 1, 1.0f), () => { }, "Replay Editor (todo)");
 		AddButton(0, 1, Color.FromHsv(270, 1, 1.0f), () => StateManager.Dispatch(new SetLayout(Root.Dependencies.CustomLeaderboardsRecorderMainLayout)), "Custom Leaderboards");
-		AddButton(1, 1, Color.FromHsv(300, 1, 1.0f), () => { }, "Memory (todo)");
-		AddButton(0, 2, Color.FromHsv(130, 1, 0.6f), () => { }, "Asset Editor (todo)");
-		AddButton(1, 2, Color.FromHsv(220, 1, 1.0f), () => { }, "Replay Editor (todo)");
-		AddButton(0, 3, Color.Gray(0.3f), () => StateManager.Dispatch(new SetLayout(Root.Dependencies.ConfigLayout)), "Configuration");
-		AddButton(1, 3, Color.Gray(0.3f), () => Environment.Exit(0), "Exit");
+		AddButton(1, 1, Color.FromHsv(032, 1, 0.8f), () => { }, "Practice (todo)");
+		AddButton(2, 1, Color.FromHsv(320, 1, 0.8f), () => { }, "Mod Manager (todo)");
+		AddButton(0, 2, Color.Gray(0.3f), () => StateManager.Dispatch(new SetLayout(Root.Dependencies.ConfigLayout)), "Configuration");
+		AddButton(1, 2, Color.Gray(0.3f), () => StateManager.Dispatch(new SetLayout(Root.Dependencies.SettingsLayout)), "Settings");
+		AddButton(2, 2, Color.Gray(0.3f), () => Environment.Exit(0), "Exit");
 
 		void AddButton(int x, int y, Color color, Action onClick, string text)
 		{
-			int xPos = x % 2 == 0 ? 128 : 640;
-			int yPos = y * 128 + 192;
-			NestingContext.Add(new TextButton(new PixelBounds(xPos, yPos, 256, 96), onClick, GetStyle(color), textButtonStyle, text));
+			int xPos = x switch
+			{
+				0 => 160,
+				1 => 416,
+				_ => 672,
+			};
+			int yPos = y * 128 + 256;
+			NestingContext.Add(new TextButton(new PixelBounds(xPos, yPos, 192, 96), onClick, GetStyle(color), textButtonStyle, text));
 
 			static ButtonStyle GetStyle(Color color)
 			{
@@ -64,6 +70,7 @@ public class MainLayout : Layout, IExtendedLayout
 	/// </summary>
 	private void InitializeScene()
 	{
+		// TODO: Prevent executing this method multiple times.
 		AsyncHandler.Run(ShowUpdateAvailable, () => FetchLatestVersion.HandleAsync(Root.Game.AppVersion, Root.Dependencies.PlatformSpecificValues.BuildType));
 
 		_skull4 = new(ContentManager.Content.Skull4Mesh, ContentManager.Content.Skull4Texture, Vector3.One, Quaternion.Identity, _origin);

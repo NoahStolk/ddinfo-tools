@@ -42,6 +42,7 @@ public class DependencyContainer : IDependencyContainer
 	public INativeDialogService NativeDialogService { get; }
 
 	public IExtendedLayout ConfigLayout { get; } = new Layouts.ConfigLayout();
+	public IExtendedLayout SettingsLayout { get; } = new Layouts.SettingsLayout();
 	public IExtendedLayout MainLayout { get; } = new Layouts.MainLayout();
 
 	public IExtendedLayout SurvivalEditorMainLayout { get; } = new SurvivalEditorMainLayout();

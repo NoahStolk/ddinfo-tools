@@ -4,7 +4,6 @@ using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.Base.Rendering.Renderers;
 using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.Base.StateManagement;
-using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Versioning;
 using Silk.NET.OpenGL;
@@ -57,12 +56,6 @@ public sealed partial class Game : GameBase, IGame
 	public RectangleRenderer RectangleRenderer { get; } = new();
 	public CircleRenderer CircleRenderer { get; } = new();
 
-	public void Initialize()
-	{
-		StateManager.Dispatch(new SetLayout(Root.Dependencies.ConfigLayout));
-		StateManager.Dispatch(new ValidateInstallation());
-	}
-
 	protected override void Update()
 	{
 		StateManager.ReduceAll();
@@ -83,8 +76,11 @@ public sealed partial class Game : GameBase, IGame
 		StateManager.LayoutState.CurrentLayout?.Render();
 		StateManager.LayoutState.CurrentLayout?.NestingContext.Render(default);
 
-		MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(0, 640), 500, Color.Green, DebugStack.GetString(), TextAlign.Left);
-		MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(960, 736), 500, Color.Green, $"{Fps} FPS\n{Tps} TPS", TextAlign.Left);
+		if (UserSettings.Model.ShowDebugOutput)
+		{
+			MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(0, 640), 500, Color.Green, DebugStack.GetString(), TextAlign.Left);
+			MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(960, 736), 500, Color.Green, $"{Fps} FPS\n{Tps} TPS", TextAlign.Left);
+		}
 
 		if (string.IsNullOrWhiteSpace(TooltipText))
 			return;
@@ -101,7 +97,10 @@ public sealed partial class Game : GameBase, IGame
 		Gl.ClearColor(0, 0, 0, 1);
 		Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-		ActivateViewport(Program.Viewport3d);
+		if (!UserSettings.Model.RenderWhileWindowIsInactive && !WindowIsActive)
+			return;
+
+		ActivateViewport(ViewportState.Viewport3d);
 
 		StateManager.LayoutState.CurrentLayout?.Render3d();
 
