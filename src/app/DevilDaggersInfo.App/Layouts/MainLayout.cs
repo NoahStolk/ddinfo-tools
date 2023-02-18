@@ -24,9 +24,9 @@ public class MainLayout : Layout, IExtendedLayout
 	{
 		TextButtonStyle textButtonStyle = new(Color.White, TextAlign.Middle, FontSize.H16);
 
-		AddButton(0, 0, Color.FromHsv(000, 1, 0.8f), () => StateManager.Dispatch(new SetLayout(Root.Dependencies.SurvivalEditorMainLayout)), "Survival Editor");
+		AddButton(0, 0, Color.FromHsv(000, 1, 0.8f), () => StateManager.Dispatch(new SetLayout(Root.Dependencies.SurvivalEditorMainLayout)), "Survival Editor (wip)");
 		AddButton(1, 0, Color.FromHsv(130, 1, 0.6f), () => { }, "Asset Editor (todo)");
-		AddButton(2, 0, Color.FromHsv(220, 1, 1.0f), () => { }, "Replay Editor (todo)");
+		AddButton(2, 0, Color.FromHsv(220, 1, 1.0f), () => StateManager.Dispatch(new SetLayout(Root.Dependencies.ReplayEditorMainLayout)), "Replay Editor (wip)");
 		AddButton(0, 1, Color.FromHsv(270, 1, 1.0f), () => StateManager.Dispatch(new SetLayout(Root.Dependencies.CustomLeaderboardsRecorderMainLayout)), "Custom Leaderboards");
 		AddButton(1, 1, Color.FromHsv(032, 1, 0.8f), () => { }, "Practice (todo)");
 		AddButton(2, 1, Color.FromHsv(320, 1, 0.8f), () => { }, "Mod Manager (todo)");

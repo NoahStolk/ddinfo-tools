@@ -9,6 +9,7 @@ using DevilDaggersInfo.App.Core.NativeInterface.Services;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.Platforms;
 using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Layouts;
+using DevilDaggersInfo.App.Ui.ReplayEditor.Layouts;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Layouts;
 using Serilog;
 using Serilog.Core;
@@ -50,4 +51,7 @@ public class DependencyContainer : IDependencyContainer
 
 	public IExtendedLayout CustomLeaderboardsRecorderMainLayout { get; } = new CustomLeaderboardsRecorderMainLayout();
 	public IExtendedLayout CustomLeaderboardsRecorderReplayViewer3dLayout { get; } = new ReplayViewer3dLayout();
+
+	public IExtendedLayout ReplayEditorMainLayout { get; } = new ReplayEditorMainLayout();
+	public IExtendedLayout ReplayEditor3dLayout { get; } = new ReplayEditor3dLayout();
 }
