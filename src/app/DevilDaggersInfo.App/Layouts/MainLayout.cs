@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Scenes;
 using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.Components.Styles;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
@@ -6,8 +7,8 @@ using DevilDaggersInfo.App.Ui.Base.Networking.TaskHandlers;
 using DevilDaggersInfo.App.Ui.Base.Rendering.Text;
 using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
-using DevilDaggersInfo.App.Ui.Scene;
 using DevilDaggersInfo.Common.Utils;
+using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Versioning;
 using Warp.NET.Text;
 using Warp.NET.Ui;
@@ -18,7 +19,7 @@ public class MainLayout : Layout, IExtendedLayout
 {
 	private static readonly string _version = VersionUtils.EntryAssemblyVersion;
 
-	private readonly ArenaScene _arenaScene = new();
+	private readonly MainMenuArenaScene _arenaScene = new();
 
 	public MainLayout()
 	{
@@ -52,7 +53,7 @@ public class MainLayout : Layout, IExtendedLayout
 			}
 		}
 
-		StateManager.Subscribe<InitializeContent>(() => _arenaScene.BuildMainMenu());
+		StateManager.Subscribe<InitializeContent>(() => _arenaScene.BuildSpawnset(SpawnsetBinary.CreateDefault()));
 
 		AsyncHandler.Run(ShowUpdateAvailable, () => FetchLatestVersion.HandleAsync(Root.Game.AppVersion, Root.Dependencies.PlatformSpecificValues.BuildType));
 	}

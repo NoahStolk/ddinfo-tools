@@ -30,7 +30,7 @@ public class SettingsLayout : Layout, IExtendedLayout
 		Checkbox renderWhileWindowIsInactiveCheckbox = AddCheckbox("Render while window is inactive", b => UserSettings.Model = UserSettings.Model with { RenderWhileWindowIsInactive = b });
 		Slider maxFpsSlider = AddSlider("Max FPS", f => UserSettings.Model = UserSettings.Model with { MaxFps = (int)f }, false, UserSettingsModel.MaxFpsMin, UserSettingsModel.MaxFpsMax, 1, UserSettings.Model.MaxFps, SliderStyles.Default with { ValueFormat = "0" });
 		Slider lookSpeedSlider = AddSlider("Look speed", f => UserSettings.Model = UserSettings.Model with { LookSpeed = f }, false, UserSettingsModel.LookSpeedMin, UserSettingsModel.LookSpeedMax, 0.05f, UserSettings.Model.LookSpeed, SliderStyles.Default);
-		Slider fieldOfViewSlider = AddSlider("Field of view", f => UserSettings.Model = UserSettings.Model with { FieldOfView = f }, false, UserSettingsModel.FieldOfViewMin, UserSettingsModel.FieldOfViewMax, 0.01f, UserSettings.Model.FieldOfView, SliderStyles.Default);
+		Slider fieldOfViewSlider = AddSlider("Field of view", f => UserSettings.Model = UserSettings.Model with { FieldOfView = (int)f }, false, UserSettingsModel.FieldOfViewMin, UserSettingsModel.FieldOfViewMax, 1, UserSettings.Model.FieldOfView, SliderStyles.Default with { ValueFormat = "0" });
 
 		Checkbox AddCheckbox(string label, Action<bool> onClick)
 		{

@@ -32,19 +32,19 @@ public static class Program
 		const string? ddInfoToolsContentRootDirectory = null;
 #endif
 		DecompiledContentFile ddInfoToolsContent = Bootstrapper.GetDecompiledContent(ddInfoToolsContentRootDirectory, "ddinfo");
-		DdInfoToolsBaseBlobs.Initialize(ddInfoToolsContent.Blobs);
-		DdInfoToolsBaseCharsets.Initialize(ddInfoToolsContent.Charsets);
-		DdInfoToolsBaseModels.Initialize(ddInfoToolsContent.Models);
-		DdInfoToolsBaseShaders.Initialize(ddInfoToolsContent.Shaders);
-		DdInfoToolsBaseTextures.Initialize(ddInfoToolsContent.Textures);
-		DdInfoToolsBaseShaderUniformInitializer.Initialize();
+		WarpBlobs.Initialize(ddInfoToolsContent.Blobs);
+		WarpCharsets.Initialize(ddInfoToolsContent.Charsets);
+		WarpModels.Initialize(ddInfoToolsContent.Models);
+		WarpShaders.Initialize(ddInfoToolsContent.Shaders);
+		WarpTextures.Initialize(ddInfoToolsContent.Textures);
+		WarpShaderUniformInitializer.Initialize();
 
-		fixed (byte* ptr = &DdInfoToolsBaseTextures.ApplicationIcon.Pixels.ToArray()[0])
+		fixed (byte* ptr = &WarpTextures.ApplicationIcon.Pixels.ToArray()[0])
 		{
 			Image image = new()
 			{
-				Width = DdInfoToolsBaseTextures.ApplicationIcon.Width,
-				Height = DdInfoToolsBaseTextures.ApplicationIcon.Height,
+				Width = WarpTextures.ApplicationIcon.Width,
+				Height = WarpTextures.ApplicationIcon.Height,
 				Pixels = ptr,
 			};
 			Graphics.Glfw.SetWindowIcon(Window, 1, &image);
