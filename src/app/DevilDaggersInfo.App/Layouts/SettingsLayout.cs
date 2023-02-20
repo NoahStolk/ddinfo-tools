@@ -21,6 +21,8 @@ public class SettingsLayout : Layout, IExtendedLayout
 		const int labelX = 256;
 		const int settingX = 512;
 
+		CheckboxStyle checkboxStyle = new(8, 4, 6);
+
 		MainLayoutBackButton backButton = new(new PixelBounds(0, 0, 24, headerHeight), () => StateManager.Dispatch(new SetLayout(Root.Dependencies.MainLayout)));
 		NestingContext.Add(backButton);
 
@@ -34,7 +36,7 @@ public class SettingsLayout : Layout, IExtendedLayout
 
 		Checkbox AddCheckbox(string label, Action<bool> onClick)
 		{
-			Checkbox checkbox = new(new PixelBounds(settingX, y, 24, 24), onClick);
+			Checkbox checkbox = new(new PixelBounds(settingX, y, 24, 24), onClick, checkboxStyle);
 			AddSetting(label, checkbox);
 			return checkbox;
 		}
