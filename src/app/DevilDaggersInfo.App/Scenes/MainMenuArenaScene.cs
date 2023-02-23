@@ -16,7 +16,7 @@ public sealed class MainMenuArenaScene : IArenaScene
 	public List<LightObject> Lights { get; } = new();
 	public RaceDagger? RaceDagger { get; set; }
 
-	public void Clear()
+	private void Clear()
 	{
 		_skull4 = null;
 

@@ -55,6 +55,7 @@ public sealed partial class Game : GameBase, IGame
 	public SpriteRenderer SpriteRenderer { get; } = new();
 	public RectangleRenderer RectangleRenderer { get; } = new();
 	public CircleRenderer CircleRenderer { get; } = new();
+	public LineRenderer LineRenderer { get; } = new();
 
 	protected override void Update()
 	{
@@ -110,6 +111,7 @@ public sealed partial class Game : GameBase, IGame
 		Shader.SetMatrix4x4(UiUniforms.Projection, _uiProjectionMatrix);
 		RectangleRenderer.Render();
 		CircleRenderer.Render();
+		LineRenderer.Render();
 
 		WarpShaders.Font.Use();
 		Shader.SetMatrix4x4(FontUniforms.Projection, _uiProjectionMatrix);
