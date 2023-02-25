@@ -43,7 +43,7 @@ public sealed partial class Game : GameBase, IGame
 
 	public AppVersion AppVersion { get; }
 
-	public string? TooltipText { get; set; }
+	public TooltipContext? TooltipContext { get; set; }
 
 	public MonoSpaceFontRenderer MonoSpaceFontRenderer8 { get; } = new(new(WarpTextures.Spleen5x8, WarpCharsets.Ascii_32_126));
 	public MonoSpaceFontRenderer MonoSpaceFontRenderer12 { get; } = new(new(WarpTextures.Spleen6x12, WarpCharsets.Ascii_32_126));
@@ -63,7 +63,7 @@ public sealed partial class Game : GameBase, IGame
 
 		base.Update();
 
-		TooltipText = null;
+		TooltipContext = null;
 
 		MouseUiContext.Reset(ViewportState.MousePosition);
 		StateManager.LayoutState.CurrentLayout?.Update();
@@ -83,14 +83,14 @@ public sealed partial class Game : GameBase, IGame
 			MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(960, 736), 500, Color.Green, $"{Fps} FPS\n{Tps} TPS", TextAlign.Left);
 		}
 
-		if (string.IsNullOrWhiteSpace(TooltipText))
+		if (TooltipContext == null)
 			return;
 
 		Vector2i<int> tooltipOffset = new Vector2i<int>(16, 16) / ViewportState.Scale.FloorToVector2Int32();
-		Vector2i<int> textSize = MonoSpaceFontRenderer12.Font.MeasureText(TooltipText);
+		Vector2i<int> textSize = MonoSpaceFontRenderer12.Font.MeasureText(TooltipContext.Value.Text);
 		Vector2i<int> tooltipPosition = ViewportState.MousePosition.RoundToVector2Int32() + tooltipOffset + textSize / 2;
-		RectangleRenderer.Schedule(textSize, tooltipPosition, 1000, Color.Black);
-		MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, ViewportState.MousePosition.RoundToVector2Int32() + tooltipOffset, 1001, Color.White, TooltipText, TextAlign.Left);
+		RectangleRenderer.Schedule(textSize, tooltipPosition, 1000, TooltipContext.Value.BackgroundColor);
+		MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, ViewportState.MousePosition.RoundToVector2Int32() + tooltipOffset, 1001, TooltipContext.Value.ForegroundColor, TooltipContext.Value.Text, TextAlign.Left);
 	}
 
 	protected override void Render()
