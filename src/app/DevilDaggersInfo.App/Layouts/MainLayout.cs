@@ -7,6 +7,7 @@ using DevilDaggersInfo.App.Ui.Base.Networking.TaskHandlers;
 using DevilDaggersInfo.App.Ui.Base.Rendering.Text;
 using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
+using DevilDaggersInfo.App.Ui.Base.Utils;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Versioning;
@@ -34,6 +35,24 @@ public class MainLayout : Layout, IExtendedLayout
 		AddButton(0, 2, Color.Gray(0.3f), () => StateManager.Dispatch(new SetLayout(Root.Dependencies.ConfigLayout)), "Configuration");
 		AddButton(1, 2, Color.Gray(0.3f), () => StateManager.Dispatch(new SetLayout(Root.Dependencies.SettingsLayout)), "Settings");
 		AddButton(2, 2, Color.Gray(0.3f), () => Environment.Exit(0), "Exit");
+
+		Color hyperlinkColor = new(0, 160, 255, 255);
+		Color hyperlinkHoverColor = new(63, 223, 255, 255);
+
+		const string homePage = "https://devildaggers.info/";
+		const string toolsPage = "https://devildaggers.info/tools";
+
+		int homePageLinkWidth = homePage.Length * 12; // Root.Game.MonoSpaceFontRenderer24.Font.CharWidth
+		const int homePageLinkHeight = 24;
+		HyperlinkStyle homePageStyle = new(hyperlinkColor, hyperlinkHoverColor, TextAlign.Middle, FontSize.H24);
+		Hyperlink homePageHyperlink = new(new PixelBounds(512 - homePageLinkWidth / 2, 752 - homePageLinkHeight / 2, homePageLinkWidth, homePageLinkHeight), homePage, homePageStyle, homePage);
+		NestingContext.Add(homePageHyperlink);
+
+		int toolsPageLinkWidth = toolsPage.Length * 8; // Root.Game.MonoSpaceFontRenderer16.Font.CharWidth
+		const int toolsPageLinkHeight = 16;
+		HyperlinkStyle toolsPageStyle = new(hyperlinkColor, hyperlinkHoverColor, TextAlign.Left, FontSize.H16);
+		Hyperlink toolsPageHyperlink = new(new PixelBounds(8, 148, toolsPageLinkWidth, toolsPageLinkHeight), toolsPage, toolsPageStyle, toolsPage);
+		NestingContext.Add(toolsPageHyperlink);
 
 		void AddButton(int x, int y, Color color, Action onClick, string text)
 		{
@@ -76,11 +95,12 @@ public class MainLayout : Layout, IExtendedLayout
 
 	public void Render()
 	{
+		Game.Self.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(8), 0, Color.White, StringResources.MainMenu, TextAlign.Left);
+
 		Game.Self.MonoSpaceFontRenderer64.Schedule(Vector2i<int>.One, new(512, 64), 0, Color.Red, "DDINFO", TextAlign.Middle);
 		Game.Self.MonoSpaceFontRenderer32.Schedule(Vector2i<int>.One, new(512, 128), 0, new(255, 127, 0, 255), "TOOLS", TextAlign.Middle);
 		Game.Self.MonoSpaceFontRenderer24.Schedule(Vector2i<int>.One, new(512, 176), 0, new(255, 191, 0, 255), _version, TextAlign.Middle);
 		Game.Self.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(512, 712), 0, Color.White, "Devil Daggers is created by Sorath", TextAlign.Middle);
 		Game.Self.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(512, 728), 0, Color.White, "DevilDaggers.info is created by Noah Stolk", TextAlign.Middle);
-		Game.Self.MonoSpaceFontRenderer24.Schedule(Vector2i<int>.One, new(512, 752), 0, new(255, 0, 31, 255), "HTTPS://DEVILDAGGERS.INFO/", TextAlign.Middle);
 	}
 }
