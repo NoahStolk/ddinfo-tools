@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>SA1633</NoWarn>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <CompilerGeneratedFilesOutputPath>obj\SourceGenOutput</CompilerGeneratedFilesOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
+    <None Include="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\api\DevilDaggersInfo.Api.App\DevilDaggersInfo.Api.App.csproj" />
+    <ProjectReference Include="..\..\common\DevilDaggersInfo.Common\DevilDaggersInfo.Common.csproj" />
+    <ProjectReference Include="..\..\core\DevilDaggersInfo.Core.Mod\DevilDaggersInfo.Core.Mod.csproj" />
+    <ProjectReference Include="..\..\core\DevilDaggersInfo.Core.Spawnset\DevilDaggersInfo.Core.Spawnset.csproj" />
+    <ProjectReference Include="..\..\core\DevilDaggersInfo.Core.Versioning\DevilDaggersInfo.Core.Versioning.csproj" />
+    <ProjectReference Include="..\..\types\DevilDaggersInfo.Types.Core\DevilDaggersInfo.Types.Core.csproj" />
+    <ProjectReference Include="..\..\types\DevilDaggersInfo.Types.Web\DevilDaggersInfo.Types.Web.csproj" />
+    <ProjectReference Include="..\DevilDaggersInfo.App.Core.GameMemory\DevilDaggersInfo.App.Core.GameMemory.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Serilog.Sinks.File" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NoahStolk.Warp.NET" />
+    <PackageReference Include="NoahStolk.Warp.NET.SourceGen" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <!-- In order to use Warp.NET locally, uncomment the following ItemGroup and comment out the NoahStolk.Warp.NET PackageReference above. Using the SourceGen project locally current does not work. -->
+  <!--
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Warp.NET\src\common\Warp.NET.Common.Content\Warp.NET.Common.Content.csproj" />
+    <ProjectReference Include="..\..\..\..\Warp.NET\src\common\Warp.NET.Common.Maths\Warp.NET.Common.Maths.csproj" />
+    <ProjectReference Include="..\..\..\..\Warp.NET\src\common\Warp.NET.Common.Parsers.GameDefinition\Warp.NET.Common.Parsers.GameDefinition.csproj" />
+    <ProjectReference Include="..\..\..\..\Warp.NET\src\common\Warp.NET.Common.Parsers.Map\Warp.NET.Common.Parsers.Map.csproj" />
+    <ProjectReference Include="..\..\..\..\Warp.NET\src\common\Warp.NET.Common.Parsers.Model\Warp.NET.Common.Parsers.Model.csproj" />
+    <ProjectReference Include="..\..\..\..\Warp.NET\src\common\Warp.NET.Common.Parsers.Sound\Warp.NET.Common.Parsers.Sound.csproj" />
+    <ProjectReference Include="..\..\..\..\Warp.NET\src\common\Warp.NET.Common.Parsers.Texture\Warp.NET.Common.Parsers.Texture.csproj" />
+    <ProjectReference Include="..\..\..\..\Warp.NET\src\common\Warp.NET.Common.Parsing\Warp.NET.Common.Parsing.csproj" />
+    <ProjectReference Include="..\..\..\..\Warp.NET\src\lib\Warp.NET\Warp.NET.csproj" />
+  </ItemGroup>
+  -->
+
+  <ItemGroup>
+    <AdditionalFiles Include="Content\Content" />
+  </ItemGroup>
+
+</Project>

@@ -33,10 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\app-ui\DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder\DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.csproj" />
-    <ProjectReference Include="..\..\app-ui\DevilDaggersInfo.App.Ui.ReplayEditor\DevilDaggersInfo.App.Ui.ReplayEditor.csproj" />
-    <ProjectReference Include="..\..\app-ui\DevilDaggersInfo.App.Ui.SurvivalEditor\DevilDaggersInfo.App.Ui.SurvivalEditor.csproj" />
     <ProjectReference Include="..\..\core\DevilDaggersInfo.Core.Spawnset\DevilDaggersInfo.Core.Spawnset.csproj" />
+    <ProjectReference Include="..\DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder\DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.csproj" />
+    <ProjectReference Include="..\DevilDaggersInfo.App.Ui.ReplayEditor\DevilDaggersInfo.App.Ui.ReplayEditor.csproj" />
+    <ProjectReference Include="..\DevilDaggersInfo.App.Ui.SurvivalEditor\DevilDaggersInfo.App.Ui.SurvivalEditor.csproj" />
   </ItemGroup>
 
   <ItemGroup>
