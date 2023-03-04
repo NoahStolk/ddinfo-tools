@@ -8,8 +8,8 @@ public class EllipseRenderer
 {
 	private const int _circleSubdivisionCount = 40;
 
-	private readonly uint _vaoCircleLines = VertexArrayObjectUtils.CreateFromVertices(UiVertexBuilder.CircleLines(_circleSubdivisionCount));
-	private readonly List<EllipseLines> _collection = new();
+	private readonly uint _vaoCircleLineStrip = VertexArrayObjectUtils.CreateFromVertices(UiVertexBuilder.CircleLineStrip(_circleSubdivisionCount));
+	private readonly List<EllipseLineStrip> _collection = new();
 
 	public void Schedule(Vector2i<int> center, float radius, float depth, Color color)
 	{
@@ -26,16 +26,16 @@ public class EllipseRenderer
 		if (_collection.Count == 0)
 			return;
 
-		Gl.BindVertexArray(_vaoCircleLines);
+		Gl.BindVertexArray(_vaoCircleLineStrip);
 
-		foreach (EllipseLines el in _collection)
+		foreach (EllipseLineStrip els in _collection)
 		{
-			ScissorActivator.SetScissor(el.Scissor);
+			ScissorActivator.SetScissor(els.Scissor);
 
-			Matrix4x4 scale = Matrix4x4.CreateScale(el.Radius.X, el.Radius.Y, 1);
-			Matrix4x4 translation = Matrix4x4.CreateTranslation(el.CenterPosition.X, el.CenterPosition.Y, el.Depth);
+			Matrix4x4 scale = Matrix4x4.CreateScale(els.Radius.X, els.Radius.Y, 1);
+			Matrix4x4 translation = Matrix4x4.CreateTranslation(els.CenterPosition.X, els.CenterPosition.Y, els.Depth);
 			Shader.SetMatrix4x4(UiUniforms.Model, scale * translation);
-			Shader.SetVector4(UiUniforms.Color, el.Color);
+			Shader.SetVector4(UiUniforms.Color, els.Color);
 			Gl.DrawArrays(PrimitiveType.LineStrip, 0, _circleSubdivisionCount + 1);
 		}
 
@@ -44,5 +44,5 @@ public class EllipseRenderer
 		_collection.Clear();
 	}
 
-	private readonly record struct EllipseLines(Vector2i<int> CenterPosition, Vector2 Radius, float Depth, Color Color, Scissor? Scissor);
+	private readonly record struct EllipseLineStrip(Vector2i<int> CenterPosition, Vector2 Radius, float Depth, Color Color, Scissor? Scissor);
 }

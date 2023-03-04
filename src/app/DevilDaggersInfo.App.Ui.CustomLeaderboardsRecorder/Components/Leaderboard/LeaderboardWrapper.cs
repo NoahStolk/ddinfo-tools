@@ -94,9 +94,7 @@ public class LeaderboardWrapper : AbstractComponent
 	{
 		base.Render(scrollOffset);
 
-		const int border = 1;
-		Root.Game.RectangleRenderer.Schedule(Bounds.Size, Bounds.Center + scrollOffset, Depth - 5, new(255, 127, 0, 255));
-		Root.Game.RectangleRenderer.Schedule(Bounds.Size - new Vector2i<int>(border * 2), Bounds.Center + scrollOffset, Depth - 4, Color.Gray(0.1f));
+		Root.Game.RectangleRenderer.Schedule(new(Bounds.Size.X, 2), new Vector2i<int>(Bounds.Center.X, Bounds.Y1) + scrollOffset, Depth - 5, Color.Gray(0.4f));
 
 		Root.Game.MonoSpaceFontRenderer24.Schedule(new(1), Bounds.TopLeft + new Vector2i<int>(4) + scrollOffset, Depth - 3, Color.White, StateManager.LeaderboardListState.SelectedCustomLeaderboard?.SpawnsetName ?? string.Empty, TextAlign.Left);
 

@@ -101,13 +101,4 @@ public class StateWrapper : AbstractComponent
 		_labelSpawnsetValue.Text = StateManager.ActiveSpawnsetState.Name ?? "(unknown)";
 		_labelSubmissionValue.Text = DateTimeUtils.FormatTimeAgo(StateManager.RecordingState.LastSubmission);
 	}
-
-	public override void Render(Vector2i<int> scrollOffset)
-	{
-		base.Render(scrollOffset);
-
-		const int border = 1;
-		Root.Game.RectangleRenderer.Schedule(Bounds.Size, Bounds.Center + scrollOffset, Depth, Color.Red);
-		Root.Game.RectangleRenderer.Schedule(Bounds.Size - new Vector2i<int>(border * 2), Bounds.Center + scrollOffset, Depth + 1, Color.Gray(0.1f));
-	}
 }

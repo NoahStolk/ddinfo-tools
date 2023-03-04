@@ -44,7 +44,8 @@ public class Camera
 
 		if (IsMenuCamera)
 		{
-			PositionState.Physics = new(MathF.Sin(Root.Game.Tt) * 5, 6, MathF.Cos(Root.Game.Tt) * 5);
+			float time = Root.Game.Tt * 0.7f;
+			PositionState.Physics = new(MathF.Sin(time) * 5, 6, MathF.Cos(time) * 5);
 			_rotationState.Physics = Quaternion.CreateFromRotationMatrix(SetRotationFromDirectionalVector(new Vector3(0, 4, 0) - PositionState.Physics));
 			return;
 		}

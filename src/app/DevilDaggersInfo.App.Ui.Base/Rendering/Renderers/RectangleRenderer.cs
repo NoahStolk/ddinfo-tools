@@ -7,21 +7,33 @@ namespace DevilDaggersInfo.App.Ui.Base.Rendering.Renderers;
 public class RectangleRenderer
 {
 	private readonly uint _vaoRectangleTriangles = VertexArrayObjectUtils.CreateFromVertices(UiVertexBuilder.RectangleTriangles());
-	private readonly List<Rectangle> _collection = new();
+	private readonly uint _vaoRectangleLineLoop = VertexArrayObjectUtils.CreateFromVertices(UiVertexBuilder.RectangleLineLoop());
 
-	public void Schedule(Vector2i<int> scale, Vector2i<int> center, float depth, Color color)
+	private readonly List<RectangleTriangles> _collectionTriangles = new();
+	private readonly List<RectangleLineLoop> _collectionLineLoop = new();
+
+	public void Schedule(Vector2i<int> scale, Vector2i<int> center, float depth, Color color, bool filled = true)
 	{
-		_collection.Add(new(scale, center, depth, color, ScissorScheduler.GetCalculatedScissor()));
+		if (filled)
+			_collectionTriangles.Add(new(scale, center, depth, color, ScissorScheduler.GetCalculatedScissor()));
+		else
+			_collectionLineLoop.Add(new(scale, center, depth, color, ScissorScheduler.GetCalculatedScissor()));
 	}
 
 	public void Render()
 	{
-		if (_collection.Count == 0)
+		RenderTriangles();
+		RenderLineLoop();
+	}
+
+	private void RenderTriangles()
+	{
+		if (_collectionTriangles.Count == 0)
 			return;
 
 		Gl.BindVertexArray(_vaoRectangleTriangles);
 
-		foreach (Rectangle rt in _collection)
+		foreach (RectangleTriangles rt in _collectionTriangles)
 		{
 			ScissorActivator.SetScissor(rt.Scissor);
 
@@ -34,8 +46,33 @@ public class RectangleRenderer
 
 		Gl.BindVertexArray(0);
 
-		_collection.Clear();
+		_collectionTriangles.Clear();
 	}
 
-	private readonly record struct Rectangle(Vector2i<int> Scale, Vector2i<int> CenterPosition, float Depth, Color Color, Scissor? Scissor);
+	private void RenderLineLoop()
+	{
+		if (_collectionLineLoop.Count == 0)
+			return;
+
+		Gl.BindVertexArray(_vaoRectangleLineLoop);
+
+		foreach (RectangleLineLoop rll in _collectionLineLoop)
+		{
+			ScissorActivator.SetScissor(rll.Scissor);
+
+			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(rll.Scale.X, rll.Scale.Y, 1);
+
+			Shader.SetMatrix4x4(UiUniforms.Model, scaleMatrix * Matrix4x4.CreateTranslation(rll.CenterPosition.X, rll.CenterPosition.Y, rll.Depth));
+			Shader.SetVector4(UiUniforms.Color, rll.Color);
+			Gl.DrawArrays(PrimitiveType.LineLoop, 0, 4);
+		}
+
+		Gl.BindVertexArray(0);
+
+		_collectionLineLoop.Clear();
+	}
+
+	private readonly record struct RectangleTriangles(Vector2i<int> Scale, Vector2i<int> CenterPosition, float Depth, Color Color, Scissor? Scissor);
+
+	private readonly record struct RectangleLineLoop(Vector2i<int> Scale, Vector2i<int> CenterPosition, float Depth, Color Color, Scissor? Scissor);
 }

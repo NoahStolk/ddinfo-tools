@@ -16,7 +16,7 @@ public static class UiVertexBuilder
 		};
 	}
 
-	public static float[] CircleLines(int subdivisionCount)
+	public static float[] CircleLineStrip(int subdivisionCount)
 	{
 		float[] vertices = new float[(subdivisionCount + 2) * 2];
 		for (uint i = 0; i <= subdivisionCount; i++)
@@ -27,6 +27,17 @@ public static class UiVertexBuilder
 		}
 
 		return vertices;
+	}
+
+	public static float[] RectangleLineLoop()
+	{
+		return new[]
+		{
+			-0.5f, -0.5f,
+			+0.5f, -0.5f,
+			+0.5f, +0.5f,
+			-0.5f, +0.5f,
+		};
 	}
 
 	public static float[] Line()

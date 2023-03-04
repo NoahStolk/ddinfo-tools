@@ -15,6 +15,7 @@ namespace DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Layouts;
 
 public class CustomLeaderboardsRecorderMainLayout : Layout, IExtendedLayout
 {
+	private const int _headerHeight = 24;
 	private readonly StateWrapper _stateWrapper;
 	private readonly RecordingScrollArea _recordingScrollArea;
 	private readonly RecordingResultScrollArea _recordingResultScrollArea;
@@ -23,15 +24,14 @@ public class CustomLeaderboardsRecorderMainLayout : Layout, IExtendedLayout
 
 	public CustomLeaderboardsRecorderMainLayout()
 	{
-		const int headerHeight = 24;
 		const int stateWrapperBottom = 96;
 		const int recordingScrollAreaBottom = 444;
 
-		MainLayoutBackButton backButton = new(new PixelBounds(0, 0, 24, headerHeight), () => StateManager.Dispatch(new SetLayout(Root.Dependencies.MainLayout)));
-		_stateWrapper = new(new PixelBounds(0, headerHeight, 256, stateWrapperBottom - headerHeight));
+		MainLayoutBackButton backButton = new(new PixelBounds(0, 0, 24, _headerHeight), () => StateManager.Dispatch(new SetLayout(Root.Dependencies.MainLayout)));
+		_stateWrapper = new(new PixelBounds(0, _headerHeight, 256, stateWrapperBottom - _headerHeight));
 		_recordingScrollArea = new(new PixelBounds(0, stateWrapperBottom, 256, recordingScrollAreaBottom - stateWrapperBottom));
 		_recordingResultScrollArea = new(new PixelBounds(0, stateWrapperBottom, 256, recordingScrollAreaBottom - stateWrapperBottom));
-		LeaderboardListWrapper leaderboardListWrapper = new(new PixelBounds(256, headerHeight, 768, recordingScrollAreaBottom - headerHeight));
+		LeaderboardListWrapper leaderboardListWrapper = new(new PixelBounds(256, _headerHeight, 768, recordingScrollAreaBottom - _headerHeight));
 		LeaderboardWrapper leaderboardWrapper = new(new PixelBounds(0, recordingScrollAreaBottom, 1024, 768 - recordingScrollAreaBottom));
 
 		NestingContext.Add(backButton);
@@ -82,8 +82,9 @@ public class CustomLeaderboardsRecorderMainLayout : Layout, IExtendedLayout
 
 	public void Render()
 	{
-		const int border = 1;
-		Root.Game.RectangleRenderer.Schedule(_recordingScrollArea.Bounds.Size, _recordingScrollArea.Bounds.Center, -2, Color.Purple);
-		Root.Game.RectangleRenderer.Schedule(_recordingScrollArea.Bounds.Size - new Vector2i<int>(border * 2), _recordingScrollArea.Bounds.Center, -1, Color.Gray(0.1f));
+		Vector2i<int> windowSize = new(CurrentWindowState.Width, CurrentWindowState.Height);
+		Root.Game.RectangleRenderer.Schedule(windowSize, windowSize / 2, -100, Color.Gray(0.1f));
+
+		Root.Game.RectangleRenderer.Schedule(new(windowSize.X, 2), new(0, _headerHeight + 1), -99, Color.Gray(0.4f));
 	}
 }
