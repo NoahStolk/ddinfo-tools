@@ -9,19 +9,20 @@ using Warp.NET.Ui.Components;
 
 namespace DevilDaggersInfo.App.Ui.Base.Components;
 
-public class Hyperlink : AbstractComponent
+public class ClickableLabel : AbstractComponent
 {
 	private readonly string _text;
-	private readonly HyperlinkStyle _hyperlinkStyle;
-	private readonly string _url;
+	private readonly Action _onClick;
+	private readonly ClickableLabelStyle _clickableLabelStyle;
+
 	private bool _hover;
 
-	public Hyperlink(IBounds bounds, string text, HyperlinkStyle hyperlinkStyle, string url)
+	public ClickableLabel(IBounds bounds, string text, Action onClick, ClickableLabelStyle clickableLabelStyle)
 		: base(bounds)
 	{
 		_text = text;
-		_hyperlinkStyle = hyperlinkStyle;
-		_url = url;
+		_onClick = onClick;
+		_clickableLabelStyle = clickableLabelStyle;
 	}
 
 	public override void Update(Vector2i<int> scrollOffset)
@@ -32,7 +33,7 @@ public class Hyperlink : AbstractComponent
 		if (!_hover || !Input.IsButtonPressed(MouseButton.Left))
 			return;
 
-		Process.Start(new ProcessStartInfo(_url) { UseShellExecute = true });
+		_onClick();
 	}
 
 	public override void Render(Vector2i<int> scrollOffset)
@@ -42,15 +43,15 @@ public class Hyperlink : AbstractComponent
 		if (_text.Length == 0)
 			return;
 
-		Vector2i<int> textPosition = _hyperlinkStyle.TextAlign switch
+		Vector2i<int> textPosition = _clickableLabelStyle.TextAlign switch
 		{
 			TextAlign.Middle => new Vector2i<int>(Bounds.X1 + Bounds.X2, Bounds.Y1 + Bounds.Y2) / 2,
-			TextAlign.Left => new(Bounds.X1, Bounds.Y1),
-			TextAlign.Right => new(Bounds.X2, Bounds.Y1),
+			TextAlign.Left => new(Bounds.X1 + _clickableLabelStyle.Padding, Bounds.Y1 + _clickableLabelStyle.Padding),
+			TextAlign.Right => new(Bounds.X2 - _clickableLabelStyle.Padding, Bounds.Y1 + _clickableLabelStyle.Padding),
 			_ => throw new InvalidOperationException("Invalid text align."),
 		};
 
-		Color textColor = _hover ? _hyperlinkStyle.HoverTextColor : _hyperlinkStyle.TextColor;
-		Root.Game.GetFontRenderer(_hyperlinkStyle.FontSize).Schedule(Vector2i<int>.One, scrollOffset + textPosition, Depth, textColor, _text, _hyperlinkStyle.TextAlign);
+		Color textColor = _hover ? _clickableLabelStyle.HoverTextColor : _clickableLabelStyle.TextColor;
+		Root.Game.GetFontRenderer(_clickableLabelStyle.FontSize).Schedule(Vector2i<int>.One, scrollOffset + textPosition, Depth, textColor, _text, _clickableLabelStyle.TextAlign);
 	}
 }

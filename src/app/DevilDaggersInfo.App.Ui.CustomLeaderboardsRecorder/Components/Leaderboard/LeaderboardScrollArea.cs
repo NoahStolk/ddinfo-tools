@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Api.App.CustomLeaderboards;
 using DevilDaggersInfo.App.Ui.Base.Components;
+using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.Styling;
 using Warp.NET.Ui;
 
@@ -35,5 +36,13 @@ public class LeaderboardScrollArea : ScrollArea
 			NestingContext.Remove(leaderboardEntry);
 
 		_leaderboardEntries.Clear();
+	}
+
+	public override void Render(Vector2i<int> scrollOffset)
+	{
+		if (StateManager.LeaderboardListState.SelectedCustomLeaderboard == null)
+			return;
+
+		base.Render(scrollOffset);
 	}
 }

@@ -28,6 +28,15 @@ public partial class AppApiHttpClient
 		return await SendRequest(new HttpMethod("POST"), $"api/app/custom-entries/submit", JsonContent.Create(uploadRequest));
 	}
 
+	public async Task<List<GetCustomLeaderboardForOverview>> GetCustomLeaderboards(int selectedPlayerId)
+	{
+		Dictionary<string, object?> queryParameters = new()
+		{
+			{ nameof(selectedPlayerId), selectedPlayerId }
+		};
+		return await SendGetRequest<List<GetCustomLeaderboardForOverview>>(BuildUrlWithQuery($"api/app/custom-leaderboards/", queryParameters));
+	}
+
 	public async Task<GetCustomLeaderboard> GetCustomLeaderboardById(int id)
 	{
 		return await SendGetRequest<GetCustomLeaderboard>($"api/app/custom-leaderboards/{id}");

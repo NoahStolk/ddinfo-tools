@@ -3,4 +3,4 @@ using Warp.NET.Text;
 
 namespace DevilDaggersInfo.App.Ui.Base.Components.Styles;
 
-public record LabelStyle(Color TextColor, TextAlign TextAlign, FontSize FontSize);
+public record LabelStyle(Color TextColor, TextAlign TextAlign, FontSize FontSize, int Padding);

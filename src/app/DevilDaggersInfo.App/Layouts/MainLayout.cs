@@ -11,6 +11,7 @@ using DevilDaggersInfo.App.Ui.Base.Utils;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Versioning;
+using System.Diagnostics;
 using Warp.NET.Text;
 using Warp.NET.Ui;
 
@@ -44,14 +45,14 @@ public class MainLayout : Layout, IExtendedLayout
 
 		int homePageLinkWidth = homePage.Length * 12; // Root.Game.MonoSpaceFontRenderer24.Font.CharWidth
 		const int homePageLinkHeight = 24;
-		HyperlinkStyle homePageStyle = new(hyperlinkColor, hyperlinkHoverColor, TextAlign.Middle, FontSize.H24);
-		Hyperlink homePageHyperlink = new(new PixelBounds(512 - homePageLinkWidth / 2, 752 - homePageLinkHeight / 2, homePageLinkWidth, homePageLinkHeight), homePage, homePageStyle, homePage);
+		ClickableLabelStyle homePageStyle = new(hyperlinkColor, hyperlinkHoverColor, TextAlign.Middle, FontSize.H24, 0);
+		ClickableLabel homePageHyperlink = new(new PixelBounds(512 - homePageLinkWidth / 2, 752 - homePageLinkHeight / 2, homePageLinkWidth, homePageLinkHeight), homePage, () => Process.Start(new ProcessStartInfo(homePage) { UseShellExecute = true }), homePageStyle);
 		NestingContext.Add(homePageHyperlink);
 
 		int toolsPageLinkWidth = toolsPage.Length * 8; // Root.Game.MonoSpaceFontRenderer16.Font.CharWidth
 		const int toolsPageLinkHeight = 16;
-		HyperlinkStyle toolsPageStyle = new(hyperlinkColor, hyperlinkHoverColor, TextAlign.Left, FontSize.H16);
-		Hyperlink toolsPageHyperlink = new(new PixelBounds(8, 148, toolsPageLinkWidth, toolsPageLinkHeight), toolsPage, toolsPageStyle, toolsPage);
+		ClickableLabelStyle toolsPageStyle = new(hyperlinkColor, hyperlinkHoverColor, TextAlign.Left, FontSize.H16, 0);
+		ClickableLabel toolsPageHyperlink = new(new PixelBounds(8, 148, toolsPageLinkWidth, toolsPageLinkHeight), toolsPage, () => Process.Start(new ProcessStartInfo(homePage) { UseShellExecute = true }), toolsPageStyle);
 		NestingContext.Add(toolsPageHyperlink);
 
 		void AddButton(int x, int y, Color color, Action onClick, string text)

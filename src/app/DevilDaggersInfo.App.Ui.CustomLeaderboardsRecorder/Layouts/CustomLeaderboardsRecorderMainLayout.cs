@@ -16,6 +16,7 @@ namespace DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Layouts;
 public class CustomLeaderboardsRecorderMainLayout : Layout, IExtendedLayout
 {
 	private const int _headerHeight = 24;
+
 	private readonly StateWrapper _stateWrapper;
 	private readonly RecordingScrollArea _recordingScrollArea;
 	private readonly RecordingResultScrollArea _recordingResultScrollArea;
@@ -85,6 +86,6 @@ public class CustomLeaderboardsRecorderMainLayout : Layout, IExtendedLayout
 		Vector2i<int> windowSize = new(CurrentWindowState.Width, CurrentWindowState.Height);
 		Root.Game.RectangleRenderer.Schedule(windowSize, windowSize / 2, -100, Color.Gray(0.1f));
 
-		Root.Game.RectangleRenderer.Schedule(new(windowSize.X, 2), new(0, _headerHeight + 1), -99, Color.Gray(0.4f));
+		Root.Game.RectangleRenderer.Schedule(new(windowSize.X, 2), new(windowSize.X / 2, _headerHeight + 1), -99, Color.Gray(0.4f));
 	}
 }

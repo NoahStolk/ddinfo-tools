@@ -92,11 +92,14 @@ public class LeaderboardWrapper : AbstractComponent
 
 	public override void Render(Vector2i<int> scrollOffset)
 	{
-		base.Render(scrollOffset);
-
 		Root.Game.RectangleRenderer.Schedule(new(Bounds.Size.X, 2), new Vector2i<int>(Bounds.Center.X, Bounds.Y1) + scrollOffset, Depth - 5, Color.Gray(0.4f));
 
-		Root.Game.MonoSpaceFontRenderer24.Schedule(new(1), Bounds.TopLeft + new Vector2i<int>(4) + scrollOffset, Depth - 3, Color.White, StateManager.LeaderboardListState.SelectedCustomLeaderboard?.SpawnsetName ?? string.Empty, TextAlign.Left);
+		if (StateManager.LeaderboardListState.SelectedCustomLeaderboard == null)
+			return;
+
+		base.Render(scrollOffset);
+
+		Root.Game.MonoSpaceFontRenderer24.Schedule(new(1), Bounds.TopLeft + new Vector2i<int>(4) + scrollOffset, Depth - 3, Color.White, StateManager.LeaderboardListState.SelectedCustomLeaderboard.SpawnsetName, TextAlign.Left);
 
 		Vector2 position = Bounds.TopLeft.ToVector2() + new Vector2(8, 72) + scrollOffset.ToVector2();
 		const int offset = 8;

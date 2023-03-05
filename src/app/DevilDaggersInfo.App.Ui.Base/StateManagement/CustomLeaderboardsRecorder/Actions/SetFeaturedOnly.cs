@@ -1,14 +1,12 @@
-using DevilDaggersInfo.Types.Web;
-
 namespace DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.Actions;
 
-public record SetCategory(CustomLeaderboardCategory Category) : IAction
+public record SetFeaturedOnly(bool FeaturedOnly) : IAction
 {
 	public void Reduce(StateReducer stateReducer)
 	{
 		stateReducer.LeaderboardListState = stateReducer.LeaderboardListState with
 		{
-			Category = Category,
+			FeaturedOnly = FeaturedOnly,
 		};
 
 		stateReducer.LeaderboardListState = stateReducer.LeaderboardListState with

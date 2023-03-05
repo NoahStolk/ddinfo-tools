@@ -27,7 +27,7 @@ public static class Program
 		DebugStack.Add(sw.ElapsedMilliseconds, debugTimeout, "init window");
 
 #if DEBUG
-		const string? ddInfoToolsContentRootDirectory = @"..\..\..\..\..\app-ui\DevilDaggersInfo.App.Ui.Base\Content";
+		const string? ddInfoToolsContentRootDirectory = @"..\..\..\..\..\app\DevilDaggersInfo.App.Ui.Base\Content";
 #else
 		const string? ddInfoToolsContentRootDirectory = null;
 #endif

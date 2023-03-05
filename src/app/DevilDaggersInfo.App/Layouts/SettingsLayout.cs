@@ -50,7 +50,7 @@ public class SettingsLayout : Layout, IExtendedLayout
 
 		void AddSetting(string label, AbstractComponent component)
 		{
-			NestingContext.Add(new Label(new PixelBounds(labelX, y, 256, 32), label, LabelStyles.DefaultLeft));
+			NestingContext.Add(new Label(new PixelBounds(labelX, y, 256, 32), label, LabelStyles.DefaultLeft with { Padding = 8 }));
 			NestingContext.Add(component);
 			y += 32;
 		}
