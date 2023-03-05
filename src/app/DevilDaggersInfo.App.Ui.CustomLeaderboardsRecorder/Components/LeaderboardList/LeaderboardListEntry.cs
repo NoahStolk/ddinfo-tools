@@ -7,7 +7,9 @@ using DevilDaggersInfo.App.Ui.Base.Rendering.Text;
 using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.Actions;
 using DevilDaggersInfo.App.Ui.Base.Styling;
+using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Utils;
 using DevilDaggersInfo.Common;
+using DevilDaggersInfo.Types.Web;
 using Silk.NET.GLFW;
 using Warp.NET;
 using Warp.NET.Text;
@@ -85,18 +87,23 @@ public class LeaderboardListEntry : LeaderboardListRow
 		_name.Text = customLeaderboard.SpawnsetName;
 		_author.Text = customLeaderboard.SpawnsetAuthorName;
 		_score.Text = customLeaderboard.SelectedPlayerStats?.Time.ToString(StringFormats.TimeFormat) ?? "-";
-		_nextDagger.Text = customLeaderboard.SelectedPlayerStats?.NextDagger?.Time.ToString(StringFormats.TimeFormat) ?? "-";
 		_rank.Text = customLeaderboard.SelectedPlayerStats == null ? "-" : customLeaderboard.SelectedPlayerStats.Rank.ToString();
 		_players.Text = customLeaderboard.PlayerCount.ToString();
 		_worldRecord.Text = customLeaderboard.WorldRecord?.Time.ToString(StringFormats.TimeFormat) ?? "-";
 
-		LabelStyle scoreStyle = new(customLeaderboard.SelectedPlayerStats?.Dagger?.GetColor() ?? Color.White, TextAlign.Right, FontSize.H12, 4);
-		LabelStyle nextDaggerStyle = new(customLeaderboard.SelectedPlayerStats?.NextDagger?.Dagger.GetColor() ?? Color.White, TextAlign.Right, FontSize.H12, 4);
-		LabelStyle worldRecordStyle = new(customLeaderboard.WorldRecord?.Dagger?.GetColor() ?? Color.White, TextAlign.Right, FontSize.H12, 4);
+		_score.LabelStyle = new(CustomLeaderboardDaggerUtils.GetColor(customLeaderboard.SelectedPlayerStats?.Dagger), TextAlign.Right, FontSize.H12, 4);
+		_worldRecord.LabelStyle = new(CustomLeaderboardDaggerUtils.GetColor(customLeaderboard.WorldRecord?.Dagger), TextAlign.Right, FontSize.H12, 4);
 
-		_score.LabelStyle = scoreStyle;
-		_nextDagger.LabelStyle = nextDaggerStyle;
-		_worldRecord.LabelStyle = worldRecordStyle;
+		if (customLeaderboard.SelectedPlayerStats?.Dagger == CustomLeaderboardDagger.Leviathan)
+		{
+			_nextDagger.Text = "COMPLETED";
+			_nextDagger.LabelStyle = new(CustomLeaderboardDaggerUtils.GetColor(CustomLeaderboardDagger.Leviathan), TextAlign.Right, FontSize.H12, 4);
+		}
+		else
+		{
+			_nextDagger.Text = customLeaderboard.SelectedPlayerStats?.NextDagger?.Time.ToString(StringFormats.TimeFormat) ?? "N/A";
+			_nextDagger.LabelStyle = new(CustomLeaderboardDaggerUtils.GetColor(customLeaderboard.SelectedPlayerStats?.NextDagger?.Dagger), TextAlign.Right, FontSize.H12, 4);
+		}
 	}
 
 	public override void Update(Vector2i<int> scrollOffset)

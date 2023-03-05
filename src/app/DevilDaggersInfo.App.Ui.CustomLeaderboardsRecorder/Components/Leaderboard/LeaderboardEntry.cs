@@ -11,6 +11,7 @@ using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.Actions;
 using DevilDaggersInfo.App.Ui.Base.Styling;
 using DevilDaggersInfo.App.Ui.Base.User.Cache;
+using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Utils;
 using DevilDaggersInfo.Common;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Wiki;
@@ -150,7 +151,7 @@ public class LeaderboardEntry : AbstractComponent
 		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[01], 0), Depth, Color.White, _getCustomEntry.PlayerName, TextAlign.Left);
 		ScissorScheduler.PopScissor();
 
-		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[02], 0), Depth, _getCustomEntry.CustomLeaderboardDagger?.GetColor() ?? Color.White, _time, TextAlign.Right);
+		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[02], 0), Depth, CustomLeaderboardDaggerUtils.GetColor(_getCustomEntry.CustomLeaderboardDagger), _time, TextAlign.Right);
 		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[03], 0), Depth, Color.White, _enemiesAlive, TextAlign.Right);
 		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[04], 0), Depth, Color.White, _enemiesKilled, TextAlign.Right);
 		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[05], 0), Depth, Color.White, _gemsCollected, TextAlign.Right);
