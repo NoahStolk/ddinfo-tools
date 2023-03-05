@@ -55,7 +55,7 @@ public class ArenaToolsWrapper : AbstractComponent
 
 		void AddToolButton(int offsetX, int offsetY, ArenaTool arenaTool, Texture texture, string tooltipText)
 		{
-			TooltipIconButton button = new(Bounds.CreateNested(offsetX, offsetY, _arenaButtonSize, _arenaButtonSize), () => StateManager.Dispatch(new SetArenaTool(arenaTool)), ButtonStyles.Default, texture, tooltipText, Color.HalfTransparentWhite, Color.White);
+			TooltipIconButton button = new(Bounds.CreateNested(offsetX, offsetY, _arenaButtonSize, _arenaButtonSize), () => StateManager.Dispatch(new SetArenaTool(arenaTool)), ButtonStyles.Default, texture, tooltipText, TextAlign.Left, Color.HalfTransparentWhite, Color.White);
 			_toolButtons.Add(arenaTool, button);
 		}
 	}

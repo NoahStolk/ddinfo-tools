@@ -11,7 +11,6 @@ using DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.Ac
 using DevilDaggersInfo.App.Ui.Base.Styling;
 using DevilDaggersInfo.App.Ui.Base.User.Settings;
 using DevilDaggersInfo.Core.Wiki;
-using Warp.NET.Extensions;
 using Warp.NET.Text;
 using Warp.NET.Ui;
 using Warp.NET.Ui.Components;
@@ -20,8 +19,6 @@ namespace DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Components.Leaderbo
 
 public class LeaderboardWrapper : AbstractComponent
 {
-	private static readonly Vector2 _iconSize = new(16);
-
 	private readonly TextButton _playButton;
 	private readonly LeaderboardScrollArea _leaderboardScrollArea;
 
@@ -33,6 +30,42 @@ public class LeaderboardWrapper : AbstractComponent
 
 		NestingContext.Add(_playButton);
 		NestingContext.Add(_leaderboardScrollArea);
+
+		const int iconSize = 16;
+		const int offset = 8;
+		TooltipSprite rankTooltip = new(Bounds.CreateNested(TableOffsets[00] - offset, 64, iconSize, iconSize), WarpTextures.IconRank, Color.White, "Rank", TextAlign.Left);
+		TooltipSprite playerTooltip = new(Bounds.CreateNested(TableOffsets[01] + offset, 64, iconSize, iconSize), WarpTextures.IconEye, Color.White, "Player", TextAlign.Left);
+		TooltipSprite timeTooltip = new(Bounds.CreateNested(TableOffsets[02] - offset, 64, iconSize, iconSize), WarpTextures.IconStopwatch, Color.White, "Time", TextAlign.Left);
+		TooltipSprite enemiesAliveTooltip = new(Bounds.CreateNested(TableOffsets[03] - offset, 64, iconSize, iconSize), WarpTextures.IconSkull, Color.Orange, "Enemies alive", TextAlign.Left);
+		TooltipSprite enemiesKilledTooltip = new(Bounds.CreateNested(TableOffsets[04] - offset, 64, iconSize, iconSize), WarpTextures.IconSkull, Color.Red, "Enemies killed", TextAlign.Left);
+		TooltipSprite gemsCollectedTooltip = new(Bounds.CreateNested(TableOffsets[05] - offset, 64, iconSize, iconSize), WarpTextures.IconGem, Color.Red, "Gems collected", TextAlign.Left);
+		TooltipSprite gemsDespawnedTooltip = new(Bounds.CreateNested(TableOffsets[06] - offset, 64, iconSize, iconSize), WarpTextures.IconGem, Color.Gray(0.5f), "Gems despawned", TextAlign.Left);
+		TooltipSprite gemsEatenTooltip = new(Bounds.CreateNested(TableOffsets[07] - offset, 64, iconSize, iconSize), WarpTextures.IconGem, Color.Green, "Gems eaten", TextAlign.Left);
+		TooltipSprite accuracyTooltip = new(Bounds.CreateNested(TableOffsets[08] - offset, 64, iconSize, iconSize), WarpTextures.IconCrosshair, Color.White, "Accuracy", TextAlign.Left);
+		TooltipSprite deathTooltip = new(Bounds.CreateNested(TableOffsets[09] + offset, 64, iconSize, iconSize), WarpTextures.IconSkull, Color.Gray(0.5f), "Death type", TextAlign.Left);
+		TooltipSprite homingStoredTooltip = new(Bounds.CreateNested(TableOffsets[10] - offset, 64, iconSize, iconSize), WarpTextures.IconHoming, Color.White, "Homing stored", TextAlign.Left);
+		TooltipSprite homingEatenTooltip = new(Bounds.CreateNested(TableOffsets[11] - offset, 64, iconSize, iconSize), WarpTextures.IconHomingMask, Color.Red, "Homing eaten", TextAlign.Left);
+		TooltipSprite level2Tooltip = new(Bounds.CreateNested(TableOffsets[12] - offset, 64, iconSize, iconSize), WarpTextures.IconDagger, UpgradesV3_2.Level2.Color.ToWarpColor(), "Level 2", TextAlign.Left);
+		TooltipSprite level3Tooltip = new(Bounds.CreateNested(TableOffsets[13] - offset, 64, iconSize, iconSize), WarpTextures.IconDagger, UpgradesV3_2.Level3.Color.ToWarpColor(), "Level 3", TextAlign.Left);
+		TooltipSprite level4Tooltip = new(Bounds.CreateNested(TableOffsets[14] - offset, 64, iconSize, iconSize), WarpTextures.IconDagger, UpgradesV3_2.Level4.Color.ToWarpColor(), "Level 4", TextAlign.Left);
+		TooltipSprite submitDateTooltip = new(Bounds.CreateNested(TableOffsets[15] - offset, 64, iconSize, iconSize), WarpTextures.IconCalendar, Color.White, "Submit date", TextAlign.Right);
+
+		NestingContext.Add(rankTooltip);
+		NestingContext.Add(playerTooltip);
+		NestingContext.Add(timeTooltip);
+		NestingContext.Add(enemiesAliveTooltip);
+		NestingContext.Add(enemiesKilledTooltip);
+		NestingContext.Add(gemsCollectedTooltip);
+		NestingContext.Add(gemsDespawnedTooltip);
+		NestingContext.Add(gemsEatenTooltip);
+		NestingContext.Add(accuracyTooltip);
+		NestingContext.Add(deathTooltip);
+		NestingContext.Add(homingStoredTooltip);
+		NestingContext.Add(homingEatenTooltip);
+		NestingContext.Add(level2Tooltip);
+		NestingContext.Add(level3Tooltip);
+		NestingContext.Add(level4Tooltip);
+		NestingContext.Add(submitDateTooltip);
 
 		StateManager.Subscribe<SetSelectedCustomLeaderboard>(SetSelectedCustomLeaderboard);
 		StateManager.Subscribe<SetSuccessfulUpload>(SetCustomLeaderboardFromUploadResponse);
@@ -100,24 +133,5 @@ public class LeaderboardWrapper : AbstractComponent
 		base.Render(scrollOffset);
 
 		Root.Game.MonoSpaceFontRenderer24.Schedule(new(1), Bounds.TopLeft + new Vector2i<int>(4) + scrollOffset, Depth - 3, Color.White, StateManager.LeaderboardListState.SelectedCustomLeaderboard.SpawnsetName, TextAlign.Left);
-
-		Vector2 position = Bounds.TopLeft.ToVector2() + new Vector2(8, 72) + scrollOffset.ToVector2();
-		const int offset = 8;
-		Root.Game.SpriteRenderer.Schedule(_iconSize, position + new Vector2(TableOffsets[00] - offset, 0), Depth, WarpTextures.IconRank, Color.White);
-		Root.Game.SpriteRenderer.Schedule(_iconSize, position + new Vector2(TableOffsets[01] + offset, 0), Depth, WarpTextures.IconEye, Color.White);
-		Root.Game.SpriteRenderer.Schedule(_iconSize, position + new Vector2(TableOffsets[02] - offset, 0), Depth, WarpTextures.IconStopwatch, Color.White);
-		Root.Game.SpriteRenderer.Schedule(_iconSize, position + new Vector2(TableOffsets[03] - offset, 0), Depth, WarpTextures.IconSkull, Color.Orange);
-		Root.Game.SpriteRenderer.Schedule(_iconSize, position + new Vector2(TableOffsets[04] - offset, 0), Depth, WarpTextures.IconSkull, Color.Red);
-		Root.Game.SpriteRenderer.Schedule(_iconSize, position + new Vector2(TableOffsets[05] - offset, 0), Depth, WarpTextures.IconGem, Color.Red);
-		Root.Game.SpriteRenderer.Schedule(_iconSize, position + new Vector2(TableOffsets[06] - offset, 0), Depth, WarpTextures.IconGem, Color.Gray(0.5f));
-		Root.Game.SpriteRenderer.Schedule(_iconSize, position + new Vector2(TableOffsets[07] - offset, 0), Depth, WarpTextures.IconGem, Color.Green);
-		Root.Game.SpriteRenderer.Schedule(_iconSize, position + new Vector2(TableOffsets[08] - offset, 0), Depth, WarpTextures.IconCrosshair, Color.White);
-		Root.Game.SpriteRenderer.Schedule(_iconSize, position + new Vector2(TableOffsets[09] + offset, 0), Depth, WarpTextures.IconSkull, Color.Gray(0.5f));
-		Root.Game.SpriteRenderer.Schedule(_iconSize, position + new Vector2(TableOffsets[10] - offset, 0), Depth, WarpTextures.IconHoming, Color.White);
-		Root.Game.SpriteRenderer.Schedule(_iconSize, position + new Vector2(TableOffsets[11] - offset, 0), Depth, WarpTextures.IconHomingMask, Color.Red);
-		Root.Game.SpriteRenderer.Schedule(_iconSize, position + new Vector2(TableOffsets[12] - offset, 0), Depth, WarpTextures.IconDagger, UpgradesV3_2.Level2.Color.ToWarpColor());
-		Root.Game.SpriteRenderer.Schedule(_iconSize, position + new Vector2(TableOffsets[13] - offset, 0), Depth, WarpTextures.IconDagger, UpgradesV3_2.Level3.Color.ToWarpColor());
-		Root.Game.SpriteRenderer.Schedule(_iconSize, position + new Vector2(TableOffsets[14] - offset, 0), Depth, WarpTextures.IconDagger, UpgradesV3_2.Level4.Color.ToWarpColor());
-		Root.Game.SpriteRenderer.Schedule(_iconSize, position + new Vector2(TableOffsets[15] - offset, 0), Depth, WarpTextures.IconCalendar, Color.White);
 	}
 }

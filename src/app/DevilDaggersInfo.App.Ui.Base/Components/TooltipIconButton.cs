@@ -1,5 +1,6 @@
 using DevilDaggersInfo.App.Ui.Base.Components.Styles;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
+using Warp.NET.Text;
 using Warp.NET.Ui;
 
 namespace DevilDaggersInfo.App.Ui.Base.Components;
@@ -7,11 +8,13 @@ namespace DevilDaggersInfo.App.Ui.Base.Components;
 public class TooltipIconButton : IconButton
 {
 	private readonly string _tooltipText;
+	private readonly TextAlign _textAlign;
 
-	public TooltipIconButton(IBounds bounds, Action onClick, ButtonStyle buttonStyle, Texture texture, string tooltipText, Color disabledColor, Color enabledColor)
+	public TooltipIconButton(IBounds bounds, Action onClick, ButtonStyle buttonStyle, Texture texture, string tooltipText, TextAlign textAlign, Color disabledColor, Color enabledColor)
 		: base(bounds, onClick, buttonStyle, texture, disabledColor, enabledColor)
 	{
 		_tooltipText = tooltipText;
+		_textAlign = textAlign;
 	}
 
 	public override void Update(Vector2i<int> scrollOffset)
@@ -25,6 +28,7 @@ public class TooltipIconButton : IconButton
 				Text = _tooltipText,
 				ForegroundColor = Color.White,
 				BackgroundColor = Color.Black,
+				TextAlign = _textAlign,
 			};
 		}
 	}

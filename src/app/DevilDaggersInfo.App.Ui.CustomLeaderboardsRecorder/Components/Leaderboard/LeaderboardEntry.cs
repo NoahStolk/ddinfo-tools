@@ -65,8 +65,8 @@ public class LeaderboardEntry : AbstractComponent
 		_level4 = _getCustomEntry.LevelUpTime4InSeconds == 0 ? "-" : _getCustomEntry.LevelUpTime4InSeconds.ToString(StringFormats.TimeFormat);
 		_submitDate = _getCustomEntry.SubmitDate.ToString(StringFormats.DateTimeFormat);
 
-		TooltipIconButton watchInGame = new(Bounds.CreateNested(160, 0, 16, 16), WatchInGame, ButtonStyles.Borderless, WarpTextures.IconEye, "Watch in-game", Color.HalfTransparentWhite, Color.White) { IsDisabled = !_getCustomEntry.HasReplay, Depth = Depth + 100 };
-		TooltipIconButton watchInReplayViewer = new(Bounds.CreateNested(176, 0, 16, 16), WatchInReplayViewer, ButtonStyles.Borderless, WarpTextures.IconEye, "Watch in replay viewer", Color.HalfTransparentWhite, Color.White) { IsDisabled = !_getCustomEntry.HasReplay, Depth = Depth + 100 };
+		TooltipIconButton watchInGame = new(Bounds.CreateNested(160, 0, 16, 16), WatchInGame, ButtonStyles.Borderless, WarpTextures.IconEye, "Watch in-game", TextAlign.Left, Color.HalfTransparentWhite, Color.White) { IsDisabled = !_getCustomEntry.HasReplay, Depth = Depth + 100 };
+		TooltipIconButton watchInReplayViewer = new(Bounds.CreateNested(176, 0, 16, 16), WatchInReplayViewer, ButtonStyles.Borderless, WarpTextures.IconEye, "Watch in replay viewer", TextAlign.Left, Color.HalfTransparentWhite, Color.White) { IsDisabled = !_getCustomEntry.HasReplay, Depth = Depth + 100 };
 
 		NestingContext.Add(watchInGame);
 		NestingContext.Add(watchInReplayViewer);

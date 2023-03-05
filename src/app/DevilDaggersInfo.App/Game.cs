@@ -8,6 +8,7 @@ using DevilDaggersInfo.App.Ui.Base.User.Settings;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Versioning;
 using Silk.NET.OpenGL;
+using System.Diagnostics;
 using Warp.NET.Debugging;
 using Warp.NET.Extensions;
 using Warp.NET.Text;
@@ -88,8 +89,14 @@ public sealed partial class Game : GameBase, IGame
 		if (TooltipContext == null)
 			return;
 
-		Vector2i<int> tooltipOffset = new Vector2i<int>(16, 16) / ViewportState.Scale.FloorToVector2Int32();
 		Vector2i<int> textSize = MonoSpaceFontRenderer12.Font.MeasureText(TooltipContext.Value.Text);
+		Vector2i<int> tooltipOffset = TooltipContext.Value.TextAlign switch
+		{
+			TextAlign.Left => new Vector2i<int>(16, 16) / ViewportState.Scale.FloorToVector2Int32(),
+			TextAlign.Middle => new Vector2i<int>(-textSize.X / 2, 0) + new Vector2i<int>(0, 16) / ViewportState.Scale.FloorToVector2Int32(),
+			TextAlign.Right => new Vector2i<int>(-textSize.X, 0) + new Vector2i<int>(-4, 16) / ViewportState.Scale.FloorToVector2Int32(),
+			_ => throw new UnreachableException(),
+		};
 		Vector2i<int> tooltipPosition = ViewportState.MousePosition.RoundToVector2Int32() + tooltipOffset + textSize / 2;
 		RectangleRenderer.Schedule(textSize, tooltipPosition, 1000, TooltipContext.Value.BackgroundColor);
 		MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, ViewportState.MousePosition.RoundToVector2Int32() + tooltipOffset, 1001, TooltipContext.Value.ForegroundColor, TooltipContext.Value.Text, TextAlign.Left);
@@ -127,6 +134,8 @@ public sealed partial class Game : GameBase, IGame
 		WarpShaders.Sprite.Use();
 		Shader.SetMatrix4x4(SpriteUniforms.Projection, _uiProjectionMatrix);
 		SpriteRenderer.Render();
+
+		Gl.Disable(EnableCap.ScissorTest);
 	}
 
 	private static void ActivateViewport(Viewport viewport)

@@ -3,6 +3,7 @@ using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.Components.Styles;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.StateManagement;
+using Warp.NET.Text;
 using Warp.NET.Ui;
 
 namespace DevilDaggersInfo.App.Ui.SurvivalEditor.Components.SpawnsetArena;
@@ -22,7 +23,7 @@ public class HeightButton : Button
 		base.Update(scrollOffset);
 
 		if (Hover)
-			Root.Game.TooltipContext = new(_height.ToString(), Color.White, Color.Black);
+			Root.Game.TooltipContext = new(_height.ToString(), Color.White, Color.Black, TextAlign.Left);
 	}
 
 	public override void Render(Vector2i<int> scrollOffset)

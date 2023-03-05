@@ -44,10 +44,10 @@ public class LeaderboardListWrapper : AbstractComponent
 			NestingContext.Add(dropdownEntry);
 		}
 
-		_firstButton = new(bounds.CreateNested(4, 32, 20, 20), () => StateManager.Dispatch(new SetPageIndex(0)), ButtonStyles.NavigationButton, WarpTextures.ArrowStart, "First", Color.HalfTransparentWhite, Color.White) { Depth = pagingComponentsDepth };
-		_prevButton = new(bounds.CreateNested(24, 32, 20, 20), () => StateManager.Dispatch(new SetPageIndex(StateManager.LeaderboardListState.PageIndex - 1)), ButtonStyles.NavigationButton, WarpTextures.ArrowLeft, "Previous", Color.HalfTransparentWhite, Color.White) { Depth = pagingComponentsDepth };
-		_nextButton = new(bounds.CreateNested(44, 32, 20, 20), () => StateManager.Dispatch(new SetPageIndex(StateManager.LeaderboardListState.PageIndex + 1)), ButtonStyles.NavigationButton, WarpTextures.ArrowRight, "Next", Color.HalfTransparentWhite, Color.White) { Depth = pagingComponentsDepth };
-		_lastButton = new(bounds.CreateNested(64, 32, 20, 20), () => StateManager.Dispatch(new SetPageIndex(StateManager.LeaderboardListState.GetTotalPages() - 1)), ButtonStyles.NavigationButton, WarpTextures.ArrowEnd, "Last", Color.HalfTransparentWhite, Color.White) { Depth = pagingComponentsDepth };
+		_firstButton = new(bounds.CreateNested(4, 32, 20, 20), () => StateManager.Dispatch(new SetPageIndex(0)), ButtonStyles.NavigationButton, WarpTextures.ArrowStart, "First", TextAlign.Left, Color.HalfTransparentWhite, Color.White) { Depth = pagingComponentsDepth };
+		_prevButton = new(bounds.CreateNested(24, 32, 20, 20), () => StateManager.Dispatch(new SetPageIndex(StateManager.LeaderboardListState.PageIndex - 1)), ButtonStyles.NavigationButton, WarpTextures.ArrowLeft, "Previous", TextAlign.Left, Color.HalfTransparentWhite, Color.White) { Depth = pagingComponentsDepth };
+		_nextButton = new(bounds.CreateNested(44, 32, 20, 20), () => StateManager.Dispatch(new SetPageIndex(StateManager.LeaderboardListState.PageIndex + 1)), ButtonStyles.NavigationButton, WarpTextures.ArrowRight, "Next", TextAlign.Left, Color.HalfTransparentWhite, Color.White) { Depth = pagingComponentsDepth };
+		_lastButton = new(bounds.CreateNested(64, 32, 20, 20), () => StateManager.Dispatch(new SetPageIndex(StateManager.LeaderboardListState.GetTotalPages() - 1)), ButtonStyles.NavigationButton, WarpTextures.ArrowEnd, "Last", TextAlign.Left, Color.HalfTransparentWhite, Color.White) { Depth = pagingComponentsDepth };
 		TextInput spawnsetFilterInput = new(bounds.CreateNested(188, 32, 96, 20), false, null, null, s => StateManager.Dispatch(new SetSpawnsetFilter(s)), TextInputStyles.Default);
 		TextInput authorFilterInput = new(bounds.CreateNested(288, 32, 96, 20), false, null, null, s => StateManager.Dispatch(new SetAuthorFilter(s)), TextInputStyles.Default);
 		Checkbox featuredCheckbox = new(bounds.CreateNested(388, 32, 20, 20), b => StateManager.Dispatch(new SetFeaturedOnly(b)), new(6, 4, 4));
