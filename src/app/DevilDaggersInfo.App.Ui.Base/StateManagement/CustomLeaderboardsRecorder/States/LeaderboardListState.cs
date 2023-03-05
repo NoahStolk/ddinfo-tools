@@ -49,16 +49,17 @@ public record LeaderboardListState(
 
 	public List<GetCustomLeaderboardForOverview> GetPagedCustomLeaderboards()
 	{
+		_ = SortingDirections.TryGetValue(Sorting, out bool isAscending);
 		IEnumerable<GetCustomLeaderboardForOverview> sorted = Sorting switch
 		{
-			LeaderboardListSorting.Name => Sort(CustomLeaderboards, cl => cl.SpawnsetName),
-			LeaderboardListSorting.Author => Sort(CustomLeaderboards, cl => cl.SpawnsetAuthorName),
-			LeaderboardListSorting.Criteria => Sort(CustomLeaderboards, cl => cl.Criteria.Count),
-			LeaderboardListSorting.Score => Sort(CustomLeaderboards, cl => cl.SelectedPlayerStats?.Time),
-			LeaderboardListSorting.NextDagger => Sort(CustomLeaderboards, cl => cl.SelectedPlayerStats?.NextDagger?.Time),
-			LeaderboardListSorting.Rank => Sort(CustomLeaderboards, cl => cl.SelectedPlayerStats?.Rank),
-			LeaderboardListSorting.Players => Sort(CustomLeaderboards, cl => cl.PlayerCount),
-			LeaderboardListSorting.WorldRecord => Sort(CustomLeaderboards, cl => cl.WorldRecord?.Time),
+			LeaderboardListSorting.Name => isAscending ? CustomLeaderboards.OrderBy(cl => cl.SpawnsetName.ToLower()) : CustomLeaderboards.OrderByDescending(cl => cl.SpawnsetName.ToLower()),
+			LeaderboardListSorting.Author => isAscending ? CustomLeaderboards.OrderBy(cl => cl.SpawnsetAuthorName.ToLower()) : CustomLeaderboards.OrderByDescending(cl => cl.SpawnsetAuthorName.ToLower()),
+			LeaderboardListSorting.Criteria => isAscending ? CustomLeaderboards.OrderBy(cl => cl.Criteria.Count) : CustomLeaderboards.OrderByDescending(cl => cl.Criteria.Count),
+			LeaderboardListSorting.Score => isAscending ? CustomLeaderboards.OrderBy(cl => cl.SelectedPlayerStats?.Time) : CustomLeaderboards.OrderByDescending(cl => cl.SelectedPlayerStats?.Time),
+			LeaderboardListSorting.NextDagger => isAscending ? CustomLeaderboards.OrderBy(GetNextDaggerSortingKey) : CustomLeaderboards.OrderByDescending(GetNextDaggerSortingKey),
+			LeaderboardListSorting.Rank => isAscending ? CustomLeaderboards.OrderBy(GetRankSortingKey) : CustomLeaderboards.OrderByDescending(GetRankSortingKey),
+			LeaderboardListSorting.Players => isAscending ? CustomLeaderboards.OrderBy(cl => cl.PlayerCount) : CustomLeaderboards.OrderByDescending(cl => cl.PlayerCount),
+			LeaderboardListSorting.WorldRecord => isAscending ? CustomLeaderboards.OrderBy(cl => cl.WorldRecord?.Time) : CustomLeaderboards.OrderByDescending(cl => cl.WorldRecord?.Time),
 			_ => throw new UnreachableException(),
 		};
 
@@ -68,12 +69,23 @@ public record LeaderboardListState(
 			.Take(Constants.CustomLeaderboardsPageSize)
 			.ToList();
 
-		IEnumerable<GetCustomLeaderboardForOverview> Sort(IEnumerable<GetCustomLeaderboardForOverview> customLeaderboards, Func<GetCustomLeaderboardForOverview, object?> selector)
+		static int GetRankSortingKey(GetCustomLeaderboardForOverview customLeaderboard)
 		{
-			_ = SortingDirections.TryGetValue(Sorting, out bool isAscending);
-			return isAscending
-				? customLeaderboards.OrderBy(selector)
-				: customLeaderboards.OrderByDescending(selector);
+			if (customLeaderboard.SelectedPlayerStats == null)
+				return int.MaxValue;
+
+			return customLeaderboard.SelectedPlayerStats.Rank;
+		}
+
+		static double GetNextDaggerSortingKey(GetCustomLeaderboardForOverview customLeaderboard)
+		{
+			if (customLeaderboard.Daggers == null || customLeaderboard.SelectedPlayerStats == null)
+				return double.MinValue;
+
+			if (customLeaderboard.SelectedPlayerStats.NextDagger == null)
+				return double.MaxValue;
+
+			return customLeaderboard.SelectedPlayerStats.NextDagger.Time;
 		}
 	}
 

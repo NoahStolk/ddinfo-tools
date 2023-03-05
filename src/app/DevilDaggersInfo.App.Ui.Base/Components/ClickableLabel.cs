@@ -1,7 +1,6 @@
 using DevilDaggersInfo.App.Ui.Base.Components.Styles;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using Silk.NET.GLFW;
-using System.Diagnostics;
 using Warp.NET;
 using Warp.NET.Text;
 using Warp.NET.Ui;

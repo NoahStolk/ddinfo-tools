@@ -44,8 +44,6 @@ public class LeaderboardEntry : AbstractComponent
 	private readonly string _level4;
 	private readonly string _submitDate;
 
-	private bool _isHovering;
-
 	public LeaderboardEntry(IBounds bounds, GetCustomEntry getCustomEntry)
 		: base(bounds)
 	{
@@ -118,37 +116,26 @@ public class LeaderboardEntry : AbstractComponent
 		}
 	}
 
-	public override void Update(Vector2i<int> scrollOffset)
-	{
-		base.Update(scrollOffset);
-
-		_isHovering = MouseUiContext.Contains(scrollOffset, Bounds);
-	}
-
 	public override void Render(Vector2i<int> scrollOffset)
 	{
 		base.Render(scrollOffset);
 
 		bool isCurrentPlayer = _getCustomEntry.PlayerId == UserCache.Model.PlayerId;
-		if (isCurrentPlayer || _isHovering)
+		if (isCurrentPlayer)
 		{
-			Color color = !_getCustomEntry.HasReplay ? new(63, 0, 0, 127) : (isCurrentPlayer, _isHovering) switch
-			{
-				(true, true) => GlobalColors.EntrySelectHover,
-				(true, false) => GlobalColors.EntryHover,
-				(false, true) => GlobalColors.EntrySelect,
-				_ => throw new InvalidOperationException(),
-			};
+			Color color = new(0, 127, 0, 31);
 			Root.Game.RectangleRenderer.Schedule(Bounds.Size, Bounds.Center + scrollOffset, Depth - 1, color);
 		}
 
+		Color textColor = isCurrentPlayer ? Color.Green : Color.White;
+
 		Vector2i<int> position = Bounds.TopLeft + new Vector2i<int>(0, 4) + scrollOffset;
-		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[00], 0), Depth, Color.White, _rank, TextAlign.Right);
+		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[00], 0), Depth, textColor, _rank, TextAlign.Right);
 
 		Vector2i<int> playerNamePosition = Bounds.TopLeft + new Vector2i<int>(0, 4) + new Vector2i<int>(LeaderboardWrapper.TableOffsets[01], 0);
 		const int playerNameMaxWidth = 128;
 		ScissorScheduler.PushScissor(Scissor.Create(new PixelBounds(playerNamePosition.X, playerNamePosition.Y, playerNameMaxWidth, 16), scrollOffset, ViewportState.Offset, ViewportState.Scale));
-		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[01], 0), Depth, Color.White, _getCustomEntry.PlayerName, TextAlign.Left);
+		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[01], 0), Depth, textColor, _getCustomEntry.PlayerName, TextAlign.Left);
 		ScissorScheduler.PopScissor();
 
 		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[02], 0), Depth, CustomLeaderboardDaggerUtils.GetColor(_getCustomEntry.CustomLeaderboardDagger), _time, TextAlign.Right);

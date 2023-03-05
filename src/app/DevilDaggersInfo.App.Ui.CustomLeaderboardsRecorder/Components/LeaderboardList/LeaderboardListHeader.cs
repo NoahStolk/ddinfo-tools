@@ -4,7 +4,6 @@ using DevilDaggersInfo.App.Ui.Base.Rendering.Text;
 using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.Actions;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.Data;
-using DevilDaggersInfo.App.Ui.Base.Styling;
 using Warp.NET.Text;
 using Warp.NET.Ui;
 
