@@ -1,12 +1,15 @@
+using DevilDaggersInfo.App.Ui.Base.User.Cache;
+using DevilDaggersInfo.App.Ui.Base.User.Cache.Model;
+
 namespace DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.Actions;
 
 public record SetCurrentPlayerId(int CurrentPlayerId) : IAction
 {
 	public void Reduce(StateReducer stateReducer)
 	{
-		stateReducer.RecordingState = stateReducer.RecordingState with
+		UserCache.Model = new UserCacheModel
 		{
-			CurrentPlayerId = CurrentPlayerId,
+			PlayerId = CurrentPlayerId,
 		};
 	}
 }

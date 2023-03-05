@@ -1,5 +1,5 @@
 using DevilDaggersInfo.App.Ui.Base.Exceptions;
-using DevilDaggersInfo.App.Ui.Base.Settings;
+using DevilDaggersInfo.App.Ui.Base.User.Settings;
 using DevilDaggersInfo.Core.Mod;
 using DevilDaggersInfo.Core.Mod.Extensions;
 using DevilDaggersInfo.Core.Spawnset;

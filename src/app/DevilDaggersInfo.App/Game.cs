@@ -2,8 +2,9 @@ using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.Rendering;
 using DevilDaggersInfo.App.Ui.Base.Rendering.Renderers;
-using DevilDaggersInfo.App.Ui.Base.Settings;
 using DevilDaggersInfo.App.Ui.Base.StateManagement;
+using DevilDaggersInfo.App.Ui.Base.User.Cache;
+using DevilDaggersInfo.App.Ui.Base.User.Settings;
 using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Versioning;
 using Silk.NET.OpenGL;
@@ -39,6 +40,7 @@ public sealed partial class Game : GameBase, IGame
 		AppVersion = appVersion;
 
 		UserSettings.Load();
+		UserCache.Load();
 	}
 
 	public AppVersion AppVersion { get; }

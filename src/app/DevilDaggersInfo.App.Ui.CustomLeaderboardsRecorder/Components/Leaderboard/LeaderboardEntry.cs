@@ -10,6 +10,7 @@ using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.Actions;
 using DevilDaggersInfo.App.Ui.Base.Styling;
+using DevilDaggersInfo.App.Ui.Base.User.Cache;
 using DevilDaggersInfo.Common;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Wiki;
@@ -127,7 +128,7 @@ public class LeaderboardEntry : AbstractComponent
 	{
 		base.Render(scrollOffset);
 
-		bool isCurrentPlayer = _getCustomEntry.PlayerId == StateManager.RecordingState.CurrentPlayerId;
+		bool isCurrentPlayer = _getCustomEntry.PlayerId == UserCache.Model.PlayerId;
 		if (isCurrentPlayer || _isHovering)
 		{
 			Color color = !_getCustomEntry.HasReplay ? new(63, 0, 0, 127) : (isCurrentPlayer, _isHovering) switch

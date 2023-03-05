@@ -7,6 +7,7 @@ using DevilDaggersInfo.App.Ui.Base.Networking.TaskHandlers;
 using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.Actions;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.Data;
+using DevilDaggersInfo.App.Ui.Base.User.Cache;
 using DevilDaggersInfo.Common.Extensions;
 using DevilDaggersInfo.Core.Encryption;
 #if !SKIP_VALUE
@@ -89,7 +90,7 @@ public static class RecordingLogic
 
 		// Set current player ID when it has not been set yet.
 		// When the game starts up it will be set to -1, and then to the player ID.
-		if (StateManager.RecordingState.CurrentPlayerId == 0 && mainBlock.PlayerId > 0)
+		if (UserCache.Model.PlayerId == 0 && mainBlock.PlayerId > 0)
 		{
 			StateManager.Dispatch(new SetCurrentPlayerId(mainBlock.PlayerId));
 		}

@@ -2,10 +2,10 @@ using DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.Da
 
 namespace DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.States;
 
-public record RecordingState(RecordingStateType RecordingStateType, DateTime? LastSubmission, int CurrentPlayerId, bool ShowUploadResponse)
+public record RecordingState(RecordingStateType RecordingStateType, DateTime? LastSubmission, bool ShowUploadResponse)
 {
 	public static RecordingState GetDefault()
 	{
-		return new(RecordingStateType.WaitingForGame, null, 0, false);
+		return new(RecordingStateType.WaitingForGame, null, false);
 	}
 }

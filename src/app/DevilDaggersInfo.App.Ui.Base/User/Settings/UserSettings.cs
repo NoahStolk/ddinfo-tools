@@ -1,11 +1,11 @@
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
-using DevilDaggersInfo.App.Ui.Base.Settings.Model;
 using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
+using DevilDaggersInfo.App.Ui.Base.User.Settings.Model;
 using System.Text.Json;
 using Warp.NET.Debugging;
 
-namespace DevilDaggersInfo.App.Ui.Base.Settings;
+namespace DevilDaggersInfo.App.Ui.Base.User.Settings;
 
 public static class UserSettings
 {

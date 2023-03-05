@@ -1,5 +1,5 @@
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
-using DevilDaggersInfo.App.Ui.Base.Settings;
+using DevilDaggersInfo.App.Ui.Base.User.Settings;
 using Silk.NET.GLFW;
 using Warp.NET;
 using Warp.NET.Common.Maths;

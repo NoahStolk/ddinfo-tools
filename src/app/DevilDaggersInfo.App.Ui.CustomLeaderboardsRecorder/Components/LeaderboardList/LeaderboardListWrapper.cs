@@ -7,6 +7,7 @@ using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.Actions;
 using DevilDaggersInfo.App.Ui.Base.Styling;
+using DevilDaggersInfo.App.Ui.Base.User.Cache;
 using DevilDaggersInfo.Types.Web;
 using Warp.NET.Text;
 using Warp.NET.Ui;
@@ -87,7 +88,7 @@ public class LeaderboardListWrapper : AbstractComponent
 
 	private static void LoadAllLeaderboards()
 	{
-		AsyncHandler.Run(p => StateManager.Dispatch(new CustomLeaderboardsLoaded(p)), () => FetchCustomLeaderboards.HandleAsync(StateManager.RecordingState.CurrentPlayerId));
+		AsyncHandler.Run(p => StateManager.Dispatch(new CustomLeaderboardsLoaded(p)), () => FetchCustomLeaderboards.HandleAsync(UserCache.Model.PlayerId));
 	}
 
 	private void SetPage()

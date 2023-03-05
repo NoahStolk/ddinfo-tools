@@ -1,4 +1,4 @@
-using DevilDaggersInfo.App.Ui.Base.Settings;
+using DevilDaggersInfo.App.Ui.Base.User.Settings;
 using Warp.NET;
 
 namespace DevilDaggersInfo.App.Ui.Base.Rendering;
