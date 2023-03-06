@@ -1,5 +1,5 @@
 using DevilDaggersInfo.App.Ui.Base.StateManagement.SurvivalEditor.Data;
-using DevilDaggersInfo.Common.Exceptions;
+using System.Diagnostics;
 
 namespace DevilDaggersInfo.App.Ui.SurvivalEditor.Extensions;
 
@@ -38,7 +38,7 @@ public static class SpawnsetEditTypeExtensions
 		SpawnsetEditType.SpawnAdd => "Spawn addition",
 		SpawnsetEditType.SpawnEdit => "Spawn edit",
 		SpawnsetEditType.SpawnInsert => "Spawn insertion",
-		_ => throw new InvalidEnumConversionException(spawnsetEditType),
+		_ => throw new UnreachableException(),
 	};
 
 	public static Color GetColor(this SpawnsetEditType spawnsetEditType) => spawnsetEditType switch
@@ -64,6 +64,6 @@ public static class SpawnsetEditTypeExtensions
 		SpawnsetEditType.SpawnAdd => _colorSpawn,
 		SpawnsetEditType.SpawnEdit => _colorSpawn,
 		SpawnsetEditType.SpawnInsert => _colorSpawn,
-		_ => throw new InvalidEnumConversionException(spawnsetEditType),
+		_ => throw new UnreachableException(),
 	};
 }

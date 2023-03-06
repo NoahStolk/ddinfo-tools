@@ -1,4 +1,4 @@
-using DevilDaggersInfo.Common.Exceptions;
+using System.Diagnostics;
 
 namespace DevilDaggersInfo.App.Core.GameMemory.Extensions;
 
@@ -15,6 +15,6 @@ public static class GameStatusExtensions
 		GameStatus.OwnReplayFromLeaderboard => "Own replay from leaderboard",
 		GameStatus.OtherPlayersReplayFromLeaderboard => "Other player's replay from leaderboard",
 		GameStatus.LocalReplay => "Local replay",
-		_ => throw new InvalidEnumConversionException(gameStatus),
+		_ => throw new UnreachableException(),
 	};
 }

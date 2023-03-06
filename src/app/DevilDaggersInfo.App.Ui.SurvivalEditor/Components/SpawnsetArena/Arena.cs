@@ -9,9 +9,9 @@ using DevilDaggersInfo.App.Ui.Base.Styling;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.EditorArena;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.EditorArena.Data;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Utils;
-using DevilDaggersInfo.Common.Exceptions;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Types.Core.Spawnsets;
+using System.Diagnostics;
 using Warp.NET;
 using Warp.NET.Extensions;
 using Warp.NET.Ui;
@@ -55,7 +55,7 @@ public class Arena : AbstractComponent
 		ArenaTool.Ellipse => _ellipseState,
 		ArenaTool.Bucket => _bucketState,
 		ArenaTool.Dagger => _daggerState,
-		_ => throw new InvalidEnumConversionException(StateManager.ArenaEditorState.ArenaTool),
+		_ => throw new UnreachableException(),
 	};
 
 	private ArenaMousePosition GetArenaMousePosition(Vector2i<int> scrollOffset)

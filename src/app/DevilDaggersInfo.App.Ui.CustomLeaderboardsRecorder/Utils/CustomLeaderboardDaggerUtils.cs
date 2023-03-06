@@ -1,7 +1,7 @@
 using DevilDaggersInfo.App.Ui.Base.Extensions;
-using DevilDaggersInfo.Common.Exceptions;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Types.Web;
+using System.Diagnostics;
 
 namespace DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Utils;
 
@@ -18,7 +18,7 @@ public static class CustomLeaderboardDaggerUtils
 			CustomLeaderboardDagger.Devil => DaggerColors.Devil,
 			CustomLeaderboardDagger.Leviathan => DaggerColors.Leviathan,
 			null => new(127, 143, 127),
-			_ => throw new InvalidEnumConversionException(customLeaderboardDagger),
+			_ => throw new UnreachableException(),
 		}).ToWarpColor();
 	}
 }

@@ -1,5 +1,5 @@
 using DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.Data;
-using DevilDaggersInfo.Common.Exceptions;
+using System.Diagnostics;
 
 namespace DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Extensions;
 
@@ -16,6 +16,6 @@ public static class RecordingStateTypeExtensions
 		RecordingStateType.WaitingForReplay => "Waiting for replay",
 		RecordingStateType.Uploading => "Uploading",
 		RecordingStateType.CompletedUpload => "Completed upload",
-		_ => throw new InvalidEnumConversionException(recordingStateType),
+		_ => throw new UnreachableException(),
 	};
 }

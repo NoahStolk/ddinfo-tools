@@ -2,10 +2,10 @@
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Scene;
 using DevilDaggersInfo.App.Ui.Scene.GameObjects;
-using DevilDaggersInfo.Common.Exceptions;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Core.Spawnset;
 using Silk.NET.OpenGL;
+using System.Diagnostics;
 using Warp.NET.GameObjects.Common;
 
 namespace DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Scenes;
@@ -81,7 +81,7 @@ public sealed class GhostsArenaScene : IArenaScene
 				ReplaySound.Jump1 => ContentManager.Content.SoundJump1,
 				ReplaySound.Jump2 => ContentManager.Content.SoundJump2,
 				ReplaySound.Jump3 => ContentManager.Content.SoundJump3,
-				_ => throw new InvalidEnumConversionException(soundSnapshot.Sound),
+				_ => throw new UnreachableException(),
 			})
 			{
 				Position = soundSnapshot.Position,

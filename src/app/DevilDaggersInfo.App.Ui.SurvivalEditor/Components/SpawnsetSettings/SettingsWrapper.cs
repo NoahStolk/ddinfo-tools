@@ -6,9 +6,9 @@ using DevilDaggersInfo.App.Ui.Base.Styling;
 using DevilDaggersInfo.App.Ui.Base.Utils;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Utils;
 using DevilDaggersInfo.Common;
-using DevilDaggersInfo.Common.Exceptions;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Types.Core.Spawnsets;
+using System.Diagnostics;
 using Warp.NET.Ui;
 using Warp.NET.Ui.Components;
 
@@ -128,7 +128,7 @@ public class SettingsWrapper : AbstractComponent
 			GameMode.Survival => nameof(GameMode.Survival),
 			GameMode.TimeAttack => "TA",
 			GameMode.Race => nameof(GameMode.Race),
-			_ => throw new InvalidEnumConversionException(gameMode),
+			_ => throw new UnreachableException(),
 		};
 	}
 
@@ -143,7 +143,7 @@ public class SettingsWrapper : AbstractComponent
 			HandLevel.Level2 => "Lvl 2",
 			HandLevel.Level3 => "Lvl 3",
 			HandLevel.Level4 => "Lvl 4",
-			_ => throw new InvalidEnumConversionException(handLevel),
+			_ => throw new UnreachableException(),
 		};
 	}
 
