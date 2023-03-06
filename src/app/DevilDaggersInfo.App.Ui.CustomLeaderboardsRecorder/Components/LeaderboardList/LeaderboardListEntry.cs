@@ -115,7 +115,7 @@ public class LeaderboardListEntry : LeaderboardListRow
 		if (!_isHovering || !Input.IsButtonPressed(MouseButton.Left))
 			return;
 
-		StateManager.Dispatch(new SetSelectedCustomLeaderboard(_customLeaderboard));
+		StateManager.Dispatch(new SetSelectedCustomLeaderboard(_customLeaderboard.Id, _customLeaderboard.SpawnsetId, _customLeaderboard.SpawnsetName));
 	}
 
 	public override void Render(Vector2i<int> scrollOffset)

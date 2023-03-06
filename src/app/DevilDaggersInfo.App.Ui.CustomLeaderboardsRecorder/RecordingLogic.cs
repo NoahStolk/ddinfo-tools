@@ -108,11 +108,13 @@ public static class RecordingLogic
 			StateManager.Dispatch(new SetRecordingState(RecordingStateType.Recording));
 		}
 
+#if !FORCE_LOCAL_REPLAYS
 		if (status == GameStatus.LocalReplay)
 		{
 			StateManager.Dispatch(new SetRecordingState(RecordingStateType.WaitingForLocalReplay));
 			return;
 		}
+#endif
 
 		if (status == GameStatus.OwnReplayFromLeaderboard)
 		{
@@ -156,7 +158,11 @@ public static class RecordingLogic
 
 		string toEncrypt = string.Join(
 			";",
+#if FORCE_LOCAL_REPLAYS
+			runToUpload.ReplayPlayerId,
+#else
 			runToUpload.PlayerId,
+#endif
 			timeAsBytes.ByteArrayToHexString(),
 			runToUpload.GemsCollected,
 			runToUpload.GemsDespawned,
@@ -170,7 +176,11 @@ public static class RecordingLogic
 			runToUpload.HomingStored,
 			runToUpload.HomingEaten,
 			runToUpload.IsReplay,
+#if FORCE_LOCAL_REPLAYS
+			(int)GameStatus.Dead,
+#else
 			runToUpload.Status,
+#endif
 			runToUpload.SurvivalHashMd5.ByteArrayToHexString(),
 			levelUpTime2AsBytes.ByteArrayToHexString(),
 			levelUpTime3AsBytes.ByteArrayToHexString(),
@@ -203,11 +213,19 @@ public static class RecordingLogic
 			LevelUpTime2AsBytes = levelUpTime2AsBytes,
 			LevelUpTime3AsBytes = levelUpTime3AsBytes,
 			LevelUpTime4AsBytes = levelUpTime4AsBytes,
+#if FORCE_LOCAL_REPLAYS
+			PlayerId = runToUpload.ReplayPlayerId,
+#else
 			PlayerId = runToUpload.PlayerId,
+#endif
 			SurvivalHashMd5 = runToUpload.SurvivalHashMd5,
 			TimeInSeconds = runToUpload.Time,
 			TimeAsBytes = timeAsBytes,
+#if FORCE_LOCAL_REPLAYS
+			PlayerName = runToUpload.ReplayPlayerName,
+#else
 			PlayerName = runToUpload.PlayerName,
+#endif
 			IsReplay = runToUpload.IsReplay,
 			Validation = HttpUtility.HtmlEncode(validation),
 			ValidationVersion = 2,
@@ -221,7 +239,11 @@ public static class RecordingLogic
 			ProhibitedMods = runToUpload.ProhibitedMods,
 			Client = "ddinfo-tools",
 			ReplayData = memoryService.ReadReplayFromMemory(),
+#if FORCE_LOCAL_REPLAYS
+			Status = (int)GameStatus.Dead,
+#else
 			Status = runToUpload.Status,
+#endif
 			ReplayPlayerId = runToUpload.ReplayPlayerId,
 			GameMode = runToUpload.GameMode,
 			TimeAttackOrRaceFinished = runToUpload.TimeAttackOrRaceFinished,
