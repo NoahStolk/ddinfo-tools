@@ -1,29 +1,22 @@
 using DevilDaggersInfo.Api.App.CustomLeaderboards;
 using DevilDaggersInfo.App.Ui.Base.Components;
-using DevilDaggersInfo.App.Ui.Base.Components.Styles;
-using DevilDaggersInfo.App.Ui.Base.Extensions;
 using DevilDaggersInfo.App.Ui.Base.Styling;
-using DevilDaggersInfo.Common;
-using DevilDaggersInfo.Core.Wiki;
-using System.Diagnostics;
 using Warp.NET.Ui;
 
 namespace DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Components.Recording.Results;
 
-public class RecordingResultHighscore : RecordingResultScoreDifferenceView
+public class RecordingResultNoHighscore : RecordingResultScoreDifferenceView
 {
-	public RecordingResultHighscore(
+	public RecordingResultNoHighscore(
 		IBounds bounds,
-		GetUploadResponseHighscore response,
+		GetUploadResponseNoHighscore response,
 		bool isAscending)
 		: base(bounds)
 	{
-		Label header = new(Bounds.CreateNested(0, 0, Bounds.Size.X, 16), "NEW HIGHSCORE!", LabelStyles.DefaultLeft) { Depth = Depth + 2 };
+		Label header = new(Bounds.CreateNested(0, 0, Bounds.Size.X, 16), "No new highscore.", LabelStyles.DefaultLeft) { Depth = Depth + 2 };
 		NestingContext.Add(header);
 
 		int y = _yStart;
-		AddScoreState(ref y, "Rank", response.RankState, i => i.ToString(), i => $"{i:+0;-0;+0}");
-
 		AddStates(
 			ref y,
 			isAscending,

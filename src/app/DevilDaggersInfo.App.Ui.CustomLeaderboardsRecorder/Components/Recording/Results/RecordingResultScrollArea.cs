@@ -31,7 +31,7 @@ public class RecordingResultScrollArea : ScrollArea
 		}
 
 		if (response.NoHighscore != null)
-			ShowNoHighscoreResult();
+			ShowNoHighscoreResult(response.NoHighscore, response.IsAscending);
 		else if (response.FirstScore != null)
 			ShowFirstScoreResult(response.FirstScore);
 		else if (response.Highscore != null)
@@ -42,10 +42,10 @@ public class RecordingResultScrollArea : ScrollArea
 			Root.Dependencies.NativeDialogService.ReportError("Invalid upload response from server.");
 	}
 
-	private void ShowNoHighscoreResult()
+	private void ShowNoHighscoreResult(GetUploadResponseNoHighscore response, bool isAscending)
 	{
-		Label header = new(ContentBounds.CreateNested(0, 0, ContentBounds.Size.X, 16), "No new highscore.", LabelStyles.DefaultLeft) { Depth = Depth + 2 };
-		NestingContext.Add(header);
+		RecordingResultNoHighscore noHighscore = new(ContentBounds.CreateNested(0, 0, ContentBounds.Size.X, 404), response, isAscending) { Depth = Depth + 2 };
+		NestingContext.Add(noHighscore);
 	}
 
 	private void ShowFirstScoreResult(GetUploadResponseFirstScore response)
