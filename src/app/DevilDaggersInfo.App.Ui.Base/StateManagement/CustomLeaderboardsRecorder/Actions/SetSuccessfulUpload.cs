@@ -12,5 +12,9 @@ public record SetSuccessfulUpload(GetUploadResponse UploadResponse) : IAction
 			ShowUploadResponse = true,
 			LastSubmission = DateTime.Now,
 		};
+		stateReducer.LeaderboardListState = stateReducer.LeaderboardListState with
+		{
+			SelectedCustomLeaderboard = new(UploadResponse.CustomLeaderboardId, UploadResponse.SpawnsetId, UploadResponse.SpawnsetName),
+		};
 	}
 }

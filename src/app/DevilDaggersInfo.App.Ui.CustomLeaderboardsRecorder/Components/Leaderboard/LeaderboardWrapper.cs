@@ -120,10 +120,6 @@ public class LeaderboardWrapper : AbstractComponent
 			return;
 
 		_playButton.IsDisabled = false;
-
-		// TODO: This does not update the spawnset name. Dispatch SetSelectedCustomLeaderboard to fix this.
-		// The upload response will need to be updated to include the ID, spawnset ID, and spawnset name.
-		// StateManager.Dispatch(new SetSelectedCustomLeaderboard())...
 		_leaderboardScrollArea.SetContent(StateManager.UploadResponseState.UploadResponse.NewSortedEntries);
 	}
 
