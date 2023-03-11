@@ -1,6 +1,6 @@
 # DevilDaggersInfo
 
-DevilDaggersInfo consists of a website and some tools created specifically for the game Devil Daggers.
+DevilDaggersInfo consists of a website and various tools created specifically for the game Devil Daggers.
 
 ## Website
 
@@ -10,7 +10,7 @@ The website is hosted on [devildaggers.info](https://devildaggers.info/).
 
 ## Tools
 
-The tools can be downloaded on [devildaggers.info/tools](https://devildaggers.info/tools/).
+The tools can be downloaded from [devildaggers.info/tools](https://devildaggers.info/tools/).
 
 ![Tools](images/tools.png)
 
@@ -48,7 +48,7 @@ The tools can be downloaded on [devildaggers.info/tools](https://devildaggers.in
 
 ## Tools features
 
-The new tools are currently in development. The new tools app is a complete rewrite of the old Windows-only tools, combined into one app. The new tools app will be cross-platform.
+The new tools are currently in development. The new tools app is a complete rewrite of the old Windows-only tools, combined into one app, and will be cross-platform.
 
 These features are currently implemented:
 
@@ -72,7 +72,7 @@ These features are planned but may not be possible to implement:
 
 - Replay movement and the ability to compare speedrun/race replays using a ghost system in 3D
 
-The current deprecated apps are not included in this repository. Visit these repositories:
+The original apps are not included in this repository. Visit these repositories:
 
 - [Survival Editor](https://github.com/NoahStolk/DevilDaggersSurvivalEditor)
 - [Custom Leaderboards](https://github.com/NoahStolk/DevilDaggersCustomLeaderboards)
