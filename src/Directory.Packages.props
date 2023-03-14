@@ -34,7 +34,7 @@
 
 	<ItemGroup Label="Json">
 		<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageVersion Include="System.Net.Http.Json" Version="7.0.0" />
+		<PackageVersion Include="System.Net.Http.Json" Version="7.0.1" />
 	</ItemGroup>
 
 	<ItemGroup Label="Jwt">
