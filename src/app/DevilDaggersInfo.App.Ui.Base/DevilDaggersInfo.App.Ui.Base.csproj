@@ -52,7 +52,7 @@
   -->
 
   <ItemGroup>
-    <AdditionalFiles Include="Content\Content" />
+    <AdditionalFiles Include="Content\**\*" />
   </ItemGroup>
 
 </Project>
