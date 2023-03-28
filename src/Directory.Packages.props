@@ -92,7 +92,7 @@
 	</ItemGroup>
 
 	<ItemGroup Label="Warp">
-		<PackageVersion Include="NoahStolk.Warp.NET" Version="0.4.0" />
+		<PackageVersion Include="NoahStolk.Warp.NET" Version="0.4.1" />
 		<PackageVersion Include="NoahStolk.Warp.NET.SourceGen" Version="0.4.0" />
 	</ItemGroup>
 
