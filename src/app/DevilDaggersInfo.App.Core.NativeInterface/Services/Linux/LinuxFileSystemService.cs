@@ -1,3 +1,5 @@
+using NativeFileDialogSharp;
+
 namespace DevilDaggersInfo.App.Core.NativeInterface.Services.Linux;
 
 /// <summary>
@@ -7,16 +9,16 @@ public class LinuxFileSystemService : INativeFileSystemService
 {
 	public string? CreateOpenFileDialog(string dialogTitle, string? extensionFilter)
 	{
-		throw new NotImplementedException();
+		return Dialog.FileOpen().Path;
 	}
 
 	public string? CreateSaveFileDialog(string dialogTitle, string? extensionFilter)
 	{
-		throw new NotImplementedException();
+		return Dialog.FileSave().Path;
 	}
 
 	public string? SelectDirectory()
 	{
-		throw new NotImplementedException();
+		return Dialog.FolderPicker().Path;
 	}
 }

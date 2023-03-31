@@ -4,21 +4,32 @@ public class LinuxDialogService : INativeDialogService
 {
 	public void ReportError(string message, Exception? exception = null)
 	{
-		throw new NotImplementedException();
+		ReportError("Error", message, exception);
 	}
 
 	public void ReportError(string title, string message, Exception? exception = null)
 	{
-		throw new NotImplementedException();
+		if (exception != null)
+			message += Environment.NewLine + exception.Message;
+
+		Console.WriteLine($"{title}: {message}");
 	}
 
 	public void ReportMessage(string title, string message)
 	{
-		throw new NotImplementedException();
+		Console.WriteLine($"{title}{Environment.NewLine}{message}");
 	}
 
 	public bool? PromptYesNo(string title, string message)
 	{
-		throw new NotImplementedException();
+		Console.WriteLine($"{title}{Environment.NewLine}{message}");
+		Console.WriteLine("Y/N");
+		ConsoleKeyInfo key = Console.ReadKey();
+		return key.Key switch
+		{
+			ConsoleKey.Y => true,
+			ConsoleKey.N => false,
+			_ => null,
+		};
 	}
 }
