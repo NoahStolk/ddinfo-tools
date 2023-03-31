@@ -91,9 +91,8 @@
 		<PackageVersion Include="MSTest.TestFramework" Version="3.0.2" />
 	</ItemGroup>
 
-	<ItemGroup Label="Warp">
-		<PackageVersion Include="NoahStolk.Warp.NET" Version="0.4.1" />
-		<PackageVersion Include="NoahStolk.Warp.NET.SourceGen" Version="0.4.1" />
+	<ItemGroup Label="Warp.NET">
+		<PackageVersion Include="NoahStolk.Warp.NET" Version="0.5.0" />
 	</ItemGroup>
 
 	<ItemGroup Label="WebAssembly">

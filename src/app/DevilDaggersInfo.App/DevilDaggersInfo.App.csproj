@@ -40,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NoahStolk.Warp.NET.SourceGen" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <PackageReference Include="NoahStolk.Warp.NET" />
   </ItemGroup>
 
 </Project>

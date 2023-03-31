@@ -5,13 +5,13 @@ namespace DevilDaggersInfo.App.Ui.Base.Rendering;
 
 public static class ViewportState
 {
-	public static Viewport Viewport3d { get; set; }
+	public static Viewport Viewport3d { get; private set; }
 
-	public static Viewport Viewport { get; set; }
+	public static Viewport Viewport { get; private set; }
 
-	public static Vector2 Offset { get; set; }
+	public static Vector2 Offset { get; private set; }
 
-	public static Vector2 Scale { get; set; }
+	public static Vector2 Scale { get; private set; }
 
 	public static Vector2 MousePosition => (Input.GetMousePosition() - Offset) / Scale;
 

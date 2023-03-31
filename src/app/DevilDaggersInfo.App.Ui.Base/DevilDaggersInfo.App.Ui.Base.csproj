@@ -33,10 +33,9 @@
 
   <ItemGroup>
     <PackageReference Include="NoahStolk.Warp.NET" />
-    <PackageReference Include="NoahStolk.Warp.NET.SourceGen" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
-  <!-- In order to use Warp.NET locally, uncomment the following ItemGroup and comment out the NoahStolk.Warp.NET PackageReference above. Using the SourceGen project locally currently does not work. -->
+  <!-- In order to use Warp.NET locally, uncomment the following ItemGroup and comment out the NoahStolk.Warp.NET PackageReference above. -->
   <!--
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Warp.NET\src\common\Warp.NET.Common.Content\Warp.NET.Common.Content.csproj" />

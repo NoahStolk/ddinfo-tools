@@ -17,11 +17,7 @@ public static class Program
 		const int debugTimeout = 3;
 		Stopwatch sw = Stopwatch.StartNew();
 
-		OnChangeWindowSize = (w, h) =>
-		{
-			ViewportState.Viewport3d = new(0, 0, w, h);
-			ViewportState.UpdateViewports(w, h);
-		};
+		OnChangeWindowSize = ViewportState.UpdateViewports;
 		CreateWindow(new("DDINFO TOOLS", Constants.NativeWidth, Constants.NativeHeight, false));
 		SetWindowSizeLimits(Constants.NativeWidth, Constants.NativeHeight, -1, -1);
 		DebugStack.Add(sw.ElapsedMilliseconds, debugTimeout, "init window");
