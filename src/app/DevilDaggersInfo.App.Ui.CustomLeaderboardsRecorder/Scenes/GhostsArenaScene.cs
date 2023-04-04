@@ -5,15 +5,15 @@ using DevilDaggersInfo.App.Ui.Scene.GameObjects;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Core.Spawnset;
 using Silk.NET.OpenGL;
-using System.Diagnostics;
-using Warp.NET.GameObjects.Common;
 
 namespace DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Scenes;
 
 public sealed class GhostsArenaScene : IArenaScene
 {
 	private SpawnsetBinary? _spawnset;
+#if SOUNDS
 	private ReplaySimulation? _replaySimulation;
+#endif
 	private Player? _player;
 
 	public Camera Camera { get; } = new();
@@ -24,7 +24,9 @@ public sealed class GhostsArenaScene : IArenaScene
 	private void Clear()
 	{
 		_spawnset = null;
+#if SOUNDS
 		_replaySimulation = null;
+#endif
 		_player = null;
 
 		Tiles.Clear();
@@ -50,7 +52,9 @@ public sealed class GhostsArenaScene : IArenaScene
 
 	public void BuildPlayerMovement(ReplaySimulation replaySimulation)
 	{
+#if SOUNDS
 		_replaySimulation = replaySimulation;
+#endif
 		_player = new(replaySimulation);
 		Lights.Add(_player.Light);
 	}
@@ -73,6 +77,7 @@ public sealed class GhostsArenaScene : IArenaScene
 			tile.SetDisplayHeight(_spawnset.GetActualTileHeight(tile.ArenaX, tile.ArenaY, currentTick / 60f));
 		}
 
+#if SOUNDS
 		SoundSnapshot[] soundSnapshots = _replaySimulation?.GetSoundSnapshots(currentTick) ?? Array.Empty<SoundSnapshot>();
 		foreach (SoundSnapshot soundSnapshot in soundSnapshots)
 		{
@@ -88,6 +93,7 @@ public sealed class GhostsArenaScene : IArenaScene
 			};
 			sound.Add();
 		}
+#endif
 	}
 
 	public void Render()
