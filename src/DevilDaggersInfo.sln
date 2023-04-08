@@ -2,15 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31606.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_root", "_root", "{9AE54BA2-750F-42CC-97EC-4DD29A452100}"
-	ProjectSection(SolutionItems) = preProject
-		..\.editorconfig = ..\.editorconfig
-		..\.gitattributes = ..\.gitattributes
-		..\.gitignore = ..\.gitignore
-		..\LICENSE = ..\LICENSE
-		..\README.md = ..\README.md
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Api.Admin", "api\DevilDaggersInfo.Api.Admin\DevilDaggersInfo.Api.Admin.csproj", "{EC97F9DE-B1B3-412D-A3EE-ED5C050BFE4C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Api.App", "api\DevilDaggersInfo.Api.App\DevilDaggersInfo.Api.App.csproj", "{55BB7DBD-BFD0-4489-81C0-E909BBBEAF71}"
@@ -140,9 +131,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{1B091174-9983-4BF5-AF9C-034AE3D6D7B4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{139163CB-F521-45E4-B022-780DF7322293}"
-	ProjectSection(SolutionItems) = preProject
-		tests\.runsettings = tests\.runsettings
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tool", "tool", "{3DD4B364-6321-42CA-8CF0-0C82429E5714}"
 EndProject
@@ -153,52 +141,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web-core", "web-core", "{E46A7074-2772-4B70-A0A6-F4431CC99F4C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web-server", "web-server", "{2CA07E38-90F7-49D4-B4E5-46E92B7E862B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "architecture", "architecture", "{0232E034-4C66-4B0E-A2F4-847BAABEC89D}"
-	ProjectSection(SolutionItems) = preProject
-		..\docs\architecture\communication.md = ..\docs\architecture\communication.md
-		..\docs\architecture\core-libraries.md = ..\docs\architecture\core-libraries.md
-		..\docs\architecture\project-types-and-dependencies.md = ..\docs\architecture\project-types-and-dependencies.md
-		..\docs\architecture\types-libraries.md = ..\docs\architecture\types-libraries.md
-		..\docs\architecture\web-server.md = ..\docs\architecture\web-server.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "game-formats", "game-formats", "{9FBE0CA2-67F4-4379-B3F8-52070C0926BA}"
-	ProjectSection(SolutionItems) = preProject
-		..\docs\game-formats\game-memory.md = ..\docs\game-formats\game-memory.md
-		..\docs\game-formats\leaderboard-replay-binary.md = ..\docs\game-formats\leaderboard-replay-binary.md
-		..\docs\game-formats\local-replay-binary.md = ..\docs\game-formats\local-replay-binary.md
-		..\docs\game-formats\mod-binary.md = ..\docs\game-formats\mod-binary.md
-		..\docs\game-formats\replay-events.md = ..\docs\game-formats\replay-events.md
-		..\docs\game-formats\spawnset-binary.md = ..\docs\game-formats\spawnset-binary.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7B0D34B1-407D-4632-80FD-877AE1BB9DB1}"
-	ProjectSection(SolutionItems) = preProject
-		DevilDaggersInfo.sln.DotSettings = DevilDaggersInfo.sln.DotSettings
-		Directory.Build.props = Directory.Build.props
-		nuget.config = nuget.config
-		DevilDaggersInfo.sln = DevilDaggersInfo.sln
-		Directory.Packages.props = Directory.Packages.props
-		.globalconfig = .globalconfig
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{D642FA62-0598-4A7C-94C2-4C1BE2C7B85C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "setup", "setup", "{69AECBCE-923C-4764-87B5-CCA2F92181BC}"
-	ProjectSection(SolutionItems) = preProject
-		..\docs\setup\generating-database-migration-scripts.md = ..\docs\setup\generating-database-migration-scripts.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{A12222B8-2483-46CB-83DE-443E9F32B2EC}"
-	ProjectSection(SolutionItems) = preProject
-		..\.github\dependabot.yml = ..\.github\dependabot.yml
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{D04ACB31-15BB-49BD-B27D-AEE83ABE529F}"
-	ProjectSection(SolutionItems) = preProject
-		..\.github\workflows\ci.yml = ..\.github\workflows\ci.yml
-	EndProjectSection
 EndProject
 #Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Common.Content", "..\..\Warp.NET\src\common\Warp.NET.Common.Content\Warp.NET.Common.Content.csproj", "{EB59BED4-E11E-4211-AE54-5D3B11730E2E}"
 #EndProject
@@ -545,26 +487,10 @@ Global
 		{1E1CB75A-3F82-406A-8E07-D370B4405E64} = {2CA07E38-90F7-49D4-B4E5-46E92B7E862B}
 		{CB715CD9-FB6A-4E79-B9C0-830833223D91} = {139163CB-F521-45E4-B022-780DF7322293}
 		{8D02A724-024B-4ED3-B64B-EA6B350926F0} = {139163CB-F521-45E4-B022-780DF7322293}
-		{9FBE0CA2-67F4-4379-B3F8-52070C0926BA} = {D642FA62-0598-4A7C-94C2-4C1BE2C7B85C}
-		{0232E034-4C66-4B0E-A2F4-847BAABEC89D} = {D642FA62-0598-4A7C-94C2-4C1BE2C7B85C}
-		{69AECBCE-923C-4764-87B5-CCA2F92181BC} = {D642FA62-0598-4A7C-94C2-4C1BE2C7B85C}
-		{D04ACB31-15BB-49BD-B27D-AEE83ABE529F} = {A12222B8-2483-46CB-83DE-443E9F32B2EC}
-		{139163CB-F521-45E4-B022-780DF7322293} = {7B0D34B1-407D-4632-80FD-877AE1BB9DB1}
-		{3DD4B364-6321-42CA-8CF0-0C82429E5714} = {7B0D34B1-407D-4632-80FD-877AE1BB9DB1}
-		{DEA46385-D5E0-4F4B-961B-485242E74F6A} = {7B0D34B1-407D-4632-80FD-877AE1BB9DB1}
-		{7B96F14F-3A19-4AB1-A830-8494337397F7} = {7B0D34B1-407D-4632-80FD-877AE1BB9DB1}
-		{E46A7074-2772-4B70-A0A6-F4431CC99F4C} = {7B0D34B1-407D-4632-80FD-877AE1BB9DB1}
-		{2CA07E38-90F7-49D4-B4E5-46E92B7E862B} = {7B0D34B1-407D-4632-80FD-877AE1BB9DB1}
-		{D980D7F3-20FC-46AB-A443-3238FE1FAEC0} = {7B0D34B1-407D-4632-80FD-877AE1BB9DB1}
-		{1B091174-9983-4BF5-AF9C-034AE3D6D7B4} = {7B0D34B1-407D-4632-80FD-877AE1BB9DB1}
-		{C7C1269A-F5FF-4BC3-885B-10FC693C9062} = {7B0D34B1-407D-4632-80FD-877AE1BB9DB1}
-		{187CBC4C-3F78-477E-AA33-7FA956DDF4A3} = {7B0D34B1-407D-4632-80FD-877AE1BB9DB1}
-		{5C5B0BBB-04F2-467A-B708-C013543C0C31} = {7B0D34B1-407D-4632-80FD-877AE1BB9DB1}
 		{D5903E30-558A-40DF-B7A6-E7E1D014E2A9} = {D980D7F3-20FC-46AB-A443-3238FE1FAEC0}
 		{55BB7DBD-BFD0-4489-81C0-E909BBBEAF71} = {5C5B0BBB-04F2-467A-B708-C013543C0C31}
 		{D2A8B6DE-F046-454C-95C9-1DD7889C5430} = {139163CB-F521-45E4-B022-780DF7322293}
 		{E80EC34D-4FC7-44D1-BD96-857DD3700AED} = {1B091174-9983-4BF5-AF9C-034AE3D6D7B4}
-		{DE15E3C5-4A37-4599-A615-AF8A4BCCE141} = {7B0D34B1-407D-4632-80FD-877AE1BB9DB1}
 		{EE6A829C-B6B7-4306-9A87-47F06DD65BB7} = {DE15E3C5-4A37-4599-A615-AF8A4BCCE141}
 		{884E21EB-C4F0-4E80-9BDB-E8A28171BAF0} = {3DD4B364-6321-42CA-8CF0-0C82429E5714}
 		{54F41E67-F499-4999-A181-ACCAF2687612} = {7B96F14F-3A19-4AB1-A830-8494337397F7}
