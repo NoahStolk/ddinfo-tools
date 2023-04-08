@@ -2,10 +2,10 @@ using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.User.Settings;
 using Silk.NET.GLFW;
 using Warp.NET;
-using Warp.NET.Common.Maths;
 using Warp.NET.Extensions;
 using Warp.NET.InterpolationStates;
 using Warp.NET.Intersections;
+using Warp.NET.Maths;
 
 namespace DevilDaggersInfo.App.Ui.Scene.GameObjects;
 

@@ -4,8 +4,8 @@ using DevilDaggersInfo.Core.Mod;
 using DevilDaggersInfo.Core.Mod.Extensions;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Types.Core.Assets;
-using Warp.NET.Common.Parsers.Sound;
 using Warp.NET.Content;
+using Warp.NET.Parsers.Sound;
 
 namespace DevilDaggersInfo.App.Ui.Base;
 
