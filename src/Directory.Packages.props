@@ -29,7 +29,7 @@
 	</ItemGroup>
 
 	<ItemGroup Label="Image processing">
-		<PackageVersion Include="SixLabors.ImageSharp" Version="2.1.3" />
+		<PackageVersion Include="SixLabors.ImageSharp" Version="3.0.1" />
 	</ItemGroup>
 
 	<ItemGroup Label="Json">
