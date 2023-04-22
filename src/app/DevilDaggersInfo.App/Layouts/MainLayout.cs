@@ -1,3 +1,6 @@
+using DevilDaggersInfo.App.Engine.Maths.Numerics;
+using DevilDaggersInfo.App.Engine.Text;
+using DevilDaggersInfo.App.Engine.Ui;
 using DevilDaggersInfo.App.Scenes;
 using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.Components.Styles;
@@ -12,8 +15,6 @@ using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Versioning;
 using System.Diagnostics;
-using Warp.NET.Text;
-using Warp.NET.Ui;
 
 namespace DevilDaggersInfo.App.Layouts;
 
@@ -96,12 +97,12 @@ public class MainLayout : Layout, IExtendedLayout
 
 	public void Render()
 	{
-		Game.Self.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(8), 0, Color.White, StringResources.MainMenu, TextAlign.Left);
+		Root.Game.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(8), 0, Color.White, StringResources.MainMenu, TextAlign.Left);
 
-		Game.Self.MonoSpaceFontRenderer64.Schedule(Vector2i<int>.One, new(512, 64), 0, Color.Red, "DDINFO", TextAlign.Middle);
-		Game.Self.MonoSpaceFontRenderer32.Schedule(Vector2i<int>.One, new(512, 128), 0, new(255, 127, 0, 255), "TOOLS", TextAlign.Middle);
-		Game.Self.MonoSpaceFontRenderer24.Schedule(Vector2i<int>.One, new(512, 176), 0, new(255, 191, 0, 255), _version, TextAlign.Middle);
-		Game.Self.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(512, 712), 0, Color.White, "Devil Daggers is created by Sorath", TextAlign.Middle);
-		Game.Self.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(512, 728), 0, Color.White, "DevilDaggers.info is created by Noah Stolk", TextAlign.Middle);
+		Root.Game.MonoSpaceFontRenderer64.Schedule(Vector2i<int>.One, new(512, 64), 0, Color.Red, "DDINFO", TextAlign.Middle);
+		Root.Game.MonoSpaceFontRenderer32.Schedule(Vector2i<int>.One, new(512, 128), 0, new(255, 127, 0, 255), "TOOLS", TextAlign.Middle);
+		Root.Game.MonoSpaceFontRenderer24.Schedule(Vector2i<int>.One, new(512, 176), 0, new(255, 191, 0, 255), _version, TextAlign.Middle);
+		Root.Game.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(512, 712), 0, Color.White, "Devil Daggers is created by Sorath", TextAlign.Middle);
+		Root.Game.MonoSpaceFontRenderer12.Schedule(Vector2i<int>.One, new(512, 728), 0, Color.White, "DevilDaggers.info is created by Noah Stolk", TextAlign.Middle);
 	}
 }

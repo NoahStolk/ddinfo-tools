@@ -1,8 +1,8 @@
+using DevilDaggersInfo.App.Engine.Content;
+using DevilDaggersInfo.App.Engine.InterpolationStates;
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.Core.Spawnset;
 using Silk.NET.OpenGL;
-using Warp.NET.Content;
-using Warp.NET.InterpolationStates;
 
 namespace DevilDaggersInfo.App.Ui.Scene.GameObjects;
 
@@ -68,8 +68,8 @@ public class RaceDagger
 			Gl.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, (uint)sizeof(Vertex), (void*)(5 * sizeof(float)));
 
 			Gl.BindVertexArray(0);
-
 			Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
+			Gl.DeleteBuffer(vbo);
 
 			return vao;
 		}
@@ -107,8 +107,7 @@ public class RaceDagger
 
 		ContentManager.Content.DaggerSilverTexture.Use();
 
-		Matrix4x4 model = Matrix4x4.CreateScale(8) * Matrix4x4.CreateFromQuaternion(_meshRotation.Render) * Matrix4x4.CreateTranslation(_meshPosition.Render);
-		Shader.SetMatrix4x4(MeshUniforms.Model, model);
+		MeshShader.SetModel(Matrix4x4.CreateScale(8) * Matrix4x4.CreateFromQuaternion(_meshRotation.Render) * Matrix4x4.CreateTranslation(_meshPosition.Render));
 
 		Gl.BindVertexArray(_vao);
 		fixed (uint* i = &ContentManager.Content.DaggerMesh.Indices[0])

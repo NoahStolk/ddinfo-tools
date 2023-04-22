@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.EditorArena.Data;
 
 namespace DevilDaggersInfo.App.Ui.SurvivalEditor.EditorArena;

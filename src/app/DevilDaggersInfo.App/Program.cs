@@ -1,3 +1,6 @@
+using DevilDaggersInfo.App.Engine;
+using DevilDaggersInfo.App.Engine.Content;
+using DevilDaggersInfo.App.Engine.Debugging;
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.Rendering;
@@ -5,8 +8,6 @@ using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.Actions;
 using Silk.NET.GLFW;
 using System.Diagnostics;
-using Warp.NET.Content;
-using Warp.NET.Debugging;
 
 namespace DevilDaggersInfo.App;
 
@@ -28,19 +29,20 @@ public static class Program
 		const string? ddInfoToolsContentRootDirectory = null;
 #endif
 		DecompiledContentFile ddInfoToolsContent = Bootstrapper.GetDecompiledContent(ddInfoToolsContentRootDirectory, "ddinfo");
-		WarpBlobs.Initialize(ddInfoToolsContent.Blobs);
-		WarpCharsets.Initialize(ddInfoToolsContent.Charsets);
-		WarpModels.Initialize(ddInfoToolsContent.Models);
-		WarpShaders.Initialize(ddInfoToolsContent.Shaders);
-		WarpTextures.Initialize(ddInfoToolsContent.Textures);
-		WarpShaderUniformInitializer.Initialize();
+#if !SKIP_VALUE
+		Blobs.Initialize(ddInfoToolsContent.Blobs);
+#endif
+		Charsets.Initialize(ddInfoToolsContent.Charsets);
+		Models.Initialize(ddInfoToolsContent.Models);
+		Shaders.Initialize(ddInfoToolsContent.Shaders);
+		Textures.Initialize(ddInfoToolsContent.Textures);
 
-		fixed (byte* ptr = &WarpTextures.ApplicationIcon.Pixels.ToArray()[0])
+		fixed (byte* ptr = &Textures.ApplicationIcon.Pixels.ToArray()[0])
 		{
 			Image image = new()
 			{
-				Width = WarpTextures.ApplicationIcon.Width,
-				Height = WarpTextures.ApplicationIcon.Height,
+				Width = Textures.ApplicationIcon.Width,
+				Height = Textures.ApplicationIcon.Height,
 				Pixels = ptr,
 			};
 			Graphics.Glfw.SetWindowIcon(Window, 1, &image);
@@ -51,7 +53,8 @@ public static class Program
 		Root.Dependencies = new DependencyContainer();
 		DebugStack.Add(sw.ElapsedMilliseconds, debugTimeout, "init deps and ui");
 
-		Game game = Bootstrapper.CreateGame<Game>();
+		Game game = new();
+		EngineNodes.Initialize(game);
 		Root.Game = game;
 		DebugStack.Add(sw.ElapsedMilliseconds, debugTimeout, "init game");
 		sw.Stop();

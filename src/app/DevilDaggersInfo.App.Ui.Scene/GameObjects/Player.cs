@@ -1,8 +1,8 @@
+using DevilDaggersInfo.App.Engine.Content;
+using DevilDaggersInfo.App.Engine.Debugging;
 using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using Silk.NET.OpenGL;
-using Warp.NET.Content;
-using Warp.NET.Debugging;
 
 namespace DevilDaggersInfo.App.Ui.Scene.GameObjects;
 
@@ -50,8 +50,8 @@ public class Player
 			Gl.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, (uint)sizeof(Vertex), (void*)(5 * sizeof(float)));
 
 			Gl.BindVertexArray(0);
-
 			Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
+			Gl.DeleteBuffer(vbo);
 
 			return vao;
 		}

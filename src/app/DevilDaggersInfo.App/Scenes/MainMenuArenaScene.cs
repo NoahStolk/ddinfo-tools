@@ -53,21 +53,22 @@ public sealed class MainMenuArenaScene : IArenaScene
 
 		Camera.PreRender();
 
-		WarpShaders.Mesh.Use();
-		Shader.SetMatrix4x4(MeshUniforms.View, Camera.ViewMatrix);
-		Shader.SetMatrix4x4(MeshUniforms.Projection, Camera.Projection);
-		Shader.SetInt(MeshUniforms.TextureDiffuse, 0);
-		Shader.SetInt(MeshUniforms.TextureLut, 1);
-		Shader.SetFloat(MeshUniforms.LutScale, 1f);
+		MeshShader.Use();
+		MeshShader.SetView(Camera.ViewMatrix);
+		MeshShader.SetProjection(Camera.Projection);
+		MeshShader.SetTextureDiffuse(0);
+		MeshShader.SetTextureLut(1);
+		MeshShader.SetLutScale(1f);
 
+		// TODO: Prevent allocating memory.
 		Span<Vector3> lightPositions = Lights.Select(lo => lo.PositionState.Render).ToArray();
 		Span<Vector3> lightColors = Lights.Select(lo => lo.ColorState.Render).ToArray();
 		Span<float> lightRadii = Lights.Select(lo => lo.RadiusState.Render).ToArray();
 
-		Shader.SetInt(MeshUniforms.LightCount, lightPositions.Length);
-		Shader.SetVector3Array(MeshUniforms.LightPosition, lightPositions);
-		Shader.SetVector3Array(MeshUniforms.LightColor, lightColors);
-		Shader.SetFloatArray(MeshUniforms.LightRadius, lightRadii);
+		MeshShader.SetLightCount(lightPositions.Length);
+		MeshShader.SetLightPosition(lightPositions);
+		MeshShader.SetLightColor(lightColors);
+		MeshShader.SetLightRadius(lightRadii);
 
 		ContentManager.Content.PostLut.Use(TextureUnit.Texture1);
 
@@ -83,7 +84,7 @@ public sealed class MainMenuArenaScene : IArenaScene
 		RaceDagger?.Render();
 		_skull4?.Render();
 
-		WarpTextures.TileHitbox.Use();
+		Textures.TileHitbox.Use();
 
 		Tiles.Sort(static (a, b) => a.SquaredDistanceToCamera().CompareTo(b.SquaredDistanceToCamera()));
 		foreach (Tile tile in Tiles)

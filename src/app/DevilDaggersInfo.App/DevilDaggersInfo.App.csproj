@@ -6,6 +6,10 @@
     <Version>0.4.2.0</Version>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(CI)' == 'true'">
+    <DefineConstants>$(DefineConstants);SKIP_VALUE</DefineConstants>
+  </PropertyGroup>
+
   <Choose>
     <When Condition="'$(Configuration)' == 'Debug'">
       <Choose>
@@ -43,16 +47,6 @@
     </When>
   </Choose>
 
-  <PropertyGroup>
-    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-    <CompilerGeneratedFilesOutputPath>obj\SourceGenOutput</CompilerGeneratedFilesOutputPath>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
-    <None Include="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
-  </ItemGroup>
-
   <ItemGroup>
     <TrimmerRootDescriptor Include="TrimmerRoots.xml" />
   </ItemGroup>
@@ -62,10 +56,6 @@
     <ProjectReference Include="..\DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder\DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.csproj" />
     <ProjectReference Include="..\DevilDaggersInfo.App.Ui.ReplayEditor\DevilDaggersInfo.App.Ui.ReplayEditor.csproj" />
     <ProjectReference Include="..\DevilDaggersInfo.App.Ui.SurvivalEditor\DevilDaggersInfo.App.Ui.SurvivalEditor.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="NoahStolk.Warp.NET" />
   </ItemGroup>
 
 </Project>

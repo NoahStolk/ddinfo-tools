@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.Base.Rendering.Scissors;
 using DevilDaggersInfo.App.Ui.Base.Utils;
 using Silk.NET.OpenGL;
@@ -39,8 +40,8 @@ public class RectangleRenderer
 
 			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(rt.Scale.X, rt.Scale.Y, 1);
 
-			Shader.SetMatrix4x4(UiUniforms.Model, scaleMatrix * Matrix4x4.CreateTranslation(rt.CenterPosition.X, rt.CenterPosition.Y, rt.Depth));
-			Shader.SetVector4(UiUniforms.Color, rt.Color);
+			UiShader.SetModel(scaleMatrix * Matrix4x4.CreateTranslation(rt.CenterPosition.X, rt.CenterPosition.Y, rt.Depth));
+			UiShader.SetColor(rt.Color);
 			Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
 		}
 
@@ -62,8 +63,8 @@ public class RectangleRenderer
 
 			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(rll.Scale.X, rll.Scale.Y, 1);
 
-			Shader.SetMatrix4x4(UiUniforms.Model, scaleMatrix * Matrix4x4.CreateTranslation(rll.CenterPosition.X, rll.CenterPosition.Y, rll.Depth));
-			Shader.SetVector4(UiUniforms.Color, rll.Color);
+			UiShader.SetModel(scaleMatrix * Matrix4x4.CreateTranslation(rll.CenterPosition.X, rll.CenterPosition.Y, rll.Depth));
+			UiShader.SetColor(rll.Color);
 			Gl.DrawArrays(PrimitiveType.LineLoop, 0, 4);
 		}
 

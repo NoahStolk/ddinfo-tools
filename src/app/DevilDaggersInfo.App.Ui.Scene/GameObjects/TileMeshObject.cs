@@ -1,6 +1,6 @@
+using DevilDaggersInfo.App.Engine.Content;
 using DevilDaggersInfo.App.Ui.Base;
 using Silk.NET.OpenGL;
-using Warp.NET.Content;
 
 namespace DevilDaggersInfo.App.Ui.Scene.GameObjects;
 
@@ -24,7 +24,7 @@ public class TileMeshObject
 	public unsafe void Render()
 	{
 		Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(new(_positionX, PositionY, _positionZ));
-		Shader.SetMatrix4x4(MeshUniforms.Model, translationMatrix);
+		MeshShader.SetModel(translationMatrix);
 
 		Gl.BindVertexArray(_vao);
 		fixed (uint* i = &_mesh.Indices[0])

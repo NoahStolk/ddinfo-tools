@@ -19,8 +19,8 @@ public static class VertexArrayObjectUtils
 		Gl.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), (void*)0);
 
 		Gl.BindVertexArray(0);
-
 		Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
+		Gl.DeleteBuffer(vbo);
 
 		return vao;
 	}

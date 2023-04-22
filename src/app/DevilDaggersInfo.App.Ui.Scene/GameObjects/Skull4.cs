@@ -1,6 +1,6 @@
+using DevilDaggersInfo.App.Engine.Content;
 using DevilDaggersInfo.App.Ui.Base;
 using Silk.NET.OpenGL;
-using Warp.NET.Content;
 
 namespace DevilDaggersInfo.App.Ui.Scene.GameObjects;
 
@@ -36,8 +36,8 @@ public class Skull4
 			Gl.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, (uint)sizeof(Vertex), (void*)(5 * sizeof(float)));
 
 			Gl.BindVertexArray(0);
-
 			Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
+			Gl.DeleteBuffer(vbo);
 
 			return vao;
 		}
@@ -45,8 +45,7 @@ public class Skull4
 
 	public unsafe void Render()
 	{
-		Matrix4x4 model = Matrix4x4.CreateScale(1.5f) * Matrix4x4.CreateTranslation(new(0, 4f, 0));
-		Shader.SetMatrix4x4(MeshUniforms.Model, model);
+		MeshShader.SetModel(Matrix4x4.CreateScale(1.5f) * Matrix4x4.CreateTranslation(new(0, 4f, 0)));
 
 		ContentManager.Content.Skull4Texture.Use();
 

@@ -1,7 +1,7 @@
+using DevilDaggersInfo.App.Engine.Content;
+using DevilDaggersInfo.App.Engine.InterpolationStates;
 using DevilDaggersInfo.App.Ui.Base;
 using Silk.NET.OpenGL;
-using Warp.NET.Content;
-using Warp.NET.InterpolationStates;
 
 namespace DevilDaggersInfo.App.Ui.Scene.GameObjects;
 
@@ -34,7 +34,7 @@ public class PlayerMovement
 		RotationState.PrepareRender();
 		PositionState.PrepareRender();
 
-		Shader.SetMatrix4x4(MeshUniforms.Model, Matrix4x4.CreateScale(4) * Matrix4x4.CreateFromQuaternion(RotationState.Render) * Matrix4x4.CreateTranslation(PositionState.Render));
+		MeshShader.SetModel(Matrix4x4.CreateScale(4) * Matrix4x4.CreateFromQuaternion(RotationState.Render) * Matrix4x4.CreateTranslation(PositionState.Render));
 
 		Gl.BindVertexArray(_vao);
 		fixed (uint* i = &_mesh.Indices[0])

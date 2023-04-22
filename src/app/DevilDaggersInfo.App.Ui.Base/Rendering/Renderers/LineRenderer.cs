@@ -1,7 +1,8 @@
+using DevilDaggersInfo.App.Engine.Extensions;
+using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.Base.Rendering.Scissors;
 using DevilDaggersInfo.App.Ui.Base.Utils;
 using Silk.NET.OpenGL;
-using Warp.NET.Extensions;
 
 namespace DevilDaggersInfo.App.Ui.Base.Rendering.Renderers;
 
@@ -32,8 +33,8 @@ public class LineRenderer
 			Matrix4x4 scale = Matrix4x4.CreateScale(length, 1, 1);
 			Matrix4x4 rotation = Matrix4x4.CreateRotationZ(angle);
 			Matrix4x4 translation = Matrix4x4.CreateTranslation(l.Start.X, l.Start.Y, l.Depth);
-			Shader.SetMatrix4x4(UiUniforms.Model, scale * rotation * translation);
-			Shader.SetVector4(UiUniforms.Color, l.Color);
+			UiShader.SetModel(scale * rotation * translation);
+			UiShader.SetColor(l.Color);
 			Gl.DrawArrays(PrimitiveType.LineStrip, 0, 2);
 		}
 

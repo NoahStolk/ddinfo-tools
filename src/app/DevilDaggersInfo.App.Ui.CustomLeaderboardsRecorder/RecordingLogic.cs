@@ -11,6 +11,7 @@ using DevilDaggersInfo.App.Ui.Base.User.Cache;
 using DevilDaggersInfo.Common.Extensions;
 using DevilDaggersInfo.Core.Encryption;
 #if !SKIP_VALUE
+using DevilDaggersInfo.App.Ui.Base;
 using System.IO.Compression;
 using System.Text;
 #endif
@@ -30,7 +31,7 @@ public static class RecordingLogic
 #if SKIP_VALUE
 		_aesBase32Wrapper = new(string.Empty, string.Empty, string.Empty);
 #else
-		using MemoryStream msIn = new(WarpBlobs.Value.Data.Select((b, i) => i < 4 ? (byte)(b << 4 | b >> 4) : (byte)~b).ToArray());
+		using MemoryStream msIn = new(Blobs.Value.Data.Select((b, i) => i < 4 ? (byte)(b << 4 | b >> 4) : (byte)~b).ToArray());
 		using MemoryStream msOut = new();
 		using DeflateStream ds = new(msIn, CompressionMode.Decompress);
 		ds.CopyTo(msOut);

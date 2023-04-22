@@ -1,4 +1,4 @@
-using Warp.NET.InterpolationStates;
+using DevilDaggersInfo.App.Engine.InterpolationStates;
 
 namespace DevilDaggersInfo.App.Ui.Scene.GameObjects;
 

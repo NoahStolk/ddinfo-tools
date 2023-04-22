@@ -1,5 +1,6 @@
-using Warp.NET.Extensions;
-using Warp.NET.Ui;
+using DevilDaggersInfo.App.Engine.Extensions;
+using DevilDaggersInfo.App.Engine.Maths.Numerics;
+using DevilDaggersInfo.App.Engine.Ui;
 
 namespace DevilDaggersInfo.App.Ui.Base.Rendering.Scissors;
 

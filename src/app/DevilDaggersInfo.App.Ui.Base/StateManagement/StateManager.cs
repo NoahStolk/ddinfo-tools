@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Engine.Ui;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.Base.States;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.States;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.ReplayEditor.States;
@@ -47,7 +48,7 @@ public static class StateManager
 	/// If this event handler is subscribed to multiple action types which are reduced at the same time, the event handler will still only be called once.
 	/// </para>
 	/// <para>
-	/// This is done to prevent the event handler from executing twice, which can lead to corrupted components or crashes. Note that <see cref="Warp.NET.Ui.NestingContext"/> also does not allow the same components to be added or removed more than once per update.
+	/// This is done to prevent the event handler from executing twice, which can lead to corrupted components or crashes. Note that <see cref="NestingContext"/> also does not allow the same components to be added or removed more than once per update.
 	/// </para>
 	/// </summary>
 	/// <param name="eventHandler">The event handler.</param>

@@ -1,3 +1,5 @@
+using DevilDaggersInfo.App.Engine.Maths.Numerics;
+
 namespace DevilDaggersInfo.App.Ui.Base.Extensions;
 
 public static class WikiColorExtensions

@@ -1,13 +1,15 @@
 using DevilDaggersInfo.App.Core.GameMemory;
 using DevilDaggersInfo.App.Core.GameMemory.Extensions;
+using DevilDaggersInfo.App.Engine.Content;
+using DevilDaggersInfo.App.Engine.Maths.Numerics;
+using DevilDaggersInfo.App.Engine.Ui;
+using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.Extensions;
 using DevilDaggersInfo.App.Ui.Base.Styling;
 using DevilDaggersInfo.Common;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;
-using Warp.NET.Content;
-using Warp.NET.Ui;
 
 namespace DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Components.Recording;
 
@@ -26,7 +28,7 @@ public class RecordingScrollArea : ScrollArea
 		_recordingValues.Add(AddValue(ref height, "Status", Color.White, b => ((GameStatus)b.Status).ToDisplayString()));
 
 		AddSpacing(ref height);
-		AddIcon(ref height, WarpTextures.IconEye, Color.Orange);
+		AddIcon(ref height, Textures.IconEye, Color.Orange);
 		_recordingValues.Add(AddValue(ref height, "Player", Color.White, b => b.IsReplay ? $"{b.ReplayPlayerName} ({b.ReplayPlayerId})" : $"{b.PlayerName} ({b.PlayerId})"));
 		_recordingValues.Add(AddValue(ref height, "Time", Color.White, b => b.Time.ToString(StringFormats.TimeFormat)));
 		_recordingValues.Add(AddValue(ref height, "Hand", Color.White, b => GetUpgrade(b).Name, b => GetUpgrade(b).Color.ToWarpColor()));
@@ -36,25 +38,25 @@ public class RecordingScrollArea : ScrollArea
 		_recordingValues.Add(AddValue(ref height, "Death", Color.White, b => b.IsPlayerAlive ? "-" : GetDeath(b)?.Name ?? "?", b => GetDeath(b)?.Color.ToWarpColor() ?? Color.White));
 
 		AddSpacing(ref height);
-		AddIcon(ref height, WarpTextures.IconGem, Color.Red);
+		AddIcon(ref height, Textures.IconGem, Color.Red);
 		_recordingValues.Add(AddValue(ref height, "Gems collected", Color.Red, b => b.GemsCollected.ToString()));
 		_recordingValues.Add(AddValue(ref height, "Gems despawned", Color.Gray(0.6f), b => b.GemsDespawned.ToString()));
 		_recordingValues.Add(AddValue(ref height, "Gems eaten", Color.Green, b => b.GemsEaten.ToString()));
 		_recordingValues.Add(AddValue(ref height, "Gems total", Color.Red, b => b.GemsTotal.ToString()));
 
 		AddSpacing(ref height);
-		AddIcon(ref height, WarpTextures.IconHoming, Color.White);
+		AddIcon(ref height, Textures.IconHoming, Color.White);
 		_recordingValues.Add(AddValue(ref height, "Homing stored", Color.Purple, b => b.HomingStored.ToString()));
 		_recordingValues.Add(AddValue(ref height, "Homing eaten", Color.Red, b => b.HomingEaten.ToString()));
 
 		AddSpacing(ref height);
-		AddIcon(ref height, WarpTextures.IconCrosshair, Color.Green);
+		AddIcon(ref height, Textures.IconCrosshair, Color.Green);
 		_recordingValues.Add(AddValue(ref height, "Daggers fired", Color.Yellow, b => b.DaggersFired.ToString()));
 		_recordingValues.Add(AddValue(ref height, "Daggers hit", Color.Red, b => b.DaggersHit.ToString()));
 		_recordingValues.Add(AddValue(ref height, "Accuracy", Color.Orange, b => (b.DaggersFired == 0 ? 0 : b.DaggersHit / (float)b.DaggersFired).ToString("0.00%")));
 
 		AddSpacing(ref height);
-		AddIcon(ref height, WarpTextures.IconSkull, EnemiesV3_2.Skull4.Color.ToWarpColor());
+		AddIcon(ref height, Textures.IconSkull, EnemiesV3_2.Skull4.Color.ToWarpColor());
 		_recordingValues.Add(AddValue(ref height, "Enemies killed", Color.Red, b => b.EnemiesKilled.ToString()));
 		_recordingValues.Add(AddValue(ref height, "Enemies alive", Color.Yellow, b => b.EnemiesAlive.ToString()));
 

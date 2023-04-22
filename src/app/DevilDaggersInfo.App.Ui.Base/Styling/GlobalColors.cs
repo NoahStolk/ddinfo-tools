@@ -1,3 +1,5 @@
+using DevilDaggersInfo.App.Engine.Maths.Numerics;
+
 namespace DevilDaggersInfo.App.Ui.Base.Styling;
 
 public static class GlobalColors

@@ -1,5 +1,4 @@
 global using System.Numerics;
-global using Warp.NET.Maths.Numerics;
-global using static Warp.NET.Graphics;
-global using Shader = Warp.NET.Content.Shader;
-global using Texture = Warp.NET.Content.Texture;
+global using static DevilDaggersInfo.App.Engine.Graphics;
+global using Shader = DevilDaggersInfo.App.Engine.Content.Shader;
+global using Texture = DevilDaggersInfo.App.Engine.Content.Texture;

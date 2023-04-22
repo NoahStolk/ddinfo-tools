@@ -1,4 +1,5 @@
-using Warp.NET.Text;
+using DevilDaggersInfo.App.Engine.Maths.Numerics;
+using DevilDaggersInfo.App.Engine.Text;
 
 namespace DevilDaggersInfo.App.Ui.Base;
 

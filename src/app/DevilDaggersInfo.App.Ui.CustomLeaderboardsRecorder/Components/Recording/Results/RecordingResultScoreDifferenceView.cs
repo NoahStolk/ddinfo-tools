@@ -1,4 +1,7 @@
 using DevilDaggersInfo.Api.App.CustomLeaderboards;
+using DevilDaggersInfo.App.Engine.Maths.Numerics;
+using DevilDaggersInfo.App.Engine.Ui;
+using DevilDaggersInfo.App.Ui.Base;
 using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.Base.Components.Styles;
 using DevilDaggersInfo.App.Ui.Base.Extensions;
@@ -6,7 +9,6 @@ using DevilDaggersInfo.App.Ui.Base.Styling;
 using DevilDaggersInfo.Common;
 using DevilDaggersInfo.Core.Wiki;
 using System.Diagnostics;
-using Warp.NET.Ui;
 
 namespace DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Components.Recording.Results;
 
@@ -36,7 +38,7 @@ public abstract class RecordingResultScoreDifferenceView : RecordingResultScoreV
 		GetScoreState<int> daggersHitState)
 	{
 		AddSpacing(ref y);
-		AddIcon(ref y, WarpTextures.IconEye, Color.Orange);
+		AddIcon(ref y, Textures.IconEye, Color.Orange);
 		AddScoreState(ref y, "Time", timeState, d => d.ToString(StringFormats.TimeFormat), i => $"{i:+0.0000;-0.0000;+0.0000}", !isAscending);
 		AddLevelUpScoreState(ref y, "Level 2", levelUpTime2State);
 		AddLevelUpScoreState(ref y, "Level 3", levelUpTime3State);
@@ -44,19 +46,19 @@ public abstract class RecordingResultScoreDifferenceView : RecordingResultScoreV
 		AddDeath(ref y);
 
 		AddSpacing(ref y);
-		AddIcon(ref y, WarpTextures.IconGem, Color.Red);
+		AddIcon(ref y, Textures.IconGem, Color.Red);
 		AddScoreState(ref y, "Gems collected", gemsCollectedState, i => i.ToString(), i => $"{i:+0;-0;+0}");
 		AddScoreState(ref y, "Gems despawned", gemsDespawnedState, i => i.ToString(), i => $"{i:+0;-0;+0}", false);
 		AddScoreState(ref y, "Gems eaten", gemsEatenState, i => i.ToString(), i => $"{i:+0;-0;+0}", false);
 		AddScoreState(ref y, "Gems total", gemsTotalState, i => i.ToString(), i => $"{i:+0;-0;+0}");
 
 		AddSpacing(ref y);
-		AddIcon(ref y, WarpTextures.IconHoming, Color.White);
+		AddIcon(ref y, Textures.IconHoming, Color.White);
 		AddScoreState(ref y, "Homing stored", homingStoredState, i => i.ToString(), i => $"{i:+0;-0;+0}");
 		AddScoreState(ref y, "Homing eaten", homingEatenState, i => i.ToString(), i => $"{i:+0;-0;+0}", false);
 
 		AddSpacing(ref y);
-		AddIcon(ref y, WarpTextures.IconCrosshair, Color.Green);
+		AddIcon(ref y, Textures.IconCrosshair, Color.Green);
 		AddScoreState(ref y, "Daggers fired", daggersFiredState, i => i.ToString(), i => $"{i:+0;-0;+0}");
 		AddScoreState(ref y, "Daggers hit", daggersHitState, i => i.ToString(), i => $"{i:+0;-0;+0}");
 
@@ -73,7 +75,7 @@ public abstract class RecordingResultScoreDifferenceView : RecordingResultScoreV
 		AddScoreState(ref y, "Accuracy", accuracyState, i => i.ToString(StringFormats.AccuracyFormat), i => $"{i:+0.00%;-0.00%;+0.00%}");
 
 		AddSpacing(ref y);
-		AddIcon(ref y, WarpTextures.IconSkull, EnemiesV3_2.Skull4.Color.ToWarpColor());
+		AddIcon(ref y, Textures.IconSkull, EnemiesV3_2.Skull4.Color.ToWarpColor());
 		AddScoreState(ref y, "Enemies killed", enemiesKilledState, i => i.ToString(), i => $"{i:+0;-0;+0}");
 		AddScoreState(ref y, "Enemies alive", enemiesAliveState, i => i.ToString(), i => $"{i:+0;-0;+0}");
 	}

@@ -1,5 +1,5 @@
-using Warp.NET.Ui;
-using Warp.NET.Ui.Components;
+using DevilDaggersInfo.App.Engine.Ui;
+using DevilDaggersInfo.App.Engine.Ui.Components;
 
 namespace DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Components.LeaderboardList;
 

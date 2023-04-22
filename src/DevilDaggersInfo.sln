@@ -142,26 +142,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web-core", "web-core", "{E4
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web-server", "web-server", "{2CA07E38-90F7-49D4-B4E5-46E92B7E862B}"
 EndProject
-#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Common.Content", "..\..\Warp.NET\src\common\Warp.NET.Common.Content\Warp.NET.Common.Content.csproj", "{EB59BED4-E11E-4211-AE54-5D3B11730E2E}"
-#EndProject
-#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Common.Maths", "..\..\Warp.NET\src\common\Warp.NET.Common.Maths\Warp.NET.Common.Maths.csproj", "{868BB6E4-50AE-4274-9F44-10C247566899}"
-#EndProject
-#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Common.Parsers.GameDefinition", "..\..\Warp.NET\src\common\Warp.NET.Common.Parsers.GameDefinition\Warp.NET.Common.Parsers.GameDefinition.csproj", "{FFFC8F52-CE6B-432C-9F21-B06995968946}"
-#EndProject
-#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Common.Parsers.Map", "..\..\Warp.NET\src\common\Warp.NET.Common.Parsers.Map\Warp.NET.Common.Parsers.Map.csproj", "{D40B5449-35D9-420F-B5C6-867A12B18DD9}"
-#EndProject
-#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Common.Parsers.Model", "..\..\Warp.NET\src\common\Warp.NET.Common.Parsers.Model\Warp.NET.Common.Parsers.Model.csproj", "{D28CAEF9-EAEA-4D71-A852-5CCDC78356D6}"
-#EndProject
-#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Common.Parsers.Sound", "..\..\Warp.NET\src\common\Warp.NET.Common.Parsers.Sound\Warp.NET.Common.Parsers.Sound.csproj", "{D9ED4033-9EA6-4A64-AC62-7150D5BC31B2}"
-#EndProject
-#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Common.Parsers.Texture", "..\..\Warp.NET\src\common\Warp.NET.Common.Parsers.Texture\Warp.NET.Common.Parsers.Texture.csproj", "{2C73B7CB-2BD9-4CC5-B316-D0391F15D13D}"
-#EndProject
-#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Common.Parsing", "..\..\Warp.NET\src\common\Warp.NET.Common.Parsing\Warp.NET.Common.Parsing.csproj", "{D9383703-E1A0-4D07-A273-00A933223CE7}"
-#EndProject
-#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET", "..\..\Warp.NET\src\lib\Warp.NET\Warp.NET.csproj", "{3151A06E-264A-45DF-8773-E12F48AD5BB3}"
-#EndProject
-#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.SourceGen", "..\..\Warp.NET\src\lib\Warp.NET.SourceGen\Warp.NET.SourceGen.csproj", "{59524A4E-DEE5-43B1-AD6E-C81B5147496D}"
-#EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Engine", "app\DevilDaggersInfo.App.Engine\DevilDaggersInfo.App.Engine.csproj", "{B84DBB9B-1C43-4F6C-8C19-B028F3B7C2D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.ContentSourceGen", "app\DevilDaggersInfo.App.ContentSourceGen\DevilDaggersInfo.App.ContentSourceGen.csproj", "{DB1B399B-5AC2-4848-B15B-729DE17169BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -384,46 +368,6 @@ Global
 		{884E21EB-C4F0-4E80-9BDB-E8A28171BAF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{884E21EB-C4F0-4E80-9BDB-E8A28171BAF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{884E21EB-C4F0-4E80-9BDB-E8A28171BAF0}.Release|Any CPU.Build.0 = Release|Any CPU
-#		{EB59BED4-E11E-4211-AE54-5D3B11730E2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-#		{EB59BED4-E11E-4211-AE54-5D3B11730E2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-#		{EB59BED4-E11E-4211-AE54-5D3B11730E2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-#		{EB59BED4-E11E-4211-AE54-5D3B11730E2E}.Release|Any CPU.Build.0 = Release|Any CPU
-#		{868BB6E4-50AE-4274-9F44-10C247566899}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-#		{868BB6E4-50AE-4274-9F44-10C247566899}.Debug|Any CPU.Build.0 = Debug|Any CPU
-#		{868BB6E4-50AE-4274-9F44-10C247566899}.Release|Any CPU.ActiveCfg = Release|Any CPU
-#		{868BB6E4-50AE-4274-9F44-10C247566899}.Release|Any CPU.Build.0 = Release|Any CPU
-#		{FFFC8F52-CE6B-432C-9F21-B06995968946}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-#		{FFFC8F52-CE6B-432C-9F21-B06995968946}.Debug|Any CPU.Build.0 = Debug|Any CPU
-#		{FFFC8F52-CE6B-432C-9F21-B06995968946}.Release|Any CPU.ActiveCfg = Release|Any CPU
-#		{FFFC8F52-CE6B-432C-9F21-B06995968946}.Release|Any CPU.Build.0 = Release|Any CPU
-#		{D40B5449-35D9-420F-B5C6-867A12B18DD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-#		{D40B5449-35D9-420F-B5C6-867A12B18DD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-#		{D40B5449-35D9-420F-B5C6-867A12B18DD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-#		{D40B5449-35D9-420F-B5C6-867A12B18DD9}.Release|Any CPU.Build.0 = Release|Any CPU
-#		{D28CAEF9-EAEA-4D71-A852-5CCDC78356D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-#		{D28CAEF9-EAEA-4D71-A852-5CCDC78356D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-#		{D28CAEF9-EAEA-4D71-A852-5CCDC78356D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-#		{D28CAEF9-EAEA-4D71-A852-5CCDC78356D6}.Release|Any CPU.Build.0 = Release|Any CPU
-#		{D9ED4033-9EA6-4A64-AC62-7150D5BC31B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-#		{D9ED4033-9EA6-4A64-AC62-7150D5BC31B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-#		{D9ED4033-9EA6-4A64-AC62-7150D5BC31B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-#		{D9ED4033-9EA6-4A64-AC62-7150D5BC31B2}.Release|Any CPU.Build.0 = Release|Any CPU
-#		{2C73B7CB-2BD9-4CC5-B316-D0391F15D13D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-#		{2C73B7CB-2BD9-4CC5-B316-D0391F15D13D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-#		{2C73B7CB-2BD9-4CC5-B316-D0391F15D13D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-#		{2C73B7CB-2BD9-4CC5-B316-D0391F15D13D}.Release|Any CPU.Build.0 = Release|Any CPU
-#		{D9383703-E1A0-4D07-A273-00A933223CE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-#		{D9383703-E1A0-4D07-A273-00A933223CE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-#		{D9383703-E1A0-4D07-A273-00A933223CE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-#		{D9383703-E1A0-4D07-A273-00A933223CE7}.Release|Any CPU.Build.0 = Release|Any CPU
-#		{3151A06E-264A-45DF-8773-E12F48AD5BB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-#		{3151A06E-264A-45DF-8773-E12F48AD5BB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-#		{3151A06E-264A-45DF-8773-E12F48AD5BB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-#		{3151A06E-264A-45DF-8773-E12F48AD5BB3}.Release|Any CPU.Build.0 = Release|Any CPU
-#		{59524A4E-DEE5-43B1-AD6E-C81B5147496D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-#		{59524A4E-DEE5-43B1-AD6E-C81B5147496D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-#		{59524A4E-DEE5-43B1-AD6E-C81B5147496D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-#		{59524A4E-DEE5-43B1-AD6E-C81B5147496D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5FBC97A2-4DF7-42DB-B801-D5825C51A885}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5FBC97A2-4DF7-42DB-B801-D5825C51A885}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FBC97A2-4DF7-42DB-B801-D5825C51A885}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -440,6 +384,14 @@ Global
 		{A0228BE6-4A70-4A2E-8550-55AD4DF2ECD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0228BE6-4A70-4A2E-8550-55AD4DF2ECD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0228BE6-4A70-4A2E-8550-55AD4DF2ECD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B84DBB9B-1C43-4F6C-8C19-B028F3B7C2D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B84DBB9B-1C43-4F6C-8C19-B028F3B7C2D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B84DBB9B-1C43-4F6C-8C19-B028F3B7C2D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B84DBB9B-1C43-4F6C-8C19-B028F3B7C2D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB1B399B-5AC2-4848-B15B-729DE17169BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB1B399B-5AC2-4848-B15B-729DE17169BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB1B399B-5AC2-4848-B15B-729DE17169BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB1B399B-5AC2-4848-B15B-729DE17169BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -503,6 +455,8 @@ Global
 		{68460CC6-C011-4364-9006-281F6F5C54A0} = {D980D7F3-20FC-46AB-A443-3238FE1FAEC0}
 		{F8DCF34B-4EF0-43AB-B578-D18B1417BD93} = {D980D7F3-20FC-46AB-A443-3238FE1FAEC0}
 		{6D7EE612-55E1-4609-ADA1-B612193232AD} = {D980D7F3-20FC-46AB-A443-3238FE1FAEC0}
+		{B84DBB9B-1C43-4F6C-8C19-B028F3B7C2D3} = {D980D7F3-20FC-46AB-A443-3238FE1FAEC0}
+		{DB1B399B-5AC2-4848-B15B-729DE17169BC} = {D980D7F3-20FC-46AB-A443-3238FE1FAEC0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E27EC676-81BF-4099-BFC9-20E860CE83A5}
