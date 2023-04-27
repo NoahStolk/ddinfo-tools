@@ -1,5 +1,5 @@
+using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Events.Interfaces;
-using DevilDaggersInfo.Types.Core.Replays;
 
 namespace DevilDaggersInfo.Cmd.CreateReplay;
 
