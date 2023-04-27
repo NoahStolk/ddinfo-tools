@@ -147,7 +147,7 @@ public class LeaderboardEntry : AbstractComponent
 		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[06], 0), Depth, Color.White, _gemsDespawned, TextAlign.Right);
 		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[07], 0), Depth, Color.White, _gemsEaten, TextAlign.Right);
 		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[08], 0), Depth, Color.White, _accuracy, TextAlign.Right);
-		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[09], 0), Depth, _death?.Color.ToWarpColor() ?? Color.White, _death?.Name ?? "-", TextAlign.Left);
+		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[09], 0), Depth, _death?.Color.ToEngineColor() ?? Color.White, _death?.Name ?? "-", TextAlign.Left);
 		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[10], 0), Depth, Color.White, _homingStored, TextAlign.Right);
 		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[11], 0), Depth, Color.White, _homingEaten, TextAlign.Right);
 		Root.Game.MonoSpaceFontRenderer12.Schedule(new(1), position + new Vector2i<int>(LeaderboardWrapper.TableOffsets[12], 0), Depth, Color.White, _level2, TextAlign.Right);

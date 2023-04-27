@@ -75,7 +75,7 @@ public abstract class RecordingResultScoreDifferenceView : RecordingResultScoreV
 		AddScoreState(ref y, "Accuracy", accuracyState, i => i.ToString(StringFormats.AccuracyFormat), i => $"{i:+0.00%;-0.00%;+0.00%}");
 
 		AddSpacing(ref y);
-		AddIcon(ref y, Textures.IconSkull, EnemiesV3_2.Skull4.Color.ToWarpColor());
+		AddIcon(ref y, Textures.IconSkull, EnemiesV3_2.Skull4.Color.ToEngineColor());
 		AddScoreState(ref y, "Enemies killed", enemiesKilledState, i => i.ToString(), i => $"{i:+0;-0;+0}");
 		AddScoreState(ref y, "Enemies alive", enemiesAliveState, i => i.ToString(), i => $"{i:+0;-0;+0}");
 	}

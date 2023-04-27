@@ -50,7 +50,7 @@ public class RecordingResultFirstScore : RecordingResultScoreView
 		Add("Accuracy", accuracy, i => i.ToString(StringFormats.AccuracyFormat));
 
 		AddSpacing(ref y);
-		AddIcon(ref y, Textures.IconSkull, EnemiesV3_2.Skull4.Color.ToWarpColor());
+		AddIcon(ref y, Textures.IconSkull, EnemiesV3_2.Skull4.Color.ToEngineColor());
 		Add("Enemies killed", response.EnemiesKilled, i => i.ToString());
 		Add("Enemies alive", response.EnemiesAlive, i => i.ToString());
 

@@ -20,6 +20,6 @@ public static class CustomLeaderboardDaggerUtils
 			CustomLeaderboardDagger.Leviathan => DaggerColors.Leviathan,
 			null => new(127, 143, 127),
 			_ => throw new UnreachableException(),
-		}).ToWarpColor();
+		}).ToEngineColor();
 	}
 }

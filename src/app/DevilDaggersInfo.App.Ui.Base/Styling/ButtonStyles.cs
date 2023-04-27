@@ -13,7 +13,7 @@ public static class ButtonStyles
 		foreach (EnemyType enemyType in Enum.GetValues<EnemyType>())
 		{
 			Enemy? enemy = enemyType.GetEnemy();
-			Color enemyColor = enemy?.Color.ToWarpColor() ?? Color.Gray(0.75f);
+			Color enemyColor = enemy?.Color.ToEngineColor() ?? Color.Gray(0.75f);
 			Color hoverBackgroundColor = Color.Lerp(enemyColor, Color.White, 0.5f);
 
 			Enemies[enemyType] = new(enemyColor, Color.Black, hoverBackgroundColor, 1);

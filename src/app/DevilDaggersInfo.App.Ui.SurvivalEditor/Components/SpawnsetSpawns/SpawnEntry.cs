@@ -24,7 +24,7 @@ public class SpawnEntry : AbstractComponent
 	{
 		_spawnUiEntry = spawnUiEntry;
 		_enemy = spawnUiEntry.EnemyType.GetEnemy();
-		_enemyColor = _enemy == null ? Color.Gray(0.75f) : _enemy.Color.ToWarpColor();
+		_enemyColor = _enemy == null ? Color.Gray(0.75f) : _enemy.Color.ToEngineColor();
 
 		Index = spawnUiEntry.Index;
 	}
@@ -76,8 +76,8 @@ public class SpawnEntry : AbstractComponent
 
 		Color GetColorFromHand(HandLevel handLevel) => handLevel switch
 		{
-			HandLevel.Level3 => UpgradeColors.Level3.ToWarpColor(),
-			HandLevel.Level4 => UpgradeColors.Level4.ToWarpColor(),
+			HandLevel.Level3 => UpgradeColors.Level3.ToEngineColor(),
+			HandLevel.Level4 => UpgradeColors.Level4.ToEngineColor(),
 			_ => Color.Red,
 		};
 

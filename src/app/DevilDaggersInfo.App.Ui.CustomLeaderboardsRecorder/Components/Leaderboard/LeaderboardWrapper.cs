@@ -47,9 +47,9 @@ public class LeaderboardWrapper : AbstractComponent
 		TooltipSprite deathTooltip = new(Bounds.CreateNested(TableOffsets[09] + offset, 64, iconSize, iconSize), Textures.IconSkull, Color.Gray(0.5f), "Death type", TextAlign.Left);
 		TooltipSprite homingStoredTooltip = new(Bounds.CreateNested(TableOffsets[10] - offset, 64, iconSize, iconSize), Textures.IconHoming, Color.White, "Homing stored", TextAlign.Left);
 		TooltipSprite homingEatenTooltip = new(Bounds.CreateNested(TableOffsets[11] - offset, 64, iconSize, iconSize), Textures.IconHomingMask, Color.Red, "Homing eaten", TextAlign.Left);
-		TooltipSprite level2Tooltip = new(Bounds.CreateNested(TableOffsets[12] - offset, 64, iconSize, iconSize), Textures.IconDagger, UpgradesV3_2.Level2.Color.ToWarpColor(), "Level 2", TextAlign.Left);
-		TooltipSprite level3Tooltip = new(Bounds.CreateNested(TableOffsets[13] - offset, 64, iconSize, iconSize), Textures.IconDagger, UpgradesV3_2.Level3.Color.ToWarpColor(), "Level 3", TextAlign.Left);
-		TooltipSprite level4Tooltip = new(Bounds.CreateNested(TableOffsets[14] - offset, 64, iconSize, iconSize), Textures.IconDagger, UpgradesV3_2.Level4.Color.ToWarpColor(), "Level 4", TextAlign.Left);
+		TooltipSprite level2Tooltip = new(Bounds.CreateNested(TableOffsets[12] - offset, 64, iconSize, iconSize), Textures.IconDagger, UpgradesV3_2.Level2.Color.ToEngineColor(), "Level 2", TextAlign.Left);
+		TooltipSprite level3Tooltip = new(Bounds.CreateNested(TableOffsets[13] - offset, 64, iconSize, iconSize), Textures.IconDagger, UpgradesV3_2.Level3.Color.ToEngineColor(), "Level 3", TextAlign.Left);
+		TooltipSprite level4Tooltip = new(Bounds.CreateNested(TableOffsets[14] - offset, 64, iconSize, iconSize), Textures.IconDagger, UpgradesV3_2.Level4.Color.ToEngineColor(), "Level 4", TextAlign.Left);
 		TooltipSprite submitDateTooltip = new(Bounds.CreateNested(TableOffsets[15] - offset, 64, iconSize, iconSize), Textures.IconCalendar, Color.White, "Submit date", TextAlign.Right);
 
 		NestingContext.Add(rankTooltip);

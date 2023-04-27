@@ -103,7 +103,7 @@ public static class ContentManager
 		if (!ddBinary.AssetMap.TryGetValue(new(AssetType.Mesh, meshName), out AssetData? meshData))
 			throw new MissingContentException($"Required mesh '{meshName}' from 'res/dd' was not found.");
 
-		return ToWarpMesh(meshData.Buffer);
+		return ToEngineMesh(meshData.Buffer);
 	}
 
 	private static Texture GetTexture(ModBinary ddBinary, string textureName)
@@ -111,7 +111,7 @@ public static class ContentManager
 		if (!ddBinary.AssetMap.TryGetValue(new(AssetType.Texture, textureName), out AssetData? textureData))
 			throw new MissingContentException($"Required texture '{textureName}' from 'res/dd' was not found.");
 
-		return ToWarpTexture(textureData.Buffer);
+		return ToEngineTexture(textureData.Buffer);
 	}
 
 	private static Sound GetSound(ModBinary audioBinary, string soundName)
@@ -123,7 +123,7 @@ public static class ContentManager
 		return new(waveData.Channels, waveData.SampleRate, waveData.BitsPerSample, waveData.Data.Length, waveData.Data);
 	}
 
-	private static Mesh ToWarpMesh(byte[] ddMeshBuffer)
+	private static Mesh ToEngineMesh(byte[] ddMeshBuffer)
 	{
 		using MemoryStream ms = new(ddMeshBuffer);
 		using BinaryReader br = new(ms);
@@ -140,17 +140,17 @@ public static class ContentManager
 		for (int i = 0; i < indices.Length; i++)
 			indices[i] = br.ReadUInt32();
 
-		Vertex[] warpVertices = new Vertex[vertexCount];
+		Vertex[] engineVertices = new Vertex[vertexCount];
 		for (int i = 0; i < ddVertices.Length; i++)
 		{
 			DevilDaggersInfo.Core.Mod.Structs.Vertex ddVertex = ddVertices[i];
-			warpVertices[i] = new(ddVertex.Position, ddVertex.TexCoord, ddVertex.Normal);
+			engineVertices[i] = new(ddVertex.Position, ddVertex.TexCoord, ddVertex.Normal);
 		}
 
-		return new(warpVertices, indices);
+		return new(engineVertices, indices);
 	}
 
-	private static Texture ToWarpTexture(byte[] ddTextureBuffer)
+	private static Texture ToEngineTexture(byte[] ddTextureBuffer)
 	{
 		const ushort expectedHeader = 16401;
 		const int headerSize = 11;
