@@ -1,23 +1,22 @@
-using DevilDaggersInfo.Api.App.CustomLeaderboards;
 using DevilDaggersInfo.App.Engine.Text;
 using DevilDaggersInfo.App.Engine.Ui;
 using DevilDaggersInfo.App.Ui.Base.Components;
 using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Extensions;
 using DevilDaggersInfo.Core.CriteriaExpression;
+using DevilDaggersInfo.Core.CriteriaExpression.Extensions;
 using DevilDaggersInfo.Core.CriteriaExpression.Parts;
-using DevilDaggersInfo.Types.Core.CustomLeaderboards.Extensions;
 using System.Text;
 
 namespace DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Components.LeaderboardList;
 
 public class CriteriaIcon : TooltipSprite
 {
-	public CriteriaIcon(IBounds bounds, GetCustomLeaderboardCriteria criteria)
+	public CriteriaIcon(IBounds bounds, Api.App.CustomLeaderboards.GetCustomLeaderboardCriteria criteria)
 		: base(bounds, criteria.Type.GetTexture(), criteria.Type.GetColor(), GetText(criteria), TextAlign.Left)
 	{
 	}
 
-	private static string GetText(GetCustomLeaderboardCriteria criteria)
+	private static string GetText(Api.App.CustomLeaderboards.GetCustomLeaderboardCriteria criteria)
 	{
 		if (!Expression.TryParse(criteria.Expression, out Expression? criteriaExpression))
 		{
@@ -25,8 +24,8 @@ public class CriteriaIcon : TooltipSprite
 			return string.Empty;
 		}
 
-		Types.Core.CustomLeaderboards.CustomLeaderboardCriteriaType criteriaType = criteria.Type.ToCore();
-		Types.Core.CustomLeaderboards.CustomLeaderboardCriteriaOperator @operator = criteria.Operator.ToCore();
+		CustomLeaderboardCriteriaType criteriaType = criteria.Type.ToCore();
+		CustomLeaderboardCriteriaOperator @operator = criteria.Operator.ToCore();
 
 		StringBuilder sb = new();
 		sb.Append(criteriaType.Display());

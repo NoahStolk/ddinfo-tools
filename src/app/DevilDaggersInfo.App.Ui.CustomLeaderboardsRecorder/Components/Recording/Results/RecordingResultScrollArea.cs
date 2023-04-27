@@ -8,7 +8,7 @@ using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.Actions;
 using DevilDaggersInfo.App.Ui.Base.Styling;
 using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Extensions;
-using DevilDaggersInfo.Types.Core.CustomLeaderboards.Extensions;
+using DevilDaggersInfo.Core.CriteriaExpression.Extensions;
 
 namespace DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Components.Recording.Results;
 
