@@ -2,10 +2,10 @@ using DevilDaggersInfo.App.Engine.Content;
 using DevilDaggersInfo.App.Engine.Parsers.Sound;
 using DevilDaggersInfo.App.Ui.Base.Exceptions;
 using DevilDaggersInfo.App.Ui.Base.User.Settings;
+using DevilDaggersInfo.Core.Asset;
 using DevilDaggersInfo.Core.Mod;
 using DevilDaggersInfo.Core.Mod.Extensions;
 using DevilDaggersInfo.Core.Spawnset;
-using DevilDaggersInfo.Types.Core.Assets;
 
 namespace DevilDaggersInfo.App.Ui.Base;
 
