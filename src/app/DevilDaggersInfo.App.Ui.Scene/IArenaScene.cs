@@ -1,6 +1,5 @@
 using DevilDaggersInfo.App.Ui.Scene.GameObjects;
 using DevilDaggersInfo.Core.Spawnset;
-using DevilDaggersInfo.Types.Core.Spawnsets;
 
 namespace DevilDaggersInfo.App.Ui.Scene;
 

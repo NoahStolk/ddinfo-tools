@@ -15,7 +15,6 @@ using DevilDaggersInfo.App.Ui.SurvivalEditor.EditorArena;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.EditorArena.Data;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Utils;
 using DevilDaggersInfo.Core.Spawnset;
-using DevilDaggersInfo.Types.Core.Spawnsets;
 using System.Diagnostics;
 
 namespace DevilDaggersInfo.App.Ui.SurvivalEditor.Components.SpawnsetArena;

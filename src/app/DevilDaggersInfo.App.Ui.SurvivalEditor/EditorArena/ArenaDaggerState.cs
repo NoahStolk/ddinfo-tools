@@ -8,7 +8,7 @@ using DevilDaggersInfo.App.Ui.Base.StateManagement.SurvivalEditor.Actions;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Components.SpawnsetArena;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.EditorArena.Data;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Utils;
-using DevilDaggersInfo.Types.Core.Spawnsets;
+using DevilDaggersInfo.Core.Spawnset;
 using Silk.NET.GLFW;
 
 namespace DevilDaggersInfo.App.Ui.SurvivalEditor.EditorArena;

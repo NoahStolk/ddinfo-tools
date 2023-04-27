@@ -10,7 +10,6 @@ using DevilDaggersInfo.App.Ui.Base.Utils;
 using DevilDaggersInfo.App.Ui.SurvivalEditor.Utils;
 using DevilDaggersInfo.Common;
 using DevilDaggersInfo.Core.Spawnset;
-using DevilDaggersInfo.Types.Core.Spawnsets;
 using System.Diagnostics;
 
 namespace DevilDaggersInfo.App.Ui.SurvivalEditor.Components.SpawnsetSettings;

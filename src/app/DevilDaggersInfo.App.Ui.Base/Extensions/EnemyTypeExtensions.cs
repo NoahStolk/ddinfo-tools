@@ -1,6 +1,6 @@
+using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;
-using DevilDaggersInfo.Types.Core.Spawnsets;
 
 namespace DevilDaggersInfo.App.Ui.Base.Extensions;
 

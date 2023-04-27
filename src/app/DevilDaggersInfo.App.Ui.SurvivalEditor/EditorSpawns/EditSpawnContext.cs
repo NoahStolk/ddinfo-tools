@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Spawnset.Extensions;
 using DevilDaggersInfo.Core.Spawnset.View;
-using DevilDaggersInfo.Types.Core.Spawnsets;
 using System.Collections.Immutable;
 
 namespace DevilDaggersInfo.App.Ui.SurvivalEditor.EditorSpawns;

@@ -1,5 +1,5 @@
+using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Spawnset.View;
-using DevilDaggersInfo.Types.Core.Spawnsets;
 
 namespace DevilDaggersInfo.App.Ui.SurvivalEditor.EditorSpawns;
 

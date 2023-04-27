@@ -1,8 +1,8 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.Base.Components.Styles;
 using DevilDaggersInfo.App.Ui.Base.Extensions;
+using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Wiki.Objects;
-using DevilDaggersInfo.Types.Core.Spawnsets;
 
 namespace DevilDaggersInfo.App.Ui.Base.Styling;
 

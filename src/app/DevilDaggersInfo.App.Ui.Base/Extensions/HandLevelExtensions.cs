@@ -1,6 +1,6 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
+using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Wiki;
-using DevilDaggersInfo.Types.Core.Spawnsets;
 using System.Diagnostics;
 
 namespace DevilDaggersInfo.App.Ui.Base.Extensions;
