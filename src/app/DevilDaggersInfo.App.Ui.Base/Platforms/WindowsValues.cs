@@ -1,5 +1,5 @@
 using DevilDaggersInfo.Api.App.ProcessMemory;
-using DevilDaggersInfo.Types.Web;
+using DevilDaggersInfo.Api.App.Updates;
 
 namespace DevilDaggersInfo.App.Ui.Base.Platforms;
 

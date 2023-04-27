@@ -7,6 +7,7 @@ using DevilDaggersInfo.App.Ui.Base.DependencyPattern;
 using DevilDaggersInfo.App.Ui.Base.StateManagement;
 using DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.Actions;
 using DevilDaggersInfo.App.Ui.Base.Styling;
+using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Extensions;
 using DevilDaggersInfo.Types.Core.CustomLeaderboards.Extensions;
 
 namespace DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Components.Recording.Results;
@@ -63,7 +64,7 @@ public class RecordingResultScrollArea : ScrollArea
 
 	private void ShowRejectionResult(GetUploadResponseCriteriaRejection response)
 	{
-		Label header = new(ContentBounds.CreateNested(0, 0, ContentBounds.Size.X, 16), $"{response.CriteriaName}\nMust be {response.CriteriaOperator.ShortString()} {response.ExpectedValue}\nValue was {response.ActualValue}", LabelStyles.DefaultLeft with { TextColor = Color.Red }) { Depth = Depth + 2 };
+		Label header = new(ContentBounds.CreateNested(0, 0, ContentBounds.Size.X, 16), $"{response.CriteriaName}\nMust be {response.CriteriaOperator.ToCore().ShortString()} {response.ExpectedValue}\nValue was {response.ActualValue}", LabelStyles.DefaultLeft with { TextColor = Color.Red }) { Depth = Depth + 2 };
 		NestingContext.Add(header);
 	}
 }

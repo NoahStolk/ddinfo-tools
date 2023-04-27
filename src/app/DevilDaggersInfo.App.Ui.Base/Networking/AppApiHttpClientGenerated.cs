@@ -11,7 +11,6 @@ using DevilDaggersInfo.Api.App.CustomLeaderboards;
 using DevilDaggersInfo.Api.App.ProcessMemory;
 using DevilDaggersInfo.Api.App.Spawnsets;
 using DevilDaggersInfo.Api.App.Updates;
-using DevilDaggersInfo.Types.Web;
 using System.Net.Http.Json;
 
 namespace DevilDaggersInfo.App.Ui.Base.Networking;

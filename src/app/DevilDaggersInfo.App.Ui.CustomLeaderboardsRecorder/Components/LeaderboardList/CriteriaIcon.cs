@@ -25,10 +25,13 @@ public class CriteriaIcon : TooltipSprite
 			return string.Empty;
 		}
 
+		Types.Core.CustomLeaderboards.CustomLeaderboardCriteriaType criteriaType = criteria.Type.ToCore();
+		Types.Core.CustomLeaderboards.CustomLeaderboardCriteriaOperator @operator = criteria.Operator.ToCore();
+
 		StringBuilder sb = new();
-		sb.Append(criteria.Type.Display());
+		sb.Append(criteriaType.Display());
 		sb.Append(' ');
-		sb.Append(criteria.Operator.ShortString());
+		sb.Append(@operator.ShortString());
 		sb.Append(' ');
 
 		foreach (IExpressionPart expressionPart in criteriaExpression.Parts)
@@ -42,7 +45,7 @@ public class CriteriaIcon : TooltipSprite
 					sb.Append(target);
 					break;
 				case ExpressionValue value:
-					sb.Append(value.ToDisplayString(criteria.Type));
+					sb.Append(value.ToDisplayString(criteriaType));
 					break;
 			}
 

@@ -11,7 +11,6 @@ using DevilDaggersInfo.App.Ui.Base.StateManagement.CustomLeaderboardsRecorder.Ac
 using DevilDaggersInfo.App.Ui.Base.Styling;
 using DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Utils;
 using DevilDaggersInfo.Common;
-using DevilDaggersInfo.Types.Web;
 using Silk.NET.GLFW;
 
 namespace DevilDaggersInfo.App.Ui.CustomLeaderboardsRecorder.Components.LeaderboardList;
