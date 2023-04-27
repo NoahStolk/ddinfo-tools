@@ -38,7 +38,7 @@
 	</ItemGroup>
 
 	<ItemGroup Label="Jwt">
-		<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.29.0" />
+		<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.30.0" />
 	</ItemGroup>
 
 	<ItemGroup Label="Misc">
