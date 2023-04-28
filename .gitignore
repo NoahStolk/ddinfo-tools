@@ -279,7 +279,6 @@ database-exports/
 */**/DevilDaggersInfo.Web.Server/Data/ModArchiveCache
 */**/DevilDaggersInfo.Web.Server/Data/ModScreenshots
 */**/DevilDaggersInfo.Web.Server/Data/ResponseTimes
-*/**/DevilDaggersInfo.Web.Server/Data/Spawnsets
 */**/DevilDaggersInfo.Web.Server/Data/Tools/*.zip
 
 # Tailwind
