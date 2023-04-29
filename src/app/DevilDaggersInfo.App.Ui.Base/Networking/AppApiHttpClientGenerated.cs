@@ -6,7 +6,6 @@
 
 #nullable enable
 
-using DevilDaggersInfo.Api.App;
 using DevilDaggersInfo.Api.App.CustomLeaderboards;
 using DevilDaggersInfo.Api.App.ProcessMemory;
 using DevilDaggersInfo.Api.App.Spawnsets;
@@ -48,19 +47,6 @@ public partial class AppApiHttpClient
 			{ nameof(hash), Uri.EscapeDataString(Convert.ToBase64String(hash)) }
 		};
 		return await SendGetRequest<GetCustomLeaderboard>(BuildUrlWithQuery($"api/app/custom-leaderboards/by-hash", queryParameters));
-	}
-
-	public async Task<Page<GetCustomLeaderboardForOverview>> GetCustomLeaderboardOverview(CustomLeaderboardCategory category, int pageIndex, int pageSize, int selectedPlayerId, bool onlyFeatured)
-	{
-		Dictionary<string, object?> queryParameters = new()
-		{
-			{ nameof(category), category },
-			{ nameof(pageIndex), pageIndex },
-			{ nameof(pageSize), pageSize },
-			{ nameof(selectedPlayerId), selectedPlayerId },
-			{ nameof(onlyFeatured), onlyFeatured }
-		};
-		return await SendGetRequest<Page<GetCustomLeaderboardForOverview>>(BuildUrlWithQuery($"api/app/custom-leaderboards/overview", queryParameters));
 	}
 
 	public async Task<HttpResponseMessage> CustomLeaderboardExistsBySpawnsetHash(byte[] hash)
