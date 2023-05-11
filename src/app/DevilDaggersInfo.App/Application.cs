@@ -116,8 +116,6 @@ public class Application
 		Span<RawImage> rawImages = MemoryMarshal.CreateSpan(ref rawImage, 1);
 		_window.SetWindowIcon(rawImages);
 
-		AppDomain.CurrentDomain.UnhandledException += (_, args) => Root.Log.Fatal(args.ExceptionObject.ToString());
-
 		AsyncHandler.Run(
 			static av =>
 			{
