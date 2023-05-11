@@ -29,61 +29,6 @@
           "Serilog": "2.10.0"
         }
       },
-      "Silk.NET.Input": {
-        "type": "Direct",
-        "requested": "[2.17.1, )",
-        "resolved": "2.17.1",
-        "contentHash": "9IPA6SfzhvaTZjl4JYO29oOSXxv7dDXebxc0uo5ChRxqyiRUsPpoCp4RGlj1nqq9BFIQ95t6xCfxPD3hQfYGuA==",
-        "dependencies": {
-          "Silk.NET.Input.Common": "2.17.1",
-          "Silk.NET.Input.Glfw": "2.17.1",
-          "Silk.NET.Input.Sdl": "2.17.1"
-        }
-      },
-      "Silk.NET.OpenAL": {
-        "type": "Direct",
-        "requested": "[2.17.1, )",
-        "resolved": "2.17.1",
-        "contentHash": "nrlp4fKspIr2jGn0gdKKPwPeCrTuixgmZjy/urGOg5k/Wz+Ijh8r+/+BGp9iCYGuYqDxIlvoPiPm9UzwviNfyw==",
-        "dependencies": {
-          "Silk.NET.Core": "2.17.1",
-          "System.Buffers": "4.5.1",
-          "System.Numerics.Vectors": "4.5.0"
-        }
-      },
-      "Silk.NET.OpenGL": {
-        "type": "Direct",
-        "requested": "[2.17.1, )",
-        "resolved": "2.17.1",
-        "contentHash": "cQW4i0KL8ASjMNkpR/GTHbbG1cSFxZHNUSISwzdPmMxkj6LFxF5M6o6zhcMHi3LV3zRN5+5/Lp/WsfVOW2QO2w==",
-        "dependencies": {
-          "Silk.NET.Core": "2.17.1",
-          "Silk.NET.Maths": "2.17.1"
-        }
-      },
-      "Silk.NET.OpenGL.Extensions.ImGui": {
-        "type": "Direct",
-        "requested": "[2.17.1, )",
-        "resolved": "2.17.1",
-        "contentHash": "pfADp5/tDR/iJcsvaMAQ+wEtsEUnIwonmTYcTUP6StiDAakdlv69q90PCrxV87qjsff/8PPkAz5RXBtmqN2m1Q==",
-        "dependencies": {
-          "ImGui.NET": "1.88.0",
-          "Silk.NET.Input.Common": "2.17.1",
-          "Silk.NET.Input.Extensions": "2.17.1",
-          "Silk.NET.OpenGL": "2.17.1",
-          "Silk.NET.Windowing.Common": "2.17.1"
-        }
-      },
-      "Silk.NET.Windowing": {
-        "type": "Direct",
-        "requested": "[2.17.1, )",
-        "resolved": "2.17.1",
-        "contentHash": "ITbhKDt2XbV3TJAg7nybjT7l45owbX+gaH2YH8yWqcrtLpOFMZ+tvvxU9sO+/n2TvFCxGe5E7ABoK/xA+oAd8w==",
-        "dependencies": {
-          "Silk.NET.Windowing.Common": "2.17.1",
-          "Silk.NET.Windowing.Glfw": "2.17.1"
-        }
-      },
       "SonarAnalyzer.CSharp": {
         "type": "Direct",
         "requested": "[9.0.0.68202, )",
@@ -345,6 +290,61 @@
         "type": "Project",
         "dependencies": {
           "DevilDaggersInfo.Common": "[1.0.0, )"
+        }
+      },
+      "Silk.NET.Input": {
+        "type": "CentralTransitive",
+        "requested": "[2.17.1, )",
+        "resolved": "2.17.1",
+        "contentHash": "9IPA6SfzhvaTZjl4JYO29oOSXxv7dDXebxc0uo5ChRxqyiRUsPpoCp4RGlj1nqq9BFIQ95t6xCfxPD3hQfYGuA==",
+        "dependencies": {
+          "Silk.NET.Input.Common": "2.17.1",
+          "Silk.NET.Input.Glfw": "2.17.1",
+          "Silk.NET.Input.Sdl": "2.17.1"
+        }
+      },
+      "Silk.NET.OpenAL": {
+        "type": "CentralTransitive",
+        "requested": "[2.17.1, )",
+        "resolved": "2.17.1",
+        "contentHash": "nrlp4fKspIr2jGn0gdKKPwPeCrTuixgmZjy/urGOg5k/Wz+Ijh8r+/+BGp9iCYGuYqDxIlvoPiPm9UzwviNfyw==",
+        "dependencies": {
+          "Silk.NET.Core": "2.17.1",
+          "System.Buffers": "4.5.1",
+          "System.Numerics.Vectors": "4.5.0"
+        }
+      },
+      "Silk.NET.OpenGL": {
+        "type": "CentralTransitive",
+        "requested": "[2.17.1, )",
+        "resolved": "2.17.1",
+        "contentHash": "cQW4i0KL8ASjMNkpR/GTHbbG1cSFxZHNUSISwzdPmMxkj6LFxF5M6o6zhcMHi3LV3zRN5+5/Lp/WsfVOW2QO2w==",
+        "dependencies": {
+          "Silk.NET.Core": "2.17.1",
+          "Silk.NET.Maths": "2.17.1"
+        }
+      },
+      "Silk.NET.OpenGL.Extensions.ImGui": {
+        "type": "CentralTransitive",
+        "requested": "[2.17.1, )",
+        "resolved": "2.17.1",
+        "contentHash": "pfADp5/tDR/iJcsvaMAQ+wEtsEUnIwonmTYcTUP6StiDAakdlv69q90PCrxV87qjsff/8PPkAz5RXBtmqN2m1Q==",
+        "dependencies": {
+          "ImGui.NET": "1.88.0",
+          "Silk.NET.Input.Common": "2.17.1",
+          "Silk.NET.Input.Extensions": "2.17.1",
+          "Silk.NET.OpenGL": "2.17.1",
+          "Silk.NET.Windowing.Common": "2.17.1"
+        }
+      },
+      "Silk.NET.Windowing": {
+        "type": "CentralTransitive",
+        "requested": "[2.17.1, )",
+        "resolved": "2.17.1",
+        "contentHash": "ITbhKDt2XbV3TJAg7nybjT7l45owbX+gaH2YH8yWqcrtLpOFMZ+tvvxU9sO+/n2TvFCxGe5E7ABoK/xA+oAd8w==",
+        "dependencies": {
+          "Silk.NET.Windowing.Common": "2.17.1",
+          "Silk.NET.Windowing.Glfw": "2.17.1"
         }
       },
       "SixLabors.ImageSharp": {
