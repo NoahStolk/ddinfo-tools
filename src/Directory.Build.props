@@ -12,6 +12,8 @@
 		<EnablePreviewFeatures>true</EnablePreviewFeatures>
 		<LangVersion>preview</LangVersion>
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+		<RestoreLockedMode>true</RestoreLockedMode>
 	</PropertyGroup>
 
 	<PropertyGroup Label="Custom properties">
