@@ -99,10 +99,6 @@
 		<PackageVersion Include="MSTest.TestFramework" Version="3.0.2" />
 	</ItemGroup>
 
-	<ItemGroup Label="Warp.NET">
-		<PackageVersion Include="NoahStolk.Warp.NET" Version="0.5.6" />
-	</ItemGroup>
-
 	<ItemGroup Label="WebAssembly">
 		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.5" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="7.0.5" />
