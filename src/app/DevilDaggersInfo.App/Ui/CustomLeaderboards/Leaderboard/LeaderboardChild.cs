@@ -261,6 +261,7 @@ public static class LeaderboardChild
 			}
 			catch (Exception ex)
 			{
+				Root.Log.Error(ex, "Could not parse replay.");
 				Modals.ShowError("Could not parse replay.");
 				return;
 			}
