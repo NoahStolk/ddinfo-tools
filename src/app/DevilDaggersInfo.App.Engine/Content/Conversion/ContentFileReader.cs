@@ -1,5 +1,4 @@
 using DevilDaggersInfo.App.Engine.Content.Conversion.Blobs;
-using DevilDaggersInfo.App.Engine.Content.Conversion.Charsets;
 using DevilDaggersInfo.App.Engine.Content.Conversion.Models;
 using DevilDaggersInfo.App.Engine.Content.Conversion.Shaders;
 using DevilDaggersInfo.App.Engine.Content.Conversion.Sounds;
@@ -15,7 +14,7 @@ internal static class ContentFileReader
 	/// </summary>
 	public static DecompiledContentFile Read(string contentFilePath)
 	{
-		Texture blankTexture = new(1, 1, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF });
+		TextureContent blankTexture = new(1, 1, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF });
 
 		if (!File.Exists(contentFilePath))
 			throw new InvalidOperationException("Content file does not exist.");
@@ -34,12 +33,11 @@ internal static class ContentFileReader
 			tocEntries[i] = new(contentType, name, length);
 		}
 
-		Dictionary<string, Blob> blobs = new();
-		Dictionary<string, Charset> charsets = new();
-		Dictionary<string, Model> models = new();
-		Dictionary<string, Shader> shaders = new();
-		Dictionary<string, Sound> sounds = new();
-		Dictionary<string, Texture> textures = new();
+		Dictionary<string, BlobContent> blobs = new();
+		Dictionary<string, ModelContent> models = new();
+		Dictionary<string, ShaderContent> shaders = new();
+		Dictionary<string, SoundContent> sounds = new();
+		Dictionary<string, TextureContent> textures = new();
 
 		Dictionary<string, ModelContext> modelContexts = new();
 		Dictionary<string, ShaderSourceCollection> shaderSourceCollections = new();
@@ -51,7 +49,6 @@ internal static class ContentFileReader
 			switch (tocEntry.ContentType)
 			{
 				case ContentType.Blob: blobs[tocEntry.Name] = GetBlob(br); break;
-				case ContentType.Charset: charsets[tocEntry.Name] = GetCharset(br); break;
 				case ContentType.Model: modelContexts[tocEntry.Name] = GetModel(br); break;
 				case ContentType.Shader: SetShaderSource(shaderSourceCollections, br, tocEntry.Name); break;
 				case ContentType.Sound: sounds[tocEntry.Name] = GetSound(br); break;
@@ -66,11 +63,11 @@ internal static class ContentFileReader
 		// Post processing for models and shaders.
 		foreach (KeyValuePair<string, ModelContext> modelContext in modelContexts)
 		{
-			Dictionary<Mesh, Texture> meshes = new();
+			Dictionary<MeshContent, TextureContent> meshes = new();
 
-			foreach ((string MaterialName, Mesh Mesh) mesh in modelContext.Value.Meshes)
+			foreach ((string MaterialName, MeshContent Mesh) mesh in modelContext.Value.Meshes)
 			{
-				textures.TryGetValue(mesh.MaterialName, out Texture? texture);
+				textures.TryGetValue(mesh.MaterialName, out TextureContent? texture);
 				meshes.Add(mesh.Mesh, texture ?? blankTexture);
 			}
 
@@ -87,19 +84,13 @@ internal static class ContentFileReader
 			shaders[shaderSource.Key] = new(shaderSource.Value.VertexCode, shaderSource.Value.GeometryCode, shaderSource.Value.FragmentCode);
 		}
 
-		return new(blobs, charsets, models, shaders, sounds, textures);
+		return new(blobs, models, shaders, sounds, textures);
 	}
 
-	private static Blob GetBlob(BinaryReader br)
+	private static BlobContent GetBlob(BinaryReader br)
 	{
 		BlobBinary blobBinary = BlobBinary.FromStream(br);
 		return new(blobBinary.Data);
-	}
-
-	private static Charset GetCharset(BinaryReader br)
-	{
-		CharsetBinary charsetBinary = CharsetBinary.FromStream(br);
-		return new(charsetBinary.Characters);
 	}
 
 	private static ModelContext GetModel(BinaryReader br)
@@ -107,7 +98,7 @@ internal static class ContentFileReader
 		ModelBinary modelBinary = ModelBinary.FromStream(br);
 		return new(modelBinary.Meshes.Select(m => (m.MaterialName, GetMesh(modelBinary, m))).ToList());
 
-		static Mesh GetMesh(ModelBinary modelBinary, MeshData meshData)
+		static MeshContent GetMesh(ModelBinary modelBinary, MeshData meshData)
 		{
 			Vertex[] outVertices = new Vertex[meshData.Faces.Count];
 			uint[] outFaces = new uint[meshData.Faces.Count];
@@ -152,13 +143,13 @@ internal static class ContentFileReader
 		}
 	}
 
-	private static Sound GetSound(BinaryReader br)
+	private static SoundContent GetSound(BinaryReader br)
 	{
 		SoundBinary soundBinary = SoundBinary.FromStream(br);
 		return new(soundBinary.Channels, soundBinary.SampleRate, soundBinary.BitsPerSample, soundBinary.Data.Length, soundBinary.Data);
 	}
 
-	private static Texture GetTexture(BinaryReader br)
+	private static TextureContent GetTexture(BinaryReader br)
 	{
 		TextureBinary textureBinary = TextureBinary.FromStream(br);
 		return new(textureBinary.Width, textureBinary.Height, textureBinary.ColorData);
@@ -173,11 +164,11 @@ internal static class ContentFileReader
 
 	private sealed class ModelContext
 	{
-		public ModelContext(List<(string MaterialName, Mesh Mesh)> meshes)
+		public ModelContext(List<(string MaterialName, MeshContent Mesh)> meshes)
 		{
 			Meshes = meshes;
 		}
 
-		public List<(string MaterialName, Mesh Mesh)> Meshes { get; }
+		public List<(string MaterialName, MeshContent Mesh)> Meshes { get; }
 	}
 }

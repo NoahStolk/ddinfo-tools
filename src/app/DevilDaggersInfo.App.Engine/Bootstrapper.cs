@@ -3,9 +3,6 @@ using DevilDaggersInfo.App.Engine.Content.Conversion;
 
 namespace DevilDaggersInfo.App.Engine;
 
-/// <summary>
-/// Used to instantiate game classes.
-/// </summary>
 public static class Bootstrapper
 {
 	/// <summary>

@@ -1,5 +1,4 @@
 using DevilDaggersInfo.App.Engine.Content.Conversion.Blobs;
-using DevilDaggersInfo.App.Engine.Content.Conversion.Charsets;
 using DevilDaggersInfo.App.Engine.Content.Conversion.Models;
 using DevilDaggersInfo.App.Engine.Content.Conversion.Shaders;
 using DevilDaggersInfo.App.Engine.Content.Conversion.Sounds;
@@ -22,9 +21,6 @@ internal static class ContentFileWriter
 
 		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".bin"))
 			Write<BlobContentConverter, BlobBinary>(path, tocEntries, dataWriter);
-
-		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".txt"))
-			Write<CharsetContentConverter, CharsetBinary>(path, tocEntries, dataWriter);
 
 		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".obj"))
 			Write<ModelContentConverter, ModelBinary>(path, tocEntries, dataWriter);

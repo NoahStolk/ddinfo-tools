@@ -5,9 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup Label="External dependencies">
-    <PackageReference Include="Silk.NET.GLFW" />
+    <PackageReference Include="Silk.NET.Input" />
     <PackageReference Include="Silk.NET.OpenAL" />
     <PackageReference Include="Silk.NET.OpenGL" />
+    <PackageReference Include="Silk.NET.OpenGL.Extensions.ImGui" />
+    <PackageReference Include="Silk.NET.Windowing" />
   </ItemGroup>
 
 </Project>
