@@ -5,6 +5,13 @@
     <NoWarn>SA1633</NoWarn>
     <Version>0.5.0.1</Version>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
+    
+    <!--This is required because the Silk.NET "Input" and "Windowing" libraries are not trim-compatible (this is planned for Silk.NET 3.0).-->
+    <!--If we do not set TrimMode to partial, Silk.NET will throw a System.PlatformNotSupportedException when the assemblies are trimmed.-->
+    <!--Partial trimming only adds around 2 MB to the executable size, which isn't too bad considering no trimming wastes around 25 MB.-->
+    <TrimMode>partial</TrimMode>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(CI)' == 'true'">
@@ -48,11 +55,11 @@
     </When>
   </Choose>
 
-  <ItemGroup>
+  <ItemGroup Label="Trimming configuration">
     <TrimmerRootDescriptor Include="TrimmerRoots.xml" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Label="Internal dependencies">
     <ProjectReference Include="..\..\api\DevilDaggersInfo.Api.App\DevilDaggersInfo.Api.App.csproj" />
     <ProjectReference Include="..\..\common\DevilDaggersInfo.Common\DevilDaggersInfo.Common.csproj" />
     <ProjectReference Include="..\..\core\DevilDaggersInfo.Core.CriteriaExpression\DevilDaggersInfo.Core.CriteriaExpression.csproj" />
