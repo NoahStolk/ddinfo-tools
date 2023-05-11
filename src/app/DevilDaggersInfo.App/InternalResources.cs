@@ -41,7 +41,7 @@ public record InternalResources(
 #else
 		const string? ddInfoToolsContentRootDirectory = null;
 #endif
-		DecompiledContentFile ddInfoToolsContent = Bootstrapper.GetDecompiledContent(ddInfoToolsContentRootDirectory, "ddinfo");
+		DecompiledContentFile ddInfoToolsContent = Bootstrapper.GetDecompiledContent(ddInfoToolsContentRootDirectory, "ddinfo-assets");
 
 		return new(
 			Value: GetBlobContent(ddInfoToolsContent, "Value"),
