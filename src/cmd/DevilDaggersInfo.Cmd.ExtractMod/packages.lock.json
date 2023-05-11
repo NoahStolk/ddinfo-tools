@@ -54,6 +54,8 @@
         "resolved": "3.0.1",
         "contentHash": "o0v/J6SJwp3RFrzR29beGx0cK7xcMRgOyIuw8ZNLQyNnBhiyL/vIQKn7cfycthcWUPG3XezUjFwBWzkcUUDFbg=="
       }
-    }
+    },
+    "net7.0/linux-x64": {},
+    "net7.0/win-x64": {}
   }
 }

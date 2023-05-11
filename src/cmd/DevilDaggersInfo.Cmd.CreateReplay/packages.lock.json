@@ -56,6 +56,8 @@
           "DevilDaggersInfo.Common": "[1.0.0, )"
         }
       }
-    }
+    },
+    "net7.0/linux-x64": {},
+    "net7.0/win-x64": {}
   }
 }
