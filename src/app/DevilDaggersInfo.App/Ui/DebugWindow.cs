@@ -23,8 +23,7 @@ public static class DebugWindow
 	{
 		ImGui.SetNextWindowSize(new(512, 384));
 
-		bool temp = true;
-		ImGui.Begin("Debug", ref temp, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize);
+		ImGui.Begin("Debug", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize);
 
 		ImGui.Text($"{Application.RenderCounter.CountPerSecond} FPS ({1f / Application.LastRenderDelta:000.000})");
 
