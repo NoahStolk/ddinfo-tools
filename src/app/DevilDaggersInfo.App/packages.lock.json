@@ -223,7 +223,6 @@
       "devildaggersinfo.core.mod": {
         "type": "Project",
         "dependencies": {
-          "DevilDaggersInfo.Common": "[1.0.0, )",
           "DevilDaggersInfo.Core.Asset": "[1.0.0, )",
           "SixLabors.ImageSharp": "[3.0.1, )"
         }
