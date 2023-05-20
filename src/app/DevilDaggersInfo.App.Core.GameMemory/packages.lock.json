@@ -54,10 +54,7 @@
         }
       },
       "devildaggersinfo.core.wiki": {
-        "type": "Project",
-        "dependencies": {
-          "DevilDaggersInfo.Common": "[1.0.0, )"
-        }
+        "type": "Project"
       }
     },
     "net7.0/linux-x64": {},
