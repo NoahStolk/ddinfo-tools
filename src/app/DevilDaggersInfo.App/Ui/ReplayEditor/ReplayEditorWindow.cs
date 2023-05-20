@@ -1,5 +1,4 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
-using DevilDaggersInfo.App.Engine.Utils;
 using DevilDaggersInfo.App.Ui.ReplayEditor.State;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
@@ -53,7 +52,7 @@ public static class ReplayEditorWindow
 
 		const int center = size / 2;
 		const float max = center - border - pointerScale / 2;
-		Vector2 pointerCenter = origin + new Vector2(center) + VectorUtils.Clamp(new Vector2(snapshot.MouseX, snapshot.MouseY) * pointerScale, -max, max);
+		Vector2 pointerCenter = origin + new Vector2(center) + Clamp(new Vector2(snapshot.MouseX, snapshot.MouseY) * pointerScale, -max, max);
 		drawList.AddRect(pointerCenter - new Vector2(pointerSize / 2f), pointerCenter + new Vector2(pointerSize / 2f), ImGui.GetColorU32(Color.White));
 
 		RenderInput(snapshot.Left, "A");
@@ -65,6 +64,11 @@ public static class ReplayEditorWindow
 		RenderInput(snapshot.ShootHoming == ShootType.Hold, "RMB");
 
 		ImGui.End();
+
+		static Vector2 Clamp(Vector2 vector, float min, float max)
+		{
+			return new(Math.Clamp(vector.X, min, max), Math.Clamp(vector.Y, min, max));
+		}
 	}
 
 	private static void RenderInput(bool used, string input)

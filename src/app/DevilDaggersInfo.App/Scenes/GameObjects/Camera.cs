@@ -132,7 +132,7 @@ public class Camera
 		if (Root.Mouse == null || mouseButton != _lookButton)
 			return;
 
-		_lockedMousePosition = Root.Mouse.Position.FloorToVector2Int32();
+		_lockedMousePosition = FloorToVector2Int32(Root.Mouse.Position);
 		Root.Mouse.Cursor.CursorMode = CursorMode.Hidden;
 	}
 
@@ -150,7 +150,7 @@ public class Camera
 		if (Root.Mouse == null)
 			return;
 
-		Vector2D<int> mousePosition = Root.Mouse.Position.FloorToVector2Int32();
+		Vector2D<int> mousePosition = FloorToVector2Int32(Root.Mouse.Position);
 		if (!Root.Mouse.IsButtonPressed(_lookButton) || !_lockedMousePosition.HasValue || mousePosition == _lockedMousePosition)
 			return;
 
@@ -229,4 +229,7 @@ public class Camera
 		// Output a ray from camera position, along this direction.
 		return new(Position, direction);
 	}
+
+	private static Vector2D<int> FloorToVector2Int32(Vector2 vector)
+		=> new((int)MathF.Floor(vector.X), (int)MathF.Floor(vector.Y));
 }

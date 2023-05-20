@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.App.Engine.Extensions;
 
-public static class BinaryReaderExtensions
+internal static class BinaryReaderExtensions
 {
 	public static Vector2 ReadVector2AsHalfPrecision(this BinaryReader br)
 		=> new((float)br.ReadHalf(), (float)br.ReadHalf());

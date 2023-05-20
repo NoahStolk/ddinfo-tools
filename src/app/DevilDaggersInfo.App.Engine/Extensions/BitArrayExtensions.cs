@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.App.Engine.Extensions;
 
-public static class BitArrayExtensions
+internal static class BitArrayExtensions
 {
 	public static byte[] ToBytes(this BitArray bitArray)
 	{

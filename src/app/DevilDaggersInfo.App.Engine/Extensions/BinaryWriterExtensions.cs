@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.App.Engine.Extensions;
 
-public static class BinaryWriterExtensions
+internal static class BinaryWriterExtensions
 {
 	public static void WriteAsHalfPrecision(this BinaryWriter binaryWriter, Vector2 vector)
 	{
