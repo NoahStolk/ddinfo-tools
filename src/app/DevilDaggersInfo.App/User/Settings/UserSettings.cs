@@ -17,8 +17,6 @@ public static class UserSettings
 		{
 			_model = value.Sanitize();
 			Save();
-
-			Root.Application.UpdateWindow();
 		}
 	}
 

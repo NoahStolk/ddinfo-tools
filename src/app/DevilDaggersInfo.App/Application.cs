@@ -26,12 +26,11 @@ public class Application
 
 	public Application()
 	{
-		_window = Window.Create(WindowOptions.Default);
+		// Always keep V-sync on to prevent missing inputs.
+		_window = Window.Create(WindowOptions.Default with { VSync = true });
 
 		UserSettings.Load();
 		UserCache.Load();
-
-		UpdateWindow();
 
 		Vector2D<int> windowSize = new(UserCache.Model.WindowWidth, UserCache.Model.WindowHeight);
 		Vector2D<int> monitorSize = Silk.NET.Windowing.Monitor.GetMainMonitor(_window).Bounds.Size;
@@ -54,15 +53,6 @@ public class Application
 	public static float LastRenderDelta { get; private set; }
 
 	public AppVersion AppVersion { get; }
-
-	/// <summary>
-	/// When the app starts up, and when the settings are saved, we need to modify these window properties.
-	/// </summary>
-	public void UpdateWindow()
-	{
-		_window.FramesPerSecond = UserSettings.Model.MaxFps;
-		_window.VSync = UserSettings.Model.VerticalSync;
-	}
 
 	public void Run()
 	{

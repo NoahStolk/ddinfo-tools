@@ -5,7 +5,6 @@ public static class StringResources
 	private const string _movement3D = "Use WASD, space, and left shift to move around.";
 	private const string _camera3D = "Hold right click to look around.";
 	private const string _tileEditor3D = "Use the scroll wheel to raise individual tiles.";
-	private const string _escape3D = "Press escape to exit.";
 
 	public const string MainMenu = """
 		This is an alpha version of the rewritten tools.
@@ -24,7 +23,6 @@ public static class StringResources
 	public const string ReplaySimulator3D = $"""
 		{_movement3D}
 		{_camera3D}
-		{_escape3D}
 
 		NOTE: This feature is VERY EXPERIMENTAL and may never fully work.
 
@@ -38,7 +36,6 @@ public static class StringResources
 		{_movement3D}
 		{_camera3D}
 		{_tileEditor3D}
-		{_escape3D}
 
 		The 3D editor is still a work in progress.
 		""";
