@@ -1,5 +1,4 @@
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.State;
-using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Spawnset;
 using System.Security.Cryptography;
 
@@ -23,7 +22,7 @@ public static class SpawnsetHistoryUtils
 			byte[] originalHash = HistoryChild.History[HistoryChild.CurrentHistoryIndex].Hash;
 			byte[] hash = MD5.HashData(copy.ToBytes());
 
-			if (ArrayUtils.AreEqual(originalHash, hash))
+			if (originalHash.SequenceEqual(hash))
 				return;
 
 			SpawnsetHistoryEntry historyEntry = new(copy, hash, spawnsetEditType);
