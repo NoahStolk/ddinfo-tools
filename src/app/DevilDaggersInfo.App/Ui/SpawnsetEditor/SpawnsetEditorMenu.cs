@@ -30,14 +30,22 @@ public static class SpawnsetEditorMenu
 		if (ImGui.MenuItem("Open", "Ctrl+O"))
 			OpenSpawnset();
 
-		if (ImGui.MenuItem("Open default (V3)"))
+		if (ImGui.MenuItem("Open default (V3)", "Ctrl+Shift+D"))
 			OpenDefaultSpawnset();
 
 		if (ImGui.MenuItem("Save", "Ctrl+S"))
 			SaveSpawnset();
 
-		if (ImGui.MenuItem("Replace", "Ctrl+R"))
-			ReplaceSpawnset();
+		ImGui.Separator();
+
+		if (ImGui.MenuItem("Open current", "Ctrl+Shift+O"))
+			OpenCurrentSpawnset();
+
+		if (ImGui.MenuItem("Replace current", "Ctrl+R"))
+			ReplaceCurrentSpawnset();
+
+		if (ImGui.MenuItem("Delete current", "Ctrl+D"))
+			DeleteCurrentSpawnset();
 
 		ImGui.Separator();
 
@@ -55,9 +63,12 @@ public static class SpawnsetEditorMenu
 	public static void OpenSpawnset()
 	{
 		string? filePath = NativeFileDialog.CreateOpenFileDialog(null);
-		if (filePath == null)
-			return;
+		if (filePath != null)
+			OpenSpawnset(filePath);
+	}
 
+	private static void OpenSpawnset(string filePath)
+	{
 		byte[] fileContents;
 		try
 		{
@@ -84,7 +95,7 @@ public static class SpawnsetEditorMenu
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.Reset);
 	}
 
-	private static void OpenDefaultSpawnset()
+	public static void OpenDefaultSpawnset()
 	{
 		SpawnsetState.SpawnsetName = "V3";
 		SpawnsetState.Spawnset = ContentManager.Content.DefaultSpawnset.DeepCopy();
@@ -98,10 +109,24 @@ public static class SpawnsetEditorMenu
 			File.WriteAllBytes(filePath, SpawnsetState.Spawnset.ToBytes());
 	}
 
-	public static void ReplaceSpawnset()
+	public static void OpenCurrentSpawnset()
+	{
+		if (File.Exists(UserSettings.ModsSurvivalPath))
+			OpenSpawnset(UserSettings.ModsSurvivalPath);
+	}
+
+	public static void ReplaceCurrentSpawnset()
 	{
 		File.WriteAllBytes(UserSettings.ModsSurvivalPath, SpawnsetState.Spawnset.ToBytes());
 		Modals.ShowReplacedSurvivalFile();
+	}
+
+	public static void DeleteCurrentSpawnset()
+	{
+		if (File.Exists(UserSettings.ModsSurvivalPath))
+			File.Delete(UserSettings.ModsSurvivalPath);
+
+		Modals.ShowDeletedSurvivalFile();
 	}
 
 	public static void Close()
