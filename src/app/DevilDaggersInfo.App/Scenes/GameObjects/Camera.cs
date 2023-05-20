@@ -1,4 +1,3 @@
-using DevilDaggersInfo.App.Engine.Extensions;
 using DevilDaggersInfo.App.Engine.Intersections;
 using DevilDaggersInfo.App.Engine.Maths;
 using DevilDaggersInfo.App.User.Settings;

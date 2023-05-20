@@ -1,4 +1,3 @@
-using DevilDaggersInfo.App.Engine;
 using DevilDaggersInfo.App.Engine.Content;
 using Silk.NET.OpenGL;
 

@@ -231,7 +231,6 @@
       "devildaggersinfo.core.replay": {
         "type": "Project",
         "dependencies": {
-          "DevilDaggersInfo.Common": "[1.0.0, )",
           "DevilDaggersInfo.Core.Spawnset": "[1.0.0, )"
         }
       },

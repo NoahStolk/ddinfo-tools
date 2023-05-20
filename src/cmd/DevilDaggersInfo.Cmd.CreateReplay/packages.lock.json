@@ -34,13 +34,9 @@
         "resolved": "1.2.0.435",
         "contentHash": "ouwPWZxbOV3SmCZxIRqHvljkSzkCyi1tDoMzQtDb/bRP8ctASV/iRJr+A2Gdj0QLaLmWnqTWDrH82/iP+X80Lg=="
       },
-      "devildaggersinfo.common": {
-        "type": "Project"
-      },
       "devildaggersinfo.core.replay": {
         "type": "Project",
         "dependencies": {
-          "DevilDaggersInfo.Common": "[1.0.0, )",
           "DevilDaggersInfo.Core.Spawnset": "[1.0.0, )"
         }
       },
