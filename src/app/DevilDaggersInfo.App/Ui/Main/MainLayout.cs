@@ -1,7 +1,6 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Scenes;
 using DevilDaggersInfo.App.Ui.CustomLeaderboards.LeaderboardList;
-using DevilDaggersInfo.Common.Utils;
 using DevilDaggersInfo.Core.Spawnset;
 using ImGuiNET;
 using Silk.NET.OpenGL;

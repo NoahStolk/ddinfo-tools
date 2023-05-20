@@ -1,6 +1,5 @@
 using DevilDaggersInfo.App.Core.GameMemory;
 using DevilDaggersInfo.App.Platforms;
-using DevilDaggersInfo.Common.Utils;
 using Serilog;
 using Serilog.Core;
 #if WINDOWS
