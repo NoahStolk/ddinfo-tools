@@ -147,6 +147,8 @@ public static class LeaderboardChild
 		ImGui.TableNextColumn();
 
 		Color daggerColor = CustomLeaderboardDaggerUtils.GetColor(ce.CustomLeaderboardDagger);
+
+		// TODO: Refactor these if statements and use a function.
 		if (rankSorting is CustomLeaderboardRankSorting.TimeAsc or CustomLeaderboardRankSorting.TimeDesc)
 			ImGui.TextColored(daggerColor, ce.TimeInSeconds.ToString(StringFormats.TimeFormat));
 		else
