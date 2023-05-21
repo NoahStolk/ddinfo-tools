@@ -36,9 +36,9 @@ public static class MainLayout
 		ImGui.Begin("Main Menu", Constants.LayoutFlags);
 
 		TextAt(StringResources.MainMenu, 8, 8);
-		TextAt("DDINFO", _centerX, 64, new(1, 0, 0, 1), true); // TODO: font size 64
-		TextAt("TOOLS", _centerX, 128, new(1, 0.5f, 0, 1), true); // TODO: font size 32
-		TextAt(_version, _centerX, 176, new(1, 0.8f, 0, 1), true); // TODO: font size 24
+		// TextAt("DDINFO", _centerX, 64, new(1, 0, 0, 1), true); // TODO: font size 64
+		// TextAt("TOOLS", _centerX, 128, new(1, 0.5f, 0, 1), true); // TODO: font size 32
+		// TextAt(_version, _centerX, 176, new(1, 0.8f, 0, 1), true); // TODO: font size 24
 		TextAt("Devil Daggers is created by Sorath", _centerX, 708, default, true);
 		TextAt("DevilDaggers.info is created by Noah Stolk", _centerX, 724, default, true);
 
