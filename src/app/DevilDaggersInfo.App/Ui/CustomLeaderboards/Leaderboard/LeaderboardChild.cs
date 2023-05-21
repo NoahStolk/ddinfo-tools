@@ -81,11 +81,11 @@ public static class LeaderboardChild
 		}
 
 		ImGui.BeginChild("LeaderboardTableChild");
-		RenderTable();
+		RenderTable(data.Leaderboard.RankSorting);
 		ImGui.EndChild();
 	}
 
-	private static unsafe void RenderTable()
+	private static unsafe void RenderTable(CustomLeaderboardRankSorting rankSorting)
 	{
 		const ImGuiTableFlags flags = ImGuiTableFlags.Resizable | ImGuiTableFlags.Reorderable | ImGuiTableFlags.Hideable | ImGuiTableFlags.Sortable | ImGuiTableFlags.SortMulti | ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersV | ImGuiTableFlags.NoBordersInBody;
 
@@ -120,7 +120,7 @@ public static class LeaderboardChild
 			foreach (GetCustomEntry ce in _sortedEntries)
 			{
 				ImGui.TableNextRow();
-				RenderCustomEntry(ce);
+				RenderCustomEntry(ce, rankSorting);
 			}
 
 			ImGui.PopStyleVar();
@@ -128,7 +128,7 @@ public static class LeaderboardChild
 		}
 	}
 
-	private static void RenderCustomEntry(GetCustomEntry ce)
+	private static void RenderCustomEntry(GetCustomEntry ce, CustomLeaderboardRankSorting rankSorting)
 	{
 		ImGui.TableNextColumn();
 
@@ -146,16 +146,26 @@ public static class LeaderboardChild
 		ImGui.TextColored(ce.PlayerId == UserCache.Model.PlayerId ? Color.Green : Color.White, ce.PlayerName);
 		ImGui.TableNextColumn();
 
-		ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(ce.CustomLeaderboardDagger), ce.TimeInSeconds.ToString(StringFormats.TimeFormat));
+		Color daggerColor = CustomLeaderboardDaggerUtils.GetColor(ce.CustomLeaderboardDagger);
+		if (rankSorting is CustomLeaderboardRankSorting.TimeAsc or CustomLeaderboardRankSorting.TimeDesc)
+			ImGui.TextColored(daggerColor, ce.TimeInSeconds.ToString(StringFormats.TimeFormat));
+		else
+			ImGui.Text(ce.TimeInSeconds.ToString(StringFormats.TimeFormat));
 		ImGui.TableNextColumn();
 
 		ImGui.Text(ce.EnemiesAlive.ToString());
 		ImGui.TableNextColumn();
 
-		ImGui.Text(ce.EnemiesKilled.ToString());
+		if (rankSorting == CustomLeaderboardRankSorting.KillsDesc)
+			ImGui.TextColored(daggerColor, ce.EnemiesKilled.ToString());
+		else
+			ImGui.Text(ce.EnemiesKilled.ToString());
 		ImGui.TableNextColumn();
 
-		ImGui.Text(ce.GemsCollected.ToString());
+		if (rankSorting == CustomLeaderboardRankSorting.GemsDesc)
+			ImGui.TextColored(daggerColor, ce.GemsCollected.ToString());
+		else
+			ImGui.Text(ce.GemsCollected.ToString());
 		ImGui.TableNextColumn();
 
 		ImGui.Text(ce.GemsDespawned?.ToString() ?? "-");
@@ -167,11 +177,14 @@ public static class LeaderboardChild
 		ImGui.TextUnformatted(GetAccuracy(ce).ToString(StringFormats.AccuracyFormat));
 		ImGui.TableNextColumn();
 
-		Death? death = Deaths.GetDeathByLeaderboardType(GameConstants.CurrentVersion, ce.DeathType);
+		Death? death = Deaths.GetDeathByLeaderboardType(GameConstants.CurrentVersion, ce.DeathType, false); // SkipUnknown is false to save on memory allocations.
 		ImGui.TextColored(death?.Color.ToEngineColor() ?? Color.White, death?.Name ?? "Unknown");
 		ImGui.TableNextColumn();
 
-		ImGui.Text(ce.HomingStored.ToString());
+		if (rankSorting == CustomLeaderboardRankSorting.HomingDesc)
+			ImGui.TextColored(daggerColor, ce.HomingStored.ToString());
+		else
+			ImGui.Text(ce.HomingStored.ToString());
 		ImGui.TableNextColumn();
 
 		ImGui.Text(ce.HomingEaten?.ToString() ?? "-");
