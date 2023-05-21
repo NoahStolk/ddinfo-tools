@@ -156,13 +156,13 @@ public static class LeaderboardChild
 		ImGui.Text(ce.EnemiesAlive.ToString());
 		ImGui.TableNextColumn();
 
-		if (rankSorting == CustomLeaderboardRankSorting.KillsDesc)
+		if (rankSorting == CustomLeaderboardRankSorting.EnemiesKilledDesc)
 			ImGui.TextColored(daggerColor, ce.EnemiesKilled.ToString());
 		else
 			ImGui.Text(ce.EnemiesKilled.ToString());
 		ImGui.TableNextColumn();
 
-		if (rankSorting == CustomLeaderboardRankSorting.GemsDesc)
+		if (rankSorting == CustomLeaderboardRankSorting.GemsCollectedDesc)
 			ImGui.TextColored(daggerColor, ce.GemsCollected.ToString());
 		else
 			ImGui.Text(ce.GemsCollected.ToString());
@@ -181,7 +181,7 @@ public static class LeaderboardChild
 		ImGui.TextColored(death?.Color.ToEngineColor() ?? Color.White, death?.Name ?? "Unknown");
 		ImGui.TableNextColumn();
 
-		if (rankSorting == CustomLeaderboardRankSorting.HomingDesc)
+		if (rankSorting == CustomLeaderboardRankSorting.HomingStoredDesc)
 			ImGui.TextColored(daggerColor, ce.HomingStored.ToString());
 		else
 			ImGui.Text(ce.HomingStored.ToString());

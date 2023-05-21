@@ -111,9 +111,9 @@ public static class LeaderboardListChild
 					{
 						CustomLeaderboardRankSorting.TimeDesc => "Highest Time",
 						CustomLeaderboardRankSorting.TimeAsc => "Lowest Time",
-						CustomLeaderboardRankSorting.GemsDesc => "Most Gems",
-						CustomLeaderboardRankSorting.KillsDesc => "Most Kills",
-						CustomLeaderboardRankSorting.HomingDesc => "Most Homing",
+						CustomLeaderboardRankSorting.GemsCollectedDesc => "Most Gems",
+						CustomLeaderboardRankSorting.EnemiesKilledDesc => "Most Kills",
+						CustomLeaderboardRankSorting.HomingStoredDesc => "Most Homing",
 						_ => allowedCategory.RankSorting.ToString(), // Fallback for when more sorting options are added.
 					};
 
