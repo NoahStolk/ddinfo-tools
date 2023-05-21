@@ -128,7 +128,13 @@ public static class LeaderboardListViewChild
 				ImGui.Text(clOverview.PlayerCount.ToString());
 				ImGui.TableNextColumn();
 
-				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.WorldRecord?.Dagger), clOverview.WorldRecord?.Time.ToString(StringFormats.TimeFormat) ?? "-");
+				string worldRecordFormat = clOverview.RankSorting switch
+				{
+					CustomLeaderboardRankSorting.TimeAsc or CustomLeaderboardRankSorting.TimeDesc => StringFormats.TimeFormat,
+					_ => "0",
+				};
+
+				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.WorldRecord?.Dagger), clOverview.WorldRecord?.WorldRecordValue.ToString(worldRecordFormat) ?? "-");
 				ImGui.TableNextColumn();
 			}
 
