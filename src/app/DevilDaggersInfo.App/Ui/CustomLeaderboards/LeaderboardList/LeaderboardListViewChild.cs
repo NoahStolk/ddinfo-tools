@@ -114,12 +114,18 @@ public static class LeaderboardListViewChild
 
 				ImGui.TableNextColumn();
 
-				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.SelectedPlayerStats?.Dagger), clOverview.SelectedPlayerStats?.Time.ToString(StringFormats.TimeFormat) ?? "-");
+				string valueFormat = clOverview.RankSorting switch
+				{
+					CustomLeaderboardRankSorting.TimeAsc or CustomLeaderboardRankSorting.TimeDesc => StringFormats.TimeFormat,
+					_ => "0",
+				};
+
+				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.SelectedPlayerStats?.Dagger), clOverview.SelectedPlayerStats?.HighscoreValue.ToString(valueFormat) ?? "-");
 				ImGui.TableNextColumn();
 
 				bool completed = clOverview.SelectedPlayerStats?.Dagger == CustomLeaderboardDagger.Leviathan;
 				Color color = CustomLeaderboardDaggerUtils.GetColor(completed ? CustomLeaderboardDagger.Leviathan : clOverview.SelectedPlayerStats?.NextDagger?.Dagger);
-				ImGui.TextColored(color, completed ? "COMPLETED" : clOverview.SelectedPlayerStats?.NextDagger?.Time.ToString(StringFormats.TimeFormat) ?? "N/A");
+				ImGui.TextColored(color, completed ? "COMPLETED" : clOverview.SelectedPlayerStats?.NextDagger?.DaggerValue.ToString(valueFormat) ?? "N/A");
 				ImGui.TableNextColumn();
 
 				ImGui.Text(clOverview.SelectedPlayerStats?.Rank.ToString() ?? "-");
@@ -128,13 +134,7 @@ public static class LeaderboardListViewChild
 				ImGui.Text(clOverview.PlayerCount.ToString());
 				ImGui.TableNextColumn();
 
-				string worldRecordFormat = clOverview.RankSorting switch
-				{
-					CustomLeaderboardRankSorting.TimeAsc or CustomLeaderboardRankSorting.TimeDesc => StringFormats.TimeFormat,
-					_ => "0",
-				};
-
-				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.WorldRecord?.Dagger), clOverview.WorldRecord?.WorldRecordValue.ToString(worldRecordFormat) ?? "-");
+				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.WorldRecord?.Dagger), clOverview.WorldRecord?.WorldRecordValue.ToString(valueFormat) ?? "-");
 				ImGui.TableNextColumn();
 			}
 
