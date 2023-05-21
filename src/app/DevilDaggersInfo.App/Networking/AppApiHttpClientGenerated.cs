@@ -58,6 +58,11 @@ public partial class AppApiHttpClient
 		return await SendRequest(new HttpMethod("HEAD"), BuildUrlWithQuery($"api/app/custom-leaderboards/exists", queryParameters));
 	}
 
+	public async Task<List<GetCustomLeaderboardAllowedCategory>> GetCustomLeaderboardAllowedCategories()
+	{
+		return await SendGetRequest<List<GetCustomLeaderboardAllowedCategory>>($"api/app/custom-leaderboards/allowed-categories");
+	}
+
 	public async Task<GetMarker> GetMarker(SupportedOperatingSystem operatingSystem)
 	{
 		Dictionary<string, object?> queryParameters = new()

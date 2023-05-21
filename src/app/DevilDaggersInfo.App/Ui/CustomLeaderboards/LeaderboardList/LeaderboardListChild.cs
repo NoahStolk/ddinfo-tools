@@ -12,7 +12,8 @@ public static class LeaderboardListChild
 {
 	public const int PageSize = 20;
 
-	private static readonly string[] _categoryNames = Enum.GetValues<CustomLeaderboardCategory>().Select(et => et.ToString()).ToArray();
+	private static readonly List<GetCustomLeaderboardAllowedCategory> _categories = new();
+	private static string[] _categoryNames = Array.Empty<string>();
 
 	private static int _categoryIndex;
 	private static bool _featuredOnly;
@@ -21,7 +22,8 @@ public static class LeaderboardListChild
 
 	private static readonly List<GetCustomLeaderboardForOverview> _customLeaderboards = new();
 
-	private static CustomLeaderboardCategory Category => Enum.Parse<CustomLeaderboardCategory>(_categoryNames[_categoryIndex]);
+	private static CustomLeaderboardRankSorting RankSorting => _categories.Count > _categoryIndex ? _categories[_categoryIndex].RankSorting : CustomLeaderboardRankSorting.TimeDesc;
+	private static SpawnsetGameMode GameMode => _categories.Count > _categoryIndex ? _categories[_categoryIndex].GameMode : SpawnsetGameMode.Survival;
 
 	public static bool IsLoading { get; private set; }
 	public static int PageIndex { get; private set; }
@@ -59,8 +61,8 @@ public static class LeaderboardListChild
 			SetPageIndex(TotalPages - 1);
 
 		ImGui.SameLine();
-		ImGui.BeginChild("ComboCategory", new(200, 20));
-		if (ImGui.Combo("Category", ref _categoryIndex, _categoryNames, _categoryNames.Length))
+		ImGui.BeginChild("ComboCategory", new(320, 20));
+		if (ImGui.Combo("Category", ref _categoryIndex, _categoryNames, _categories.Count))
 			UpdatePagedCustomLeaderboards();
 		ImGui.EndChild();
 
@@ -85,20 +87,55 @@ public static class LeaderboardListChild
 
 	public static void LoadAll()
 	{
+		AsyncHandler.Run(
+			acs =>
+			{
+				if (acs == null)
+					return;
+
+				_categories.Clear();
+				_categories.AddRange(acs);
+				_categoryNames = acs.Select(ToDisplayString).ToArray();
+
+				static string ToDisplayString(GetCustomLeaderboardAllowedCategory allowedCategory)
+				{
+					string gameModeString = allowedCategory.GameMode switch
+					{
+						SpawnsetGameMode.Survival => "Survival",
+						SpawnsetGameMode.TimeAttack => "Time Attack",
+						SpawnsetGameMode.Race => "Race",
+						_ => throw new UnreachableException(),
+					};
+
+					string rankSortingString = allowedCategory.RankSorting switch
+					{
+						CustomLeaderboardRankSorting.TimeDesc => "Highest Time",
+						CustomLeaderboardRankSorting.TimeAsc => "Lowest Time",
+						CustomLeaderboardRankSorting.GemsDesc => "Most Gems",
+						CustomLeaderboardRankSorting.KillsDesc => "Most Kills",
+						CustomLeaderboardRankSorting.HomingDesc => "Most Homing",
+						_ => allowedCategory.RankSorting.ToString(), // Fallback for when more sorting options are added.
+					};
+
+					return $"{gameModeString}: {rankSortingString}";
+				}
+			},
+			FetchAllowedCategories.HandleAsync);
+
 		IsLoading = true;
 		AsyncHandler.Run(
-			p =>
+			cls =>
 			{
 				IsLoading = false;
 				_customLeaderboards.Clear();
 
-				if (p == null)
+				if (cls == null)
 				{
 					PageIndex = 0;
 				}
 				else
 				{
-					_customLeaderboards.AddRange(p);
+					_customLeaderboards.AddRange(cls);
 					ClampPageIndex();
 				}
 
@@ -159,7 +196,8 @@ public static class LeaderboardListChild
 	private static bool Predicate(GetCustomLeaderboardForOverview cl)
 	{
 		return
-			cl.Category == Category &&
+			cl.RankSorting == RankSorting &&
+			cl.SpawnsetGameMode == GameMode &&
 			(string.IsNullOrEmpty(_spawnsetFilter) || cl.SpawnsetName.Contains(_spawnsetFilter, StringComparison.OrdinalIgnoreCase)) &&
 			(string.IsNullOrEmpty(_authorFilter) || cl.SpawnsetAuthorName.Contains(_authorFilter, StringComparison.OrdinalIgnoreCase)) &&
 			(!_featuredOnly || cl.Daggers != null);
