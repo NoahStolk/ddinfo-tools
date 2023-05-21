@@ -162,11 +162,11 @@ public static class LeaderboardListChild
 		{
 			LeaderboardListSorting.Name => SortAscending ? _customLeaderboards.OrderBy(cl => cl.SpawnsetName.ToLower()) : _customLeaderboards.OrderByDescending(cl => cl.SpawnsetName.ToLower()),
 			LeaderboardListSorting.Author => SortAscending ? _customLeaderboards.OrderBy(cl => cl.SpawnsetAuthorName.ToLower()) : _customLeaderboards.OrderByDescending(cl => cl.SpawnsetAuthorName.ToLower()),
-			LeaderboardListSorting.Score => SortAscending ? _customLeaderboards.OrderBy(cl => cl.SelectedPlayerStats?.Time) : _customLeaderboards.OrderByDescending(cl => cl.SelectedPlayerStats?.Time),
+			LeaderboardListSorting.Score => SortAscending ? _customLeaderboards.OrderBy(cl => cl.SelectedPlayerStats?.HighscoreValue) : _customLeaderboards.OrderByDescending(cl => cl.SelectedPlayerStats?.HighscoreValue),
 			LeaderboardListSorting.NextDagger => SortAscending ? _customLeaderboards.OrderBy(GetNextDaggerSortingKey) : _customLeaderboards.OrderByDescending(GetNextDaggerSortingKey),
 			LeaderboardListSorting.Rank => SortAscending ? _customLeaderboards.OrderBy(GetRankSortingKey) : _customLeaderboards.OrderByDescending(GetRankSortingKey),
 			LeaderboardListSorting.Players => SortAscending ? _customLeaderboards.OrderBy(cl => cl.PlayerCount) : _customLeaderboards.OrderByDescending(cl => cl.PlayerCount),
-			LeaderboardListSorting.WorldRecord => SortAscending ? _customLeaderboards.OrderBy(cl => cl.WorldRecord?.Time) : _customLeaderboards.OrderByDescending(cl => cl.WorldRecord?.Time),
+			LeaderboardListSorting.WorldRecord => SortAscending ? _customLeaderboards.OrderBy(cl => cl.WorldRecord?.WorldRecordValue) : _customLeaderboards.OrderByDescending(cl => cl.WorldRecord?.WorldRecordValue),
 			_ => throw new UnreachableException(),
 		};
 
@@ -189,7 +189,7 @@ public static class LeaderboardListChild
 			if (customLeaderboard.Daggers == null || customLeaderboard.SelectedPlayerStats == null)
 				return double.MinValue;
 
-			return customLeaderboard.SelectedPlayerStats.NextDagger?.Time ?? double.MaxValue;
+			return customLeaderboard.SelectedPlayerStats.NextDagger?.DaggerValue ?? double.MaxValue;
 		}
 	}
 
