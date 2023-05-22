@@ -88,7 +88,7 @@
 	</ItemGroup>
 
 	<ItemGroup Label="Tests">
-		<PackageVersion Include="coverlet.collector" Version="3.2.0" />
+		<PackageVersion Include="coverlet.collector" Version="6.0.0" />
 		<PackageVersion Include="JetBrains.Annotations" Version="2022.3.1" />
 		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
 		<PackageVersion Include="MockQueryable.Moq" Version="7.0.0" />
