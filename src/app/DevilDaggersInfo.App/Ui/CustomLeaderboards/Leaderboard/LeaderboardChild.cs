@@ -151,19 +151,19 @@ public static class LeaderboardChild
 		TextDaggerColored(ce.TimeInSeconds.ToString(StringFormats.TimeFormat), rs => rs is CustomLeaderboardRankSorting.TimeAsc or CustomLeaderboardRankSorting.TimeDesc);
 		ImGui.TableNextColumn();
 
-		ImGui.Text(ce.EnemiesAlive.ToString());
+		TextDaggerColored(ce.EnemiesAlive.ToString(), rs => rs is CustomLeaderboardRankSorting.EnemiesAliveAsc or CustomLeaderboardRankSorting.EnemiesAliveDesc);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(ce.EnemiesKilled.ToString(), rs => rs == CustomLeaderboardRankSorting.EnemiesKilledDesc);
+		TextDaggerColored(ce.EnemiesKilled.ToString(), rs => rs is CustomLeaderboardRankSorting.EnemiesKilledAsc or CustomLeaderboardRankSorting.EnemiesKilledDesc);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(ce.GemsCollected.ToString(), rs => rs == CustomLeaderboardRankSorting.GemsCollectedDesc);
+		TextDaggerColored(ce.GemsCollected.ToString(), rs => rs is CustomLeaderboardRankSorting.GemsCollectedAsc or CustomLeaderboardRankSorting.GemsCollectedDesc);
 		ImGui.TableNextColumn();
 
-		ImGui.Text(ce.GemsDespawned?.ToString() ?? "-");
+		TextDaggerColored(ce.GemsDespawned?.ToString() ?? "-", rs => rs is CustomLeaderboardRankSorting.GemsDespawnedAsc or CustomLeaderboardRankSorting.GemsDespawnedDesc);
 		ImGui.TableNextColumn();
 
-		ImGui.Text(ce.GemsEaten?.ToString() ?? "-");
+		TextDaggerColored(ce.GemsEaten?.ToString() ?? "-", rs => rs is CustomLeaderboardRankSorting.GemsEatenAsc or CustomLeaderboardRankSorting.GemsEatenDesc);
 		ImGui.TableNextColumn();
 
 		ImGui.TextUnformatted(GetAccuracy(ce).ToString(StringFormats.AccuracyFormat));
@@ -173,10 +173,10 @@ public static class LeaderboardChild
 		ImGui.TextColored(death?.Color.ToEngineColor() ?? Color.White, death?.Name ?? "Unknown");
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(ce.HomingStored.ToString(), rs => rs == CustomLeaderboardRankSorting.HomingStoredDesc);
+		TextDaggerColored(ce.HomingStored.ToString(), rs => rs is CustomLeaderboardRankSorting.HomingStoredAsc or CustomLeaderboardRankSorting.HomingStoredDesc);
 		ImGui.TableNextColumn();
 
-		ImGui.Text(ce.HomingEaten?.ToString() ?? "-");
+		TextDaggerColored(ce.HomingEaten?.ToString() ?? "-", rs => rs is CustomLeaderboardRankSorting.HomingEatenAsc or CustomLeaderboardRankSorting.HomingEatenDesc);
 		ImGui.TableNextColumn();
 
 		ImGui.Text(ce.LevelUpTime2InSeconds == 0 ? "-" : ce.LevelUpTime2InSeconds.ToString(StringFormats.TimeFormat));

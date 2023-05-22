@@ -112,8 +112,19 @@ public static class LeaderboardListChild
 						CustomLeaderboardRankSorting.TimeDesc => "Highest Time",
 						CustomLeaderboardRankSorting.TimeAsc => "Lowest Time",
 						CustomLeaderboardRankSorting.GemsCollectedDesc => "Most Gems",
+						CustomLeaderboardRankSorting.GemsCollectedAsc => "Least Gems",
+						CustomLeaderboardRankSorting.GemsDespawnedDesc => "Most Gems Despawned",
+						CustomLeaderboardRankSorting.GemsDespawnedAsc => "Least Gems Despawned",
+						CustomLeaderboardRankSorting.GemsEatenDesc => "Most Gems Eaten",
+						CustomLeaderboardRankSorting.GemsEatenAsc => "Least Gems Eaten",
 						CustomLeaderboardRankSorting.EnemiesKilledDesc => "Most Kills",
+						CustomLeaderboardRankSorting.EnemiesKilledAsc => "Least Kills",
+						CustomLeaderboardRankSorting.EnemiesAliveDesc => "Most Enemies Alive",
+						CustomLeaderboardRankSorting.EnemiesAliveAsc => "Least Enemies Alive",
 						CustomLeaderboardRankSorting.HomingStoredDesc => "Most Homing",
+						CustomLeaderboardRankSorting.HomingStoredAsc => "Least Homing",
+						CustomLeaderboardRankSorting.HomingEatenDesc => "Most Homing Eaten",
+						CustomLeaderboardRankSorting.HomingEatenAsc	=> "Least Homing Eaten",
 						_ => allowedCategory.RankSorting.ToString(), // Fallback for when more sorting options are added.
 					};
 
