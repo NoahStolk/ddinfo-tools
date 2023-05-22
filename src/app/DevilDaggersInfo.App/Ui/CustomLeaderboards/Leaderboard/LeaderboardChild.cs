@@ -148,26 +148,16 @@ public static class LeaderboardChild
 
 		Color daggerColor = CustomLeaderboardDaggerUtils.GetColor(ce.CustomLeaderboardDagger);
 
-		// TODO: Refactor these if statements and use a function.
-		if (rankSorting is CustomLeaderboardRankSorting.TimeAsc or CustomLeaderboardRankSorting.TimeDesc)
-			ImGui.TextColored(daggerColor, ce.TimeInSeconds.ToString(StringFormats.TimeFormat));
-		else
-			ImGui.Text(ce.TimeInSeconds.ToString(StringFormats.TimeFormat));
+		TextDaggerColored(ce.TimeInSeconds.ToString(StringFormats.TimeFormat), rs => rs is CustomLeaderboardRankSorting.TimeAsc or CustomLeaderboardRankSorting.TimeDesc);
 		ImGui.TableNextColumn();
 
 		ImGui.Text(ce.EnemiesAlive.ToString());
 		ImGui.TableNextColumn();
 
-		if (rankSorting == CustomLeaderboardRankSorting.EnemiesKilledDesc)
-			ImGui.TextColored(daggerColor, ce.EnemiesKilled.ToString());
-		else
-			ImGui.Text(ce.EnemiesKilled.ToString());
+		TextDaggerColored(ce.EnemiesKilled.ToString(), rs => rs == CustomLeaderboardRankSorting.EnemiesKilledDesc);
 		ImGui.TableNextColumn();
 
-		if (rankSorting == CustomLeaderboardRankSorting.GemsCollectedDesc)
-			ImGui.TextColored(daggerColor, ce.GemsCollected.ToString());
-		else
-			ImGui.Text(ce.GemsCollected.ToString());
+		TextDaggerColored(ce.GemsCollected.ToString(), rs => rs == CustomLeaderboardRankSorting.GemsCollectedDesc);
 		ImGui.TableNextColumn();
 
 		ImGui.Text(ce.GemsDespawned?.ToString() ?? "-");
@@ -183,10 +173,7 @@ public static class LeaderboardChild
 		ImGui.TextColored(death?.Color.ToEngineColor() ?? Color.White, death?.Name ?? "Unknown");
 		ImGui.TableNextColumn();
 
-		if (rankSorting == CustomLeaderboardRankSorting.HomingStoredDesc)
-			ImGui.TextColored(daggerColor, ce.HomingStored.ToString());
-		else
-			ImGui.Text(ce.HomingStored.ToString());
+		TextDaggerColored(ce.HomingStored.ToString(), rs => rs == CustomLeaderboardRankSorting.HomingStoredDesc);
 		ImGui.TableNextColumn();
 
 		ImGui.Text(ce.HomingEaten?.ToString() ?? "-");
@@ -203,6 +190,14 @@ public static class LeaderboardChild
 
 		ImGui.Text(ce.SubmitDate.ToString(StringFormats.DateTimeFormat));
 		ImGui.TableNextColumn();
+
+		void TextDaggerColored(string text, Func<CustomLeaderboardRankSorting, bool> isRankSortingApplicable)
+		{
+			if (isRankSortingApplicable(rankSorting))
+				ImGui.TextColored(daggerColor, text);
+			else
+				ImGui.Text(text);
+		}
 	}
 
 	private static void Sort(ImGuiTableSortSpecsPtr sortsSpecs)
