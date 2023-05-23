@@ -61,7 +61,7 @@ public static class LeaderboardListChild
 			SetPageIndex(TotalPages - 1);
 
 		ImGui.SameLine();
-		ImGui.BeginChild("ComboCategory", new(320, 20));
+		ImGui.BeginChild("ComboCategory", new(360, 20));
 		if (ImGui.Combo("Category", ref _categoryIndex, _categoryNames, _categories.Count))
 			UpdatePagedCustomLeaderboards();
 		ImGui.EndChild();
