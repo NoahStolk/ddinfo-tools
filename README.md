@@ -2,7 +2,7 @@
 
 DevilDaggersInfo consists of a website, web server, and various tools created specifically for the game Devil Daggers.
 
-The purpose of the project is to make it easier for players to play and understand the game, and to provide a platform for the community to create and share custom levels, mods, participate in custom leaderboards, and a lot more.
+The purpose of the project is to make it easier for players to play and understand the game, and to provide a platform for the community to create and share custom spawnsets (levels), mods, participate in custom leaderboards, and a lot more.
 
 While the project provides many ways to practice and modify the game, it does **not** encourage cheating. You are also asked to not redistribute the game assets, and only use them for modding purposes.
 
@@ -18,7 +18,8 @@ Most of these features have been discussed with the community and the developer 
 
 - Viewing and searching the official leaderboards
 - Viewing leaderboard data for any player
-- Displaying custom spawnsets made by the community
+- Browsing leaderboard history, statistics, world record progression, player settings, and more
+- Displaying custom spawnsets (levels) made by the community
   - Spawns list and accurate end loop timings
   - Accurate arena previewer with shrink slider
 - Displaying mods made by the community
@@ -27,12 +28,16 @@ Most of these features have been discussed with the community and the developer 
 - Viewing custom leaderboards for spawnsets
   - Data for custom scores can be viewed, as well as replay statistics in the form of graphs
   - Custom replays can be downloaded directly from the website
+- Guides on how to use and create custom spawnsets and mods
 - Accurate wiki pages
   - Enemy types
   - List of spawns
   - Hand upgrades
   - Dagger types
   - List of game assets (the actual assets are not included)
+- Editing your player settings (if you have an account)
+- Browsing the APIs
+- An admin portal for moderators to upload spawnsets and mods, manage custom leaderboards and player data, and more
 
 ## Web server
 
@@ -54,12 +59,11 @@ The web server is responsible for serving the website and providing various APIs
   - Hosting replays for every score
   - Hosting graph data for every score
 - Hosting mods
-- An admin portal for moderators to upload spawnsets and mods, manage custom leaderboards and player data, and more
-- All APIs used by the website, as well as APIs for:
-  - The new ddinfo tools
-  - [DDSE 2 (deprecated)](https://github.com/NoahStolk/DevilDaggersSurvivalEditor)
-  - [DDCL 1 (deprecated)](https://github.com/NoahStolk/DevilDaggersCustomLeaderboards)
-  - [DDAE 1 (deprecated)](https://github.com/NoahStolk/DevilDaggersAssetEditor)
+- Providing APIs used by the website, as well as APIs for:
+  - The tools app
+  - The deprecated Windows-only tools
+    - [DDSE 2](https://github.com/NoahStolk/DevilDaggersSurvivalEditor)
+    - [DDAE 1](https://github.com/NoahStolk/DevilDaggersAssetEditor)
   - [ddstats-rust](https://github.com/lsaa/ddstats-rust)
   - [DDLIVE](https://github.com/rotisseriechicken/DDLIVE)
   - [Clubber](https://github.com/Spoertm/Clubber)
@@ -94,12 +98,6 @@ These features are planned but may not be possible to implement:
 
 - Replay movement and the ability to compare speedrun/race replays using a ghost system in 3D
 
-The original apps are not included in this repository. Visit these repositories:
-
-- [Survival Editor](https://github.com/NoahStolk/DevilDaggersSurvivalEditor)
-- [Custom Leaderboards](https://github.com/NoahStolk/DevilDaggersCustomLeaderboards)
-- [Asset Editor](https://github.com/NoahStolk/DevilDaggersAssetEditor)
-
 ## Libraries
 
 The DevilDaggersInfo project offers a couple libraries for parsing and creating Devil Daggers files. This is what the website, the web server, and the tools depend on internally.
@@ -123,3 +121,11 @@ Particle files are not supported (yet).
 ### Reading game memory
 
 The tools app provides a way to read live game memory from the game in real time. This is primarily used for custom leaderboards, but it can also be used for other purposes, such as for practice or understanding game mechanics.
+
+## Deprecated tools
+
+The original apps are not included in this repository. Visit these repositories:
+
+- [Survival Editor](https://github.com/NoahStolk/DevilDaggersSurvivalEditor)
+- [Custom Leaderboards](https://github.com/NoahStolk/DevilDaggersCustomLeaderboards)
+- [Asset Editor](https://github.com/NoahStolk/DevilDaggersAssetEditor)
