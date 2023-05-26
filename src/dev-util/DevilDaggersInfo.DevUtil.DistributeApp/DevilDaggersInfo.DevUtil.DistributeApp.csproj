@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CliWrap" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\api\DevilDaggersInfo.Api.Admin\DevilDaggersInfo.Api.Admin.csproj" />
+    <ProjectReference Include="..\..\api\DevilDaggersInfo.Api.Main\DevilDaggersInfo.Api.Main.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(CI)' == ''">
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

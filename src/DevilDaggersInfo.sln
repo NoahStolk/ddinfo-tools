@@ -64,19 +64,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Wiki"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Wiki.Test", "test\DevilDaggersInfo.Core.Wiki.Test\DevilDaggersInfo.Core.Wiki.Test.csproj", "{07BBEC96-50D3-49A2-934F-AC8BB7E8BB0D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.DevUtil.DistributeApp", "dev-util\DevilDaggersInfo.DevUtil.DistributeApp\DevilDaggersInfo.DevUtil.DistributeApp.csproj", "{884E21EB-C4F0-4E80-9BDB-E8A28171BAF0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.DevUtil.DistributeHistoryStats", "dev-util\DevilDaggersInfo.DevUtil.DistributeHistoryStats\DevilDaggersInfo.DevUtil.DistributeHistoryStats.csproj", "{B11627A5-9A22-4E5F-8B35-C27869339BA7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.DevUtil.FetchLeaderboard", "dev-util\DevilDaggersInfo.DevUtil.FetchLeaderboard\DevilDaggersInfo.DevUtil.FetchLeaderboard.csproj", "{17BA3EE7-7067-4A07-A978-27D05E8D0CCE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.DevUtil.GenerateClient", "dev-util\DevilDaggersInfo.DevUtil.GenerateClient\DevilDaggersInfo.DevUtil.GenerateClient.csproj", "{9178E989-F0E7-44EE-BC27-FD07D06DD5DA}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Razor.Core.Canvas", "web-client\DevilDaggersInfo.Razor.Core.Canvas\DevilDaggersInfo.Razor.Core.Canvas.csproj", "{54F41E67-F499-4999-A181-ACCAF2687612}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Razor.Core.CanvasArena", "web-client\DevilDaggersInfo.Razor.Core.CanvasArena\DevilDaggersInfo.Razor.Core.CanvasArena.csproj", "{59657D63-6CF4-40AD-B596-14FBB4F88FAF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Razor.Core.CanvasChart", "web-client\DevilDaggersInfo.Razor.Core.CanvasChart\DevilDaggersInfo.Razor.Core.CanvasChart.csproj", "{A0228BE6-4A70-4A2E-8550-55AD4DF2ECD8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Tool.DistributeApp", "tool\DevilDaggersInfo.Tool.DistributeApp\DevilDaggersInfo.Tool.DistributeApp.csproj", "{884E21EB-C4F0-4E80-9BDB-E8A28171BAF0}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Tool.DistributeHistoryStats", "tool\DevilDaggersInfo.Tool.DistributeHistoryStats\DevilDaggersInfo.Tool.DistributeHistoryStats.csproj", "{B11627A5-9A22-4E5F-8B35-C27869339BA7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Tool.FetchLeaderboard", "tool\DevilDaggersInfo.Tool.FetchLeaderboard\DevilDaggersInfo.Tool.FetchLeaderboard.csproj", "{17BA3EE7-7067-4A07-A978-27D05E8D0CCE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Tool.GenerateClient", "tool\DevilDaggersInfo.Tool.GenerateClient\DevilDaggersInfo.Tool.GenerateClient.csproj", "{9178E989-F0E7-44EE-BC27-FD07D06DD5DA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Client", "web-client\DevilDaggersInfo.Web.Client\DevilDaggersInfo.Web.Client.csproj", "{0F9B44AE-52A6-4BCD-8AC1-72FE4235E356}"
 EndProject
@@ -102,9 +102,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{187CBC
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{1B091174-9983-4BF5-AF9C-034AE3D6D7B4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{139163CB-F521-45E4-B022-780DF7322293}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dev-util", "dev-util", "{3DD4B364-6321-42CA-8CF0-0C82429E5714}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tool", "tool", "{3DD4B364-6321-42CA-8CF0-0C82429E5714}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{139163CB-F521-45E4-B022-780DF7322293}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web-client", "web-client", "{7B96F14F-3A19-4AB1-A830-8494337397F7}"
 EndProject
