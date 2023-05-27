@@ -28,6 +28,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.Core.G
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.Core.NativeInterface", "app\DevilDaggersInfo.App.Core.NativeInterface\DevilDaggersInfo.App.Core.NativeInterface.csproj", "{6D7EE612-55E1-4609-ADA1-B612193232AD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Engine", "app\DevilDaggersInfo.App.Engine\DevilDaggersInfo.App.Engine.csproj", "{B84DBB9B-1C43-4F6C-8C19-B028F3B7C2D3}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Launcher", "app\DevilDaggersInfo.App.Launcher\DevilDaggersInfo.App.Launcher.csproj", "{EE6A829C-B6B7-4306-9A87-47F06DD65BB7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Cmd.CreateReplay", "cmd\DevilDaggersInfo.Cmd.CreateReplay\DevilDaggersInfo.Cmd.CreateReplay.csproj", "{6BEED33C-F8F8-4884-85A3-FDD48C7C63E8}"
@@ -72,23 +74,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.DevUtil.Fe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.DevUtil.GenerateClient", "dev-util\DevilDaggersInfo.DevUtil.GenerateClient\DevilDaggersInfo.DevUtil.GenerateClient.csproj", "{9178E989-F0E7-44EE-BC27-FD07D06DD5DA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Client", "web-client\DevilDaggersInfo.Web.Client\DevilDaggersInfo.Web.Client.csproj", "{0F9B44AE-52A6-4BCD-8AC1-72FE4235E356}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Client", "web\DevilDaggersInfo.Web.Client\DevilDaggersInfo.Web.Client.csproj", "{0F9B44AE-52A6-4BCD-8AC1-72FE4235E356}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Web.Client.Core.Canvas", "web-client\DevilDaggersInfo.Web.Client.Core.Canvas\DevilDaggersInfo.Web.Client.Core.Canvas.csproj", "{54F41E67-F499-4999-A181-ACCAF2687612}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Web.Client.Core.Canvas", "web\DevilDaggersInfo.Web.Client.Core.Canvas\DevilDaggersInfo.Web.Client.Core.Canvas.csproj", "{54F41E67-F499-4999-A181-ACCAF2687612}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Web.Client.Core.CanvasArena", "web-client\DevilDaggersInfo.Web.Client.Core.CanvasArena\DevilDaggersInfo.Web.Client.Core.CanvasArena.csproj", "{59657D63-6CF4-40AD-B596-14FBB4F88FAF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Web.Client.Core.CanvasArena", "web\DevilDaggersInfo.Web.Client.Core.CanvasArena\DevilDaggersInfo.Web.Client.Core.CanvasArena.csproj", "{59657D63-6CF4-40AD-B596-14FBB4F88FAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Web.Client.Core.CanvasChart", "web-client\DevilDaggersInfo.Web.Client.Core.CanvasChart\DevilDaggersInfo.Web.Client.Core.CanvasChart.csproj", "{A0228BE6-4A70-4A2E-8550-55AD4DF2ECD8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Web.Client.Core.CanvasChart", "web\DevilDaggersInfo.Web.Client.Core.CanvasChart\DevilDaggersInfo.Web.Client.Core.CanvasChart.csproj", "{A0228BE6-4A70-4A2E-8550-55AD4DF2ECD8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Core.Claims", "web-core\DevilDaggersInfo.Web.Core.Claims\DevilDaggersInfo.Web.Core.Claims.csproj", "{296837AA-47C6-4679-AE63-39EFA4C98675}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Core.Claims", "web\DevilDaggersInfo.Web.Core.Claims\DevilDaggersInfo.Web.Core.Claims.csproj", "{296837AA-47C6-4679-AE63-39EFA4C98675}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server", "web-server\DevilDaggersInfo.Web.Server\DevilDaggersInfo.Web.Server.csproj", "{595CAB68-C85D-4AAD-B78F-4CC499921E61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server", "web\DevilDaggersInfo.Web.Server\DevilDaggersInfo.Web.Server.csproj", "{595CAB68-C85D-4AAD-B78F-4CC499921E61}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server.Domain", "web-server\DevilDaggersInfo.Web.Server.Domain\DevilDaggersInfo.Web.Server.Domain.csproj", "{FA23F585-CF8F-49ED-8E47-D1B9235774CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server.Domain", "web\DevilDaggersInfo.Web.Server.Domain\DevilDaggersInfo.Web.Server.Domain.csproj", "{FA23F585-CF8F-49ED-8E47-D1B9235774CD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server.Domain.Admin", "web-server\DevilDaggersInfo.Web.Server.Domain.Admin\DevilDaggersInfo.Web.Server.Domain.Admin.csproj", "{DBA5B2EB-D1B0-43B3-A1FF-435722C3E3E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server.Domain.Admin", "web\DevilDaggersInfo.Web.Server.Domain.Admin\DevilDaggersInfo.Web.Server.Domain.Admin.csproj", "{DBA5B2EB-D1B0-43B3-A1FF-435722C3E3E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server.Domain.Main", "web-server\DevilDaggersInfo.Web.Server.Domain.Main\DevilDaggersInfo.Web.Server.Domain.Main.csproj", "{1E1CB75A-3F82-406A-8E07-D370B4405E64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server.Domain.Main", "web\DevilDaggersInfo.Web.Server.Domain.Main\DevilDaggersInfo.Web.Server.Domain.Main.csproj", "{1E1CB75A-3F82-406A-8E07-D370B4405E64}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Server.Domain.Test", "test\DevilDaggersInfo.Web.Server.Domain.Test\DevilDaggersInfo.Web.Server.Domain.Test.csproj", "{CB715CD9-FB6A-4E79-B9C0-830833223D91}"
 EndProject
@@ -106,13 +108,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dev-util", "dev-util", "{3D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{139163CB-F521-45E4-B022-780DF7322293}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web-client", "web-client", "{7B96F14F-3A19-4AB1-A830-8494337397F7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web-core", "web-core", "{E46A7074-2772-4B70-A0A6-F4431CC99F4C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web-server", "web-server", "{2CA07E38-90F7-49D4-B4E5-46E92B7E862B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Engine", "app\DevilDaggersInfo.App.Engine\DevilDaggersInfo.App.Engine.csproj", "{B84DBB9B-1C43-4F6C-8C19-B028F3B7C2D3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web", "web", "{7B96F14F-3A19-4AB1-A830-8494337397F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -337,11 +333,6 @@ Global
 		{17BA3EE7-7067-4A07-A978-27D05E8D0CCE} = {3DD4B364-6321-42CA-8CF0-0C82429E5714}
 		{9178E989-F0E7-44EE-BC27-FD07D06DD5DA} = {3DD4B364-6321-42CA-8CF0-0C82429E5714}
 		{0F9B44AE-52A6-4BCD-8AC1-72FE4235E356} = {7B96F14F-3A19-4AB1-A830-8494337397F7}
-		{296837AA-47C6-4679-AE63-39EFA4C98675} = {E46A7074-2772-4B70-A0A6-F4431CC99F4C}
-		{595CAB68-C85D-4AAD-B78F-4CC499921E61} = {2CA07E38-90F7-49D4-B4E5-46E92B7E862B}
-		{FA23F585-CF8F-49ED-8E47-D1B9235774CD} = {2CA07E38-90F7-49D4-B4E5-46E92B7E862B}
-		{DBA5B2EB-D1B0-43B3-A1FF-435722C3E3E2} = {2CA07E38-90F7-49D4-B4E5-46E92B7E862B}
-		{1E1CB75A-3F82-406A-8E07-D370B4405E64} = {2CA07E38-90F7-49D4-B4E5-46E92B7E862B}
 		{CB715CD9-FB6A-4E79-B9C0-830833223D91} = {139163CB-F521-45E4-B022-780DF7322293}
 		{8D02A724-024B-4ED3-B64B-EA6B350926F0} = {139163CB-F521-45E4-B022-780DF7322293}
 		{D5903E30-558A-40DF-B7A6-E7E1D014E2A9} = {D980D7F3-20FC-46AB-A443-3238FE1FAEC0}
@@ -355,6 +346,11 @@ Global
 		{6D7EE612-55E1-4609-ADA1-B612193232AD} = {D980D7F3-20FC-46AB-A443-3238FE1FAEC0}
 		{B84DBB9B-1C43-4F6C-8C19-B028F3B7C2D3} = {D980D7F3-20FC-46AB-A443-3238FE1FAEC0}
 		{EE6A829C-B6B7-4306-9A87-47F06DD65BB7} = {D980D7F3-20FC-46AB-A443-3238FE1FAEC0}
+		{296837AA-47C6-4679-AE63-39EFA4C98675} = {7B96F14F-3A19-4AB1-A830-8494337397F7}
+		{595CAB68-C85D-4AAD-B78F-4CC499921E61} = {7B96F14F-3A19-4AB1-A830-8494337397F7}
+		{FA23F585-CF8F-49ED-8E47-D1B9235774CD} = {7B96F14F-3A19-4AB1-A830-8494337397F7}
+		{DBA5B2EB-D1B0-43B3-A1FF-435722C3E3E2} = {7B96F14F-3A19-4AB1-A830-8494337397F7}
+		{1E1CB75A-3F82-406A-8E07-D370B4405E64} = {7B96F14F-3A19-4AB1-A830-8494337397F7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E27EC676-81BF-4099-BFC9-20E860CE83A5}
