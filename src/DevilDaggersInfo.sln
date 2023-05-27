@@ -72,13 +72,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.DevUtil.Fe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.DevUtil.GenerateClient", "dev-util\DevilDaggersInfo.DevUtil.GenerateClient\DevilDaggersInfo.DevUtil.GenerateClient.csproj", "{9178E989-F0E7-44EE-BC27-FD07D06DD5DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Razor.Core.Canvas", "web-client\DevilDaggersInfo.Razor.Core.Canvas\DevilDaggersInfo.Razor.Core.Canvas.csproj", "{54F41E67-F499-4999-A181-ACCAF2687612}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Razor.Core.CanvasArena", "web-client\DevilDaggersInfo.Razor.Core.CanvasArena\DevilDaggersInfo.Razor.Core.CanvasArena.csproj", "{59657D63-6CF4-40AD-B596-14FBB4F88FAF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Razor.Core.CanvasChart", "web-client\DevilDaggersInfo.Razor.Core.CanvasChart\DevilDaggersInfo.Razor.Core.CanvasChart.csproj", "{A0228BE6-4A70-4A2E-8550-55AD4DF2ECD8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Client", "web-client\DevilDaggersInfo.Web.Client\DevilDaggersInfo.Web.Client.csproj", "{0F9B44AE-52A6-4BCD-8AC1-72FE4235E356}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Web.Client.Core.Canvas", "web-client\DevilDaggersInfo.Web.Client.Core.Canvas\DevilDaggersInfo.Web.Client.Core.Canvas.csproj", "{54F41E67-F499-4999-A181-ACCAF2687612}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Web.Client.Core.CanvasArena", "web-client\DevilDaggersInfo.Web.Client.Core.CanvasArena\DevilDaggersInfo.Web.Client.Core.CanvasArena.csproj", "{59657D63-6CF4-40AD-B596-14FBB4F88FAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Web.Client.Core.CanvasChart", "web-client\DevilDaggersInfo.Web.Client.Core.CanvasChart\DevilDaggersInfo.Web.Client.Core.CanvasChart.csproj", "{A0228BE6-4A70-4A2E-8550-55AD4DF2ECD8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Web.Core.Claims", "web-core\DevilDaggersInfo.Web.Core.Claims\DevilDaggersInfo.Web.Core.Claims.csproj", "{296837AA-47C6-4679-AE63-39EFA4C98675}"
 EndProject
