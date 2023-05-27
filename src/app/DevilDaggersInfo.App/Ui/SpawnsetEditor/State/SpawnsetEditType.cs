@@ -23,4 +23,5 @@ public enum SpawnsetEditType
 	SpawnAdd,
 	SpawnEdit,
 	SpawnInsert,
+	SpawnsTransformation,
 }

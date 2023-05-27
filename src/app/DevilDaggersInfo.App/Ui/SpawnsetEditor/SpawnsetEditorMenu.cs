@@ -67,13 +67,16 @@ public static class SpawnsetEditorMenu
 		if (ImGui.MenuItem("Redo", "Ctrl+Y"))
 			HistoryChild.Redo();
 
-		if (ImGui.MenuItem("Hardcode end loop"))
+		if (ImGui.MenuItem("Hardcode end loop") && SpawnsetState.Spawnset.HasEndLoop())
 		{
-			if (SpawnsetState.Spawnset.HasEndLoop())
-			{
-				SpawnsetState.Spawnset = SpawnsetState.Spawnset.GetWithHardcodedEndLoop(20);
-				SpawnsetHistoryUtils.Save(SpawnsetEditType.Reset);
-			}
+			SpawnsetState.Spawnset = SpawnsetState.Spawnset.GetWithHardcodedEndLoop(20);
+			SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnsTransformation);
+		}
+
+		if (ImGui.MenuItem("Trim start of spawns"))
+		{
+			SpawnsetState.Spawnset = SpawnsetState.Spawnset.GetWithTrimmedStart(100);
+			SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnsTransformation);
 		}
 	}
 

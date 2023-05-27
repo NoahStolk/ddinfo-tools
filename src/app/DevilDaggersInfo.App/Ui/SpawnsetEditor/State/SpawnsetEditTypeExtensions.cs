@@ -38,6 +38,7 @@ public static class SpawnsetEditTypeExtensions
 		SpawnsetEditType.SpawnAdd => "Spawn addition",
 		SpawnsetEditType.SpawnEdit => "Spawn edit",
 		SpawnsetEditType.SpawnInsert => "Spawn insertion",
+		SpawnsetEditType.SpawnsTransformation => "Spawns transformation",
 		_ => throw new UnreachableException(),
 	};
 
@@ -64,6 +65,7 @@ public static class SpawnsetEditTypeExtensions
 		SpawnsetEditType.SpawnAdd => _colorSpawn,
 		SpawnsetEditType.SpawnEdit => _colorSpawn,
 		SpawnsetEditType.SpawnInsert => _colorSpawn,
+		SpawnsetEditType.SpawnsTransformation => _colorSpawn,
 		_ => throw new UnreachableException(),
 	};
 }
