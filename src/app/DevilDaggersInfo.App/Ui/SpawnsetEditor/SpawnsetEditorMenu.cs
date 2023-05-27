@@ -66,6 +66,15 @@ public static class SpawnsetEditorMenu
 
 		if (ImGui.MenuItem("Redo", "Ctrl+Y"))
 			HistoryChild.Redo();
+
+		if (ImGui.MenuItem("Hardcode end loop"))
+		{
+			if (SpawnsetState.Spawnset.HasEndLoop())
+			{
+				SpawnsetState.Spawnset = SpawnsetState.Spawnset.GetWithHardcodedEndLoop(20);
+				SpawnsetHistoryUtils.Save(SpawnsetEditType.Reset);
+			}
+		}
 	}
 
 	public static void NewSpawnset()
