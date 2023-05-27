@@ -18,6 +18,12 @@ public static class SpawnsetEditorMenu
 				ImGui.EndMenu();
 			}
 
+			if (ImGui.BeginMenu("Edit"))
+			{
+				RenderEditMenu();
+				ImGui.EndMenu();
+			}
+
 			ImGui.EndMenuBar();
 		}
 	}
@@ -51,6 +57,15 @@ public static class SpawnsetEditorMenu
 
 		if (ImGui.MenuItem("Close", "Esc"))
 			Close();
+	}
+
+	private static void RenderEditMenu()
+	{
+		if (ImGui.MenuItem("Undo", "Ctrl+Z"))
+			HistoryChild.Undo();
+
+		if (ImGui.MenuItem("Redo", "Ctrl+Y"))
+			HistoryChild.Redo();
 	}
 
 	public static void NewSpawnset()

@@ -75,20 +75,33 @@ public static class HistoryChild
 		ImGuiIOPtr io = ImGui.GetIO();
 		if (io.KeyCtrl)
 		{
-			if (ImGui.IsKeyPressed(ImGuiKey.Z) && CurrentHistoryIndex > 0)
-				SetHistoryIndex(CurrentHistoryIndex - 1);
-			else if (ImGui.IsKeyPressed(ImGuiKey.Y) && CurrentHistoryIndex < History.Count - 1)
-				SetHistoryIndex(CurrentHistoryIndex + 1);
+			if (ImGui.IsKeyPressed(ImGuiKey.Z))
+				Undo();
+			else if (ImGui.IsKeyPressed(ImGuiKey.Y))
+				Redo();
 		}
+	}
 
-		static void SetHistoryIndex(int index)
-		{
-			// Workaround: Remove the window focus to prevent undo/redo not working when a text input is focused, and the next/previous history entry changes the value of that text input.
-			ImGui.SetWindowFocus(null);
+	public static void Undo()
+	{
+		SetHistoryIndex(CurrentHistoryIndex - 1);
+	}
 
-			CurrentHistoryIndex = Math.Clamp(index, 0, History.Count - 1);
-			SpawnsetState.Spawnset = History[CurrentHistoryIndex].Spawnset.DeepCopy();
-			_updateScroll = true;
-		}
+	public static void Redo()
+	{
+		SetHistoryIndex(CurrentHistoryIndex + 1);
+	}
+
+	private static void SetHistoryIndex(int index)
+	{
+		if (index < 0 || index >= History.Count)
+			return;
+
+		// Workaround: Remove the window focus to prevent undo/redo not working when a text input is focused, and the next/previous history entry changes the value of that text input.
+		ImGui.SetWindowFocus(null);
+
+		CurrentHistoryIndex = Math.Clamp(index, 0, History.Count - 1);
+		SpawnsetState.Spawnset = History[CurrentHistoryIndex].Spawnset.DeepCopy();
+		_updateScroll = true;
 	}
 }
