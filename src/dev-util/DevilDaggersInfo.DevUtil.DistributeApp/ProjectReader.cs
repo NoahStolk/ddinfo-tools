@@ -1,6 +1,6 @@
 using System.Xml;
 
-namespace DevilDaggersInfo.Tool.DistributeApp;
+namespace DevilDaggersInfo.DevUtil.DistributeApp;
 
 public static class ProjectReader
 {

@@ -2,7 +2,7 @@ using CliWrap;
 using DevilDaggersInfo.Api.Admin.Tools;
 using System.Text;
 
-namespace DevilDaggersInfo.Tool.DistributeApp;
+namespace DevilDaggersInfo.DevUtil.DistributeApp;
 
 public static class AppBuilder
 {
