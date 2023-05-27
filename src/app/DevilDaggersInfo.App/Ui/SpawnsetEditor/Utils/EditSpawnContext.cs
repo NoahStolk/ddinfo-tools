@@ -13,22 +13,17 @@ public static class EditSpawnContext
 
 	public static void BuildFrom(SpawnsetBinary spawnsetBinary)
 	{
-		BuildFrom(spawnsetBinary.Spawns, spawnsetBinary.SpawnVersion, spawnsetBinary.HandLevel, spawnsetBinary.AdditionalGems, spawnsetBinary.TimerStart);
-	}
-
-	private static void BuildFrom(ImmutableArray<Spawn> spawns, int spawnVersion, HandLevel handLevel = HandLevel.Level1, int additionalGems = 0, float timerStart = 0)
-	{
-		if (spawns.Length == 0)
+		if (spawnsetBinary.Spawns.Length == 0)
 		{
 			_spawns.Clear();
 			return;
 		}
 
-		double totalSeconds = SpawnsetUtils.GetEffectiveTimerStart(spawnVersion, timerStart);
-		EffectivePlayerSettings effectivePlayerSettings = SpawnsetUtils.GetEffectivePlayerSettings(spawnVersion, handLevel, additionalGems);
+		double totalSeconds = spawnsetBinary.GetEffectiveTimerStart();
+		EffectivePlayerSettings effectivePlayerSettings = spawnsetBinary.GetEffectivePlayerSettings();
 		GemState gemState = new(effectivePlayerSettings.HandLevel, effectivePlayerSettings.GemsOrHoming, 0);
 
-		Build(ref totalSeconds, ref gemState, spawns);
+		Build(ref totalSeconds, ref gemState, spawnsetBinary.Spawns);
 	}
 
 	private static void Build(ref double totalSeconds, ref GemState gemState, ImmutableArray<Spawn> preLoopSpawns)
