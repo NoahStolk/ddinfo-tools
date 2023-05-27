@@ -2,6 +2,7 @@ using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.State;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Core.Spawnset.Extensions;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Extensions;
 using ImGuiNET;
@@ -80,17 +81,8 @@ public static class SettingsChild
 
 		ImGui.Text("Supported in game version:");
 
-		GameVersion minimumGameVersion;
-		if (SpawnsetState.Spawnset.SpawnVersion >= 5)
-			minimumGameVersion = GameVersion.V3_1;
-		else if (SpawnsetState.Spawnset.WorldVersion >= 9)
-			minimumGameVersion = GameVersion.V2_0;
-		else
-			minimumGameVersion = GameVersion.V1_0;
-
-		ImGui.Text(minimumGameVersion.ToDisplayString());
-		ImGui.SameLine();
-		ImGui.Text("and newer");
+		SpawnsetSupportedGameVersion supportedGameVersion = SpawnsetState.Spawnset.GetSupportedGameVersion();
+		ImGui.Text(supportedGameVersion.ToDisplayString());
 	}
 
 	private static void RenderGameMode()
