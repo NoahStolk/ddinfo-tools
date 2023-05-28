@@ -3,6 +3,7 @@ using DevilDaggersInfo.App.Ui.Config;
 using DevilDaggersInfo.App.Ui.CustomLeaderboards;
 using DevilDaggersInfo.App.Ui.CustomLeaderboards.Results;
 using DevilDaggersInfo.App.Ui.Main;
+using DevilDaggersInfo.App.Ui.Practice;
 using DevilDaggersInfo.App.Ui.ReplayEditor;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor;
 using DevilDaggersInfo.App.User.Settings;
@@ -50,6 +51,9 @@ public static class UiRenderer
 				ReplayEditorWindow.Update(delta);
 				ReplayEditorWindow.Render();
 				ReplayEditor3DWindow.Render(delta);
+				break;
+			case LayoutType.Practice:
+				PracticeWindow.Render();
 				break;
 		}
 

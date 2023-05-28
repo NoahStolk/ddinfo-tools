@@ -1,3 +1,5 @@
+using DevilDaggersInfo.Core.Spawnset;
+
 namespace DevilDaggersInfo.App.User.Settings.Model;
 
 public record UserSettingsModel
@@ -6,6 +8,7 @@ public record UserSettingsModel
 	public bool ShowDebugWindow { get; init; }
 	public float LookSpeed { get; init; }
 	public int FieldOfView { get; init; }
+	public IReadOnlyList<UserSettingsPracticeTemplate> PracticeTemplates { get; init; } = new List<UserSettingsPracticeTemplate>();
 
 	public static UserSettingsModel Default { get; } = new()
 	{
@@ -13,6 +16,7 @@ public record UserSettingsModel
 		ShowDebugWindow = false,
 		LookSpeed = 20,
 		FieldOfView = 90,
+		PracticeTemplates = new List<UserSettingsPracticeTemplate>(),
 	};
 
 	public static float LookSpeedMin => 1;
@@ -26,6 +30,14 @@ public record UserSettingsModel
 		{
 			LookSpeed = Math.Clamp(LookSpeed, LookSpeedMin, LookSpeedMax),
 			FieldOfView = Math.Clamp(FieldOfView, FieldOfViewMin, FieldOfViewMax),
+			PracticeTemplates = PracticeTemplates
+				.Select(pt => pt with
+				{
+					HandLevel = Enum.IsDefined(pt.HandLevel) ? pt.HandLevel : HandLevel.Level1,
+				})
+				.ToList(),
 		};
 	}
+
+	public record UserSettingsPracticeTemplate(HandLevel HandLevel, int AdditionalGems, float TimerStart);
 }

@@ -5,70 +5,68 @@ namespace DevilDaggersInfo.App.Ui;
 
 public static class Colors
 {
-	public static Color SpawnsetEditor => new(250, 66, 66, 255);
-	public static Color CustomLeaderboards => new(150, 66, 250, 255);
+	private const byte _alphaButton = 102;
+	private const byte _alphaButtonActive = 191;
+	private const byte _alphaHeader = 79;
+	private const byte _alphaHeaderHovered = 204;
+	private const byte _alphaFrameBackground = 138;
+	private const byte _alphaTitleBackgroundActive = 138;
+	private const byte _alphaFrameBackgroundHovered = 102;
+	private const byte _alphaFrameBackgroundActive = 171;
+	private const byte _alphaSeparatorHovered = 199;
+
+	public static ColorConfiguration SpawnsetEditor { get; } = new()
+	{
+		Primary = new(250, 66, 66, 255),
+		Secondary = new(224, 61, 61, 255),
+		Tertiary = new(122, 41, 41, 255),
+		Quaternary = new(191, 26, 26, 255),
+	};
+
+	public static ColorConfiguration CustomLeaderboards { get; } = new()
+	{
+		Primary = new(150, 66, 250, 255),
+		Secondary = new(133, 61, 224, 255),
+		Tertiary = new(74, 41, 122, 255),
+		Quaternary = new(102, 26, 191, 255),
+	};
+
+	public static ColorConfiguration ReplayEditor { get; } = new()
+	{
+		Primary = new(66, 66, 250, 255),
+		Secondary = new(61, 61, 224, 255),
+		Tertiary = new(41, 41, 122, 255),
+		Quaternary = new(26, 26, 191, 255),
+	};
+
+	public static ColorConfiguration Practice { get; } = new()
+	{
+		Primary = new(250, 150, 66, 255),
+		Secondary = new(224, 133, 61, 255),
+		Tertiary = new(122, 74, 41, 255),
+		Quaternary = new(191, 102, 26, 255),
+	};
+
 	public static Color AssetEditor => new(66, 250, 66, 255);
-	public static Color ReplayEditor => new(66, 66, 250, 255);
-	public static Color Practice => new(250, 150, 66, 255);
 	public static Color ModManager => new(66, 250, 150, 255);
 
-	public static void SetCustomLeaderboardsColors()
+	public static void SetColors(ColorConfiguration colorConfiguration)
 	{
 		ImGuiStylePtr style = ImGui.GetStyle();
-		style.Colors[(int)ImGuiCol.CheckMark] = CustomLeaderboards;
-		style.Colors[(int)ImGuiCol.SliderGrab] = new Color(133, 61, 224, 255);
-		style.Colors[(int)ImGuiCol.SliderGrabActive] = CustomLeaderboards;
-		style.Colors[(int)ImGuiCol.Button] = CustomLeaderboards with { A = 102 };
-		style.Colors[(int)ImGuiCol.ButtonHovered] = CustomLeaderboards;
-		style.Colors[(int)ImGuiCol.ButtonActive] = CustomLeaderboards with { B = 191 };
-		style.Colors[(int)ImGuiCol.Header] = CustomLeaderboards with { A = 79 };
-		style.Colors[(int)ImGuiCol.HeaderHovered] = CustomLeaderboards with { A = 204 };
-		style.Colors[(int)ImGuiCol.HeaderActive] = CustomLeaderboards with { A = 255 };
-		style.Colors[(int)ImGuiCol.FrameBg] = new Color(74, 41, 122, 138);
-		style.Colors[(int)ImGuiCol.TitleBgActive] = new Color(74, 41, 122, 138);
-		style.Colors[(int)ImGuiCol.FrameBgHovered] = CustomLeaderboards with { A = 102 };
-		style.Colors[(int)ImGuiCol.FrameBgActive] = CustomLeaderboards with { A = 171 };
-		style.Colors[(int)ImGuiCol.SeparatorHovered] = new Color(102, 26, 191, 199);
-		style.Colors[(int)ImGuiCol.SeparatorActive] = new Color(102, 26, 191, 255);
-	}
-
-	public static void SetSpawnsetEditorColors()
-	{
-		ImGuiStylePtr style = ImGui.GetStyle();
-		style.Colors[(int)ImGuiCol.CheckMark] = SpawnsetEditor;
-		style.Colors[(int)ImGuiCol.SliderGrab] = new Color(224, 61, 61, 255);
-		style.Colors[(int)ImGuiCol.SliderGrabActive] = SpawnsetEditor;
-		style.Colors[(int)ImGuiCol.Button] = SpawnsetEditor with { A = 102 };
-		style.Colors[(int)ImGuiCol.ButtonHovered] = SpawnsetEditor;
-		style.Colors[(int)ImGuiCol.ButtonActive] = SpawnsetEditor with { B = 191 };
-		style.Colors[(int)ImGuiCol.Header] = SpawnsetEditor with { A = 79 };
-		style.Colors[(int)ImGuiCol.HeaderHovered] = SpawnsetEditor with { A = 204 };
-		style.Colors[(int)ImGuiCol.HeaderActive] = SpawnsetEditor with { A = 255 };
-		style.Colors[(int)ImGuiCol.FrameBg] = new Color(122, 41, 41, 138);
-		style.Colors[(int)ImGuiCol.TitleBgActive] = new Color(122, 41, 41, 138);
-		style.Colors[(int)ImGuiCol.FrameBgHovered] = SpawnsetEditor with { A = 102 };
-		style.Colors[(int)ImGuiCol.FrameBgActive] = SpawnsetEditor with { A = 171 };
-		style.Colors[(int)ImGuiCol.SeparatorHovered] = new Color(191, 26, 26, 199);
-		style.Colors[(int)ImGuiCol.SeparatorActive] = new Color(191, 26, 26, 255);
-	}
-
-	public static void SetReplayEditorColors()
-	{
-		ImGuiStylePtr style = ImGui.GetStyle();
-		style.Colors[(int)ImGuiCol.CheckMark] = ReplayEditor;
-		style.Colors[(int)ImGuiCol.SliderGrab] = new Color(61, 61, 224, 255);
-		style.Colors[(int)ImGuiCol.SliderGrabActive] = ReplayEditor;
-		style.Colors[(int)ImGuiCol.Button] = ReplayEditor with { A = 102 };
-		style.Colors[(int)ImGuiCol.ButtonHovered] = ReplayEditor;
-		style.Colors[(int)ImGuiCol.ButtonActive] = ReplayEditor with { B = 191 };
-		style.Colors[(int)ImGuiCol.Header] = ReplayEditor with { A = 79 };
-		style.Colors[(int)ImGuiCol.HeaderHovered] = ReplayEditor with { A = 204 };
-		style.Colors[(int)ImGuiCol.HeaderActive] = ReplayEditor with { A = 255 };
-		style.Colors[(int)ImGuiCol.FrameBg] = new Color(41, 41, 122, 138);
-		style.Colors[(int)ImGuiCol.TitleBgActive] = new Color(41, 41, 122, 138);
-		style.Colors[(int)ImGuiCol.FrameBgHovered] = ReplayEditor with { A = 102 };
-		style.Colors[(int)ImGuiCol.FrameBgActive] = ReplayEditor with { A = 171 };
-		style.Colors[(int)ImGuiCol.SeparatorHovered] = new Color(26, 26, 191, 199);
-		style.Colors[(int)ImGuiCol.SeparatorActive] = new Color(26, 26, 191, 255);
+		style.Colors[(int)ImGuiCol.CheckMark] = colorConfiguration.Primary;
+		style.Colors[(int)ImGuiCol.SliderGrab] = colorConfiguration.Secondary;
+		style.Colors[(int)ImGuiCol.SliderGrabActive] = colorConfiguration.Primary;
+		style.Colors[(int)ImGuiCol.Button] = colorConfiguration.Primary with { A = _alphaButton };
+		style.Colors[(int)ImGuiCol.ButtonHovered] = colorConfiguration.Primary;
+		style.Colors[(int)ImGuiCol.ButtonActive] = colorConfiguration.Primary with { B = _alphaButtonActive };
+		style.Colors[(int)ImGuiCol.Header] = colorConfiguration.Primary with { A = _alphaHeader };
+		style.Colors[(int)ImGuiCol.HeaderHovered] = colorConfiguration.Primary with { A = _alphaHeaderHovered };
+		style.Colors[(int)ImGuiCol.HeaderActive] = colorConfiguration.Primary;
+		style.Colors[(int)ImGuiCol.FrameBg] = colorConfiguration.Tertiary with { A = _alphaFrameBackground };
+		style.Colors[(int)ImGuiCol.TitleBgActive] = colorConfiguration.Tertiary with { A = _alphaTitleBackgroundActive };
+		style.Colors[(int)ImGuiCol.FrameBgHovered] = colorConfiguration.Primary with { A = _alphaFrameBackgroundHovered };
+		style.Colors[(int)ImGuiCol.FrameBgActive] = colorConfiguration.Primary with { A = _alphaFrameBackgroundActive };
+		style.Colors[(int)ImGuiCol.SeparatorHovered] = colorConfiguration.Quaternary with { A = _alphaSeparatorHovered };
+		style.Colors[(int)ImGuiCol.SeparatorActive] = colorConfiguration.Quaternary;
 	}
 }

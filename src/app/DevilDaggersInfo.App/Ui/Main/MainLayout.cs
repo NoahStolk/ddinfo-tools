@@ -39,32 +39,37 @@ public static class MainLayout
 		// TextAt("DDINFO", _centerX, 64, new(1, 0, 0, 1), true); // TODO: font size 64
 		// TextAt("TOOLS", _centerX, 128, new(1, 0.5f, 0, 1), true); // TODO: font size 32
 		// TextAt(_version, _centerX, 176, new(1, 0.8f, 0, 1), true); // TODO: font size 24
-		TextAt("Devil Daggers is created by Sorath", _centerX, 708, default, true);
-		TextAt("DevilDaggers.info is created by Noah Stolk", _centerX, 724, default, true);
+		TextAt("Devil Daggers is created by Sorath", _centerX, 692, default, true);
+		TextAt("DevilDaggers.info is created by Noah Stolk", _centerX, 708, default, true);
 
 		const byte buttonAlpha = 191;
 
-		if (MainButtonAt(0, 0, Colors.SpawnsetEditor with { A = buttonAlpha }, "Spawnset Editor (wip)"))
+		if (MainButtonAt(0, 0, Colors.SpawnsetEditor.Primary with { A = buttonAlpha }, "Spawnset Editor (wip)"))
 		{
 			UiRenderer.Layout = LayoutType.SpawnsetEditor;
-			Colors.SetSpawnsetEditorColors();
+			Colors.SetColors(Colors.SpawnsetEditor);
 		}
 
 		MainButtonAt(1, 0, Colors.AssetEditor with { A = buttonAlpha }, "Asset Editor (todo)");
-		if (MainButtonAt(2, 0, Colors.ReplayEditor with { A = buttonAlpha }, "Replay Editor (wip)"))
+		if (MainButtonAt(2, 0, Colors.ReplayEditor.Primary with { A = buttonAlpha }, "Replay Editor (wip)"))
 		{
 			UiRenderer.Layout = LayoutType.ReplayEditor;
-			Colors.SetReplayEditorColors();
+			Colors.SetColors(Colors.ReplayEditor);
 		}
 
-		if (MainButtonAt(0, 1, Colors.CustomLeaderboards with { A = buttonAlpha }, "Custom Leaderboards"))
+		if (MainButtonAt(0, 1, Colors.CustomLeaderboards.Primary with { A = buttonAlpha }, "Custom Leaderboards"))
 		{
 			UiRenderer.Layout = LayoutType.CustomLeaderboards;
-			Colors.SetCustomLeaderboardsColors();
+			Colors.SetColors(Colors.CustomLeaderboards);
 			LeaderboardListChild.LoadAll();
 		}
 
-		MainButtonAt(1, 1, Colors.Practice with { A = buttonAlpha }, "Practice (todo)");
+		if (MainButtonAt(1, 1, Colors.Practice.Primary with { A = buttonAlpha }, "Practice (wip)"))
+		{
+			UiRenderer.Layout = LayoutType.Practice;
+			Colors.SetColors(Colors.Practice);
+		}
+
 		MainButtonAt(2, 1, Colors.ModManager with { A = buttonAlpha }, "Mod Manager (todo)");
 
 		Color gray = new(96, 96, 96, buttonAlpha);
@@ -87,10 +92,15 @@ public static class MainLayout
 
 		const string homePage = "https://devildaggers.info/";
 		const string toolsPage = "https://devildaggers.info/tools";
+		const string gitHubPage = "https://github.com/NoahStolk/DevilDaggersInfo";
 
-		ImGui.SetCursorPos(new(_centerX - ImGui.CalcTextSize(homePage).X / 2, 740));
+		ImGui.SetCursorPos(new(_centerX - ImGui.CalcTextSize(homePage).X / 2, 724));
 		if (ImGui.Button(homePage))
 			Process.Start(new ProcessStartInfo(homePage) { UseShellExecute = true });
+
+		ImGui.SetCursorPos(new(_centerX - ImGui.CalcTextSize(gitHubPage).X / 2, 740));
+		if (ImGui.Button(gitHubPage))
+			Process.Start(new ProcessStartInfo(gitHubPage) { UseShellExecute = true });
 
 		ImGui.SetCursorPos(new(4, 156));
 		if (ImGui.Button(toolsPage))

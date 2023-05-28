@@ -5,6 +5,7 @@ using DevilDaggersInfo.Core.Asset;
 using DevilDaggersInfo.Core.Mod;
 using DevilDaggersInfo.Core.Mod.Extensions;
 using DevilDaggersInfo.Core.Spawnset;
+using System.Security.Cryptography;
 
 namespace DevilDaggersInfo.App;
 
@@ -39,10 +40,14 @@ public static class ContentManager
 		if (!File.Exists(UserSettings.ResDdPath))
 			throw new InvalidGameInstallationException("File 'res/dd' does not exist.");
 
-		// TODO: Also verify survival hash.
 		byte[] survivalBytes = File.ReadAllBytes(UserSettings.DdSurvivalPath);
 		if (!SpawnsetBinary.TryParse(survivalBytes, out SpawnsetBinary? defaultSpawnset))
 			throw new InvalidGameInstallationException("File 'dd/survival' could not be parsed.");
+
+		Span<byte> defaultHash = stackalloc byte[16] { 0x56, 0x9f, 0xea, 0xd8, 0x7a, 0xbf, 0x4d, 0x30, 0xfd, 0xee, 0x42, 0x31, 0xa6, 0x39, 0x80, 0x51 };
+		byte[] survivalHash = MD5.HashData(survivalBytes);
+		if (!defaultHash.SequenceEqual(survivalHash))
+			throw new InvalidGameInstallationException("File 'dd/survival' is invalid. Make sure you have not modified the file. Validate your game files and try again.");
 
 		if (Directory.Exists(UserSettings.ModsSurvivalPath))
 			throw new InvalidGameInstallationException("There must not be a directory named 'survival' in the 'mods' directory. You must delete the directory, or mods will not work.");

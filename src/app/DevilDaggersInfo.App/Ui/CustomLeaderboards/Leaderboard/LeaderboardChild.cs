@@ -132,9 +132,9 @@ public static class LeaderboardChild
 	{
 		ImGui.TableNextColumn();
 
-		ImGui.PushStyleColor(ImGuiCol.Header, Colors.CustomLeaderboards with { A = 24 });
-		ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.CustomLeaderboards with { A = 64 });
-		ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.CustomLeaderboards with { A = 96 });
+		ImGui.PushStyleColor(ImGuiCol.Header, Colors.CustomLeaderboards.Primary with { A = 24 });
+		ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.CustomLeaderboards.Primary with { A = 64 });
+		ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.CustomLeaderboards.Primary with { A = 96 });
 		bool temp = true;
 		if (ImGui.Selectable(ce.Rank.ToString("00"), ref temp, ImGuiSelectableFlags.SpanAllColumns))
 			_selectedCustomEntry = ce;

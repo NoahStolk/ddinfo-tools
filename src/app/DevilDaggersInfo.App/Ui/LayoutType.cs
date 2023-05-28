@@ -7,4 +7,5 @@ public enum LayoutType
 	SpawnsetEditor,
 	CustomLeaderboards,
 	ReplayEditor,
+	Practice,
 }
