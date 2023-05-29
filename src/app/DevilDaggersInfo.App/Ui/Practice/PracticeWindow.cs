@@ -216,14 +216,12 @@ public static class PracticeWindow
 
 	private static void RenderCustomTemplate(UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
 	{
-		const int deleteButtonWidth = 64;
-
-		Color color = Color.Blue;
+		Color color = Color.White;
 		string uniqueName = $"{customTemplate.HandLevel}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart.ToString(StringFormats.TimeFormat)}";
 		(byte backgroundAlpha, byte textAlpha) = GetAlpha(_state.IsEqual(customTemplate));
 
 		ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = backgroundAlpha });
-		if (ImGui.BeginChild(uniqueName, new(_templateWidth - (deleteButtonWidth + 8), 48), true))
+		if (ImGui.BeginChild(uniqueName, new(_templateWidth - 56, 48), true))
 		{
 			bool hover = ImGui.IsWindowHovered();
 			if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
@@ -255,7 +253,7 @@ public static class PracticeWindow
 		ImGui.PopStyleColor();
 
 		ImGui.SameLine();
-		if (ImGui.Button("Delete", new(deleteButtonWidth, 48)))
+		if (ImGui.ImageButton((IntPtr)Root.InternalResources.BinTexture.Handle, new(24), Vector2.Zero, Vector2.One, 12))
 		{
 			UserSettings.Model = UserSettings.Model with
 			{
