@@ -9,9 +9,11 @@ public static class UpdateLogic
 #if WINDOWS
 	private const ToolBuildType _appBuildType = ToolBuildType.WindowsWarp;
 	private const string _exeFileName = "ddinfo-tools.exe"; // TODO: Get this from the AssemblyName MSBuild property.
-	private const string _oldExeFileName = "ddinfo-tools.old.exe";
+	private const string _oldExeFileName = "ddinfo-tools-old.exe";
 #elif LINUX
 	private const ToolBuildType _appBuildType = ToolBuildType.LinuxWarp;
+	private const string _exeFileName = "ddinfo-tools";
+	private const string _oldExeFileName = "ddinfo-tools-old";
 #endif
 
 	private static readonly Uri _baseAddress = new("https://devildaggers.info/");
