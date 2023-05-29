@@ -50,7 +50,7 @@ public static class PracticeWindow
 		ImGui.Begin("Practice", ImGuiWindowFlags.NoCollapse);
 		ImGui.PopStyleVar();
 
-		ImGui.Text("Use these templates to practice specific sections of the game. Click on a template to apply its values.");
+		ImGui.Text("Use these templates to practice specific sections of the game. Click on a template to install it.");
 		ImGui.Spacing();
 
 		ImGui.BeginChild("No farm templates", _templateContainerSize, true);
@@ -253,6 +253,10 @@ public static class PracticeWindow
 		ImGui.PopStyleColor();
 
 		ImGui.SameLine();
+		ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 159 });
+		ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red);
+		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red with { A = 223 });
+		ImGui.PushID(customTemplate.ToString());
 		if (ImGui.ImageButton((IntPtr)Root.InternalResources.BinTexture.Handle, new(24), Vector2.Zero, Vector2.One, 12))
 		{
 			UserSettings.Model = UserSettings.Model with
@@ -260,6 +264,9 @@ public static class PracticeWindow
 				PracticeTemplates = UserSettings.Model.PracticeTemplates.Where(pt => customTemplate != pt).ToList(),
 			};
 		}
+
+		ImGui.PopID();
+		ImGui.PopStyleColor(3);
 	}
 
 	private static (byte BackgroundAlpha, byte TextAlpha) GetAlpha(bool isActive)
