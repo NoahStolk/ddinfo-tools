@@ -36,14 +36,14 @@ public class Application
 		Vector2D<int> monitorSize = Silk.NET.Windowing.Monitor.GetMainMonitor(_window).Bounds.Size;
 		_window.Size = windowSize;
 		_window.Position = monitorSize / 2 - windowSize / 2;
-		_window.Title = $"ddinfo tools {VersionUtils.EntryAssemblyVersion}";
+		_window.Title = $"ddinfo tools {AssemblyUtils.EntryAssemblyVersion}";
 
 		_window.Load += OnWindowOnLoad;
 		_window.FramebufferResize += OnWindowOnFramebufferResize;
 		_window.Render += OnWindowOnRender;
 		_window.Closing += OnWindowOnClosing;
 
-		if (!AppVersion.TryParse(VersionUtils.EntryAssemblyVersion, out AppVersion? appVersion))
+		if (!AppVersion.TryParse(AssemblyUtils.EntryAssemblyVersion, out AppVersion? appVersion))
 			throw new InvalidOperationException("The current version number is invalid.");
 
 		AppVersion = appVersion;

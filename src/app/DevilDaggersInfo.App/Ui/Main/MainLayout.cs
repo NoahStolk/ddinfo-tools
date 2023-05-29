@@ -13,7 +13,7 @@ public static class MainLayout
 {
 	private static readonly int _centerX = (int)Constants.LayoutSize.X / 2;
 
-	private static readonly string _version = VersionUtils.EntryAssemblyVersion;
+	private static readonly string _version = AssemblyUtils.EntryAssemblyVersion;
 
 	private static readonly SpawnsetBinary _mainMenuSpawnset = SpawnsetBinary.CreateDefault();
 

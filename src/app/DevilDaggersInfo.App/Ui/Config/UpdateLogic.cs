@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Api.App.Updates;
 using System.Diagnostics;
 using System.IO.Compression;
-using System.Reflection;
 
 namespace DevilDaggersInfo.App.Ui.Config;
 
@@ -17,10 +16,14 @@ public static class UpdateLogic
 
 	private static readonly Uri _baseAddress = new("https://devildaggers.info/");
 
+	public static void DeleteOldExecutable()
+	{
+		if (File.Exists(_oldExeFileName))
+			File.Delete(_oldExeFileName);
+	}
+
 	public static async Task RunAsync()
 	{
-		string installationDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? throw new($"Could not get installation directory of '{Assembly.GetExecutingAssembly().Location}'.");
-
 		// Rename the currently running executable, so the new executable can be installed.
 		File.Move(_exeFileName, _oldExeFileName);
 
@@ -29,11 +32,11 @@ public static class UpdateLogic
 		using ZipArchive archive = new(ms);
 
 		// This will overwrite all the existing files.
-		archive.ExtractToDirectory(installationDirectory, true);
+		archive.ExtractToDirectory(AssemblyUtils.InstallationDirectory, true);
 
 		Process process = new();
 		process.StartInfo.FileName = _exeFileName;
-		process.StartInfo.WorkingDirectory = installationDirectory;
+		process.StartInfo.WorkingDirectory = AssemblyUtils.InstallationDirectory;
 		process.Start();
 
 		Environment.Exit(0);

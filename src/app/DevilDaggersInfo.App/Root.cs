@@ -93,7 +93,7 @@ public static class Root
 	public static IMouse? Mouse { get; set; }
 	public static IKeyboard? Keyboard { get; set; }
 	public static Logger Log { get; } = new LoggerConfiguration()
-		.WriteTo.File($"ddinfo-{VersionUtils.EntryAssemblyVersion}.log", rollingInterval: RollingInterval.Infinite)
+		.WriteTo.File($"ddinfo-{AssemblyUtils.EntryAssemblyVersion}.log", rollingInterval: RollingInterval.Infinite)
 		.CreateLogger();
 
 #if WINDOWS
