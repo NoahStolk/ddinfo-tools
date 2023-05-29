@@ -97,19 +97,11 @@ public class Application
 			Root.Keyboard.KeyDown += Shortcuts.OnKeyPressed;
 		}
 
-		ConfigLayout.ValidateInstallation();
+		ConfigLayout.Initialize();
 
 		RawImage rawImage = new(Root.InternalResources.ApplicationIconTexture.Width, Root.InternalResources.ApplicationIconTexture.Height, Root.InternalResources.ApplicationIconTexture.Pixels);
 		Span<RawImage> rawImages = MemoryMarshal.CreateSpan(ref rawImage, 1);
 		_window.SetWindowIcon(rawImages);
-
-		AsyncHandler.Run(
-			static av =>
-			{
-				if (av != null)
-					Modals.ShowUpdateAvailable(av);
-			},
-			() => FetchLatestVersion.HandleAsync(AppVersion, Root.PlatformSpecificValues.BuildType));
 	}
 
 	private static void ConfigureImGui()

@@ -5,7 +5,6 @@ using DevilDaggersInfo.App.Ui.ReplayEditor;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor;
 using DevilDaggersInfo.App.User.Settings;
 using ImGuiNET;
-using System.Numerics;
 
 namespace DevilDaggersInfo.App.Ui.Config;
 
@@ -16,7 +15,8 @@ public static class InstallationWindow
 	private static string _installationDirectoryInput = string.Empty;
 
 	/// <summary>
-	/// Is called on launch, and when the user changes the installation directory.
+	/// Is called on launch (after checking for updates), and when the user changes the installation directory.
+	/// Must be called on the main thread.
 	/// </summary>
 	public static void ValidateInstallation()
 	{
@@ -77,12 +77,6 @@ public static class InstallationWindow
 			Example: {examplePath}
 			""";
 
-		Vector2 center = ImGui.GetMainViewport().GetCenter();
-		ImGui.SetNextWindowPos(center, ImGuiCond.Always, new(0.5f, 0.5f));
-		ImGui.SetNextWindowSize(Constants.LayoutSize);
-
-		ImGui.Begin("Configuration", Constants.LayoutFlags);
-
 		ImGui.Text(text);
 		ImGui.Spacing();
 
@@ -110,7 +104,5 @@ public static class InstallationWindow
 
 			ValidateInstallation();
 		}
-
-		ImGui.End();
 	}
 }

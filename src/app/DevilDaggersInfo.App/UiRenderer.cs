@@ -35,6 +35,7 @@ public static class UiRenderer
 				MainLayout.Render(delta, out _windowShouldClose);
 				break;
 			case LayoutType.Config:
+				ConfigLayout.Update();
 				ConfigLayout.Render();
 				break;
 			case LayoutType.SpawnsetEditor:

@@ -1,4 +1,3 @@
-using DevilDaggersInfo.Core.Versioning;
 using ImGuiNET;
 using System.Numerics;
 
@@ -6,29 +5,20 @@ namespace DevilDaggersInfo.App.Ui;
 
 public static class Modals
 {
-	private const string _updateId = "Update available";
 	private const string _errorId = "Error";
 	private const string _replacedSurvivalFileId = "Successfully replaced current survival file";
 	private const string _deletedSurvivalFileId = "Successfully deleted current survival file";
 
 	private static readonly List<ModalData> _modals = new()
 	{
-		new(_updateId, () => ImGui.Text($"Version {_availableVersion} is available. Re-run the launcher to install it.")),
 		new(_errorId, () => ImGui.TextWrapped(_errorText)),
 		new(_replacedSurvivalFileId, () => ImGui.Text("The current survival file has been replaced with the current spawnset.")),
 		new(_deletedSurvivalFileId, () => ImGui.Text("The current survival file has been deleted.")),
 	};
 
-	private static AppVersion? _availableVersion;
 	private static string? _errorText;
 
 	public static bool IsAnyOpen { get; private set; }
-
-	public static void ShowUpdateAvailable(AppVersion availableVersion)
-	{
-		_availableVersion = availableVersion;
-		_modals.First(m => m.Id == _updateId).ShouldOpen = true;
-	}
 
 	public static void ShowError(string errorText)
 	{
