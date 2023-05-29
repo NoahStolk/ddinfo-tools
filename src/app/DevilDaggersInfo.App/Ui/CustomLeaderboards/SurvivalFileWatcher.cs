@@ -45,10 +45,9 @@ public static class SurvivalFileWatcher
 					byte[] fileHash = MD5.HashData(fileContents);
 					AsyncHandler.Run(s => SpawnsetName = s?.Name, () => FetchSpawnsetByHash.HandleAsync(fileHash));
 				}
-				catch (Exception)
+				catch (Exception ex)
 				{
-					// TODO: Log this instead.
-					Modals.ShowError("Failed to update active spawnset based on hash.");
+					Root.Log.Warning(ex, "Failed to update active spawnset based on hash.");
 				}
 			}
 		}

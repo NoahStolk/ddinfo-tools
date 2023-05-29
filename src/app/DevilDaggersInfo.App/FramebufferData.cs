@@ -67,7 +67,7 @@ public unsafe class FramebufferData
 		Root.Gl.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthStencilAttachment, RenderbufferTarget.Renderbuffer, rbo);
 
 		if (Root.Gl.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != GLEnum.FramebufferComplete)
-			Root.Log.Error("Framebuffer is not complete.");
+			Root.Log.Warning("Framebuffer is not complete.");
 
 		// Unbind.
 		Root.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
