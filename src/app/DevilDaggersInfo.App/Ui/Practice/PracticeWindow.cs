@@ -34,7 +34,7 @@ public static class PracticeWindow
 
 	private static readonly List<float> _endLoopTimerStarts = new();
 
-	private static State _state;
+	private static State _state = State.Default;
 
 	static PracticeWindow()
 	{
@@ -103,7 +103,11 @@ public static class PracticeWindow
 		ImGui.EndChild();
 		ImGui.EndChild();
 
-		ImGui.BeginChild("Input values", new(512, 192));
+		ImGui.BeginChild("Input values", new(296, 192));
+
+		ImGui.Spacing();
+		ImGui.Image((IntPtr)Root.GameResources.IconDaggerTexture.Handle, new(16), Vector2.UnitY, Vector2.UnitX);
+		ImGui.SameLine();
 		foreach (HandLevel level in Enum.GetValues<HandLevel>())
 		{
 			if (ImGui.RadioButton($"Lvl {(int)level}", level == _state.HandLevel) && _state.HandLevel != level)
@@ -113,8 +117,19 @@ public static class PracticeWindow
 				ImGui.SameLine();
 		}
 
+		(Texture gemOrHomingTexture, Color tintColor) = _state.HandLevel is HandLevel.Level3 or HandLevel.Level4 ? (Root.GameResources.IconMaskHomingTexture, Color.White) : (Root.GameResources.IconMaskGemTexture, Color.Red);
+		ImGui.Spacing();
+		ImGui.Image((IntPtr)gemOrHomingTexture.Handle, new(16), Vector2.UnitY, Vector2.UnitX, tintColor);
+		ImGui.SameLine();
 		ImGui.InputInt("Added gems", ref _state.AdditionalGems, 1);
+
+		ImGui.Spacing();
+		ImGui.Image((IntPtr)Root.GameResources.IconMaskStopwatchTexture.Handle, new(16), Vector2.UnitY, Vector2.UnitX);
+		ImGui.SameLine();
 		ImGui.InputFloat("Timer start", ref _state.TimerStart, 1, 5, "%.4f");
+
+		for (int i = 0; i < 8; i++)
+			ImGui.Spacing();
 
 		if (ImGui.Button("Apply", new(80, 30)))
 			Apply();
@@ -294,7 +309,7 @@ public static class PracticeWindow
 
 	private struct State
 	{
-		public HandLevel HandLevel = HandLevel.Level1;
+		public HandLevel HandLevel;
 		public int AdditionalGems;
 		public float TimerStart;
 
@@ -304,6 +319,8 @@ public static class PracticeWindow
 			AdditionalGems = additionalGems;
 			TimerStart = timerStart;
 		}
+
+		public static State Default => new(HandLevel.Level1, 0, 0);
 
 		public bool IsEqual(UserSettingsModel.UserSettingsPracticeTemplate practiceTemplate)
 		{

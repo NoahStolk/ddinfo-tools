@@ -54,6 +54,9 @@ public static class ContentManager
 
 		ModBinaryReadFilter ddReadFilter = ModBinaryReadFilter.Assets(
 			new(AssetType.Texture, "iconmaskdagger"),
+			new(AssetType.Texture, "iconmaskgem"),
+			new(AssetType.Texture, "iconmaskhoming"),
+			new(AssetType.Texture, "iconmaskstopwatch"),
 			new(AssetType.Mesh, "dagger"),
 			new(AssetType.Texture, "daggersilver"),
 			new(AssetType.Mesh, "boid4"),
@@ -84,6 +87,9 @@ public static class ContentManager
 		Content = new(
 			DefaultSpawnset: defaultSpawnset,
 			IconDaggerTexture: GetTexture(ddBinary, "iconmaskdagger"),
+			IconMaskGemTexture: GetTexture(ddBinary, "iconmaskgem"),
+			IconMaskHomingTexture: GetTexture(ddBinary, "iconmaskhoming"),
+			IconMaskStopwatchTexture: GetTexture(ddBinary, "iconmaskstopwatch"),
 			DaggerMesh: GetMesh(ddBinary, "dagger"),
 			DaggerSilverTexture: GetTexture(ddBinary, "daggersilver"),
 			Skull4Mesh: GetMesh(ddBinary, "boid4"),
