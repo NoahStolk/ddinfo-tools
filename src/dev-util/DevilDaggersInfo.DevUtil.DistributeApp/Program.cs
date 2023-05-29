@@ -12,12 +12,6 @@ if (Question("Build app for Windows?"))
 if (Question("Build app for Linux?"))
 	await DistributeAsync("ddinfo-tools", "app", "DevilDaggersInfo.App", ToolBuildType.LinuxWarp, ToolPublishMethod.SelfContained);
 
-if (Question("Build app launcher for Windows?"))
-	await DistributeAsync("ddinfo-tools-launcher", "app-launcher", "DevilDaggersInfo.App.Launcher", ToolBuildType.WindowsConsole, ToolPublishMethod.Aot);
-
-if (Question("Build app launcher for Linux?"))
-	await DistributeAsync("ddinfo-tools-launcher", "app-launcher", "DevilDaggersInfo.App.Launcher", ToolBuildType.LinuxConsole, ToolPublishMethod.Aot);
-
 static bool Question(string question)
 {
 	Console.WriteLine($"{question} y/n");
