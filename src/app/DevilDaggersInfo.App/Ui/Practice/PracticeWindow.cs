@@ -106,7 +106,7 @@ public static class PracticeWindow
 		ImGui.BeginChild("Input values", new(296, 192));
 
 		ImGui.Spacing();
-		ImGui.Image((IntPtr)Root.GameResources.IconDaggerTexture.Handle, new(16), Vector2.UnitY, Vector2.UnitX);
+		ImGui.Image((IntPtr)Root.InternalResources.IconHandTexture.Handle, new(16), Vector2.Zero, Vector2.One, _state.HandLevel.GetColor());
 		ImGui.SameLine();
 		foreach (HandLevel level in Enum.GetValues<HandLevel>())
 		{
