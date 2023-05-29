@@ -9,7 +9,7 @@ public static class UpdateLogic
 {
 #if WINDOWS
 	private const ToolBuildType _appBuildType = ToolBuildType.WindowsWarp;
-	private const string _exeFileName = "ddinfo-tools.exe";
+	private const string _exeFileName = "ddinfo-tools.exe"; // TODO: Get this from the AssemblyName MSBuild property.
 	private const string _oldExeFileName = "ddinfo-tools.old.exe";
 #elif LINUX
 	private const ToolBuildType _appBuildType = ToolBuildType.LinuxWarp;
@@ -43,7 +43,7 @@ public static class UpdateLogic
 	{
 		using HttpRequestMessage request = new()
 		{
-			RequestUri = new($"api/app-launcher/latest-version-file?publishMethod={ToolPublishMethod.SelfContained}&buildType={_appBuildType}", UriKind.Relative),
+			RequestUri = new($"api/app/updates/latest-version-file?publishMethod={ToolPublishMethod.SelfContained}&buildType={_appBuildType}", UriKind.Relative),
 			Method = HttpMethod.Get,
 		};
 
