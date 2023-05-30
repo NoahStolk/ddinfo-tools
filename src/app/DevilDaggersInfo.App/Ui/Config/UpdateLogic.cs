@@ -26,22 +26,39 @@ public static class UpdateLogic
 
 	public static async Task RunAsync()
 	{
-		// Rename the currently running executable, so the new executable can be installed.
-		File.Move(_exeFileName, _oldExeFileName);
+		try
+		{
+			// Rename the currently running executable, so the new executable can be installed.
+			ConfigLayout.LogMessages.Add("Renaming old executable...");
+			File.Move(_exeFileName, _oldExeFileName);
 
-		byte[] zipFileContents = await DownloadAppAsync();
-		using MemoryStream ms = new(zipFileContents);
-		using ZipArchive archive = new(ms);
+			ConfigLayout.LogMessages.Add("Downloading update...");
+			byte[] zipFileContents = await DownloadAppAsync();
 
-		// This will overwrite all the existing files.
-		archive.ExtractToDirectory(AssemblyUtils.InstallationDirectory, true);
+			ConfigLayout.LogMessages.Add("Opening ZIP...");
 
-		Process process = new();
-		process.StartInfo.FileName = _exeFileName;
-		process.StartInfo.WorkingDirectory = AssemblyUtils.InstallationDirectory;
-		process.Start();
+			using MemoryStream ms = new(zipFileContents);
+			using ZipArchive archive = new(ms);
 
-		Environment.Exit(0);
+			ConfigLayout.LogMessages.Add("Installing update...");
+
+			// This will overwrite all the existing files.
+			archive.ExtractToDirectory(AssemblyUtils.InstallationDirectory, true);
+
+			ConfigLayout.LogMessages.Add("Launching new version...");
+			Process process = new();
+			process.StartInfo.FileName = _exeFileName;
+			process.StartInfo.WorkingDirectory = AssemblyUtils.InstallationDirectory;
+			process.Start();
+
+			Environment.Exit(0);
+		}
+		catch (Exception ex)
+		{
+			const string errorMessage = "An error occurred while updating the application.";
+			ConfigLayout.LogMessages.Add($"{errorMessage}\n{ex.Message}");
+			Root.Log.Error(ex, errorMessage);
+		}
 	}
 
 	private static async Task<byte[]> DownloadAppAsync()

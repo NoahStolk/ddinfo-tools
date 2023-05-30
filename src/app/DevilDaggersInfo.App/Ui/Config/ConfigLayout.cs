@@ -9,6 +9,8 @@ public static class ConfigLayout
 	private static bool _contentInitialized;
 	private static bool? _isUpToDate;
 
+	public static List<string> LogMessages { get; } = new();
+
 	public static void Initialize()
 	{
 		AsyncHandler.Run(
@@ -47,7 +49,7 @@ public static class ConfigLayout
 		else if (_isUpToDate.Value)
 			InstallationWindow.Render();
 		else
-			ImGui.Text("Updating...");
+			LogMessages.ForEach(ImGui.Text);
 
 		ImGui.End();
 	}
