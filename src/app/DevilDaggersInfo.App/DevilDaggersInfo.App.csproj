@@ -46,7 +46,7 @@
             <OutputType>WinExe</OutputType>
           </PropertyGroup>
         </When>
-        <When Condition="'$(RuntimeIdentifier)' == 'linux-x64'">
+        <When Condition="'$(RuntimeIdentifier)' == 'linux-x64' Or '$(CI)' == 'true'">
           <PropertyGroup>
             <DefineConstants>$(DefineConstants);LINUX</DefineConstants>
             <OutputType>Exe</OutputType>
