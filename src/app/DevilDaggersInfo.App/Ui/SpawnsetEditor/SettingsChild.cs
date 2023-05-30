@@ -3,8 +3,6 @@ using DevilDaggersInfo.App.Ui.SpawnsetEditor.State;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Spawnset.Extensions;
-using DevilDaggersInfo.Core.Wiki;
-using DevilDaggersInfo.Core.Wiki.Extensions;
 using ImGuiNET;
 using System.Numerics;
 

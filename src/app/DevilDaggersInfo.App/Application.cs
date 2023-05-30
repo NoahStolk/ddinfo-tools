@@ -1,5 +1,3 @@
-using DevilDaggersInfo.App.Networking;
-using DevilDaggersInfo.App.Networking.TaskHandlers;
 using DevilDaggersInfo.App.Ui;
 using DevilDaggersInfo.App.Ui.Config;
 using DevilDaggersInfo.App.User.Cache;
