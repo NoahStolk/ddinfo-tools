@@ -42,6 +42,7 @@ public static class ConfigLayout
 
 	public static void Render()
 	{
+		ImGui.SetNextWindowSize(Constants.LayoutSize);
 		ImGui.Begin("Configuration", Constants.LayoutFlags);
 
 		if (!_isUpToDate.HasValue)
