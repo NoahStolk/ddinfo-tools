@@ -1,3 +1,5 @@
+using DevilDaggersInfo.App.Networking;
+using DevilDaggersInfo.App.Networking.TaskHandlers;
 using DevilDaggersInfo.App.Ui;
 using DevilDaggersInfo.App.Ui.Config;
 using DevilDaggersInfo.App.User.Cache;
@@ -95,7 +97,17 @@ public class Application
 			Root.Keyboard.KeyDown += Shortcuts.OnKeyPressed;
 		}
 
-		ConfigLayout.Initialize();
+		ConfigLayout.ValidateInstallation();
+		AsyncHandler.Run(
+			static newVersion =>
+			{
+				if (newVersion == null)
+					return;
+
+				UiRenderer.ShowUpdateAvailable();
+				UpdateWindow.AvailableUpdateVersion = newVersion;
+			},
+			() => FetchLatestVersion.HandleAsync(Root.Application.AppVersion, Root.PlatformSpecificValues.BuildType));
 
 		RawImage rawImage = new(Root.InternalResources.ApplicationIconTexture.Width, Root.InternalResources.ApplicationIconTexture.Height, Root.InternalResources.ApplicationIconTexture.Pixels);
 		Span<RawImage> rawImages = MemoryMarshal.CreateSpan(ref rawImage, 1);

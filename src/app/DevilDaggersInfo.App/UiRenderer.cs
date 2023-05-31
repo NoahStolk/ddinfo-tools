@@ -13,6 +13,7 @@ namespace DevilDaggersInfo.App;
 public static class UiRenderer
 {
 	private static bool _showSettings;
+	private static bool _showUpdateAvailable;
 	private static bool _windowShouldClose;
 
 	public static bool WindowShouldClose => _windowShouldClose;
@@ -22,6 +23,11 @@ public static class UiRenderer
 	public static void ShowSettings()
 	{
 		_showSettings = true;
+	}
+
+	public static void ShowUpdateAvailable()
+	{
+		_showUpdateAvailable = true;
 	}
 
 	public static void Render(float delta)
@@ -35,7 +41,6 @@ public static class UiRenderer
 				MainLayout.Render(delta, out _windowShouldClose);
 				break;
 			case LayoutType.Config:
-				ConfigLayout.Update();
 				ConfigLayout.Render();
 				break;
 			case LayoutType.SpawnsetEditor:
@@ -62,6 +67,7 @@ public static class UiRenderer
 			DebugWindow.Render();
 
 		SettingsWindow.Render(ref _showSettings);
+		UpdateWindow.Render(ref _showUpdateAvailable);
 
 		Modals.Render();
 	}

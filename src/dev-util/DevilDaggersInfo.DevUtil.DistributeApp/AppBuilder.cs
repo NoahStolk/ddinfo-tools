@@ -8,6 +8,7 @@ public static class AppBuilder
 {
 	public static async Task BuildAsync(string projectFilePath, string publishDirectoryName, ToolBuildType toolBuildType, ToolPublishMethod toolPublishMethod)
 	{
+		// TODO: Print output to console so we can inspect trim warnings from the build process.
 		await Cli.Wrap("dotnet")
 			.WithArguments(GetArguments(projectFilePath, publishDirectoryName, toolBuildType, toolPublishMethod))
 			.ExecuteAsync();

@@ -1,57 +1,108 @@
-using DevilDaggersInfo.App.Networking;
-using DevilDaggersInfo.App.Networking.TaskHandlers;
+using DevilDaggersInfo.App.Scenes.GameObjects;
+using DevilDaggersInfo.App.Ui.CustomLeaderboards;
+using DevilDaggersInfo.App.Ui.Main;
+using DevilDaggersInfo.App.Ui.ReplayEditor;
+using DevilDaggersInfo.App.Ui.SpawnsetEditor;
+using DevilDaggersInfo.App.User.Settings;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.App.Ui.Config;
 
 public static class ConfigLayout
 {
+	private static string? _error;
 	private static bool _contentInitialized;
-	private static bool? _isUpToDate;
+	private static string _installationDirectoryInput = string.Empty;
 
-	public static List<string> LogMessages { get; } = new();
-
-	public static void Initialize()
+	/// <summary>
+	/// Is called on launch, and when the user changes the installation directory.
+	/// Must be called on the main thread.
+	/// </summary>
+	public static void ValidateInstallation()
 	{
-		AsyncHandler.Run(
-			static newVersion =>
-			{
-				if (newVersion != null)
-				{
-					_isUpToDate = false;
-					Task.Run(async () => await UpdateLogic.RunAsync());
-				}
-				else
-				{
-					_isUpToDate = true;
-				}
-			},
-			() => FetchLatestVersion.HandleAsync(Root.Application.AppVersion, Root.PlatformSpecificValues.BuildType));
-	}
+		_installationDirectoryInput = UserSettings.Model.DevilDaggersInstallationDirectory;
 
-	public static void Update()
-	{
-		if (_contentInitialized || _isUpToDate != true)
+		try
+		{
+			ContentManager.Initialize();
+		}
+		catch (InvalidGameInstallationException ex)
+		{
+			_error = ex.Message;
+			return;
+		}
+
+		UiRenderer.Layout = LayoutType.Main;
+		_error = null;
+
+		if (_contentInitialized)
 			return;
 
-		// This must be called once when we know the app is up-to-date and can run.
-		// IMPORTANT: This method must run on the main thread.
-		InstallationWindow.ValidateInstallation();
+		// Initialize game resources.
+		Root.GameResources = GameResources.Create(Root.Gl);
+
+		// Initialize 3D rendering.
+		Player.InitializeRendering();
+		RaceDagger.InitializeRendering();
+		Tile.InitializeRendering();
+		Skull4.InitializeRendering();
+
+		// Initialize scenes.
+		MainLayout.InitializeScene();
+		SpawnsetEditor3DWindow.InitializeScene();
+		CustomLeaderboards3DWindow.InitializeScene();
+		ReplayEditor3DWindow.InitializeScene();
+
+		// Initialize file watchers.
+		SurvivalFileWatcher.Initialize();
+
 		_contentInitialized = true;
 	}
 
 	public static void Render()
 	{
-		ImGui.SetNextWindowSize(Constants.LayoutSize);
-		ImGui.Begin("Configuration", Constants.LayoutFlags);
+#pragma warning disable S1075
+#if LINUX
+		const string examplePath = "/home/{USERNAME}/.local/share/Steam/steamapps/common/devildaggers/";
+#elif WINDOWS
+		const string examplePath = """C:\Program Files (x86)\Steam\steamapps\common\devildaggers""";
+#endif
+#pragma warning restore S1075
 
-		if (!_isUpToDate.HasValue)
-			ImGui.Text("Checking for updates...");
-		else if (_isUpToDate.Value)
-			InstallationWindow.Render();
-		else
-			LogMessages.ForEach(ImGui.Text);
+		const string text = $"""
+			Please configure your Devil Daggers installation directory.
 
-		ImGui.End();
+			This is the directory containing the executable.
+
+			Example: {examplePath}
+			""";
+
+		ImGui.Text(text);
+		ImGui.Spacing();
+
+		ImGui.BeginChild("Input", new(1366, 128));
+		if (ImGui.Button("Select installation directory", new(224, 24)))
+		{
+			string? directory = NativeFileDialog.SelectDirectory();
+			if (directory != null)
+				_installationDirectoryInput = directory;
+		}
+
+		ImGui.InputText("##installationDirectoryInput", ref _installationDirectoryInput, 1024, ImGuiInputTextFlags.None);
+
+		if (!string.IsNullOrWhiteSpace(_error))
+			ImGui.TextColored(new(1, 0, 0, 1), _error);
+
+		ImGui.EndChild();
+
+		if (ImGui.Button("Save and continue", new(192, 96)))
+		{
+			UserSettings.Model = UserSettings.Model with
+			{
+				DevilDaggersInstallationDirectory = _installationDirectoryInput,
+			};
+
+			ValidateInstallation();
+		}
 	}
 }
