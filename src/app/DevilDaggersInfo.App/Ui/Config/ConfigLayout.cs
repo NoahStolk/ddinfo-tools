@@ -5,6 +5,7 @@ using DevilDaggersInfo.App.Ui.ReplayEditor;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor;
 using DevilDaggersInfo.App.User.Settings;
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.App.Ui.Config;
 
@@ -77,6 +78,11 @@ public static class ConfigLayout
 			Example: {examplePath}
 			""";
 
+		Vector2 center = ImGui.GetMainViewport().GetCenter();
+		ImGui.SetNextWindowPos(center, ImGuiCond.Always, new(0.5f, 0.5f));
+		ImGui.SetNextWindowSize(Constants.LayoutSize);
+		ImGui.Begin("Configuration", Constants.LayoutFlags);
+
 		ImGui.Text(text);
 		ImGui.Spacing();
 
@@ -104,5 +110,7 @@ public static class ConfigLayout
 
 			ValidateInstallation();
 		}
+
+		ImGui.End();
 	}
 }
