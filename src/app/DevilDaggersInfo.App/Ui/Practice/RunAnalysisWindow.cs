@@ -3,7 +3,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.App.Ui.Practice;
 
-public static class SplitsWindow
+public static class RunAnalysisWindow
 {
 	private static float _recordingTimer;
 
@@ -59,7 +59,7 @@ public static class SplitsWindow
 		}
 
 		ImGui.SetNextWindowSize(new(512, 320), ImGuiCond.Always);
-		ImGui.Begin("Splits", ImGuiWindowFlags.NoResize);
+		ImGui.Begin("Run Analysis", ImGuiWindowFlags.NoResize);
 
 		if (ImGui.BeginTable("LeaderboardTable", 4, ImGuiTableFlags.None))
 		{
@@ -73,7 +73,7 @@ public static class SplitsWindow
 			{
 				KeyValuePair<int, int> splitEntry = _splitData.ElementAt(i);
 				int? homing = relevantHomingValues[i];
-				int previousHoming = i > 0 ? relevantHomingValues[i - 1] ?? 0 : 0;
+				int? previousHoming = i > 0 ? relevantHomingValues[i - 1] : null;
 
 				ImGui.BeginDisabled(!homing.HasValue);
 
@@ -89,9 +89,9 @@ public static class SplitsWindow
 				ImGui.Text(homing.HasValue ? homing.Value.ToString() : "N/A");
 
 				ImGui.TableNextColumn();
-				if (homing.HasValue)
+				if (homing.HasValue && previousHoming.HasValue)
 				{
-					int delta = homing.Value - previousHoming;
+					int delta = homing.Value - previousHoming.Value;
 					Color color = delta switch
 					{
 						< 0 => Color.Red,
