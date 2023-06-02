@@ -283,40 +283,40 @@ public static class RecordingLogic
 		List<int> gemsEaten = new();
 		List<int> gemsTotal = new();
 		List<int> homingEaten = new();
-		List<ushort> skull1SAlive = new();
-		List<ushort> skull2SAlive = new();
-		List<ushort> skull3SAlive = new();
-		List<ushort> spiderlingsAlive = new();
-		List<ushort> skull4SAlive = new();
-		List<ushort> squid1SAlive = new();
-		List<ushort> squid2SAlive = new();
-		List<ushort> squid3SAlive = new();
-		List<ushort> centipedesAlive = new();
-		List<ushort> gigapedesAlive = new();
-		List<ushort> spider1SAlive = new();
-		List<ushort> spider2SAlive = new();
-		List<ushort> leviathansAlive = new();
-		List<ushort> orbsAlive = new();
-		List<ushort> thornsAlive = new();
-		List<ushort> ghostpedesAlive = new();
-		List<ushort> spiderEggsAlive = new();
-		List<ushort> skull1SKilled = new();
-		List<ushort> skull2SKilled = new();
-		List<ushort> skull3SKilled = new();
-		List<ushort> spiderlingsKilled = new();
-		List<ushort> skull4SKilled = new();
-		List<ushort> squid1SKilled = new();
-		List<ushort> squid2SKilled = new();
-		List<ushort> squid3SKilled = new();
-		List<ushort> centipedesKilled = new();
-		List<ushort> gigapedesKilled = new();
-		List<ushort> spider1SKilled = new();
-		List<ushort> spider2SKilled = new();
-		List<ushort> leviathansKilled = new();
-		List<ushort> orbsKilled = new();
-		List<ushort> thornsKilled = new();
-		List<ushort> ghostpedesKilled = new();
-		List<ushort> spiderEggsKilled = new();
+		List<ushort> skull1AliveCount = new();
+		List<ushort> skull2AliveCount = new();
+		List<ushort> skull3AliveCount = new();
+		List<ushort> spiderlingAliveCount = new();
+		List<ushort> skull4AliveCount = new();
+		List<ushort> squid1AliveCount = new();
+		List<ushort> squid2AliveCount = new();
+		List<ushort> squid3AliveCount = new();
+		List<ushort> centipedeAliveCount = new();
+		List<ushort> gigapedeAliveCount = new();
+		List<ushort> spider1AliveCount = new();
+		List<ushort> spider2AliveCount = new();
+		List<ushort> leviathanAliveCount = new();
+		List<ushort> orbAliveCount = new();
+		List<ushort> thornAliveCount = new();
+		List<ushort> ghostpedeAliveCount = new();
+		List<ushort> spiderEggAliveCount = new();
+		List<ushort> skull1KillCount = new();
+		List<ushort> skull2KillCount = new();
+		List<ushort> skull3KillCount = new();
+		List<ushort> spiderlingKillCount = new();
+		List<ushort> skull4KillCount = new();
+		List<ushort> squid1KillCount = new();
+		List<ushort> squid2KillCount = new();
+		List<ushort> squid3KillCount = new();
+		List<ushort> centipedeKillCount = new();
+		List<ushort> gigapedeKillCount = new();
+		List<ushort> spider1KillCount = new();
+		List<ushort> spider2KillCount = new();
+		List<ushort> leviathanKillCount = new();
+		List<ushort> orbKillCount = new();
+		List<ushort> thornKillCount = new();
+		List<ushort> ghostpedeKillCount = new();
+		List<ushort> spiderEggKillCount = new();
 
 		using MemoryStream ms = new(statsBuffer);
 		using BinaryReader br = new(ms);
@@ -334,41 +334,41 @@ public static class RecordingLogic
 			gemsTotal.Add(br.ReadInt32());
 			homingEaten.Add(br.ReadInt32());
 
-			skull1SAlive.Add(br.ReadUInt16());
-			skull2SAlive.Add(br.ReadUInt16());
-			skull3SAlive.Add(br.ReadUInt16());
-			spiderlingsAlive.Add(br.ReadUInt16());
-			skull4SAlive.Add(br.ReadUInt16());
-			squid1SAlive.Add(br.ReadUInt16());
-			squid2SAlive.Add(br.ReadUInt16());
-			squid3SAlive.Add(br.ReadUInt16());
-			centipedesAlive.Add(br.ReadUInt16());
-			gigapedesAlive.Add(br.ReadUInt16());
-			spider1SAlive.Add(br.ReadUInt16());
-			spider2SAlive.Add(br.ReadUInt16());
-			leviathansAlive.Add(br.ReadUInt16());
-			orbsAlive.Add(br.ReadUInt16());
-			thornsAlive.Add(br.ReadUInt16());
-			ghostpedesAlive.Add(br.ReadUInt16());
-			spiderEggsAlive.Add(br.ReadUInt16());
+			skull1AliveCount.Add(br.ReadUInt16());
+			skull2AliveCount.Add(br.ReadUInt16());
+			skull3AliveCount.Add(br.ReadUInt16());
+			spiderlingAliveCount.Add(br.ReadUInt16());
+			skull4AliveCount.Add(br.ReadUInt16());
+			squid1AliveCount.Add(br.ReadUInt16());
+			squid2AliveCount.Add(br.ReadUInt16());
+			squid3AliveCount.Add(br.ReadUInt16());
+			centipedeAliveCount.Add(br.ReadUInt16());
+			gigapedeAliveCount.Add(br.ReadUInt16());
+			spider1AliveCount.Add(br.ReadUInt16());
+			spider2AliveCount.Add(br.ReadUInt16());
+			leviathanAliveCount.Add(br.ReadUInt16());
+			orbAliveCount.Add(br.ReadUInt16());
+			thornAliveCount.Add(br.ReadUInt16());
+			ghostpedeAliveCount.Add(br.ReadUInt16());
+			spiderEggAliveCount.Add(br.ReadUInt16());
 
-			skull1SKilled.Add(br.ReadUInt16());
-			skull2SKilled.Add(br.ReadUInt16());
-			skull3SKilled.Add(br.ReadUInt16());
-			spiderlingsKilled.Add(br.ReadUInt16());
-			skull4SKilled.Add(br.ReadUInt16());
-			squid1SKilled.Add(br.ReadUInt16());
-			squid2SKilled.Add(br.ReadUInt16());
-			squid3SKilled.Add(br.ReadUInt16());
-			centipedesKilled.Add(br.ReadUInt16());
-			gigapedesKilled.Add(br.ReadUInt16());
-			spider1SKilled.Add(br.ReadUInt16());
-			spider2SKilled.Add(br.ReadUInt16());
-			leviathansKilled.Add(br.ReadUInt16());
-			orbsKilled.Add(br.ReadUInt16());
-			thornsKilled.Add(br.ReadUInt16());
-			ghostpedesKilled.Add(br.ReadUInt16());
-			spiderEggsKilled.Add(br.ReadUInt16());
+			skull1KillCount.Add(br.ReadUInt16());
+			skull2KillCount.Add(br.ReadUInt16());
+			skull3KillCount.Add(br.ReadUInt16());
+			spiderlingKillCount.Add(br.ReadUInt16());
+			skull4KillCount.Add(br.ReadUInt16());
+			squid1KillCount.Add(br.ReadUInt16());
+			squid2KillCount.Add(br.ReadUInt16());
+			squid3KillCount.Add(br.ReadUInt16());
+			centipedeKillCount.Add(br.ReadUInt16());
+			gigapedeKillCount.Add(br.ReadUInt16());
+			spider1KillCount.Add(br.ReadUInt16());
+			spider2KillCount.Add(br.ReadUInt16());
+			leviathanKillCount.Add(br.ReadUInt16());
+			orbKillCount.Add(br.ReadUInt16());
+			thornKillCount.Add(br.ReadUInt16());
+			ghostpedeKillCount.Add(br.ReadUInt16());
+			spiderEggKillCount.Add(br.ReadUInt16());
 		}
 
 		return new()
@@ -383,40 +383,40 @@ public static class RecordingLogic
 			GemsEaten = gemsEaten,
 			GemsTotal = gemsTotal,
 			HomingEaten = homingEaten,
-			Skull1sAlive = skull1SAlive,
-			Skull2sAlive = skull2SAlive,
-			Skull3sAlive = skull3SAlive,
-			SpiderlingsAlive = spiderlingsAlive,
-			Skull4sAlive = skull4SAlive,
-			Squid1sAlive = squid1SAlive,
-			Squid2sAlive = squid2SAlive,
-			Squid3sAlive = squid3SAlive,
-			CentipedesAlive = centipedesAlive,
-			GigapedesAlive = gigapedesAlive,
-			Spider1sAlive = spider1SAlive,
-			Spider2sAlive = spider2SAlive,
-			LeviathansAlive = leviathansAlive,
-			OrbsAlive = orbsAlive,
-			ThornsAlive = thornsAlive,
-			GhostpedesAlive = ghostpedesAlive,
-			SpiderEggsAlive = spiderEggsAlive,
-			Skull1sKilled = skull1SKilled,
-			Skull2sKilled = skull2SKilled,
-			Skull3sKilled = skull3SKilled,
-			SpiderlingsKilled = spiderlingsKilled,
-			Skull4sKilled = skull4SKilled,
-			Squid1sKilled = squid1SKilled,
-			Squid2sKilled = squid2SKilled,
-			Squid3sKilled = squid3SKilled,
-			CentipedesKilled = centipedesKilled,
-			GigapedesKilled = gigapedesKilled,
-			Spider1sKilled = spider1SKilled,
-			Spider2sKilled = spider2SKilled,
-			LeviathansKilled = leviathansKilled,
-			OrbsKilled = orbsKilled,
-			ThornsKilled = thornsKilled,
-			GhostpedesKilled = ghostpedesKilled,
-			SpiderEggsKilled = spiderEggsKilled,
+			Skull1sAlive = skull1AliveCount,
+			Skull2sAlive = skull2AliveCount,
+			Skull3sAlive = skull3AliveCount,
+			SpiderlingsAlive = spiderlingAliveCount,
+			Skull4sAlive = skull4AliveCount,
+			Squid1sAlive = squid1AliveCount,
+			Squid2sAlive = squid2AliveCount,
+			Squid3sAlive = squid3AliveCount,
+			CentipedesAlive = centipedeAliveCount,
+			GigapedesAlive = gigapedeAliveCount,
+			Spider1sAlive = spider1AliveCount,
+			Spider2sAlive = spider2AliveCount,
+			LeviathansAlive = leviathanAliveCount,
+			OrbsAlive = orbAliveCount,
+			ThornsAlive = thornAliveCount,
+			GhostpedesAlive = ghostpedeAliveCount,
+			SpiderEggsAlive = spiderEggAliveCount,
+			Skull1sKilled = skull1KillCount,
+			Skull2sKilled = skull2KillCount,
+			Skull3sKilled = skull3KillCount,
+			SpiderlingsKilled = spiderlingKillCount,
+			Skull4sKilled = skull4KillCount,
+			Squid1sKilled = squid1KillCount,
+			Squid2sKilled = squid2KillCount,
+			Squid3sKilled = squid3KillCount,
+			CentipedesKilled = centipedeKillCount,
+			GigapedesKilled = gigapedeKillCount,
+			Spider1sKilled = spider1KillCount,
+			Spider2sKilled = spider2KillCount,
+			LeviathansKilled = leviathanKillCount,
+			OrbsKilled = orbKillCount,
+			ThornsKilled = thornKillCount,
+			GhostpedesKilled = ghostpedeKillCount,
+			SpiderEggsKilled = spiderEggKillCount,
 		};
 	}
 }
