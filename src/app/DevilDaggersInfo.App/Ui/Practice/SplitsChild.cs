@@ -22,31 +22,31 @@ public static class SplitsChild
 
 	public static void Render()
 	{
-		if (ImGui.BeginChild("Splits", new(512, 192)))
+		if (ImGui.BeginChild("Splits", new(160, 192)))
 		{
 			for (int i = 0; i < _splitData.Count; i++)
 			{
-				KeyValuePair<int, int> splitEntry = _splitData.ElementAt(i);
+				KeyValuePair<int, int> splitEntry = _splitData.ElementAt(i); // TODO: This allocates heap memory.
 				int actualIndex = Math.Max(0, splitEntry.Value - 350); // TEMP
 				bool hasValue = RunAnalysisWindow.StatsData.Statistics.Count > actualIndex;
 				_relevantHomingValues[i] = hasValue ? RunAnalysisWindow.StatsData.Statistics[actualIndex].HomingStored : null;
 			}
 
-			if (ImGui.BeginTable("LeaderboardTable", 4, ImGuiTableFlags.None))
+			if (ImGui.BeginTable("LeaderboardTable", 3, ImGuiTableFlags.None))
 			{
-				ImGui.TableSetupColumn("Name");
-				ImGui.TableSetupColumn("Seconds");
-				ImGui.TableSetupColumn("Homing");
-				ImGui.TableSetupColumn("Split");
+				ImGui.TableSetupColumn("Split", ImGuiTableColumnFlags.None, 24);
+				ImGui.TableSetupColumn("Homing", ImGuiTableColumnFlags.None, 32);
+				ImGui.TableSetupColumn("Delta", ImGuiTableColumnFlags.None, 32);
 				ImGui.TableHeadersRow();
 
 				for (int i = 0; i < _splitData.Count; i++)
 				{
-					KeyValuePair<int, int> splitEntry = _splitData.ElementAt(i);
+					KeyValuePair<int, int> splitEntry = _splitData.ElementAt(i); // TODO: This allocates heap memory.
 					int? homing = _relevantHomingValues[i];
 					int? previousHoming = i > 0 ? _relevantHomingValues[i - 1] : null;
 
-					ImGui.BeginDisabled(!homing.HasValue);
+					if (!homing.HasValue || !previousHoming.HasValue)
+						continue;
 
 					ImGui.TableNextRow();
 
@@ -54,29 +54,17 @@ public static class SplitsChild
 					ImGui.Text(splitEntry.Key.ToString());
 
 					ImGui.TableNextColumn();
-					ImGui.Text(splitEntry.Value.ToString());
+					ImGui.Text(homing.Value.ToString());
 
 					ImGui.TableNextColumn();
-					ImGui.Text(homing.HasValue ? homing.Value.ToString() : "N/A");
-
-					ImGui.TableNextColumn();
-					if (homing.HasValue && previousHoming.HasValue)
+					int delta = homing.Value - previousHoming.Value;
+					Color color = delta switch
 					{
-						int delta = homing.Value - previousHoming.Value;
-						Color color = delta switch
-						{
-							< 0 => Color.Red,
-							> 0 => Color.Green,
-							_ => Color.White,
-						};
-						ImGui.TextColored(color, delta.ToString("+0;-0;+0"));
-					}
-					else
-					{
-						ImGui.Text("N/A");
-					}
-
-					ImGui.EndDisabled();
+						< 0 => Color.Red,
+						> 0 => Color.Green,
+						_ => Color.White,
+					};
+					ImGui.TextColored(color, delta.ToString("+0;-0;+0"));
 				}
 
 				ImGui.EndTable();

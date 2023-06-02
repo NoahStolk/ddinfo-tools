@@ -1,4 +1,5 @@
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.App.Ui.Practice;
 
@@ -24,13 +25,15 @@ public static class RunAnalysisWindow
 
 	public static void Render()
 	{
-		ImGui.SetNextWindowSize(new(512, 512), ImGuiCond.Always);
-		if (ImGui.Begin("Run Analysis", ImGuiWindowFlags.NoResize))
+		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, new Vector2(512, 512));
+		if (ImGui.Begin("Run Analysis"))
 		{
 			SplitsChild.Render();
 			GemCollectionChild.Render();
 
 			ImGui.End();
 		}
+
+		ImGui.PopStyleVar();
 	}
 }

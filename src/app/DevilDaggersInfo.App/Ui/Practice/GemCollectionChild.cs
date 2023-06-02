@@ -38,7 +38,7 @@ public static class GemCollectionChild
 	public static unsafe void Render()
 	{
 		const float height = 120;
-		if (ImGui.BeginChild("Gem Collection", new(496, 256)))
+		if (ImGui.BeginChild("Gem Collection"))
 		{
 			fixed (float* f = _gemsCollectedDelta.Select(i => (float)i).ToArray())
 				ImGui.PlotLines("Gems collected", ref f[0], _gemsCollectedDelta.Count, 0, null, 0, _maxGemsCollectedDelta, new(0, height));
