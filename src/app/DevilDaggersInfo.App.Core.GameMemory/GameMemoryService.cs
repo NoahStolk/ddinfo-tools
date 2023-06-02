@@ -6,8 +6,9 @@ namespace DevilDaggersInfo.App.Core.GameMemory;
 
 public class GameMemoryService
 {
+	public const int StatsBufferSize = 112;
+
 	private const int _bufferSize = 319;
-	private const int _statesBufferSize = 112;
 
 	private readonly byte[] _buffer = new byte[_bufferSize];
 
@@ -55,12 +56,17 @@ public class GameMemoryService
 
 	public byte[] GetStatsBuffer()
 	{
+		byte[] buffer = new byte[StatsBufferSize * MainBlock.StatsCount];
+		GetStatsBuffer(buffer);
+		return buffer;
+	}
+
+	public void GetStatsBuffer(byte[] buffer)
+	{
 		if (_process == null)
 			throw new InvalidOperationException("Cannot get stats buffer while the process is unavailable.");
 
-		byte[] buffer = new byte[_statesBufferSize * MainBlock.StatsCount];
 		_nativeMemoryService.ReadMemory(_process, MainBlock.StatsBase, buffer, 0, buffer.Length);
-		return buffer;
 	}
 
 	public bool IsReplayValid()
