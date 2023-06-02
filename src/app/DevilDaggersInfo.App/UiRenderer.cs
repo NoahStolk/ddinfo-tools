@@ -60,6 +60,8 @@ public static class UiRenderer
 				break;
 			case LayoutType.Practice:
 				PracticeWindow.Render();
+				SplitsWindow.Update(delta);
+				SplitsWindow.Render();
 				break;
 		}
 

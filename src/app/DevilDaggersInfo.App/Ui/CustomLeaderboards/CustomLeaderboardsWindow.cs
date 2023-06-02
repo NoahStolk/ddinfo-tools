@@ -6,18 +6,18 @@ namespace DevilDaggersInfo.App.Ui.CustomLeaderboards;
 
 public static class CustomLeaderboardsWindow
 {
-	private static int _recordingInterval;
+	private static float _recordingTimer;
 
 	public static void Update(float delta)
 	{
 		CustomLeaderboards3DWindow.Update(delta);
 		RecordingChild.Update(delta);
 
-		_recordingInterval++;
-		if (_recordingInterval < 5)
+		_recordingTimer += delta;
+		if (_recordingTimer < 0.12f)
 			return;
 
-		_recordingInterval = 0;
+		_recordingTimer = 0;
 		if (!GameMemoryServiceWrapper.Scan())
 			return;
 
