@@ -13,7 +13,7 @@ public static class StateChild
 			ImGui.TableNextColumn();
 			ImGui.Text("Memory");
 			ImGui.TableNextColumn();
-			ImGui.Text(RecordingLogic.Marker.HasValue ? $"0x{RecordingLogic.Marker.Value:X}" : "Waiting...");
+			ImGui.Text(GameMemoryServiceWrapper.Marker.HasValue ? $"0x{GameMemoryServiceWrapper.Marker.Value:X}" : "Waiting...");
 			ImGui.TableNextRow();
 
 			ImGui.TableNextColumn();

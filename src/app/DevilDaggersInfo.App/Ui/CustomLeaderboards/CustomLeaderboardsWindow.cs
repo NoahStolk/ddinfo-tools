@@ -18,7 +18,7 @@ public static class CustomLeaderboardsWindow
 			return;
 
 		_recordingInterval = 0;
-		if (!RecordingLogic.Scan())
+		if (!GameMemoryServiceWrapper.Scan())
 			return;
 
 		RecordingLogic.Handle();
