@@ -4,7 +4,7 @@ DevilDaggersInfo consists of a website, web server, and various tools created sp
 
 The purpose of the project is to make it easier for players to play and understand the game, and to provide a platform for the community to create and share custom spawnsets (levels), mods, participate in custom leaderboards, and a lot more.
 
-While the project provides many ways to practice and modify the game, it does **not** encourage cheating. You are also asked to not redistribute the game assets, and only use them for modding purposes.
+While the project provides many ways to practice and modify the game, it does **not** allow you to cheat, or encourage cheating at all. You are also asked to not redistribute the game assets, and only use them for modding purposes.
 
 Most of these features have been discussed with the community and the developer of Devil Daggers (Sorath), some of which have been done in collaboration.
 
@@ -84,11 +84,14 @@ The new tools are currently in development. The new tools app is a complete rewr
 ![Spawnset editor](images/spawnset-editor-1.png)
 ![Spawnset editor](images/spawnset-editor-2.png)
 
+#### Practice mode
+
+![Practice](images/practice.png)
+
 These features are planned or in development:
 
 - Replay previewer including input visualization
 - Renewed spawnset manager
-- Dedicated and simplified practice functionality
 - Renewed asset editor for mods
 - Renewed mod manager
 - Replay previewer (and possibly editor)
