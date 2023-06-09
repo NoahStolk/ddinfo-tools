@@ -1,9 +1,10 @@
 using DevilDaggersInfo.App.Networking;
 using DevilDaggersInfo.App.Networking.TaskHandlers;
 using DevilDaggersInfo.App.User.Settings;
+using DevilDaggersInfo.Core.Spawnset;
 using System.Security.Cryptography;
 
-namespace DevilDaggersInfo.App.Ui.CustomLeaderboards;
+namespace DevilDaggersInfo.App;
 
 public static class SurvivalFileWatcher
 {
@@ -11,7 +12,13 @@ public static class SurvivalFileWatcher
 	private static FileSystemWatcher? _survivalFileWatcher;
 #pragma warning restore S1450
 
+	public static bool Exists { get; private set; }
+
 	public static string? SpawnsetName { get; private set; }
+
+	public static HandLevel HandLevel { get; private set; } = HandLevel.Level1;
+	public static int AdditionalGems { get; private set; }
+	public static float TimerStart { get; private set; }
 
 	public static void Initialize()
 	{
@@ -33,7 +40,9 @@ public static class SurvivalFileWatcher
 
 		void UpdateActiveSpawnsetBasedOnHash()
 		{
-			if (!File.Exists(UserSettings.ModsSurvivalPath))
+			Exists = File.Exists(UserSettings.ModsSurvivalPath);
+
+			if (!Exists)
 			{
 				SpawnsetName = null;
 			}
@@ -44,6 +53,13 @@ public static class SurvivalFileWatcher
 					byte[] fileContents = File.ReadAllBytes(UserSettings.ModsSurvivalPath);
 					byte[] fileHash = MD5.HashData(fileContents);
 					AsyncHandler.Run(s => SpawnsetName = s?.Name, () => FetchSpawnsetByHash.HandleAsync(fileHash));
+
+					if (SpawnsetBinary.TryParse(fileContents, out SpawnsetBinary? spawnsetBinary))
+					{
+						HandLevel = spawnsetBinary.HandLevel;
+						AdditionalGems = spawnsetBinary.AdditionalGems;
+						TimerStart = spawnsetBinary.TimerStart;
+					}
 				}
 				catch (Exception ex)
 				{
