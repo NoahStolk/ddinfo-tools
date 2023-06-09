@@ -103,7 +103,7 @@ public static class PracticeWindow
 		ImGui.EndChild();
 		ImGui.EndChild();
 
-		ImGui.BeginChild("Input values", new(296, 192));
+		ImGui.BeginChild("Input values", new(400, 192), true);
 
 		ImGui.Spacing();
 		ImGui.Image((IntPtr)Root.InternalResources.IconHandTexture.Handle, new(16), Vector2.Zero, Vector2.One, _state.HandLevel.GetColor());
@@ -151,6 +151,33 @@ public static class PracticeWindow
 				};
 			}
 		}
+
+		ImGui.EndChild();
+
+		ImGui.SameLine();
+		ImGui.BeginChild("Current spawnset", new(400, 192), true);
+
+		ImGui.Text("Current spawnset");
+
+		ImGui.BeginChild("Current spawnset description", new(400, 64));
+		if (SurvivalFileWatcher.Exists)
+		{
+			ImGui.Text(SurvivalFileWatcher.HandLevel.ToString());
+			ImGui.Text(SurvivalFileWatcher.AdditionalGems.ToString());
+			ImGui.Text(SurvivalFileWatcher.TimerStart.ToString(StringFormats.TimeFormat));
+		}
+		else
+		{
+			ImGui.Text("<No spawnset enabled>");
+		}
+
+		ImGui.EndChild();
+
+		ImGui.BeginDisabled(!SurvivalFileWatcher.Exists);
+		if (ImGui.Button("Delete spawnset", new(0, 30)))
+			DeleteModdedSpawnset();
+
+		ImGui.EndDisabled();
 
 		ImGui.EndChild();
 
@@ -305,6 +332,12 @@ public static class PracticeWindow
 			ShrinkStart = shrinkStart,
 		};
 		File.WriteAllBytes(UserSettings.ModsSurvivalPath, generatedSpawnset.ToBytes());
+	}
+
+	private static void DeleteModdedSpawnset()
+	{
+		if (File.Exists(UserSettings.ModsSurvivalPath))
+			File.Delete(UserSettings.ModsSurvivalPath);
 	}
 
 	private struct State
