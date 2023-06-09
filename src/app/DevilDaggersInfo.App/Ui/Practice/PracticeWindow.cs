@@ -159,7 +159,7 @@ public static class PracticeWindow
 
 		ImGui.Text("Current spawnset");
 
-		ImGui.BeginChild("Current spawnset description", new(400, 64));
+		ImGui.BeginChild("Current practice values", new(400, 64));
 		if (SurvivalFileWatcher.Exists)
 		{
 			ImGui.Text(SurvivalFileWatcher.HandLevel.ToString());
@@ -174,7 +174,7 @@ public static class PracticeWindow
 		ImGui.EndChild();
 
 		ImGui.BeginDisabled(!SurvivalFileWatcher.Exists);
-		if (ImGui.Button("Delete spawnset", new(0, 30)))
+		if (ImGui.Button("Delete spawnset (restore default)", new(0, 30)))
 			DeleteModdedSpawnset();
 
 		ImGui.EndDisabled();

@@ -60,8 +60,10 @@ public static class UiRenderer
 				break;
 			case LayoutType.Practice:
 				PracticeWindow.Render();
-				RunAnalysisWindow.Update(delta);
-				RunAnalysisWindow.Render();
+
+				// TODO: Fix hardcoded 350 in SplitsChild. Fix graphs in GemCollectionChild.
+				// RunAnalysisWindow.Update(delta);
+				// RunAnalysisWindow.Render();
 				break;
 		}
 

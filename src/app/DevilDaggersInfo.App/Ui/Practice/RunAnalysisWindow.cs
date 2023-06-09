@@ -29,7 +29,7 @@ public static class RunAnalysisWindow
 		if (ImGui.Begin("Run Analysis"))
 		{
 			SplitsChild.Render();
-			// GemCollectionChild.Render();
+			GemCollectionChild.Render();
 
 			ImGui.End();
 		}
