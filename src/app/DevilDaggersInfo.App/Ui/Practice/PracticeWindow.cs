@@ -41,7 +41,15 @@ public static class PracticeWindow
 		const int endLoopTemplateWaveCount = 33;
 		SpawnsView spawnsView = new(ContentManager.Content.DefaultSpawnset, GameVersion.V3_2, endLoopTemplateWaveCount);
 		for (int i = 0; i < endLoopTemplateWaveCount; i++)
-			_endLoopTimerStarts.Add((float)spawnsView.Waves[i][0].Seconds);
+		{
+			float timerStart;
+			if (i == 0)
+				timerStart = spawnsView.Waves[i][0].Seconds;
+			else
+				timerStart = spawnsView.Waves[i - 1][^1].Seconds + 0.1f; // Make sure we don't accidentally include the last enemy of the previous wave.
+
+			_endLoopTimerStarts.Add(timerStart);
+		}
 	}
 
 	public static void Render()
