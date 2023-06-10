@@ -191,64 +191,56 @@ public static class PracticeWindow
 	{
 		(byte backgroundAlpha, byte textAlpha) = GetAlpha(template.IsEqual(_state));
 
-		ImGui.PushStyleColor(ImGuiCol.ChildBg, template.Color with { A = backgroundAlpha });
-		if (ImGui.BeginChild(template.Name, new(_templateWidth, 48), true))
+		string timerText = template.TimerStart.ToString(StringFormats.TimeFormat);
+		(string gemsOrHomingText, Color gemColor) = template.HandLevel switch
 		{
-			bool hover = ImGui.IsWindowHovered();
-			if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+			HandLevel.Level3 => ($"{template.AdditionalGems} homing", HandLevel.Level3.GetColor()),
+			HandLevel.Level4 => ($"{template.AdditionalGems} homing", HandLevel.Level4.GetColor()),
+			_ => ($"{template.AdditionalGems} gems", Color.Red),
+		};
+
+		ButtonWrapper.Render(
+			template.Name,
+			new(_templateWidth, 48),
+			template.Color with { A = backgroundAlpha },
+			template.Color with { A = 31 },
+			() =>
 			{
 				_state = new(template.HandLevel, template.AdditionalGems, template.TimerStart);
 				Apply();
-			}
-
-			string timerText = template.TimerStart.ToString(StringFormats.TimeFormat);
-			(string gemsOrHomingText, Color gemColor) = template.HandLevel switch
-			{
-				HandLevel.Level3 => ($"{template.AdditionalGems} homing", HandLevel.Level3.GetColor()),
-				HandLevel.Level4 => ($"{template.AdditionalGems} homing", HandLevel.Level4.GetColor()),
-				_ => ($"{template.AdditionalGems} gems", Color.Red),
-			};
-			float windowWidth = ImGui.GetWindowWidth();
-
-			ImGui.TextColored(template.Color with { A = textAlpha }, template.Name);
-			ImGui.SameLine(windowWidth - ImGui.CalcTextSize(timerText).X - 8);
-			ImGui.TextColored(Color.White with { A = textAlpha }, timerText);
-
-			ImGui.TextColored(template.HandLevel.GetColor() with { A = textAlpha }, template.HandLevel.ToString());
-			ImGui.SameLine(windowWidth - ImGui.CalcTextSize(gemsOrHomingText).X - 8);
-			ImGui.TextColored(gemColor with { A = textAlpha }, gemsOrHomingText);
-		}
-
-		ImGui.EndChild();
-		ImGui.PopStyleColor();
+			},
+			template.Color with { A = textAlpha },
+			template.Name,
+			Color.White with { A = textAlpha },
+			timerText,
+			template.HandLevel.GetColor() with { A = textAlpha },
+			template.HandLevel.ToString(),
+			gemColor with { A = textAlpha },
+			gemsOrHomingText);
 	}
 
 	private static void RenderEndLoopTemplate(int waveIndex, float timerStart)
 	{
 		(byte backgroundAlpha, byte textAlpha) = GetAlpha(IsEqual(_state, timerStart));
 
+		string timerText = timerStart.ToString(StringFormats.TimeFormat);
 		string name = $"Wave {waveIndex + 1}";
 		Color color = waveIndex % 3 == 2 ? EnemiesV3_2.Ghostpede.Color.ToEngineColor() : EnemiesV3_2.Gigapede.Color.ToEngineColor();
-		ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = backgroundAlpha });
-		if (ImGui.BeginChild(name, new(_templateWidth, 30), true))
-		{
-			bool hover = ImGui.IsWindowHovered();
-			if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+
+		ButtonWrapper.Render(
+			name,
+			new(_templateWidth, 30),
+			color with { A = backgroundAlpha },
+			color with { A = 31 },
+			() =>
 			{
 				_state = new(HandLevel.Level4, 0, timerStart);
 				Apply();
-			}
-
-			string timerText = timerStart.ToString(StringFormats.TimeFormat);
-			float windowWidth = ImGui.GetWindowWidth();
-
-			ImGui.TextColored(color with { A = textAlpha }, name);
-			ImGui.SameLine(windowWidth - ImGui.CalcTextSize(timerText).X - 8);
-			ImGui.TextColored(Color.White with { A = textAlpha }, timerText);
-		}
-
-		ImGui.EndChild();
-		ImGui.PopStyleColor();
+			},
+			color with { A = textAlpha },
+			name,
+			Color.White with { A = textAlpha },
+			timerText);
 
 		static bool IsEqual(State state, float timerStart)
 		{
@@ -262,37 +254,32 @@ public static class PracticeWindow
 		string uniqueName = $"{customTemplate.HandLevel}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart.ToString(StringFormats.TimeFormat)}";
 		(byte backgroundAlpha, byte textAlpha) = GetAlpha(_state.IsEqual(customTemplate));
 
-		ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = backgroundAlpha });
-		if (ImGui.BeginChild(uniqueName, new(_templateWidth - 56, 48), true))
+		string timerText = customTemplate.TimerStart.ToString(StringFormats.TimeFormat);
+		(string gemsOrHomingText, Color gemColor) = customTemplate.HandLevel switch
 		{
-			bool hover = ImGui.IsWindowHovered();
-			if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+			HandLevel.Level3 => ($"{customTemplate.AdditionalGems} homing", HandLevel.Level3.GetColor()),
+			HandLevel.Level4 => ($"{customTemplate.AdditionalGems} homing", HandLevel.Level4.GetColor()),
+			_ => ($"{customTemplate.AdditionalGems} gems", Color.Red),
+		};
+
+		ButtonWrapper.Render(
+			uniqueName,
+			new(_templateWidth - 56, 48),
+			color with { A = backgroundAlpha },
+			color with { A = 31 },
+			() =>
 			{
 				_state = new(customTemplate.HandLevel, customTemplate.AdditionalGems, customTemplate.TimerStart);
 				Apply();
-			}
-
-			string timerText = customTemplate.TimerStart.ToString(StringFormats.TimeFormat);
-			(string gemsOrHomingText, Color gemColor) = customTemplate.HandLevel switch
-			{
-				HandLevel.Level3 => ($"{customTemplate.AdditionalGems} homing", HandLevel.Level3.GetColor()),
-				HandLevel.Level4 => ($"{customTemplate.AdditionalGems} homing", HandLevel.Level4.GetColor()),
-				_ => ($"{customTemplate.AdditionalGems} gems", Color.Red),
-			};
-			float windowWidth = ImGui.GetWindowWidth();
-
-			ImGui.TextColored(color with { A = textAlpha }, "Custom template");
-			ImGui.SameLine(windowWidth - ImGui.CalcTextSize(timerText).X - 8);
-			ImGui.TextColored(Color.White with { A = textAlpha }, timerText);
-
-			ImGui.TextColored(customTemplate.HandLevel.GetColor() with { A = textAlpha }, customTemplate.HandLevel.ToString());
-			ImGui.SameLine(windowWidth - ImGui.CalcTextSize(gemsOrHomingText).X - 8);
-			ImGui.TextColored(gemColor with { A = textAlpha }, gemsOrHomingText);
-		}
-
-		ImGui.EndChild();
-
-		ImGui.PopStyleColor();
+			},
+			color with { A = textAlpha },
+			"Custom template",
+			Color.White with { A = textAlpha },
+			timerText,
+			customTemplate.HandLevel.GetColor() with { A = textAlpha },
+			customTemplate.HandLevel.ToString(),
+			gemColor with { A = textAlpha },
+			gemsOrHomingText);
 
 		ImGui.SameLine();
 		ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 159 });
