@@ -1,5 +1,6 @@
 using DevilDaggersInfo.App.Core.GameMemory;
 using DevilDaggersInfo.App.Platforms;
+using ImGuiNET;
 using Serilog;
 using Serilog.Core;
 #if WINDOWS
@@ -23,6 +24,7 @@ public static class Root
 	private static GL? _gl;
 	private static IWindow? _window;
 	private static Application? _application;
+	private static ImFontPtr _fontGoetheBold;
 
 	/// <summary>
 	/// Holds the internal resources, such as shaders and icons.
@@ -87,6 +89,18 @@ public static class Root
 				throw _alreadyInitializedException;
 
 			_application = value;
+		}
+	}
+
+	public static unsafe ImFontPtr FontGoetheBold
+	{
+		get => _fontGoetheBold.NativePtr == (void*)0 ? throw _notInitializedException : _fontGoetheBold;
+		set
+		{
+			if (_fontGoetheBold.NativePtr != (void*)0)
+				throw _alreadyInitializedException;
+
+			_fontGoetheBold = value;
 		}
 	}
 

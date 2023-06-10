@@ -77,4 +77,10 @@
     <PackageReference Include="Serilog.Sinks.File" />
   </ItemGroup>
 
+  <ItemGroup Label="Fonts">
+    <None Update="goethebold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -68,7 +68,14 @@ public class Application
 	{
 		_gl = _window.CreateOpenGL();
 		_inputContext = _window.CreateInput();
-		_imGuiController = new(_gl, _window, _inputContext);
+		_imGuiController = new(_gl, _window, _inputContext, () =>
+		{
+			ImGuiIOPtr io = ImGui.GetIO();
+
+			// Add the default font first so it is actually used by default.
+			io.Fonts.AddFontDefault();
+			Root.FontGoetheBold = io.Fonts.AddFontFromFileTTF("goethebold.ttf", 72);
+		});
 
 		_gl.ClearColor(0, 0, 0, 1);
 
