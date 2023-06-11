@@ -5,7 +5,7 @@ namespace DevilDaggersInfo.App.User.Settings.Model;
 public record UserSettingsModel
 {
 	public string DevilDaggersInstallationDirectory { get; init; } = string.Empty;
-	public bool ShowDebugWindow { get; init; }
+	public bool ShowDebug { get; init; }
 	public float LookSpeed { get; init; }
 	public int FieldOfView { get; init; }
 	public IReadOnlyList<UserSettingsPracticeTemplate> PracticeTemplates { get; init; } = new List<UserSettingsPracticeTemplate>();
@@ -13,7 +13,7 @@ public record UserSettingsModel
 	public static UserSettingsModel Default { get; } = new()
 	{
 		DevilDaggersInstallationDirectory = string.Empty,
-		ShowDebugWindow = false,
+		ShowDebug = false,
 		LookSpeed = 20,
 		FieldOfView = 90,
 		PracticeTemplates = new List<UserSettingsPracticeTemplate>(),

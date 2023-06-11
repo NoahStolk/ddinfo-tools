@@ -25,10 +25,10 @@ public static class SettingsWindow
 		if (UserSettings.Model.FieldOfView != fieldOfView)
 			UserSettings.Model = UserSettings.Model with { FieldOfView = fieldOfView };
 
-		bool showDebugWindow = UserSettings.Model.ShowDebugWindow;
-		ImGui.Checkbox("Show debug window", ref showDebugWindow);
-		if (UserSettings.Model.ShowDebugWindow != showDebugWindow)
-			UserSettings.Model = UserSettings.Model with { ShowDebugWindow = showDebugWindow };
+		bool showDebug = UserSettings.Model.ShowDebug;
+		ImGui.Checkbox("Show debug", ref showDebug);
+		if (UserSettings.Model.ShowDebug != showDebug)
+			UserSettings.Model = UserSettings.Model with { ShowDebug = showDebug };
 
 		ImGui.End();
 	}

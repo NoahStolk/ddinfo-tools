@@ -67,8 +67,8 @@ public static class UiRenderer
 				break;
 		}
 
-		if (UserSettings.Model.ShowDebugWindow)
-			DebugWindow.Render();
+		if (UserSettings.Model.ShowDebug)
+			DebugLayout.Render();
 
 		SettingsWindow.Render(ref _showSettings);
 		UpdateWindow.Render(ref _showUpdateAvailable);
