@@ -45,7 +45,11 @@ public record InternalResources(
 		DecompiledContentFile ddInfoToolsContent = DecompiledContentFile.Create(ddInfoToolsContentRootDirectory, "ddinfo-assets");
 
 		return new(
+#if SKIP_VALUE
+			Value: new(Array.Empty<byte>()),
+#else
 			Value: GetBlobContent(ddInfoToolsContent, "Value"),
+#endif
 			MeshShader: GetShader(ddInfoToolsContent, "Mesh"),
 			ApplicationIconTexture: GetTextureContent(ddInfoToolsContent, "ApplicationIcon"),
 			ArrowEndTexture: GetTexture(ddInfoToolsContent, "ArrowEnd"),
