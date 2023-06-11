@@ -17,14 +17,13 @@ namespace DevilDaggersInfo.App;
 public static class Root
 {
 	private static readonly InvalidOperationException _notInitializedException = new("Root component is not initialized.");
-	private static readonly InvalidOperationException _alreadyInitializedException = new("Root component is already initialized.");
 
 	private static InternalResources? _internalResources;
 	private static GameResources? _gameResources;
 	private static GL? _gl;
 	private static IWindow? _window;
 	private static Application? _application;
-	private static ImFontPtr _fontGoetheBold;
+	private static ImFontPtr _fontGoetheBold60;
 
 	/// <summary>
 	/// Holds the internal resources, such as shaders and icons.
@@ -32,13 +31,7 @@ public static class Root
 	public static InternalResources InternalResources
 	{
 		get => _internalResources ?? throw _notInitializedException;
-		set
-		{
-			if (_internalResources != null)
-				throw _alreadyInitializedException;
-
-			_internalResources = value;
-		}
+		set => _internalResources = value;
 	}
 
 	/// <summary>
@@ -47,61 +40,31 @@ public static class Root
 	public static GameResources GameResources
 	{
 		get => _gameResources ?? throw _notInitializedException;
-		set
-		{
-			if (_gameResources != null)
-				throw _alreadyInitializedException;
-
-			_gameResources = value;
-		}
+		set => _gameResources = value;
 	}
 
 	public static GL Gl
 	{
 		get => _gl ?? throw _notInitializedException;
-		set
-		{
-			if (_gl != null)
-				throw _alreadyInitializedException;
-
-			_gl = value;
-		}
+		set => _gl = value;
 	}
 
 	public static IWindow Window
 	{
 		get => _window ?? throw _notInitializedException;
-		set
-		{
-			if (_window != null)
-				throw _alreadyInitializedException;
-
-			_window = value;
-		}
+		set => _window = value;
 	}
 
 	public static Application Application
 	{
 		get => _application ?? throw _notInitializedException;
-		set
-		{
-			if (_application != null)
-				throw _alreadyInitializedException;
-
-			_application = value;
-		}
+		set => _application = value;
 	}
 
-	public static unsafe ImFontPtr FontGoetheBold
+	public static unsafe ImFontPtr FontGoetheBold60
 	{
-		get => _fontGoetheBold.NativePtr == (void*)0 ? throw _notInitializedException : _fontGoetheBold;
-		set
-		{
-			if (_fontGoetheBold.NativePtr != (void*)0)
-				throw _alreadyInitializedException;
-
-			_fontGoetheBold = value;
-		}
+		get => _fontGoetheBold60.NativePtr == (void*)0 ? throw _notInitializedException : _fontGoetheBold60;
+		set => _fontGoetheBold60 = value;
 	}
 
 	public static IMouse? Mouse { get; set; }

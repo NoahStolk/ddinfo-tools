@@ -74,7 +74,7 @@ public class Application
 
 			// Add the default font first so it is actually used by default.
 			io.Fonts.AddFontDefault();
-			Root.FontGoetheBold = io.Fonts.AddFontFromFileTTF("goethebold.ttf", 72);
+			Root.FontGoetheBold60 = io.Fonts.AddFontFromFileTTF("goethebold.ttf", 60);
 		});
 
 		_gl.ClearColor(0, 0, 0, 1);
