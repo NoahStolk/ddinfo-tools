@@ -12,17 +12,41 @@ namespace DevilDaggersInfo.App;
 
 public static class UiRenderer
 {
+	private static LayoutType _layout;
+
 	private static bool _showSettings;
+	private static bool _showAbout;
 	private static bool _showUpdateAvailable;
 	private static bool _windowShouldClose;
 
 	public static bool WindowShouldClose => _windowShouldClose;
 
-	public static LayoutType Layout { get; set; }
+	public static LayoutType Layout
+	{
+		get => _layout;
+		set
+		{
+			_layout = value;
+			Colors.SetColors(value switch
+			{
+				LayoutType.Config or LayoutType.Main => Colors.Main,
+				LayoutType.SpawnsetEditor => Colors.SpawnsetEditor,
+				LayoutType.CustomLeaderboards => Colors.CustomLeaderboards,
+				LayoutType.ReplayEditor => Colors.ReplayEditor,
+				LayoutType.Practice => Colors.Practice,
+				_ => throw new ArgumentOutOfRangeException(nameof(value), value, null),
+			});
+		}
+	}
 
 	public static void ShowSettings()
 	{
 		_showSettings = true;
+	}
+
+	public static void ShowAbout()
+	{
+		_showAbout = true;
 	}
 
 	public static void ShowUpdateAvailable()
@@ -38,7 +62,8 @@ public static class UiRenderer
 		switch (Layout)
 		{
 			case LayoutType.Main:
-				MainLayout.Render(delta, out _windowShouldClose);
+				MainWindow.Render(out _windowShouldClose);
+				MainScene.Render(delta);
 				break;
 			case LayoutType.Config:
 				ConfigLayout.Render();
@@ -71,6 +96,7 @@ public static class UiRenderer
 			DebugLayout.Render();
 
 		SettingsWindow.Render(ref _showSettings);
+		AboutWindow.Render(ref _showAbout);
 		UpdateWindow.Render(ref _showUpdateAvailable);
 
 		Modals.Render();

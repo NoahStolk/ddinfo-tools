@@ -207,10 +207,7 @@ public static class SpawnsChild
 					saved = true;
 				}
 
-				ImGui.PopStyleColor();
-				ImGui.PopStyleColor();
-				ImGui.PopStyleColor();
-				ImGui.PopStyleColor();
+				ImGui.PopStyleColor(4);
 			}
 
 			ImGui.InputFloat("Delay", ref _editDelay, 1, 5, "%.4f");

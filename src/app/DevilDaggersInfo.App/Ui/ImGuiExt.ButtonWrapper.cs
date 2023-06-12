@@ -3,9 +3,9 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.App.Ui;
 
-public static class ButtonWrapper
+public static partial class ImGuiExt
 {
-	public static void Render(
+	public static void ButtonWrapper(
 		string buttonName,
 		Vector2 buttonSize,
 		Vector4 color,
@@ -61,7 +61,7 @@ public static class ButtonWrapper
 		ImGui.EndChild();
 	}
 
-	public static void Render(
+	public static void ButtonWrapper(
 		string buttonName,
 		Vector2 buttonSize,
 		Vector4 color,

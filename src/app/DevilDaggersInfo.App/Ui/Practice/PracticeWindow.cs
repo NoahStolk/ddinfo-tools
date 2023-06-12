@@ -207,7 +207,7 @@ public static class PracticeWindow
 			_ => ($"{template.AdditionalGems} gems", Color.Red),
 		};
 
-		ButtonWrapper.Render(
+		ImGuiExt.ButtonWrapper(
 			template.Name,
 			new(_templateWidth, 48),
 			template.Color with { A = backgroundAlpha },
@@ -235,7 +235,7 @@ public static class PracticeWindow
 		string name = $"Wave {waveIndex + 1}";
 		Color color = waveIndex % 3 == 2 ? EnemiesV3_2.Ghostpede.Color.ToEngineColor() : EnemiesV3_2.Gigapede.Color.ToEngineColor();
 
-		ButtonWrapper.Render(
+		ImGuiExt.ButtonWrapper(
 			name,
 			new(_templateWidth, 30),
 			color with { A = backgroundAlpha },
@@ -270,7 +270,7 @@ public static class PracticeWindow
 			_ => ($"{customTemplate.AdditionalGems} gems", Color.Red),
 		};
 
-		ButtonWrapper.Render(
+		ImGuiExt.ButtonWrapper(
 			uniqueName,
 			new(_templateWidth - 56, 48),
 			color with { A = backgroundAlpha },

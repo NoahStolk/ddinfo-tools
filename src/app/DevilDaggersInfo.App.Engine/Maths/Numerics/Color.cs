@@ -61,6 +61,25 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 		return new(r, g, b, a);
 	}
 
+	public Color Desaturate(float f)
+	{
+		float r = R / (float)byte.MaxValue;
+		float g = G / (float)byte.MaxValue;
+		float b = B / (float)byte.MaxValue;
+
+		float l = 0.3f * r + 0.6f * g + 0.1f * b;
+		float newR = r + f * (l - r);
+		float newG = g + f * (l - g);
+		float newB = b + f * (l - b);
+
+		return new((byte)(newR * byte.MaxValue), (byte)(newG * byte.MaxValue), (byte)(newB * byte.MaxValue), A);
+	}
+
+	public Color Darken(float amount)
+	{
+		return new((byte)(R * (1 - amount)), (byte)(G * (1 - amount)), (byte)(B * (1 - amount)), A);
+	}
+
 	public int GetHue()
 	{
 		byte min = Math.Min(Math.Min(R, G), B);

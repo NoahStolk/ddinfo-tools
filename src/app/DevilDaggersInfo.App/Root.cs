@@ -23,6 +23,7 @@ public static class Root
 	private static GL? _gl;
 	private static IWindow? _window;
 	private static Application? _application;
+	private static ImFontPtr _fontGoetheBold30;
 	private static ImFontPtr _fontGoetheBold60;
 
 	/// <summary>
@@ -59,6 +60,12 @@ public static class Root
 	{
 		get => _application ?? throw _notInitializedException;
 		set => _application = value;
+	}
+
+	public static unsafe ImFontPtr FontGoetheBold30
+	{
+		get => _fontGoetheBold30.NativePtr == (void*)0 ? throw _notInitializedException : _fontGoetheBold30;
+		set => _fontGoetheBold30 = value;
 	}
 
 	public static unsafe ImFontPtr FontGoetheBold60

@@ -13,6 +13,8 @@ public record InternalResources(
 	Texture ArrowStartTexture,
 	Texture BinTexture,
 	Texture BucketTexture,
+	Texture CloseTexture,
+	Texture ConfigurationTexture,
 	Texture DaggerTexture,
 	Texture EllipseTexture,
 	Texture IconCalendarTexture,
@@ -28,10 +30,12 @@ public record InternalResources(
 	Texture IconSkullTexture,
 	Texture IconSpiderTexture,
 	Texture IconStopwatchTexture,
+	Texture InfoTexture,
 	Texture LineTexture,
 	Texture PencilTexture,
 	Texture RectangleTexture,
 	Texture ReloadTexture,
+	Texture SettingsTexture,
 	Texture TileHitboxTexture,
 	ModelContent TileHitboxModel)
 {
@@ -58,6 +62,8 @@ public record InternalResources(
 			ArrowStartTexture: GetTexture(ddInfoToolsContent, "ArrowStart"),
 			BinTexture: GetTexture(ddInfoToolsContent, "Bin"),
 			BucketTexture: GetTexture(ddInfoToolsContent, "Bucket"),
+			CloseTexture: GetTexture(ddInfoToolsContent, "Close"),
+			ConfigurationTexture: GetTexture(ddInfoToolsContent, "Configuration"),
 			DaggerTexture: GetTexture(ddInfoToolsContent, "Dagger"),
 			EllipseTexture: GetTexture(ddInfoToolsContent, "Ellipse"),
 			IconCalendarTexture: GetTexture(ddInfoToolsContent, "IconCalendar"),
@@ -73,10 +79,12 @@ public record InternalResources(
 			IconSkullTexture: GetTexture(ddInfoToolsContent, "IconSkull"),
 			IconSpiderTexture: GetTexture(ddInfoToolsContent, "IconSpider"),
 			IconStopwatchTexture: GetTexture(ddInfoToolsContent, "IconStopwatch"),
+			InfoTexture: GetTexture(ddInfoToolsContent, "Info"),
 			LineTexture: GetTexture(ddInfoToolsContent, "Line"),
 			PencilTexture: GetTexture(ddInfoToolsContent, "Pencil"),
 			RectangleTexture: GetTexture(ddInfoToolsContent, "Rectangle"),
 			ReloadTexture: GetTexture(ddInfoToolsContent, "Reload"),
+			SettingsTexture: GetTexture(ddInfoToolsContent, "Settings"),
 			TileHitboxTexture: GetTexture(ddInfoToolsContent, "TileHitbox"),
 			TileHitboxModel: GetModelContent(ddInfoToolsContent, "TileHitbox"));
 

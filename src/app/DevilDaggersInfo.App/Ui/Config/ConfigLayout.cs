@@ -49,7 +49,7 @@ public static class ConfigLayout
 		Skull4.InitializeRendering();
 
 		// Initialize scenes.
-		MainLayout.InitializeScene();
+		MainScene.Initialize();
 		SpawnsetEditor3DWindow.InitializeScene();
 		CustomLeaderboards3DWindow.InitializeScene();
 		ReplayEditor3DWindow.InitializeScene();

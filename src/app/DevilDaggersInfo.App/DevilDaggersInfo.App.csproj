@@ -56,6 +56,12 @@
     </When>
   </Choose>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="DevilDaggersInfo.App.BuildTimeAttribute">
+      <_Parameter1>$([System.DateTime]::UtcNow.ToString("yyyy-MM-dd HH:mm")) UTC</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
   <ItemGroup Label="Trimming configuration">
     <TrimmerRootDescriptor Include="TrimmerRoots.xml" />
   </ItemGroup>

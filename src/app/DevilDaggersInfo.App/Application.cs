@@ -74,6 +74,7 @@ public class Application
 
 			// Add the default font first so it is actually used by default.
 			io.Fonts.AddFontDefault();
+			Root.FontGoetheBold30 = io.Fonts.AddFontFromFileTTF("goethebold.ttf", 30);
 			Root.FontGoetheBold60 = io.Fonts.AddFontFromFileTTF("goethebold.ttf", 60);
 		});
 
@@ -126,6 +127,8 @@ public class Application
 		ImGuiStylePtr style = ImGui.GetStyle();
 		style.ScrollbarSize = 16;
 		style.ScrollbarRounding = 0;
+
+		Colors.SetColors(Colors.Main);
 	}
 
 	private void OnWindowOnFramebufferResize(Vector2D<int> size)

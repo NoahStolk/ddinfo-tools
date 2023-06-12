@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.App.Extensions;
 
-public static class ImGuiExtensions
+public static class ImDrawListPtrExtensions
 {
 	public static void AddEllipse(this ImDrawListPtr drawList, Vector2 center, Vector2 radius, uint col, int numSegments, float thickness)
 	{

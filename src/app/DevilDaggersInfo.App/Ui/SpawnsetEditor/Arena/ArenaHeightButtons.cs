@@ -47,11 +47,7 @@ public static class ArenaHeightButtons
 			if (ImGui.Button(height.ToString(), new(width - 1, _arenaButtonSize - 1)))
 				ArenaChild.SelectedHeight = height;
 
-			ImGui.PopStyleColor();
-			ImGui.PopStyleColor();
-			ImGui.PopStyleColor();
-			ImGui.PopStyleColor();
-			ImGui.PopStyleColor();
+			ImGui.PopStyleColor(5);
 			ImGui.PopStyleVar();
 		}
 	}

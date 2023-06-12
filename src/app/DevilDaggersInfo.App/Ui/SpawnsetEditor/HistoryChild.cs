@@ -60,13 +60,9 @@ public static class HistoryChild
 
 			ImGui.PopID();
 
-			ImGui.PopStyleColor();
-			ImGui.PopStyleColor();
-			ImGui.PopStyleColor();
-			ImGui.PopStyleColor();
+			ImGui.PopStyleColor(4);
 
-			ImGui.PopStyleVar();
-			ImGui.PopStyleVar();
+			ImGui.PopStyleVar(2);
 		}
 
 		ImGui.PopStyleVar();
