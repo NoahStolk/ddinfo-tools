@@ -26,6 +26,18 @@ public static class CustomLeaderboardsWindow
 
 	public static void Render()
 	{
+#if DEBUG
+		if (ImGui.Begin("Timestamps"))
+		{
+			foreach (DevilDaggersInfo.Api.App.CustomLeaderboards.AddUploadRequestTimestamp timestamp in RecordingLogic.Timestamps)
+			{
+				ImGui.Text($"{new DateTime(timestamp.Timestamp, DateTimeKind.Utc)} {timestamp.TimeInSeconds}");
+			}
+		}
+
+		ImGui.End();
+#endif
+
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, Constants.MinWindowSize);
 		ImGui.Begin("Custom Leaderboards", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollWithMouse);
 		ImGui.PopStyleVar();

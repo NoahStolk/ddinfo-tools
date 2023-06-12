@@ -19,6 +19,8 @@ public static class RecordingLogic
 	private static readonly AesBase32Wrapper _aesBase32Wrapper;
 	private static MainBlock? _runToUpload;
 
+	private static readonly List<AddUploadRequestTimestamp> _timestamps = new();
+
 #pragma warning disable S3963
 	static RecordingLogic()
 #pragma warning restore S3963
@@ -40,8 +42,10 @@ public static class RecordingLogic
 	public static RecordingStateType RecordingStateType { get; private set; }
 	public static DateTime? LastSubmission { get; private set; }
 
-	// TODO: Remove?
+	// TODO: Flip values and rename to ShowRecording.
 	public static bool ShowUploadResponse { get; private set; }
+
+	public static IEnumerable<AddUploadRequestTimestamp> Timestamps => _timestamps;
 
 	public static void Handle()
 	{
@@ -90,6 +94,8 @@ public static class RecordingLogic
 
 			RecordingStateType = RecordingStateType.Recording;
 			ShowUploadResponse = false;
+			_timestamps.Clear();
+			AddTimestamp(mainBlock);
 		}
 
 #if !FORCE_LOCAL_REPLAYS
@@ -106,10 +112,29 @@ public static class RecordingLogic
 			return;
 		}
 
+		int expectedTimestampCount = (int)Math.Floor(mainBlock.Time / 60f) + 1;
+		if (_timestamps.Count < expectedTimestampCount)
+		{
+			AddTimestamp(mainBlock);
+			return;
+		}
+
 		// Determine whether to upload the run or not.
 		bool justDied = !mainBlock.IsPlayerAlive && mainBlockPrevious.IsPlayerAlive;
 		if (justDied && (mainBlock.GameMode == 0 || mainBlock.TimeAttackOrRaceFinished))
+		{
 			_runToUpload = mainBlock;
+			AddTimestamp(mainBlock);
+		}
+	}
+
+	private static void AddTimestamp(MainBlock mainBlock)
+	{
+		_timestamps.Add(new AddUploadRequestTimestamp
+		{
+			Timestamp = DateTime.UtcNow.Ticks,
+			TimeInSeconds = mainBlock.Time,
+		});
 	}
 
 	private static void UploadRunIfExists(MainBlock runToUpload)
@@ -217,6 +242,7 @@ public static class RecordingLogic
 			ReplayPlayerId = runToUpload.ReplayPlayerId,
 			GameMode = runToUpload.GameMode,
 			TimeAttackOrRaceFinished = runToUpload.TimeAttackOrRaceFinished,
+			Timestamps = _timestamps,
 		};
 
 		AsyncHandler.Run(uploadResponse => OnSubmit(uploadResponse, uploadRequest), () => UploadSubmission.HandleAsync(uploadRequest));
