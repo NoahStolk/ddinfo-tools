@@ -22,9 +22,15 @@ public static class DebugLayout
 	public static void Render()
 	{
 		ImGui.SetNextWindowPos(new(8, 8));
-		ImGui.SetNextWindowSize(new(512, 384));
+		ImGui.SetNextWindowSize(new(320, 256));
 
-		if (ImGui.Begin("Debug", Constants.LayoutFlags))
+#if DEBUG
+		const ImGuiWindowFlags flags = Constants.LayoutFlags | ImGuiWindowFlags.NoInputs;
+#else
+		const ImGuiWindowFlags flags = Constants.LayoutFlags;
+#endif
+
+		if (ImGui.Begin("Debug", flags))
 		{
 			ImGui.Text($"{Application.RenderCounter.CountPerSecond} FPS ({1f / Application.LastRenderDelta:000.000})");
 
@@ -39,6 +45,7 @@ public static class DebugLayout
 
 			ImGui.Text($"Modal active: {Modals.IsAnyOpen}");
 
+#if DEBUG
 			if (ImGui.Button("Error window"))
 				Modals.ShowError("Test error!");
 
@@ -60,6 +67,7 @@ public static class DebugLayout
 
 			foreach (string debugMessage in _debugMessages)
 				ImGui.Text(debugMessage);
+#endif
 		}
 
 		ImGui.End();
