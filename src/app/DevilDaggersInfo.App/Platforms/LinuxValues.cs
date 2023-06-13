@@ -1,13 +1,10 @@
-using DevilDaggersInfo.Api.App.ProcessMemory;
-using DevilDaggersInfo.Api.App.Updates;
+using DevilDaggersInfo.Api.App;
 
 namespace DevilDaggersInfo.App.Platforms;
 
 public class LinuxValues : IPlatformSpecificValues
 {
-	public ToolBuildType BuildType => ToolBuildType.LinuxWarp;
-
-	public SupportedOperatingSystem OperatingSystem => SupportedOperatingSystem.Linux;
+	public AppOperatingSystem AppOperatingSystem => AppOperatingSystem.Linux;
 
 	public string DefaultInstallationPath => string.Empty;
 }

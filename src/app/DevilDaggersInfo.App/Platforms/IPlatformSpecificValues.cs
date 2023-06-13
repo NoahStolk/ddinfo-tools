@@ -1,13 +1,10 @@
-using DevilDaggersInfo.Api.App.ProcessMemory;
-using DevilDaggersInfo.Api.App.Updates;
+using DevilDaggersInfo.Api.App;
 
 namespace DevilDaggersInfo.App.Platforms;
 
 public interface IPlatformSpecificValues
 {
-	ToolBuildType BuildType { get; }
-
-	SupportedOperatingSystem OperatingSystem { get; }
+	AppOperatingSystem AppOperatingSystem { get; }
 
 	string DefaultInstallationPath { get; }
 }

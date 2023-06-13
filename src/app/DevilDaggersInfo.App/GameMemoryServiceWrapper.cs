@@ -30,7 +30,7 @@ public static class GameMemoryServiceWrapper
 
 	private static void InitializeMarker()
 	{
-		AsyncHandler.Run(SetMarker, () => FetchMarker.HandleAsync(Root.PlatformSpecificValues.OperatingSystem));
+		AsyncHandler.Run(SetMarker, () => FetchMarker.HandleAsync(Root.PlatformSpecificValues.AppOperatingSystem));
 
 		void SetMarker(GetMarker? getMarker)
 		{

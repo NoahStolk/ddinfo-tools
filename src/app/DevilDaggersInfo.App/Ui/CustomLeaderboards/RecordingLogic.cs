@@ -230,7 +230,7 @@ public static class RecordingLogic
 #else
 			BuildMode = "RELEASE",
 #endif
-			OperatingSystem = Root.PlatformSpecificValues.OperatingSystem.ToString(),
+			OperatingSystem = Root.PlatformSpecificValues.AppOperatingSystem.ToString(),
 			ProhibitedMods = runToUpload.ProhibitedMods,
 			Client = "ddinfo-tools",
 			ReplayData = Root.GameMemoryService.ReadReplayFromMemory(),

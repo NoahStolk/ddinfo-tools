@@ -116,7 +116,7 @@ public class Application
 				UiRenderer.ShowUpdateAvailable();
 				UpdateWindow.AvailableUpdateVersion = newVersion;
 			},
-			() => FetchLatestVersion.HandleAsync(Root.Application.AppVersion, Root.PlatformSpecificValues.BuildType));
+			() => FetchLatestVersion.HandleAsync(Root.Application.AppVersion, Root.PlatformSpecificValues.AppOperatingSystem));
 
 		RawImage rawImage = new(Root.InternalResources.ApplicationIconTexture.Width, Root.InternalResources.ApplicationIconTexture.Height, Root.InternalResources.ApplicationIconTexture.Pixels);
 		Span<RawImage> rawImages = MemoryMarshal.CreateSpan(ref rawImage, 1);

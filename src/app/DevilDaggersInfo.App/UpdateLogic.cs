@@ -1,4 +1,4 @@
-using DevilDaggersInfo.Api.App.Updates;
+using DevilDaggersInfo.Api.App;
 using DevilDaggersInfo.App.Ui;
 using System.Diagnostics;
 using System.IO.Compression;
@@ -10,10 +10,10 @@ public static class UpdateLogic
 	private const string _oldTemporaryDirectoryName = "old";
 
 #if WINDOWS
-	private const ToolBuildType _appBuildType = ToolBuildType.WindowsWarp;
+	private const AppOperatingSystem _operatingSystem = AppOperatingSystem.Windows;
 	private const string _exeFileName = "ddinfo-tools.exe"; // TODO: Get this from the AssemblyName MSBuild property.
 #elif LINUX
-	private const ToolBuildType _appBuildType = ToolBuildType.LinuxWarp;
+	private const AppOperatingSystem _operatingSystem = AppOperatingSystem.Linux;
 	private const string _exeFileName = "ddinfo-tools";
 #endif
 
@@ -93,7 +93,7 @@ public static class UpdateLogic
 	{
 		using HttpRequestMessage request = new()
 		{
-			RequestUri = new($"api/app/updates/latest-version-file?publishMethod={ToolPublishMethod.SelfContained}&buildType={_appBuildType}", UriKind.Relative),
+			RequestUri = new($"api/app/updates/latest-file?appOperatingSystem={_operatingSystem}", UriKind.Relative),
 			Method = HttpMethod.Get,
 		};
 

@@ -1,13 +1,10 @@
-using DevilDaggersInfo.Api.App.ProcessMemory;
-using DevilDaggersInfo.Api.App.Updates;
+using DevilDaggersInfo.Api.App;
 
 namespace DevilDaggersInfo.App.Platforms;
 
 public class WindowsValues : IPlatformSpecificValues
 {
-	public ToolBuildType BuildType => ToolBuildType.WindowsWarp;
-
-	public SupportedOperatingSystem OperatingSystem => SupportedOperatingSystem.Windows;
+	public AppOperatingSystem AppOperatingSystem => AppOperatingSystem.Windows;
 
 	public string DefaultInstallationPath => @"C:\Program Files (x86)\Steam\steamapps\common\devildaggers";
 }

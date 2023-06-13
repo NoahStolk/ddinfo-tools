@@ -6,6 +6,7 @@
 
 #nullable enable
 
+using DevilDaggersInfo.Api.App;
 using DevilDaggersInfo.Api.App.CustomLeaderboards;
 using DevilDaggersInfo.Api.App.ProcessMemory;
 using DevilDaggersInfo.Api.App.Spawnsets;
@@ -63,10 +64,11 @@ public partial class AppApiHttpClient
 		return await SendGetRequest<List<GetCustomLeaderboardAllowedCategory>>($"api/app/custom-leaderboards/allowed-categories");
 	}
 
-	public async Task<GetMarker> GetMarker(SupportedOperatingSystem operatingSystem)
+	public async Task<GetMarker> GetMarker(AppOperatingSystem? appOperatingSystem, SupportedOperatingSystem? operatingSystem)
 	{
 		Dictionary<string, object?> queryParameters = new()
 		{
+			{ nameof(appOperatingSystem), appOperatingSystem },
 			{ nameof(operatingSystem), operatingSystem }
 		};
 		return await SendGetRequest<GetMarker>(BuildUrlWithQuery($"api/app/process-memory/marker", queryParameters));
@@ -109,6 +111,24 @@ public partial class AppApiHttpClient
 			{ nameof(buildType), buildType }
 		};
 		return await SendGetRequest<Task>(BuildUrlWithQuery($"api/app/updates/latest-version-file", queryParameters));
+	}
+
+	public async Task<GetLatestVersion> GetLatest(AppOperatingSystem appOperatingSystem)
+	{
+		Dictionary<string, object?> queryParameters = new()
+		{
+			{ nameof(appOperatingSystem), appOperatingSystem }
+		};
+		return await SendGetRequest<GetLatestVersion>(BuildUrlWithQuery($"api/app/updates/latest", queryParameters));
+	}
+
+	public async Task<Task> GetLatestFile(AppOperatingSystem appOperatingSystem)
+	{
+		Dictionary<string, object?> queryParameters = new()
+		{
+			{ nameof(appOperatingSystem), appOperatingSystem }
+		};
+		return await SendGetRequest<Task>(BuildUrlWithQuery($"api/app/updates/latest-file", queryParameters));
 	}
 
 	private static string BuildUrlWithQuery(string baseUrl, Dictionary<string, object?> queryParameters)
