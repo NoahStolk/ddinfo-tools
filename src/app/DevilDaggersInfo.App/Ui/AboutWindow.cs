@@ -30,11 +30,8 @@ public static class AboutWindow
 			ImGui.Text("The source code is available on GitHub.");
 
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
-			ImGui.PushFont(Root.FontGoetheBold20);
-			if (ImGui.Button("View on GitHub"))
-				Process.Start(new ProcessStartInfo("https://github.com/NoahStolk/DevilDaggersInfo") { UseShellExecute = true });
 
-			ImGui.PopFont();
+			RenderGitHubButton();
 
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
 			ImGuiExt.Title("Alpha notice", Root.FontGoetheBold20);
@@ -69,5 +66,39 @@ public static class AboutWindow
 		}
 
 		ImGui.End();
+	}
+
+	private static void RenderGitHubButton()
+	{
+		Vector2 buttonSize = new(168, 40);
+
+		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
+		ImGui.BeginChild("##GitHub", buttonSize, true);
+		ImGui.PopStyleVar();
+
+		bool hover = ImGui.IsWindowHovered();
+
+		ImGuiStylePtr style = ImGui.GetStyle();
+		ImGui.PushStyleColor(ImGuiCol.ChildBg, style.Colors[(int)(hover ? ImGuiCol.ButtonHovered : ImGuiCol.Button)]);
+		if (ImGui.BeginChild("##GitHub child", buttonSize, false, ImGuiWindowFlags.NoInputs))
+		{
+			if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+				Process.Start(new ProcessStartInfo("https://github.com/NoahStolk/DevilDaggersInfo") { UseShellExecute = true });
+
+			ImGui.SetCursorPos(new(8));
+			ImGui.Image((IntPtr)Root.InternalResources.GitHubTexture.Handle, new(24));
+			ImGui.SameLine();
+
+			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 3);
+			ImGui.PushFont(Root.FontGoetheBold20);
+			ImGui.Text("View on GitHub");
+			ImGui.PopFont();
+		}
+
+		ImGui.EndChild();
+
+		ImGui.PopStyleColor();
+
+		ImGui.EndChild();
 	}
 }
