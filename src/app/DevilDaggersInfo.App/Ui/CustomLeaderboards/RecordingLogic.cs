@@ -94,8 +94,6 @@ public static class RecordingLogic
 
 			RecordingStateType = RecordingStateType.Recording;
 			ShowUploadResponse = false;
-			_timestamps.Clear();
-			AddTimestamp(mainBlock);
 		}
 
 #if !FORCE_LOCAL_REPLAYS
@@ -110,6 +108,12 @@ public static class RecordingLogic
 		{
 			RecordingStateType = RecordingStateType.WaitingForLeaderboardReplay;
 			return;
+		}
+
+		if (mainBlock.Time < mainBlockPrevious.Time)
+		{
+			_timestamps.Clear();
+			AddTimestamp(mainBlock);
 		}
 
 		int expectedTimestampCount = (int)Math.Floor(mainBlock.Time / 60f) + 1;
