@@ -18,13 +18,12 @@ public static class MainWindow
 
 		ImGui.SetNextWindowPos(center, ImGuiCond.Always, new(0.5f, 0.5f));
 		ImGui.SetNextWindowSize(windowSize);
-		ImGui.SetNextWindowBgAlpha(0.8f);
 
 		ImGui.Begin("Main Menu", ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBringToFrontOnFocus);
 
 		ImGui.PushFont(Root.FontGoetheBold60);
 		const string title = "ddinfo tools";
-		ImGui.TextColored(Vector4.Lerp(Color.Red, Color.Orange, MathF.Sin((float)Root.Window.Time)), title);
+		ImGui.TextColored(Colors.TitleColor, title);
 		float textWidth = ImGui.CalcTextSize(title).X;
 		ImGui.PopFont();
 

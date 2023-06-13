@@ -4,9 +4,11 @@ namespace DevilDaggersInfo.App.Ui;
 
 public static partial class ImGuiExt
 {
-	public static void Title(string title)
+	public static unsafe void Title(string title, ImFontPtr font = default)
 	{
-		ImGui.PushFont(Root.FontGoetheBold30);
+		if (font == (void*)0)
+			font = Root.FontGoetheBold30;
+		ImGui.PushFont(font);
 		ImGui.Text(title);
 		ImGui.PopFont();
 	}

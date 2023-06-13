@@ -1,4 +1,5 @@
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.App.Ui;
 
@@ -14,12 +15,14 @@ public static class Colors
 	private const byte _alphaFrameBackgroundActive = 171;
 	private const byte _alphaSeparatorHovered = 199;
 
+	public static Vector4 TitleColor => Vector4.Lerp(new(1, 0.2f, 0.05f, 1), new(1, 0.5f, 0.2f, 1), MathF.Sin((float)Root.Window.Time));
+
 	public static ColorConfiguration Main { get; } = new()
 	{
-		Primary = new(250, 66, 250, 255),
-		Secondary = new(224, 61, 224, 255),
-		Tertiary = new(122, 41, 122, 255),
-		Quaternary = new(191, 26, 191, 255),
+		Primary = new(250, 66, 66, 255),
+		Secondary = new(224, 61, 61, 255),
+		Tertiary = new(122, 41, 41, 255),
+		Quaternary = new(191, 26, 26, 255),
 	};
 
 	public static ColorConfiguration SpawnsetEditor { get; } = new()
