@@ -4,7 +4,7 @@
     <AssemblyName>ddinfo-tools</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>SA1633</NoWarn>
-    <Version>0.7.0.0</Version>
+    <Version>0.7.1.0</Version>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
     <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
