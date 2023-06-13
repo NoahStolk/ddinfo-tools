@@ -110,7 +110,7 @@ public static class RecordingLogic
 			return;
 		}
 
-		if (mainBlock.Time < mainBlockPrevious.Time)
+		if (mainBlock.Time > mainBlockPrevious.Time && mainBlock.Time < 0.5f)
 		{
 			_timestamps.Clear();
 			AddTimestamp(mainBlock);
