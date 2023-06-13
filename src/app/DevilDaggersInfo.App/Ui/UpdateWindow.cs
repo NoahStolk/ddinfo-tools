@@ -18,16 +18,21 @@ public static class UpdateWindow
 			return;
 
 		Vector2 center = ImGui.GetMainViewport().GetCenter();
+		Vector2 windowSize = new(384, 384);
 		ImGui.SetNextWindowPos(center, ImGuiCond.Always, new(0.5f, 0.5f));
-		ImGui.SetNextWindowSize(new(512, 384));
+		ImGui.SetNextWindowSize(windowSize);
 		if (ImGui.Begin("Update available", ref show, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize))
 		{
-			ImGui.PushTextWrapPos(480);
+			ImGui.PushTextWrapPos(windowSize.X - 16);
 
-			ImGui.Text($"Version {AvailableUpdateVersion} is available. The current version is {Root.Application.AppVersion}.");
+			ImGui.Text($"""
+				Version {AvailableUpdateVersion} is available.
+				The current version is {Root.Application.AppVersion}.
+				""");
+			ImGui.Spacing();
 
 			ImGui.BeginDisabled(_updateInProgress);
-			if (ImGui.Button("Update and restart"))
+			if (ImGui.Button("Update and restart", new(160, 24)))
 			{
 				LogMessages.Clear();
 				_updateInProgress = true;
