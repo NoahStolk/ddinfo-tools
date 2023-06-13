@@ -111,7 +111,9 @@ public static class MainWindow
 		ImGui.PushStyleColor(ImGuiCol.Border, color with { A = 255 });
 		ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, 2);
 
+		ImGui.PushFont(Root.FontGoetheBold20);
 		bool clicked = ImGui.Button(text, new(198, 48));
+		ImGui.PopFont();
 
 		ImGui.PopStyleColor(4);
 		ImGui.PopStyleVar();
