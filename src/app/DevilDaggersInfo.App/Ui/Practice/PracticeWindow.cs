@@ -14,6 +14,8 @@ namespace DevilDaggersInfo.App.Ui.Practice;
 
 public static class PracticeWindow
 {
+	private const int _spawnVersion = 6;
+
 	private const float _timerStartTolerance = 0.00001f;
 	private const int _templateWidth = 360;
 	private const int _templateDescriptionHeight = 48;
@@ -165,14 +167,38 @@ public static class PracticeWindow
 		ImGui.SameLine();
 		ImGui.BeginChild("Current spawnset", new(400, 192), true);
 
-		ImGui.Text("Current spawnset");
-
 		ImGui.BeginChild("Current practice values", new(400, 64));
 		if (SurvivalFileWatcher.Exists)
 		{
-			ImGui.Text(SurvivalFileWatcher.HandLevel.ToString());
-			ImGui.Text(SurvivalFileWatcher.AdditionalGems.ToString());
-			ImGui.Text(SurvivalFileWatcher.TimerStart.ToString(StringFormats.TimeFormat));
+			string timerStart = SurvivalFileWatcher.TimerStart.ToString(StringFormats.TimeFormat);
+
+			if (ImGui.BeginChild("Current practice values left", new(160, 64)))
+			{
+				ImGui.TextColored(Color.Yellow, "Effective values");
+
+				if (SurvivalFileWatcher.EffectivePlayerSettings.HandLevel != SurvivalFileWatcher.EffectivePlayerSettings.HandMesh)
+					ImGui.Text($"{SurvivalFileWatcher.EffectivePlayerSettings.HandLevel} ({SurvivalFileWatcher.EffectivePlayerSettings.HandMesh} mesh)");
+				else
+					ImGui.Text(SurvivalFileWatcher.EffectivePlayerSettings.HandLevel.ToString());
+
+				ImGui.Text(SurvivalFileWatcher.EffectivePlayerSettings.GemsOrHoming.ToString());
+				ImGui.Text(timerStart);
+			}
+
+			ImGui.EndChild();
+
+			ImGui.SameLine();
+
+			if (ImGui.BeginChild("Current practice values right", new(160, 64)))
+			{
+				ImGui.TextColored(Color.Yellow, "Spawnset values");
+
+				ImGui.Text(SurvivalFileWatcher.HandLevel.ToString());
+				ImGui.Text(SurvivalFileWatcher.AdditionalGems.ToString());
+				ImGui.Text(timerStart);
+			}
+
+			ImGui.EndChild();
 		}
 		else
 		{
@@ -195,17 +221,24 @@ public static class PracticeWindow
 			UiRenderer.Layout = LayoutType.Main;
 	}
 
+	private static (string Text, Color TextColor) GetGemsOrHomingText(HandLevel handLevel, int additionalGems)
+	{
+		EffectivePlayerSettings effectivePlayerSettings = SpawnsetBinary.GetEffectivePlayerSettings(_spawnVersion, handLevel, additionalGems);
+		return effectivePlayerSettings.HandLevel switch
+		{
+			HandLevel.Level3 => ($"{effectivePlayerSettings.GemsOrHoming} homing", HandLevel.Level3.GetColor()),
+			HandLevel.Level4 => ($"{effectivePlayerSettings.GemsOrHoming} homing", HandLevel.Level4.GetColor()),
+			_ => ($"{effectivePlayerSettings.GemsOrHoming} gems", Color.Red),
+		};
+	}
+
 	private static void RenderTemplate(Template template)
 	{
 		(byte backgroundAlpha, byte textAlpha) = GetAlpha(template.IsEqual(_state));
 
 		string timerText = template.TimerStart.ToString(StringFormats.TimeFormat);
-		(string gemsOrHomingText, Color gemColor) = template.HandLevel switch
-		{
-			HandLevel.Level3 => ($"{template.AdditionalGems} homing", HandLevel.Level3.GetColor()),
-			HandLevel.Level4 => ($"{template.AdditionalGems} homing", HandLevel.Level4.GetColor()),
-			_ => ($"{template.AdditionalGems} gems", Color.Red),
-		};
+
+		(string gemsOrHomingText, Color gemColor) = GetGemsOrHomingText(template.HandLevel, template.AdditionalGems);
 
 		ImGuiExt.ButtonWrapper(
 			template.Name,
@@ -263,12 +296,7 @@ public static class PracticeWindow
 		(byte backgroundAlpha, byte textAlpha) = GetAlpha(_state.IsEqual(customTemplate));
 
 		string timerText = customTemplate.TimerStart.ToString(StringFormats.TimeFormat);
-		(string gemsOrHomingText, Color gemColor) = customTemplate.HandLevel switch
-		{
-			HandLevel.Level3 => ($"{customTemplate.AdditionalGems} homing", HandLevel.Level3.GetColor()),
-			HandLevel.Level4 => ($"{customTemplate.AdditionalGems} homing", HandLevel.Level4.GetColor()),
-			_ => ($"{customTemplate.AdditionalGems} gems", Color.Red),
-		};
+		(string gemsOrHomingText, Color gemColor) = GetGemsOrHomingText(customTemplate.HandLevel, customTemplate.AdditionalGems);
 
 		ImGuiExt.ButtonWrapper(
 			uniqueName,
@@ -323,7 +351,7 @@ public static class PracticeWindow
 			HandLevel = _state.HandLevel,
 			AdditionalGems = _state.AdditionalGems,
 			TimerStart = _state.TimerStart,
-			SpawnVersion = 6,
+			SpawnVersion = _spawnVersion,
 			ShrinkStart = shrinkStart,
 		};
 		File.WriteAllBytes(UserSettings.ModsSurvivalPath, generatedSpawnset.ToBytes());
