@@ -22,6 +22,8 @@ public static class PracticeWindow
 	private const int _templateWidth = 360;
 	private const int _templateDescriptionHeight = 48;
 
+	private static int _customTemplateIndexToReorder;
+
 	private static readonly Vector2 _templateContainerSize = new(400, 480);
 	private static readonly Vector2 _templateListSize = new(380, 380);
 
@@ -109,8 +111,10 @@ public static class PracticeWindow
 		ImGui.EndChild();
 
 		ImGui.BeginChild("Custom template list", _templateListSize);
+
+		RenderDragDropTarget(-1);
 		for (int i = 0; i < UserSettings.Model.PracticeTemplates.Count; i++)
-			RenderCustomTemplate(UserSettings.Model.PracticeTemplates[i]);
+			RenderCustomTemplate(i, UserSettings.Model.PracticeTemplates[i]);
 
 		ImGui.EndChild();
 		ImGui.EndChild();
@@ -252,17 +256,42 @@ public static class PracticeWindow
 		}
 	}
 
-	private static void RenderCustomTemplate(UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
+	private static void RenderCustomTemplate(int i, UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
 	{
 		CustomTemplateChild.Render(
 			customTemplate: customTemplate,
 			isActive: _state.IsEqual(customTemplate),
-			buttonSize: new(_templateWidth - 56, 48),
+			buttonSize: new(_templateWidth - 96, 48),
 			onClick: () =>
 			{
 				_state = new(customTemplate.HandLevel, customTemplate.AdditionalGems, customTemplate.TimerStart);
 				Apply();
 			});
+
+		ImGui.SameLine();
+		Color gray = Color.Gray(0.3f);
+		ImGui.PushStyleColor(ImGuiCol.Button, gray with { A = 159 });
+		ImGui.PushStyleColor(ImGuiCol.ButtonActive, gray);
+		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, gray with { A = 223 });
+		ImGui.PushID($"dd {customTemplate}");
+
+		ImGui.ImageButton((IntPtr)Root.InternalResources.DragIndicatorTexture.Handle, new(32, 48), Vector2.Zero, Vector2.One, 0);
+
+		if (ImGui.IsItemHovered())
+			ImGui.SetTooltip("Reorder");
+
+		if (ImGui.BeginDragDropSource(ImGuiDragDropFlags.None))
+		{
+			_customTemplateIndexToReorder = i;
+
+			ImGui.SetDragDropPayload("CustomTemplateReorder", IntPtr.Zero, 0);
+			string templateDragName = customTemplate.Name != null ? $"\"{customTemplate.Name}\"" : $"{customTemplate.HandLevel} (+{customTemplate.AdditionalGems}) {customTemplate.TimerStart.ToString(StringFormats.TimeFormat)}";
+			ImGui.Text($"Reorder {templateDragName}");
+			ImGui.EndDragDropSource();
+		}
+
+		ImGui.PopID();
+		ImGui.PopStyleColor(3);
 
 		ImGui.SameLine();
 		ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 159 });
@@ -277,8 +306,45 @@ public static class PracticeWindow
 			};
 		}
 
+		if (ImGui.IsItemHovered())
+			ImGui.SetTooltip("Delete permanently");
+
 		ImGui.PopID();
 		ImGui.PopStyleColor(3);
+
+		RenderDragDropTarget(i);
+	}
+
+	private static unsafe void RenderDragDropTarget(int i)
+	{
+		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
+		ImGui.InvisibleButton("Drop", new(_templateWidth, 8));
+		ImGui.PopStyleVar();
+
+		if (ImGui.BeginDragDropTarget())
+		{
+			ImGuiPayload* payload = ImGui.AcceptDragDropPayload("CustomTemplateReorder");
+			if (payload != (void*)0)
+			{
+				UserSettingsModel.UserSettingsPracticeTemplate originalTemplate = UserSettings.Model.PracticeTemplates[_customTemplateIndexToReorder];
+
+				List<UserSettingsModel.UserSettingsPracticeTemplate> newPracticeTemplates = UserSettings.Model.PracticeTemplates
+					.Where(pt => pt != originalTemplate)
+					.ToList();
+
+				if (i < _customTemplateIndexToReorder)
+					newPracticeTemplates.Insert(i + 1, originalTemplate);
+				else
+					newPracticeTemplates.Insert(i, originalTemplate);
+
+				UserSettings.Model = UserSettings.Model with
+				{
+					PracticeTemplates = newPracticeTemplates,
+				};
+			}
+
+			ImGui.EndDragDropTarget();
+		}
 	}
 
 	public static (string Text, Color TextColor) GetGemsOrHomingText(HandLevel handLevel, int additionalGems)

@@ -64,7 +64,7 @@ public static class CustomTemplateChild
 		{
 			string name = customTemplate.Name ?? string.Empty;
 			ImGui.SetKeyboardFocusHere();
-			if (ImGui.InputText("##name", ref name, 32))
+			if (ImGui.InputText("##name", ref name, 24))
 			{
 				UserSettingsModel.UserSettingsPracticeTemplate originalTemplate = UserSettings.Model.PracticeTemplates.First(pt => pt == customTemplate);
 				int index = UserSettings.Model.PracticeTemplates.IndexOf(originalTemplate);
