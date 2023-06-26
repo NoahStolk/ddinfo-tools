@@ -317,9 +317,8 @@ public static class PracticeWindow
 
 	private static unsafe void RenderDragDropTarget(int i)
 	{
-		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-		ImGui.InvisibleButton("Drop", new(_templateWidth, 8));
-		ImGui.PopStyleVar();
+		ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(4, 4));
+		ImGui.InvisibleButton("Drop", new(_templateWidth - 4, 8));
 
 		if (ImGui.BeginDragDropTarget())
 		{

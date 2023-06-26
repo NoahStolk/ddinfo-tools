@@ -144,6 +144,7 @@ public static class MainWindow
 			Be sure to check out the custom leaderboards to see what's possible.
 
 			Note that using custom spawnsets will not submit your score to the official leaderboards.
+
 			Spawnsets can only be used to practice, not cheat. They're completely safe to use.
 			""");
 	}
@@ -181,6 +182,8 @@ public static class MainWindow
 	{
 		ImGuiExt.Title("Custom Leaderboards");
 		ImGui.Text("""
+			WINDOWS ONLY
+
 			Custom leaderboards are leaderboards for custom spawnsets.
 
 			All game modes are supported:
@@ -216,6 +219,8 @@ public static class MainWindow
 		ImGuiExt.Title("Practice");
 		ImGui.Text("""
 			Practice the main game by starting at any point in time with any hand upgrade and amount of gems/homing.
+
+			Save templates to quickly load your desired practice settings.
 			""");
 	}
 
