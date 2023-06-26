@@ -1,6 +1,7 @@
 using DevilDaggersInfo.App.Engine.Maths;
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Extensions;
+using DevilDaggersInfo.App.Ui.Practice.Templates;
 using DevilDaggersInfo.App.User.Settings;
 using DevilDaggersInfo.App.User.Settings.Model;
 using DevilDaggersInfo.Common;
@@ -9,6 +10,7 @@ using DevilDaggersInfo.Core.Spawnset.View;
 using DevilDaggersInfo.Core.Wiki;
 using ImGuiNET;
 using System.Numerics;
+using System.Runtime.InteropServices;
 
 namespace DevilDaggersInfo.App.Ui.Practice;
 
@@ -147,16 +149,13 @@ public static class PracticeWindow
 		ImGui.SameLine();
 		if (ImGui.Button("Save", new(80, 30)))
 		{
-			UserSettingsModel.UserSettingsPracticeTemplate newTemplate = new(_state.HandLevel, _state.AdditionalGems, _state.TimerStart);
+			UserSettingsModel.UserSettingsPracticeTemplate newTemplate = new(null, _state.HandLevel, _state.AdditionalGems, _state.TimerStart);
 			if (!UserSettings.Model.PracticeTemplates.Contains(newTemplate))
 			{
 				UserSettings.Model = UserSettings.Model with
 				{
 					PracticeTemplates = UserSettings.Model.PracticeTemplates
 						.Append(newTemplate)
-						.OrderBy(pt => pt.TimerStart)
-						.ThenBy(pt => pt.HandLevel)
-						.ThenBy(pt => pt.AdditionalGems)
 						.ToList(),
 				};
 			}
@@ -221,67 +220,31 @@ public static class PracticeWindow
 			UiRenderer.Layout = LayoutType.Main;
 	}
 
-	private static (string Text, Color TextColor) GetGemsOrHomingText(HandLevel handLevel, int additionalGems)
-	{
-		EffectivePlayerSettings effectivePlayerSettings = SpawnsetBinary.GetEffectivePlayerSettings(_spawnVersion, handLevel, additionalGems);
-		return effectivePlayerSettings.HandLevel switch
-		{
-			HandLevel.Level3 => ($"{effectivePlayerSettings.GemsOrHoming} homing", HandLevel.Level3.GetColor()),
-			HandLevel.Level4 => ($"{effectivePlayerSettings.GemsOrHoming} homing", HandLevel.Level4.GetColor()),
-			_ => ($"{effectivePlayerSettings.GemsOrHoming} gems", Color.Red),
-		};
-	}
-
 	private static void RenderTemplate(Template template)
 	{
-		(byte backgroundAlpha, byte textAlpha) = GetAlpha(template.IsEqual(_state));
-
-		string timerText = template.TimerStart.ToString(StringFormats.TimeFormat);
-
-		(string gemsOrHomingText, Color gemColor) = GetGemsOrHomingText(template.HandLevel, template.AdditionalGems);
-
-		ImGuiExt.ButtonWrapper(
-			template.Name,
+		TemplateChild.Render(
+			template,
+			template.IsEqual(_state),
 			new(_templateWidth, 48),
-			template.Color with { A = backgroundAlpha },
-			template.Color with { A = 31 },
 			() =>
 			{
 				_state = new(template.HandLevel, template.AdditionalGems, template.TimerStart);
 				Apply();
-			},
-			template.Color with { A = textAlpha },
-			template.Name,
-			Color.White with { A = textAlpha },
-			timerText,
-			template.HandLevel.GetColor() with { A = textAlpha },
-			template.HandLevel.ToString(),
-			gemColor with { A = textAlpha },
-			gemsOrHomingText);
+			});
 	}
 
 	private static void RenderEndLoopTemplate(int waveIndex, float timerStart)
 	{
-		(byte backgroundAlpha, byte textAlpha) = GetAlpha(IsEqual(_state, timerStart));
-
-		string timerText = timerStart.ToString(StringFormats.TimeFormat);
-		string name = $"Wave {waveIndex + 1}";
-		Color color = waveIndex % 3 == 2 ? EnemiesV3_2.Ghostpede.Color.ToEngineColor() : EnemiesV3_2.Gigapede.Color.ToEngineColor();
-
-		ImGuiExt.ButtonWrapper(
-			name,
-			new(_templateWidth, 30),
-			color with { A = backgroundAlpha },
-			color with { A = 31 },
-			() =>
+		EndLoopTemplateChild.Render(
+			waveIndex: waveIndex,
+			timerStart: timerStart,
+			isActive: IsEqual(_state, timerStart),
+			buttonSize: new(_templateWidth, 30),
+			onClick: () =>
 			{
 				_state = new(HandLevel.Level4, 0, timerStart);
 				Apply();
-			},
-			color with { A = textAlpha },
-			name,
-			Color.White with { A = textAlpha },
-			timerText);
+			});
 
 		static bool IsEqual(State state, float timerStart)
 		{
@@ -291,31 +254,15 @@ public static class PracticeWindow
 
 	private static void RenderCustomTemplate(UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
 	{
-		Color color = Color.White;
-		string uniqueName = $"{customTemplate.HandLevel}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart.ToString(StringFormats.TimeFormat)}";
-		(byte backgroundAlpha, byte textAlpha) = GetAlpha(_state.IsEqual(customTemplate));
-
-		string timerText = customTemplate.TimerStart.ToString(StringFormats.TimeFormat);
-		(string gemsOrHomingText, Color gemColor) = GetGemsOrHomingText(customTemplate.HandLevel, customTemplate.AdditionalGems);
-
-		ImGuiExt.ButtonWrapper(
-			uniqueName,
-			new(_templateWidth - 56, 48),
-			color with { A = backgroundAlpha },
-			color with { A = 31 },
-			() =>
+		CustomTemplateChild.Render(
+			customTemplate: customTemplate,
+			isActive: _state.IsEqual(customTemplate),
+			buttonSize: new(_templateWidth - 56, 48),
+			onClick: () =>
 			{
 				_state = new(customTemplate.HandLevel, customTemplate.AdditionalGems, customTemplate.TimerStart);
 				Apply();
-			},
-			color with { A = textAlpha },
-			"Custom template",
-			Color.White with { A = textAlpha },
-			timerText,
-			customTemplate.HandLevel.GetColor() with { A = textAlpha },
-			customTemplate.HandLevel.ToString(),
-			gemColor with { A = textAlpha },
-			gemsOrHomingText);
+			});
 
 		ImGui.SameLine();
 		ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 159 });
@@ -334,7 +281,18 @@ public static class PracticeWindow
 		ImGui.PopStyleColor(3);
 	}
 
-	private static (byte BackgroundAlpha, byte TextAlpha) GetAlpha(bool isActive)
+	public static (string Text, Color TextColor) GetGemsOrHomingText(HandLevel handLevel, int additionalGems)
+	{
+		EffectivePlayerSettings effectivePlayerSettings = SpawnsetBinary.GetEffectivePlayerSettings(_spawnVersion, handLevel, additionalGems);
+		return effectivePlayerSettings.HandLevel switch
+		{
+			HandLevel.Level3 => ($"{effectivePlayerSettings.GemsOrHoming} homing", HandLevel.Level3.GetColor()),
+			HandLevel.Level4 => ($"{effectivePlayerSettings.GemsOrHoming} homing", HandLevel.Level4.GetColor()),
+			_ => ($"{effectivePlayerSettings.GemsOrHoming} gems", Color.Red),
+		};
+	}
+
+	public static (byte BackgroundAlpha, byte TextAlpha) GetAlpha(bool isActive)
 	{
 		return isActive ? ((byte)48, (byte)255) : ((byte)16, (byte)191);
 	}
@@ -363,7 +321,8 @@ public static class PracticeWindow
 			File.Delete(UserSettings.ModsSurvivalPath);
 	}
 
-	private struct State
+	[StructLayout(LayoutKind.Sequential)]
+	public struct State
 	{
 		public HandLevel HandLevel;
 		public int AdditionalGems;
@@ -384,7 +343,7 @@ public static class PracticeWindow
 		}
 	}
 
-	private readonly record struct Template(string Name, Color Color, HandLevel HandLevel, int AdditionalGems, float TimerStart)
+	public readonly record struct Template(string Name, Color Color, HandLevel HandLevel, int AdditionalGems, float TimerStart)
 	{
 		public bool IsEqual(State state)
 		{
