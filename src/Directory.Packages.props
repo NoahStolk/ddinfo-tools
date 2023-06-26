@@ -84,7 +84,7 @@
 		<PackageVersion Include="Nullable.Extended.Analyzer" Version="1.10.4539" />
 		<PackageVersion Include="Roslynator.Analyzers" Version="4.3.0" />
 		<PackageVersion Include="SonarAnalyzer.CSharp" Version="9.3.0.71466" />
-		<PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.435" />
+		<PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.507" />
 	</ItemGroup>
 
 	<ItemGroup Label="Tests">
