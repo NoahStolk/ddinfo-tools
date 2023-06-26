@@ -38,10 +38,9 @@ public static class CustomTemplateChild
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 8));
 
-				string timerStartString = customTemplate.TimerStart.ToString(StringFormats.TimeFormat);
-
 				ImGui.TextColored(color with { A = textAlpha }, string.IsNullOrWhiteSpace(customTemplate.Name) ? "<untitled>" : customTemplate.Name);
 
+				string timerStartString = customTemplate.TimerStart.ToString(StringFormats.TimeFormat);
 				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(timerStartString).X - 8);
 				ImGui.TextColored(Color.White with { A = textAlpha }, timerStartString);
 
@@ -65,23 +64,20 @@ public static class CustomTemplateChild
 		{
 			string name = customTemplate.Name ?? string.Empty;
 			ImGui.SetKeyboardFocusHere();
-			if (ImGui.InputText("Name", ref name, 32))
+			if (ImGui.InputText("##name", ref name, 32))
 			{
 				UserSettingsModel.UserSettingsPracticeTemplate originalTemplate = UserSettings.Model.PracticeTemplates.First(pt => pt == customTemplate);
 				int index = UserSettings.Model.PracticeTemplates.IndexOf(originalTemplate);
 
-				List<UserSettingsModel.UserSettingsPracticeTemplate> newList = UserSettings.Model.PracticeTemplates
+				List<UserSettingsModel.UserSettingsPracticeTemplate> newPracticeTemplates = UserSettings.Model.PracticeTemplates
 					.Where(pt => pt != originalTemplate)
 					.ToList();
 
-				newList.Insert(index, originalTemplate with
-				{
-					Name = name,
-				});
+				newPracticeTemplates.Insert(index, originalTemplate with { Name = name });
 
 				UserSettings.Model = UserSettings.Model with
 				{
-					PracticeTemplates = newList,
+					PracticeTemplates = newPracticeTemplates,
 				};
 			}
 
