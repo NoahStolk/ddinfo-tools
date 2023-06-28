@@ -6,7 +6,7 @@ using DevilDaggersInfo.Common;
 using ImGuiNET;
 using System.Numerics;
 
-namespace DevilDaggersInfo.App.Ui.Practice.Templates;
+namespace DevilDaggersInfo.App.Ui.Practice.Main.Templates;
 
 public static class CustomTemplateChild
 {

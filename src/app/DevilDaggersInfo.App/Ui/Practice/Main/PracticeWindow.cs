@@ -1,7 +1,7 @@
 using DevilDaggersInfo.App.Engine.Maths;
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Extensions;
-using DevilDaggersInfo.App.Ui.Practice.Templates;
+using DevilDaggersInfo.App.Ui.Practice.Main.Templates;
 using DevilDaggersInfo.App.User.Settings;
 using DevilDaggersInfo.App.User.Settings.Model;
 using DevilDaggersInfo.Common;
@@ -12,7 +12,7 @@ using ImGuiNET;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
-namespace DevilDaggersInfo.App.Ui.Practice;
+namespace DevilDaggersInfo.App.Ui.Practice.Main;
 
 public static class PracticeWindow
 {
@@ -77,8 +77,18 @@ public static class PracticeWindow
 		ImGui.EndChild();
 
 		ImGui.BeginChild("No farm template list", _templateListSize);
-		foreach (Template noFarmTemplate in _noFarmTemplates)
-			RenderTemplate(noFarmTemplate);
+		foreach (Template template in _noFarmTemplates)
+		{
+			TemplateChild.Render(
+				template,
+				template.IsEqual(_state),
+				new(_templateWidth, 48),
+				() =>
+				{
+					_state = new(template.HandLevel, template.AdditionalGems, template.TimerStart);
+					Apply();
+				});
+		}
 
 		ImGui.EndChild();
 		ImGui.EndChild();
@@ -225,19 +235,6 @@ public static class PracticeWindow
 
 		if (ImGui.IsKeyPressed(ImGuiKey.Escape) || ImGui.IsKeyPressed((ImGuiKey)526))
 			UiRenderer.Layout = LayoutType.Main;
-	}
-
-	private static void RenderTemplate(Template template)
-	{
-		TemplateChild.Render(
-			template,
-			template.IsEqual(_state),
-			new(_templateWidth, 48),
-			() =>
-			{
-				_state = new(template.HandLevel, template.AdditionalGems, template.TimerStart);
-				Apply();
-			});
 	}
 
 	private static void RenderEndLoopTemplate(int waveIndex, float timerStart)

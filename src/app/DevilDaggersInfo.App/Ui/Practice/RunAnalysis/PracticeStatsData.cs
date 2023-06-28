@@ -1,6 +1,6 @@
 using DevilDaggersInfo.App.Core.GameMemory;
 
-namespace DevilDaggersInfo.App.Ui.Practice;
+namespace DevilDaggersInfo.App.Ui.Practice.RunAnalysis;
 
 public class PracticeStatsData
 {

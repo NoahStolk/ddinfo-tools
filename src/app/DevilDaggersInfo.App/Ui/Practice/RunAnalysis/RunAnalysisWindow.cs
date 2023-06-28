@@ -1,7 +1,7 @@
 using ImGuiNET;
 using System.Numerics;
 
-namespace DevilDaggersInfo.App.Ui.Practice;
+namespace DevilDaggersInfo.App.Ui.Practice.RunAnalysis;
 
 public static class RunAnalysisWindow
 {

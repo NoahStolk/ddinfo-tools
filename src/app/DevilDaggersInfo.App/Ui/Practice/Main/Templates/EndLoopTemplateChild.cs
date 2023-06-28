@@ -5,7 +5,7 @@ using DevilDaggersInfo.Core.Wiki;
 using ImGuiNET;
 using System.Numerics;
 
-namespace DevilDaggersInfo.App.Ui.Practice.Templates;
+namespace DevilDaggersInfo.App.Ui.Practice.Main.Templates;
 
 public static class EndLoopTemplateChild
 {

@@ -1,6 +1,6 @@
 using ImGuiNET;
 
-namespace DevilDaggersInfo.App.Ui.Practice;
+namespace DevilDaggersInfo.App.Ui.Practice.RunAnalysis;
 
 public static class GemCollectionChild
 {
