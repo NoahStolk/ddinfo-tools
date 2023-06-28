@@ -9,14 +9,13 @@ public static class PracticeLogic
 {
 	public const int SpawnVersion = 6;
 
+#pragma warning disable SA1401, S1104, S2223, CA2211
 	public static PracticeState State = PracticeState.Default;
+#pragma warning restore CA2211, S2223, S1104, SA1401
 
 	public static void Apply()
 	{
-		State = State with
-		{
-			TimerStart = Math.Clamp(State.TimerStart, 0, 1400),
-		};
+		State.TimerStart = Math.Clamp(State.TimerStart, 0, 1400);
 
 		SpawnsetBinary spawnset = ContentManager.Content.DefaultSpawnset;
 		float shrinkStart = MathUtils.Lerp(spawnset.ShrinkStart, spawnset.ShrinkEnd, State.TimerStart / ((spawnset.ShrinkStart - spawnset.ShrinkEnd) / spawnset.ShrinkRate));
