@@ -10,8 +10,8 @@ public static class PracticeWindow
 {
 	public const int TemplateWidth = 360;
 	public const int TemplateDescriptionHeight = 48;
-	public static readonly Vector2 TemplateContainerSize = new(400, 480);
-	public static readonly Vector2 TemplateListSize = new(380, 380);
+	public static readonly Vector2 TemplateContainerSize = new(400, 544);
+	public static readonly Vector2 TemplateListSize = new(380, 456);
 
 	public static void Render()
 	{

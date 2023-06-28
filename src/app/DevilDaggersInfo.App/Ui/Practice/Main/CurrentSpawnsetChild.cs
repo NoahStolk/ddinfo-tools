@@ -8,7 +8,7 @@ public static class CurrentSpawnsetChild
 {
 	public static void Render()
 	{
-		ImGui.BeginChild("Current spawnset", new(400, 192), true);
+		ImGui.BeginChild("Current spawnset", new(400, 160), true);
 
 		ImGui.BeginChild("Current practice values", new(400, 64));
 		if (SurvivalFileWatcher.Exists)
