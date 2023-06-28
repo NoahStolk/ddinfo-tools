@@ -320,21 +320,24 @@ public static class PracticeWindow
 
 	private static void RenderDragDropTarget(int i)
 	{
-		if (!_customTemplateIndexToReorder.HasValue || _customTemplateIndexToReorder.Value == i || _customTemplateIndexToReorder.Value == i + 1)
+		if (!_customTemplateIndexToReorder.HasValue)
 			return;
 
 		float relativeMouseY = ImGui.GetMousePos().Y - ImGui.GetWindowPos().Y + ImGui.GetScrollY();
 		float currentY = ImGui.GetCursorPosY();
-		const float space = 56;
-		if (relativeMouseY > currentY - space / 2 && relativeMouseY < currentY + space / 2)
+		const float dropAreaPaddingY = 28;
+		if (relativeMouseY > currentY - dropAreaPaddingY && relativeMouseY < currentY + dropAreaPaddingY)
 		{
-			ImGui.SetCursorPosY(ImGui.GetCursorPosY() - 2);
+			const float spacingY = 8;
+			const float dropAreaHeight = 14;
 
-			ImGui.PushStyleColor(ImGuiCol.Button, Color.Yellow);
-			ImGui.Button("Drop", new(_templateWidth, 2));
+			ImGui.SetCursorPosY(ImGui.GetCursorPosY() - spacingY);
+
+			ImGui.PushStyleColor(ImGuiCol.Button, Color.Green with { A = 111 });
+			ImGui.Button("##drop", new(_templateWidth - 96, dropAreaHeight));
 			ImGui.PopStyleColor();
 
-			ImGui.SetCursorPosY(ImGui.GetCursorPosY() - 4);
+			ImGui.SetCursorPosY(ImGui.GetCursorPosY() - dropAreaHeight + spacingY - 4);
 
 			if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 			{
