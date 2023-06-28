@@ -1,10 +1,8 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Extensions;
-using DevilDaggersInfo.App.Ui.Practice.Main.Data;
 using DevilDaggersInfo.App.User.Settings;
 using DevilDaggersInfo.App.User.Settings.Model;
 using DevilDaggersInfo.Common;
-using DevilDaggersInfo.Core.Spawnset;
 using ImGuiNET;
 using System.Numerics;
 
