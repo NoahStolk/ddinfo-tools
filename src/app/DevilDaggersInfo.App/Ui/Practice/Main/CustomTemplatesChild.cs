@@ -45,7 +45,7 @@ public static class CustomTemplatesChild
 			onClick: () =>
 			{
 				PracticeLogic.State = new(customTemplate.HandLevel, customTemplate.AdditionalGems, customTemplate.TimerStart);
-				PracticeLogic.Apply();
+				PracticeLogic.GenerateAndApplyPracticeSpawnset();
 			});
 
 		ImGui.SameLine();

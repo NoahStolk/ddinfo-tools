@@ -13,7 +13,7 @@ public static class PracticeLogic
 	public static PracticeState State = PracticeState.Default;
 #pragma warning restore CA2211, S2223, S1104, SA1401
 
-	public static void Apply()
+	public static void GenerateAndApplyPracticeSpawnset()
 	{
 		State.TimerStart = Math.Clamp(State.TimerStart, 0, 1400);
 
@@ -29,5 +29,11 @@ public static class PracticeLogic
 			ShrinkStart = shrinkStart,
 		};
 		File.WriteAllBytes(UserSettings.ModsSurvivalPath, generatedSpawnset.ToBytes());
+	}
+
+	public static void DeleteModdedSpawnset()
+	{
+		if (File.Exists(UserSettings.ModsSurvivalPath))
+			File.Delete(UserSettings.ModsSurvivalPath);
 	}
 }

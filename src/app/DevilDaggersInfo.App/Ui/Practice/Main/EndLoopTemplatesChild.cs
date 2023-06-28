@@ -59,7 +59,7 @@ public static class EndLoopTemplatesChild
 			onClick: () =>
 			{
 				PracticeLogic.State = new(HandLevel.Level4, 0, timerStart);
-				PracticeLogic.Apply();
+				PracticeLogic.GenerateAndApplyPracticeSpawnset();
 			});
 
 		static bool IsEqual(PracticeState state, float timerStart)

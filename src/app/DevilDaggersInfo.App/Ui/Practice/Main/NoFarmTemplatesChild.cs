@@ -43,7 +43,7 @@ public static class NoFarmTemplatesChild
 				() =>
 				{
 					PracticeLogic.State = new(template.HandLevel, template.AdditionalGems, template.TimerStart);
-					PracticeLogic.Apply();
+					PracticeLogic.GenerateAndApplyPracticeSpawnset();
 				});
 		}
 
