@@ -1,6 +1,5 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Extensions;
-using DevilDaggersInfo.App.Ui.Practice.Main.Data;
 using DevilDaggersInfo.App.Ui.Practice.Main.Templates;
 using DevilDaggersInfo.App.User.Settings;
 using DevilDaggersInfo.App.User.Settings.Model;
