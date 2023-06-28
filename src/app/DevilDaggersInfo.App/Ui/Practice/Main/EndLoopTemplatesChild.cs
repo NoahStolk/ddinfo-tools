@@ -37,7 +37,7 @@ public static class EndLoopTemplatesChild
 
 		ImGui.BeginChild("End loop template description", PracticeWindow.TemplateListSize with { Y = PracticeWindow.TemplateDescriptionHeight });
 		ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + PracticeWindow.TemplateWidth);
-		ImGui.Text("The amount of homing for the end loop waves is set to 0. Use one that is realistic for you.");
+		ImGui.Text("The amount of homing for the end loop waves is set to 0. You can fill in your preferred homing count and save it as a template.");
 		ImGui.PopTextWrapPos();
 		ImGui.EndChild();
 
