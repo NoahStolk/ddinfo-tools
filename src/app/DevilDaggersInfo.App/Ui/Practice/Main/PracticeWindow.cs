@@ -1,6 +1,6 @@
-using DevilDaggersInfo.App.Engine.Maths;
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Extensions;
+using DevilDaggersInfo.App.Ui.Practice.Main.Data;
 using DevilDaggersInfo.App.Ui.Practice.Main.Templates;
 using DevilDaggersInfo.App.User.Settings;
 using DevilDaggersInfo.App.User.Settings.Model;
@@ -10,37 +10,19 @@ using DevilDaggersInfo.Core.Spawnset.View;
 using DevilDaggersInfo.Core.Wiki;
 using ImGuiNET;
 using System.Numerics;
-using System.Runtime.InteropServices;
 
 namespace DevilDaggersInfo.App.Ui.Practice.Main;
 
 public static class PracticeWindow
 {
-	private const int _spawnVersion = 6;
-
-	private const float _timerStartTolerance = 0.00001f;
-	private const int _templateWidth = 360;
-	private const int _templateDescriptionHeight = 48;
-
 	private static int? _customTemplateIndexToReorder;
 
-	private static readonly Vector2 _templateContainerSize = new(400, 480);
-	private static readonly Vector2 _templateListSize = new(380, 380);
-
-	private static readonly List<Template> _noFarmTemplates = new()
-	{
-		new("First Spider I & Squid II", EnemiesV3_2.Squid2.Color.ToEngineColor(), HandLevel.Level1, 8, 39),
-		new("First Centipede", EnemiesV3_2.Centipede.Color.ToEngineColor(), HandLevel.Level2, 25, 114),
-		new("Centipede & first triple Spider Is", EnemiesV3_2.Spider1.Color.ToEngineColor(), HandLevel.Level3, 11, 174),
-		new("Six Squid Is", EnemiesV3_2.Squid3.Color.ToEngineColor(), HandLevel.Level3, 57, 229),
-		new("Gigapedes", EnemiesV3_2.Gigapede.Color.ToEngineColor(), HandLevel.Level3, 81, 259),
-		new("Leviathan", EnemiesV3_2.Leviathan.Color.ToEngineColor(), HandLevel.Level4, 105, 350),
-		new("Post Orb", EnemiesV3_2.TheOrb.Color.ToEngineColor(), HandLevel.Level4, 129, 397),
-	};
+	public const int TemplateWidth = 360;
+	public const int TemplateDescriptionHeight = 48;
+	public static readonly Vector2 TemplateContainerSize = new(400, 480);
+	public static readonly Vector2 TemplateListSize = new(380, 380);
 
 	private static readonly List<float> _endLoopTimerStarts = new();
-
-	private static State _state = State.Default;
 
 	static PracticeWindow()
 	{
@@ -67,43 +49,19 @@ public static class PracticeWindow
 		ImGui.Text("Use these templates to practice specific sections of the game. Click on a template to install it.");
 		ImGui.Spacing();
 
-		ImGui.BeginChild("No farm templates", _templateContainerSize, true);
-		ImGui.Text("No farm templates");
-
-		ImGui.BeginChild("No farm template description", _templateListSize with { Y = _templateDescriptionHeight });
-		ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + _templateWidth);
-		ImGui.Text("The amount of gems is based on how many gems you would have at that point, without farming, without losing gems, and without any homing usage.");
-		ImGui.PopTextWrapPos();
-		ImGui.EndChild();
-
-		ImGui.BeginChild("No farm template list", _templateListSize);
-		foreach (Template template in _noFarmTemplates)
-		{
-			TemplateChild.Render(
-				template,
-				template.IsEqual(_state),
-				new(_templateWidth, 48),
-				() =>
-				{
-					_state = new(template.HandLevel, template.AdditionalGems, template.TimerStart);
-					Apply();
-				});
-		}
-
-		ImGui.EndChild();
-		ImGui.EndChild();
+		NoFarmTemplatesChild.Render();
 
 		ImGui.SameLine();
-		ImGui.BeginChild("End loop templates", _templateContainerSize, true);
+		ImGui.BeginChild("End loop templates", TemplateContainerSize, true);
 		ImGui.Text("End loop templates");
 
-		ImGui.BeginChild("End loop template description", _templateListSize with { Y = _templateDescriptionHeight });
-		ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + _templateWidth);
+		ImGui.BeginChild("End loop template description", TemplateListSize with { Y = TemplateDescriptionHeight });
+		ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + TemplateWidth);
 		ImGui.Text("The amount of homing for the end loop waves is set to 0. Use one that is realistic for you.");
 		ImGui.PopTextWrapPos();
 		ImGui.EndChild();
 
-		ImGui.BeginChild("End loop template list", _templateListSize);
+		ImGui.BeginChild("End loop template list", TemplateListSize);
 		for (int i = 0; i < _endLoopTimerStarts.Count; i++)
 			RenderEndLoopTemplate(i, _endLoopTimerStarts[i]);
 
@@ -111,16 +69,16 @@ public static class PracticeWindow
 		ImGui.EndChild();
 
 		ImGui.SameLine();
-		ImGui.BeginChild("Custom templates", _templateContainerSize, true);
+		ImGui.BeginChild("Custom templates", TemplateContainerSize, true);
 		ImGui.Text("Custom templates");
 
-		ImGui.BeginChild("Custom template description", _templateListSize with { Y = _templateDescriptionHeight });
-		ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + _templateWidth);
+		ImGui.BeginChild("Custom template description", TemplateListSize with { Y = TemplateDescriptionHeight });
+		ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + TemplateWidth);
 		ImGui.Text("You can make your own templates and save them. Your custom templates are saved locally on your computer. Right-click to rename a template.");
 		ImGui.PopTextWrapPos();
 		ImGui.EndChild();
 
-		ImGui.BeginChild("Custom template list", _templateListSize);
+		ImGui.BeginChild("Custom template list", TemplateListSize);
 
 		RenderDragDropTarget(-1);
 		for (int i = 0; i < UserSettings.Model.PracticeTemplates.Count; i++)
@@ -135,38 +93,38 @@ public static class PracticeWindow
 		ImGui.BeginChild("Input values", new(400, 192), true);
 
 		ImGui.Spacing();
-		ImGui.Image((IntPtr)Root.InternalResources.IconHandTexture.Handle, new(16), Vector2.Zero, Vector2.One, _state.HandLevel.GetColor());
+		ImGui.Image((IntPtr)Root.InternalResources.IconHandTexture.Handle, new(16), Vector2.Zero, Vector2.One, PracticeLogic.State.HandLevel.GetColor());
 		ImGui.SameLine();
 		foreach (HandLevel level in Enum.GetValues<HandLevel>())
 		{
-			if (ImGui.RadioButton($"Lvl {(int)level}", level == _state.HandLevel) && _state.HandLevel != level)
-				_state.HandLevel = level;
+			if (ImGui.RadioButton($"Lvl {(int)level}", level == PracticeLogic.State.HandLevel) && PracticeLogic.State.HandLevel != level)
+				PracticeLogic.State.HandLevel = level;
 
 			if (level != HandLevel.Level4)
 				ImGui.SameLine();
 		}
 
-		(Texture gemOrHomingTexture, Color tintColor) = _state.HandLevel is HandLevel.Level3 or HandLevel.Level4 ? (Root.GameResources.IconMaskHomingTexture, Color.White) : (Root.GameResources.IconMaskGemTexture, Color.Red);
+		(Texture gemOrHomingTexture, Color tintColor) = PracticeLogic.State.HandLevel is HandLevel.Level3 or HandLevel.Level4 ? (Root.GameResources.IconMaskHomingTexture, Color.White) : (Root.GameResources.IconMaskGemTexture, Color.Red);
 		ImGui.Spacing();
 		ImGui.Image((IntPtr)gemOrHomingTexture.Handle, new(16), Vector2.UnitY, Vector2.UnitX, tintColor);
 		ImGui.SameLine();
-		ImGui.InputInt("Added gems", ref _state.AdditionalGems, 1);
+		ImGui.InputInt("Added gems", ref PracticeLogic.State.AdditionalGems, 1);
 
 		ImGui.Spacing();
 		ImGui.Image((IntPtr)Root.GameResources.IconMaskStopwatchTexture.Handle, new(16), Vector2.UnitY, Vector2.UnitX);
 		ImGui.SameLine();
-		ImGui.InputFloat("Timer start", ref _state.TimerStart, 1, 5, "%.4f");
+		ImGui.InputFloat("Timer start", ref PracticeLogic.State.TimerStart, 1, 5, "%.4f");
 
 		for (int i = 0; i < 8; i++)
 			ImGui.Spacing();
 
 		if (ImGui.Button("Apply", new(80, 30)))
-			Apply();
+			PracticeLogic.Apply();
 
 		ImGui.SameLine();
 		if (ImGui.Button("Save", new(80, 30)))
 		{
-			UserSettingsModel.UserSettingsPracticeTemplate newTemplate = new(null, _state.HandLevel, _state.AdditionalGems, _state.TimerStart);
+			UserSettingsModel.UserSettingsPracticeTemplate newTemplate = new(null, PracticeLogic.State.HandLevel, PracticeLogic.State.AdditionalGems, PracticeLogic.State.TimerStart);
 			if (!UserSettings.Model.PracticeTemplates.Contains(newTemplate))
 			{
 				UserSettings.Model = UserSettings.Model with
@@ -242,17 +200,17 @@ public static class PracticeWindow
 		EndLoopTemplateChild.Render(
 			waveIndex: waveIndex,
 			timerStart: timerStart,
-			isActive: IsEqual(_state, timerStart),
-			buttonSize: new(_templateWidth, 30),
+			isActive: IsEqual(PracticeLogic.State, timerStart),
+			buttonSize: new(TemplateWidth, 30),
 			onClick: () =>
 			{
-				_state = new(HandLevel.Level4, 0, timerStart);
-				Apply();
+				PracticeLogic.State = new(HandLevel.Level4, 0, timerStart);
+				PracticeLogic.Apply();
 			});
 
-		static bool IsEqual(State state, float timerStart)
+		static bool IsEqual(PracticeState state, float timerStart)
 		{
-			return state is { HandLevel: HandLevel.Level4, AdditionalGems: 0 } && Math.Abs(state.TimerStart - timerStart) < _timerStartTolerance;
+			return state is { HandLevel: HandLevel.Level4, AdditionalGems: 0 } && Math.Abs(state.TimerStart - timerStart) < PracticeDataConstants.TimerStartTolerance;
 		}
 	}
 
@@ -260,12 +218,12 @@ public static class PracticeWindow
 	{
 		CustomTemplateChild.Render(
 			customTemplate: customTemplate,
-			isActive: _state.IsEqual(customTemplate),
-			buttonSize: new(_templateWidth - 96, 48),
+			isActive: PracticeLogic.State.IsEqual(customTemplate),
+			buttonSize: new(TemplateWidth - 96, 48),
 			onClick: () =>
 			{
-				_state = new(customTemplate.HandLevel, customTemplate.AdditionalGems, customTemplate.TimerStart);
-				Apply();
+				PracticeLogic.State = new(customTemplate.HandLevel, customTemplate.AdditionalGems, customTemplate.TimerStart);
+				PracticeLogic.Apply();
 			});
 
 		ImGui.SameLine();
@@ -331,7 +289,7 @@ public static class PracticeWindow
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() - spacingY);
 
 			ImGui.PushStyleColor(ImGuiCol.Button, Color.Green with { A = 111 });
-			ImGui.Button("##drop", new(_templateWidth - 96, dropAreaHeight));
+			ImGui.Button("##drop", new(TemplateWidth - 96, dropAreaHeight));
 			ImGui.PopStyleColor();
 
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() - dropAreaHeight + spacingY - 4);
@@ -361,7 +319,7 @@ public static class PracticeWindow
 
 	public static (string Text, Color TextColor) GetGemsOrHomingText(HandLevel handLevel, int additionalGems)
 	{
-		EffectivePlayerSettings effectivePlayerSettings = SpawnsetBinary.GetEffectivePlayerSettings(_spawnVersion, handLevel, additionalGems);
+		EffectivePlayerSettings effectivePlayerSettings = SpawnsetBinary.GetEffectivePlayerSettings(PracticeLogic.SpawnVersion, handLevel, additionalGems);
 		return effectivePlayerSettings.HandLevel switch
 		{
 			HandLevel.Level3 => ($"{effectivePlayerSettings.GemsOrHoming} homing", HandLevel.Level3.GetColor()),
@@ -375,57 +333,9 @@ public static class PracticeWindow
 		return isActive ? ((byte)48, (byte)255) : ((byte)16, (byte)191);
 	}
 
-	private static void Apply()
-	{
-		_state.TimerStart = Math.Clamp(_state.TimerStart, 0, 1400);
-
-		SpawnsetBinary spawnset = ContentManager.Content.DefaultSpawnset;
-		float shrinkStart = MathUtils.Lerp(spawnset.ShrinkStart, spawnset.ShrinkEnd, _state.TimerStart / ((spawnset.ShrinkStart - spawnset.ShrinkEnd) / spawnset.ShrinkRate));
-
-		SpawnsetBinary generatedSpawnset = spawnset.GetWithHardcodedEndLoop(70).GetWithTrimmedStart(_state.TimerStart) with
-		{
-			HandLevel = _state.HandLevel,
-			AdditionalGems = _state.AdditionalGems,
-			TimerStart = _state.TimerStart,
-			SpawnVersion = _spawnVersion,
-			ShrinkStart = shrinkStart,
-		};
-		File.WriteAllBytes(UserSettings.ModsSurvivalPath, generatedSpawnset.ToBytes());
-	}
-
 	private static void DeleteModdedSpawnset()
 	{
 		if (File.Exists(UserSettings.ModsSurvivalPath))
 			File.Delete(UserSettings.ModsSurvivalPath);
-	}
-
-	[StructLayout(LayoutKind.Sequential)]
-	public struct State
-	{
-		public HandLevel HandLevel;
-		public int AdditionalGems;
-		public float TimerStart;
-
-		public State(HandLevel handLevel, int additionalGems, float timerStart)
-		{
-			HandLevel = handLevel;
-			AdditionalGems = additionalGems;
-			TimerStart = timerStart;
-		}
-
-		public static State Default => new(HandLevel.Level1, 0, 0);
-
-		public bool IsEqual(UserSettingsModel.UserSettingsPracticeTemplate practiceTemplate)
-		{
-			return HandLevel == practiceTemplate.HandLevel && AdditionalGems == practiceTemplate.AdditionalGems && Math.Abs(TimerStart - practiceTemplate.TimerStart) < _timerStartTolerance;
-		}
-	}
-
-	public readonly record struct Template(string Name, Color Color, HandLevel HandLevel, int AdditionalGems, float TimerStart)
-	{
-		public bool IsEqual(State state)
-		{
-			return HandLevel == state.HandLevel && AdditionalGems == state.AdditionalGems && Math.Abs(TimerStart - state.TimerStart) < _timerStartTolerance;
-		}
 	}
 }
