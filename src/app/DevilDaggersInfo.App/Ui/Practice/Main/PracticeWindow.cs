@@ -6,8 +6,6 @@ using DevilDaggersInfo.App.User.Settings;
 using DevilDaggersInfo.App.User.Settings.Model;
 using DevilDaggersInfo.Common;
 using DevilDaggersInfo.Core.Spawnset;
-using DevilDaggersInfo.Core.Spawnset.View;
-using DevilDaggersInfo.Core.Wiki;
 using ImGuiNET;
 using System.Numerics;
 
@@ -22,24 +20,6 @@ public static class PracticeWindow
 	public static readonly Vector2 TemplateContainerSize = new(400, 480);
 	public static readonly Vector2 TemplateListSize = new(380, 380);
 
-	private static readonly List<float> _endLoopTimerStarts = new();
-
-	static PracticeWindow()
-	{
-		const int endLoopTemplateWaveCount = 33;
-		SpawnsView spawnsView = new(ContentManager.Content.DefaultSpawnset, GameVersion.V3_2, endLoopTemplateWaveCount);
-		for (int i = 0; i < endLoopTemplateWaveCount; i++)
-		{
-			float timerStart;
-			if (i == 0)
-				timerStart = spawnsView.Waves[i][0].Seconds;
-			else
-				timerStart = spawnsView.Waves[i - 1][^1].Seconds + 0.1f; // Make sure we don't accidentally include the last enemy of the previous wave.
-
-			_endLoopTimerStarts.Add(timerStart);
-		}
-	}
-
 	public static void Render()
 	{
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, Constants.MinWindowSize);
@@ -52,21 +32,8 @@ public static class PracticeWindow
 		NoFarmTemplatesChild.Render();
 
 		ImGui.SameLine();
-		ImGui.BeginChild("End loop templates", TemplateContainerSize, true);
-		ImGui.Text("End loop templates");
 
-		ImGui.BeginChild("End loop template description", TemplateListSize with { Y = TemplateDescriptionHeight });
-		ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + TemplateWidth);
-		ImGui.Text("The amount of homing for the end loop waves is set to 0. Use one that is realistic for you.");
-		ImGui.PopTextWrapPos();
-		ImGui.EndChild();
-
-		ImGui.BeginChild("End loop template list", TemplateListSize);
-		for (int i = 0; i < _endLoopTimerStarts.Count; i++)
-			RenderEndLoopTemplate(i, _endLoopTimerStarts[i]);
-
-		ImGui.EndChild();
-		ImGui.EndChild();
+		EndLoopTemplatesChild.Render();
 
 		ImGui.SameLine();
 		ImGui.BeginChild("Custom templates", TemplateContainerSize, true);
@@ -193,25 +160,6 @@ public static class PracticeWindow
 
 		if (ImGui.IsKeyPressed(ImGuiKey.Escape) || ImGui.IsKeyPressed((ImGuiKey)526))
 			UiRenderer.Layout = LayoutType.Main;
-	}
-
-	private static void RenderEndLoopTemplate(int waveIndex, float timerStart)
-	{
-		EndLoopTemplateChild.Render(
-			waveIndex: waveIndex,
-			timerStart: timerStart,
-			isActive: IsEqual(PracticeLogic.State, timerStart),
-			buttonSize: new(TemplateWidth, 30),
-			onClick: () =>
-			{
-				PracticeLogic.State = new(HandLevel.Level4, 0, timerStart);
-				PracticeLogic.Apply();
-			});
-
-		static bool IsEqual(PracticeState state, float timerStart)
-		{
-			return state is { HandLevel: HandLevel.Level4, AdditionalGems: 0 } && Math.Abs(state.TimerStart - timerStart) < PracticeDataConstants.TimerStartTolerance;
-		}
 	}
 
 	private static void RenderCustomTemplate(int i, UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
