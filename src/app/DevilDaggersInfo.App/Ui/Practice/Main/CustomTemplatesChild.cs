@@ -1,8 +1,10 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Extensions;
+using DevilDaggersInfo.App.Ui.Practice.Main.Data;
 using DevilDaggersInfo.App.User.Settings;
 using DevilDaggersInfo.App.User.Settings.Model;
 using DevilDaggersInfo.Common;
+using DevilDaggersInfo.Core.Spawnset;
 using ImGuiNET;
 using System.Numerics;
 
@@ -38,15 +40,7 @@ public static class CustomTemplatesChild
 
 	private static void RenderCustomTemplate(int i, UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
 	{
-		RenderTemplateButton(
-			customTemplate: customTemplate,
-			isActive: PracticeLogic.State.IsEqual(customTemplate),
-			buttonSize: new(PracticeWindow.TemplateWidth - 96, 48),
-			onClick: () =>
-			{
-				PracticeLogic.State = new(customTemplate.HandLevel, customTemplate.AdditionalGems, customTemplate.TimerStart);
-				PracticeLogic.GenerateAndApplyPracticeSpawnset();
-			});
+		RenderTemplateButton(customTemplate);
 
 		ImGui.SameLine();
 
@@ -59,18 +53,14 @@ public static class CustomTemplatesChild
 		RenderDragDropTarget(i);
 	}
 
-	private static void RenderTemplateButton(
-		UserSettingsModel.UserSettingsPracticeTemplate customTemplate,
-		bool isActive,
-		Vector2 buttonSize,
-		Action onClick)
+	private static void RenderTemplateButton(UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
 	{
+		Vector2 buttonSize = new(PracticeWindow.TemplateWidth - 96, 48);
 		string buttonName = $"{customTemplate.HandLevel}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart.ToString(StringFormats.TimeFormat)}";
-
 		Color color = Color.White;
 
 		(string gemsOrHomingText, Color gemColor) = PracticeWindow.GetGemsOrHomingText(customTemplate.HandLevel, customTemplate.AdditionalGems);
-		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(isActive);
+		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(PracticeLogic.IsActive(customTemplate));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
 		if (ImGui.BeginChild(buttonName, buttonSize, true))
@@ -81,7 +71,10 @@ public static class CustomTemplatesChild
 			if (ImGui.BeginChild(buttonName + " child", buttonSize, false, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-					onClick.Invoke();
+				{
+					PracticeLogic.State = new(customTemplate.HandLevel, customTemplate.AdditionalGems, customTemplate.TimerStart);
+					PracticeLogic.GenerateAndApplyPracticeSpawnset();
+				}
 
 				float windowWidth = ImGui.GetWindowWidth();
 

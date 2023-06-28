@@ -1,6 +1,7 @@
 using DevilDaggersInfo.App.Engine.Maths;
 using DevilDaggersInfo.App.Ui.Practice.Main.Data;
 using DevilDaggersInfo.App.User.Settings;
+using DevilDaggersInfo.App.User.Settings.Model;
 using DevilDaggersInfo.Core.Spawnset;
 
 namespace DevilDaggersInfo.App.Ui.Practice.Main;
@@ -35,5 +36,20 @@ public static class PracticeLogic
 	{
 		if (File.Exists(UserSettings.ModsSurvivalPath))
 			File.Delete(UserSettings.ModsSurvivalPath);
+	}
+
+	public static bool IsActive(UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
+	{
+		return IsActive(customTemplate.HandLevel, customTemplate.AdditionalGems, customTemplate.TimerStart);
+	}
+
+	public static bool IsActive(NoFarmTemplate noFarmTemplate)
+	{
+		return IsActive(noFarmTemplate.HandLevel, noFarmTemplate.AdditionalGems, noFarmTemplate.TimerStart);
+	}
+
+	public static bool IsActive(HandLevel handLevel, int additionalGems, float timerStart)
+	{
+		return handLevel == SurvivalFileWatcher.HandLevel && additionalGems == SurvivalFileWatcher.AdditionalGems && Math.Abs(timerStart - SurvivalFileWatcher.TimerStart) < PracticeDataConstants.TimerStartTolerance;
 	}
 }

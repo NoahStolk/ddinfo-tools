@@ -35,34 +35,21 @@ public static class NoFarmTemplatesChild
 
 		ImGui.BeginChild("No farm template list", PracticeWindow.TemplateListSize);
 		foreach (NoFarmTemplate template in _noFarmTemplates)
-		{
-			Render(
-				template,
-				template.IsEqual(PracticeLogic.State),
-				new(PracticeWindow.TemplateWidth, 48),
-				() =>
-				{
-					PracticeLogic.State = new(template.HandLevel, template.AdditionalGems, template.TimerStart);
-					PracticeLogic.GenerateAndApplyPracticeSpawnset();
-				});
-		}
+			RenderNoFarmTemplate(template);
 
 		ImGui.EndChild();
 		ImGui.EndChild();
 	}
 
-	private static void Render(
-		NoFarmTemplate noFarmTemplate,
-		bool isActive,
-		Vector2 buttonSize,
-		Action onClick)
+	private static void RenderNoFarmTemplate(NoFarmTemplate noFarmTemplate)
 	{
-		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(isActive);
+		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(PracticeLogic.IsActive(noFarmTemplate));
 
 		string timerText = noFarmTemplate.TimerStart.ToString(StringFormats.TimeFormat);
 
 		(string gemsOrHomingText, Color gemColor) = PracticeWindow.GetGemsOrHomingText(noFarmTemplate.HandLevel, noFarmTemplate.AdditionalGems);
 
+		Vector2 buttonSize = new(PracticeWindow.TemplateWidth, 48);
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
 		if (ImGui.BeginChild(noFarmTemplate.Name, buttonSize, true))
 		{
@@ -72,7 +59,10 @@ public static class NoFarmTemplatesChild
 			if (ImGui.BeginChild(noFarmTemplate.Name + " child", buttonSize, false, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-					onClick.Invoke();
+				{
+					PracticeLogic.State = new(noFarmTemplate.HandLevel, noFarmTemplate.AdditionalGems, noFarmTemplate.TimerStart);
+					PracticeLogic.GenerateAndApplyPracticeSpawnset();
+				}
 
 				float windowWidth = ImGui.GetWindowWidth();
 

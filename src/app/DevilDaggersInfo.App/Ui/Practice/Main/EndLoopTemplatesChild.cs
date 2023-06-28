@@ -51,32 +51,9 @@ public static class EndLoopTemplatesChild
 
 	private static void RenderEndLoopTemplate(int waveIndex, float timerStart)
 	{
-		Render(
-			waveIndex: waveIndex,
-			timerStart: timerStart,
-			isActive: IsEqual(PracticeLogic.State, timerStart),
-			buttonSize: new(PracticeWindow.TemplateWidth, 30),
-			onClick: () =>
-			{
-				PracticeLogic.State = new(HandLevel.Level4, 0, timerStart);
-				PracticeLogic.GenerateAndApplyPracticeSpawnset();
-			});
-
-		static bool IsEqual(PracticeState state, float timerStart)
-		{
-			return state is { HandLevel: HandLevel.Level4, AdditionalGems: 0 } && Math.Abs(state.TimerStart - timerStart) < PracticeDataConstants.TimerStartTolerance;
-		}
-	}
-
-	private static void Render(
-		int waveIndex,
-		float timerStart,
-		bool isActive,
-		Vector2 buttonSize,
-		Action onClick)
-	{
+		Vector2 buttonSize = new(PracticeWindow.TemplateWidth, 30);
 		string waveName = $"Wave {waveIndex + 1}";
-		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(isActive);
+		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(PracticeLogic.IsActive(HandLevel.Level4, 0, timerStart));
 		Color color = waveIndex % 3 == 2 ? EnemiesV3_2.Ghostpede.Color.ToEngineColor() : EnemiesV3_2.Gigapede.Color.ToEngineColor();
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
@@ -88,7 +65,10 @@ public static class EndLoopTemplatesChild
 			if (ImGui.BeginChild(waveName + " child", buttonSize, false, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-					onClick.Invoke();
+				{
+					PracticeLogic.State = new(HandLevel.Level4, 0, timerStart);
+					PracticeLogic.GenerateAndApplyPracticeSpawnset();
+				}
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 8));
 

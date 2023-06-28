@@ -1,4 +1,3 @@
-using DevilDaggersInfo.App.User.Settings.Model;
 using DevilDaggersInfo.Core.Spawnset;
 using System.Runtime.InteropServices;
 
@@ -19,9 +18,4 @@ public struct PracticeState
 	}
 
 	public static PracticeState Default => new(HandLevel.Level1, 0, 0);
-
-	public bool IsEqual(UserSettingsModel.UserSettingsPracticeTemplate practiceTemplate)
-	{
-		return HandLevel == practiceTemplate.HandLevel && AdditionalGems == practiceTemplate.AdditionalGems && Math.Abs(TimerStart - practiceTemplate.TimerStart) < PracticeDataConstants.TimerStartTolerance;
-	}
 }
