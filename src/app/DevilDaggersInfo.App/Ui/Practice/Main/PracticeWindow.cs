@@ -15,13 +15,13 @@ public static class PracticeWindow
 
 	public static void Render()
 	{
-		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, new Vector2(1200, 768));
+		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, new Vector2(1280, 768));
 		ImGui.Begin("Practice", ImGuiWindowFlags.NoCollapse);
 		ImGui.PopStyleVar();
 
 		Vector2 windowSize = ImGui.GetWindowSize();
-		TemplateContainerSize = new(windowSize.X / 3 - 10, 544);
-		TemplateListSize = new(TemplateContainerSize.X - 20, 456);
+		TemplateContainerSize = new(windowSize.X / 3 - 11, windowSize.Y - 220);
+		TemplateListSize = new(TemplateContainerSize.X - 20, TemplateContainerSize.Y - 88);
 		TemplateWidth = TemplateListSize.X - 20;
 
 		ImGui.Text("Use these templates to practice specific sections of the game. Click on a template to install it.");

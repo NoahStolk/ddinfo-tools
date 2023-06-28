@@ -192,7 +192,7 @@ public static class CustomTemplatesChild
 
 		float relativeMouseY = ImGui.GetMousePos().Y - ImGui.GetWindowPos().Y + ImGui.GetScrollY();
 		float currentY = ImGui.GetCursorPosY();
-		const float dropAreaPaddingY = 28;
+		const float dropAreaPaddingY = 26;
 		if (relativeMouseY > currentY - dropAreaPaddingY && relativeMouseY < currentY + dropAreaPaddingY)
 		{
 			const float spacingY = 8;
