@@ -22,7 +22,7 @@ public static class PracticeWindow
 	private const int _templateWidth = 360;
 	private const int _templateDescriptionHeight = 48;
 
-	private static int _customTemplateIndexToReorder;
+	private static int? _customTemplateIndexToReorder;
 
 	private static readonly Vector2 _templateContainerSize = new(400, 480);
 	private static readonly Vector2 _templateListSize = new(380, 380);
@@ -106,7 +106,7 @@ public static class PracticeWindow
 
 		ImGui.BeginChild("Custom template description", _templateListSize with { Y = _templateDescriptionHeight });
 		ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + _templateWidth);
-		ImGui.Text("You can make your own templates and save them. Your custom templates are saved locally on your computer.");
+		ImGui.Text("You can make your own templates and save them. Your custom templates are saved locally on your computer. Right-click to rename a template.");
 		ImGui.PopTextWrapPos();
 		ImGui.EndChild();
 
@@ -115,6 +115,9 @@ public static class PracticeWindow
 		RenderDragDropTarget(-1);
 		for (int i = 0; i < UserSettings.Model.PracticeTemplates.Count; i++)
 			RenderCustomTemplate(i, UserSettings.Model.PracticeTemplates[i]);
+
+		if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+			_customTemplateIndexToReorder = null;
 
 		ImGui.EndChild();
 		ImGui.EndChild();
@@ -275,12 +278,12 @@ public static class PracticeWindow
 		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, gray with { A = 223 });
 		ImGui.PushID($"dd {customTemplate}");
 
-		ImGui.ImageButton((IntPtr)Root.InternalResources.DragIndicatorTexture.Handle, new(32, 48), Vector2.Zero, Vector2.One, 0);
+		ImGui.ImageButton((IntPtr)Root.InternalResources.DragIndicatorTexture.Handle, new(32, 48), Vector2.Zero, Vector2.One, 0, _customTemplateIndexToReorder == i ? Color.Gray(0.7f) : gray);
 
 		if (ImGui.IsItemHovered())
 			ImGui.SetTooltip("Reorder");
 
-		if (ImGui.BeginDragDropSource(ImGuiDragDropFlags.None))
+		if (ImGui.BeginDragDropSource())
 		{
 			_customTemplateIndexToReorder = i;
 
@@ -315,17 +318,27 @@ public static class PracticeWindow
 		RenderDragDropTarget(i);
 	}
 
-	private static unsafe void RenderDragDropTarget(int i)
+	private static void RenderDragDropTarget(int i)
 	{
-		ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(4, 4));
-		ImGui.InvisibleButton("Drop", new(_templateWidth - 4, 8));
+		if (!_customTemplateIndexToReorder.HasValue || _customTemplateIndexToReorder.Value == i || _customTemplateIndexToReorder.Value == i + 1)
+			return;
 
-		if (ImGui.BeginDragDropTarget())
+		float relativeMouseY = ImGui.GetMousePos().Y - ImGui.GetWindowPos().Y + ImGui.GetScrollY();
+		float currentY = ImGui.GetCursorPosY();
+		const float space = 56;
+		if (relativeMouseY > currentY - space / 2 && relativeMouseY < currentY + space / 2)
 		{
-			ImGuiPayload* payload = ImGui.AcceptDragDropPayload("CustomTemplateReorder");
-			if (payload != (void*)0)
+			ImGui.SetCursorPosY(ImGui.GetCursorPosY() - 2);
+
+			ImGui.PushStyleColor(ImGuiCol.Button, Color.Yellow);
+			ImGui.Button("Drop", new(_templateWidth, 2));
+			ImGui.PopStyleColor();
+
+			ImGui.SetCursorPosY(ImGui.GetCursorPosY() - 4);
+
+			if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 			{
-				UserSettingsModel.UserSettingsPracticeTemplate originalTemplate = UserSettings.Model.PracticeTemplates[_customTemplateIndexToReorder];
+				UserSettingsModel.UserSettingsPracticeTemplate originalTemplate = UserSettings.Model.PracticeTemplates[_customTemplateIndexToReorder.Value];
 
 				List<UserSettingsModel.UserSettingsPracticeTemplate> newPracticeTemplates = UserSettings.Model.PracticeTemplates
 					.Where(pt => pt != originalTemplate)
@@ -340,9 +353,9 @@ public static class PracticeWindow
 				{
 					PracticeTemplates = newPracticeTemplates,
 				};
-			}
 
-			ImGui.EndDragDropTarget();
+				_customTemplateIndexToReorder = null;
+			}
 		}
 	}
 
