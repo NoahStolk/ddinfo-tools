@@ -21,31 +21,32 @@ public static class DebugLayout
 
 	public static void Render()
 	{
-		ImGui.SetNextWindowPos(new(8, 8));
-		ImGui.SetNextWindowSize(new(320, 256));
+		ImDrawListPtr drawList = ImGui.GetForegroundDrawList();
+		const uint textColor = 0xffffffff;
+		float y = 0;
+		AddText(ref y, $"{Application.RenderCounter.CountPerSecond} FPS ({1f / Application.LastRenderDelta:000.000})");
 
-#if DEBUG
-		const ImGuiWindowFlags flags = Constants.LayoutFlags | ImGuiWindowFlags.NoInputs;
-#else
-		const ImGuiWindowFlags flags = Constants.LayoutFlags;
-#endif
+		long allocatedBytes = GC.GetAllocatedBytesForCurrentThread();
+		AddText(ref y, allocatedBytes + " bytes allocated on managed heap");
+		AddText(ref y, allocatedBytes - _previousAllocatedBytes + " since last frame");
+		_previousAllocatedBytes = allocatedBytes;
 
-		if (ImGui.Begin("Debug", flags))
+		AddText(ref y, GC.CollectionCount(0) + " gen 0 garbage collections");
+		AddText(ref y, GC.CollectionCount(1) + " gen 1 garbage collections");
+		AddText(ref y, GC.CollectionCount(2) + " gen 2 garbage collections");
+
+		AddText(ref y, $"Modal active: {Modals.IsAnyOpen}");
+
+		void AddText(ref float posY, string text)
 		{
-			ImGui.Text($"{Application.RenderCounter.CountPerSecond} FPS ({1f / Application.LastRenderDelta:000.000})");
-
-			long allocatedBytes = GC.GetAllocatedBytesForCurrentThread();
-			ImGui.Text(allocatedBytes + " bytes allocated on managed heap");
-			ImGui.Text(allocatedBytes - _previousAllocatedBytes + " since last frame");
-			_previousAllocatedBytes = allocatedBytes;
-
-			ImGui.Text(GC.CollectionCount(0) + " gen 0 garbage collections");
-			ImGui.Text(GC.CollectionCount(1) + " gen 1 garbage collections");
-			ImGui.Text(GC.CollectionCount(2) + " gen 2 garbage collections");
-
-			ImGui.Text($"Modal active: {Modals.IsAnyOpen}");
+			drawList.AddText(new(0, posY), textColor, text);
+			posY += 16;
+		}
 
 #if DEBUG
+		ImGui.SetNextWindowSize(new(320, 256));
+		if (ImGui.Begin("Debug"))
+		{
 			if (ImGui.Button("Error window"))
 				Modals.ShowError("Test error!");
 
@@ -67,9 +68,9 @@ public static class DebugLayout
 
 			foreach (string debugMessage in _debugMessages)
 				ImGui.Text(debugMessage);
-#endif
-		}
 
-		ImGui.End();
+			ImGui.End();
+		}
+#endif
 	}
 }
