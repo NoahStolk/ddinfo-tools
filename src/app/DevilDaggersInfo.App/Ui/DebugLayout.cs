@@ -9,6 +9,8 @@ public static class DebugLayout
 
 	private static readonly List<string> _debugMessages = new();
 
+	private static readonly DateTime _startUpTime = DateTime.UtcNow;
+
 	public static void Add(object? obj)
 	{
 		_debugMessages.Add(obj?.ToString() ?? "null");
@@ -34,6 +36,8 @@ public static class DebugLayout
 		AddText(ref y, GC.CollectionCount(0) + " gen 0 garbage collections");
 		AddText(ref y, GC.CollectionCount(1) + " gen 1 garbage collections");
 		AddText(ref y, GC.CollectionCount(2) + " gen 2 garbage collections");
+		AddText(ref y, GC.GetTotalPauseDuration() + " pause duration");
+		AddText(ref y, DateTime.UtcNow - _startUpTime + " total time");
 
 		AddText(ref y, $"Modal active: {Modals.IsAnyOpen}");
 
