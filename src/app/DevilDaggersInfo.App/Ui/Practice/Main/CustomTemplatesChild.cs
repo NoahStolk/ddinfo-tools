@@ -80,7 +80,7 @@ public static class CustomTemplatesChild
 
 				ImGui.TextColored(color with { A = textAlpha }, string.IsNullOrWhiteSpace(customTemplate.Name) ? "<untitled>" : customTemplate.Name);
 
-				string timerStartString = customTemplate.TimerStart.ToString(StringFormats.TimeFormat);
+				ReadOnlySpan<char> timerStartString = UnsafeSpan.Get(customTemplate.TimerStart, StringFormats.TimeFormat);
 				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(timerStartString).X - 8);
 				ImGui.TextColored(Color.White with { A = textAlpha }, timerStartString);
 

@@ -11,6 +11,8 @@ namespace DevilDaggersInfo.App.Ui.Practice.Main;
 
 public static class NoFarmTemplatesChild
 {
+	private static readonly IdBuffer _idBuffer = new(128);
+
 	private static readonly List<NoFarmTemplate> _noFarmTemplates = new()
 	{
 		new("First Spider I & Squid II", EnemiesV3_2.Squid2.Color.ToEngineColor(), HandLevel.Level1, 8, 39),
@@ -34,8 +36,11 @@ public static class NoFarmTemplatesChild
 		ImGui.EndChild();
 
 		ImGui.BeginChild("No farm template list", PracticeWindow.TemplateListSize);
-		foreach (NoFarmTemplate template in _noFarmTemplates)
+		for (int i = 0; i < _noFarmTemplates.Count; i++)
+		{
+			NoFarmTemplate template = _noFarmTemplates[i];
 			RenderNoFarmTemplate(template);
+		}
 
 		ImGui.EndChild();
 		ImGui.EndChild();
@@ -45,7 +50,7 @@ public static class NoFarmTemplatesChild
 	{
 		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(PracticeLogic.IsActive(noFarmTemplate));
 
-		string timerText = noFarmTemplate.TimerStart.ToString(StringFormats.TimeFormat);
+		ReadOnlySpan<char> timerText = UnsafeSpan.Get(noFarmTemplate.TimerStart, StringFormats.TimeFormat);
 
 		(string gemsOrHomingText, Color gemColor) = PracticeWindow.GetGemsOrHomingText(noFarmTemplate.HandLevel, noFarmTemplate.AdditionalGems);
 
@@ -56,7 +61,8 @@ public static class NoFarmTemplatesChild
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, noFarmTemplate.Color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
 
-			if (ImGui.BeginChild(noFarmTemplate.Name + " child", buttonSize, false, ImGuiWindowFlags.NoInputs))
+			_idBuffer.Overwrite(noFarmTemplate.Name, " child");
+			if (ImGui.BeginChild(_idBuffer, buttonSize, false, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 				{
@@ -74,7 +80,7 @@ public static class NoFarmTemplatesChild
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 0));
 
-				ImGui.TextColored(noFarmTemplate.HandLevel.GetColor() with { A = textAlpha }, noFarmTemplate.HandLevel.ToString());
+				ImGui.TextColored(noFarmTemplate.HandLevel.GetColor() with { A = textAlpha }, EnumUtils.HandLevelNames[noFarmTemplate.HandLevel]);
 				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(gemsOrHomingText).X - 8);
 				ImGui.TextColored(gemColor with { A = textAlpha }, gemsOrHomingText);
 			}
