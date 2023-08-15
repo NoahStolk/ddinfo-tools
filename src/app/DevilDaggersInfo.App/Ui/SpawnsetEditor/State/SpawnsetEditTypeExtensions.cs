@@ -15,7 +15,7 @@ public static class SpawnsetEditTypeExtensions
 	private static readonly Color _colorPractice = new(0, _colorValue, _colorValue, 255);
 	private static readonly Color _colorSpawn = new(_colorValue, 0, _colorValue, 255);
 
-	public static string GetChange(this SpawnsetEditType spawnsetEditType) => spawnsetEditType switch
+	public static ReadOnlySpan<char> GetChange(this SpawnsetEditType spawnsetEditType) => spawnsetEditType switch
 	{
 		SpawnsetEditType.Reset => "Spawnset reset",
 		SpawnsetEditType.ArenaTileHeight => "Arena tile height edit",

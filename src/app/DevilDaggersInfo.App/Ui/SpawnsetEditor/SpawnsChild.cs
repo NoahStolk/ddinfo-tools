@@ -128,8 +128,9 @@ public static class SpawnsChild
 			ImGui.TableHeadersRow();
 
 			EditSpawnContext.BuildFrom(SpawnsetState.Spawnset);
-			foreach (SpawnUiEntry spawn in EditSpawnContext.Spawns)
+			for (int i = 0; i < EditSpawnContext.Spawns.Count; i++)
 			{
+				SpawnUiEntry spawn = EditSpawnContext.Spawns[i];
 				ImGui.TableNextRow();
 				ImGui.TableNextColumn();
 
@@ -139,7 +140,7 @@ public static class SpawnsChild
 					_scrollToIndex = null;
 				}
 
-				if (ImGui.Selectable(spawn.Index.ToString(), ref _selected[spawn.Index], ImGuiSelectableFlags.SpanAllColumns))
+				if (ImGui.Selectable(UnsafeSpan.Get(spawn.Index), ref _selected[spawn.Index], ImGuiSelectableFlags.SpanAllColumns))
 				{
 					if (!io.KeyCtrl)
 					{
@@ -151,8 +152,8 @@ public static class SpawnsChild
 					{
 						int start = Math.Clamp(Math.Min(spawn.Index, _lastSelectedIndex), 0, _selected.Length - 1);
 						int end = Math.Clamp(Math.Max(spawn.Index, _lastSelectedIndex), 0, _selected.Length - 1);
-						for (int i = start; i <= end; i++)
-							_selected[i] = true;
+						for (int j = start; j <= end; j++)
+							_selected[j] = true;
 					}
 
 					_lastSelectedIndex = spawn.Index;
@@ -162,19 +163,19 @@ public static class SpawnsChild
 
 				ImGui.TableNextColumn();
 
-				ImGui.TextColored(spawn.EnemyType.GetColor(GameConstants.CurrentVersion), spawn.EnemyType.ToString());
+				ImGui.TextColored(spawn.EnemyType.GetColor(GameConstants.CurrentVersion), EnumUtils.EnemyTypeNames[spawn.EnemyType]);
 				ImGui.TableNextColumn();
 
-				ImGui.Text(spawn.Seconds.ToString(StringFormats.TimeFormat));
+				ImGui.Text(UnsafeSpan.Get(spawn.Seconds, StringFormats.TimeFormat));
 				ImGui.TableNextColumn();
 
-				ImGui.Text(spawn.Delay.ToString(StringFormats.TimeFormat));
+				ImGui.Text(UnsafeSpan.Get(spawn.Delay, StringFormats.TimeFormat));
 				ImGui.TableNextColumn();
 
-				ImGui.Text(spawn.NoFarmGems == 0 ? "-" : $"+{spawn.NoFarmGems}");
+				ImGui.Text(spawn.NoFarmGems == 0 ? "-" : UnsafeSpan.Get(spawn.NoFarmGems, "+0"));
 				ImGui.TableNextColumn();
 
-				ImGui.TextColored(spawn.GemState.HandLevel.GetColor(), spawn.GemState.Value.ToString());
+				ImGui.TextColored(spawn.GemState.HandLevel.GetColor(), UnsafeSpan.Get(spawn.GemState.Value));
 				ImGui.TableNextColumn();
 			}
 
@@ -186,14 +187,14 @@ public static class SpawnsChild
 	private static void EditContextItem(SpawnUiEntry spawn)
 	{
 		bool saved = false;
-		if (ImGui.BeginPopupContextItem(spawn.Index.ToString()))
+		if (ImGui.BeginPopupContextItem(UnsafeSpan.Get(spawn.Index)))
 		{
 			if (!_delayEdited)
 				_editDelay = (float)spawn.Delay;
 
 			ImGui.Text($"Edit #{spawn.Index} ({spawn.EnemyType} at {spawn.Seconds.ToString(StringFormats.TimeFormat)})");
 
-			foreach (EnemyType enemyType in Enum.GetValues<EnemyType>())
+			foreach (EnemyType enemyType in EnumUtils.EnemyTypes)
 			{
 				Color color = enemyType.GetColor(GameConstants.CurrentVersion);
 				ImGui.PushStyleColor(ImGuiCol.Text, color.ToEngineColor().ReadableColorForBrightness());

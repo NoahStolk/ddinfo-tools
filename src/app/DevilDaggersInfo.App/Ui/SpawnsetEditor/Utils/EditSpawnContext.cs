@@ -9,7 +9,7 @@ public static class EditSpawnContext
 {
 	private static readonly List<SpawnUiEntry> _spawns = new();
 
-	public static IEnumerable<SpawnUiEntry> Spawns => _spawns;
+	public static IReadOnlyList<SpawnUiEntry> Spawns => _spawns;
 
 	public static void BuildFrom(SpawnsetBinary spawnsetBinary)
 	{
