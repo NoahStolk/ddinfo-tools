@@ -41,23 +41,23 @@ public static class LeaderboardListChild
 
 		ImGui.BeginChild("LeaderboardList");
 
-		if (ImGui.ImageButton((IntPtr)Root.InternalResources.ReloadTexture.Handle, iconSize))
+		if (ImGui.ImageButton("Reload", (IntPtr)Root.InternalResources.ReloadTexture.Handle, iconSize))
 			LoadAll();
 
 		ImGui.SameLine();
-		if (ImGui.ImageButton((IntPtr)Root.InternalResources.ArrowStartTexture.Handle, iconSize))
+		if (ImGui.ImageButton("Begin", (IntPtr)Root.InternalResources.ArrowStartTexture.Handle, iconSize))
 			SetPageIndex(0);
 
 		ImGui.SameLine();
-		if (ImGui.ImageButton((IntPtr)Root.InternalResources.ArrowLeftTexture.Handle, iconSize))
+		if (ImGui.ImageButton("Previous", (IntPtr)Root.InternalResources.ArrowLeftTexture.Handle, iconSize))
 			SetPageIndex(PageIndex - 1);
 
 		ImGui.SameLine();
-		if (ImGui.ImageButton((IntPtr)Root.InternalResources.ArrowRightTexture.Handle, iconSize))
+		if (ImGui.ImageButton("Next", (IntPtr)Root.InternalResources.ArrowRightTexture.Handle, iconSize))
 			SetPageIndex(PageIndex + 1);
 
 		ImGui.SameLine();
-		if (ImGui.ImageButton((IntPtr)Root.InternalResources.ArrowEndTexture.Handle, iconSize))
+		if (ImGui.ImageButton("End", (IntPtr)Root.InternalResources.ArrowEndTexture.Handle, iconSize))
 			SetPageIndex(TotalPages - 1);
 
 		ImGui.SameLine();

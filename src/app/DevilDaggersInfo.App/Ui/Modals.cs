@@ -11,9 +11,9 @@ public static class Modals
 
 	private static readonly List<ModalData> _modals = new()
 	{
-		new(_errorId, () => ImGui.TextWrapped(_errorText)),
-		new(_replacedSurvivalFileId, () => ImGui.Text("The current survival file has been replaced with the current spawnset.")),
-		new(_deletedSurvivalFileId, () => ImGui.Text("The current survival file has been deleted.")),
+		new(_errorId, static () => ImGui.TextWrapped(_errorText)),
+		new(_replacedSurvivalFileId, static () => ImGui.Text("The current survival file has been replaced with the current spawnset.")),
+		new(_deletedSurvivalFileId, static () => ImGui.Text("The current survival file has been deleted.")),
 	};
 
 	private static string? _errorText;
@@ -38,31 +38,36 @@ public static class Modals
 
 	public static void Render()
 	{
-		ModalData? modalToOpen = _modals.Find(kvp => kvp.ShouldOpen);
-		if (modalToOpen != null)
+		for (int i = 0; i < _modals.Count; i++)
 		{
-			ImGui.OpenPopup(modalToOpen.Id);
-			modalToOpen.ShouldOpen = false;
+			ModalData modal = _modals[i];
+			if (modal.ShouldOpen)
+			{
+				ImGui.OpenPopup(modal.Id);
+				modal.ShouldOpen = false;
+				break;
+			}
 		}
 
 		IsAnyOpen = false;
-		foreach (ModalData modal in _modals)
+		for (int i = 0; i < _modals.Count; i++)
 		{
-			bool isOpen = RenderModal(modal.Id, modal.RenderAction);
+			ModalData modal = _modals[i];
+			bool isOpen = RenderModal(modal);
 			if (isOpen)
 				IsAnyOpen = true;
 		}
 	}
 
-	private static bool RenderModal(string modalId, Action renderAction)
+	private static bool RenderModal(ModalData modal)
 	{
 		Vector2 center = ImGui.GetMainViewport().GetCenter();
 		ImGui.SetNextWindowPos(center, ImGuiCond.Always, new(0.5f, 0.5f));
 
 		bool temp = true;
-		if (ImGui.BeginPopupModal(modalId, ref temp, ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize))
+		if (ImGui.BeginPopupModal(modal.Id, ref temp, ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize))
 		{
-			renderAction();
+			modal.RenderAction();
 
 			ImGui.Spacing();
 			ImGui.Separator();
@@ -73,7 +78,7 @@ public static class Modals
 			ImGui.EndPopup();
 		}
 
-		return ImGui.IsPopupOpen(modalId);
+		return ImGui.IsPopupOpen(modal.Id);
 	}
 
 	private sealed record ModalData(string Id, Action RenderAction)

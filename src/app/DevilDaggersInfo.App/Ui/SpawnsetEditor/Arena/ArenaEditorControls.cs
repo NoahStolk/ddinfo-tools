@@ -7,6 +7,9 @@ namespace DevilDaggersInfo.App.Ui.SpawnsetEditor.Arena;
 
 public static class ArenaEditorControls
 {
+	private static readonly ArenaTool[] _arenaTools = Enum.GetValues<ArenaTool>();
+	private static readonly Dictionary<ArenaTool, string> _arenaToolNames = _arenaTools.ToDictionary(at => at, at => at.ToString());
+
 	public static void Render()
 	{
 		ImGui.BeginChild("ArenaEditorControls", new(256, 26));
@@ -14,8 +17,11 @@ public static class ArenaEditorControls
 		const int borderSize = 2;
 		const int size = 16;
 		int offsetX = 0;
-		foreach (ArenaTool arenaTool in Enum.GetValues<ArenaTool>())
+		for (int i = 0; i < _arenaTools.Length; i++)
 		{
+			ArenaTool arenaTool = _arenaTools[i];
+			ReadOnlySpan<char> arenaToolText = _arenaToolNames[arenaTool];
+
 			bool isDagger = arenaTool == ArenaTool.Dagger;
 			bool isCurrent = arenaTool == ArenaChild.ArenaTool;
 			ImGui.SetCursorPos(new(offsetX + borderSize * 2, borderSize));
@@ -26,14 +32,14 @@ public static class ArenaEditorControls
 			if (isCurrent)
 				ImGui.PushStyleColor(ImGuiCol.Button, ImGui.GetStyle().Colors[(int)ImGuiCol.ButtonHovered]);
 
-			if (ImGui.ImageButton(GetTexture(arenaTool), new(size)) && ArenaChild.ArenaTool != arenaTool)
+			if (ImGui.ImageButton(arenaToolText, GetTexture(arenaTool), new(size)) && ArenaChild.ArenaTool != arenaTool)
 				ArenaChild.ArenaTool = arenaTool;
 
 			if (isCurrent)
 				ImGui.PopStyleColor();
 
 			if (ImGui.IsItemHovered())
-				ImGui.SetTooltip(arenaTool.ToString());
+				ImGui.SetTooltip(arenaToolText);
 
 			if (isDagger)
 				ImGui.EndDisabled();

@@ -29,8 +29,8 @@ public static class SettingsWindow
 			ImGui.Checkbox("Show debug", ref showDebug);
 			if (UserSettings.Model.ShowDebug != showDebug)
 				UserSettings.Model = UserSettings.Model with { ShowDebug = showDebug };
-		}
 
-		ImGui.End();
+			ImGui.End();
+		}
 	}
 }

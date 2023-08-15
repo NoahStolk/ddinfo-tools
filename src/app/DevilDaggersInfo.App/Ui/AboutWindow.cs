@@ -7,6 +7,8 @@ namespace DevilDaggersInfo.App.Ui;
 
 public static class AboutWindow
 {
+	private static readonly string _versionInfo = $"Version {AssemblyUtils.EntryAssemblyVersion} (build time {AssemblyUtils.EntryAssemblyBuildTime})";
+
 	public static void Render(ref bool show)
 	{
 		if (!show)
@@ -20,9 +22,7 @@ public static class AboutWindow
 
 			ImGuiExt.Title("About");
 
-			ImGui.Text("""
-				ddinfo tools is a collection of tools for Devil Daggers. The tools are part of the DevilDaggers.info project.
-				""");
+			ImGui.Text("ddinfo tools is a collection of tools for Devil Daggers. The tools are part of the DevilDaggers.info project.");
 
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
 			ImGuiExt.Title("Open source", Root.FontGoetheBold20);
@@ -60,7 +60,7 @@ public static class AboutWindow
 			ImGui.SameLine();
 			ImGuiExt.Hyperlink("https://noahstolk.com/", "Noah Stolk");
 
-			ImGui.TextColored(Color.Gray(0.6f), $"Version {AssemblyUtils.EntryAssemblyVersion} (build time {AssemblyUtils.EntryAssemblyBuildTime})");
+			ImGui.TextColored(Color.Gray(0.6f), _versionInfo);
 
 			ImGui.PopTextWrapPos();
 		}

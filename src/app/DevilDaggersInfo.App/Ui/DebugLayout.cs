@@ -26,24 +26,26 @@ public static class DebugLayout
 		ImDrawListPtr drawList = ImGui.GetForegroundDrawList();
 		const uint textColor = 0xffffffff;
 		float y = 0;
-		AddText(ref y, $"{Application.RenderCounter.CountPerSecond} FPS ({1f / Application.LastRenderDelta:000.000})");
+		AddText(ref y, "FPS (smoothed)", UnsafeSpan.Get(Application.RenderCounter.CountPerSecond));
+		AddText(ref y, "FPS", UnsafeSpan.Get(1f / Application.LastRenderDelta, "000.000"));
 
 		long allocatedBytes = GC.GetAllocatedBytesForCurrentThread();
-		AddText(ref y, allocatedBytes + " bytes allocated on managed heap");
-		AddText(ref y, allocatedBytes - _previousAllocatedBytes + " since last frame");
+		AddText(ref y, "Total managed heap alloc in bytes", UnsafeSpan.Get(allocatedBytes));
+		AddText(ref y, "Heap alloc bytes since last frame", UnsafeSpan.Get(allocatedBytes - _previousAllocatedBytes));
 		_previousAllocatedBytes = allocatedBytes;
 
-		AddText(ref y, GC.CollectionCount(0) + " gen 0 garbage collections");
-		AddText(ref y, GC.CollectionCount(1) + " gen 1 garbage collections");
-		AddText(ref y, GC.CollectionCount(2) + " gen 2 garbage collections");
-		AddText(ref y, GC.GetTotalPauseDuration() + " pause duration");
-		AddText(ref y, DateTime.UtcNow - _startUpTime + " total time");
+		AddText(ref y, "Gen 0 GCs", UnsafeSpan.Get(GC.CollectionCount(0)));
+		AddText(ref y, "Gen 1 GCs", UnsafeSpan.Get(GC.CollectionCount(1)));
+		AddText(ref y, "Gen 2 GCs", UnsafeSpan.Get(GC.CollectionCount(2)));
+		AddText(ref y, "Total GC pause duration", UnsafeSpan.Get(GC.GetTotalPauseDuration() ));
+		AddText(ref y, "Total app time", UnsafeSpan.Get(DateTime.UtcNow - _startUpTime));
 
-		AddText(ref y, $"Modal active: {Modals.IsAnyOpen}");
+		AddText(ref y, "Modal active", Modals.IsAnyOpen ? bool.TrueString : bool.FalseString);
 
-		void AddText(ref float posY, string text)
+		void AddText(ref float posY, ReadOnlySpan<char> textLeft, ReadOnlySpan<char> textRight)
 		{
-			drawList.AddText(new(0, posY), textColor, text);
+			drawList.AddText(new(0, posY), textColor, textLeft);
+			drawList.AddText(new(256, posY), textColor, textRight);
 			posY += 16;
 		}
 
@@ -70,8 +72,8 @@ public static class DebugLayout
 			if (ImGui.Button("Clear"))
 				_debugMessages.Clear();
 
-			foreach (string debugMessage in _debugMessages)
-				ImGui.Text(debugMessage);
+			for (int i = 0; i < _debugMessages.Count; i++)
+				ImGui.Text(_debugMessages[i]);
 
 			ImGui.End();
 		}
