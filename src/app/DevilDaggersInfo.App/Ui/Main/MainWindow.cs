@@ -7,11 +7,13 @@ namespace DevilDaggersInfo.App.Ui.Main;
 
 public static class MainWindow
 {
-	private static Action? _hoveredButtonAction;
-
 	private static readonly string _version = $"{AssemblyUtils.EntryAssemblyVersion} (ALPHA)";
 
-	public static void Render(out bool shouldClose)
+	private static Action? _hoveredButtonAction;
+
+	public static bool ShouldClose { get; private set; }
+
+	public static void Render()
 	{
 		Vector2 center = ImGui.GetMainViewport().GetCenter();
 		Vector2 windowSize = new(683, 768);
@@ -43,21 +45,19 @@ public static class MainWindow
 		AppButton(Root.InternalResources.InfoTexture, "About", UiRenderer.ShowAbout);
 
 		ImGui.SameLine();
-		bool close = false; // Cannot use out parameter inside lambda.
-		AppButton(Root.InternalResources.CloseTexture, "Exit application", () => close = true);
-		shouldClose = close;
+		AppButton(Root.InternalResources.CloseTexture, "Exit application", static () => ShouldClose = true);
 
 		ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 40);
 		if (ImGui.BeginChild("Tool buttons", mainButtonsSize))
 		{
 			ToolButton(GetColor(Colors.SpawnsetEditor.Primary), "Spawnset Editor", GoToSpawnsetEditor, ref _hoveredButtonAction, RenderSpawnsetEditorPreview);
-			ToolButton(GetColor(Colors.AssetEditor.Primary), "Asset Editor", () => { }, ref _hoveredButtonAction, RenderAssetEditorPreview);
+			ToolButton(GetColor(Colors.AssetEditor.Primary), "Asset Editor", static () => { }, ref _hoveredButtonAction, RenderAssetEditorPreview);
 			ToolButton(GetColor(Colors.ReplayEditor.Primary), "Replay Editor", GoToReplayEditor, ref _hoveredButtonAction, RenderReplayEditorPreview);
 
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 16);
 			ToolButton(GetColor(Colors.CustomLeaderboards.Primary), "Custom Leaderboards", GoToCustomLeaderboards, ref _hoveredButtonAction, RenderCustomLeaderboardsPreview);
 			ToolButton(GetColor(Colors.Practice.Primary), "Practice", GoToPractice, ref _hoveredButtonAction, RenderPracticePreview);
-			ToolButton(GetColor(Colors.ModManager.Primary), "Mod Manager", () => { }, ref _hoveredButtonAction, RenderModManagerPreview);
+			ToolButton(GetColor(Colors.ModManager.Primary), "Mod Manager", static () => { }, ref _hoveredButtonAction, RenderModManagerPreview);
 
 			static Color GetColor(Color primary)
 			{

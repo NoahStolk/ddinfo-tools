@@ -1,5 +1,6 @@
 // ReSharper disable ForCanBeConvertedToForeach
 using DevilDaggersInfo.App.Scenes.GameObjects;
+using DevilDaggersInfo.App.Ui;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Core.Spawnset;
 using Silk.NET.OpenGL;
@@ -113,10 +114,15 @@ public sealed class ArenaScene
 		shader.SetUniform("textureLut", 1);
 		shader.SetUniform("lutScale", 1f);
 
-		// TODO: Prevent allocating memory?
-		Span<Vector3> lightPositions = _lights.Select(lo => lo.Position).ToArray();
-		Span<Vector3> lightColors = _lights.Select(lo => lo.Color).ToArray();
-		Span<float> lightRadii = _lights.Select(lo => lo.Radius).ToArray();
+		Span<Vector3> lightPositions = stackalloc Vector3[_lights.Count];
+		Span<Vector3> lightColors = stackalloc Vector3[_lights.Count];
+		Span<float> lightRadii = stackalloc float[_lights.Count];
+		for (int i = 0; i < _lights.Count; i++)
+		{
+			lightPositions[i] = _lights[i].Position;
+			lightColors[i] = _lights[i].Color;
+			lightRadii[i] = _lights[i].Radius;
+		}
 
 		shader.SetUniform("lightCount", lightPositions.Length);
 		shader.SetUniform("lightPosition", lightPositions);
@@ -137,8 +143,11 @@ public sealed class ArenaScene
 		Root.InternalResources.TileHitboxTexture.Bind();
 
 		Array.Sort(_sortedTiles, static (a, b) => a.SquaredDistanceToCamera().CompareTo(b.SquaredDistanceToCamera()));
-		foreach (Tile tile in _sortedTiles)
+		for (int i = 0; i < _sortedTiles.Length; i++)
+		{
+			Tile tile = _sortedTiles[i];
 			tile.RenderHitbox();
+		}
 	}
 
 	private void RenderTilesDefault()

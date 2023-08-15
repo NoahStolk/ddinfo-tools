@@ -17,9 +17,6 @@ public static class UiRenderer
 	private static bool _showSettings;
 	private static bool _showAbout;
 	private static bool _showUpdateAvailable;
-	private static bool _windowShouldClose;
-
-	public static bool WindowShouldClose => _windowShouldClose;
 
 	public static LayoutType Layout
 	{
@@ -62,7 +59,7 @@ public static class UiRenderer
 		switch (Layout)
 		{
 			case LayoutType.Main:
-				MainWindow.Render(out _windowShouldClose);
+				MainWindow.Render();
 				MainScene.Render(delta);
 				break;
 			case LayoutType.Config:

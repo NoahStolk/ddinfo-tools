@@ -3,6 +3,7 @@ using DevilDaggersInfo.App.Networking;
 using DevilDaggersInfo.App.Networking.TaskHandlers;
 using DevilDaggersInfo.App.Ui;
 using DevilDaggersInfo.App.Ui.Config;
+using DevilDaggersInfo.App.Ui.Main;
 using DevilDaggersInfo.App.User.Cache;
 using DevilDaggersInfo.App.User.Settings;
 using DevilDaggersInfo.Core.Versioning;
@@ -164,7 +165,7 @@ public class Application
 
 		_imGuiController.Render();
 
-		if (UiRenderer.WindowShouldClose)
+		if (MainWindow.ShouldClose)
 			_window.Close();
 	}
 
