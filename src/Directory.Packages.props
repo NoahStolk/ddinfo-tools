@@ -56,7 +56,7 @@
 	</ItemGroup>
 
 	<ItemGroup Label="NSwag">
-		<PackageVersion Include="NSwag.AspNetCore" Version="13.19.0" />
+		<PackageVersion Include="NSwag.AspNetCore" Version="13.20.0" />
 	</ItemGroup>
 
 	<ItemGroup Label="Pomelo">
