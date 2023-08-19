@@ -52,7 +52,10 @@ public static class NoFarmTemplatesChild
 
 		ReadOnlySpan<char> timerText = UnsafeSpan.Get(noFarmTemplate.TimerStart, StringFormats.TimeFormat);
 
-		(string gemsOrHomingText, Color gemColor) = PracticeWindow.GetGemsOrHomingText(noFarmTemplate.HandLevel, noFarmTemplate.AdditionalGems);
+		const int bufferLength = 32;
+		Span<char> gemsOrHomingText = stackalloc char[bufferLength];
+		PracticeWindow.GetGemsOrHomingText(noFarmTemplate.HandLevel, noFarmTemplate.AdditionalGems, gemsOrHomingText, out Color gemColor);
+		gemsOrHomingText = gemsOrHomingText.SliceUntilNull(bufferLength);
 
 		Vector2 buttonSize = new(PracticeWindow.TemplateWidth, 48);
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);

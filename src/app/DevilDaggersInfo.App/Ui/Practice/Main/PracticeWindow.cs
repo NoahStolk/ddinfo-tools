@@ -49,14 +49,22 @@ public static class PracticeWindow
 			UiRenderer.Layout = LayoutType.Main;
 	}
 
-	public static (string Text, Color TextColor) GetGemsOrHomingText(HandLevel handLevel, int additionalGems)
+	public static void GetGemsOrHomingText(HandLevel handLevel, int additionalGems, Span<char> text, out Color textColor)
 	{
 		EffectivePlayerSettings effectivePlayerSettings = SpawnsetBinary.GetEffectivePlayerSettings(PracticeLogic.SpawnVersion, handLevel, additionalGems);
-		return effectivePlayerSettings.HandLevel switch
+		effectivePlayerSettings.GemsOrHoming.TryFormat(text, out int charsWritten);
+
+		switch (handLevel)
 		{
-			HandLevel.Level3 => ($"{effectivePlayerSettings.GemsOrHoming} homing", HandLevel.Level3.GetColor()),
-			HandLevel.Level4 => ($"{effectivePlayerSettings.GemsOrHoming} homing", HandLevel.Level4.GetColor()),
-			_ => ($"{effectivePlayerSettings.GemsOrHoming} gems", Color.Red),
+			case HandLevel.Level1 or HandLevel.Level2: " gems".AsSpan().CopyTo(text[charsWritten..]); break;
+			case HandLevel.Level3 or HandLevel.Level4: " homing".AsSpan().CopyTo(text[charsWritten..]); break;
+			default: throw new InvalidOperationException($"Invalid hand level '{handLevel}'.");
+		}
+
+		textColor = effectivePlayerSettings.HandLevel switch
+		{
+			HandLevel.Level1 or HandLevel.Level2 => Color.Red,
+			_ => effectivePlayerSettings.HandLevel.GetColor(),
 		};
 	}
 

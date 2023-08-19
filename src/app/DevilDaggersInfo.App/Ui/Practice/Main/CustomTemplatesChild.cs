@@ -10,6 +10,11 @@ namespace DevilDaggersInfo.App.Ui.Practice.Main;
 
 public static class CustomTemplatesChild
 {
+	private static readonly char[] _buttonNameBuffer = new char[256];
+	private static readonly IdBuffer _childIdBuffer = new(256);
+	private static readonly IdBuffer _dragIndicatorIdBuffer = new(64);
+	private static readonly IdBuffer _deleteButtonIdBuffer = new(64);
+
 	private static int? _customTemplateIndexToReorder;
 
 	public static void Render()
@@ -46,7 +51,7 @@ public static class CustomTemplatesChild
 
 		ImGui.SameLine();
 
-		RenderDeleteButton(customTemplate);
+		RenderDeleteButton(i, customTemplate);
 
 		RenderDragDropTarget(i);
 	}
@@ -54,10 +59,21 @@ public static class CustomTemplatesChild
 	private static void RenderTemplateButton(UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
 	{
 		Vector2 buttonSize = new(PracticeWindow.TemplateWidth - 96, 48);
-		string buttonName = $"{customTemplate.HandLevel}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart.ToString(StringFormats.TimeFormat)}";
+		UnsafeCharBufferWriter writer = new(_buttonNameBuffer);
+		writer.Write(EnumUtils.HandLevelNames[customTemplate.HandLevel]);
+		writer.Write('-');
+		writer.Write(customTemplate.AdditionalGems);
+		writer.Write('-');
+		writer.Write(customTemplate.TimerStart, StringFormats.TimeFormat);
+		ReadOnlySpan<char> buttonName = writer;
+
 		Color color = Color.White;
 
-		(string gemsOrHomingText, Color gemColor) = PracticeWindow.GetGemsOrHomingText(customTemplate.HandLevel, customTemplate.AdditionalGems);
+		const int bufferLength = 32;
+		Span<char> gemsOrHomingText = stackalloc char[bufferLength];
+		PracticeWindow.GetGemsOrHomingText(customTemplate.HandLevel, customTemplate.AdditionalGems, gemsOrHomingText, out Color gemColor);
+		gemsOrHomingText = gemsOrHomingText.SliceUntilNull(bufferLength);
+
 		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(PracticeLogic.IsActive(customTemplate));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
@@ -66,7 +82,8 @@ public static class CustomTemplatesChild
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
 
-			if (ImGui.BeginChild(buttonName + " child", buttonSize, false, ImGuiWindowFlags.NoInputs))
+			_childIdBuffer.Overwrite(buttonName, " child");
+			if (ImGui.BeginChild(_childIdBuffer, buttonSize, false, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 				{
@@ -86,7 +103,7 @@ public static class CustomTemplatesChild
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 0));
 
-				ImGui.TextColored(customTemplate.HandLevel.GetColor() with { A = textAlpha }, customTemplate.HandLevel.ToString());
+				ImGui.TextColored(customTemplate.HandLevel.GetColor() with { A = textAlpha }, EnumUtils.HandLevelNames[customTemplate.HandLevel]);
 				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(gemsOrHomingText).X - 8);
 				ImGui.TextColored(gemColor with { A = textAlpha }, gemsOrHomingText);
 			}
@@ -100,7 +117,8 @@ public static class CustomTemplatesChild
 
 		ImGui.EndChild();
 
-		if (ImGui.BeginPopupContextItem(buttonName + " rename", ImGuiPopupFlags.MouseButtonRight))
+		_childIdBuffer.Overwrite(buttonName, " rename");
+		if (ImGui.BeginPopupContextItem(_childIdBuffer, ImGuiPopupFlags.MouseButtonRight))
 		{
 			string name = customTemplate.Name ?? string.Empty;
 			ImGui.SetKeyboardFocusHere();
@@ -134,7 +152,8 @@ public static class CustomTemplatesChild
 		ImGui.PushStyleColor(ImGuiCol.Button, gray with { A = 159 });
 		ImGui.PushStyleColor(ImGuiCol.ButtonActive, gray);
 		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, gray with { A = 223 });
-		ImGui.PushID($"dd {customTemplate}");
+		_dragIndicatorIdBuffer.Overwrite("drag indicator", i);
+		ImGui.PushID(_dragIndicatorIdBuffer);
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
 		ImGui.ImageButton("CustomTemplateReorderImageButton", (IntPtr)Root.InternalResources.DragIndicatorTexture.Handle, new(32, 48), Vector2.Zero, Vector2.One, _customTemplateIndexToReorder == i ? Color.Gray(0.7f) : gray);
@@ -157,12 +176,13 @@ public static class CustomTemplatesChild
 		ImGui.PopStyleColor(3);
 	}
 
-	private static void RenderDeleteButton(UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
+	private static void RenderDeleteButton(int i, UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
 	{
 		ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 159 });
 		ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red);
 		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red with { A = 223 });
-		ImGui.PushID(customTemplate.ToString());
+		_deleteButtonIdBuffer.Overwrite("delete button", i);
+		ImGui.PushID(_deleteButtonIdBuffer);
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(12));
 		if (ImGui.ImageButton("CustomTemplateDeleteImageButton", (IntPtr)Root.InternalResources.BinTexture.Handle, new(24), Vector2.Zero, Vector2.One))
