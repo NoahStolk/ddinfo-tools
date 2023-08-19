@@ -70,11 +70,24 @@ public static class LeaderboardChild
 			ImGui.BeginDisabled(!_selectedCustomEntry.HasReplay);
 
 			ImGui.SameLine();
-			if (ImGui.Button($"View {_selectedCustomEntry.PlayerName}'s replay in game"))
+
+			const string view = "View ";
+			const string inGameText = "'s replay in game";
+			Span<char> viewInGameText = stackalloc char[256];
+			view.AsSpan().CopyTo(viewInGameText);
+			_selectedCustomEntry.PlayerName.AsSpan().CopyTo(viewInGameText[view.Length..]);
+			inGameText.AsSpan().CopyTo(viewInGameText[(view.Length + _selectedCustomEntry.PlayerName.Length)..]);
+			if (ImGui.Button(viewInGameText[..(view.Length + _selectedCustomEntry.PlayerName.Length + inGameText.Length)]))
 				WatchInGame(_selectedCustomEntry.Id);
 
 			ImGui.SameLine();
-			if (ImGui.Button($"View {_selectedCustomEntry.PlayerName}'s replay in replay viewer"))
+
+			const string inReplayViewerText = "'s replay in replay viewer";
+			Span<char> viewInReplayViewerText = stackalloc char[256];
+			view.AsSpan().CopyTo(viewInReplayViewerText);
+			_selectedCustomEntry.PlayerName.AsSpan().CopyTo(viewInReplayViewerText[view.Length..]);
+			inReplayViewerText.AsSpan().CopyTo(viewInReplayViewerText[(view.Length + _selectedCustomEntry.PlayerName.Length)..]);
+			if (ImGui.Button(viewInReplayViewerText[..(view.Length + _selectedCustomEntry.PlayerName.Length + inReplayViewerText.Length)]))
 				WatchInReplayViewer(_selectedCustomEntry.Id);
 
 			ImGui.EndDisabled();
@@ -136,7 +149,7 @@ public static class LeaderboardChild
 		ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.CustomLeaderboards.Primary with { A = 64 });
 		ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.CustomLeaderboards.Primary with { A = 96 });
 		bool temp = true;
-		if (ImGui.Selectable(ce.Rank.ToString("00"), ref temp, ImGuiSelectableFlags.SpanAllColumns))
+		if (ImGui.Selectable(UnsafeSpan.Get(ce.Rank, "00"), ref temp, ImGuiSelectableFlags.SpanAllColumns))
 			_selectedCustomEntry = ce;
 
 		ImGui.PopStyleColor(3);
@@ -148,50 +161,51 @@ public static class LeaderboardChild
 
 		Color daggerColor = CustomLeaderboardDaggerUtils.GetColor(ce.CustomLeaderboardDagger);
 
-		TextDaggerColored(ce.TimeInSeconds.ToString(StringFormats.TimeFormat), rs => rs is CustomLeaderboardRankSorting.TimeAsc or CustomLeaderboardRankSorting.TimeDesc);
+		TextDaggerColored(UnsafeSpan.Get(ce.TimeInSeconds, StringFormats.TimeFormat), static rs => rs is CustomLeaderboardRankSorting.TimeAsc or CustomLeaderboardRankSorting.TimeDesc);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(ce.EnemiesAlive.ToString(), rs => rs is CustomLeaderboardRankSorting.EnemiesAliveAsc or CustomLeaderboardRankSorting.EnemiesAliveDesc);
+		TextDaggerColored(UnsafeSpan.Get(ce.EnemiesAlive), static rs => rs is CustomLeaderboardRankSorting.EnemiesAliveAsc or CustomLeaderboardRankSorting.EnemiesAliveDesc);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(ce.EnemiesKilled.ToString(), rs => rs is CustomLeaderboardRankSorting.EnemiesKilledAsc or CustomLeaderboardRankSorting.EnemiesKilledDesc);
+		TextDaggerColored(UnsafeSpan.Get(ce.EnemiesKilled), static rs => rs is CustomLeaderboardRankSorting.EnemiesKilledAsc or CustomLeaderboardRankSorting.EnemiesKilledDesc);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(ce.GemsCollected.ToString(), rs => rs is CustomLeaderboardRankSorting.GemsCollectedAsc or CustomLeaderboardRankSorting.GemsCollectedDesc);
+		TextDaggerColored(UnsafeSpan.Get(ce.GemsCollected), static rs => rs is CustomLeaderboardRankSorting.GemsCollectedAsc or CustomLeaderboardRankSorting.GemsCollectedDesc);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(ce.GemsDespawned?.ToString() ?? "-", rs => rs is CustomLeaderboardRankSorting.GemsDespawnedAsc or CustomLeaderboardRankSorting.GemsDespawnedDesc);
+		TextDaggerColored(ce.GemsDespawned.HasValue ? UnsafeSpan.Get(ce.GemsDespawned.Value) : "-", static rs => rs is CustomLeaderboardRankSorting.GemsDespawnedAsc or CustomLeaderboardRankSorting.GemsDespawnedDesc);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(ce.GemsEaten?.ToString() ?? "-", rs => rs is CustomLeaderboardRankSorting.GemsEatenAsc or CustomLeaderboardRankSorting.GemsEatenDesc);
+		TextDaggerColored(ce.GemsEaten.HasValue ? UnsafeSpan.Get(ce.GemsEaten.Value) : "-", static rs => rs is CustomLeaderboardRankSorting.GemsEatenAsc or CustomLeaderboardRankSorting.GemsEatenDesc);
 		ImGui.TableNextColumn();
 
-		ImGui.TextUnformatted(GetAccuracy(ce).ToString(StringFormats.AccuracyFormat));
+		ImGui.TextUnformatted(UnsafeSpan.Get(GetAccuracy(ce), StringFormats.AccuracyFormat));
 		ImGui.TableNextColumn();
 
+		// TODO: This call allocates memory.
 		Death? death = Deaths.GetDeathByLeaderboardType(GameConstants.CurrentVersion, ce.DeathType, false); // SkipUnknown is false to save on memory allocations.
 		ImGui.TextColored(death?.Color.ToEngineColor() ?? Color.White, death?.Name ?? "Unknown");
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(ce.HomingStored.ToString(), rs => rs is CustomLeaderboardRankSorting.HomingStoredAsc or CustomLeaderboardRankSorting.HomingStoredDesc);
+		TextDaggerColored(UnsafeSpan.Get(ce.HomingStored), static rs => rs is CustomLeaderboardRankSorting.HomingStoredAsc or CustomLeaderboardRankSorting.HomingStoredDesc);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(ce.HomingEaten?.ToString() ?? "-", rs => rs is CustomLeaderboardRankSorting.HomingEatenAsc or CustomLeaderboardRankSorting.HomingEatenDesc);
+		TextDaggerColored(ce.HomingEaten.HasValue ? UnsafeSpan.Get(ce.HomingEaten.Value) : "-", static rs => rs is CustomLeaderboardRankSorting.HomingEatenAsc or CustomLeaderboardRankSorting.HomingEatenDesc);
 		ImGui.TableNextColumn();
 
-		ImGui.Text(ce.LevelUpTime2InSeconds == 0 ? "-" : ce.LevelUpTime2InSeconds.ToString(StringFormats.TimeFormat));
+		ImGui.Text(ce.LevelUpTime2InSeconds == 0 ? "-" : UnsafeSpan.Get(ce.LevelUpTime2InSeconds, StringFormats.TimeFormat));
 		ImGui.TableNextColumn();
 
-		ImGui.Text(ce.LevelUpTime3InSeconds == 0 ? "-" : ce.LevelUpTime3InSeconds.ToString(StringFormats.TimeFormat));
+		ImGui.Text(ce.LevelUpTime3InSeconds == 0 ? "-" : UnsafeSpan.Get(ce.LevelUpTime3InSeconds, StringFormats.TimeFormat));
 		ImGui.TableNextColumn();
 
-		ImGui.Text(ce.LevelUpTime4InSeconds == 0 ? "-" : ce.LevelUpTime4InSeconds.ToString(StringFormats.TimeFormat));
+		ImGui.Text(ce.LevelUpTime4InSeconds == 0 ? "-" : UnsafeSpan.Get(ce.LevelUpTime4InSeconds, StringFormats.TimeFormat));
 		ImGui.TableNextColumn();
 
-		ImGui.Text(ce.SubmitDate.ToString(StringFormats.DateTimeFormat));
+		ImGui.Text(UnsafeSpan.Get(ce.SubmitDate, StringFormats.DateTimeFormat));
 		ImGui.TableNextColumn();
 
-		void TextDaggerColored(string text, Func<CustomLeaderboardRankSorting, bool> isRankSortingApplicable)
+		void TextDaggerColored(ReadOnlySpan<char> text, Func<CustomLeaderboardRankSorting, bool> isRankSortingApplicable)
 		{
 			if (isRankSortingApplicable(rankSorting))
 				ImGui.TextColored(daggerColor, text);

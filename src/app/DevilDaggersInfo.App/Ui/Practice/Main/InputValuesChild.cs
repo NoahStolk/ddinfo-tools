@@ -10,6 +10,8 @@ namespace DevilDaggersInfo.App.Ui.Practice.Main;
 
 public static class InputValuesChild
 {
+	private static readonly IdBuffer _handLevelIdBuffer = new(16);
+
 	public static void Render()
 	{
 		ImGui.BeginChild("Input values", new(400, 160), true);
@@ -17,9 +19,10 @@ public static class InputValuesChild
 		ImGui.Spacing();
 		ImGui.Image((IntPtr)Root.InternalResources.IconHandTexture.Handle, new(16), Vector2.Zero, Vector2.One, PracticeLogic.State.HandLevel.GetColor());
 		ImGui.SameLine();
-		foreach (HandLevel level in Enum.GetValues<HandLevel>())
+		foreach (HandLevel level in EnumUtils.HandLevels)
 		{
-			if (ImGui.RadioButton($"Lvl {(int)level}", level == PracticeLogic.State.HandLevel) && PracticeLogic.State.HandLevel != level)
+			_handLevelIdBuffer.Overwrite("Lvl ", (int)level);
+			if (ImGui.RadioButton(_handLevelIdBuffer, level == PracticeLogic.State.HandLevel) && PracticeLogic.State.HandLevel != level)
 				PracticeLogic.State.HandLevel = level;
 
 			if (level != HandLevel.Level4)

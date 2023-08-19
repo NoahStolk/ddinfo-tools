@@ -100,8 +100,9 @@ public static class LeaderboardListViewChild
 				ImGui.Text(clOverview.SpawnsetAuthorName);
 				ImGui.TableNextColumn();
 
-				foreach (GetCustomLeaderboardCriteria criteria in clOverview.Criteria)
+				for (int i = 0; i < clOverview.Criteria.Count; i++)
 				{
+					GetCustomLeaderboardCriteria criteria = clOverview.Criteria[i];
 					ImGui.Image((IntPtr)criteria.Type.GetTexture().Handle, new(16), Vector2.UnitX, Vector2.UnitY, criteria.Type.GetColor());
 					if (ImGui.IsItemHovered())
 					{
@@ -120,21 +121,21 @@ public static class LeaderboardListViewChild
 					_ => "0",
 				};
 
-				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.SelectedPlayerStats?.Dagger), clOverview.SelectedPlayerStats?.HighscoreValue.ToString(valueFormat) ?? "-");
+				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.SelectedPlayerStats?.Dagger), clOverview.SelectedPlayerStats == null ? "-" : UnsafeSpan.Get(clOverview.SelectedPlayerStats.HighscoreValue, valueFormat));
 				ImGui.TableNextColumn();
 
 				bool completed = clOverview.SelectedPlayerStats?.Dagger == CustomLeaderboardDagger.Leviathan;
 				Color color = CustomLeaderboardDaggerUtils.GetColor(completed ? CustomLeaderboardDagger.Leviathan : clOverview.SelectedPlayerStats?.NextDagger?.Dagger);
-				ImGui.TextColored(color, completed ? "COMPLETED" : clOverview.SelectedPlayerStats?.NextDagger?.DaggerValue.ToString(valueFormat) ?? "N/A");
+				ImGui.TextColored(color, completed ? "COMPLETED" : clOverview.SelectedPlayerStats?.NextDagger == null ? "N/A" : UnsafeSpan.Get(clOverview.SelectedPlayerStats.NextDagger.DaggerValue, valueFormat));
 				ImGui.TableNextColumn();
 
-				ImGui.Text(clOverview.SelectedPlayerStats?.Rank.ToString() ?? "-");
+				ImGui.Text(clOverview.SelectedPlayerStats == null ? "-" : UnsafeSpan.Get(clOverview.SelectedPlayerStats.Rank));
 				ImGui.TableNextColumn();
 
-				ImGui.Text(clOverview.PlayerCount.ToString());
+				ImGui.Text(UnsafeSpan.Get(clOverview.PlayerCount));
 				ImGui.TableNextColumn();
 
-				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.WorldRecord?.Dagger), clOverview.WorldRecord?.WorldRecordValue.ToString(valueFormat) ?? "-");
+				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.WorldRecord?.Dagger), clOverview.WorldRecord == null ? "-" : UnsafeSpan.Get(clOverview.WorldRecord.WorldRecordValue, valueFormat));
 				ImGui.TableNextColumn();
 			}
 

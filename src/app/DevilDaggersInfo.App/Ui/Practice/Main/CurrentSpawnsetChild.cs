@@ -6,6 +6,8 @@ namespace DevilDaggersInfo.App.Ui.Practice.Main;
 
 public static class CurrentSpawnsetChild
 {
+	private static readonly char[] _handLevelWithMeshBuffer = new char[128];
+
 	public static void Render()
 	{
 		ImGui.BeginChild("Current spawnset", new(400, 160), true);
@@ -13,19 +15,26 @@ public static class CurrentSpawnsetChild
 		ImGui.BeginChild("Current practice values", new(400, 64));
 		if (SurvivalFileWatcher.Exists)
 		{
-			string timerStart = SurvivalFileWatcher.TimerStart.ToString(StringFormats.TimeFormat);
-
 			if (ImGui.BeginChild("Current practice values left", new(160, 64)))
 			{
 				ImGui.TextColored(Color.Yellow, "Effective values");
 
 				if (SurvivalFileWatcher.EffectivePlayerSettings.HandLevel != SurvivalFileWatcher.EffectivePlayerSettings.HandMesh)
-					ImGui.Text($"{SurvivalFileWatcher.EffectivePlayerSettings.HandLevel} ({SurvivalFileWatcher.EffectivePlayerSettings.HandMesh} mesh)");
+				{
+					UnsafeCharBufferWriter writer = new(_handLevelWithMeshBuffer);
+					writer.Write(EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]);
+					writer.Write(" (");
+					writer.Write(EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandMesh]);
+					writer.Write(" mesh)");
+					ImGui.Text(writer);
+				}
 				else
-					ImGui.Text(SurvivalFileWatcher.EffectivePlayerSettings.HandLevel.ToString());
+				{
+					ImGui.Text(EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]);
+				}
 
-				ImGui.Text(SurvivalFileWatcher.EffectivePlayerSettings.GemsOrHoming.ToString());
-				ImGui.Text(timerStart);
+				ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.EffectivePlayerSettings.GemsOrHoming));
+				ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
 			}
 
 			ImGui.EndChild();
@@ -36,9 +45,9 @@ public static class CurrentSpawnsetChild
 			{
 				ImGui.TextColored(Color.Yellow, "Spawnset values");
 
-				ImGui.Text(SurvivalFileWatcher.HandLevel.ToString());
-				ImGui.Text(SurvivalFileWatcher.AdditionalGems.ToString());
-				ImGui.Text(timerStart);
+				ImGui.Text(EnumUtils.HandLevelNames[SurvivalFileWatcher.HandLevel]);
+				ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.AdditionalGems));
+				ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
 			}
 
 			ImGui.EndChild();
