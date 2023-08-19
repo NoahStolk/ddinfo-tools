@@ -20,6 +20,8 @@ public static class SpawnsChild
 	private static readonly bool[] _selected = new bool[MaxSpawns];
 	private static readonly string[] _enemyNames = Enum.GetValues<EnemyType>().Select(et => et.ToString()).ToArray();
 
+	private static readonly char[] _editContextBuffer = new char[256];
+
 	private static int? _scrollToIndex;
 
 	private static int _lastSelectedIndex = -1;
@@ -192,17 +194,26 @@ public static class SpawnsChild
 			if (!_delayEdited)
 				_editDelay = (float)spawn.Delay;
 
-			ImGui.Text($"Edit #{spawn.Index} ({spawn.EnemyType} at {spawn.Seconds.ToString(StringFormats.TimeFormat)})");
+			UnsafeCharBufferWriter writer = new(_editContextBuffer);
+			writer.Write("Edit #");
+			writer.Write(spawn.Index);
+			writer.Write(" (");
+			writer.Write(EnumUtils.EnemyTypeNames[spawn.EnemyType]);
+			writer.Write(" at ");
+			writer.Write(spawn.Seconds, StringFormats.TimeFormat);
+			writer.Write(')');
+			ImGui.Text(writer);
 
-			foreach (EnemyType enemyType in EnumUtils.EnemyTypes)
+			for (int i = 0; i < EnumUtils.EnemyTypes.Count; i++)
 			{
+				EnemyType enemyType = EnumUtils.EnemyTypes[i];
 				Color color = enemyType.GetColor(GameConstants.CurrentVersion);
 				ImGui.PushStyleColor(ImGuiCol.Text, color.ToEngineColor().ReadableColorForBrightness());
 				ImGui.PushStyleColor(ImGuiCol.Button, color);
 				ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color + new Vector4(0.3f, 0.3f, 0.3f, 0));
 				ImGui.PushStyleColor(ImGuiCol.ButtonActive, color + new Vector4(0.5f, 0.5f, 0.5f, 0));
 
-				if (ImGui.Button(enemyType.ToString(), new(96, 18)))
+				if (ImGui.Button(EnumUtils.EnemyTypeNames[enemyType], new(96, 18)))
 				{
 					SaveEditedSpawn(spawn.Index, enemyType, _editDelay);
 					saved = true;

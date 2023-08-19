@@ -1,5 +1,6 @@
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.Arena;
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Core.Spawnset.Extensions;
 
 namespace DevilDaggersInfo.App;
 
@@ -13,4 +14,10 @@ public static class EnumUtils
 
 	public static readonly IReadOnlyList<EnemyType> EnemyTypes = Enum.GetValues<EnemyType>();
 	public static readonly IReadOnlyDictionary<EnemyType, string> EnemyTypeNames = EnemyTypes.ToDictionary(et => et, et => et.ToString());
+
+	public static readonly IReadOnlyList<SpawnsetSupportedGameVersion> SpawnsetSupportedGameVersions = Enum.GetValues<SpawnsetSupportedGameVersion>();
+	public static readonly IReadOnlyDictionary<SpawnsetSupportedGameVersion, string> SpawnsetSupportedGameVersionNames = SpawnsetSupportedGameVersions.ToDictionary(gv => gv, gv => gv.ToDisplayString());
+
+	public static readonly IReadOnlyList<GameMode> GameModes = Enum.GetValues<GameMode>();
+	public static readonly IReadOnlyDictionary<GameMode, string> GameModeNames = GameModes.ToDictionary(gm => gm, gm => gm.ToString());
 }

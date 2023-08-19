@@ -2,7 +2,6 @@ using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.State;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Core.Spawnset;
-using DevilDaggersInfo.Core.Spawnset.Extensions;
 using ImGuiNET;
 using System.Numerics;
 
@@ -10,6 +9,8 @@ namespace DevilDaggersInfo.App.Ui.SpawnsetEditor;
 
 public static class SettingsChild
 {
+	private static readonly IdBuffer _handLevelIdBuffer = new(16);
+
 	private static void InfoTooltipWhenDisabled(bool disabled, string tooltipText)
 	{
 		if (disabled)
@@ -53,7 +54,7 @@ public static class SettingsChild
 		ImGui.SameLine();
 		for (int i = 8; i < 10; i++)
 		{
-			if (ImGui.RadioButton(i.ToString(), i == SpawnsetState.Spawnset.WorldVersion) && SpawnsetState.Spawnset.WorldVersion != i)
+			if (ImGui.RadioButton(UnsafeSpan.Get(i), i == SpawnsetState.Spawnset.WorldVersion) && SpawnsetState.Spawnset.WorldVersion != i)
 			{
 				SpawnsetState.Spawnset = SpawnsetState.Spawnset with { WorldVersion = i };
 				SpawnsetHistoryUtils.Save(SpawnsetEditType.Format);
@@ -67,7 +68,7 @@ public static class SettingsChild
 		ImGui.SameLine();
 		for (int i = 4; i < 7; i++)
 		{
-			if (ImGui.RadioButton(i.ToString(), i == SpawnsetState.Spawnset.SpawnVersion) && SpawnsetState.Spawnset.SpawnVersion != i)
+			if (ImGui.RadioButton(UnsafeSpan.Get(i), i == SpawnsetState.Spawnset.SpawnVersion) && SpawnsetState.Spawnset.SpawnVersion != i)
 			{
 				SpawnsetState.Spawnset = SpawnsetState.Spawnset with { SpawnVersion = i };
 				SpawnsetHistoryUtils.Save(SpawnsetEditType.Format);
@@ -80,7 +81,7 @@ public static class SettingsChild
 		ImGui.Text("Supported in game version:");
 
 		SpawnsetSupportedGameVersion supportedGameVersion = SpawnsetState.Spawnset.GetSupportedGameVersion();
-		ImGui.Text(supportedGameVersion.ToDisplayString());
+		ImGui.Text(EnumUtils.SpawnsetSupportedGameVersionNames[supportedGameVersion]);
 	}
 
 	private static void RenderGameMode()
@@ -91,9 +92,9 @@ public static class SettingsChild
 		ImGui.Separator();
 		ImGui.Indent(8);
 
-		foreach (GameMode gameMode in Enum.GetValues<GameMode>())
+		foreach (GameMode gameMode in EnumUtils.GameModes)
 		{
-			if (ImGui.RadioButton(gameMode.ToString(), gameMode == SpawnsetState.Spawnset.GameMode) && SpawnsetState.Spawnset.GameMode != gameMode)
+			if (ImGui.RadioButton(EnumUtils.GameModeNames[gameMode], gameMode == SpawnsetState.Spawnset.GameMode) && SpawnsetState.Spawnset.GameMode != gameMode)
 			{
 				SpawnsetState.Spawnset = SpawnsetState.Spawnset with { GameMode = gameMode };
 				SpawnsetHistoryUtils.Save(SpawnsetEditType.GameMode);
@@ -179,9 +180,11 @@ public static class SettingsChild
 		ImGui.Separator();
 		ImGui.Indent(8);
 
-		foreach (HandLevel level in Enum.GetValues<HandLevel>())
+		for (int i = 0; i < EnumUtils.HandLevels.Count; i++)
 		{
-			if (ImGui.RadioButton($"Lvl {(int)level}", level == SpawnsetState.Spawnset.HandLevel) && SpawnsetState.Spawnset.HandLevel != level)
+			HandLevel level = EnumUtils.HandLevels[i];
+			_handLevelIdBuffer.Overwrite("Lvl ", (int)level);
+			if (ImGui.RadioButton(_handLevelIdBuffer, level == SpawnsetState.Spawnset.HandLevel) && SpawnsetState.Spawnset.HandLevel != level)
 			{
 				SpawnsetState.Spawnset = SpawnsetState.Spawnset with { HandLevel = level };
 				SpawnsetHistoryUtils.Save(SpawnsetEditType.HandLevel);

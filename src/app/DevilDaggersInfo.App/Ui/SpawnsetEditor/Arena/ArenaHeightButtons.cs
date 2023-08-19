@@ -44,7 +44,7 @@ public static class ArenaHeightButtons
 			ImGui.PushStyleColor(ImGuiCol.Border, Math.Abs(ArenaChild.SelectedHeight - height) < 0.001f ? Color.Invert(heightColor) : Color.Lerp(heightColor, Color.Black, 0.2f));
 
 			ImGui.SetCursorPos(new(offsetX + borderSize * 2, offsetY + borderSize));
-			if (ImGui.Button(height.ToString(), new(width - 1, _arenaButtonSize - 1)))
+			if (ImGui.Button(UnsafeSpan.Get(height), new(width - 1, _arenaButtonSize - 1)))
 				ArenaChild.SelectedHeight = height;
 
 			ImGui.PopStyleColor(5);
