@@ -2,7 +2,7 @@ using DevilDaggersInfo.App.Ui.SpawnsetEditor.Arena;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Spawnset.Extensions;
 
-namespace DevilDaggersInfo.App;
+namespace DevilDaggersInfo.App.Utils;
 
 public static class EnumUtils
 {

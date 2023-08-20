@@ -7,6 +7,7 @@ using DevilDaggersInfo.App.Networking.TaskHandlers;
 using DevilDaggersInfo.App.Ui.CustomLeaderboards.LeaderboardList;
 using DevilDaggersInfo.App.User.Cache;
 using DevilDaggersInfo.App.User.Settings;
+using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Common;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Wiki;

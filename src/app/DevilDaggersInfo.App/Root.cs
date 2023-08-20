@@ -1,5 +1,6 @@
 using DevilDaggersInfo.App.Core.GameMemory;
 using DevilDaggersInfo.App.Platforms;
+using DevilDaggersInfo.App.Utils;
 using ImGuiNET;
 using Serilog;
 using Serilog.Core;

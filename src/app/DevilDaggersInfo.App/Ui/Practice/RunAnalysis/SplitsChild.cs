@@ -1,5 +1,6 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.Practice.RunAnalysis.Data;
+using DevilDaggersInfo.App.ZeroAllocation;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.App.Ui.Practice.RunAnalysis;
@@ -10,8 +11,10 @@ public static class SplitsChild
 	{
 		IReadOnlyList<SplitDataEntry> data = RunAnalysisWindow.StatsData.SplitsData.HomingSplitData;
 
-		if (ImGui.BeginChild("Splits", new(192, 224)))
+		if (ImGui.BeginChild("Splits", new(192, 256)))
 		{
+			ImGuiExt.Title("Splits", Root.FontGoetheBold20);
+
 			if (ImGui.BeginTable("LeaderboardTable", 3, ImGuiTableFlags.None))
 			{
 				ImGui.TableSetupColumn("Split", ImGuiTableColumnFlags.None, 40);
@@ -21,7 +24,7 @@ public static class SplitsChild
 
 				for (int i = 0; i < data.Count; i++)
 				{
-					float displayTimer = data[i].DisplayTimer;
+					int displayTimer = data[i].DisplayTimer;
 					int? homing = data[i].Homing;
 					int? homingPrevious = data[i].HomingPrevious;
 

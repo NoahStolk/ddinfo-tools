@@ -2,7 +2,11 @@ namespace DevilDaggersInfo.App.Ui.Practice.RunAnalysis.Data;
 
 public class SplitsData
 {
-	private static readonly IReadOnlyList<(int Label, int Seconds)> _splitData = new List<(int Label, int Seconds)>
+	private readonly SplitDataEntry[] _homingSplitData = new SplitDataEntry[SplitData.Count + 2]; // Include start and end.
+
+	public IReadOnlyList<SplitDataEntry> HomingSplitData => _homingSplitData;
+
+	public static IReadOnlyList<(int Label, int Seconds)> SplitData { get; } = new List<(int Label, int Seconds)>
 	{
 		(350, 366),
 		(700, 709),
@@ -16,18 +20,14 @@ public class SplitsData
 		(1160, 1170),
 	};
 
-	private readonly SplitDataEntry[] _homingSplitData = new SplitDataEntry[_splitData.Count + 2]; // Include start and end.
-
-	public IReadOnlyList<SplitDataEntry> HomingSplitData => _homingSplitData;
-
 	public void Populate()
 	{
 		bool addedTimerStart = false;
 		bool addedTimerEnd = false;
 		int homingSplitDataIndex = 0;
-		for (int i = 0; i < _splitData.Count; i++)
+		for (int i = 0; i < SplitData.Count; i++)
 		{
-			(int Label, int Seconds) splitEntry = _splitData[i];
+			(int Label, int Seconds) splitEntry = SplitData[i];
 
 			if (!addedTimerStart && splitEntry.Seconds > RunAnalysisWindow.StatsData.TimerStart)
 			{

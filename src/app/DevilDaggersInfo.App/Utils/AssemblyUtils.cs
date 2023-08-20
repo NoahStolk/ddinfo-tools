@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Reflection;
 
-namespace DevilDaggersInfo.App;
+namespace DevilDaggersInfo.App.Utils;
 
 public static class AssemblyUtils
 {

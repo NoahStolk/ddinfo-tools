@@ -6,6 +6,7 @@ using DevilDaggersInfo.App.Ui.Config;
 using DevilDaggersInfo.App.Ui.Main;
 using DevilDaggersInfo.App.User.Cache;
 using DevilDaggersInfo.App.User.Settings;
+using DevilDaggersInfo.App.Utils;
 using DevilDaggersInfo.Core.Versioning;
 using ImGuiNET;
 using Silk.NET.Core;

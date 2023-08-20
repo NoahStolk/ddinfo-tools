@@ -21,18 +21,16 @@ public static class RunAnalysisWindow
 			return;
 
 		StatsData.Populate();
-		GemCollectionChild.Update(StatsData.Statistics);
+		GraphsChild.Update(StatsData.Statistics);
 	}
 
 	public static void Render()
 	{
-		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, new Vector2(512, 512));
+		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, new Vector2(512, 1024));
 		if (ImGui.Begin("Run Analysis"))
 		{
 			SplitsChild.Render();
-
-			// TODO: Fix graphs in GemCollectionChild.
-			// GemCollectionChild.Render();
+			GraphsChild.Render();
 
 			ImGui.End();
 		}

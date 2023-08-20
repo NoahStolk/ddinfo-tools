@@ -1,4 +1,4 @@
-namespace DevilDaggersInfo.App;
+namespace DevilDaggersInfo.App.ZeroAllocation;
 
 public struct UnsafeCharBufferWriter
 {
