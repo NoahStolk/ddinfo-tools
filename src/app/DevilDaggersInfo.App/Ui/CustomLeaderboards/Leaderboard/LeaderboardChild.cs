@@ -182,8 +182,7 @@ public static class LeaderboardChild
 		ImGui.TextUnformatted(UnsafeSpan.Get(GetAccuracy(ce), StringFormats.AccuracyFormat));
 		ImGui.TableNextColumn();
 
-		// TODO: This call allocates memory.
-		Death? death = Deaths.GetDeathByLeaderboardType(GameConstants.CurrentVersion, ce.DeathType, false); // SkipUnknown is false to save on memory allocations.
+		Death? death = Deaths.GetDeathByType(GameConstants.CurrentVersion, ce.DeathType);
 		ImGui.TextColored(death?.Color.ToEngineColor() ?? Color.White, death?.Name ?? "Unknown");
 		ImGui.TableNextColumn();
 
