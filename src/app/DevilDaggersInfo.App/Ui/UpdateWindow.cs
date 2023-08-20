@@ -1,4 +1,3 @@
-using DevilDaggersInfo.Core.Versioning;
 using ImGuiNET;
 using System.Numerics;
 
@@ -8,7 +7,7 @@ public static class UpdateWindow
 {
 	private static bool _updateInProgress;
 
-	public static AppVersion? AvailableUpdateVersion { get; set; }
+	public static Version? AvailableUpdateVersion { get; set; }
 
 	public static List<string> LogMessages { get; } = new();
 

@@ -7,7 +7,6 @@ using DevilDaggersInfo.App.Ui.Main;
 using DevilDaggersInfo.App.User.Cache;
 using DevilDaggersInfo.App.User.Settings;
 using DevilDaggersInfo.App.Utils;
-using DevilDaggersInfo.Core.Versioning;
 using ImGuiNET;
 using Silk.NET.Core;
 using Silk.NET.Input;
@@ -45,7 +44,7 @@ public class Application
 		_window.Render += OnWindowOnRender;
 		_window.Closing += OnWindowOnClosing;
 
-		if (!AppVersion.TryParse(AssemblyUtils.EntryAssemblyVersion, out AppVersion? appVersion))
+		if (!Version.TryParse(AssemblyUtils.EntryAssemblyVersion, out Version? appVersion))
 			throw new InvalidOperationException("The current version number is invalid.");
 
 		AppVersion = appVersion;
@@ -54,7 +53,7 @@ public class Application
 	public static PerSecondCounter RenderCounter { get; } = new();
 	public static float LastRenderDelta { get; private set; }
 
-	public AppVersion AppVersion { get; }
+	public Version AppVersion { get; }
 
 	public void Run()
 	{

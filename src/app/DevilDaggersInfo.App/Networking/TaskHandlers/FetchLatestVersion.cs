@@ -1,17 +1,16 @@
 using DevilDaggersInfo.Api.App;
 using DevilDaggersInfo.Api.App.Updates;
-using DevilDaggersInfo.Core.Versioning;
 
 namespace DevilDaggersInfo.App.Networking.TaskHandlers;
 
 public static class FetchLatestVersion
 {
-	public static async Task<AppVersion?> HandleAsync(AppVersion appVersion, AppOperatingSystem appOperatingSystem)
+	public static async Task<Version?> HandleAsync(Version appVersion, AppOperatingSystem appOperatingSystem)
 	{
 		try
 		{
 			GetLatestVersion latestVersion = await AsyncHandler.Client.GetLatest(appOperatingSystem);
-			if (!AppVersion.TryParse(latestVersion.VersionNumber, out AppVersion? onlineVersion))
+			if (!Version.TryParse(latestVersion.VersionNumber, out Version? onlineVersion))
 				return null;
 
 			return onlineVersion > appVersion ? onlineVersion : null;
