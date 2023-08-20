@@ -64,12 +64,11 @@ public partial class AppApiHttpClient
 		return await SendGetRequest<List<GetCustomLeaderboardAllowedCategory>>($"api/app/custom-leaderboards/allowed-categories");
 	}
 
-	public async Task<GetMarker> GetMarker(AppOperatingSystem? appOperatingSystem, SupportedOperatingSystem? operatingSystem)
+	public async Task<GetMarker> GetMarker(AppOperatingSystem appOperatingSystem)
 	{
 		Dictionary<string, object?> queryParameters = new()
 		{
-			{ nameof(appOperatingSystem), appOperatingSystem },
-			{ nameof(operatingSystem), operatingSystem }
+			{ nameof(appOperatingSystem), appOperatingSystem }
 		};
 		return await SendGetRequest<GetMarker>(BuildUrlWithQuery($"api/app/process-memory/marker", queryParameters));
 	}
@@ -91,26 +90,6 @@ public partial class AppApiHttpClient
 			{ nameof(hash), Uri.EscapeDataString(Convert.ToBase64String(hash)) }
 		};
 		return await SendGetRequest<GetSpawnsetByHash>(BuildUrlWithQuery($"api/app/spawnsets/by-hash", queryParameters));
-	}
-
-	public async Task<GetLatestVersion> GetLatestVersion(ToolPublishMethod publishMethod, ToolBuildType buildType)
-	{
-		Dictionary<string, object?> queryParameters = new()
-		{
-			{ nameof(publishMethod), publishMethod },
-			{ nameof(buildType), buildType }
-		};
-		return await SendGetRequest<GetLatestVersion>(BuildUrlWithQuery($"api/app/updates/latest-version", queryParameters));
-	}
-
-	public async Task<Task> GetLatestVersionFile(ToolPublishMethod publishMethod, ToolBuildType buildType)
-	{
-		Dictionary<string, object?> queryParameters = new()
-		{
-			{ nameof(publishMethod), publishMethod },
-			{ nameof(buildType), buildType }
-		};
-		return await SendGetRequest<Task>(BuildUrlWithQuery($"api/app/updates/latest-version-file", queryParameters));
 	}
 
 	public async Task<GetLatestVersion> GetLatest(AppOperatingSystem appOperatingSystem)
