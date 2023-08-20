@@ -8,9 +8,11 @@ public class GameMemoryService
 {
 	public const int StatsBufferSize = 112;
 
-	private const int _bufferSize = 319;
+	private const int _mainBufferSize = 319;
 
-	private readonly byte[] _buffer = new byte[_bufferSize];
+	private readonly byte[] _pointerBuffer = new byte[sizeof(long)];
+	private readonly byte[] _mainBuffer = new byte[_mainBufferSize];
+	private readonly byte[] _replayIdentifierBuffer = new byte[LocalReplayBinaryHeader.IdentifierLength];
 
 	private long _memoryBlockAddress;
 	private Process? _process;
@@ -36,9 +38,9 @@ public class GameMemoryService
 		}
 		else
 		{
-			byte[] pointerBytes = new byte[sizeof(long)];
-			_nativeMemoryService.ReadMemory(_process, _process.MainModule.BaseAddress.ToInt64() + ddstatsMarkerOffset, pointerBytes, 0, sizeof(long));
-			_memoryBlockAddress = BitConverter.ToInt64(pointerBytes);
+			_pointerBuffer.AsSpan().Clear();
+			_nativeMemoryService.ReadMemory(_process, _process.MainModule.BaseAddress.ToInt64() + ddstatsMarkerOffset, _pointerBuffer, 0, sizeof(long));
+			_memoryBlockAddress = BitConverter.ToInt64(_pointerBuffer);
 			IsInitialized = true;
 		}
 	}
@@ -48,10 +50,10 @@ public class GameMemoryService
 		if (_process == null)
 			return;
 
-		_nativeMemoryService.ReadMemory(_process, _memoryBlockAddress, _buffer, 0, _bufferSize);
+		_nativeMemoryService.ReadMemory(_process, _memoryBlockAddress, _mainBuffer, 0, _mainBufferSize);
 
 		MainBlockPrevious = MainBlock;
-		MainBlock = new(_buffer);
+		MainBlock = new(_mainBuffer);
 	}
 
 	public byte[] GetStatsBuffer()
@@ -74,9 +76,9 @@ public class GameMemoryService
 		if (_process == null || MainBlock.ReplayLength is <= 0 or > 30 * 1024 * 1024)
 			return false;
 
-		byte[] headerBytes = new byte[LocalReplayBinaryHeader.IdentifierLength];
-		_nativeMemoryService.ReadMemory(_process, MainBlock.ReplayBase, headerBytes, 0, headerBytes.Length);
-		return LocalReplayBinaryHeader.IdentifierIsValid(headerBytes, out _);
+		_replayIdentifierBuffer.AsSpan().Clear();
+		_nativeMemoryService.ReadMemory(_process, MainBlock.ReplayBase, _replayIdentifierBuffer, 0, _replayIdentifierBuffer.Length);
+		return LocalReplayBinaryHeader.IdentifierIsValid(_replayIdentifierBuffer, out _);
 	}
 
 	public byte[] ReadReplayFromMemory()
