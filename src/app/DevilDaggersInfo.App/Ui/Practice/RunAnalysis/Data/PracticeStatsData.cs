@@ -1,14 +1,17 @@
 using DevilDaggersInfo.App.Core.GameMemory;
 
-namespace DevilDaggersInfo.App.Ui.Practice.RunAnalysis;
+namespace DevilDaggersInfo.App.Ui.Practice.RunAnalysis.Data;
 
 public class PracticeStatsData
 {
 	private readonly byte[] _statsBuffer = new byte[GameMemoryService.StatsBufferSize * 60 * 60]; // Allow up to an hour of data (roughly 3600 seconds in game).
 
-	private readonly List<Statistic> _statistics = new();
+	private readonly List<StatisticEntry> _statistics = new();
 
-	public IReadOnlyList<Statistic> Statistics => _statistics;
+	public SplitsData SplitsData { get; } = new();
+	public IReadOnlyList<StatisticEntry> Statistics => _statistics;
+	public float TimerStart { get; private set; }
+	public float TimerEnd { get; private set; }
 
 	public void Populate()
 	{
@@ -39,15 +42,10 @@ public class PracticeStatsData
 				HomingEaten = homingEaten,
 			});
 		}
-	}
 
-	public struct Statistic
-	{
-		public int GemsCollected;
-		public int HomingStored;
-		public int GemsDespawned;
-		public int GemsEaten;
-		public int GemsTotal;
-		public int HomingEaten;
+		TimerStart = Root.GameMemoryService.MainBlock.StartTimer;
+		TimerEnd = Root.GameMemoryService.MainBlock.StartTimer + Root.GameMemoryService.MainBlock.Time;
+
+		SplitsData.Populate();
 	}
 }

@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Ui.Practice.RunAnalysis.Data;
 using ImGuiNET;
 using System.Numerics;
 
@@ -29,7 +30,9 @@ public static class RunAnalysisWindow
 		if (ImGui.Begin("Run Analysis"))
 		{
 			SplitsChild.Render();
-			GemCollectionChild.Render();
+
+			// TODO: Fix graphs in GemCollectionChild.
+			// GemCollectionChild.Render();
 
 			ImGui.End();
 		}

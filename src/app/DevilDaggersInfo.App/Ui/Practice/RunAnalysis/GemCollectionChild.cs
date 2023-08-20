@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Ui.Practice.RunAnalysis.Data;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.App.Ui.Practice.RunAnalysis;
@@ -14,7 +15,7 @@ public static class GemCollectionChild
 	private static int _maxGemsEatenDelta;
 	private static int _maxGemsTotalDelta;
 
-	public static void Update(IReadOnlyList<PracticeStatsData.Statistic> data)
+	public static void Update(IReadOnlyList<StatisticEntry> data)
 	{
 		_gemsCollectedDelta.Clear();
 		_gemsDespawnedDelta.Clear();

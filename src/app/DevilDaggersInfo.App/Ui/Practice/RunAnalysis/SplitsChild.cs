@@ -1,70 +1,59 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
+using DevilDaggersInfo.App.Ui.Practice.RunAnalysis.Data;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.App.Ui.Practice.RunAnalysis;
 
 public static class SplitsChild
 {
-	private static readonly IReadOnlyDictionary<int, int> _splitData = new Dictionary<int, int>
-	{
-		[350] = 366,
-		[700] = 709,
-		[800] = 800,
-		[880] = 875,
-		[930] = 942,
-		[1000] = 996,
-		[1040] = 1047,
-		[1080] = 1091,
-		[1130] = 1133,
-		[1160] = 1170,
-	};
-	private static readonly int?[] _relevantHomingValues = new int?[_splitData.Count];
-
 	public static void Render()
 	{
-		if (ImGui.BeginChild("Splits", new(160, 192)))
-		{
-			for (int i = 0; i < _splitData.Count; i++)
-			{
-				KeyValuePair<int, int> splitEntry = _splitData.ElementAt(i); // TODO: This allocates heap memory.
-				int actualIndex = Math.Max(0, splitEntry.Value - 350); // TEMP
-				bool hasValue = RunAnalysisWindow.StatsData.Statistics.Count > actualIndex;
-				_relevantHomingValues[i] = hasValue ? RunAnalysisWindow.StatsData.Statistics[actualIndex].HomingStored : null;
-			}
+		IReadOnlyList<SplitDataEntry> data = RunAnalysisWindow.StatsData.SplitsData.HomingSplitData;
 
+		if (ImGui.BeginChild("Splits", new(192, 224)))
+		{
 			if (ImGui.BeginTable("LeaderboardTable", 3, ImGuiTableFlags.None))
 			{
-				ImGui.TableSetupColumn("Split", ImGuiTableColumnFlags.None, 24);
-				ImGui.TableSetupColumn("Homing", ImGuiTableColumnFlags.None, 32);
-				ImGui.TableSetupColumn("Delta", ImGuiTableColumnFlags.None, 32);
+				ImGui.TableSetupColumn("Split", ImGuiTableColumnFlags.None, 40);
+				ImGui.TableSetupColumn("Homing", ImGuiTableColumnFlags.None, 40);
+				ImGui.TableSetupColumn("Delta", ImGuiTableColumnFlags.None, 40);
 				ImGui.TableHeadersRow();
 
-				for (int i = 0; i < _splitData.Count; i++)
+				for (int i = 0; i < data.Count; i++)
 				{
-					KeyValuePair<int, int> splitEntry = _splitData.ElementAt(i); // TODO: This allocates heap memory.
-					int? homing = _relevantHomingValues[i];
-					int? previousHoming = i > 0 ? _relevantHomingValues[i - 1] : null;
+					float displayTimer = data[i].DisplayTimer;
+					int? homing = data[i].Homing;
+					int? homingPrevious = data[i].HomingPrevious;
 
-					if (!homing.HasValue || !previousHoming.HasValue)
-						continue;
-
+					Color textColor = homing.HasValue ? Color.White : Color.Gray(0.5f);
+					uint backgroundColor = data[i].Kind switch
+					{
+						SplitDataEntryKind.Start => 0x2200ff00,
+						SplitDataEntryKind.End => 0x220000ff,
+						_ => 0x00000000,
+					};
 					ImGui.TableNextRow();
 
-					ImGui.TableNextColumn();
-					ImGui.Text(splitEntry.Key.ToString());
+					ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, backgroundColor);
 
 					ImGui.TableNextColumn();
-					ImGui.Text(homing.Value.ToString());
+					ImGui.TextColored(textColor, UnsafeSpan.Get(displayTimer));
 
 					ImGui.TableNextColumn();
-					int delta = homing.Value - previousHoming.Value;
+					ImGui.TextColored(textColor, homing.HasValue ? UnsafeSpan.Get(homing.Value) : "-");
+
+					ImGui.TableNextColumn();
+					int? delta = homing.HasValue && homingPrevious.HasValue ? homing.Value - homingPrevious.Value : null;
 					Color color = delta switch
 					{
 						< 0 => Color.Red,
 						> 0 => Color.Green,
+						null => Color.Gray(0.5f),
 						_ => Color.White,
 					};
-					ImGui.TextColored(color, delta.ToString("+0;-0;+0"));
+					ImGui.TextColored(color, delta.HasValue ? UnsafeSpan.Get(delta.Value, "+0;-0;+0") : "-");
+
+					ImGui.PopStyleColor();
 				}
 
 				ImGui.EndTable();

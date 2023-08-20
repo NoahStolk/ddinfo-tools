@@ -4,6 +4,7 @@ using DevilDaggersInfo.App.Ui.CustomLeaderboards;
 using DevilDaggersInfo.App.Ui.CustomLeaderboards.Results;
 using DevilDaggersInfo.App.Ui.Main;
 using DevilDaggersInfo.App.Ui.Practice.Main;
+using DevilDaggersInfo.App.Ui.Practice.RunAnalysis;
 using DevilDaggersInfo.App.Ui.ReplayEditor;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor;
 using DevilDaggersInfo.App.User.Settings;
@@ -82,10 +83,8 @@ public static class UiRenderer
 				break;
 			case LayoutType.Practice:
 				PracticeWindow.Render();
-
-				// TODO: Fix hardcoded 350 in SplitsChild. Fix graphs in GemCollectionChild.
-				// RunAnalysisWindow.Update(delta);
-				// RunAnalysisWindow.Render();
+				RunAnalysisWindow.Update(delta);
+				RunAnalysisWindow.Render();
 				break;
 		}
 
