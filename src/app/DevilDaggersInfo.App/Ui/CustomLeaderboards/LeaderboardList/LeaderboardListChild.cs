@@ -63,7 +63,7 @@ public static class LeaderboardListChild
 			ImGui.SameLine();
 			if (ImGui.BeginChild("ComboCategory", new(360, 20)))
 			{
-				if (ImGui.Combo("Category", ref _categoryIndex, _categoryNames, _categories.Count))
+				if (_categoryNames.Length > 0 && ImGui.Combo("Category", ref _categoryIndex, _categoryNames, _categoryNames.Length))
 					UpdatePagedCustomLeaderboards();
 			}
 
