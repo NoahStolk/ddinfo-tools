@@ -113,7 +113,7 @@ public static class ContentManager
 		if (!ddBinary.AssetMap.TryGetValue(new(AssetType.Mesh, meshName), out AssetData? meshData))
 			throw new InvalidGameInstallationException($"Required mesh '{meshName}' from 'res/dd' was not found.");
 
-		return ToEngineMesh(meshData.Buffer);
+		return ToEngineMesh(meshName, meshData.Buffer);
 	}
 
 	private static TextureContent GetTexture(ModBinary ddBinary, string textureName)
@@ -129,18 +129,36 @@ public static class ContentManager
 		if (!audioBinary.AssetMap.TryGetValue(new(AssetType.Audio, soundName), out AssetData? audioData))
 			throw new InvalidGameInstallationException($"Required audio '{soundName}' from 'res/audio' was not found.");
 
-		SoundData waveData = WaveParser.Parse(audioData.Buffer);
-		return new(waveData.Channels, waveData.SampleRate, waveData.BitsPerSample, waveData.Data.Length, waveData.Data);
+		try
+		{
+			SoundData waveData = WaveParser.Parse(audioData.Buffer);
+			return new(waveData.Channels, waveData.SampleRate, waveData.BitsPerSample, waveData.Data.Length, waveData.Data);
+		}
+		catch (WaveParseException ex)
+		{
+			Root.Log.Warning(ex, $"Could not parse .wav file {soundName}.");
+			throw new InvalidGameInstallationException($"Required audio '{soundName}' from 'res/audio' was not in a valid format. Make sure your game files are not corrupted.");
+		}
 	}
 
-	private static MeshContent ToEngineMesh(byte[] ddMeshBuffer)
+	private static MeshContent ToEngineMesh(string meshName, byte[] ddMeshBuffer)
 	{
+		const int headerSize = 10;
+
+		if (ddMeshBuffer.Length < headerSize)
+			throw new InvalidGameInstallationException($"Invalid data for mesh '{meshName}'. Length was {ddMeshBuffer.Length} but should be at least {headerSize}. Make sure your game files are not corrupted.");
+
 		using MemoryStream ms = new(ddMeshBuffer);
 		using BinaryReader br = new(ms);
 
 		int indexCount = br.ReadInt32();
 		int vertexCount = br.ReadInt32();
 		_ = br.ReadUInt16();
+
+		const int vertexSize = sizeof(float) * 8;
+		int minimumSize = indexCount * sizeof(uint) + vertexCount * vertexSize + headerSize;
+		if (ddMeshBuffer.Length < minimumSize)
+			throw new InvalidGameInstallationException($"Invalid data for mesh '{meshName}'. Not enough data for complete mesh ({ddMeshBuffer.Length:N0} / {minimumSize:N0}). Make sure your game files are not corrupted.");
 
 		DevilDaggersInfo.Core.Mod.Structs.Vertex[] ddVertices = new DevilDaggersInfo.Core.Mod.Structs.Vertex[vertexCount];
 		for (int i = 0; i < ddVertices.Length; i++)
@@ -164,6 +182,10 @@ public static class ContentManager
 	{
 		const ushort expectedHeader = 16401;
 		const int headerSize = 11;
+
+		if (ddTextureBuffer.Length < headerSize)
+			throw new InvalidGameInstallationException($"Invalid data for texture '{textureName}'. Length was {ddTextureBuffer.Length} but should be at least {headerSize}. Make sure your game files are not corrupted.");
+
 		using MemoryStream ms = new(ddTextureBuffer);
 		using BinaryReader br = new(ms);
 		ushort header = br.ReadUInt16();

@@ -9,12 +9,12 @@ internal record TextureBinary(ushort Width, ushort Height, byte[] ColorData) : I
 	private static bool IsOpaqueWhite(byte r, byte g, byte b, byte a)
 		=> r == byte.MaxValue && g == byte.MaxValue && b == byte.MaxValue && a == byte.MaxValue;
 
-	private static TextureContentType DetermineTextureContentType(byte[] colorData)
+	private static TextureContentType DetermineTextureContentType(IReadOnlyList<byte> colorData)
 	{
 		bool isWhiteOrTransparentOnly = true;
 		bool isOpaque = true;
 		bool isGrayScale = true;
-		for (int i = 0; i < colorData.Length; i += 4)
+		for (int i = 0; i < colorData.Count; i += 4)
 		{
 			byte r = colorData[i];
 			byte g = colorData[i + 1];
