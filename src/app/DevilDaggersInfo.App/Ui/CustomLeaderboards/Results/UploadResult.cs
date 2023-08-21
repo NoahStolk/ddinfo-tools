@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Api.App.CustomLeaderboards;
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Extensions;
+using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Common;
 using DevilDaggersInfo.Core.CriteriaExpression.Extensions;
 using DevilDaggersInfo.Core.Wiki;
@@ -238,9 +239,9 @@ public class UploadResult
 
 			ImGui.TextColored(color, _spawnsetName);
 
-			string timeAgo = SubmittedAt.ToString("HH:mm:ss");
-			ImGui.SameLine(ImGui.GetWindowWidth() - ImGui.CalcTextSize(timeAgo).X - 8);
-			ImGui.Text(timeAgo);
+			ReadOnlySpan<char> format = "HH:mm:ss";
+			ImGui.SameLine(ImGui.GetWindowWidth() - ImGui.CalcTextSize(format).X - 8);
+			ImGui.Text(UnsafeSpan.Get(SubmittedAt, format));
 
 			ImGui.Text(title);
 		}
@@ -352,7 +353,7 @@ public class UploadResult
 		}
 	}
 
-	private static void AddScoreState<T>(string label, GetScoreState<T> scoreState, Func<T, string> formatter, Func<T, string> formatterDifference, bool higherIsBetter = true)
+	private static void AddScoreState<T>(ReadOnlySpan<char> label, GetScoreState<T> scoreState, Func<T, string> formatter, Func<T, string> formatterDifference, bool higherIsBetter = true)
 		where T : struct, INumber<T>
 	{
 		int comparison = scoreState.ValueDifference.CompareTo(T.Zero);
@@ -378,7 +379,7 @@ public class UploadResult
 		ImGui.PopStyleColor();
 	}
 
-	private static void AddLevelUpScoreState(string label, GetScoreState<double> scoreState)
+	private static void AddLevelUpScoreState(ReadOnlySpan<char> label, GetScoreState<double> scoreState)
 	{
 		int comparison = -scoreState.ValueDifference.CompareTo(0);
 		Color color = comparison switch

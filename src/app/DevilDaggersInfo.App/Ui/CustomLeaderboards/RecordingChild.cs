@@ -2,6 +2,7 @@ using DevilDaggersInfo.App.Core.GameMemory;
 using DevilDaggersInfo.App.Core.GameMemory.Extensions;
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Extensions;
+using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Common;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;
@@ -168,79 +169,79 @@ public static class RecordingChild
 			// TODO: Use spans here.
 			ImGuiImage.Image(Root.InternalResources.IconEyeTexture.Handle, iconSize, Color.Orange);
 			RenderValue("Player", GetPlayerText(b), Color.White, _playerIntensity);
-			RenderValue("Time", b.Time.ToString(StringFormats.TimeFormat), Color.White, _timeIntensity);
+			RenderValue("Time", UnsafeSpan.Get(b.Time, StringFormats.TimeFormat), Color.White, _timeIntensity);
 			RenderValue("Hand", GetUpgrade(b).Name, GetUpgrade(b).Color.ToEngineColor(), _handIntensity);
-			RenderValue("Level 2", b.LevelUpTime2 == 0 ? "-" : b.LevelUpTime2.ToString(StringFormats.TimeFormat), UpgradesV3_2.Level2.Color.ToEngineColor(), _level2Intensity);
-			RenderValue("Level 3", b.LevelUpTime3 == 0 ? "-" : b.LevelUpTime3.ToString(StringFormats.TimeFormat), UpgradesV3_2.Level3.Color.ToEngineColor(), _level3Intensity);
-			RenderValue("Level 4", b.LevelUpTime4 == 0 ? "-" : b.LevelUpTime4.ToString(StringFormats.TimeFormat), UpgradesV3_2.Level4.Color.ToEngineColor(), _level4Intensity);
+			RenderValue("Level 2", b.LevelUpTime2 == 0 ? "-" : UnsafeSpan.Get(b.LevelUpTime2, StringFormats.TimeFormat), UpgradesV3_2.Level2.Color.ToEngineColor(), _level2Intensity);
+			RenderValue("Level 3", b.LevelUpTime3 == 0 ? "-" : UnsafeSpan.Get(b.LevelUpTime3, StringFormats.TimeFormat), UpgradesV3_2.Level3.Color.ToEngineColor(), _level3Intensity);
+			RenderValue("Level 4", b.LevelUpTime4 == 0 ? "-" : UnsafeSpan.Get(b.LevelUpTime4, StringFormats.TimeFormat), UpgradesV3_2.Level4.Color.ToEngineColor(), _level4Intensity);
 			RenderValue("Death", b.IsPlayerAlive ? "-" : GetDeath(b)?.Name ?? "?", GetDeath(b)?.Color.ToEngineColor() ?? Color.White, _deathIntensity);
 
 			ImGui.Spacing();
 			ImGuiImage.Image(Root.GameResources.IconMaskGemTexture.Handle, iconSize, Color.Red);
-			RenderValue("Gems collected", b.GemsCollected.ToString(), Color.Red, _gemsCollectedIntensity);
-			RenderValue("Gems despawned", b.GemsDespawned.ToString(), Color.Gray(0.6f), _gemsDespawnedIntensity);
-			RenderValue("Gems eaten", b.GemsEaten.ToString(), Color.Green, _gemsEatenIntensity);
-			RenderValue("Gems total", b.GemsTotal.ToString(), Color.Red, _gemsTotalIntensity);
+			RenderValue("Gems collected", UnsafeSpan.Get(b.GemsCollected), Color.Red, _gemsCollectedIntensity);
+			RenderValue("Gems despawned", UnsafeSpan.Get(b.GemsDespawned), Color.Gray(0.6f), _gemsDespawnedIntensity);
+			RenderValue("Gems eaten", UnsafeSpan.Get(b.GemsEaten), Color.Green, _gemsEatenIntensity);
+			RenderValue("Gems total", UnsafeSpan.Get(b.GemsTotal), Color.Red, _gemsTotalIntensity);
 
 			ImGui.Spacing();
 			ImGuiImage.Image(Root.GameResources.IconMaskHomingTexture.Handle, iconSize);
-			RenderValue("Homing stored", b.HomingStored.ToString(), Color.Purple, _homingStoredIntensity);
-			RenderValue("Homing eaten", b.HomingEaten.ToString(), Color.Red, _homingEatenIntensity);
+			RenderValue("Homing stored", UnsafeSpan.Get(b.HomingStored), Color.Purple, _homingStoredIntensity);
+			RenderValue("Homing eaten", UnsafeSpan.Get(b.HomingEaten), Color.Red, _homingEatenIntensity);
 
 			ImGui.Spacing();
 			ImGuiImage.Image(Root.GameResources.IconMaskCrosshairTexture.Handle, iconSize, Color.Green);
-			RenderValue("Daggers fired", b.DaggersFired.ToString(), Color.Yellow, _daggersFiredIntensity);
-			RenderValue("Daggers hit", b.DaggersHit.ToString(), Color.Red, _daggersHitIntensity);
-			RenderValue("Accuracy", GetAccuracy(b).ToString("0.00%"), Color.Orange, _accuracyIntensity);
+			RenderValue("Daggers fired", UnsafeSpan.Get(b.DaggersFired), Color.Yellow, _daggersFiredIntensity);
+			RenderValue("Daggers hit", UnsafeSpan.Get(b.DaggersHit), Color.Red, _daggersHitIntensity);
+			RenderValue("Accuracy", UnsafeSpan.Get(GetAccuracy(b), "0.00%"), Color.Orange, _accuracyIntensity);
 
 			ImGui.Spacing();
 			ImGuiImage.Image(Root.GameResources.IconMaskSkullTexture.Handle, iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
-			RenderValue("Enemies killed", b.EnemiesKilled.ToString(), Color.Red, _enemiesKilledIntensity);
-			RenderValue("Enemies alive", b.EnemiesAlive.ToString(), Color.Yellow, _enemiesAliveIntensity);
+			RenderValue("Enemies killed", UnsafeSpan.Get(b.EnemiesKilled), Color.Red, _enemiesKilledIntensity);
+			RenderValue("Enemies alive", UnsafeSpan.Get(b.EnemiesAlive), Color.Yellow, _enemiesAliveIntensity);
 
 			ImGui.Spacing();
-			RenderValue("Skull Is killed", b.Skull1KillCount.ToString(), EnemiesV3_2.Skull1.Color.ToEngineColor(), _skull1KillCountIntensity);
-			RenderValue("Skull IIs killed", b.Skull2KillCount.ToString(), EnemiesV3_2.Skull2.Color.ToEngineColor(), _skull2KillCountIntensity);
-			RenderValue("Skull IIIs killed", b.Skull3KillCount.ToString(), EnemiesV3_2.Skull3.Color.ToEngineColor(), _skull3KillCountIntensity);
-			RenderValue("Skull IVs killed", b.Skull4KillCount.ToString(), EnemiesV3_2.Skull4.Color.ToEngineColor(), _skull4KillCountIntensity);
-			RenderValue("Squid Is killed", b.Squid1KillCount.ToString(), EnemiesV3_2.Squid1.Color.ToEngineColor(), _squid1KillCountIntensity);
-			RenderValue("Squid IIs killed", b.Squid2KillCount.ToString(), EnemiesV3_2.Squid2.Color.ToEngineColor(), _squid2KillCountIntensity);
-			RenderValue("Squid IIIs killed", b.Squid3KillCount.ToString(), EnemiesV3_2.Squid3.Color.ToEngineColor(), _squid3KillCountIntensity);
-			RenderValue("Centipedes killed", b.CentipedeKillCount.ToString(), EnemiesV3_2.Centipede.Color.ToEngineColor(), _centipedeKillCountIntensity);
-			RenderValue("Gigapedes killed", b.GigapedeKillCount.ToString(), EnemiesV3_2.Gigapede.Color.ToEngineColor(), _gigapedeKillCountIntensity);
-			RenderValue("Ghostpedes killed", b.GhostpedeKillCount.ToString(), EnemiesV3_2.Ghostpede.Color.ToEngineColor(), _ghostpedeKillCountIntensity);
-			RenderValue("Spider Is killed", b.Spider1KillCount.ToString(), EnemiesV3_2.SpiderEgg1.Color.ToEngineColor(), _spider1KillCountIntensity);
-			RenderValue("Spider IIs killed", b.Spider2KillCount.ToString(), EnemiesV3_2.SpiderEgg2.Color.ToEngineColor(), _spider2KillCountIntensity);
-			RenderValue("Spiderlings killed", b.SpiderlingKillCount.ToString(), EnemiesV3_2.Spiderling.Color.ToEngineColor(), _spiderlingKillCountIntensity);
-			RenderValue("Spider Eggs killed", b.SpiderEggKillCount.ToString(), EnemiesV3_2.SpiderEgg1.Color.ToEngineColor(), _spiderEggKillCountIntensity);
-			RenderValue("Leviathans killed", b.LeviathanKillCount.ToString(), EnemiesV3_2.Leviathan.Color.ToEngineColor(), _leviathanKillCountIntensity);
-			RenderValue("Orbs killed", b.OrbKillCount.ToString(), EnemiesV3_2.TheOrb.Color.ToEngineColor(), _orbKillCountIntensity);
-			RenderValue("Thorns killed", b.ThornKillCount.ToString(), EnemiesV3_2.Thorn.Color.ToEngineColor(), _thornKillCountIntensity);
+			RenderValue("Skull Is killed", UnsafeSpan.Get(b.Skull1KillCount), EnemiesV3_2.Skull1.Color.ToEngineColor(), _skull1KillCountIntensity);
+			RenderValue("Skull IIs killed", UnsafeSpan.Get(b.Skull2KillCount), EnemiesV3_2.Skull2.Color.ToEngineColor(), _skull2KillCountIntensity);
+			RenderValue("Skull IIIs killed", UnsafeSpan.Get(b.Skull3KillCount), EnemiesV3_2.Skull3.Color.ToEngineColor(), _skull3KillCountIntensity);
+			RenderValue("Skull IVs killed", UnsafeSpan.Get(b.Skull4KillCount), EnemiesV3_2.Skull4.Color.ToEngineColor(), _skull4KillCountIntensity);
+			RenderValue("Squid Is killed", UnsafeSpan.Get(b.Squid1KillCount), EnemiesV3_2.Squid1.Color.ToEngineColor(), _squid1KillCountIntensity);
+			RenderValue("Squid IIs killed", UnsafeSpan.Get(b.Squid2KillCount), EnemiesV3_2.Squid2.Color.ToEngineColor(), _squid2KillCountIntensity);
+			RenderValue("Squid IIIs killed", UnsafeSpan.Get(b.Squid3KillCount), EnemiesV3_2.Squid3.Color.ToEngineColor(), _squid3KillCountIntensity);
+			RenderValue("Centipedes killed", UnsafeSpan.Get(b.CentipedeKillCount), EnemiesV3_2.Centipede.Color.ToEngineColor(), _centipedeKillCountIntensity);
+			RenderValue("Gigapedes killed", UnsafeSpan.Get(b.GigapedeKillCount), EnemiesV3_2.Gigapede.Color.ToEngineColor(), _gigapedeKillCountIntensity);
+			RenderValue("Ghostpedes killed", UnsafeSpan.Get(b.GhostpedeKillCount), EnemiesV3_2.Ghostpede.Color.ToEngineColor(), _ghostpedeKillCountIntensity);
+			RenderValue("Spider Is killed", UnsafeSpan.Get(b.Spider1KillCount), EnemiesV3_2.SpiderEgg1.Color.ToEngineColor(), _spider1KillCountIntensity);
+			RenderValue("Spider IIs killed", UnsafeSpan.Get(b.Spider2KillCount), EnemiesV3_2.SpiderEgg2.Color.ToEngineColor(), _spider2KillCountIntensity);
+			RenderValue("Spiderlings killed", UnsafeSpan.Get(b.SpiderlingKillCount), EnemiesV3_2.Spiderling.Color.ToEngineColor(), _spiderlingKillCountIntensity);
+			RenderValue("Spider Eggs killed", UnsafeSpan.Get(b.SpiderEggKillCount), EnemiesV3_2.SpiderEgg1.Color.ToEngineColor(), _spiderEggKillCountIntensity);
+			RenderValue("Leviathans killed", UnsafeSpan.Get(b.LeviathanKillCount), EnemiesV3_2.Leviathan.Color.ToEngineColor(), _leviathanKillCountIntensity);
+			RenderValue("Orbs killed", UnsafeSpan.Get(b.OrbKillCount), EnemiesV3_2.TheOrb.Color.ToEngineColor(), _orbKillCountIntensity);
+			RenderValue("Thorns killed", UnsafeSpan.Get(b.ThornKillCount), EnemiesV3_2.Thorn.Color.ToEngineColor(), _thornKillCountIntensity);
 
 			ImGui.Spacing();
-			RenderValue("Skull Is alive", b.Skull1AliveCount.ToString(), EnemiesV3_2.Skull1.Color.ToEngineColor(), _skull1AliveCountIntensity);
-			RenderValue("Skull IIs alive", b.Skull2AliveCount.ToString(), EnemiesV3_2.Skull2.Color.ToEngineColor(), _skull2AliveCountIntensity);
-			RenderValue("Skull IIIs alive", b.Skull3AliveCount.ToString(), EnemiesV3_2.Skull3.Color.ToEngineColor(), _skull3AliveCountIntensity);
-			RenderValue("Skull IVs alive", b.Skull4AliveCount.ToString(), EnemiesV3_2.Skull4.Color.ToEngineColor(), _skull4AliveCountIntensity);
-			RenderValue("Squid Is alive", b.Squid1AliveCount.ToString(), EnemiesV3_2.Squid1.Color.ToEngineColor(), _squid1AliveCountIntensity);
-			RenderValue("Squid IIs alive", b.Squid2AliveCount.ToString(), EnemiesV3_2.Squid2.Color.ToEngineColor(), _squid2AliveCountIntensity);
-			RenderValue("Squid IIIs alive", b.Squid3AliveCount.ToString(), EnemiesV3_2.Squid3.Color.ToEngineColor(), _squid3AliveCountIntensity);
-			RenderValue("Centipedes alive", b.CentipedeAliveCount.ToString(), EnemiesV3_2.Centipede.Color.ToEngineColor(), _centipedeAliveCountIntensity);
-			RenderValue("Gigapedes alive", b.GigapedeAliveCount.ToString(), EnemiesV3_2.Gigapede.Color.ToEngineColor(), _gigapedeAliveCountIntensity);
-			RenderValue("Ghostpedes alive", b.GhostpedeAliveCount.ToString(), EnemiesV3_2.Ghostpede.Color.ToEngineColor(), _ghostpedeAliveCountIntensity);
-			RenderValue("Spider Is alive", b.Spider1AliveCount.ToString(), EnemiesV3_2.SpiderEgg1.Color.ToEngineColor(), _spider1AliveCountIntensity);
-			RenderValue("Spider IIs alive", b.Spider2AliveCount.ToString(), EnemiesV3_2.SpiderEgg2.Color.ToEngineColor(), _spider2AliveCountIntensity);
-			RenderValue("Spiderlings alive", b.SpiderlingAliveCount.ToString(), EnemiesV3_2.Spiderling.Color.ToEngineColor(), _spiderlingAliveCountIntensity);
-			RenderValue("Spider Eggs alive", b.SpiderEggAliveCount.ToString(), EnemiesV3_2.SpiderEgg1.Color.ToEngineColor(), _spiderEggAliveCountIntensity);
-			RenderValue("Leviathans alive", b.LeviathanAliveCount.ToString(), EnemiesV3_2.Leviathan.Color.ToEngineColor(), _leviathanAliveCountIntensity);
-			RenderValue("Orbs alive", b.OrbAliveCount.ToString(), EnemiesV3_2.TheOrb.Color.ToEngineColor(), _orbAliveCountIntensity);
-			RenderValue("Thorns alive", b.ThornAliveCount.ToString(), EnemiesV3_2.Thorn.Color.ToEngineColor(), _thornAliveCountIntensity);
+			RenderValue("Skull Is alive", UnsafeSpan.Get(b.Skull1AliveCount), EnemiesV3_2.Skull1.Color.ToEngineColor(), _skull1AliveCountIntensity);
+			RenderValue("Skull IIs alive", UnsafeSpan.Get(b.Skull2AliveCount), EnemiesV3_2.Skull2.Color.ToEngineColor(), _skull2AliveCountIntensity);
+			RenderValue("Skull IIIs alive", UnsafeSpan.Get(b.Skull3AliveCount), EnemiesV3_2.Skull3.Color.ToEngineColor(), _skull3AliveCountIntensity);
+			RenderValue("Skull IVs alive", UnsafeSpan.Get(b.Skull4AliveCount), EnemiesV3_2.Skull4.Color.ToEngineColor(), _skull4AliveCountIntensity);
+			RenderValue("Squid Is alive", UnsafeSpan.Get(b.Squid1AliveCount), EnemiesV3_2.Squid1.Color.ToEngineColor(), _squid1AliveCountIntensity);
+			RenderValue("Squid IIs alive", UnsafeSpan.Get(b.Squid2AliveCount), EnemiesV3_2.Squid2.Color.ToEngineColor(), _squid2AliveCountIntensity);
+			RenderValue("Squid IIIs alive", UnsafeSpan.Get(b.Squid3AliveCount), EnemiesV3_2.Squid3.Color.ToEngineColor(), _squid3AliveCountIntensity);
+			RenderValue("Centipedes alive", UnsafeSpan.Get(b.CentipedeAliveCount), EnemiesV3_2.Centipede.Color.ToEngineColor(), _centipedeAliveCountIntensity);
+			RenderValue("Gigapedes alive", UnsafeSpan.Get(b.GigapedeAliveCount), EnemiesV3_2.Gigapede.Color.ToEngineColor(), _gigapedeAliveCountIntensity);
+			RenderValue("Ghostpedes alive", UnsafeSpan.Get(b.GhostpedeAliveCount), EnemiesV3_2.Ghostpede.Color.ToEngineColor(), _ghostpedeAliveCountIntensity);
+			RenderValue("Spider Is alive", UnsafeSpan.Get(b.Spider1AliveCount), EnemiesV3_2.SpiderEgg1.Color.ToEngineColor(), _spider1AliveCountIntensity);
+			RenderValue("Spider IIs alive", UnsafeSpan.Get(b.Spider2AliveCount), EnemiesV3_2.SpiderEgg2.Color.ToEngineColor(), _spider2AliveCountIntensity);
+			RenderValue("Spiderlings alive", UnsafeSpan.Get(b.SpiderlingAliveCount), EnemiesV3_2.Spiderling.Color.ToEngineColor(), _spiderlingAliveCountIntensity);
+			RenderValue("Spider Eggs alive", UnsafeSpan.Get(b.SpiderEggAliveCount), EnemiesV3_2.SpiderEgg1.Color.ToEngineColor(), _spiderEggAliveCountIntensity);
+			RenderValue("Leviathans alive", UnsafeSpan.Get(b.LeviathanAliveCount), EnemiesV3_2.Leviathan.Color.ToEngineColor(), _leviathanAliveCountIntensity);
+			RenderValue("Orbs alive", UnsafeSpan.Get(b.OrbAliveCount), EnemiesV3_2.TheOrb.Color.ToEngineColor(), _orbAliveCountIntensity);
+			RenderValue("Thorns alive", UnsafeSpan.Get(b.ThornAliveCount), EnemiesV3_2.Thorn.Color.ToEngineColor(), _thornAliveCountIntensity);
 		}
 
 		ImGui.EndChild(); // End RecordingValues
 	}
 
-	private static void RenderValue(string label, string value, Color color, float intensity)
+	private static void RenderValue(ReadOnlySpan<char> label, ReadOnlySpan<char> value, Color color, float intensity)
 	{
 		ImGui.Text(label);
 		ImGui.SameLine(288 - 16 - ImGui.CalcTextSize(value).X);
