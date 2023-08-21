@@ -30,7 +30,7 @@ public static class ArenaEditorControls
 			if (isCurrent)
 				ImGui.PushStyleColor(ImGuiCol.Button, ImGui.GetStyle().Colors[(int)ImGuiCol.ButtonHovered]);
 
-			if (ImGui.ImageButton(arenaToolText, GetTexture(arenaTool), new(size)) && ArenaChild.ArenaTool != arenaTool)
+			if (ImGuiImage.ImageButton(arenaToolText, GetTexture(arenaTool), new(size)) && ArenaChild.ArenaTool != arenaTool)
 				ArenaChild.ArenaTool = arenaTool;
 
 			if (isCurrent)
@@ -74,9 +74,9 @@ public static class ArenaEditorControls
 		ImGui.EndChild();
 	}
 
-	private static IntPtr GetTexture(ArenaTool arenaTool)
+	private static uint GetTexture(ArenaTool arenaTool)
 	{
-		uint textureId = arenaTool switch
+		return arenaTool switch
 		{
 			ArenaTool.Pencil => Root.InternalResources.PencilTexture.Handle,
 			ArenaTool.Line => Root.InternalResources.LineTexture.Handle,
@@ -86,6 +86,5 @@ public static class ArenaEditorControls
 			ArenaTool.Dagger => Root.InternalResources.DaggerTexture.Handle,
 			_ => throw new($"Unknown arena tool {arenaTool}."),
 		};
-		return (IntPtr)textureId;
 	}
 }

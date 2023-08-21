@@ -99,7 +99,7 @@ public static class MainWindow
 	private static void AppButton(Texture icon, ReadOnlySpan<char> tooltip, Action action)
 	{
 		Vector2 iconSize = new(36);
-		if (ImGui.ImageButton(tooltip, (IntPtr)icon.Handle, iconSize))
+		if (ImGuiImage.ImageButton(tooltip, icon.Handle, iconSize))
 			action();
 
 		if (ImGui.IsItemHovered())

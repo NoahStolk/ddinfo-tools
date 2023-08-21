@@ -5,9 +5,11 @@ namespace DevilDaggersInfo.App;
 
 public record ContentContainer(
 	SpawnsetBinary DefaultSpawnset,
-	TextureContent IconDaggerTexture,
+	TextureContent IconMaskCrosshairTexture,
+	TextureContent IconMaskDaggerTexture,
 	TextureContent IconMaskGemTexture,
 	TextureContent IconMaskHomingTexture,
+	TextureContent IconMaskSkullTexture,
 	TextureContent IconMaskStopwatchTexture,
 	MeshContent DaggerMesh,
 	TextureContent DaggerSilverTexture,

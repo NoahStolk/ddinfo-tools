@@ -158,7 +158,7 @@ public static class CustomTemplatesChild
 		ImGui.PushID(_dragIndicatorIdBuffer);
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-		ImGui.ImageButton("CustomTemplateReorderImageButton", (IntPtr)Root.InternalResources.DragIndicatorTexture.Handle, new(32, 48), Vector2.Zero, Vector2.One, _customTemplateIndexToReorder == i ? Color.Gray(0.7f) : gray);
+		ImGuiImage.ImageButton("CustomTemplateReorderImageButton", Root.InternalResources.DragIndicatorTexture.Handle, new(32, 48), _customTemplateIndexToReorder == i ? Color.Gray(0.7f) : gray);
 		ImGui.PopStyleVar();
 
 		if (ImGui.IsItemHovered())
@@ -187,7 +187,7 @@ public static class CustomTemplatesChild
 		ImGui.PushID(_deleteButtonIdBuffer);
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(12));
-		if (ImGui.ImageButton("CustomTemplateDeleteImageButton", (IntPtr)Root.InternalResources.BinTexture.Handle, new(24), Vector2.Zero, Vector2.One))
+		if (ImGuiImage.ImageButton("CustomTemplateDeleteImageButton", Root.InternalResources.BinTexture.Handle, new(24)))
 		{
 			UserSettings.Model = UserSettings.Model with
 			{

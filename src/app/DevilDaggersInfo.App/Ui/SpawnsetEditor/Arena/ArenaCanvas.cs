@@ -68,7 +68,7 @@ public static class ArenaCanvas
 			Vector3 daggerColor = Vector3.Lerp(invertedTileColor, invertedTileColor.Intensify(96), MathF.Sin((float)ImGui.GetTime()) / 2 + 0.5f);
 
 			Vector2 center = origin + new Vector2(realRaceX * ArenaChild.TileSize + halfSize, realRaceZ * ArenaChild.TileSize + halfSize);
-			drawList.AddImage((IntPtr)Root.InternalResources.IconDaggerTexture.Handle, center - new Vector2(8), center + new Vector2(8), Vector2.UnitX, Vector2.UnitY, ImGui.GetColorU32(Color.FromVector3(daggerColor)));
+			drawList.AddImage(Root.GameResources.IconMaskDaggerTexture.Handle, center - new Vector2(8), center + new Vector2(8), Color.FromVector3(daggerColor));
 		}
 
 		const int tileUnit = 4;

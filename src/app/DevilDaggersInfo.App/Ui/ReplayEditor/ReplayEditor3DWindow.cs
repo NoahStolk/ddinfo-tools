@@ -34,7 +34,7 @@ public static class ReplayEditor3DWindow
 			_framebufferData.RenderArena(delta, ArenaScene);
 
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
-			drawList.AddImage((IntPtr)_framebufferData.TextureHandle, cursorScreenPos, cursorScreenPos + new Vector2(_framebufferData.Width, _framebufferData.Height), Vector2.UnitY, Vector2.UnitX);
+			drawList.AddFramebufferImage(_framebufferData, cursorScreenPos, cursorScreenPos + new Vector2(_framebufferData.Width, _framebufferData.Height));
 
 			ImGui.Text(StringResources.ReplaySimulator3D);
 

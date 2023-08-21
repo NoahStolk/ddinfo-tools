@@ -53,9 +53,11 @@ public static class ContentManager
 			throw new InvalidGameInstallationException("There must not be a directory named 'survival' in the 'mods' directory. You must delete the directory, or mods will not work.");
 
 		ModBinaryReadFilter ddReadFilter = ModBinaryReadFilter.Assets(
+			new(AssetType.Texture, "iconmaskcrosshair"),
 			new(AssetType.Texture, "iconmaskdagger"),
 			new(AssetType.Texture, "iconmaskgem"),
 			new(AssetType.Texture, "iconmaskhoming"),
+			new(AssetType.Texture, "iconmaskskull"),
 			new(AssetType.Texture, "iconmaskstopwatch"),
 			new(AssetType.Mesh, "dagger"),
 			new(AssetType.Texture, "daggersilver"),
@@ -86,10 +88,12 @@ public static class ContentManager
 
 		Content = new(
 			DefaultSpawnset: defaultSpawnset,
-			IconDaggerTexture: GetTexture(ddBinary, "iconmaskdagger"),
-			IconMaskGemTexture: GetTexture(ddBinary, "iconmaskgem"),
-			IconMaskHomingTexture: GetTexture(ddBinary, "iconmaskhoming"),
-			IconMaskStopwatchTexture: GetTexture(ddBinary, "iconmaskstopwatch"),
+			IconMaskCrosshairTexture: GetTexture(ddBinary, "iconmaskcrosshair", true),
+			IconMaskDaggerTexture: GetTexture(ddBinary, "iconmaskdagger", true),
+			IconMaskGemTexture: GetTexture(ddBinary, "iconmaskgem", true),
+			IconMaskHomingTexture: GetTexture(ddBinary, "iconmaskhoming", true),
+			IconMaskSkullTexture: GetTexture(ddBinary, "iconmaskskull", true),
+			IconMaskStopwatchTexture: GetTexture(ddBinary, "iconmaskstopwatch", true),
 			DaggerMesh: GetMesh(ddBinary, "dagger"),
 			DaggerSilverTexture: GetTexture(ddBinary, "daggersilver"),
 			Skull4Mesh: GetMesh(ddBinary, "boid4"),
@@ -116,12 +120,12 @@ public static class ContentManager
 		return ToEngineMesh(meshName, meshData.Buffer);
 	}
 
-	private static TextureContent GetTexture(ModBinary ddBinary, string textureName)
+	private static TextureContent GetTexture(ModBinary ddBinary, string textureName, bool flipVertically = false)
 	{
 		if (!ddBinary.AssetMap.TryGetValue(new(AssetType.Texture, textureName), out AssetData? textureData))
 			throw new InvalidGameInstallationException($"Required texture '{textureName}' from 'res/dd' was not found.");
 
-		return ToEngineTexture(textureName, textureData.Buffer);
+		return ToEngineTexture(textureName, textureData.Buffer, flipVertically);
 	}
 
 	private static SoundContent GetSound(ModBinary audioBinary, string soundName)
@@ -178,7 +182,7 @@ public static class ContentManager
 		return new(engineVertices, indices);
 	}
 
-	private static TextureContent ToEngineTexture(string textureName, byte[] ddTextureBuffer)
+	private static TextureContent ToEngineTexture(string textureName, byte[] ddTextureBuffer, bool flipVertically)
 	{
 		const ushort expectedHeader = 16401;
 		const int headerSize = 11;
@@ -203,6 +207,42 @@ public static class ContentManager
 		if (ddTextureBuffer.Length < minimumSize)
 			throw new InvalidGameInstallationException($"Invalid data for texture '{textureName}'. Not enough pixel data for complete texture ({ddTextureBuffer.Length:N0} / {minimumSize:N0}). Make sure your game files are not corrupted.");
 
-		return new(width, height, br.ReadBytes(width * height * 4));
+		byte[] pixelData = new byte[width * height * 4];
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				pixelData[(y * width + x) * 4 + 0] = br.ReadByte();
+				pixelData[(y * width + x) * 4 + 1] = br.ReadByte();
+				pixelData[(y * width + x) * 4 + 2] = br.ReadByte();
+				pixelData[(y * width + x) * 4 + 3] = br.ReadByte();
+			}
+		}
+
+		if (flipVertically)
+		{
+			for (int y = 0; y < height / 2; y++)
+			{
+				for (int x = 0; x < width; x++)
+				{
+					byte r = pixelData[(y * width + x) * 4 + 0];
+					byte g = pixelData[(y * width + x) * 4 + 1];
+					byte b = pixelData[(y * width + x) * 4 + 2];
+					byte a = pixelData[(y * width + x) * 4 + 3];
+
+					pixelData[(y * width + x) * 4 + 0] = pixelData[((height - y - 1) * width + x) * 4 + 0];
+					pixelData[(y * width + x) * 4 + 1] = pixelData[((height - y - 1) * width + x) * 4 + 1];
+					pixelData[(y * width + x) * 4 + 2] = pixelData[((height - y - 1) * width + x) * 4 + 2];
+					pixelData[(y * width + x) * 4 + 3] = pixelData[((height - y - 1) * width + x) * 4 + 3];
+
+					pixelData[((height - y - 1) * width + x) * 4 + 0] = r;
+					pixelData[((height - y - 1) * width + x) * 4 + 1] = g;
+					pixelData[((height - y - 1) * width + x) * 4 + 2] = b;
+					pixelData[((height - y - 1) * width + x) * 4 + 3] = a;
+				}
+			}
+		}
+
+		return new(width, height, pixelData);
 	}
 }

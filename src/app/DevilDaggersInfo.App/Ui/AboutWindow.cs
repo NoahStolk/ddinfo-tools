@@ -87,7 +87,7 @@ public static class AboutWindow
 				Process.Start(new ProcessStartInfo("https://github.com/NoahStolk/DevilDaggersInfo") { UseShellExecute = true });
 
 			ImGui.SetCursorPos(new(8));
-			ImGui.Image((IntPtr)Root.InternalResources.GitHubTexture.Handle, new(24));
+			ImGuiImage.Image(Root.InternalResources.GitHubTexture.Handle, new(24));
 			ImGui.SameLine();
 
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 3);
