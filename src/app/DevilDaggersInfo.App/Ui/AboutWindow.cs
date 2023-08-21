@@ -66,7 +66,7 @@ public static class AboutWindow
 			ImGui.PopTextWrapPos();
 		}
 
-		ImGui.End();
+		ImGui.End(); // End About ddinfo tools
 	}
 
 	private static void RenderGitHubButton()
@@ -74,32 +74,34 @@ public static class AboutWindow
 		Vector2 buttonSize = new(168, 40);
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
-		ImGui.BeginChild("##GitHub", buttonSize, true);
-		ImGui.PopStyleVar();
-
-		bool hover = ImGui.IsWindowHovered();
-
-		ImGuiStylePtr style = ImGui.GetStyle();
-		ImGui.PushStyleColor(ImGuiCol.ChildBg, style.Colors[(int)(hover ? ImGuiCol.ButtonHovered : ImGuiCol.Button)]);
-		if (ImGui.BeginChild("##GitHub child", buttonSize, false, ImGuiWindowFlags.NoInputs))
+		if (ImGui.BeginChild("GitHub", buttonSize, true))
 		{
-			if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-				Process.Start(new ProcessStartInfo("https://github.com/NoahStolk/DevilDaggersInfo") { UseShellExecute = true });
+			ImGui.PopStyleVar();
 
-			ImGui.SetCursorPos(new(8));
-			ImGuiImage.Image(Root.InternalResources.GitHubTexture.Handle, new(24));
-			ImGui.SameLine();
+			bool hover = ImGui.IsWindowHovered();
 
-			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 3);
-			ImGui.PushFont(Root.FontGoetheBold20);
-			ImGui.Text("View on GitHub");
-			ImGui.PopFont();
+			ImGuiStylePtr style = ImGui.GetStyle();
+			ImGui.PushStyleColor(ImGuiCol.ChildBg, style.Colors[(int)(hover ? ImGuiCol.ButtonHovered : ImGuiCol.Button)]);
+			if (ImGui.BeginChild("GitHubChild", buttonSize, false, ImGuiWindowFlags.NoInputs))
+			{
+				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+					Process.Start(new ProcessStartInfo("https://github.com/NoahStolk/DevilDaggersInfo") { UseShellExecute = true });
+
+				ImGui.SetCursorPos(new(8));
+				ImGuiImage.Image(Root.InternalResources.GitHubTexture.Handle, new(24));
+				ImGui.SameLine();
+
+				ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 3);
+				ImGui.PushFont(Root.FontGoetheBold20);
+				ImGui.Text("View on GitHub");
+				ImGui.PopFont();
+			}
+
+			ImGui.EndChild(); // End GitHubChild
+
+			ImGui.PopStyleColor();
 		}
 
-		ImGui.EndChild();
-
-		ImGui.PopStyleColor();
-
-		ImGui.EndChild();
+		ImGui.EndChild(); // End GitHub
 	}
 }

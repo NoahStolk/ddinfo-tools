@@ -35,61 +35,69 @@ public static class SpawnsChild
 
 	public static void Render()
 	{
-		ImGui.BeginChild("SpawnsChild", new(400 - 8, 768 - 64));
-
-		ImGui.BeginChild("SpawnsListChild", new(400 - 8, 768 - 144));
-		RenderSpawnsTable();
-		ImGui.EndChild();
-
-		ImGui.BeginChild("SpawnControlsChild", new(400 - 8, 72));
-
-		ImGui.BeginChild("AddAndInsertButtons", new(72, 72));
-		if (ImGui.Button("Add", new(64, 32)))
+		if (ImGui.BeginChild("SpawnsChild", new(400 - 8, 768 - 64)))
 		{
-			if (SpawnsetState.Spawnset.Spawns.Length >= MaxSpawns)
+			if (ImGui.BeginChild("SpawnsListChild", new(400 - 8, 768 - 144)))
+				RenderSpawnsTable();
+
+			ImGui.EndChild(); // End SpawnsListChild
+
+			if (ImGui.BeginChild("SpawnControlsChild", new(400 - 8, 72)))
 			{
-				Modals.ShowError("Reached max amount of spawns.");
+				if (ImGui.BeginChild("AddAndInsertButtons", new(72, 72)))
+				{
+					if (ImGui.Button("Add", new(64, 32)))
+					{
+						if (SpawnsetState.Spawnset.Spawns.Length >= MaxSpawns)
+						{
+							Modals.ShowError("Reached max amount of spawns.");
+						}
+						else
+						{
+							EnemyType enemyType = _addEnemyTypeIndex is >= 0 and <= 9 ? (EnemyType)_addEnemyTypeIndex : EnemyType.Empty;
+							SpawnsetState.Spawnset = SpawnsetState.Spawnset with { Spawns = SpawnsetState.Spawnset.Spawns.Add(new(enemyType, _addDelay)) };
+							SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnAdd);
+							_scrollToIndex = SpawnsetState.Spawnset.Spawns.Length - 1;
+						}
+					}
+
+					if (ImGui.Button("Insert", new(64, 32)))
+					{
+						int selectedIndex = Array.IndexOf(_selected, true);
+						if (selectedIndex == -1)
+							selectedIndex = 0;
+
+						if (SpawnsetState.Spawnset.Spawns.Length >= MaxSpawns)
+						{
+							Modals.ShowError("Reached max amount of spawns.");
+						}
+						else
+						{
+							EnemyType enemyType = _addEnemyTypeIndex is >= 0 and <= 9 ? (EnemyType)_addEnemyTypeIndex : EnemyType.Empty;
+							SpawnsetState.Spawnset = SpawnsetState.Spawnset with { Spawns = SpawnsetState.Spawnset.Spawns.Insert(selectedIndex, new(enemyType, _addDelay)) };
+							SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnInsert);
+							_scrollToIndex = selectedIndex;
+						}
+					}
+				}
+
+				ImGui.EndChild(); // End AddAndInsertButtons
+
+				ImGui.SameLine();
+
+				if (ImGui.BeginChild("AddSpawnControls"))
+				{
+					ImGui.Combo("Enemy", ref _addEnemyTypeIndex, _enemyNames, _enemyNames.Length);
+					ImGui.InputFloat("Delay", ref _addDelay, 1, 2, "%.4f");
+				}
+
+				ImGui.EndChild(); // End AddSpawnControls
 			}
-			else
-			{
-				EnemyType enemyType = _addEnemyTypeIndex is >= 0 and <= 9 ? (EnemyType)_addEnemyTypeIndex : EnemyType.Empty;
-				SpawnsetState.Spawnset = SpawnsetState.Spawnset with { Spawns = SpawnsetState.Spawnset.Spawns.Add(new(enemyType, _addDelay)) };
-				SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnAdd);
-				_scrollToIndex = SpawnsetState.Spawnset.Spawns.Length - 1;
-			}
+
+			ImGui.EndChild(); // End SpawnControlsChild
 		}
 
-		if (ImGui.Button("Insert", new(64, 32)))
-		{
-			int selectedIndex = Array.IndexOf(_selected, true);
-			if (selectedIndex == -1)
-				selectedIndex = 0;
-
-			if (SpawnsetState.Spawnset.Spawns.Length >= MaxSpawns)
-			{
-				Modals.ShowError("Reached max amount of spawns.");
-			}
-			else
-			{
-				EnemyType enemyType = _addEnemyTypeIndex is >= 0 and <= 9 ? (EnemyType)_addEnemyTypeIndex : EnemyType.Empty;
-				SpawnsetState.Spawnset = SpawnsetState.Spawnset with { Spawns = SpawnsetState.Spawnset.Spawns.Insert(selectedIndex, new(enemyType, _addDelay)) };
-				SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnInsert);
-				_scrollToIndex = selectedIndex;
-			}
-		}
-
-		ImGui.EndChild();
-
-		ImGui.SameLine();
-
-		ImGui.BeginChild("AddSpawnControls");
-		ImGui.Combo("Enemy", ref _addEnemyTypeIndex, _enemyNames, _enemyNames.Length);
-		ImGui.InputFloat("Delay", ref _addDelay, 1, 2, "%.4f");
-		ImGui.EndChild();
-
-		ImGui.EndChild();
-
-		ImGui.EndChild();
+		ImGui.EndChild(); // End SpawnsChild
 	}
 
 	private static void RenderSpawnsTable()

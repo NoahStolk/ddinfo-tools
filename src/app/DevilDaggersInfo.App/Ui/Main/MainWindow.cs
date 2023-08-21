@@ -24,76 +24,77 @@ public static class MainWindow
 		ImGui.SetNextWindowPos(center, ImGuiCond.Always, new(0.5f, 0.5f));
 		ImGui.SetNextWindowSize(windowSize);
 
-		ImGui.Begin("Main Menu", ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBringToFrontOnFocus);
-
-		ImGui.PushFont(Root.FontGoetheBold60);
-		const string title = "ddinfo tools";
-		ImGui.TextColored(Colors.TitleColor, title);
-		float textWidth = ImGui.CalcTextSize(title).X;
-		ImGui.PopFont();
-
-		ImGui.SetCursorPos(new(textWidth + 16, 39));
-		ImGui.Text(_version);
-		ImGui.Text("Developed by Noah Stolk");
-
-		ImGui.SetCursorPos(new(windowSize.X - 208, 8));
-		AppButton(Root.InternalResources.ConfigurationTexture, "Configuration", static () => UiRenderer.Layout = LayoutType.Config);
-
-		ImGui.SameLine();
-		AppButton(Root.InternalResources.SettingsTexture, "Settings", UiRenderer.ShowSettings);
-
-		ImGui.SameLine();
-		AppButton(Root.InternalResources.InfoTexture, "About", UiRenderer.ShowAbout);
-
-		ImGui.SameLine();
-		AppButton(Root.InternalResources.CloseTexture, "Exit application", static () => ShouldClose = true);
-
-		ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 40);
-		if (ImGui.BeginChild("Tool buttons", mainButtonsSize))
+		if (ImGui.Begin("Main Menu", ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBringToFrontOnFocus))
 		{
-			ToolButton(GetColor(Colors.SpawnsetEditor.Primary), "Spawnset Editor", GoToSpawnsetEditor, ref _hoveredButtonAction, RenderSpawnsetEditorPreview);
-			ToolButton(GetColor(Colors.AssetEditor.Primary), "Asset Editor", static () => { }, ref _hoveredButtonAction, RenderAssetEditorPreview);
-			ToolButton(GetColor(Colors.ReplayEditor.Primary), "Replay Editor", GoToReplayEditor, ref _hoveredButtonAction, RenderReplayEditorPreview);
+			ImGui.PushFont(Root.FontGoetheBold60);
+			const string title = "ddinfo tools";
+			ImGui.TextColored(Colors.TitleColor, title);
+			float textWidth = ImGui.CalcTextSize(title).X;
+			ImGui.PopFont();
 
-			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 16);
-			ToolButton(GetColor(Colors.CustomLeaderboards.Primary), "Custom Leaderboards", GoToCustomLeaderboards, ref _hoveredButtonAction, RenderCustomLeaderboardsPreview);
-			ToolButton(GetColor(Colors.Practice.Primary), "Practice", GoToPractice, ref _hoveredButtonAction, RenderPracticePreview);
-			ToolButton(GetColor(Colors.ModManager.Primary), "Mod Manager", static () => { }, ref _hoveredButtonAction, RenderModManagerPreview);
+			ImGui.SetCursorPos(new(textWidth + 16, 39));
+			ImGui.Text(_version);
+			ImGui.Text("Developed by Noah Stolk");
 
-			static Color GetColor(Color primary)
-			{
-				const byte buttonAlpha = 127;
-				const float buttonColorDesaturation = 0.3f;
-				return primary.Desaturate(buttonColorDesaturation).Darken(0.2f) with { A = buttonAlpha };
-			}
+			ImGui.SetCursorPos(new(windowSize.X - 208, 8));
+			AppButton(Root.InternalResources.ConfigurationTexture, "Configuration", static () => UiRenderer.Layout = LayoutType.Config);
 
-			static void GoToSpawnsetEditor() => UiRenderer.Layout = LayoutType.SpawnsetEditor;
-			static void GoToReplayEditor() => UiRenderer.Layout = LayoutType.ReplayEditor;
-			static void GoToPractice() => UiRenderer.Layout = LayoutType.Practice;
-
-			static void GoToCustomLeaderboards()
-			{
-				UiRenderer.Layout = LayoutType.CustomLeaderboards;
-				LeaderboardListChild.LoadAll();
-			}
-		}
-
-		ImGui.EndChild();
-
-		if (_hoveredButtonAction != null)
-		{
 			ImGui.SameLine();
-			if (ImGui.BeginChild("Preview", previewSize))
+			AppButton(Root.InternalResources.SettingsTexture, "Settings", UiRenderer.ShowSettings);
+
+			ImGui.SameLine();
+			AppButton(Root.InternalResources.InfoTexture, "About", UiRenderer.ShowAbout);
+
+			ImGui.SameLine();
+			AppButton(Root.InternalResources.CloseTexture, "Exit application", static () => ShouldClose = true);
+
+			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 40);
+			if (ImGui.BeginChild("ToolButtons", mainButtonsSize))
 			{
-				ImGui.PushTextWrapPos(previewSize.X - 16);
-				_hoveredButtonAction.Invoke();
-				ImGui.PopTextWrapPos();
+				ToolButton(GetColor(Colors.SpawnsetEditor.Primary), "Spawnset Editor", GoToSpawnsetEditor, ref _hoveredButtonAction, RenderSpawnsetEditorPreview);
+				ToolButton(GetColor(Colors.AssetEditor.Primary), "Asset Editor", static () => { }, ref _hoveredButtonAction, RenderAssetEditorPreview);
+				ToolButton(GetColor(Colors.ReplayEditor.Primary), "Replay Editor", GoToReplayEditor, ref _hoveredButtonAction, RenderReplayEditorPreview);
+
+				ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 16);
+				ToolButton(GetColor(Colors.CustomLeaderboards.Primary), "Custom Leaderboards", GoToCustomLeaderboards, ref _hoveredButtonAction, RenderCustomLeaderboardsPreview);
+				ToolButton(GetColor(Colors.Practice.Primary), "Practice", GoToPractice, ref _hoveredButtonAction, RenderPracticePreview);
+				ToolButton(GetColor(Colors.ModManager.Primary), "Mod Manager", static () => { }, ref _hoveredButtonAction, RenderModManagerPreview);
+
+				static Color GetColor(Color primary)
+				{
+					const byte buttonAlpha = 127;
+					const float buttonColorDesaturation = 0.3f;
+					return primary.Desaturate(buttonColorDesaturation).Darken(0.2f) with { A = buttonAlpha };
+				}
+
+				static void GoToSpawnsetEditor() => UiRenderer.Layout = LayoutType.SpawnsetEditor;
+				static void GoToReplayEditor() => UiRenderer.Layout = LayoutType.ReplayEditor;
+				static void GoToPractice() => UiRenderer.Layout = LayoutType.Practice;
+
+				static void GoToCustomLeaderboards()
+				{
+					UiRenderer.Layout = LayoutType.CustomLeaderboards;
+					LeaderboardListChild.LoadAll();
+				}
 			}
 
-			ImGui.EndChild();
+			ImGui.EndChild(); // End ToolButtons
+
+			if (_hoveredButtonAction != null)
+			{
+				ImGui.SameLine();
+				if (ImGui.BeginChild("Preview", previewSize))
+				{
+					ImGui.PushTextWrapPos(previewSize.X - 16);
+					_hoveredButtonAction.Invoke();
+					ImGui.PopTextWrapPos();
+				}
+
+				ImGui.EndChild(); // End Preview
+			}
 		}
 
-		ImGui.End();
+		ImGui.End(); // End Main Menu
 	}
 
 	private static void AppButton(Texture icon, ReadOnlySpan<char> tooltip, Action action)

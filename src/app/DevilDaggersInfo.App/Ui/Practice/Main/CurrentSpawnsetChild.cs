@@ -12,61 +12,64 @@ public static class CurrentSpawnsetChild
 
 	public static void Render()
 	{
-		ImGui.BeginChild("Current spawnset", new(400, 160), true);
-
-		ImGui.BeginChild("Current practice values", new(400, 64));
-		if (SurvivalFileWatcher.Exists)
+		if (ImGui.BeginChild("CurrentSpawnset", new(400, 160), true))
 		{
-			if (ImGui.BeginChild("Current practice values left", new(160, 64)))
+			if (ImGui.BeginChild("CurrentPracticeValues", new(400, 64)))
 			{
-				ImGui.TextColored(Color.Yellow, "Effective values");
-
-				if (SurvivalFileWatcher.EffectivePlayerSettings.HandLevel != SurvivalFileWatcher.EffectivePlayerSettings.HandMesh)
+				if (SurvivalFileWatcher.Exists)
 				{
-					UnsafeCharBufferWriter writer = new(_handLevelWithMeshBuffer);
-					writer.Write(EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]);
-					writer.Write(" (");
-					writer.Write(EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandMesh]);
-					writer.Write(" mesh)");
-					ImGui.Text(writer);
+					if (ImGui.BeginChild("CurrentPracticeValuesLeft", new(160, 64)))
+					{
+						ImGui.TextColored(Color.Yellow, "Effective values");
+
+						if (SurvivalFileWatcher.EffectivePlayerSettings.HandLevel != SurvivalFileWatcher.EffectivePlayerSettings.HandMesh)
+						{
+							UnsafeCharBufferWriter writer = new(_handLevelWithMeshBuffer);
+							writer.Write(EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]);
+							writer.Write(" (");
+							writer.Write(EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandMesh]);
+							writer.Write(" mesh)");
+							ImGui.Text(writer);
+						}
+						else
+						{
+							ImGui.Text(EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]);
+						}
+
+						ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.EffectivePlayerSettings.GemsOrHoming));
+						ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
+					}
+
+					ImGui.EndChild(); // End CurrentPracticeValuesLeft
+
+					ImGui.SameLine();
+
+					if (ImGui.BeginChild("CurrentPracticeValuesRight", new(160, 64)))
+					{
+						ImGui.TextColored(Color.Yellow, "Spawnset values");
+
+						ImGui.Text(EnumUtils.HandLevelNames[SurvivalFileWatcher.HandLevel]);
+						ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.AdditionalGems));
+						ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
+					}
+
+					ImGui.EndChild(); // End CurrentPracticeValuesRight
 				}
 				else
 				{
-					ImGui.Text(EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]);
+					ImGui.Text("<No spawnset enabled>");
 				}
-
-				ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.EffectivePlayerSettings.GemsOrHoming));
-				ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
 			}
 
-			ImGui.EndChild();
+			ImGui.EndChild(); // End CurrentPracticeValues
 
-			ImGui.SameLine();
+			ImGui.BeginDisabled(!SurvivalFileWatcher.Exists);
+			if (ImGui.Button("Delete spawnset (restore default)", new(0, 30)))
+				PracticeLogic.DeleteModdedSpawnset();
 
-			if (ImGui.BeginChild("Current practice values right", new(160, 64)))
-			{
-				ImGui.TextColored(Color.Yellow, "Spawnset values");
-
-				ImGui.Text(EnumUtils.HandLevelNames[SurvivalFileWatcher.HandLevel]);
-				ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.AdditionalGems));
-				ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
-			}
-
-			ImGui.EndChild();
-		}
-		else
-		{
-			ImGui.Text("<No spawnset enabled>");
+			ImGui.EndDisabled();
 		}
 
-		ImGui.EndChild();
-
-		ImGui.BeginDisabled(!SurvivalFileWatcher.Exists);
-		if (ImGui.Button("Delete spawnset (restore default)", new(0, 30)))
-			PracticeLogic.DeleteModdedSpawnset();
-
-		ImGui.EndDisabled();
-
-		ImGui.EndChild();
+		ImGui.EndChild(); // End CurrentSpawnset
 	}
 }

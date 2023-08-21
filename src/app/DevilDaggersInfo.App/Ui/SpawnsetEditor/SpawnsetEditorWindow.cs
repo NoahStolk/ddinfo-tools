@@ -8,22 +8,27 @@ public static class SpawnsetEditorWindow
 	public static void Render()
 	{
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, Constants.MinWindowSize);
-		ImGui.Begin("Spawnset Editor", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.MenuBar | ImGuiWindowFlags.NoScrollWithMouse);
-		ImGui.PopStyleVar();
+		if (ImGui.Begin("Spawnset Editor", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.MenuBar | ImGuiWindowFlags.NoScrollWithMouse))
+		{
+			ImGui.PopStyleVar();
 
-		SpawnsetEditorMenu.Render();
+			SpawnsetEditorMenu.Render();
+			SpawnsChild.Render();
 
-		SpawnsChild.Render();
+			ImGui.SameLine();
+			ArenaChild.Render();
 
-		ImGui.SameLine();
-		ArenaChild.Render();
+			ImGui.SameLine();
+			SettingsChild.Render();
 
-		ImGui.SameLine();
-		SettingsChild.Render();
+			ImGui.SameLine();
+			HistoryChild.Render();
+		}
+		else
+		{
+			ImGui.PopStyleVar();
+		}
 
-		ImGui.SameLine();
-		HistoryChild.Render();
-
-		ImGui.End();
+		ImGui.End(); // End Spawnset Editor
 	}
 }

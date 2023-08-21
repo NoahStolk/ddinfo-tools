@@ -31,9 +31,9 @@ public static class RunAnalysisWindow
 		{
 			SplitsChild.Render();
 			GraphsChild.Render();
-
-			ImGui.End();
 		}
+
+		ImGui.End(); // End Run Analysis
 
 		ImGui.PopStyleVar();
 	}

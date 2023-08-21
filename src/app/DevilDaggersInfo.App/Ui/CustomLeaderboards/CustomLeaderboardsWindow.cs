@@ -35,32 +35,40 @@ public static class CustomLeaderboardsWindow
 			}
 		}
 
-		ImGui.End();
+		ImGui.End(); // End Timestamps
 #endif
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, Constants.MinWindowSize);
-		ImGui.Begin("Custom Leaderboards", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollWithMouse);
-		ImGui.PopStyleVar();
+		if (ImGui.Begin("Custom Leaderboards", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollWithMouse))
+		{
+			ImGui.PopStyleVar();
 
-		ImGui.BeginChild("LeftRow", new(288, 464));
+			if (ImGui.BeginChild("LeftRow", new(288, 464)))
+			{
+				StateChild.Render();
+				RecordingChild.Render();
+			}
 
-		StateChild.Render();
-		RecordingChild.Render();
+			ImGui.EndChild(); // End LeftRow
 
-		ImGui.EndChild();
+			ImGui.SameLine();
 
-		ImGui.SameLine();
+			if (ImGui.BeginChild("RightRow", new(0, 464)))
+			{
+				LeaderboardListChild.Render();
+				LeaderboardListViewChild.Render();
+			}
 
-		ImGui.BeginChild("RightRow", new(0, 464));
+			ImGui.EndChild(); // End RightRow
 
-		LeaderboardListChild.Render();
-		LeaderboardListViewChild.Render();
+			LeaderboardChild.Render();
+		}
+		else
+		{
+			ImGui.PopStyleVar();
+		}
 
-		ImGui.EndChild();
-
-		LeaderboardChild.Render();
-
-		ImGui.End();
+		ImGui.End(); // End Custom Leaderboards
 
 		if (ImGui.IsKeyPressed(ImGuiKey.Escape) || ImGui.IsKeyPressed((ImGuiKey)526))
 			UiRenderer.Layout = LayoutType.Main;

@@ -37,14 +37,15 @@ public static class LeaderboardChild
 
 	public static void Render()
 	{
-		ImGui.BeginChild("LeaderboardChild");
+		if (ImGui.BeginChild("LeaderboardChild"))
+		{
+			if (Data == null)
+				ImGui.Text("None selected");
+			else
+				RenderLeaderboard(Data);
+		}
 
-		if (Data == null)
-			ImGui.Text("None selected");
-		else
-			RenderLeaderboard(Data);
-
-		ImGui.EndChild();
+		ImGui.EndChild(); // End LeaderboardChild
 	}
 
 	private static void RenderLeaderboard(LeaderboardData data)
@@ -94,9 +95,10 @@ public static class LeaderboardChild
 			ImGui.EndDisabled();
 		}
 
-		ImGui.BeginChild("LeaderboardTableChild");
-		RenderTable(data.Leaderboard.RankSorting);
-		ImGui.EndChild();
+		if (ImGui.BeginChild("LeaderboardTableChild"))
+			RenderTable(data.Leaderboard.RankSorting);
+
+		ImGui.EndChild(); // End LeaderboardTableChild
 	}
 
 	private static unsafe void RenderTable(CustomLeaderboardRankSorting rankSorting)

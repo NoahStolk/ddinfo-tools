@@ -34,27 +34,35 @@ public static class EndLoopTemplatesChild
 
 	public static void Render()
 	{
-		ImGui.BeginChild("End loop templates", PracticeWindow.TemplateContainerSize, true);
-		ImGui.Text("End loop templates");
+		if (ImGui.BeginChild("EndLoopTemplates", PracticeWindow.TemplateContainerSize, true))
+		{
+			ImGui.Text("End loop templates");
 
-		ImGui.BeginChild("End loop template description", PracticeWindow.TemplateListSize with { Y = PracticeWindow.TemplateDescriptionHeight });
-		ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + PracticeWindow.TemplateWidth);
-		ImGui.Text("The amount of homing for the end loop waves is set to 0. You can fill in your preferred homing count and save it as a template.");
-		ImGui.PopTextWrapPos();
-		ImGui.EndChild();
+			if (ImGui.BeginChild("EndLoopTemplateDescription", PracticeWindow.TemplateListSize with { Y = PracticeWindow.TemplateDescriptionHeight }))
+			{
+				ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + PracticeWindow.TemplateWidth);
+				ImGui.Text("The amount of homing for the end loop waves is set to 0. You can fill in your preferred homing count and save it as a template.");
+				ImGui.PopTextWrapPos();
+			}
 
-		ImGui.BeginChild("End loop template list", PracticeWindow.TemplateListSize);
-		for (int i = 0; i < _endLoopTimerStarts.Count; i++)
-			RenderEndLoopTemplate(i, _endLoopTimerStarts[i]);
+			ImGui.EndChild(); // End EndLoopTemplateDescription
 
-		ImGui.EndChild();
-		ImGui.EndChild();
+			if (ImGui.BeginChild("EndLoopTemplateList", PracticeWindow.TemplateListSize))
+			{
+				for (int i = 0; i < _endLoopTimerStarts.Count; i++)
+					RenderEndLoopTemplate(i, _endLoopTimerStarts[i]);
+			}
+
+			ImGui.EndChild(); // End EndLoopTemplateList
+		}
+
+		ImGui.EndChild(); // End EndLoopTemplates
 	}
 
 	private static void RenderEndLoopTemplate(int waveIndex, float timerStart)
 	{
 		Vector2 buttonSize = new(PracticeWindow.TemplateWidth, 30);
-		_idBuffer.Overwrite("Wave ", waveIndex + 1);
+		_idBuffer.Overwrite("Wave", waveIndex + 1);
 		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(PracticeLogic.IsActive(HandLevel.Level4, 0, timerStart));
 		Color color = waveIndex % 3 == 2 ? EnemiesV3_2.Ghostpede.Color.ToEngineColor() : EnemiesV3_2.Gigapede.Color.ToEngineColor();
 
@@ -64,7 +72,7 @@ public static class EndLoopTemplatesChild
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
 
-			_idBufferChild.Overwrite("Wave child ", waveIndex + 1);
+			_idBufferChild.Overwrite("WaveChild", waveIndex + 1);
 			if (ImGui.BeginChild(_idBufferChild, buttonSize, false, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
@@ -82,13 +90,13 @@ public static class EndLoopTemplatesChild
 				ImGui.TextColored(Color.White with { A = textAlpha }, topRightTextString);
 			}
 
-			ImGui.EndChild();
+			ImGui.EndChild(); // End WaveChild{waveIndex + 1}
 
 			ImGui.PopStyleColor();
 		}
 
 		ImGui.PopStyleVar();
 
-		ImGui.EndChild();
+		ImGui.EndChild(); // End Wave{waveIndex + 1}
 	}
 }

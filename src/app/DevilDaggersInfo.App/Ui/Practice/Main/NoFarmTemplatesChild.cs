@@ -28,24 +28,32 @@ public static class NoFarmTemplatesChild
 
 	public static void Render()
 	{
-		ImGui.BeginChild("No farm templates", PracticeWindow.TemplateContainerSize, true);
-		ImGui.Text("No farm templates");
-
-		ImGui.BeginChild("No farm template description", PracticeWindow.TemplateListSize with { Y = PracticeWindow.TemplateDescriptionHeight });
-		ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + PracticeWindow.TemplateWidth);
-		ImGui.Text("The amount of gems is based on how many gems you would have at that point, without farming, without losing gems, and without any homing usage.");
-		ImGui.PopTextWrapPos();
-		ImGui.EndChild();
-
-		ImGui.BeginChild("No farm template list", PracticeWindow.TemplateListSize);
-		for (int i = 0; i < _noFarmTemplates.Count; i++)
+		if (ImGui.BeginChild("NoFarmTemplates", PracticeWindow.TemplateContainerSize, true))
 		{
-			NoFarmTemplate template = _noFarmTemplates[i];
-			RenderNoFarmTemplate(template);
+			ImGui.Text("No farm templates");
+
+			if (ImGui.BeginChild("NoFarmTemplateDescription", PracticeWindow.TemplateListSize with { Y = PracticeWindow.TemplateDescriptionHeight }))
+			{
+				ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + PracticeWindow.TemplateWidth);
+				ImGui.Text("The amount of gems is based on how many gems you would have at that point, without farming, without losing gems, and without any homing usage.");
+				ImGui.PopTextWrapPos();
+			}
+
+			ImGui.EndChild(); // End NoFarmTemplateDescription
+
+			if (ImGui.BeginChild("NoFarmTemplateList", PracticeWindow.TemplateListSize))
+			{
+				for (int i = 0; i < _noFarmTemplates.Count; i++)
+				{
+					NoFarmTemplate template = _noFarmTemplates[i];
+					RenderNoFarmTemplate(template);
+				}
+			}
+
+			ImGui.EndChild(); // End NoFarmTemplateList
 		}
 
-		ImGui.EndChild();
-		ImGui.EndChild();
+		ImGui.EndChild(); // End NoFarmTemplates
 	}
 
 	private static void RenderNoFarmTemplate(NoFarmTemplate noFarmTemplate)
@@ -66,7 +74,7 @@ public static class NoFarmTemplatesChild
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, noFarmTemplate.Color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
 
-			_idBuffer.Overwrite(noFarmTemplate.Name, " child");
+			_idBuffer.Overwrite(noFarmTemplate.Name, "Child");
 			if (ImGui.BeginChild(_idBuffer, buttonSize, false, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
@@ -90,13 +98,13 @@ public static class NoFarmTemplatesChild
 				ImGui.TextColored(gemColor with { A = textAlpha }, gemsOrHomingText);
 			}
 
-			ImGui.EndChild();
+			ImGui.EndChild(); // End {NoFarmTemplate.Name}Child
 
 			ImGui.PopStyleColor();
 		}
 
 		ImGui.PopStyleVar();
 
-		ImGui.EndChild();
+		ImGui.EndChild(); // End {NoFarmTemplate.Name}
 	}
 }

@@ -1,4 +1,3 @@
-using DevilDaggersInfo.App.Engine.Extensions;
 using DevilDaggersInfo.App.Engine.Maths;
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Extensions;
@@ -107,9 +106,9 @@ public static class GraphsChild
 			ImGui.SameLine();
 			ImGui.Checkbox("Homing Eaten", ref _showHomingEaten);
 			RenderHomingGraph(drawListPtr, mousePos);
-
-			ImGui.EndChild();
 		}
+
+		ImGui.EndChild(); // End Graphs
 
 		void RenderGemsGraph(ImDrawListPtr drawListPtr, Vector2 mousePos)
 		{

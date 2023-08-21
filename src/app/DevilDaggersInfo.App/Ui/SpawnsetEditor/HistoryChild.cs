@@ -35,42 +35,44 @@ public static class HistoryChild
 	public static void Render()
 	{
 		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(8, 1));
-		ImGui.BeginChild("HistoryChild", new(244, 712));
-
-		for (int i = 0; i < History.Count; i++)
+		if (ImGui.BeginChild("HistoryChild", new(244, 712)))
 		{
-			SpawnsetHistoryEntry history = History[i];
-
-			if (_updateScroll && i == CurrentHistoryIndex)
+			for (int i = 0; i < History.Count; i++)
 			{
-				ImGui.SetScrollHereY();
-				_updateScroll = false;
+				SpawnsetHistoryEntry history = History[i];
+
+				if (_updateScroll && i == CurrentHistoryIndex)
+				{
+					ImGui.SetScrollHereY();
+					_updateScroll = false;
+				}
+
+				const int borderSize = 2;
+				ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, borderSize);
+				ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0.5f));
+
+				Color color = history.EditType.GetColor();
+				ImGui.PushStyleColor(ImGuiCol.Button, color);
+				ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color + new Vector4(0.3f, 0.3f, 0.3f, 0));
+				ImGui.PushStyleColor(ImGuiCol.ButtonActive, color + new Vector4(0.5f, 0.5f, 0.5f, 0));
+				ImGui.PushStyleColor(ImGuiCol.Border, i == CurrentHistoryIndex ? Color.White : Color.Black);
+
+				_idBuffer.Overwrite("HistoryButton", i);
+				ImGui.PushID(_idBuffer);
+				if (ImGui.Button(history.EditType.GetChange(), new(226, 20)))
+					SetHistoryIndex(i);
+
+				ImGui.PopID();
+
+				ImGui.PopStyleColor(4);
+
+				ImGui.PopStyleVar(2);
 			}
 
-			const int borderSize = 2;
-			ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, borderSize);
-			ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0.5f));
-
-			Color color = history.EditType.GetColor();
-			ImGui.PushStyleColor(ImGuiCol.Button, color);
-			ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color + new Vector4(0.3f, 0.3f, 0.3f, 0));
-			ImGui.PushStyleColor(ImGuiCol.ButtonActive, color + new Vector4(0.5f, 0.5f, 0.5f, 0));
-			ImGui.PushStyleColor(ImGuiCol.Border, i == CurrentHistoryIndex ? Color.White : Color.Black);
-
-			_idBuffer.Overwrite("HistoryButton", i);
-			ImGui.PushID(_idBuffer);
-			if (ImGui.Button(history.EditType.GetChange(), new(226, 20)))
-				SetHistoryIndex(i);
-
-			ImGui.PopID();
-
-			ImGui.PopStyleColor(4);
-
-			ImGui.PopStyleVar(2);
+			ImGui.PopStyleVar();
 		}
 
-		ImGui.PopStyleVar();
-		ImGui.EndChild();
+		ImGui.EndChild(); // End HistoryChild
 
 		ImGuiIOPtr io = ImGui.GetIO();
 		if (io.KeyCtrl)

@@ -1,6 +1,5 @@
 // ReSharper disable ForCanBeConvertedToForeach
 using DevilDaggersInfo.App.Scenes.GameObjects;
-using DevilDaggersInfo.App.Ui;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Core.Spawnset;
 using Silk.NET.OpenGL;

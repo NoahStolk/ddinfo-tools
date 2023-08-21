@@ -23,8 +23,9 @@ public static class CustomLeaderboardResultsWindow
 	{
 		ImGui.SetNextWindowSizeConstraints(new(388, 0), new(388, float.MaxValue));
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, new Vector2(0, 320));
-		ImGui.Begin("Custom Leaderboard Submissions (this session)");
-		ImGui.PopStyleVar();
+		if (ImGui.Begin("Custom Leaderboard Submissions (this session)"))
+		{
+			ImGui.PopStyleVar();
 
 #if TESTING
 		if (ImGui.Button("Random first score"))
@@ -43,17 +44,22 @@ public static class CustomLeaderboardResultsWindow
 			_results.Clear();
 #endif
 
-		if (ImGui.Button("Collapse all"))
-			_results.ForEach(r => r.IsExpanded = false);
+			if (ImGui.Button("Collapse all"))
+				_results.ForEach(r => r.IsExpanded = false);
 
-		ImGui.SameLine();
-		if (ImGui.Button("Expand all"))
-			_results.ForEach(r => r.IsExpanded = true);
+			ImGui.SameLine();
+			if (ImGui.Button("Expand all"))
+				_results.ForEach(r => r.IsExpanded = true);
 
-		foreach (UploadResult result in _results.OrderByDescending(ur => ur.SubmittedAt))
-			result.Render();
+			foreach (UploadResult result in _results.OrderByDescending(ur => ur.SubmittedAt))
+				result.Render();
+		}
+		else
+		{
+			ImGui.PopStyleVar();
+		}
 
-		ImGui.End();
+		ImGui.End(); // End Custom Leaderboard Submissions (this session)
 	}
 
 #if TESTING

@@ -18,27 +18,28 @@ public static class LeaderboardListViewChild
 {
 	public static void Render()
 	{
-		ImGui.BeginChild("LeaderboardList");
-
-		if (LeaderboardListChild.IsLoading)
+		if (ImGui.BeginChild("LeaderboardList"))
 		{
-			ImGui.TextColored(Color.Yellow, "Loading...");
+			if (LeaderboardListChild.IsLoading)
+			{
+				ImGui.TextColored(Color.Yellow, "Loading...");
+			}
+			else
+			{
+				int page = LeaderboardListChild.PageIndex + 1;
+				int totalPages = LeaderboardListChild.TotalPages;
+				int totalEntries = LeaderboardListChild.TotalEntries;
+
+				int start = LeaderboardListChild.PageIndex * LeaderboardListChild.PageSize + 1;
+				int end = Math.Min((LeaderboardListChild.PageIndex + 1) * LeaderboardListChild.PageSize, totalEntries);
+
+				ImGui.Text($"Page {page} of {totalPages} ({start}-{end} of {totalEntries})");
+
+				RenderTable();
+			}
 		}
-		else
-		{
-			int page = LeaderboardListChild.PageIndex + 1;
-			int totalPages = LeaderboardListChild.TotalPages;
-			int totalEntries = LeaderboardListChild.TotalEntries;
 
-			int start = LeaderboardListChild.PageIndex * LeaderboardListChild.PageSize + 1;
-			int end = Math.Min((LeaderboardListChild.PageIndex + 1) * LeaderboardListChild.PageSize, totalEntries);
-
-			ImGui.Text($"Page {page} of {totalPages} ({start}-{end} of {totalEntries})");
-
-			RenderTable();
-		}
-
-		ImGui.EndChild();
+		ImGui.EndChild(); // End LeaderboardList
 	}
 
 	private static unsafe void RenderTable()

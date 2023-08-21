@@ -81,36 +81,39 @@ public static class ConfigLayout
 		Vector2 center = ImGui.GetMainViewport().GetCenter();
 		ImGui.SetNextWindowPos(center, ImGuiCond.Always, new(0.5f, 0.5f));
 		ImGui.SetNextWindowSize(Constants.LayoutSize);
-		ImGui.Begin("Configuration", Constants.LayoutFlags);
-
-		ImGui.Text(text);
-		ImGui.Spacing();
-
-		ImGui.BeginChild("Input", new(1366, 128));
-		if (ImGui.Button("Select installation directory", new(224, 24)))
+		if (ImGui.Begin("Configuration", Constants.LayoutFlags))
 		{
-			string? directory = NativeFileDialog.SelectDirectory();
-			if (directory != null)
-				_installationDirectoryInput = directory;
-		}
+			ImGui.Text(text);
+			ImGui.Spacing();
 
-		ImGui.InputText("##installationDirectoryInput", ref _installationDirectoryInput, 1024, ImGuiInputTextFlags.None);
-
-		if (!string.IsNullOrWhiteSpace(_error))
-			ImGui.TextColored(new(1, 0, 0, 1), _error);
-
-		ImGui.EndChild();
-
-		if (ImGui.Button("Save and continue", new(192, 96)))
-		{
-			UserSettings.Model = UserSettings.Model with
+			if (ImGui.BeginChild("Input", new(1366, 128)))
 			{
-				DevilDaggersInstallationDirectory = _installationDirectoryInput,
-			};
+				if (ImGui.Button("Select installation directory", new(224, 24)))
+				{
+					string? directory = NativeFileDialog.SelectDirectory();
+					if (directory != null)
+						_installationDirectoryInput = directory;
+				}
 
-			ValidateInstallation();
+				ImGui.InputText("##installationDirectoryInput", ref _installationDirectoryInput, 1024, ImGuiInputTextFlags.None);
+
+				if (!string.IsNullOrWhiteSpace(_error))
+					ImGui.TextColored(new(1, 0, 0, 1), _error);
+			}
+
+			ImGui.EndChild(); // End Input
+
+			if (ImGui.Button("Save and continue", new(192, 96)))
+			{
+				UserSettings.Model = UserSettings.Model with
+				{
+					DevilDaggersInstallationDirectory = _installationDirectoryInput,
+				};
+
+				ValidateInstallation();
+			}
 		}
 
-		ImGui.End();
+		ImGui.End(); // End Configuration
 	}
 }

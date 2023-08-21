@@ -21,26 +21,33 @@ public static class CustomTemplatesChild
 
 	public static void Render()
 	{
-		ImGui.BeginChild("Custom templates", PracticeWindow.TemplateContainerSize, true);
-		ImGui.Text("Custom templates");
+		if (ImGui.BeginChild("CustomTemplates", PracticeWindow.TemplateContainerSize, true))
+		{
+			ImGui.Text("Custom templates");
 
-		ImGui.BeginChild("Custom template description", PracticeWindow.TemplateListSize with { Y = PracticeWindow.TemplateDescriptionHeight });
-		ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + PracticeWindow.TemplateWidth);
-		ImGui.Text("You can make your own templates and save them. Your custom templates are saved locally on your computer. Right-click to rename a template.");
-		ImGui.PopTextWrapPos();
-		ImGui.EndChild();
+			if (ImGui.BeginChild("CustomTemplateDescription", PracticeWindow.TemplateListSize with { Y = PracticeWindow.TemplateDescriptionHeight }))
+			{
+				ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + PracticeWindow.TemplateWidth);
+				ImGui.Text("You can make your own templates and save them. Your custom templates are saved locally on your computer. Right-click to rename a template.");
+				ImGui.PopTextWrapPos();
+			}
 
-		ImGui.BeginChild("Custom template list", PracticeWindow.TemplateListSize);
+			ImGui.EndChild(); // End CustomTemplateDescription
 
-		RenderDragDropTarget(-1);
-		for (int i = 0; i < UserSettings.Model.PracticeTemplates.Count; i++)
-			RenderCustomTemplate(i, UserSettings.Model.PracticeTemplates[i]);
+			if (ImGui.BeginChild("CustomTemplateList", PracticeWindow.TemplateListSize))
+			{
+				RenderDragDropTarget(-1);
+				for (int i = 0; i < UserSettings.Model.PracticeTemplates.Count; i++)
+					RenderCustomTemplate(i, UserSettings.Model.PracticeTemplates[i]);
 
-		if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-			_customTemplateIndexToReorder = null;
+				if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+					_customTemplateIndexToReorder = null;
+			}
 
-		ImGui.EndChild();
-		ImGui.EndChild();
+			ImGui.EndChild(); // End CustomTemplateList
+		}
+
+		ImGui.EndChild(); // End CustomTemplates
 	}
 
 	private static void RenderCustomTemplate(int i, UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
@@ -84,7 +91,7 @@ public static class CustomTemplatesChild
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
 
-			_childIdBuffer.Overwrite(buttonName, " child");
+			_childIdBuffer.Overwrite(buttonName, "Child");
 			if (ImGui.BeginChild(_childIdBuffer, buttonSize, false, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
@@ -110,14 +117,14 @@ public static class CustomTemplatesChild
 				ImGui.TextColored(gemColor with { A = textAlpha }, gemsOrHomingText);
 			}
 
-			ImGui.EndChild();
+			ImGui.EndChild(); // End {buttonName}Child
 
 			ImGui.PopStyleColor();
 		}
 
 		ImGui.PopStyleVar();
 
-		ImGui.EndChild();
+		ImGui.EndChild(); // End {buttonName}
 
 		_childIdBuffer.Overwrite(buttonName, " rename");
 		if (ImGui.BeginPopupContextItem(_childIdBuffer, ImGuiPopupFlags.MouseButtonRight))

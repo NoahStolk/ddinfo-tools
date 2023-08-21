@@ -60,9 +60,9 @@ public static class CustomLeaderboards3DWindow
 			drawList.AddFramebufferImage(_framebufferData, cursorScreenPos, cursorScreenPos + new Vector2(_framebufferData.Width, _framebufferData.Height));
 
 			ImGui.Text(StringResources.ReplaySimulator3D);
-
-			ImGui.End();
 		}
+
+		ImGui.End(); // End 3D Replay Viewer
 
 		ImGui.PopStyleVar();
 	}

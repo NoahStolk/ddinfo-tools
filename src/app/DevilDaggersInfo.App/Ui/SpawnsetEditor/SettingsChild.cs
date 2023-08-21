@@ -33,16 +33,18 @@ public static class SettingsChild
 
 	public static void Render()
 	{
-		ImGui.BeginChild("SettingsChild", new(288, 416));
+		if (ImGui.BeginChild("SettingsChild", new(288, 416)))
+		{
+			RenderFormat();
+			RenderGameMode();
+			RenderRaceDagger();
+			RenderArena();
+			RenderPractice();
 
-		RenderFormat();
-		RenderGameMode();
-		RenderRaceDagger();
-		RenderArena();
-		RenderPractice();
+			ImGui.Unindent();
+		}
 
-		ImGui.Unindent();
-		ImGui.EndChild();
+		ImGui.EndChild(); // End SettingsChild
 	}
 
 	private static void RenderFormat()

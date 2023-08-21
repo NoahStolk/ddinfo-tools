@@ -46,60 +46,62 @@ public static class ArenaChild
 
 	public static void Render()
 	{
-		ImGui.BeginChild("ArenaChild", new(416 - 8, 768 - 64));
-
-		ImGui.BeginChild("Arena", ArenaSize);
-
-		ImGuiIOPtr io = ImGui.GetIO();
-
-		ArenaMousePosition mousePosition = ArenaMousePosition.Get(io, ImGui.GetCursorScreenPos());
-
-		if (mousePosition.IsValid)
+		if (ImGui.BeginChild("ArenaChild", new(416 - 8, 768 - 64)))
 		{
-			UnsafeCharBufferWriter writer = new(_tooltipBuffer);
-			writer.WriteLine(SpawnsetState.Spawnset.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y]);
-			writer.Write('<');
-			writer.Write(mousePosition.Tile.X);
-			writer.Write(", ");
-			writer.Write(mousePosition.Tile.Y);
-			writer.Write('>');
-			ImGui.SetTooltip(writer);
-
-			if (io.MouseWheel != 0)
+			if (ImGui.BeginChild("Arena", ArenaSize))
 			{
-				float[,] newTiles = SpawnsetState.Spawnset.ArenaTiles.GetMutableClone();
-				newTiles[mousePosition.Tile.X, mousePosition.Tile.Y] -= io.MouseWheel;
-				SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ArenaTiles = new(SpawnsetState.Spawnset.ArenaDimension, newTiles) };
-				SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaTileHeight);
+				ImGuiIOPtr io = ImGui.GetIO();
+
+				ArenaMousePosition mousePosition = ArenaMousePosition.Get(io, ImGui.GetCursorScreenPos());
+
+				if (mousePosition.IsValid)
+				{
+					UnsafeCharBufferWriter writer = new(_tooltipBuffer);
+					writer.WriteLine(SpawnsetState.Spawnset.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y]);
+					writer.Write('<');
+					writer.Write(mousePosition.Tile.X);
+					writer.Write(", ");
+					writer.Write(mousePosition.Tile.Y);
+					writer.Write('>');
+					ImGui.SetTooltip(writer);
+
+					if (io.MouseWheel != 0)
+					{
+						float[,] newTiles = SpawnsetState.Spawnset.ArenaTiles.GetMutableClone();
+						newTiles[mousePosition.Tile.X, mousePosition.Tile.Y] -= io.MouseWheel;
+						SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ArenaTiles = new(SpawnsetState.Spawnset.ArenaDimension, newTiles) };
+						SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaTileHeight);
+					}
+				}
+
+				IArenaState activeState = GetActiveState();
+
+				// TODO: Only do this when the survival editor window is focused.
+				// This breaks the first click on the arena: if (ImGui.IsWindowFocused())
+				// So don't use that.
+				if (mousePosition.IsValid)
+					activeState.Handle(mousePosition);
+				else
+					activeState.HandleOutOfRange(mousePosition);
+
+				ArenaCanvas.Render();
+				activeState.Render(mousePosition);
+
+				// Capture mouse input when the mouse is over the canvas.
+				// This prevents dragging the window while drawing on the arena canvas.
+				ImGui.InvisibleButton("ArenaCanvas", ArenaSize, ImGuiButtonFlags.MouseButtonLeft);
 			}
+
+			ImGui.EndChild(); // End Arena
+
+			ImGui.SliderFloat("Time", ref _currentSecond, 0, SpawnsetState.Spawnset.GetSliderMaxSeconds());
+
+			SpawnsetEditor3DWindow.ArenaScene.CurrentTick = (int)MathF.Round(_currentSecond * 60);
+
+			ArenaEditorControls.Render();
+			ArenaHeightButtons.Render();
 		}
 
-		IArenaState activeState = GetActiveState();
-
-		// TODO: Only do this when the survival editor window is focused.
-		// This breaks the first click on the arena: if (ImGui.IsWindowFocused())
-		// So don't use that.
-		if (mousePosition.IsValid)
-			activeState.Handle(mousePosition);
-		else
-			activeState.HandleOutOfRange(mousePosition);
-
-		ArenaCanvas.Render();
-		activeState.Render(mousePosition);
-
-		// Capture mouse input when the mouse is over the canvas.
-		// This prevents dragging the window while drawing on the arena canvas.
-		ImGui.InvisibleButton("ArenaCanvas", ArenaSize, ImGuiButtonFlags.MouseButtonLeft);
-
-		ImGui.EndChild();
-
-		ImGui.SliderFloat("Time", ref _currentSecond, 0, SpawnsetState.Spawnset.GetSliderMaxSeconds());
-
-		SpawnsetEditor3DWindow.ArenaScene.CurrentTick = (int)MathF.Round(_currentSecond * 60);
-
-		ArenaEditorControls.Render();
-		ArenaHeightButtons.Render();
-
-		ImGui.EndChild();
+		ImGui.EndChild(); // End ArenaChild
 	}
 }

@@ -12,25 +12,26 @@ public static class ArenaHeightButtons
 
 	public static void Render()
 	{
-		ImGui.BeginChild("ArenaHeightButtons", new(388, 112));
-
-		Span<float> heights = stackalloc float[] { -1000, -1.1f, -1.01f, -1, -0.8f, -0.6f, -0.4f, -0.2f };
-		for (int i = 0; i < heights.Length; i++)
+		if (ImGui.BeginChild("ArenaHeightButtons", new(388, 112)))
 		{
-			float height = heights[i];
-			int offsetX = i % 2 * _arenaButtonSizeLarge;
-			int offsetY = i / 2 * _arenaButtonSize;
-			AddHeightButton(height, offsetX, offsetY, _arenaButtonSizeLarge);
+			Span<float> heights = stackalloc float[] { -1000, -1.1f, -1.01f, -1, -0.8f, -0.6f, -0.4f, -0.2f };
+			for (int i = 0; i < heights.Length; i++)
+			{
+				float height = heights[i];
+				int offsetX = i % 2 * _arenaButtonSizeLarge;
+				int offsetY = i / 2 * _arenaButtonSize;
+				AddHeightButton(height, offsetX, offsetY, _arenaButtonSizeLarge);
+			}
+
+			for (int i = 0; i < 48; i++)
+			{
+				int offsetX = i % 12 * _arenaButtonSize;
+				int offsetY = i / 12 * _arenaButtonSize;
+				AddHeightButton(i, offsetX + _arenaButtonSizeLarge * 2, offsetY);
+			}
 		}
 
-		for (int i = 0; i < 48; i++)
-		{
-			int offsetX = i % 12 * _arenaButtonSize;
-			int offsetY = i / 12 * _arenaButtonSize;
-			AddHeightButton(i, offsetX + _arenaButtonSizeLarge * 2, offsetY);
-		}
-
-		ImGui.EndChild();
+		ImGui.EndChild(); // End ArenaHeightButtons
 
 		static void AddHeightButton(float height, int offsetX, int offsetY, int width = _arenaButtonSize)
 		{

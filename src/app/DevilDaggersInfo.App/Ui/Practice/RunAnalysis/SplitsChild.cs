@@ -61,8 +61,8 @@ public static class SplitsChild
 
 				ImGui.EndTable();
 			}
-
-			ImGui.EndChild();
 		}
+
+		ImGui.EndChild(); // End Splits
 	}
 }

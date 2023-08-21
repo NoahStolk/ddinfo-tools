@@ -50,6 +50,6 @@ public static class UpdateWindow
 			ImGui.PopTextWrapPos();
 		}
 
-		ImGui.End();
+		ImGui.End(); // End Update available
 	}
 }

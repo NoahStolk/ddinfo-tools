@@ -75,9 +75,9 @@ public static class DebugLayout
 
 			for (int i = 0; i < _debugMessages.Count; i++)
 				ImGui.Text(_debugMessages[i]);
-
-			ImGui.End();
 		}
+
+		ImGui.End(); // End Debug
 #endif
 	}
 }

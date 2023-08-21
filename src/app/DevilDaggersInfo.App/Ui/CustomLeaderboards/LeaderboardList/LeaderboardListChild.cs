@@ -39,50 +39,60 @@ public static class LeaderboardListChild
 	{
 		Vector2 iconSize = new(16);
 
-		ImGui.BeginChild("LeaderboardList");
+		if (ImGui.BeginChild("LeaderboardList"))
+		{
+			if (ImGuiImage.ImageButton("Reload", Root.InternalResources.ReloadTexture.Handle, iconSize))
+				LoadAll();
 
-		if (ImGuiImage.ImageButton("Reload", Root.InternalResources.ReloadTexture.Handle, iconSize))
-			LoadAll();
+			ImGui.SameLine();
+			if (ImGuiImage.ImageButton("Begin", Root.InternalResources.ArrowStartTexture.Handle, iconSize))
+				SetPageIndex(0);
 
-		ImGui.SameLine();
-		if (ImGuiImage.ImageButton("Begin", Root.InternalResources.ArrowStartTexture.Handle, iconSize))
-			SetPageIndex(0);
+			ImGui.SameLine();
+			if (ImGuiImage.ImageButton("Previous", Root.InternalResources.ArrowLeftTexture.Handle, iconSize))
+				SetPageIndex(PageIndex - 1);
 
-		ImGui.SameLine();
-		if (ImGuiImage.ImageButton("Previous", Root.InternalResources.ArrowLeftTexture.Handle, iconSize))
-			SetPageIndex(PageIndex - 1);
+			ImGui.SameLine();
+			if (ImGuiImage.ImageButton("Next", Root.InternalResources.ArrowRightTexture.Handle, iconSize))
+				SetPageIndex(PageIndex + 1);
 
-		ImGui.SameLine();
-		if (ImGuiImage.ImageButton("Next", Root.InternalResources.ArrowRightTexture.Handle, iconSize))
-			SetPageIndex(PageIndex + 1);
+			ImGui.SameLine();
+			if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Handle, iconSize))
+				SetPageIndex(TotalPages - 1);
 
-		ImGui.SameLine();
-		if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Handle, iconSize))
-			SetPageIndex(TotalPages - 1);
+			ImGui.SameLine();
+			if (ImGui.BeginChild("ComboCategory", new(360, 20)))
+			{
+				if (ImGui.Combo("Category", ref _categoryIndex, _categoryNames, _categories.Count))
+					UpdatePagedCustomLeaderboards();
+			}
 
-		ImGui.SameLine();
-		ImGui.BeginChild("ComboCategory", new(360, 20));
-		if (ImGui.Combo("Category", ref _categoryIndex, _categoryNames, _categories.Count))
-			UpdatePagedCustomLeaderboards();
-		ImGui.EndChild();
+			ImGui.EndChild(); // End ComboCategory
 
-		ImGui.SameLine();
-		if (ImGui.Checkbox("Featured", ref _featuredOnly))
-			UpdatePagedCustomLeaderboards();
+			ImGui.SameLine();
+			if (ImGui.Checkbox("Featured", ref _featuredOnly))
+				UpdatePagedCustomLeaderboards();
 
-		ImGui.SameLine();
-		ImGui.BeginChild("InputSpawnset", new(150, 20));
-		if (ImGui.InputText("Name", ref _spawnsetFilter, 32))
-			UpdatePagedCustomLeaderboards();
-		ImGui.EndChild();
+			ImGui.SameLine();
+			if (ImGui.BeginChild("InputSpawnset", new(150, 20)))
+			{
+				if (ImGui.InputText("Name", ref _spawnsetFilter, 32))
+					UpdatePagedCustomLeaderboards();
+			}
 
-		ImGui.SameLine();
-		ImGui.BeginChild("InputAuthor", new(150, 20));
-		if (ImGui.InputText("Author", ref _authorFilter, 32))
-			UpdatePagedCustomLeaderboards();
-		ImGui.EndChild();
+			ImGui.EndChild(); // End InputSpawnset
 
-		ImGui.EndChild();
+			ImGui.SameLine();
+			if (ImGui.BeginChild("InputAuthor", new(150, 20)))
+			{
+				if (ImGui.InputText("Author", ref _authorFilter, 32))
+					UpdatePagedCustomLeaderboards();
+			}
+
+			ImGui.EndChild(); // End InputAuthor
+		}
+
+		ImGui.EndChild(); // End LeaderboardList
 	}
 
 	public static void LoadAll()

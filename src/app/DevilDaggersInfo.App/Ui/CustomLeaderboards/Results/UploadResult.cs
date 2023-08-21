@@ -245,7 +245,7 @@ public class UploadResult
 			ImGui.Text(title);
 		}
 
-		ImGui.EndChild();
+		ImGui.EndChild(); // End {SubmittedAt.Ticks}{_spawnsetName}
 		ImGui.PopStyleColor();
 
 		return IsExpanded;
