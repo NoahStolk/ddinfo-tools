@@ -6,17 +6,6 @@ namespace DevilDaggersInfo.App;
 
 public unsafe class FramebufferData
 {
-	private readonly float[] _screenVertices =
-	{
-		-1.0f, 1.0f, 0.0f, 1.0f,
-		-1.0f, -1.0f, 0.0f, 0.0f,
-		1.0f, -1.0f, 1.0f, 0.0f,
-
-		-1.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, -1.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-	};
-
 	public uint TextureHandle { get; private set; }
 	public uint Framebuffer { get; private set; }
 	public int Width { get; private set; }
@@ -38,17 +27,6 @@ public unsafe class FramebufferData
 			Root.Gl.DeleteTexture(TextureHandle);
 
 		// Create new data.
-		uint screenVao = Root.Gl.GenVertexArray();
-		uint screenVbo = Root.Gl.GenBuffer();
-		Root.Gl.BindVertexArray(screenVao);
-		Root.Gl.BindBuffer(BufferTargetARB.ArrayBuffer, screenVbo);
-		fixed (float* v = &_screenVertices[0])
-			Root.Gl.BufferData(BufferTargetARB.ArrayBuffer, (uint)(sizeof(float) * _screenVertices.Length), v, BufferUsageARB.StaticDraw);
-		Root.Gl.EnableVertexAttribArray(0);
-		Root.Gl.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 4 * sizeof(float), (void*)0);
-		Root.Gl.EnableVertexAttribArray(1);
-		Root.Gl.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-
 		Framebuffer = Root.Gl.GenFramebuffer();
 		Root.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, Framebuffer);
 
@@ -62,21 +40,14 @@ public unsafe class FramebufferData
 		uint rbo = Root.Gl.GenRenderbuffer();
 		Root.Gl.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rbo);
 
-		// Use a single renderbuffer object for both a depth AND stencil buffer.
-		Root.Gl.RenderbufferStorage(RenderbufferTarget.Renderbuffer, InternalFormat.Depth24Stencil8, (uint)Width, (uint)Height);
-		Root.Gl.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthStencilAttachment, RenderbufferTarget.Renderbuffer, rbo);
+		Root.Gl.RenderbufferStorage(RenderbufferTarget.Renderbuffer, InternalFormat.DepthComponent24, (uint)Width, (uint)Height);
+		Root.Gl.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rbo);
 
 		if (Root.Gl.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != GLEnum.FramebufferComplete)
 			Root.Log.Warning("Framebuffer is not complete.");
 
-		// Unbind.
 		Root.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-		Root.Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
-		Root.Gl.BindVertexArray(0);
-
-		// Delete.
-		Root.Gl.DeleteVertexArray(screenVao);
-		Root.Gl.DeleteBuffer(screenVbo);
+		Root.Gl.DeleteRenderbuffer(rbo);
 	}
 
 	public void RenderArena(float delta, ArenaScene arenaScene)
