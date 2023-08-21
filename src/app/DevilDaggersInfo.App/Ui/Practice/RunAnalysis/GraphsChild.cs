@@ -162,7 +162,7 @@ public static class GraphsChild
 			RenderGraphSplits(drawListPtr, pos, size);
 
 			if (_showHomingStored)
-				RenderGraphLine(drawListPtr, _homingStored, max, _homingStoredPoints, UpgradeColors.Level4.ToEngineColor().ToArgbUInt(), pos, size);
+				RenderGraphLine(drawListPtr, _homingStored, max, _homingStoredPoints, ImGui.GetColorU32(UpgradeColors.Level4.ToEngineColor()), pos, size);
 
 			if (_showHomingEaten)
 				RenderGraphLine(drawListPtr, _homingEaten, max, _homingEatenPoints, 0xff0000ff, pos, size);
