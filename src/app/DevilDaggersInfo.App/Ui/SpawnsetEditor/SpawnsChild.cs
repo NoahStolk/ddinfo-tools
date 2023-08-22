@@ -254,4 +254,15 @@ public static class SpawnsChild
 			_delayEdited = false;
 		}
 	}
+
+	public static void ClearUnusedSelections()
+	{
+		for (int i = SpawnsetState.Spawnset.Spawns.Length; i < _selected.Length; i++)
+			_selected[i] = false;
+	}
+
+	public static void ClearAllSelections()
+	{
+		Array.Clear(_selected);
+	}
 }

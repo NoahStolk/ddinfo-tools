@@ -105,5 +105,7 @@ public static class HistoryChild
 		CurrentHistoryIndex = Math.Clamp(index, 0, History.Count - 1);
 		SpawnsetState.Spawnset = History[CurrentHistoryIndex].Spawnset.DeepCopy();
 		_updateScroll = true;
+
+		SpawnsChild.ClearUnusedSelections();
 	}
 }

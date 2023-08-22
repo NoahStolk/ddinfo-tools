@@ -85,6 +85,7 @@ public static class SpawnsetEditorMenu
 		SpawnsetState.SpawnsetName = "(untitled)";
 		SpawnsetState.Spawnset = SpawnsetBinary.CreateDefault();
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.Reset);
+		SpawnsChild.ClearAllSelections();
 	}
 
 	public static void OpenSpawnset()
@@ -120,6 +121,7 @@ public static class SpawnsetEditorMenu
 		}
 
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.Reset);
+		SpawnsChild.ClearAllSelections();
 	}
 
 	public static void OpenDefaultSpawnset()
@@ -127,6 +129,7 @@ public static class SpawnsetEditorMenu
 		SpawnsetState.SpawnsetName = "V3";
 		SpawnsetState.Spawnset = ContentManager.Content.DefaultSpawnset.DeepCopy();
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.Reset);
+		SpawnsChild.ClearAllSelections();
 	}
 
 	public static void SaveSpawnset()
