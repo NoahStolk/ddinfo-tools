@@ -10,20 +10,14 @@ namespace DevilDaggersInfo.App.Ui.SpawnsetEditor.Arena.EditorStates;
 
 public class ArenaLineState : IArenaState
 {
-	private Vector2? _lineStart;
-	private float[,]? _newArena;
+	private Session? _session;
 
 	public void Handle(ArenaMousePosition mousePosition)
 	{
-		if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-		{
-			_lineStart = mousePosition.Real;
-			_newArena = SpawnsetState.Spawnset.ArenaTiles.GetMutableClone();
-		}
+		if (ImGui.IsMouseDown(ImGuiMouseButton.Left))
+			_session ??= new(mousePosition.Real, SpawnsetState.Spawnset.ArenaTiles.GetMutableClone());
 		else if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-		{
 			Emit(mousePosition);
-		}
 	}
 
 	public void HandleOutOfRange(ArenaMousePosition mousePosition)
@@ -34,12 +28,12 @@ public class ArenaLineState : IArenaState
 
 	private void Emit(ArenaMousePosition mousePosition)
 	{
-		if (!_lineStart.HasValue || _newArena == null)
+		if (_session == null)
 			return;
 
-		Loop(mousePosition, (i, j) => _newArena[i, j] = ArenaChild.SelectedHeight);
+		Loop(mousePosition, (i, j) => _session.Value.NewArena[i, j] = ArenaChild.SelectedHeight);
 
-		SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ArenaTiles = new(SpawnsetState.Spawnset.ArenaDimension, _newArena) };
+		SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ArenaTiles = new(SpawnsetState.Spawnset.ArenaDimension, _session.Value.NewArena) };
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaLine);
 
 		Reset();
@@ -47,8 +41,7 @@ public class ArenaLineState : IArenaState
 
 	private void Reset()
 	{
-		_lineStart = null;
-		_newArena = null;
+		_session = null;
 	}
 
 	public void Render(ArenaMousePosition mousePosition)
@@ -62,9 +55,9 @@ public class ArenaLineState : IArenaState
 			drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaChild.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));
 		});
 
-		if (_lineStart.HasValue)
+		if (_session.HasValue)
 		{
-			ArenaEditingUtils.Stadium stadium = GetStadium(_lineStart.Value, mousePosition);
+			ArenaEditingUtils.Stadium stadium = GetStadium(_session.Value.StartPosition, mousePosition);
 
 			drawList.AddCircle(origin + stadium.Start, 2, ImGui.GetColorU32(Color.White));
 			drawList.AddCircle(origin + stadium.End, 2, ImGui.GetColorU32(Color.White));
@@ -85,10 +78,10 @@ public class ArenaLineState : IArenaState
 
 	private void Loop(ArenaMousePosition mousePosition, Action<int, int> action)
 	{
-		if (!_lineStart.HasValue)
+		if (!_session.HasValue)
 			return;
 
-		ArenaEditingUtils.Stadium stadium = GetStadium(_lineStart.Value, mousePosition);
+		ArenaEditingUtils.Stadium stadium = GetStadium(_session.Value.StartPosition, mousePosition);
 		for (int i = 0; i < SpawnsetBinary.ArenaDimensionMax; i++)
 		{
 			for (int j = 0; j < SpawnsetBinary.ArenaDimensionMax; j++)
@@ -115,5 +108,18 @@ public class ArenaLineState : IArenaState
 	private static Vector2 GetSnappedPosition(Vector2 position)
 	{
 		return ArenaEditingUtils.Snap(position, ArenaChild.TileSize) + ArenaChild.HalfTileSizeAsVector2;
+	}
+
+	private struct Session
+	{
+		public Session(Vector2 startPosition, float[,] newArena)
+		{
+			StartPosition = startPosition;
+			NewArena = newArena;
+		}
+
+		public Vector2 StartPosition { get; }
+
+		public float[,] NewArena { get; }
 	}
 }

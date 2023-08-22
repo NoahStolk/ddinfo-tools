@@ -10,13 +10,15 @@ public static class SpawnsetEditorWindow
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, Constants.MinWindowSize);
 		if (ImGui.Begin("Spawnset Editor", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.MenuBar | ImGuiWindowFlags.NoScrollWithMouse))
 		{
+			bool isWindowFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows);
+
 			ImGui.PopStyleVar();
 
 			SpawnsetEditorMenu.Render();
 			SpawnsChild.Render();
 
 			ImGui.SameLine();
-			ArenaChild.Render();
+			ArenaChild.Render(isWindowFocused);
 
 			ImGui.SameLine();
 			SettingsChild.Render();

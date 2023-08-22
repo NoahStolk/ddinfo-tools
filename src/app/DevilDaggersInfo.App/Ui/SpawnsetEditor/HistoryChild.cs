@@ -100,6 +100,7 @@ public static class HistoryChild
 			return;
 
 		// Workaround: Remove the window focus to prevent undo/redo not working when a text input is focused, and the next/previous history entry changes the value of that text input.
+		// TODO: Find another way to fix this. Currently this workaround is not ideal, this is especially noticeable when working with the arena bucket.
 		ImGui.SetWindowFocus(null);
 
 		CurrentHistoryIndex = Math.Clamp(index, 0, History.Count - 1);

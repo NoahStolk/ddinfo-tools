@@ -10,20 +10,14 @@ namespace DevilDaggersInfo.App.Ui.SpawnsetEditor.Arena.EditorStates;
 
 public class ArenaRectangleState : IArenaState
 {
-	private Vector2D<int>? _rectangleStart;
-	private float[,]? _newArena;
+	private Session? _session;
 
 	public void Handle(ArenaMousePosition mousePosition)
 	{
-		if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-		{
-			_rectangleStart = mousePosition.Tile;
-			_newArena = SpawnsetState.Spawnset.ArenaTiles.GetMutableClone();
-		}
+		if (ImGui.IsMouseDown(ImGuiMouseButton.Left))
+			_session ??= new(mousePosition.Tile, SpawnsetState.Spawnset.ArenaTiles.GetMutableClone());
 		else if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-		{
 			Emit(mousePosition);
-		}
 	}
 
 	public void HandleOutOfRange(ArenaMousePosition mousePosition)
@@ -34,12 +28,12 @@ public class ArenaRectangleState : IArenaState
 
 	private void Emit(ArenaMousePosition mousePosition)
 	{
-		if (!_rectangleStart.HasValue || _newArena == null)
+		if (!_session.HasValue)
 			return;
 
-		Loop(mousePosition, (i, j) => _newArena[i, j] = ArenaChild.SelectedHeight);
+		Loop(mousePosition, (i, j) => _session.Value.NewArena[i, j] = ArenaChild.SelectedHeight);
 
-		SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ArenaTiles = new(SpawnsetState.Spawnset.ArenaDimension, _newArena) };
+		SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ArenaTiles = new(SpawnsetState.Spawnset.ArenaDimension, _session.Value.NewArena) };
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaRectangle);
 
 		Reset();
@@ -47,8 +41,7 @@ public class ArenaRectangleState : IArenaState
 
 	private void Reset()
 	{
-		_rectangleStart = null;
-		_newArena = null;
+		_session = null;
 	}
 
 	public void Render(ArenaMousePosition mousePosition)
@@ -65,10 +58,10 @@ public class ArenaRectangleState : IArenaState
 
 	private void Loop(ArenaMousePosition mousePosition, Action<int, int> action)
 	{
-		if (!_rectangleStart.HasValue)
+		if (!_session.HasValue)
 			return;
 
-		ArenaEditingUtils.Rectangle rectangle = ArenaEditingUtils.GetRectangle(_rectangleStart.Value, mousePosition.Tile);
+		ArenaEditingUtils.Rectangle rectangle = ArenaEditingUtils.GetRectangle(_session.Value.StartPosition, mousePosition.Tile);
 
 		int startXa = Math.Max(0, rectangle.X1);
 		int startYa = Math.Max(0, rectangle.Y1);
@@ -102,5 +95,18 @@ public class ArenaRectangleState : IArenaState
 				}
 			}
 		}
+	}
+
+	private struct Session
+	{
+		public Session(Vector2D<int> startPosition, float[,] newArena)
+		{
+			StartPosition = startPosition;
+			NewArena = newArena;
+		}
+
+		public Vector2D<int> StartPosition { get; }
+
+		public float[,] NewArena { get; }
 	}
 }

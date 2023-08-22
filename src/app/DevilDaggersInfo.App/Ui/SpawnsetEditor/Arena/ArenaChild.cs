@@ -44,7 +44,7 @@ public static class ArenaChild
 		 _ => throw new UnreachableException(),
 	};
 
-	public static void Render()
+	public static void Render(bool isSpawnsetEditorWindowFocused)
 	{
 		if (ImGui.BeginChild("ArenaChild", new(416 - 8, 768 - 64)))
 		{
@@ -76,13 +76,13 @@ public static class ArenaChild
 
 				IArenaState activeState = GetActiveState();
 
-				// TODO: Only do this when the survival editor window is focused.
-				// This breaks the first click on the arena: if (ImGui.IsWindowFocused())
-				// So don't use that.
-				if (mousePosition.IsValid)
-					activeState.Handle(mousePosition);
-				else
-					activeState.HandleOutOfRange(mousePosition);
+				if (isSpawnsetEditorWindowFocused)
+				{
+					if (mousePosition.IsValid)
+						activeState.Handle(mousePosition);
+					else
+						activeState.HandleOutOfRange(mousePosition);
+				}
 
 				ArenaCanvas.Render();
 				activeState.Render(mousePosition);

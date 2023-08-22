@@ -10,7 +10,6 @@ namespace DevilDaggersInfo.App.Ui.SpawnsetEditor.Arena.EditorStates;
 
 public class ArenaDaggerState : IArenaState
 {
-	private bool _settingRaceDagger;
 	private Vector2? _position;
 
 	public void Handle(ArenaMousePosition mousePosition)
@@ -18,15 +17,9 @@ public class ArenaDaggerState : IArenaState
 		if (SpawnsetState.Spawnset.GameMode != GameMode.Race)
 			return;
 
-		if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+		if (ImGui.IsMouseDown(ImGuiMouseButton.Left))
 		{
-			_settingRaceDagger = true;
 			_position = GetSnappedDaggerPosition();
-		}
-		else if (ImGui.IsMouseDown(ImGuiMouseButton.Left))
-		{
-			if (_settingRaceDagger)
-				_position = GetSnappedDaggerPosition();
 		}
 		else if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 		{
@@ -55,7 +48,6 @@ public class ArenaDaggerState : IArenaState
 
 	private void Reset()
 	{
-		_settingRaceDagger = false;
 		_position = null;
 	}
 

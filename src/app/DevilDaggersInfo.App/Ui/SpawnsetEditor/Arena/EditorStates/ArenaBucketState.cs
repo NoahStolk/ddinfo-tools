@@ -12,24 +12,27 @@ namespace DevilDaggersInfo.App.Ui.SpawnsetEditor.Arena.EditorStates;
 public class ArenaBucketState : IArenaState
 {
 	private readonly HashSet<Vector2D<int>> _targetCoords = new();
-
-	private ArenaMousePosition _cachedPosition;
+	private Vector2D<int> _cachedPosition;
+	private bool _isFilling;
 
 	public void Handle(ArenaMousePosition mousePosition)
 	{
-		if (!ImGui.IsMouseClicked(ImGuiMouseButton.Left) && _cachedPosition == mousePosition)
+		if (ImGui.IsMouseReleased(ImGuiMouseButton.Left) && _isFilling)
+			_isFilling = false;
+
+		if (!ImGui.IsMouseDown(ImGuiMouseButton.Left) && _cachedPosition == mousePosition.Tile)
 			return;
 
-		_cachedPosition = mousePosition;
-
 		_targetCoords.Clear();
+		_cachedPosition = mousePosition.Tile;
 
 		int dimension = SpawnsetState.Spawnset.ArenaDimension;
 		float targetHeight = SpawnsetState.Spawnset.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y];
 		FillNeighbors(mousePosition.Tile.X, mousePosition.Tile.Y);
 
-		if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+		if (ImGui.IsMouseDown(ImGuiMouseButton.Left) && !_isFilling)
 		{
+			_isFilling = true;
 			float[,] newArena = SpawnsetState.Spawnset.ArenaTiles.GetMutableClone();
 			foreach (Vector2D<int> coord in _targetCoords)
 				newArena[coord.X, coord.Y] = ArenaChild.SelectedHeight;
@@ -78,6 +81,7 @@ public class ArenaBucketState : IArenaState
 	public void HandleOutOfRange(ArenaMousePosition mousePosition)
 	{
 		_targetCoords.Clear();
+		_isFilling = false;
 	}
 
 	public void Render(ArenaMousePosition mousePosition)

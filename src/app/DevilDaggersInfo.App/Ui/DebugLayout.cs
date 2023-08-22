@@ -51,7 +51,6 @@ public static class DebugLayout
 		}
 
 #if DEBUG
-		ImGui.SetNextWindowSize(new(320, 256));
 		if (ImGui.Begin("Debug"))
 		{
 			if (ImGui.Button("Error window"))

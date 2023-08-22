@@ -10,20 +10,14 @@ namespace DevilDaggersInfo.App.Ui.SpawnsetEditor.Arena.EditorStates;
 
 public class ArenaEllipseState : IArenaState
 {
-	private Vector2? _ellipseStart;
-	private float[,]? _newArena;
+	private Session? _session;
 
 	public void Handle(ArenaMousePosition mousePosition)
 	{
-		if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-		{
-			_ellipseStart = mousePosition.Real;
-			_newArena = SpawnsetState.Spawnset.ArenaTiles.GetMutableClone();
-		}
+		if (ImGui.IsMouseDown(ImGuiMouseButton.Left))
+			_session ??= new(mousePosition.Real, SpawnsetState.Spawnset.ArenaTiles.GetMutableClone());
 		else if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-		{
 			Emit(mousePosition);
-		}
 	}
 
 	public void HandleOutOfRange(ArenaMousePosition mousePosition)
@@ -34,12 +28,12 @@ public class ArenaEllipseState : IArenaState
 
 	private void Emit(ArenaMousePosition mousePosition)
 	{
-		if (!_ellipseStart.HasValue || _newArena == null)
+		if (!_session.HasValue)
 			return;
 
-		Loop(mousePosition, (i, j) => _newArena[i, j] = ArenaChild.SelectedHeight);
+		Loop(mousePosition, (i, j) => _session.Value.NewArena[i, j] = ArenaChild.SelectedHeight);
 
-		SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ArenaTiles = new(SpawnsetState.Spawnset.ArenaDimension, _newArena) };
+		SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ArenaTiles = new(SpawnsetState.Spawnset.ArenaDimension, _session.Value.NewArena) };
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaEllipse);
 
 		Reset();
@@ -47,8 +41,7 @@ public class ArenaEllipseState : IArenaState
 
 	private void Reset()
 	{
-		_ellipseStart = null;
-		_newArena = null;
+		_session = null;
 	}
 
 	public void Render(ArenaMousePosition mousePosition)
@@ -62,26 +55,26 @@ public class ArenaEllipseState : IArenaState
 			drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaChild.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));
 		});
 
-		if (!_ellipseStart.HasValue)
+		if (!_session.HasValue)
 			return;
 
-		ArenaEditingUtils.AlignedEllipse ellipse = GetEllipse(_ellipseStart.Value, mousePosition);
+		ArenaEditingUtils.AlignedEllipse ellipse = GetEllipse(_session.Value.StartPosition, mousePosition);
 
 		drawList.AddEllipse(origin + ellipse.Center, ellipse.Radius, ImGui.GetColorU32(Color.HalfTransparentWhite), 40, 1);
 
 		if (!EllipseChild.Filled)
 		{
-			ArenaEditingUtils.AlignedEllipse innerEllipse = GetEllipse(_ellipseStart.Value, mousePosition, (EllipseChild.Thickness - 1) * ArenaChild.TileSize);
+			ArenaEditingUtils.AlignedEllipse innerEllipse = GetEllipse(_session.Value.StartPosition, mousePosition, (EllipseChild.Thickness - 1) * ArenaChild.TileSize);
 			drawList.AddEllipse(origin + innerEllipse.Center, innerEllipse.Radius, ImGui.GetColorU32(Color.White), 40, 1);
 		}
 	}
 
 	private void Loop(ArenaMousePosition mousePosition, Action<int, int> action)
 	{
-		if (!_ellipseStart.HasValue)
+		if (!_session.HasValue)
 			return;
 
-		ArenaEditingUtils.AlignedEllipse ellipse = GetEllipse(_ellipseStart.Value, mousePosition);
+		ArenaEditingUtils.AlignedEllipse ellipse = GetEllipse(_session.Value.StartPosition, mousePosition);
 
 		if (EllipseChild.Filled)
 		{
@@ -99,7 +92,7 @@ public class ArenaEllipseState : IArenaState
 		}
 		else
 		{
-			ArenaEditingUtils.AlignedEllipse innerEllipse = GetEllipse(_ellipseStart.Value, mousePosition, (EllipseChild.Thickness - 1) * ArenaChild.TileSize);
+			ArenaEditingUtils.AlignedEllipse innerEllipse = GetEllipse(_session.Value.StartPosition, mousePosition, (EllipseChild.Thickness - 1) * ArenaChild.TileSize);
 			for (int i = 0; i < SpawnsetState.Spawnset.ArenaDimension; i++)
 			{
 				for (int j = 0; j < SpawnsetState.Spawnset.ArenaDimension; j++)
@@ -162,5 +155,18 @@ public class ArenaEllipseState : IArenaState
 	private static Vector2 GetSnappedPosition(Vector2 position)
 	{
 		return ArenaEditingUtils.Snap(position, ArenaChild.TileSize) + ArenaChild.HalfTileSizeAsVector2;
+	}
+
+	private struct Session
+	{
+		public Session(Vector2 startPosition, float[,] newArena)
+		{
+			StartPosition = startPosition;
+			NewArena = newArena;
+		}
+
+		public Vector2 StartPosition { get; }
+
+		public float[,] NewArena { get; }
 	}
 }
