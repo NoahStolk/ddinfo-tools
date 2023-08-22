@@ -54,7 +54,7 @@ public static class ArenaChild
 
 				ArenaMousePosition mousePosition = ArenaMousePosition.Get(io, ImGui.GetCursorScreenPos());
 
-				if (mousePosition.IsValid)
+				if (mousePosition.IsValid && isSpawnsetEditorWindowFocused)
 				{
 					UnsafeCharBufferWriter writer = new(_tooltipBuffer);
 					writer.WriteLine(SpawnsetState.Spawnset.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y]);
