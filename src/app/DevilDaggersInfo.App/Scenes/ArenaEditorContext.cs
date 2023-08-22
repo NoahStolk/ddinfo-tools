@@ -59,6 +59,7 @@ public sealed class ArenaEditorContext
 		_closestHitTile = _hitTiles.Count == 0 ? null : _hitTiles.MinBy(ht => ht.Distance).Tile;
 
 		// Temporarily use LutScale to highlight the target tile.
+		// TODO: We shouldn't highlight any tiles if the window isn't active, but we currently don't have a way to detect that.
 		Root.GameResources.TileTexture.Bind();
 
 		for (int i = 0; i < _arenaScene.Tiles.GetLength(0); i++)
