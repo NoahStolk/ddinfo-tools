@@ -11,6 +11,7 @@ namespace DevilDaggersInfo.App.Scenes.GameObjects;
 public class Camera
 {
 	private const MouseButton _lookButton = MouseButton.Right;
+	private const float _friction = 20;
 
 	private readonly bool _isMenuCamera;
 
@@ -57,6 +58,13 @@ public class Camera
 			ImGuiIOPtr io = ImGui.GetIO();
 			HandleKeys(io, delta);
 		}
+		else
+		{
+			float frictionDt = _friction * delta;
+			_axisAlignedSpeed.X -= _axisAlignedSpeed.X * frictionDt;
+			_axisAlignedSpeed.Y -= _axisAlignedSpeed.Y * frictionDt;
+			_axisAlignedSpeed.Z -= _axisAlignedSpeed.Z * frictionDt;
+		}
 
 		if (activateMouse)
 		{
@@ -80,7 +88,6 @@ public class Camera
 	private void HandleKeys(ImGuiIOPtr io, float delta)
 	{
 		const float acceleration = 20;
-		const float friction = 20;
 		const Key forwardInput = Key.W;
 		const Key leftInput = Key.A;
 		const Key backwardInput = Key.S;
@@ -95,7 +102,7 @@ public class Camera
 		bool downHold = io.KeysDown[(int)downInput];
 
 		float accelerationDt = acceleration * delta;
-		float frictionDt = friction * delta;
+		float frictionDt = _friction * delta;
 
 		if (leftHold)
 			_axisAlignedSpeed.X += accelerationDt;
