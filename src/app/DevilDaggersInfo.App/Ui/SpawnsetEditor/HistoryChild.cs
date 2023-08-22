@@ -99,9 +99,10 @@ public static class HistoryChild
 		if (index < 0 || index >= History.Count)
 			return;
 
-		// Workaround: Remove the window focus to prevent undo/redo not working when a text input is focused, and the next/previous history entry changes the value of that text input.
-		// TODO: Find another way to fix this. Currently this workaround is not ideal, this is especially noticeable when working with the arena bucket.
-		ImGui.SetWindowFocus(null);
+		// Remove the keyboard focus to prevent undo/redo not working when a text input is focused, and the next/previous history entry changes the value of that text input.
+		// TODO: This currently introduces a little bug; there is an additional history entry added when undoing/redoing, but this is better than the alternative.
+		// A way to fix this would be to unfocus the keyboard earlier?
+		ImGui.SetKeyboardFocusHere(-1);
 
 		CurrentHistoryIndex = Math.Clamp(index, 0, History.Count - 1);
 		SpawnsetState.Spawnset = History[CurrentHistoryIndex].Spawnset.DeepCopy();
