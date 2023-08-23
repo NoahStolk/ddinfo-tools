@@ -101,7 +101,7 @@ public sealed class ArenaScene
 		_editorContext?.Update(activateMouse, CurrentTick);
 	}
 
-	public void Render(int windowWidth, int windowHeight)
+	public void Render(bool isWindowActive, int windowWidth, int windowHeight)
 	{
 		Camera.PreRender(windowWidth, windowHeight);
 
@@ -131,7 +131,7 @@ public sealed class ArenaScene
 		Root.GameResources.PostLut.Bind(TextureUnit.Texture1);
 
 		if (_editorContext != null && CurrentTick == 0)
-			_editorContext.RenderTiles(shader);
+			_editorContext.RenderTiles(isWindowActive, shader);
 		else
 			RenderTilesDefault();
 

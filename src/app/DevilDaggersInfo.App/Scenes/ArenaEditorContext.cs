@@ -39,7 +39,7 @@ public sealed class ArenaEditorContext
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaTileHeight);
 	}
 
-	public void RenderTiles(Shader shader)
+	public void RenderTiles(bool isWindowFocused, Shader shader)
 	{
 		_hitTiles.Clear();
 		Ray ray = _arenaScene.Camera.ScreenToWorldPoint();
@@ -59,7 +59,6 @@ public sealed class ArenaEditorContext
 		_closestHitTile = _hitTiles.Count == 0 ? null : _hitTiles.MinBy(ht => ht.Distance).Tile;
 
 		// Temporarily use LutScale to highlight the target tile.
-		// TODO: We shouldn't highlight any tiles if the window isn't active, but we currently don't have a way to detect that.
 		Root.GameResources.TileTexture.Bind();
 
 		for (int i = 0; i < _arenaScene.Tiles.GetLength(0); i++)
@@ -68,12 +67,12 @@ public sealed class ArenaEditorContext
 			{
 				Tile tile = _arenaScene.Tiles[i, j];
 
-				if (_closestHitTile == tile)
+				if (isWindowFocused && _closestHitTile == tile)
 					shader.SetUniform("lutScale", 2.5f);
 
 				tile.RenderTop();
 
-				if (_closestHitTile == tile)
+				if (isWindowFocused && _closestHitTile == tile)
 					shader.SetUniform("lutScale", 1f);
 			}
 		}
@@ -86,12 +85,12 @@ public sealed class ArenaEditorContext
 			{
 				Tile tile = _arenaScene.Tiles[i, j];
 
-				if (_closestHitTile == tile)
+				if (isWindowFocused && _closestHitTile == tile)
 					shader.SetUniform("lutScale", 2.5f);
 
 				tile.RenderPillar();
 
-				if (_closestHitTile == tile)
+				if (isWindowFocused && _closestHitTile == tile)
 					shader.SetUniform("lutScale", 1f);
 			}
 		}

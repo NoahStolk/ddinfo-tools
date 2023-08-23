@@ -8,8 +8,13 @@ public static class ImGuiImage
 {
 	public static void AddFramebufferImage(this ImDrawListPtr drawListPtr, FramebufferData framebufferData, Vector2 pMin, Vector2 pMax)
 	{
+		drawListPtr.AddFramebufferImage(framebufferData, pMin, pMax, Color.White);
+	}
+
+	public static void AddFramebufferImage(this ImDrawListPtr drawListPtr, FramebufferData framebufferData, Vector2 pMin, Vector2 pMax, Color color)
+	{
 		// Framebuffers are flipped vertically, so we need to flip the UVs.
-		drawListPtr.AddImage((IntPtr)framebufferData.TextureHandle, pMin, pMax, Vector2.UnitY, Vector2.UnitX);
+		drawListPtr.AddImage((IntPtr)framebufferData.TextureHandle, pMin, pMax, Vector2.UnitY, Vector2.UnitX, ImGui.GetColorU32(color));
 	}
 
 	public static void AddImage(this ImDrawListPtr drawListPtr, uint imageId, Vector2 pMin, Vector2 pMax)

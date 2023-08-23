@@ -231,6 +231,8 @@ public class UploadResult
 	private bool RenderHeader(Color color, string title)
 	{
 		ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = 32 });
+
+		// TODO: Use IdBuffer.
 		if (ImGui.BeginChild(SubmittedAt.Ticks + _spawnsetName, new(_headerWidth, 48), true))
 		{
 			bool hover = ImGui.IsWindowHovered();

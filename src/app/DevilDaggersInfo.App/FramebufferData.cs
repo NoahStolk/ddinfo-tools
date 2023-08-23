@@ -1,5 +1,4 @@
 using DevilDaggersInfo.App.Scenes;
-using ImGuiNET;
 using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.App;
@@ -50,11 +49,9 @@ public unsafe class FramebufferData
 		Root.Gl.DeleteRenderbuffer(rbo);
 	}
 
-	public void RenderArena(float delta, ArenaScene arenaScene)
+	public void RenderArena(bool isWindowActive, float delta, ArenaScene arenaScene)
 	{
-		bool hover = ImGui.IsWindowHovered();
-		bool focus = ImGui.IsWindowFocused();
-		arenaScene.Update(hover, hover || focus, delta);
+		arenaScene.Update(isWindowActive, isWindowActive, delta);
 
 		Root.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, Framebuffer);
 
@@ -73,7 +70,7 @@ public unsafe class FramebufferData
 		Root.Gl.Enable(EnableCap.CullFace);
 		Root.Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-		arenaScene.Render(framebufferWidth, framebufferHeight);
+		arenaScene.Render(isWindowActive, framebufferWidth, framebufferHeight);
 
 		Root.Gl.Viewport(originalViewport[0], originalViewport[1], (uint)originalViewport[2], (uint)originalViewport[3]);
 		Root.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
