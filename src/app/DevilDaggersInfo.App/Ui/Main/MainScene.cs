@@ -37,7 +37,7 @@ public static class MainScene
 		Root.Gl.Enable(EnableCap.CullFace);
 		Root.Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-		_mainMenuScene?.Render(true, framebufferWidth, framebufferHeight);
+		_mainMenuScene?.Render(false, framebufferWidth, framebufferHeight);
 
 		Root.Gl.Viewport(originalViewport[0], originalViewport[1], (uint)originalViewport[2], (uint)originalViewport[3]);
 		Root.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);

@@ -8,7 +8,7 @@ const int maxLight = 128;
 
 uniform sampler2D textureDiffuse;
 uniform sampler2D textureLut;
-uniform float lutScale;
+uniform vec3 highlightColor;
 
 uniform int lightCount;
 uniform vec3 lightPosition[maxLight];
@@ -38,7 +38,7 @@ void main()
 	lutRg.g = 1.0 - lutRg.g;
 	vec3 lutRgb = mix(textureLod(textureLut, lutRg, 0), textureLod(textureLut, lutRg - vec2(0.0, 16.0 / 256.0), 0), lutBFract).rgb;
 
-	diffuse.rgb = mix(diffuse.rgb, lutRgb, lutScale);
+	diffuse.rgb = lutRgb + highlightColor;
 
 	vec4 black = vec4(0.0, 0.0, 0.0, 1.0);
 	float darkness = clamp(fragPosition.y, -1, 0) + 1;

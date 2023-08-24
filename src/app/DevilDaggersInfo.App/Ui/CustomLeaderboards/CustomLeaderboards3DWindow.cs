@@ -55,9 +55,8 @@ public static class CustomLeaderboards3DWindow
 			ArenaScene.Camera.FramebufferOffset = cursorScreenPos;
 
 			bool isWindowFocused = ImGui.IsWindowFocused();
-			bool isWindowHovered = ImGui.IsWindowHovered();
-			bool isWindowActive = isWindowFocused && isWindowHovered;
-			_framebufferData.RenderArena(isWindowActive, delta, ArenaScene);
+			bool isMouseOverFramebuffer = isWindowFocused && ImGui.IsWindowHovered() && ImGui.IsMouseHoveringRect(cursorScreenPos, cursorScreenPos + framebufferSize);
+			_framebufferData.RenderArena(isMouseOverFramebuffer, isWindowFocused, delta, ArenaScene);
 
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 			drawList.AddFramebufferImage(_framebufferData, cursorScreenPos, cursorScreenPos + new Vector2(_framebufferData.Width, _framebufferData.Height));

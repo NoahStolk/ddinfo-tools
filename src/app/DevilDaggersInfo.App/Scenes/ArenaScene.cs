@@ -101,7 +101,7 @@ public sealed class ArenaScene
 		_editorContext?.Update(activateMouse, CurrentTick);
 	}
 
-	public void Render(bool isWindowActive, int windowWidth, int windowHeight)
+	public void Render(bool renderEditorContext, int windowWidth, int windowHeight)
 	{
 		Camera.PreRender(windowWidth, windowHeight);
 
@@ -111,7 +111,6 @@ public sealed class ArenaScene
 		shader.SetUniform("projection", Camera.Projection);
 		shader.SetUniform("textureDiffuse", 0);
 		shader.SetUniform("textureLut", 1);
-		shader.SetUniform("lutScale", 1f);
 
 		Span<Vector3> lightPositions = stackalloc Vector3[_lights.Count];
 		Span<Vector3> lightColors = stackalloc Vector3[_lights.Count];
@@ -131,7 +130,7 @@ public sealed class ArenaScene
 		Root.GameResources.PostLut.Bind(TextureUnit.Texture1);
 
 		if (_editorContext != null && CurrentTick == 0)
-			_editorContext.RenderTiles(isWindowActive, shader);
+			_editorContext.RenderTiles(renderEditorContext, shader);
 		else
 			RenderTilesDefault();
 

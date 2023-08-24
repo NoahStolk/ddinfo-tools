@@ -28,28 +28,29 @@ public static class SpawnsetEditor3DWindow
 				ImGui.SetWindowFocus();
 
 			float textHeight = ImGui.CalcTextSize(StringResources.SpawnsetEditor3D).Y;
+			ImGui.Text(StringResources.SpawnsetEditor3D);
 
 			Vector2 framebufferSize = ImGui.GetWindowSize() - new Vector2(16, 48 + textHeight);
 			_framebufferData.ResizeIfNecessary((int)framebufferSize.X, (int)framebufferSize.Y);
 
-			Vector2 cursorScreenPos = ImGui.GetCursorScreenPos() + new Vector2(0, textHeight);
+			Vector2 cursorScreenPos = ImGui.GetCursorScreenPos();
 			ArenaScene.Camera.FramebufferOffset = cursorScreenPos;
 
 			bool isWindowFocused = ImGui.IsWindowFocused();
-			bool isWindowHovered = ImGui.IsWindowHovered();
-			bool isWindowActive = isWindowFocused && isWindowHovered;
-			_framebufferData.RenderArena(isWindowActive, delta, ArenaScene);
+			bool isMouseOverFramebuffer = ImGui.IsMouseHoveringRect(cursorScreenPos, cursorScreenPos + framebufferSize);
+			_framebufferData.RenderArena(isMouseOverFramebuffer, isWindowFocused, delta, ArenaScene);
 
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
-			drawList.AddFramebufferImage(_framebufferData, cursorScreenPos, cursorScreenPos + new Vector2(_framebufferData.Width, _framebufferData.Height), isWindowActive ? Color.White : Color.Gray(0.5f));
+			drawList.AddFramebufferImage(_framebufferData, cursorScreenPos, cursorScreenPos + new Vector2(_framebufferData.Width, _framebufferData.Height), isWindowFocused ? Color.White : Color.Gray(0.5f));
 
 			if (ArenaScene.CurrentTick != 0)
 			{
 				const int padding = 8;
-				drawList.AddText(ImGui.GetCursorScreenPos() + new Vector2(padding, textHeight + padding), ImGui.GetColorU32(Color.Yellow), "(!) Editing is disabled because the shrink preview is active.");
+				drawList.AddText(ImGui.GetCursorScreenPos() + new Vector2(padding, padding), ImGui.GetColorU32(Color.Yellow), "(!) Editing is disabled because the shrink preview is active.");
 			}
 
-			ImGui.Text(StringResources.SpawnsetEditor3D);
+			// Prevent the window from being dragged when clicking on the 3D editor.
+			ImGui.InvisibleButton("invisible", new(_framebufferData.Width, _framebufferData.Height));
 		}
 
 		ImGui.End(); // End 3D Arena Editor

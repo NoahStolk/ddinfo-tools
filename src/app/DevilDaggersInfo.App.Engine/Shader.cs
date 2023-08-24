@@ -69,6 +69,11 @@ public class Shader : IDisposable
 		_gl.Uniform1(GetUniformLocation(name), value);
 	}
 
+	public void SetUniform(string name, Vector3 value)
+	{
+		_gl.Uniform3(GetUniformLocation(name), value);
+	}
+
 	public void SetUniform(string name, Span<Vector3> value)
 	{
 		if (value.IsEmpty)

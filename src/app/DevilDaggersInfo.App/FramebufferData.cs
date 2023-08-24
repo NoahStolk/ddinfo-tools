@@ -49,9 +49,9 @@ public unsafe class FramebufferData
 		Root.Gl.DeleteRenderbuffer(rbo);
 	}
 
-	public void RenderArena(bool isWindowActive, float delta, ArenaScene arenaScene)
+	public void RenderArena(bool activateMouse, bool activateKeyboard, float delta, ArenaScene arenaScene)
 	{
-		arenaScene.Update(isWindowActive, isWindowActive, delta);
+		arenaScene.Update(activateMouse, activateKeyboard, delta);
 
 		Root.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, Framebuffer);
 
@@ -70,7 +70,7 @@ public unsafe class FramebufferData
 		Root.Gl.Enable(EnableCap.CullFace);
 		Root.Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-		arenaScene.Render(isWindowActive, framebufferWidth, framebufferHeight);
+		arenaScene.Render(activateMouse, framebufferWidth, framebufferHeight);
 
 		Root.Gl.Viewport(originalViewport[0], originalViewport[1], (uint)originalViewport[2], (uint)originalViewport[3]);
 		Root.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
