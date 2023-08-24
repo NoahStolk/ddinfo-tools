@@ -50,10 +50,9 @@ public sealed class ArenaEditorContext
 				_selectedTiles.Clear();
 			}
 		}
-		else if (ImGui.IsMouseDown(ImGuiMouseButton.Left) && !ctrl)
+		else if (ImGui.IsMouseDown(ImGuiMouseButton.Left) && !ctrl && _closestHitTile != null && !_selectedTiles.Contains(_closestHitTile))
 		{
-			if (_closestHitTile != null && !_selectedTiles.Contains(_closestHitTile))
-				_selectedTiles.Add(_closestHitTile);
+			_selectedTiles.Add(_closestHitTile);
 		}
 
 		ScrollWheel scrollWheel = Root.Mouse.ScrollWheels.Count > 0 ? Root.Mouse.ScrollWheels[0] : default;
