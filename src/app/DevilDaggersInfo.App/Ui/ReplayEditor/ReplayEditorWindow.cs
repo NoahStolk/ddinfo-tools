@@ -1,5 +1,6 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.ReplayEditor.State;
+using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using ImGuiNET;
@@ -9,16 +10,13 @@ namespace DevilDaggersInfo.App.Ui.ReplayEditor;
 
 public static class ReplayEditorWindow
 {
-	// TODO: Move to 3D window.
 	private static float _time;
 
-	// TODO: Move to 3D window.
 	public static void Reset()
 	{
 		_time = 0;
 	}
 
-	// TODO: Move to 3D window.
 	public static void Update(float delta)
 	{
 		if (_time < ReplayState.Replay.Header.Time)
@@ -36,33 +34,43 @@ public static class ReplayEditorWindow
 
 			ReplayEditorMenu.Render();
 
+			ReplayEditorFileInfo.Render();
+
 			ImGui.SliderFloat("Time", ref _time, 0, ReplayState.Replay.Header.Time, "%.4f", ImGuiSliderFlags.NoInput);
 
 			PlayerInputSnapshot snapshot = default;
 			if (ReplayEditor3DWindow.ArenaScene.CurrentTick < ReplayEditor3DWindow.ArenaScene.ReplaySimulation?.InputSnapshots.Count)
 				snapshot = ReplayEditor3DWindow.ArenaScene.ReplaySimulation.InputSnapshots[ReplayEditor3DWindow.ArenaScene.CurrentTick];
 
-			const int border = 4;
-			const int pointerSize = 4;
-			const float pointerScale = 0.25f;
-			const int size = 64;
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 			Vector2 origin = ImGui.GetCursorScreenPos();
-			drawList.AddRect(origin, origin + new Vector2(size), ImGui.GetColorU32(Color.Gray(0.6f)));
-			drawList.AddRectFilled(origin + new Vector2(border), origin + new Vector2(size - border), ImGui.GetColorU32(new Vector4(0, 0, 0, 1)));
 
-			const int center = size / 2;
-			const float max = center - border - pointerScale / 2;
-			Vector2 pointerCenter = origin + new Vector2(center) + Clamp(new Vector2(snapshot.MouseX, snapshot.MouseY) * pointerScale, -max, max);
-			drawList.AddRect(pointerCenter - new Vector2(pointerSize / 2f), pointerCenter + new Vector2(pointerSize / 2f), ImGui.GetColorU32(Color.White));
+			// Pointer area
+			const int pointerBorder = 4;
+			const int pointerSize = 4;
+			const float pointerScale = 0.25f;
+			const int mousePointerAreaSize = 64;
+			drawList.AddRect(origin, origin + new Vector2(mousePointerAreaSize), 0xFFFFFFFF);
+			drawList.AddRectFilled(origin + new Vector2(pointerBorder), origin + new Vector2(mousePointerAreaSize - pointerBorder), 0xFF000000);
 
-			RenderInput(snapshot.Left, "A");
-			RenderInput(snapshot.Right, "D");
-			RenderInput(snapshot.Forward, "W");
-			RenderInput(snapshot.Backward, "S");
-			RenderInput(snapshot.Jump is JumpType.StartedPress or JumpType.Hold, "Space");
-			RenderInput(snapshot.Shoot == ShootType.Hold, "LMB");
-			RenderInput(snapshot.ShootHoming == ShootType.Hold, "RMB");
+			// Pointer
+			const int center = mousePointerAreaSize / 2;
+			const float max = center - pointerBorder - pointerScale / 2;
+			Vector2 mouseCoordinates = new(snapshot.MouseX, snapshot.MouseY);
+			Vector2 pointerCenter = origin + new Vector2(center) + Clamp(mouseCoordinates * pointerScale, -max, max);
+			drawList.AddRect(pointerCenter - new Vector2(pointerSize / 2f), pointerCenter + new Vector2(pointerSize / 2f), 0xFFFFFFFF);
+			drawList.AddText(origin + new Vector2(0, mousePointerAreaSize), 0xFFFFFFFF, UnsafeSpan.Get(mouseCoordinates, "+000;-000;+000"));
+
+			// Inputs
+			const int inputSize = 32;
+			Vector2 inputRect = new(inputSize);
+			RenderInput(drawList, origin + new Vector2(mousePointerAreaSize, inputSize), inputRect, snapshot.Left, "A");
+			RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 2, inputSize), inputRect, snapshot.Right, "D");
+			RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize, 0), inputRect, snapshot.Forward, "W");
+			RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize, inputSize), inputRect, snapshot.Backward, "S");
+			RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 3, inputSize), new(64, 32), snapshot.Jump is JumpType.StartedPress or JumpType.Hold, "Space");
+			RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 3, 0), inputRect, snapshot.Shoot == ShootType.Hold, "LMB");
+			RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 4, 0), inputRect, snapshot.ShootHoming == ShootType.Hold, "RMB");
 		}
 		else
 		{
@@ -77,10 +85,12 @@ public static class ReplayEditorWindow
 		}
 	}
 
-	private static void RenderInput(bool used, string input)
+	private static void RenderInput(ImDrawListPtr drawList, Vector2 position, Vector2 size, bool used, ReadOnlySpan<char> input)
 	{
-		// TODO: Position the inputs.
-		Color color = used ? Color.Red : Color.White;
-		ImGui.TextColored(color, input);
+		uint color = ImGui.GetColorU32(used ? Color.Red : Color.White);
+		drawList.AddRect(position, position + size, color);
+
+		Vector2 textSize = ImGui.CalcTextSize(input);
+		drawList.AddText(position + (size - textSize) / 2, color, input);
 	}
 }
