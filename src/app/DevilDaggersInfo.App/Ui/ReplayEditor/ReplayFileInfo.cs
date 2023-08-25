@@ -8,7 +8,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.App.Ui.ReplayEditor;
 
-public static class ReplayEditorFileInfo
+public static class ReplayFileInfo
 {
 	public static void Render()
 	{

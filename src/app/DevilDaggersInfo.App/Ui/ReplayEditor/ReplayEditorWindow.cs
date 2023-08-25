@@ -34,7 +34,7 @@ public static class ReplayEditorWindow
 
 			ReplayEditorMenu.Render();
 
-			ReplayEditorFileInfo.Render();
+			ReplayFileInfo.Render();
 
 			ImGui.SliderFloat("Time", ref _time, 0, ReplayState.Replay.Header.Time, "%.4f", ImGuiSliderFlags.NoInput);
 
@@ -71,6 +71,9 @@ public static class ReplayEditorWindow
 			RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 3, inputSize), new(64, 32), snapshot.Jump is JumpType.StartedPress or JumpType.Hold, "Space");
 			RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 3, 0), inputRect, snapshot.Shoot == ShootType.Hold, "LMB");
 			RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 4, 0), inputRect, snapshot.ShootHoming == ShootType.Hold, "RMB");
+
+			ImGui.SetCursorScreenPos(origin + new Vector2(0, 96));
+			ReplayEvents.Render(ReplayState.Replay.EventsData);
 		}
 		else
 		{
