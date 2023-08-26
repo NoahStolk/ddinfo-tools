@@ -130,7 +130,7 @@ public static class ReplayEvents
 			ImGui.TextColored(Color.White, $"Look Speed: {initial.LookSpeed}");
 	}
 
-	private static void RenderHitEvents(IReadOnlyDictionary<int, HitEvent> hitEvents)
+	private static void RenderHitEvents(IReadOnlyList<(int Index, HitEvent Event)> hitEvents)
 	{
 		ImGui.TextColored(EnemiesV3_2.Skull4.Color, "Hit events");
 
@@ -142,21 +142,22 @@ public static class ReplayEvents
 			ImGui.TableSetupColumn("User Data", EventTableColumnFlags, 128);
 			ImGui.TableHeadersRow();
 
-			foreach (KeyValuePair<int, HitEvent> kvp in hitEvents)
+			for (int i = 0; i < hitEvents.Count; i++)
 			{
 				ImGui.TableNextRow();
 
-				NextColumnText(UnsafeSpan.Get(kvp.Key));
-				NextColumnText(UnsafeSpan.Get(kvp.Value.EntityIdA));
-				NextColumnText(UnsafeSpan.Get(kvp.Value.EntityIdB));
-				NextColumnText(UnsafeSpan.Get(kvp.Value.UserData));
+				(int index, HitEvent e) = hitEvents[i];
+				NextColumnText(UnsafeSpan.Get(index));
+				NextColumnText(UnsafeSpan.Get(e.EntityIdA));
+				NextColumnText(UnsafeSpan.Get(e.EntityIdB));
+				NextColumnText(UnsafeSpan.Get(e.UserData));
 			}
 
 			ImGui.EndTable();
 		}
 	}
 
-	private static void RenderSquidSpawnEvents(IReadOnlyDictionary<int, SquidSpawnEvent> squidSpawnEvents)
+	private static void RenderSquidSpawnEvents(IReadOnlyList<(int Index, SquidSpawnEvent Event)> squidSpawnEvents)
 	{
 		ImGui.TextColored(EnemiesV3_2.Squid3.Color, "Squid Spawn events");
 
@@ -170,22 +171,23 @@ public static class ReplayEvents
 			ImGui.TableSetupColumn("Rotation", EventTableColumnFlags, 128);
 			ImGui.TableHeadersRow();
 
-			foreach (KeyValuePair<int, SquidSpawnEvent> kvp in squidSpawnEvents)
+			for (int i = 0; i < squidSpawnEvents.Count; i++)
 			{
 				ImGui.TableNextRow();
 
-				NextColumnText(UnsafeSpan.Get(kvp.Key));
-				NextColumnText(GetSquidTypeText(kvp.Value.SquidType));
-				NextColumnText(UnsafeSpan.Get(kvp.Value.Position, "0.00"));
-				NextColumnText(UnsafeSpan.Get(kvp.Value.Direction, "0.00"));
-				NextColumnText(UnsafeSpan.Get(kvp.Value.RotationInRadians, "0.00"));
+				(int index, SquidSpawnEvent e) = squidSpawnEvents[i];
+				NextColumnText(UnsafeSpan.Get(index));
+				NextColumnText(GetSquidTypeText(e.SquidType));
+				NextColumnText(UnsafeSpan.Get(e.Position, "0.00"));
+				NextColumnText(UnsafeSpan.Get(e.Direction, "0.00"));
+				NextColumnText(UnsafeSpan.Get(e.RotationInRadians, "0.00"));
 			}
 
 			ImGui.EndTable();
 		}
 	}
 
-	private static void RenderSpiderSpawnEvents(IReadOnlyDictionary<int, SpiderSpawnEvent> spiderSpawnEvents)
+	private static void RenderSpiderSpawnEvents(IReadOnlyList<(int Index, SpiderSpawnEvent Event)> spiderSpawnEvents)
 	{
 		ImGui.TextColored(EnemiesV3_2.Spider2.Color, "Spider Spawn events");
 
@@ -198,15 +200,16 @@ public static class ReplayEvents
 			ImGui.TableSetupColumn("Position", EventTableColumnFlags, 196);
 			ImGui.TableHeadersRow();
 
-			foreach (KeyValuePair<int, SpiderSpawnEvent> kvp in spiderSpawnEvents)
+			for (int i = 0; i < spiderSpawnEvents.Count; i++)
 			{
 				ImGui.TableNextRow();
 
-				NextColumnText(UnsafeSpan.Get(kvp.Key));
-				NextColumnText(UnsafeSpan.Get(kvp.Value.EntityId));
-				NextColumnText(GetSpiderTypeText(kvp.Value.SpiderType));
-				NextColumnText(UnsafeSpan.Get(kvp.Value.A));
-				NextColumnText(UnsafeSpan.Get(kvp.Value.Position, "0.00"));
+				(int index, SpiderSpawnEvent e) = spiderSpawnEvents[i];
+				NextColumnText(UnsafeSpan.Get(index));
+				NextColumnText(UnsafeSpan.Get(e.EntityId));
+				NextColumnText(GetSpiderTypeText(e.SpiderType));
+				NextColumnText(UnsafeSpan.Get(e.A));
+				NextColumnText(UnsafeSpan.Get(e.Position, "0.00"));
 			}
 
 			ImGui.EndTable();
