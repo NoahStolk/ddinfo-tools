@@ -99,6 +99,7 @@ public static class ReplayEvents
 					RenderSpiderEggSpawnEvents(_eventCache.SpiderEggSpawnEvents, eventsData.EntityTypes);
 					RenderSpiderSpawnEvents(_eventCache.SpiderSpawnEvents, eventsData.EntityTypes);
 					RenderSquidSpawnEvents(_eventCache.SquidSpawnEvents, eventsData.EntityTypes);
+					RenderThornSpawnEvents(_eventCache.ThornSpawnEvents, eventsData.EntityTypes);
 					RenderHitEvents(_eventCache.HitEvents, eventsData.EntityTypes);
 				}
 			}
@@ -328,6 +329,38 @@ public static class ReplayEvents
 				NextColumnText(GetSquidTypeText(e.SquidType));
 				NextColumnText(UnsafeSpan.Get(e.Position, "0.00"));
 				NextColumnText(UnsafeSpan.Get(e.Direction, "0.00"));
+				NextColumnText(UnsafeSpan.Get(e.RotationInRadians, "0.00"));
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void RenderThornSpawnEvents(IReadOnlyList<(int Index, ThornSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
+	{
+		if (events.Count == 0)
+			return;
+
+		ImGui.TextColored(EnemiesV3_2.Thorn.Color, "Thorn Spawn events");
+
+		if (ImGui.BeginTable("ThornSpawnEvents", 5, EventTableFlags))
+		{
+			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
+			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("?", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("Position", EventTableColumnFlags, 192);
+			ImGui.TableSetupColumn("Rotation", EventTableColumnFlags, 128);
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < events.Count; i++)
+			{
+				ImGui.TableNextRow();
+
+				(int index, ThornSpawnEvent e) = events[i];
+				NextColumnText(UnsafeSpan.Get(index));
+				EntityColumn(entityTypes, e.EntityId);
+				NextColumnText(UnsafeSpan.Get(e.A));
+				NextColumnText(UnsafeSpan.Get(e.Position, "0.00"));
 				NextColumnText(UnsafeSpan.Get(e.RotationInRadians, "0.00"));
 			}
 
