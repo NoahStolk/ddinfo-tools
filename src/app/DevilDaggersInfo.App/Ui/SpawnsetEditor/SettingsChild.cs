@@ -11,8 +11,6 @@ namespace DevilDaggersInfo.App.Ui.SpawnsetEditor;
 
 public static class SettingsChild
 {
-	private static readonly IdBuffer _handLevelIdBuffer = new(16);
-
 	private static void InfoTooltipWhenDisabled(bool disabled, string tooltipText)
 	{
 		if (disabled)
@@ -187,8 +185,7 @@ public static class SettingsChild
 		for (int i = 0; i < EnumUtils.HandLevels.Count; i++)
 		{
 			HandLevel level = EnumUtils.HandLevels[i];
-			_handLevelIdBuffer.Overwrite("Lvl ", (int)level);
-			if (ImGui.RadioButton(_handLevelIdBuffer, level == SpawnsetState.Spawnset.HandLevel) && SpawnsetState.Spawnset.HandLevel != level)
+			if (ImGui.RadioButton(UnsafeSpan.Get($"Lvl {(int)level}"), level == SpawnsetState.Spawnset.HandLevel) && SpawnsetState.Spawnset.HandLevel != level)
 			{
 				SpawnsetState.Spawnset = SpawnsetState.Spawnset with { HandLevel = level };
 				SpawnsetHistoryUtils.Save(SpawnsetEditType.HandLevel);

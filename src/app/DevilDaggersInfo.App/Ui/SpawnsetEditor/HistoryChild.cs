@@ -10,8 +10,6 @@ namespace DevilDaggersInfo.App.Ui.SpawnsetEditor;
 
 public static class HistoryChild
 {
-	private static readonly IdBuffer _idBuffer = new(32);
-
 	private static bool _updateScroll;
 
 	static HistoryChild()
@@ -57,8 +55,7 @@ public static class HistoryChild
 				ImGui.PushStyleColor(ImGuiCol.ButtonActive, color + new Vector4(0.5f, 0.5f, 0.5f, 0));
 				ImGui.PushStyleColor(ImGuiCol.Border, i == CurrentHistoryIndex ? Color.White : Color.Black);
 
-				_idBuffer.Overwrite("HistoryButton", i);
-				ImGui.PushID(_idBuffer);
+				ImGui.PushID(UnsafeSpan.Get($"HistoryButton{i}"));
 				if (ImGui.Button(history.EditType.GetChange(), new(226, 20)))
 					SetHistoryIndex(i);
 

@@ -13,8 +13,6 @@ namespace DevilDaggersInfo.App.Ui.Practice.Main;
 public static class EndLoopTemplatesChild
 {
 	private static readonly List<float> _endLoopTimerStarts = new();
-	private static readonly IdBuffer _idBuffer = new(32);
-	private static readonly IdBuffer _idBufferChild = new(32);
 
 	static EndLoopTemplatesChild()
 	{
@@ -62,18 +60,16 @@ public static class EndLoopTemplatesChild
 	private static void RenderEndLoopTemplate(int waveIndex, float timerStart)
 	{
 		Vector2 buttonSize = new(PracticeWindow.TemplateWidth, 30);
-		_idBuffer.Overwrite("Wave", waveIndex + 1);
 		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(PracticeLogic.IsActive(HandLevel.Level4, 0, timerStart));
 		Color color = waveIndex % 3 == 2 ? EnemiesV3_2.Ghostpede.Color.ToEngineColor() : EnemiesV3_2.Gigapede.Color.ToEngineColor();
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
-		if (ImGui.BeginChild(_idBuffer, buttonSize, true))
+		if (ImGui.BeginChild(UnsafeSpan.Get($"Wave{waveIndex + 1}"), buttonSize, true))
 		{
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
 
-			_idBufferChild.Overwrite("WaveChild", waveIndex + 1);
-			if (ImGui.BeginChild(_idBufferChild, buttonSize, false, ImGuiWindowFlags.NoInputs))
+			if (ImGui.BeginChild(UnsafeSpan.Get($"WaveChild{waveIndex + 1}"), buttonSize, false, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 				{
@@ -83,11 +79,9 @@ public static class EndLoopTemplatesChild
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 8));
 
-				ReadOnlySpan<char> topRightTextString = UnsafeSpan.Get(timerStart, StringFormats.TimeFormat);
-
-				ImGui.TextColored(color with { A = textAlpha }, _idBuffer);
-				ImGui.SameLine(ImGui.GetWindowWidth() - ImGui.CalcTextSize(topRightTextString).X - 8);
-				ImGui.TextColored(Color.White with { A = textAlpha }, topRightTextString);
+				ImGui.TextColored(color with { A = textAlpha }, UnsafeSpan.Get($"Wave {waveIndex + 1}"));
+				ImGui.SameLine(ImGui.GetWindowWidth() - ImGui.CalcTextSize(UnsafeSpan.Get(timerStart, StringFormats.TimeFormat)).X - 8);
+				ImGui.TextColored(Color.White with { A = textAlpha }, UnsafeSpan.Get(timerStart, StringFormats.TimeFormat));
 			}
 
 			ImGui.EndChild(); // End WaveChild{waveIndex + 1}

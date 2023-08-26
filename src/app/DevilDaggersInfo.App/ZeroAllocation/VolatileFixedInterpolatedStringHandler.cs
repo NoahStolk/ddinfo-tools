@@ -20,8 +20,14 @@ public ref struct VolatileFixedInterpolatedStringHandler
 
 	public void AppendLiteral(string s)
 	{
-		s.CopyTo(0, UnsafeSpan.Buffer, _charsWritten, s.Length);
-		_charsWritten += s.Length;
+		if (s.TryCopyTo(UnsafeSpan.Buffer.AsSpan()[_charsWritten..]))
+			_charsWritten += s.Length;
+	}
+
+	public void AppendFormatted(ReadOnlySpan<char> s)
+	{
+		if (s.TryCopyTo(UnsafeSpan.Buffer.AsSpan()[_charsWritten..]))
+			_charsWritten += s.Length;
 	}
 
 	public void AppendFormatted<T>(T t, ReadOnlySpan<char> format = default, IFormatProvider? provider = null)

@@ -13,8 +13,6 @@ namespace DevilDaggersInfo.App.Ui.Practice.Main;
 
 public static class NoFarmTemplatesChild
 {
-	private static readonly IdBuffer _idBuffer = new(128);
-
 	private static readonly List<NoFarmTemplate> _noFarmTemplates = new()
 	{
 		new("First Spider I & Squid II", EnemiesV3_2.Squid2.Color.ToEngineColor(), HandLevel.Level1, 8, 39),
@@ -60,8 +58,6 @@ public static class NoFarmTemplatesChild
 	{
 		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(PracticeLogic.IsActive(noFarmTemplate));
 
-		ReadOnlySpan<char> timerText = UnsafeSpan.Get(noFarmTemplate.TimerStart, StringFormats.TimeFormat);
-
 		const int bufferLength = 32;
 		Span<char> gemsOrHomingText = stackalloc char[bufferLength];
 		PracticeWindow.GetGemsOrHomingText(noFarmTemplate.HandLevel, noFarmTemplate.AdditionalGems, gemsOrHomingText, out Color gemColor);
@@ -74,8 +70,7 @@ public static class NoFarmTemplatesChild
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, noFarmTemplate.Color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
 
-			_idBuffer.Overwrite(noFarmTemplate.Name, "Child");
-			if (ImGui.BeginChild(_idBuffer, buttonSize, false, ImGuiWindowFlags.NoInputs))
+			if (ImGui.BeginChild(UnsafeSpan.Get($"{noFarmTemplate.Name}Child"), buttonSize, false, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 				{
@@ -88,8 +83,8 @@ public static class NoFarmTemplatesChild
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 8));
 
 				ImGui.TextColored(noFarmTemplate.Color with { A = textAlpha }, noFarmTemplate.Name);
-				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(timerText).X - 8);
-				ImGui.TextColored(Color.White with { A = textAlpha }, timerText);
+				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(UnsafeSpan.Get(noFarmTemplate.TimerStart, StringFormats.TimeFormat)).X - 8);
+				ImGui.TextColored(Color.White with { A = textAlpha }, UnsafeSpan.Get(noFarmTemplate.TimerStart, StringFormats.TimeFormat));
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 0));
 
