@@ -13,6 +13,7 @@ namespace DevilDaggersInfo.App.Ui.ReplayEditor;
 
 public static class ReplayEntitiesChild
 {
+	private static int _startId;
 	private static EnemyHitLog? _enemyHitLog;
 
 	public static void Reset()
@@ -22,15 +23,30 @@ public static class ReplayEntitiesChild
 
 	public static void Render(ReplayEventsData eventsData)
 	{
-		if (ImGui.BeginChild("ReplayEntities", new Vector2(320, 0)))
+		if (ImGui.BeginChild("ReplayEntities", new(320, 0)))
 		{
+			const int maxIds = 1000;
+
+			Vector2 iconSize = new(16);
+			if (ImGuiImage.ImageButton("Start", Root.InternalResources.ArrowStartTexture.Handle, iconSize))
+				_startId = 0;
+			ImGui.SameLine();
+			if (ImGuiImage.ImageButton("Back", Root.InternalResources.ArrowLeftTexture.Handle, iconSize))
+				_startId = Math.Max(0, _startId - maxIds);
+			ImGui.SameLine();
+			if (ImGuiImage.ImageButton("Forward", Root.InternalResources.ArrowRightTexture.Handle, iconSize))
+				_startId = Math.Min(eventsData.TickCount - maxIds, _startId + maxIds);
+			ImGui.SameLine();
+			if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Handle, iconSize))
+				_startId = eventsData.TickCount - maxIds;
+
 			if (ImGui.BeginTable("ReplayEntitiesTable", 4, ImGuiTableFlags.None))
 			{
 				ImGui.TableSetupColumn("Id", ImGuiTableColumnFlags.WidthFixed, 64);
 				ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.None, 128);
 				ImGui.TableHeadersRow();
 
-				for (int i = 0; i < eventsData.EntityTypes.Count; i++)
+				for (int i = _startId; i < Math.Min(_startId + maxIds, eventsData.EntityTypes.Count); i++)
 				{
 					ImGui.TableNextRow();
 
