@@ -102,6 +102,10 @@ public static class ReplayEvents
 					RenderThornSpawnEvents(_eventCache.ThornSpawnEvents, eventsData.EntityTypes);
 
 					RenderDaggerSpawnEvents(_eventCache.DaggerSpawnEvents, eventsData.EntityTypes);
+					RenderDeathEvents(_eventCache.DeathEvents);
+					RenderEndEvents(_eventCache.EndEvents);
+					RenderEntityOrientationEvents(_eventCache.EntityOrientationEvents, eventsData.EntityTypes);
+					RenderEntityPositionEvents(_eventCache.EntityPositionEvents, eventsData.EntityTypes);
 					RenderHitEvents(_eventCache.HitEvents, eventsData.EntityTypes);
 				}
 			}
@@ -404,6 +408,112 @@ public static class ReplayEvents
 				NextColumnText(UnsafeSpan.Get(e.Position));
 				NextColumnText(UnsafeSpan.Get(e.Orientation));
 				NextColumnText(e.IsShot ? "Shot" : "Rapid");
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void RenderDeathEvents(IReadOnlyList<(int Index, DeathEvent Event)> events)
+	{
+		if (events.Count == 0)
+			return;
+
+		ImGui.TextColored(Color.Red, "Death");
+
+		if (ImGui.BeginTable("Death", 2, EventTableFlags))
+		{
+			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
+			ImGui.TableSetupColumn("Death Type", EventTableColumnFlags, 192);
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < events.Count; i++)
+			{
+				ImGui.TableNextRow();
+
+				(int index, DeathEvent e) = events[i];
+				NextColumnText(UnsafeSpan.Get(index));
+				NextColumnText(UnsafeSpan.Get(Deaths.GetDeathByType(GameConstants.CurrentVersion, (byte)e.DeathType)?.Name ?? "???"));
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void RenderEndEvents(IReadOnlyList<(int Index, EndEvent Event)> events)
+	{
+		if (events.Count == 0)
+			return;
+
+		ImGui.TextColored(Color.Red, "End");
+
+		if (ImGui.BeginTable("End", 1, EventTableFlags))
+		{
+			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < events.Count; i++)
+			{
+				ImGui.TableNextRow();
+
+				(int index, _) = events[i];
+				NextColumnText(UnsafeSpan.Get(index));
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void RenderEntityOrientationEvents(IReadOnlyList<(int Index, EntityOrientationEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
+	{
+		if (events.Count == 0)
+			return;
+
+		ImGui.TextColored(Color.Yellow, "Entity Orientation events");
+
+		if (ImGui.BeginTable("EntityOrientationEvents", 3, EventTableFlags))
+		{
+			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
+			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("Orientation", EventTableColumnFlags, 192);
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < events.Count; i++)
+			{
+				ImGui.TableNextRow();
+
+				(int index, EntityOrientationEvent e) = events[i];
+				NextColumnText(UnsafeSpan.Get(index));
+				EntityColumn(entityTypes, e.EntityId);
+				NextColumnText(UnsafeSpan.Get(e.Orientation));
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void RenderEntityPositionEvents(IReadOnlyList<(int Index, EntityPositionEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
+	{
+		if (events.Count == 0)
+			return;
+
+		ImGui.TextColored(Color.Yellow, "Entity Position events");
+
+		if (ImGui.BeginTable("EntityPositionEvents", 3, EventTableFlags))
+		{
+			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
+			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("Position", EventTableColumnFlags, 192);
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < events.Count; i++)
+			{
+				ImGui.TableNextRow();
+
+				(int index, EntityPositionEvent e) = events[i];
+				NextColumnText(UnsafeSpan.Get(index));
+				EntityColumn(entityTypes, e.EntityId);
+				NextColumnText(UnsafeSpan.Get(e.Position));
 			}
 
 			ImGui.EndTable();
