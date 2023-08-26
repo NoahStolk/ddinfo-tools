@@ -26,6 +26,7 @@ public static class UnsafeSpan
 
 		value.X.TryFormat(_buffer, out int charsWritten, format, provider);
 		_buffer[charsWritten++] = ',';
+		_buffer[charsWritten++] = ' ';
 		value.Y.TryFormat(_buffer.AsSpan()[charsWritten..], out int charsWrittenY, format, provider);
 		charsWritten += charsWrittenY;
 		return _buffer.AsSpan(0, charsWritten);
@@ -37,10 +38,13 @@ public static class UnsafeSpan
 
 		value.X.TryFormat(_buffer, out int charsWritten, format, provider);
 		_buffer[charsWritten++] = ',';
+		_buffer[charsWritten++] = ' ';
 		value.Y.TryFormat(_buffer.AsSpan()[charsWritten..], out int charsWrittenY, format, provider);
-		_buffer[charsWritten + charsWrittenY++] = ',';
-		value.Z.TryFormat(_buffer.AsSpan()[(charsWritten + charsWrittenY)..], out int charsWrittenZ, format, provider);
-		charsWritten += charsWrittenY + charsWrittenZ;
+		charsWritten += charsWrittenY;
+		_buffer[charsWritten++] = ',';
+		_buffer[charsWritten++] = ' ';
+		value.Z.TryFormat(_buffer.AsSpan()[charsWritten..], out int charsWrittenZ, format, provider);
+		charsWritten += charsWrittenZ;
 		return _buffer.AsSpan(0, charsWritten);
 	}
 }

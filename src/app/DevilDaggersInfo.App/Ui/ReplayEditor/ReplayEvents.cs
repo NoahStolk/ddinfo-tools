@@ -5,62 +5,101 @@ using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Events.Interfaces;
+using DevilDaggersInfo.Core.Wiki;
 using ImGuiNET;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace DevilDaggersInfo.App.Ui.ReplayEditor;
 
 public static class ReplayEvents
 {
+	private static readonly EventCache _eventCache = new();
+
+	private static int _startTick;
+	private static bool _showEvents = true;
+	private static bool _showTicksWithoutEvents = true;
+
+	private static ImGuiTableFlags EventTableFlags => ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX;
+	private static ImGuiTableColumnFlags EventTableColumnFlags => ImGuiTableColumnFlags.None;
+
 	public static void Render(ReplayEventsData eventsData)
 	{
 		const int maxTicks = 30;
 
-		if (ImGui.BeginTable("ReplayEventsTable", 3, ImGuiTableFlags.None))
+		Vector2 iconSize = new(16);
+		if (ImGuiImage.ImageButton("Start", Root.InternalResources.ArrowStartTexture.Handle, iconSize))
+			_startTick = 0;
+		ImGui.SameLine();
+		if (ImGuiImage.ImageButton("Back", Root.InternalResources.ArrowLeftTexture.Handle, iconSize))
+			_startTick = Math.Max(0, _startTick - maxTicks);
+		ImGui.SameLine();
+		if (ImGuiImage.ImageButton("Forward", Root.InternalResources.ArrowRightTexture.Handle, iconSize))
+			_startTick = Math.Min(eventsData.TickCount - maxTicks, _startTick + maxTicks);
+		ImGui.SameLine();
+		if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Handle, iconSize))
+			_startTick = eventsData.TickCount - maxTicks;
+
+		ImGui.Checkbox("Show events", ref _showEvents);
+		ImGui.SameLine();
+		ImGui.Checkbox("Show ticks without events", ref _showTicksWithoutEvents);
+
+		Color rowOdd = Color.Gray(0.1f);
+		Color rowEven = Color.Gray(0.05f);
+		if (ImGui.BeginTable("ReplayEventsTable", 4, ImGuiTableFlags.None))
 		{
 			ImGui.TableSetupColumn("Tick", ImGuiTableColumnFlags.None, 64);
 			ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.None, 64);
+			ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.None, 128);
 			ImGui.TableSetupColumn("Events", ImGuiTableColumnFlags.None, 384);
 			ImGui.TableHeadersRow();
 
-			int tickIndex = 0;
-			for (int i = 0; i < eventsData.Events.Count; i++)
+			for (int i = _startTick; i < Math.Min(_startTick + maxTicks, eventsData.TickCount); i++)
 			{
-				ImGui.TableNextRow();
-				IEvent e = eventsData.Events[i];
-				if (e is IInputsEvent ie)
-				{
-					ImGui.TableNextColumn();
-					ImGui.Text(UnsafeSpan.Get(tickIndex));
-					ImGui.TableNextColumn();
-					ImGui.Text(UnsafeSpan.Get(tickIndex / 60f, StringFormats.TimeFormat));
-					ImGui.TableNextColumn();
-					RenderInputsEvent(ie);
+				int offset = eventsData.EventOffsetsPerTick[i];
+				int count = eventsData.EventOffsetsPerTick[i + 1] - offset;
 
-					tickIndex++;
-				}
-				else
+				IInputsEvent? inputsEvent = null;
+				_eventCache.Clear();
+				for (int j = offset; j < offset + count; j++)
 				{
-					ImGui.TableNextColumn();
-					ImGui.TableNextColumn();
-					ImGui.TableNextColumn();
-
-					if (e is SquidSpawnEvent sse)
-					{
-						RenderSquidSpawnEvent(sse);
-					}
-					else if (e is HitEvent he)
-					{
-						RenderHitEvent(he);
-					}
+					IEvent @event = eventsData.Events[j];
+					if (@event is IInputsEvent ie)
+						inputsEvent = ie;
 					else
-					{
-						ImGui.Text("TODO");
-					}
+						_eventCache.Add(j, @event);
 				}
 
-				if (tickIndex >= Math.Min(maxTicks, eventsData.TickCount))
-					break;
+				if (!_showTicksWithoutEvents && _eventCache.Count == 0)
+					continue;
+
+				ImGui.TableNextRow();
+
+				ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, ImGui.GetColorU32(i % 2 == 0 ? rowEven : rowOdd));
+
+				ImGui.TableNextColumn();
+				ImGui.Text(UnsafeSpan.Get(i));
+				ImGui.TableNextColumn();
+				ImGui.Text(UnsafeSpan.Get(i / 60f, StringFormats.TimeFormat));
+				ImGui.TableNextColumn();
+				if (inputsEvent != null)
+					RenderInputsEvent(inputsEvent);
+				else
+					ImGui.Text("ERROR: no inputs");
+
+				ImGui.TableNextColumn();
+
+				if (_showEvents)
+				{
+					if (_eventCache.HitEvents.Count > 0)
+						RenderHitEvents(_eventCache.HitEvents);
+
+					if (_eventCache.SquidSpawnEvents.Count > 0)
+						RenderSquidSpawnEvents(_eventCache.SquidSpawnEvents);
+
+					if (_eventCache.SpiderSpawnEvents.Count > 0)
+						RenderSpiderSpawnEvents(_eventCache.SpiderSpawnEvents);
+				}
 			}
 
 			ImGui.EndTable();
@@ -77,11 +116,11 @@ public static class ReplayEvents
 		ImGui.SameLine();
 		ImGui.TextColored(ie.Right ? Color.Red : Color.White, "D");
 		ImGui.SameLine();
-		ImGui.TextColored(GetJumpTypeColor(ie.Jump), "[Jump]");
+		ImGui.TextColored(GetJumpTypeColor(ie.Jump), "[Space]");
 		ImGui.SameLine();
-		ImGui.TextColored(GetShootTypeColor(ie.Shoot), "[Shoot]");
+		ImGui.TextColored(GetShootTypeColor(ie.Shoot), "[LMB]");
 		ImGui.SameLine();
-		ImGui.TextColored(GetShootTypeColor(ie.ShootHoming), "[Shoot Homing]");
+		ImGui.TextColored(GetShootTypeColor(ie.ShootHoming), "[RMB]");
 		ImGui.SameLine();
 		ImGui.TextColored(ie.MouseX == 0 ? Color.White : Color.Red, UnsafeSpan.Get(ie.MouseX));
 		ImGui.SameLine();
@@ -91,52 +130,93 @@ public static class ReplayEvents
 			ImGui.TextColored(Color.White, $"Look Speed: {initial.LookSpeed}");
 	}
 
-	private static void RenderSquidSpawnEvent(SquidSpawnEvent e)
+	private static void RenderHitEvents(IReadOnlyDictionary<int, HitEvent> hitEvents)
 	{
-		if (ImGui.BeginTable("SquidSpawn", 5, ImGuiTableFlags.None))
+		ImGui.TextColored(EnemiesV3_2.Skull4.Color, "Hit events");
+
+		if (ImGui.BeginTable("HitEvents", 4, EventTableFlags))
 		{
-			ImGui.TableSetupColumn("Id", ImGuiTableColumnFlags.None, 64);
-			ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.None, 64);
-			ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.None, 128);
-			ImGui.TableSetupColumn("Direction", ImGuiTableColumnFlags.None, 128);
-			ImGui.TableSetupColumn("Rotation", ImGuiTableColumnFlags.None, 128);
+			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
+			ImGui.TableSetupColumn("Entity Id A", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("Entity Id B", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("User Data", EventTableColumnFlags, 128);
 			ImGui.TableHeadersRow();
 
-			ImGui.TableNextRow();
-			ImGui.TableNextColumn();
-			ImGui.Text(UnsafeSpan.Get(e.EntityId));
-			ImGui.TableNextColumn();
-			ImGui.TextColored(Color.White, GetSquidTypeText(e.SquidType));
-			ImGui.TableNextColumn();
-			ImGui.TextColored(Color.White, UnsafeSpan.Get(e.Position, "0.00"));
-			ImGui.TableNextColumn();
-			ImGui.TextColored(Color.White, UnsafeSpan.Get(e.Direction, "0.00"));
-			ImGui.TableNextColumn();
-			ImGui.TextColored(Color.White, UnsafeSpan.Get(e.RotationInRadians, "0.00"));
+			foreach (KeyValuePair<int, HitEvent> kvp in hitEvents)
+			{
+				ImGui.TableNextRow();
+
+				NextColumnText(UnsafeSpan.Get(kvp.Key));
+				NextColumnText(UnsafeSpan.Get(kvp.Value.EntityIdA));
+				NextColumnText(UnsafeSpan.Get(kvp.Value.EntityIdB));
+				NextColumnText(UnsafeSpan.Get(kvp.Value.UserData));
+			}
 
 			ImGui.EndTable();
 		}
 	}
 
-	private static void RenderHitEvent(HitEvent e)
+	private static void RenderSquidSpawnEvents(IReadOnlyDictionary<int, SquidSpawnEvent> squidSpawnEvents)
 	{
-		if (ImGui.BeginTable("HitEvent", 3, ImGuiTableFlags.None))
+		ImGui.TextColored(EnemiesV3_2.Squid3.Color, "Squid Spawn events");
+
+		if (ImGui.BeginTable("SquidSpawnEvents", 6, EventTableFlags))
 		{
-			ImGui.TableSetupColumn("Id A", ImGuiTableColumnFlags.None, 64);
-			ImGui.TableSetupColumn("Id B", ImGuiTableColumnFlags.None, 64);
-			ImGui.TableSetupColumn("User Data", ImGuiTableColumnFlags.None, 128);
+			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
+			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("Type", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("Position", EventTableColumnFlags, 192);
+			ImGui.TableSetupColumn("Direction", EventTableColumnFlags, 192);
+			ImGui.TableSetupColumn("Rotation", EventTableColumnFlags, 128);
 			ImGui.TableHeadersRow();
 
-			ImGui.TableNextRow();
-			ImGui.TableNextColumn();
-			ImGui.Text(UnsafeSpan.Get(e.EntityIdA));
-			ImGui.TableNextColumn();
-			ImGui.Text(UnsafeSpan.Get(e.EntityIdB));
-			ImGui.TableNextColumn();
-			ImGui.Text(UnsafeSpan.Get(e.UserData));
+			foreach (KeyValuePair<int, SquidSpawnEvent> kvp in squidSpawnEvents)
+			{
+				ImGui.TableNextRow();
+
+				NextColumnText(UnsafeSpan.Get(kvp.Key));
+				NextColumnText(GetSquidTypeText(kvp.Value.SquidType));
+				NextColumnText(UnsafeSpan.Get(kvp.Value.Position, "0.00"));
+				NextColumnText(UnsafeSpan.Get(kvp.Value.Direction, "0.00"));
+				NextColumnText(UnsafeSpan.Get(kvp.Value.RotationInRadians, "0.00"));
+			}
 
 			ImGui.EndTable();
 		}
+	}
+
+	private static void RenderSpiderSpawnEvents(IReadOnlyDictionary<int, SpiderSpawnEvent> spiderSpawnEvents)
+	{
+		ImGui.TextColored(EnemiesV3_2.Spider2.Color, "Spider Spawn events");
+
+		if (ImGui.BeginTable("SpiderSpawnEvents", 5, EventTableFlags))
+		{
+			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
+			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("Type", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("?", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("Position", EventTableColumnFlags, 196);
+			ImGui.TableHeadersRow();
+
+			foreach (KeyValuePair<int, SpiderSpawnEvent> kvp in spiderSpawnEvents)
+			{
+				ImGui.TableNextRow();
+
+				NextColumnText(UnsafeSpan.Get(kvp.Key));
+				NextColumnText(UnsafeSpan.Get(kvp.Value.EntityId));
+				NextColumnText(GetSpiderTypeText(kvp.Value.SpiderType));
+				NextColumnText(UnsafeSpan.Get(kvp.Value.A));
+				NextColumnText(UnsafeSpan.Get(kvp.Value.Position, "0.00"));
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void NextColumnText(ReadOnlySpan<char> text)
+	{
+		ImGui.TableNextColumn();
+		ImGui.Text(text);
 	}
 
 	private static ReadOnlySpan<char> GetSquidTypeText(SquidType squidType) => squidType switch
@@ -144,6 +224,13 @@ public static class ReplayEvents
 		SquidType.Squid1 => "Squid I",
 		SquidType.Squid2 => "Squid II",
 		SquidType.Squid3 => "Squid III",
+		_ => throw new UnreachableException(),
+	};
+
+	private static ReadOnlySpan<char> GetSpiderTypeText(SpiderType spiderType) => spiderType switch
+	{
+		SpiderType.Spider1 => "Spider I",
+		SpiderType.Spider2 => "Spider II",
 		_ => throw new UnreachableException(),
 	};
 
