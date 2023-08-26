@@ -93,14 +93,17 @@ public static class ReplayEvents
 
 				if (_showEvents)
 				{
-					if (_eventCache.HitEvents.Count > 0)
-						RenderHitEvents(_eventCache.HitEvents, eventsData.EntityTypes);
+					if (_eventCache.BoidSpawnEvents.Count > 0)
+						RenderBoidSpawnEvents(_eventCache.BoidSpawnEvents, eventsData.EntityTypes);
+
+					if (_eventCache.SpiderSpawnEvents.Count > 0)
+						RenderSpiderSpawnEvents(_eventCache.SpiderSpawnEvents, eventsData.EntityTypes);
 
 					if (_eventCache.SquidSpawnEvents.Count > 0)
 						RenderSquidSpawnEvents(_eventCache.SquidSpawnEvents, eventsData.EntityTypes);
 
-					if (_eventCache.SpiderSpawnEvents.Count > 0)
-						RenderSpiderSpawnEvents(_eventCache.SpiderSpawnEvents, eventsData.EntityTypes);
+					if (_eventCache.HitEvents.Count > 0)
+						RenderHitEvents(_eventCache.HitEvents, eventsData.EntityTypes);
 				}
 			}
 
@@ -134,7 +137,7 @@ public static class ReplayEvents
 
 	private static void RenderHitEvents(IReadOnlyList<(int Index, HitEvent Event)> hitEvents, IReadOnlyList<EntityType> entityTypes)
 	{
-		ImGui.TextColored(EnemiesV3_2.Skull4.Color, "Hit events");
+		ImGui.TextColored(Color.Orange, "Hit events");
 
 		if (ImGui.BeginTable("HitEvents", 4, EventTableFlags))
 		{
@@ -153,6 +156,74 @@ public static class ReplayEvents
 				EntityColumn(entityTypes, e.EntityIdA);
 				EntityColumn(entityTypes, e.EntityIdB);
 				NextColumnText(UnsafeSpan.Get(e.UserData));
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void RenderBoidSpawnEvents(IReadOnlyList<(int Index, BoidSpawnEvent Event)> boidSpawnEvents, IReadOnlyList<EntityType> entityTypes)
+	{
+		ImGui.TextColored(EnemiesV3_2.Skull4.Color, "Boid Spawn events");
+
+		if (ImGui.BeginTable("SpiderSpawnEvents", 10, EventTableFlags))
+		{
+			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
+			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("Spawner Entity Id", EventTableColumnFlags, 196);
+			ImGui.TableSetupColumn("Type", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("Position", EventTableColumnFlags, 196);
+			ImGui.TableSetupColumn("?", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("?", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("?", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("?", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("Speed", EventTableColumnFlags, 128);
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < boidSpawnEvents.Count; i++)
+			{
+				ImGui.TableNextRow();
+
+				(int index, BoidSpawnEvent e) = boidSpawnEvents[i];
+				NextColumnText(UnsafeSpan.Get(index));
+				EntityColumn(entityTypes, e.EntityId);
+				EntityColumn(entityTypes, e.SpawnerEntityId);
+				NextColumnText(GetBoidTypeText(e.BoidType));
+				NextColumnText(UnsafeSpan.Get(e.Position, "0.00"));
+				NextColumnText(UnsafeSpan.Get(e.A));
+				NextColumnText(UnsafeSpan.Get(e.B));
+				NextColumnText(UnsafeSpan.Get(e.C));
+				NextColumnText(UnsafeSpan.Get(e.D));
+				NextColumnText(UnsafeSpan.Get(e.Speed, "0.00"));
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void RenderSpiderSpawnEvents(IReadOnlyList<(int Index, SpiderSpawnEvent Event)> spiderSpawnEvents, IReadOnlyList<EntityType> entityTypes)
+	{
+		ImGui.TextColored(EnemiesV3_2.Spider2.Color, "Spider Spawn events");
+
+		if (ImGui.BeginTable("SpiderSpawnEvents", 5, EventTableFlags))
+		{
+			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
+			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("Type", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("?", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("Position", EventTableColumnFlags, 196);
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < spiderSpawnEvents.Count; i++)
+			{
+				ImGui.TableNextRow();
+
+				(int index, SpiderSpawnEvent e) = spiderSpawnEvents[i];
+				NextColumnText(UnsafeSpan.Get(index));
+				EntityColumn(entityTypes, e.EntityId);
+				NextColumnText(GetSpiderTypeText(e.SpiderType));
+				NextColumnText(UnsafeSpan.Get(e.A));
+				NextColumnText(UnsafeSpan.Get(e.Position, "0.00"));
 			}
 
 			ImGui.EndTable();
@@ -190,35 +261,6 @@ public static class ReplayEvents
 		}
 	}
 
-	private static void RenderSpiderSpawnEvents(IReadOnlyList<(int Index, SpiderSpawnEvent Event)> spiderSpawnEvents, IReadOnlyList<EntityType> entityTypes)
-	{
-		ImGui.TextColored(EnemiesV3_2.Spider2.Color, "Spider Spawn events");
-
-		if (ImGui.BeginTable("SpiderSpawnEvents", 5, EventTableFlags))
-		{
-			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
-			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
-			ImGui.TableSetupColumn("Type", EventTableColumnFlags, 128);
-			ImGui.TableSetupColumn("?", EventTableColumnFlags, 128);
-			ImGui.TableSetupColumn("Position", EventTableColumnFlags, 196);
-			ImGui.TableHeadersRow();
-
-			for (int i = 0; i < spiderSpawnEvents.Count; i++)
-			{
-				ImGui.TableNextRow();
-
-				(int index, SpiderSpawnEvent e) = spiderSpawnEvents[i];
-				NextColumnText(UnsafeSpan.Get(index));
-				EntityColumn(entityTypes, e.EntityId);
-				NextColumnText(GetSpiderTypeText(e.SpiderType));
-				NextColumnText(UnsafeSpan.Get(e.A));
-				NextColumnText(UnsafeSpan.Get(e.Position, "0.00"));
-			}
-
-			ImGui.EndTable();
-		}
-	}
-
 	private static void NextColumnText(ReadOnlySpan<char> text)
 	{
 		ImGui.TableNextColumn();
@@ -227,7 +269,7 @@ public static class ReplayEvents
 
 	private static void EntityColumn(IReadOnlyList<EntityType> entityTypes, int entityId)
 	{
-		EntityType? entityType = entityId < entityTypes.Count ? entityTypes[entityId] : null;
+		EntityType? entityType = entityId >= 0 && entityId < entityTypes.Count ? entityTypes[entityId] : null;
 
 		ImGui.TableNextColumn();
 		ImGui.Text(UnsafeSpan.Get(entityId));
@@ -239,11 +281,12 @@ public static class ReplayEvents
 		ImGui.Text(")");
 	}
 
-	private static ReadOnlySpan<char> GetSquidTypeText(SquidType squidType) => squidType switch
+	private static ReadOnlySpan<char> GetBoidTypeText(BoidType boidType) => boidType switch
 	{
-		SquidType.Squid1 => "Squid1",
-		SquidType.Squid2 => "Squid2",
-		SquidType.Squid3 => "Squid3",
+		BoidType.Skull1 => "Skull1",
+		BoidType.Skull2 => "Skull2",
+		BoidType.Skull3 => "Skull3",
+		BoidType.Skull4 => "Skull4",
 		_ => throw new UnreachableException(),
 	};
 
@@ -251,6 +294,14 @@ public static class ReplayEvents
 	{
 		SpiderType.Spider1 => "Spider1",
 		SpiderType.Spider2 => "Spider2",
+		_ => throw new UnreachableException(),
+	};
+
+	private static ReadOnlySpan<char> GetSquidTypeText(SquidType squidType) => squidType switch
+	{
+		SquidType.Squid1 => "Squid1",
+		SquidType.Squid2 => "Squid2",
+		SquidType.Squid3 => "Squid3",
 		_ => throw new UnreachableException(),
 	};
 

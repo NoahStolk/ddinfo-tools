@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Core.Replay.Numerics;
 using System.Numerics;
 
 namespace DevilDaggersInfo.App.ZeroAllocation;
@@ -32,6 +33,22 @@ public static class UnsafeSpan
 	}
 
 	public static Span<char> Get(Vector3 value, ReadOnlySpan<char> format = default, IFormatProvider? provider = default)
+	{
+		Array.Clear(_buffer);
+
+		value.X.TryFormat(_buffer, out int charsWritten, format, provider);
+		_buffer[charsWritten++] = ',';
+		_buffer[charsWritten++] = ' ';
+		value.Y.TryFormat(_buffer.AsSpan()[charsWritten..], out int charsWrittenY, format, provider);
+		charsWritten += charsWrittenY;
+		_buffer[charsWritten++] = ',';
+		_buffer[charsWritten++] = ' ';
+		value.Z.TryFormat(_buffer.AsSpan()[charsWritten..], out int charsWrittenZ, format, provider);
+		charsWritten += charsWrittenZ;
+		return _buffer.AsSpan(0, charsWritten);
+	}
+
+	public static Span<char> Get(Int16Vec3 value, ReadOnlySpan<char> format = default, IFormatProvider? provider = default)
 	{
 		Array.Clear(_buffer);
 
