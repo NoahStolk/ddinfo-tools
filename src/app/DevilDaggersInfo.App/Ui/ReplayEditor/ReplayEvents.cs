@@ -1,4 +1,6 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
+using DevilDaggersInfo.App.Extensions;
+using DevilDaggersInfo.App.Utils;
 using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Common;
 using DevilDaggersInfo.Core.Replay;
@@ -92,13 +94,13 @@ public static class ReplayEvents
 				if (_showEvents)
 				{
 					if (_eventCache.HitEvents.Count > 0)
-						RenderHitEvents(_eventCache.HitEvents);
+						RenderHitEvents(_eventCache.HitEvents, eventsData.EntityTypes);
 
 					if (_eventCache.SquidSpawnEvents.Count > 0)
-						RenderSquidSpawnEvents(_eventCache.SquidSpawnEvents);
+						RenderSquidSpawnEvents(_eventCache.SquidSpawnEvents, eventsData.EntityTypes);
 
 					if (_eventCache.SpiderSpawnEvents.Count > 0)
-						RenderSpiderSpawnEvents(_eventCache.SpiderSpawnEvents);
+						RenderSpiderSpawnEvents(_eventCache.SpiderSpawnEvents, eventsData.EntityTypes);
 				}
 			}
 
@@ -130,7 +132,7 @@ public static class ReplayEvents
 			ImGui.TextColored(Color.White, $"Look Speed: {initial.LookSpeed}");
 	}
 
-	private static void RenderHitEvents(IReadOnlyList<(int Index, HitEvent Event)> hitEvents)
+	private static void RenderHitEvents(IReadOnlyList<(int Index, HitEvent Event)> hitEvents, IReadOnlyList<EntityType> entityTypes)
 	{
 		ImGui.TextColored(EnemiesV3_2.Skull4.Color, "Hit events");
 
@@ -148,8 +150,8 @@ public static class ReplayEvents
 
 				(int index, HitEvent e) = hitEvents[i];
 				NextColumnText(UnsafeSpan.Get(index));
-				NextColumnText(UnsafeSpan.Get(e.EntityIdA));
-				NextColumnText(UnsafeSpan.Get(e.EntityIdB));
+				EntityColumn(entityTypes, e.EntityIdA);
+				EntityColumn(entityTypes, e.EntityIdB);
 				NextColumnText(UnsafeSpan.Get(e.UserData));
 			}
 
@@ -157,7 +159,7 @@ public static class ReplayEvents
 		}
 	}
 
-	private static void RenderSquidSpawnEvents(IReadOnlyList<(int Index, SquidSpawnEvent Event)> squidSpawnEvents)
+	private static void RenderSquidSpawnEvents(IReadOnlyList<(int Index, SquidSpawnEvent Event)> squidSpawnEvents, IReadOnlyList<EntityType> entityTypes)
 	{
 		ImGui.TextColored(EnemiesV3_2.Squid3.Color, "Squid Spawn events");
 
@@ -177,6 +179,7 @@ public static class ReplayEvents
 
 				(int index, SquidSpawnEvent e) = squidSpawnEvents[i];
 				NextColumnText(UnsafeSpan.Get(index));
+				EntityColumn(entityTypes, e.EntityId);
 				NextColumnText(GetSquidTypeText(e.SquidType));
 				NextColumnText(UnsafeSpan.Get(e.Position, "0.00"));
 				NextColumnText(UnsafeSpan.Get(e.Direction, "0.00"));
@@ -187,7 +190,7 @@ public static class ReplayEvents
 		}
 	}
 
-	private static void RenderSpiderSpawnEvents(IReadOnlyList<(int Index, SpiderSpawnEvent Event)> spiderSpawnEvents)
+	private static void RenderSpiderSpawnEvents(IReadOnlyList<(int Index, SpiderSpawnEvent Event)> spiderSpawnEvents, IReadOnlyList<EntityType> entityTypes)
 	{
 		ImGui.TextColored(EnemiesV3_2.Spider2.Color, "Spider Spawn events");
 
@@ -206,7 +209,7 @@ public static class ReplayEvents
 
 				(int index, SpiderSpawnEvent e) = spiderSpawnEvents[i];
 				NextColumnText(UnsafeSpan.Get(index));
-				NextColumnText(UnsafeSpan.Get(e.EntityId));
+				EntityColumn(entityTypes, e.EntityId);
 				NextColumnText(GetSpiderTypeText(e.SpiderType));
 				NextColumnText(UnsafeSpan.Get(e.A));
 				NextColumnText(UnsafeSpan.Get(e.Position, "0.00"));
@@ -222,18 +225,32 @@ public static class ReplayEvents
 		ImGui.Text(text);
 	}
 
+	private static void EntityColumn(IReadOnlyList<EntityType> entityTypes, int entityId)
+	{
+		EntityType? entityType = entityId < entityTypes.Count ? entityTypes[entityId] : null;
+
+		ImGui.TableNextColumn();
+		ImGui.Text(UnsafeSpan.Get(entityId));
+		ImGui.SameLine();
+		ImGui.Text("(");
+		ImGui.SameLine();
+		ImGui.TextColored(GetEntityTypeColor(entityType), entityType.HasValue ? EnumUtils.EntityTypeNames[entityType.Value] : "???");
+		ImGui.SameLine();
+		ImGui.Text(")");
+	}
+
 	private static ReadOnlySpan<char> GetSquidTypeText(SquidType squidType) => squidType switch
 	{
-		SquidType.Squid1 => "Squid I",
-		SquidType.Squid2 => "Squid II",
-		SquidType.Squid3 => "Squid III",
+		SquidType.Squid1 => "Squid1",
+		SquidType.Squid2 => "Squid2",
+		SquidType.Squid3 => "Squid3",
 		_ => throw new UnreachableException(),
 	};
 
 	private static ReadOnlySpan<char> GetSpiderTypeText(SpiderType spiderType) => spiderType switch
 	{
-		SpiderType.Spider1 => "Spider I",
-		SpiderType.Spider2 => "Spider II",
+		SpiderType.Spider1 => "Spider1",
+		SpiderType.Spider2 => "Spider2",
 		_ => throw new UnreachableException(),
 	};
 
@@ -250,4 +267,37 @@ public static class ReplayEvents
 		ShootType.Release => Color.Red,
 		_ => Color.White,
 	};
+
+	private static Color GetEntityTypeColor(EntityType? entityType)
+	{
+		DevilDaggersInfo.Core.Wiki.Structs.Color color = entityType switch
+		{
+			EntityType.Level1Dagger => UpgradesV3_2.Level1.Color,
+			EntityType.Level2Dagger => UpgradesV3_2.Level2.Color,
+			EntityType.Level3Dagger => UpgradesV3_2.Level3.Color, // TODO: Use different color.
+			EntityType.Level3HomingDagger => UpgradesV3_2.Level3.Color,
+			EntityType.Level4Dagger => UpgradesV3_2.Level4.Color, // TODO: Use different color.
+			EntityType.Level4HomingDagger => UpgradesV3_2.Level4.Color,
+			EntityType.Level4HomingSplash => UpgradesV3_2.Level4.Color,
+			EntityType.Squid1 => EnemiesV3_2.Squid1.Color,
+			EntityType.Squid2 => EnemiesV3_2.Squid2.Color,
+			EntityType.Squid3 => EnemiesV3_2.Squid3.Color,
+			EntityType.Skull1 => EnemiesV3_2.Skull1.Color,
+			EntityType.Skull2 => EnemiesV3_2.Skull2.Color,
+			EntityType.Skull3 => EnemiesV3_2.Skull3.Color,
+			EntityType.Spiderling => EnemiesV3_2.Spiderling.Color,
+			EntityType.Skull4 => EnemiesV3_2.Skull4.Color,
+			EntityType.Centipede => EnemiesV3_2.Centipede.Color,
+			EntityType.Gigapede => EnemiesV3_2.Gigapede.Color,
+			EntityType.Ghostpede => EnemiesV3_2.Ghostpede.Color,
+			EntityType.Spider1 => EnemiesV3_2.Spider1.Color,
+			EntityType.Spider2 => EnemiesV3_2.Spider2.Color,
+			EntityType.SpiderEgg => EnemiesV3_2.SpiderEgg1.Color,
+			EntityType.Leviathan => EnemiesV3_2.Leviathan.Color,
+			EntityType.Thorn => EnemiesV3_2.Thorn.Color,
+			_ => new(191, 0, 255),
+		};
+
+		return color.ToEngineColor();
+	}
 }

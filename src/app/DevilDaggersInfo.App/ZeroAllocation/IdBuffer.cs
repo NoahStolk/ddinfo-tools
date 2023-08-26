@@ -1,5 +1,6 @@
 namespace DevilDaggersInfo.App.ZeroAllocation;
 
+[Obsolete("Use UnsafeSpan instead.")]
 public class IdBuffer
 {
 	private readonly char[] _buffer;

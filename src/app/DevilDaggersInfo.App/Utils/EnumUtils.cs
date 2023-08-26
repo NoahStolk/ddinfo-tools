@@ -1,4 +1,5 @@
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.Arena;
+using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Spawnset.Extensions;
 
@@ -20,4 +21,7 @@ public static class EnumUtils
 
 	public static readonly IReadOnlyList<GameMode> GameModes = Enum.GetValues<GameMode>();
 	public static readonly IReadOnlyDictionary<GameMode, string> GameModeNames = GameModes.ToDictionary(gm => gm, gm => gm.ToString());
+
+	public static readonly IReadOnlyList<EntityType> EntityTypes = Enum.GetValues<EntityType>();
+	public static readonly IReadOnlyDictionary<EntityType, string> EntityTypeNames = EntityTypes.ToDictionary(et => et, et => et.ToString());
 }
