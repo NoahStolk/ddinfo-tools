@@ -135,10 +135,12 @@ public sealed class ArenaEditorContext
 
 		Vector3 GetHighlightColor(Tile tile)
 		{
-			if (_closestHitTile == tile && renderEditorContext)
-				return new(0.3f, 0.3f, 0.3f);
+			bool isSelected = _selectedTiles.Contains(tile);
 
-			return _selectedTiles.Contains(tile) ? new(0.25f, 0.1f, 0) : default;
+			if (_closestHitTile == tile && renderEditorContext)
+				return isSelected ? new(0.55f, 0.4f, 0.3f) : new(0.3f, 0.3f, 0.3f);
+
+			return isSelected ? new(0.25f, 0.1f, 0) : default;
 		}
 	}
 }
