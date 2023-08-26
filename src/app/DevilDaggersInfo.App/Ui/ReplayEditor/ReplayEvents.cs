@@ -106,7 +106,10 @@ public static class ReplayEvents
 					RenderEndEvents(_eventCache.EndEvents);
 					RenderEntityOrientationEvents(_eventCache.EntityOrientationEvents, eventsData.EntityTypes);
 					RenderEntityPositionEvents(_eventCache.EntityPositionEvents, eventsData.EntityTypes);
+					RenderEntityTargetEvents(_eventCache.EntityTargetEvents, eventsData.EntityTypes);
+					RenderGemEvents(_eventCache.GemEvents);
 					RenderHitEvents(_eventCache.HitEvents, eventsData.EntityTypes);
+					RenderTransmuteEvents(_eventCache.TransmuteEvents, eventsData.EntityTypes);
 				}
 			}
 
@@ -520,6 +523,58 @@ public static class ReplayEvents
 		}
 	}
 
+	private static void RenderEntityTargetEvents(IReadOnlyList<(int Index, EntityTargetEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
+	{
+		if (events.Count == 0)
+			return;
+
+		ImGui.TextColored(Color.Yellow, "Entity Target events");
+
+		if (ImGui.BeginTable("EntityTargetEvents", 3, EventTableFlags))
+		{
+			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
+			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("Target Position", EventTableColumnFlags, 192);
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < events.Count; i++)
+			{
+				ImGui.TableNextRow();
+
+				(int index, EntityTargetEvent e) = events[i];
+				NextColumnText(UnsafeSpan.Get(index));
+				EntityColumn(entityTypes, e.EntityId);
+				NextColumnText(UnsafeSpan.Get(e.TargetPosition));
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void RenderGemEvents(IReadOnlyList<(int Index, GemEvent Event)> events)
+	{
+		if (events.Count == 0)
+			return;
+
+		ImGui.TextColored(Color.Yellow, "Gem events");
+
+		if (ImGui.BeginTable("GemEvents", 1, EventTableFlags))
+		{
+			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < events.Count; i++)
+			{
+				ImGui.TableNextRow();
+
+				(int index, _) = events[i];
+				NextColumnText(UnsafeSpan.Get(index));
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
 	private static void RenderHitEvents(IReadOnlyList<(int Index, HitEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
 	{
 		if (events.Count == 0)
@@ -544,6 +599,40 @@ public static class ReplayEvents
 				EntityColumn(entityTypes, e.EntityIdA);
 				EntityColumn(entityTypes, e.EntityIdB);
 				NextColumnText(UnsafeSpan.Get(e.UserData));
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void RenderTransmuteEvents(IReadOnlyList<(int Index, TransmuteEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
+	{
+		if (events.Count == 0)
+			return;
+
+		ImGui.TextColored(Color.Yellow, "Transmute events");
+
+		if (ImGui.BeginTable("TransmuteEvents", 6, EventTableFlags))
+		{
+			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
+			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("?", EventTableColumnFlags, 192);
+			ImGui.TableSetupColumn("?", EventTableColumnFlags, 192);
+			ImGui.TableSetupColumn("?", EventTableColumnFlags, 192);
+			ImGui.TableSetupColumn("?", EventTableColumnFlags, 192);
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < events.Count; i++)
+			{
+				ImGui.TableNextRow();
+
+				(int index, TransmuteEvent e) = events[i];
+				NextColumnText(UnsafeSpan.Get(index));
+				EntityColumn(entityTypes, e.EntityId);
+				NextColumnText(UnsafeSpan.Get(e.A));
+				NextColumnText(UnsafeSpan.Get(e.B));
+				NextColumnText(UnsafeSpan.Get(e.C));
+				NextColumnText(UnsafeSpan.Get(e.D));
 			}
 
 			ImGui.EndTable();
