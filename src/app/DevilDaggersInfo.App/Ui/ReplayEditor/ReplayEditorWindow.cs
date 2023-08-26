@@ -15,7 +15,7 @@ public static class ReplayEditorWindow
 	public static void Reset()
 	{
 		_time = 0;
-		ReplayEvents.Reset();
+		ReplayEventsChild.Reset();
 	}
 
 	public static void Update(float delta)
@@ -74,7 +74,23 @@ public static class ReplayEditorWindow
 			RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 4, 0), inputRect, snapshot.ShootHoming == ShootType.Hold, "RMB");
 
 			ImGui.SetCursorScreenPos(origin + new Vector2(0, 96));
-			ReplayEvents.Render(ReplayState.Replay.EventsData);
+
+			if (ImGui.BeginTabBar("Replay Editor Tabs"))
+			{
+				if (ImGui.BeginTabItem("Events"))
+				{
+					ReplayEventsChild.Render(ReplayState.Replay.EventsData);
+					ImGui.EndTabItem();
+				}
+
+				if (ImGui.BeginTabItem("Entities"))
+				{
+					ReplayEntitiesChild.Render(ReplayState.Replay.EventsData);
+					ImGui.EndTabItem();
+				}
+
+				ImGui.EndTabBar();
+			}
 		}
 		else
 		{

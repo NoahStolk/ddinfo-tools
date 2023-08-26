@@ -11,9 +11,9 @@ public static class UnsafeSpan
 {
 	public static readonly char[] Buffer = new char[512];
 
-	public static ReadOnlySpan<char> Get(VolatileFixedInterpolatedStringHandler logMessageBuilder)
+	public static ReadOnlySpan<char> Get(VolatileFixedInterpolatedStringHandler interpolatedStringHandler)
 	{
-		return logMessageBuilder;
+		return interpolatedStringHandler;
 	}
 
 	public static ReadOnlySpan<char> Get<T>(T t, ReadOnlySpan<char> format = default, IFormatProvider? provider = null)
