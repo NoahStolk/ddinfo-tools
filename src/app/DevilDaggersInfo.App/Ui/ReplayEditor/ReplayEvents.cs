@@ -100,6 +100,8 @@ public static class ReplayEvents
 					RenderSpiderSpawnEvents(_eventCache.SpiderSpawnEvents, eventsData.EntityTypes);
 					RenderSquidSpawnEvents(_eventCache.SquidSpawnEvents, eventsData.EntityTypes);
 					RenderThornSpawnEvents(_eventCache.ThornSpawnEvents, eventsData.EntityTypes);
+
+					RenderDaggerSpawnEvents(_eventCache.DaggerSpawnEvents, eventsData.EntityTypes);
 					RenderHitEvents(_eventCache.HitEvents, eventsData.EntityTypes);
 				}
 			}
@@ -131,6 +133,8 @@ public static class ReplayEvents
 		if (ie is InitialInputsEvent initial)
 			ImGui.TextColored(Color.White, UnsafeSpan.Get($"Look Speed: {initial.LookSpeed}"));
 	}
+
+	#region Enemies
 
 	private static void RenderBoidSpawnEvents(IReadOnlyList<(int Index, BoidSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
 	{
@@ -368,6 +372,44 @@ public static class ReplayEvents
 		}
 	}
 
+	#endregion Enemies
+
+	private static void RenderDaggerSpawnEvents(IReadOnlyList<(int Index, DaggerSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
+	{
+		if (events.Count == 0)
+			return;
+
+		ImGui.TextColored(Color.Purple, "Dagger Spawn events");
+
+		if (ImGui.BeginTable("DaggerSpawnEvents", 7, EventTableFlags))
+		{
+			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
+			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 192);
+			ImGui.TableSetupColumn("Type", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("?", EventTableColumnFlags, 32);
+			ImGui.TableSetupColumn("Position", EventTableColumnFlags, 128);
+			ImGui.TableSetupColumn("Orientation", EventTableColumnFlags, 192);
+			ImGui.TableSetupColumn("Shot / Rapid", EventTableColumnFlags, 96);
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < events.Count; i++)
+			{
+				ImGui.TableNextRow();
+
+				(int index, DaggerSpawnEvent e) = events[i];
+				NextColumnText(UnsafeSpan.Get(index));
+				EntityColumn(entityTypes, e.EntityId);
+				NextColumnText(GetDaggerTypeText(e.DaggerType));
+				NextColumnText(UnsafeSpan.Get(e.A));
+				NextColumnText(UnsafeSpan.Get(e.Position));
+				NextColumnText(UnsafeSpan.Get(e.Orientation));
+				NextColumnText(e.IsShot ? "Shot" : "Rapid");
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
 	private static void RenderHitEvents(IReadOnlyList<(int Index, HitEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
 	{
 		if (events.Count == 0)
@@ -447,6 +489,18 @@ public static class ReplayEvents
 		SquidType.Squid1 => "Squid1",
 		SquidType.Squid2 => "Squid2",
 		SquidType.Squid3 => "Squid3",
+		_ => throw new UnreachableException(),
+	};
+
+	private static ReadOnlySpan<char> GetDaggerTypeText(DaggerType daggerType) => daggerType switch
+	{
+		DaggerType.Level1 => "Level1",
+		DaggerType.Level2 => "Level2",
+		DaggerType.Level3 => "Level3",
+		DaggerType.Level3Homing => "Level3Homing",
+		DaggerType.Level4 => "Level4",
+		DaggerType.Level4Homing => "Level4Homing",
+		DaggerType.Level4HomingSplash => "Level4HomingSplash",
 		_ => throw new UnreachableException(),
 	};
 
