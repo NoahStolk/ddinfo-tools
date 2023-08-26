@@ -23,9 +23,12 @@ public static class ReplayEditor3DWindow
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, Constants.MinWindowSize / 2);
 		if (ImGui.Begin("3D Replay Viewer"))
 		{
+			if (ImGui.IsMouseDown(ImGuiMouseButton.Right) && ImGui.IsWindowHovered())
+				ImGui.SetWindowFocus();
+
 			float textHeight = ImGui.CalcTextSize(StringResources.ReplaySimulator3D).Y;
 
-			Vector2 framebufferSize = ImGui.GetWindowSize() - new Vector2(32, 48 + textHeight);
+			Vector2 framebufferSize = ImGui.GetWindowSize() - new Vector2(16, 48 + textHeight);
 			_framebufferData.ResizeIfNecessary((int)framebufferSize.X, (int)framebufferSize.Y);
 
 			Vector2 cursorScreenPos = ImGui.GetCursorScreenPos() + new Vector2(0, textHeight);

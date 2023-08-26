@@ -24,7 +24,7 @@ public static class SpawnsetEditor3DWindow
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, Constants.MinWindowSize / 2);
 		if (ImGui.Begin("3D Arena Editor"))
 		{
-			if (ImGui.IsMouseDown(ImGuiMouseButton.Right))
+			if (ImGui.IsMouseDown(ImGuiMouseButton.Right) && ImGui.IsWindowHovered())
 				ImGui.SetWindowFocus();
 
 			float textHeight = ImGui.CalcTextSize(StringResources.SpawnsetEditor3D).Y;
