@@ -1,5 +1,6 @@
 namespace DevilDaggersInfo.App.ZeroAllocation;
 
+[Obsolete("Use UnsafeSpan instead.")]
 public struct UnsafeCharBufferWriter
 {
 	private readonly char[] _buffer;

@@ -127,12 +127,12 @@ public static class ReplayEvents
 		ImGui.SameLine();
 		ImGui.TextColored(GetShootTypeColor(ie.ShootHoming), "[RMB]");
 		ImGui.SameLine();
-		ImGui.TextColored(ie.MouseX == 0 ? Color.White : Color.Red, UnsafeSpan.Get(ie.MouseX));
+		ImGui.TextColored(ie.MouseX == 0 ? Color.White : Color.Red, UnsafeSpan.Get($"X: {ie.MouseX}"));
 		ImGui.SameLine();
-		ImGui.TextColored(ie.MouseY == 0 ? Color.White : Color.Red, UnsafeSpan.Get(ie.MouseY));
+		ImGui.TextColored(ie.MouseY == 0 ? Color.White : Color.Red, UnsafeSpan.Get($"X: {ie.MouseY}"));
 
 		if (ie is InitialInputsEvent initial)
-			ImGui.TextColored(Color.White, $"Look Speed: {initial.LookSpeed}");
+			ImGui.TextColored(Color.White, UnsafeSpan.Get($"Look Speed: {initial.LookSpeed}"));
 	}
 
 	private static void RenderHitEvents(IReadOnlyList<(int Index, HitEvent Event)> hitEvents, IReadOnlyList<EntityType> entityTypes)
