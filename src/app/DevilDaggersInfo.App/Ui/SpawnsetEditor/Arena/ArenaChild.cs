@@ -17,8 +17,6 @@ public static class ArenaChild
 
 	public static readonly Vector2 ArenaSize = new(TileSize * SpawnsetBinary.ArenaDimensionMax);
 
-	private static readonly char[] _tooltipBuffer = new char[256];
-
 	private static readonly ArenaPencilState _pencilState = new();
 	private static readonly ArenaLineState _lineState = new();
 	private static readonly ArenaRectangleState _rectangleState = new();
@@ -56,14 +54,7 @@ public static class ArenaChild
 
 				if (mousePosition.IsValid && isSpawnsetEditorWindowFocused)
 				{
-					UnsafeCharBufferWriter writer = new(_tooltipBuffer);
-					writer.WriteLine(SpawnsetState.Spawnset.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y]);
-					writer.Write('<');
-					writer.Write(mousePosition.Tile.X);
-					writer.Write(", ");
-					writer.Write(mousePosition.Tile.Y);
-					writer.Write('>');
-					ImGui.SetTooltip(writer);
+					ImGui.SetTooltip(UnsafeSpan.Get($"{SpawnsetState.Spawnset.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y]}\n<{mousePosition.Tile.X}, {mousePosition.Tile.Y}>"));
 
 					if (io.MouseWheel != 0)
 					{

@@ -8,8 +8,6 @@ namespace DevilDaggersInfo.App.Ui.Practice.Main;
 
 public static class CurrentSpawnsetChild
 {
-	private static readonly char[] _handLevelWithMeshBuffer = new char[128];
-
 	public static void Render()
 	{
 		if (ImGui.BeginChild("CurrentSpawnset", new(400, 160), true))
@@ -23,18 +21,9 @@ public static class CurrentSpawnsetChild
 						ImGui.TextColored(Color.Yellow, "Effective values");
 
 						if (SurvivalFileWatcher.EffectivePlayerSettings.HandLevel != SurvivalFileWatcher.EffectivePlayerSettings.HandMesh)
-						{
-							UnsafeCharBufferWriter writer = new(_handLevelWithMeshBuffer);
-							writer.Write(EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]);
-							writer.Write(" (");
-							writer.Write(EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandMesh]);
-							writer.Write(" mesh)");
-							ImGui.Text(writer);
-						}
+							ImGui.Text(UnsafeSpan.Get($"{EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]} ({EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandMesh]} mesh)"));
 						else
-						{
 							ImGui.Text(EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]);
-						}
 
 						ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.EffectivePlayerSettings.GemsOrHoming));
 						ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));

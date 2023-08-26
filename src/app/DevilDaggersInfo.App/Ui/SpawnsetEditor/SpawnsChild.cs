@@ -22,8 +22,6 @@ public static class SpawnsChild
 	private static readonly bool[] _selected = new bool[MaxSpawns];
 	private static readonly string[] _enemyNames = Enum.GetValues<EnemyType>().Select(et => et.ToString()).ToArray();
 
-	private static readonly char[] _editContextBuffer = new char[256];
-
 	private static int? _scrollToIndex;
 
 	private static int _lastSelectedIndex = -1;
@@ -204,15 +202,7 @@ public static class SpawnsChild
 			if (!_delayEdited)
 				_editDelay = (float)spawn.Delay;
 
-			UnsafeCharBufferWriter writer = new(_editContextBuffer);
-			writer.Write("Edit #");
-			writer.Write(spawn.Index);
-			writer.Write(" (");
-			writer.Write(EnumUtils.EnemyTypeNames[spawn.EnemyType]);
-			writer.Write(" at ");
-			writer.Write(spawn.Seconds, StringFormats.TimeFormat);
-			writer.Write(')');
-			ImGui.Text(writer);
+			ImGui.Text(UnsafeSpan.Get($"Edit #{spawn.Index} ({EnumUtils.EnemyTypeNames[spawn.EnemyType]} at {spawn.Seconds:0.0000})"));
 
 			for (int i = 0; i < EnumUtils.EnemyTypes.Count; i++)
 			{
