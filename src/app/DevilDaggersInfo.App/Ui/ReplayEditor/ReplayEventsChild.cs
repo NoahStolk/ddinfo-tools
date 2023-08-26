@@ -670,6 +670,7 @@ public static class ReplayEventsChild
 		BoidType.Skull2 => "Skull2",
 		BoidType.Skull3 => "Skull3",
 		BoidType.Skull4 => "Skull4",
+		BoidType.Spiderling => "Spiderling",
 		_ => throw new UnreachableException(),
 	};
 
