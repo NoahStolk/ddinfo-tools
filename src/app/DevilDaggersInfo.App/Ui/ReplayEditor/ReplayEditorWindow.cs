@@ -15,6 +15,7 @@ public static class ReplayEditorWindow
 	public static void Reset()
 	{
 		_time = 0;
+		ReplayEvents.Reset();
 	}
 
 	public static void Update(float delta)

@@ -25,9 +25,14 @@ public static class ReplayEvents
 	private static ImGuiTableFlags EventTableFlags => ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX;
 	private static ImGuiTableColumnFlags EventTableColumnFlags => ImGuiTableColumnFlags.None;
 
+	public static void Reset()
+	{
+		_startTick = 0;
+	}
+
 	public static void Render(ReplayEventsData eventsData)
 	{
-		const int maxTicks = 30;
+		const int maxTicks = 60;
 
 		Vector2 iconSize = new(16);
 		if (ImGuiImage.ImageButton("Start", Root.InternalResources.ArrowStartTexture.Handle, iconSize))
@@ -50,8 +55,8 @@ public static class ReplayEvents
 		Color rowEven = Color.Gray(0.05f);
 		if (ImGui.BeginTable("ReplayEventsTable", 4, ImGuiTableFlags.None))
 		{
-			ImGui.TableSetupColumn("Tick", ImGuiTableColumnFlags.None, 64);
-			ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.None, 64);
+			ImGui.TableSetupColumn("Tick", ImGuiTableColumnFlags.None, 32);
+			ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.None, 32);
 			ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.None, 128);
 			ImGui.TableSetupColumn("Events", ImGuiTableColumnFlags.None, 384);
 			ImGui.TableHeadersRow();
