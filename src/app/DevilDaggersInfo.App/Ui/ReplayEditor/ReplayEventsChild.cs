@@ -411,7 +411,7 @@ public static class ReplayEventsChild
 				(int index, DaggerSpawnEvent e) = events[i];
 				NextColumnText(UnsafeSpan.Get(index));
 				EntityColumn(entityTypes, e.EntityId);
-				NextColumnText(GetDaggerTypeText(e.DaggerType));
+				NextColumnText(EnumUtils.DaggerTypeNames[e.DaggerType]);
 				NextColumnText(UnsafeSpan.Get(e.A));
 				NextColumnText(UnsafeSpan.Get(e.Position));
 				NextColumnText(UnsafeSpan.Get(e.Orientation));
@@ -694,18 +694,6 @@ public static class ReplayEventsChild
 		SquidType.Squid1 => "Squid1",
 		SquidType.Squid2 => "Squid2",
 		SquidType.Squid3 => "Squid3",
-		_ => throw new UnreachableException(),
-	};
-
-	private static ReadOnlySpan<char> GetDaggerTypeText(DaggerType daggerType) => daggerType switch
-	{
-		DaggerType.Level1 => "Level1",
-		DaggerType.Level2 => "Level2",
-		DaggerType.Level3 => "Level3",
-		DaggerType.Level3Homing => "Level3Homing",
-		DaggerType.Level4 => "Level4",
-		DaggerType.Level4Homing => "Level4Homing",
-		DaggerType.Level4HomingSplash => "Level4HomingSplash",
 		_ => throw new UnreachableException(),
 	};
 

@@ -24,4 +24,7 @@ public static class EnumUtils
 
 	public static readonly IReadOnlyList<EntityType> EntityTypes = Enum.GetValues<EntityType>();
 	public static readonly IReadOnlyDictionary<EntityType, string> EntityTypeNames = EntityTypes.ToDictionary(et => et, et => et.ToString());
+
+	public static readonly IReadOnlyList<DaggerType> DaggerTypes = Enum.GetValues<DaggerType>();
+	public static readonly IReadOnlyDictionary<DaggerType, string> DaggerTypeNames = DaggerTypes.ToDictionary(dt => dt, dt => dt.ToString());
 }

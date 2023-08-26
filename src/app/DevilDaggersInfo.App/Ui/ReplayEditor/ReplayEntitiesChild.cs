@@ -1,35 +1,121 @@
+using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Utils;
 using DevilDaggersInfo.App.ZeroAllocation;
+using DevilDaggersInfo.Common;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Extensions;
+using DevilDaggersInfo.Core.Replay.PostProcessing.HitLog;
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.App.Ui.ReplayEditor;
 
 public static class ReplayEntitiesChild
 {
+	private static EnemyHitLog? _enemyHitLog;
+
+	public static void Reset()
+	{
+		_enemyHitLog = null;
+	}
+
 	public static void Render(ReplayEventsData eventsData)
 	{
-		if (ImGui.BeginTable("ReplayEventsTable", 4, ImGuiTableFlags.None))
+		if (ImGui.BeginChild("ReplayEntities", new Vector2(320, 0)))
 		{
-			ImGui.TableSetupColumn("Id", ImGuiTableColumnFlags.WidthFixed, 64);
-			ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.None, 128);
-			ImGui.TableHeadersRow();
-
-			for (int i = 0; i < eventsData.EntityTypes.Count; i++)
+			if (ImGui.BeginTable("ReplayEntitiesTable", 4, ImGuiTableFlags.None))
 			{
-				ImGui.TableNextRow();
+				ImGui.TableSetupColumn("Id", ImGuiTableColumnFlags.WidthFixed, 64);
+				ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.None, 128);
+				ImGui.TableHeadersRow();
 
-				EntityType entityType = eventsData.EntityTypes[i];
+				for (int i = 0; i < eventsData.EntityTypes.Count; i++)
+				{
+					ImGui.TableNextRow();
 
-				ImGui.TableNextColumn();
-				ImGui.Selectable(UnsafeSpan.Get(i), false, ImGuiSelectableFlags.SpanAllColumns);
-				ImGui.TableNextColumn();
-				ImGui.TextColored(((EntityType?)entityType).GetColor(), EnumUtils.EntityTypeNames[entityType]);
+					EntityType entityType = eventsData.EntityTypes[i];
+
+					ImGui.TableNextColumn();
+					if (ImGui.Selectable(UnsafeSpan.Get(i), false, ImGuiSelectableFlags.SpanAllColumns))
+						_enemyHitLog = EnemyHitLogBuilder.Build(eventsData.Events, i);
+
+					ImGui.TableNextColumn();
+					ImGui.TextColored(((EntityType?)entityType).GetColor(), EnumUtils.EntityTypeNames[entityType]);
+				}
+
+				ImGui.EndTable();
 			}
+		}
 
-			ImGui.EndTable();
+		ImGui.EndChild(); // ReplayEntities
+
+		ImGui.SameLine();
+
+		if (ImGui.BeginChild("ReplayEnemyHitLog"))
+		{
+			RenderEnemyHitLog();
+		}
+
+		ImGui.EndChild(); // ReplayEnemyHitLog
+	}
+
+	private static void RenderEnemyHitLog()
+	{
+		if (_enemyHitLog == null)
+		{
+			ImGui.Text("Select an entity from the list.");
+		}
+		else
+		{
+			ImGui.Text(UnsafeSpan.Get($"Enemy hit log for {EnumUtils.EntityTypeNames[_enemyHitLog.EntityType]} (id {_enemyHitLog.EntityId}):"));
+
+			int initialHp = _enemyHitLog.EntityType.GetInitialHp();
+			if (ImGui.BeginTable("EnemyHitLog", 6, ImGuiTableFlags.None))
+			{
+				ImGui.TableSetupColumn("Tick", ImGuiTableColumnFlags.None, 128);
+				ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.None, 128);
+				ImGui.TableSetupColumn("HP", ImGuiTableColumnFlags.None, 128);
+				ImGui.TableSetupColumn("Damage", ImGuiTableColumnFlags.None, 128);
+				ImGui.TableSetupColumn("Dagger Type", ImGuiTableColumnFlags.None, 128);
+				ImGui.TableSetupColumn("User Data", ImGuiTableColumnFlags.None, 128);
+				ImGui.TableHeadersRow();
+
+				ImGui.TableNextRow();
+				ImGui.TableNextColumn();
+				ImGui.Text(UnsafeSpan.Get(_enemyHitLog.SpawnTick));
+				ImGui.TableNextColumn();
+				ImGui.Text(UnsafeSpan.Get(_enemyHitLog.SpawnTick / 60f, StringFormats.TimeFormat));
+				ImGui.TableNextColumn();
+				ImGui.Text(UnsafeSpan.Get(initialHp));
+				ImGui.TableNextColumn();
+				ImGui.Text("-");
+				ImGui.TableNextColumn();
+				ImGui.Text("-");
+				ImGui.TableNextColumn();
+				ImGui.Text("-");
+
+				for (int i = 0; i < _enemyHitLog.Hits.Count; i++)
+				{
+					EnemyHitLogEvent hit = _enemyHitLog.Hits[i];
+
+					ImGui.TableNextRow();
+					ImGui.TableNextColumn();
+					ImGui.Text(UnsafeSpan.Get(hit.Tick));
+					ImGui.TableNextColumn();
+					ImGui.Text(UnsafeSpan.Get(hit.Tick / 60f, StringFormats.TimeFormat));
+					ImGui.TableNextColumn();
+					ImGui.TextColored(hit.Hp < 0 ? Color.Red : Color.Lerp(Color.Red, Color.White, hit.Hp / (float)initialHp), UnsafeSpan.Get($"{hit.Hp} / {initialHp}"));
+					ImGui.TableNextColumn();
+					ImGui.TextColored(hit.Damage > 0 ? Color.Red : Color.White, UnsafeSpan.Get(hit.Damage));
+					ImGui.TableNextColumn();
+					ImGui.Text(EnumUtils.DaggerTypeNames[hit.DaggerType]);
+					ImGui.TableNextColumn();
+					ImGui.Text(UnsafeSpan.Get(hit.UserData));
+				}
+
+				ImGui.EndTable();
+			}
 		}
 	}
 }
