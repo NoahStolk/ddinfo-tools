@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Core.Replay.Utils;
 using System.Numerics;
 
 namespace DevilDaggersInfo.App.ZeroAllocation;
@@ -23,27 +24,21 @@ public static class UnsafeSpan
 
 	public static ReadOnlySpan<char> Get(Vector2 value, ReadOnlySpan<char> format = default, IFormatProvider? provider = default)
 	{
-		// TODO: Check bounds and return in case of TryFormat returning false.
-		value.X.TryFormat(Buffer, out int charsWritten, format, provider);
-		Buffer[charsWritten++] = ',';
-		Buffer[charsWritten++] = ' ';
-		value.Y.TryFormat(Buffer.AsSpan()[charsWritten..], out int charsWrittenY, format, provider);
-		charsWritten += charsWrittenY;
+		int charsWritten = 0;
+		SpanWrite.TryWrite(Buffer, ref charsWritten, value.X, format, provider);
+		SpanWrite.TryWriteString(Buffer, ref charsWritten, ", ");
+		SpanWrite.TryWrite(Buffer, ref charsWritten, value.Y, format, provider);
 		return Buffer.AsSpan(0, charsWritten);
 	}
 
 	public static ReadOnlySpan<char> Get(Vector3 value, ReadOnlySpan<char> format = default, IFormatProvider? provider = default)
 	{
-		// TODO: Check bounds and return in case of TryFormat returning false.
-		value.X.TryFormat(Buffer, out int charsWritten, format, provider);
-		Buffer[charsWritten++] = ',';
-		Buffer[charsWritten++] = ' ';
-		value.Y.TryFormat(Buffer.AsSpan()[charsWritten..], out int charsWrittenY, format, provider);
-		charsWritten += charsWrittenY;
-		Buffer[charsWritten++] = ',';
-		Buffer[charsWritten++] = ' ';
-		value.Z.TryFormat(Buffer.AsSpan()[charsWritten..], out int charsWrittenZ, format, provider);
-		charsWritten += charsWrittenZ;
+		int charsWritten = 0;
+		SpanWrite.TryWrite(Buffer, ref charsWritten, value.X, format, provider);
+		SpanWrite.TryWriteString(Buffer, ref charsWritten, ", ");
+		SpanWrite.TryWrite(Buffer, ref charsWritten, value.Y, format, provider);
+		SpanWrite.TryWriteString(Buffer, ref charsWritten, ", ");
+		SpanWrite.TryWrite(Buffer, ref charsWritten, value.Z, format, provider);
 		return Buffer.AsSpan(0, charsWritten);
 	}
 

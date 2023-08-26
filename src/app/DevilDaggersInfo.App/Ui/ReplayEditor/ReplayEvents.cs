@@ -160,7 +160,7 @@ public static class ReplayEvents
 				EntityColumn(entityTypes, e.EntityId);
 				EntityColumn(entityTypes, e.SpawnerEntityId);
 				NextColumnText(GetBoidTypeText(e.BoidType));
-				NextColumnText(UnsafeSpan.Get(e.Position, "0.00"));
+				NextColumnText(UnsafeSpan.Get(e.Position));
 				NextColumnText(UnsafeSpan.Get(e.A));
 				NextColumnText(UnsafeSpan.Get(e.B));
 				NextColumnText(UnsafeSpan.Get(e.C));
@@ -227,7 +227,7 @@ public static class ReplayEvents
 				EntityColumn(entityTypes, e.EntityId);
 				NextColumnText(GetPedeTypeText(e.PedeType));
 				NextColumnText(UnsafeSpan.Get(e.A));
-				NextColumnText(UnsafeSpan.Get(e.Position));
+				NextColumnText(UnsafeSpan.Get(e.Position, "0.00"));
 				NextColumnText(UnsafeSpan.Get(e.B));
 				NextColumnText(UnsafeSpan.Get(e.Orientation));
 			}
