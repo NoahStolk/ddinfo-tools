@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Ui.ReplayEditor.Events;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.Arena;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Spawnset;
@@ -27,4 +28,7 @@ public static class EnumUtils
 
 	public static readonly IReadOnlyList<DaggerType> DaggerTypes = Enum.GetValues<DaggerType>();
 	public static readonly IReadOnlyDictionary<DaggerType, string> DaggerTypeNames = DaggerTypes.ToDictionary(dt => dt, dt => dt.ToString());
+
+	public static readonly IReadOnlyList<EventType> EventTypes = Enum.GetValues<EventType>();
+	public static readonly IReadOnlyDictionary<EventType, string> EventTypeNames = EventTypes.ToDictionary(et => et, et => et.ToString());
 }

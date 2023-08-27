@@ -1,4 +1,5 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
+using DevilDaggersInfo.App.Ui.ReplayEditor.Events;
 using DevilDaggersInfo.App.Ui.ReplayEditor.State;
 using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Replay.Events.Enums;

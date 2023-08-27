@@ -2,7 +2,7 @@ using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Interfaces;
 using System.Diagnostics;
 
-namespace DevilDaggersInfo.App.Ui.ReplayEditor;
+namespace DevilDaggersInfo.App.Ui.ReplayEditor.Events;
 
 public sealed class EventCache
 {
