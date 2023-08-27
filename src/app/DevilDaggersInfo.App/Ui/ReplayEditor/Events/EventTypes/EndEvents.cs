@@ -12,7 +12,7 @@ public sealed class EndEvents : IEventTypeRenderer<EndEvent>
 	{
 		ImGui.TextColored(Color.Red, "End of replay");
 
-		if (ImGui.BeginTable("End", columns.Count, EventTypeRendererUtils.EventTableFlags))
+		if (ImGui.BeginTable("End of replay", columns.Count, EventTypeRendererUtils.EventTableFlags))
 		{
 			EventTypeRendererUtils.SetupColumns(columns);
 

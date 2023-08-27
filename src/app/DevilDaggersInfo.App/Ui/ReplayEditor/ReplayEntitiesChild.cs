@@ -48,34 +48,39 @@ public static class ReplayEntitiesChild
 			ImGui.SameLine();
 			ImGui.Checkbox("Show daggers", ref _showDaggers);
 
-			if (ImGui.BeginTable("ReplayEntitiesTable", 2, ImGuiTableFlags.None))
+			if (ImGui.BeginChild("ReplayEntitiesChild", new(0, 0)))
 			{
-				ImGui.TableSetupColumn("Id", ImGuiTableColumnFlags.WidthFixed, 64);
-				ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.None, 128);
-				ImGui.TableHeadersRow();
-
-				for (int i = _startId; i < Math.Min(_startId + maxIds, eventsData.EntityTypes.Count); i++)
+				if (ImGui.BeginTable("ReplayEntitiesTable", 2, ImGuiTableFlags.None))
 				{
-					EntityType entityType = eventsData.EntityTypes[i];
+					ImGui.TableSetupColumn("Id", ImGuiTableColumnFlags.WidthFixed, 64);
+					ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.None, 128);
+					ImGui.TableHeadersRow();
 
-					if (!_showDaggers && entityType.IsDagger())
-						continue;
+					for (int i = _startId; i < Math.Min(_startId + maxIds, eventsData.EntityTypes.Count); i++)
+					{
+						EntityType entityType = eventsData.EntityTypes[i];
 
-					if (!_showEnemies && entityType.IsEnemy())
-						continue;
+						if (!_showDaggers && entityType.IsDagger())
+							continue;
 
-					ImGui.TableNextRow();
+						if (!_showEnemies && entityType.IsEnemy())
+							continue;
 
-					ImGui.TableNextColumn();
-					if (ImGui.Selectable(UnsafeSpan.Get(i), false, ImGuiSelectableFlags.SpanAllColumns))
-						_enemyHitLog = EnemyHitLogBuilder.Build(eventsData.Events, i);
+						ImGui.TableNextRow();
 
-					ImGui.TableNextColumn();
-					ImGui.TextColored(((EntityType?)entityType).GetColor(), EnumUtils.EntityTypeNames[entityType]);
+						ImGui.TableNextColumn();
+						if (ImGui.Selectable(UnsafeSpan.Get(i), false, ImGuiSelectableFlags.SpanAllColumns))
+							_enemyHitLog = EnemyHitLogBuilder.Build(eventsData.Events, i);
+
+						ImGui.TableNextColumn();
+						ImGui.TextColored(((EntityType?)entityType).GetColor(), EnumUtils.EntityTypeNames[entityType]);
+					}
+
+					ImGui.EndTable();
 				}
-
-				ImGui.EndTable();
 			}
+
+			ImGui.EndChild(); // ReplayEntitiesChild
 		}
 
 		ImGui.EndChild(); // ReplayEntities
