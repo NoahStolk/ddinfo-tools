@@ -163,6 +163,7 @@ public static class ReplayEventsChild
 	public static void Reset()
 	{
 		_startTick = 0;
+		_targetTime = 0;
 	}
 
 	private static void ToggleAll(bool enabled)
