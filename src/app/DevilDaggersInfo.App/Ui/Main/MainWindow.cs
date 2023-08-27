@@ -135,6 +135,8 @@ public static class MainWindow
 	{
 		ImGuiExt.Title("Spawnset Editor");
 		ImGui.Text("""
+			WORK IN PROGRESS
+
 			Create and edit custom spawnsets (levels) for Devil Daggers.
 
 			Some things you can do:
@@ -176,7 +178,7 @@ public static class MainWindow
 	{
 		ImGuiExt.Title("Replay Editor");
 		ImGui.Text("""
-			NOT IMPLEMENTED YET
+			WORK IN PROGRESS
 
 			Create, analyze, and edit replays for Devil Daggers.
 			""");
@@ -186,7 +188,7 @@ public static class MainWindow
 	{
 		ImGuiExt.Title("Custom Leaderboards");
 		ImGui.Text("""
-			WINDOWS ONLY
+			WINDOWS ONLY (FOR NOW)
 
 			Custom leaderboards are leaderboards for custom spawnsets.
 
@@ -225,6 +227,11 @@ public static class MainWindow
 			Practice the main game by starting at any point in time with any hand upgrade and amount of gems/homing.
 
 			Save templates to quickly load your desired practice settings.
+
+			View live data from the current run (Windows only for now):
+			- Splits
+			- Homing usage
+			- Gem collection
 			""");
 	}
 
