@@ -47,6 +47,8 @@ public static class ReplayEventsChild
 		if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Handle, iconSize))
 			_startTick = eventsData.TickCount - maxTicks;
 
+		ImGui.Text(UnsafeSpan.Get($"Showing {_startTick} - {_startTick + maxTicks - 1} of {eventsData.TickCount}"));
+
 		ImGui.Checkbox("Show events", ref _showEvents);
 		ImGui.SameLine();
 		ImGui.Checkbox("Show ticks without events", ref _showTicksWithoutEvents);
@@ -107,14 +109,15 @@ public static class ReplayEventsChild
 					RenderThornSpawnEvents(_eventCache.ThornSpawnEvents, eventsData.EntityTypes);
 
 					RenderDaggerSpawnEvents(_eventCache.DaggerSpawnEvents, eventsData.EntityTypes);
-					RenderDeathEvents(_eventCache.DeathEvents);
-					RenderEndEvents(_eventCache.EndEvents);
 					RenderEntityOrientationEvents(_eventCache.EntityOrientationEvents, eventsData.EntityTypes);
 					RenderEntityPositionEvents(_eventCache.EntityPositionEvents, eventsData.EntityTypes);
 					RenderEntityTargetEvents(_eventCache.EntityTargetEvents, eventsData.EntityTypes);
 					RenderGemEvents(_eventCache.GemEvents);
 					RenderHitEvents(_eventCache.HitEvents, eventsData.EntityTypes);
 					RenderTransmuteEvents(_eventCache.TransmuteEvents, eventsData.EntityTypes);
+
+					RenderDeathEvents(_eventCache.DeathEvents);
+					RenderEndEvents(_eventCache.EndEvents);
 				}
 			}
 

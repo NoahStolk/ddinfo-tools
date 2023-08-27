@@ -1,7 +1,7 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
+using DevilDaggersInfo.App.Ui.ReplayEditor.State;
 using DevilDaggersInfo.App.Utils;
 using DevilDaggersInfo.App.ZeroAllocation;
-using DevilDaggersInfo.Common;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Extensions;
@@ -14,6 +14,8 @@ namespace DevilDaggersInfo.App.Ui.ReplayEditor;
 public static class ReplayEntitiesChild
 {
 	private static int _startId;
+	private static bool _showEnemies = true;
+	private static bool _showDaggers = true;
 	private static EnemyHitLog? _enemyHitLog;
 
 	public static void Reset()
@@ -35,12 +37,18 @@ public static class ReplayEntitiesChild
 				_startId = Math.Max(0, _startId - maxIds);
 			ImGui.SameLine();
 			if (ImGuiImage.ImageButton("Forward", Root.InternalResources.ArrowRightTexture.Handle, iconSize))
-				_startId = Math.Min(eventsData.TickCount - maxIds, _startId + maxIds);
+				_startId = Math.Min(eventsData.EntityTypes.Count - maxIds, _startId + maxIds);
 			ImGui.SameLine();
 			if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Handle, iconSize))
-				_startId = eventsData.TickCount - maxIds;
+				_startId = eventsData.EntityTypes.Count - maxIds;
 
-			if (ImGui.BeginTable("ReplayEntitiesTable", 4, ImGuiTableFlags.None))
+			ImGui.Text(UnsafeSpan.Get($"Showing {_startId} - {_startId + maxIds - 1} of {eventsData.EntityTypes.Count}"));
+
+			ImGui.Checkbox("Show enemies", ref _showEnemies);
+			ImGui.SameLine();
+			ImGui.Checkbox("Show daggers", ref _showDaggers);
+
+			if (ImGui.BeginTable("ReplayEntitiesTable", 2, ImGuiTableFlags.None))
 			{
 				ImGui.TableSetupColumn("Id", ImGuiTableColumnFlags.WidthFixed, 64);
 				ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.None, 128);
@@ -48,9 +56,15 @@ public static class ReplayEntitiesChild
 
 				for (int i = _startId; i < Math.Min(_startId + maxIds, eventsData.EntityTypes.Count); i++)
 				{
-					ImGui.TableNextRow();
-
 					EntityType entityType = eventsData.EntityTypes[i];
+
+					if (!_showDaggers && entityType.IsDagger())
+						continue;
+
+					if (!_showEnemies && entityType.IsEnemy())
+						continue;
+
+					ImGui.TableNextRow();
 
 					ImGui.TableNextColumn();
 					if (ImGui.Selectable(UnsafeSpan.Get(i), false, ImGuiSelectableFlags.SpanAllColumns))
@@ -87,9 +101,8 @@ public static class ReplayEntitiesChild
 			ImGui.Text(UnsafeSpan.Get($"Enemy hit log for {EnumUtils.EntityTypeNames[_enemyHitLog.EntityType]} (id {_enemyHitLog.EntityId}):"));
 
 			int initialHp = _enemyHitLog.EntityType.GetInitialHp();
-			if (ImGui.BeginTable("EnemyHitLog", 6, ImGuiTableFlags.None))
+			if (ImGui.BeginTable("EnemyHitLog", 5, ImGuiTableFlags.None))
 			{
-				ImGui.TableSetupColumn("Tick", ImGuiTableColumnFlags.None, 128);
 				ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.None, 128);
 				ImGui.TableSetupColumn("HP", ImGuiTableColumnFlags.None, 128);
 				ImGui.TableSetupColumn("Damage", ImGuiTableColumnFlags.None, 128);
@@ -99,11 +112,9 @@ public static class ReplayEntitiesChild
 
 				ImGui.TableNextRow();
 				ImGui.TableNextColumn();
-				ImGui.Text(UnsafeSpan.Get(_enemyHitLog.SpawnTick));
+				ImGui.Text(UnsafeSpan.Get($"{_enemyHitLog.SpawnTick / 60f + ReplayState.Replay.Header.StartTime:0.0000} ({_enemyHitLog.SpawnTick})"));
 				ImGui.TableNextColumn();
-				ImGui.Text(UnsafeSpan.Get(_enemyHitLog.SpawnTick / 60f, StringFormats.TimeFormat));
-				ImGui.TableNextColumn();
-				ImGui.Text(UnsafeSpan.Get(initialHp));
+				ImGui.TextColored(Color.Green, "Spawn");
 				ImGui.TableNextColumn();
 				ImGui.Text("-");
 				ImGui.TableNextColumn();
@@ -117,11 +128,9 @@ public static class ReplayEntitiesChild
 
 					ImGui.TableNextRow();
 					ImGui.TableNextColumn();
-					ImGui.Text(UnsafeSpan.Get(hit.Tick));
+					ImGui.Text(UnsafeSpan.Get($"{hit.Tick / 60f + ReplayState.Replay.Header.StartTime:0.0000} ({hit.Tick})"));
 					ImGui.TableNextColumn();
-					ImGui.Text(UnsafeSpan.Get(hit.Tick / 60f, StringFormats.TimeFormat));
-					ImGui.TableNextColumn();
-					ImGui.TextColored(hit.Hp < 0 ? Color.Red : Color.Lerp(Color.Red, Color.White, hit.Hp / (float)initialHp), UnsafeSpan.Get($"{hit.Hp} / {initialHp}"));
+					ImGui.TextColored(hit.Hp < 0 ? Color.Red : Color.Lerp(Color.Red, Color.White, hit.Hp / (float)initialHp), hit.Hp <= 0 ? "Dead" : UnsafeSpan.Get($"{hit.Hp} / {initialHp}"));
 					ImGui.TableNextColumn();
 					ImGui.TextColored(hit.Damage > 0 ? Color.Red : Color.White, UnsafeSpan.Get(hit.Damage));
 					ImGui.TableNextColumn();
