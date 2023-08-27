@@ -10,7 +10,7 @@ public sealed class EndEvents : IEventTypeRenderer<EndEvent>
 {
 	public static void Render(IReadOnlyList<(int Index, EndEvent Event)> events, IReadOnlyList<EntityType> entityTypes, IReadOnlyList<EventColumn> columns)
 	{
-		ImGui.TextColored(Color.Red, "End");
+		ImGui.TextColored(Color.Red, "End of replay");
 
 		if (ImGui.BeginTable("End", columns.Count, EventTypeRendererUtils.EventTableFlags))
 		{
