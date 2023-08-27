@@ -1,6 +1,7 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.ReplayEditor.Events;
 using DevilDaggersInfo.App.Ui.ReplayEditor.State;
+using DevilDaggersInfo.App.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
@@ -25,7 +26,7 @@ public static class ReplayEditorWindow
 		if (_time < ReplayState.Replay.Header.Time)
 			_time += delta;
 
-		ReplayEditor3DWindow.ArenaScene.CurrentTick = (int)MathF.Round(_time * 60);
+		ReplayEditor3DWindow.ArenaScene.CurrentTick = TimeUtils.TimeToTick(_time, 0);
 	}
 
 	public static void Render()
@@ -81,13 +82,13 @@ public static class ReplayEditorWindow
 			{
 				if (ImGui.BeginTabItem("Events"))
 				{
-					ReplayEventsChild.Render(ReplayState.Replay.EventsData);
+					ReplayEventsChild.Render(ReplayState.Replay.EventsData, ReplayState.Replay.Header.StartTime);
 					ImGui.EndTabItem();
 				}
 
 				if (ImGui.BeginTabItem("Entities"))
 				{
-					ReplayEntitiesChild.Render(ReplayState.Replay.EventsData);
+					ReplayEntitiesChild.Render(ReplayState.Replay.EventsData, ReplayState.Replay.Header.StartTime);
 					ImGui.EndTabItem();
 				}
 

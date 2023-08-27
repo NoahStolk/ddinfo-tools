@@ -1,6 +1,6 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.ReplayEditor.Events.EventTypes;
-using DevilDaggersInfo.App.Ui.ReplayEditor.State;
+using DevilDaggersInfo.App.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.App.Utils;
 using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Replay;
@@ -155,6 +155,7 @@ public static class ReplayEventsChild
 	private static readonly Dictionary<EventType, bool> _eventTypeEnabled = Enum.GetValues<EventType>().ToDictionary(et => et, _ => true);
 
 	private static int _startTick;
+	private static float _targetTime;
 
 	private static bool _showEvents = true;
 	private static bool _showTicksWithoutEvents = true;
@@ -173,7 +174,7 @@ public static class ReplayEventsChild
 		}
 	}
 
-	public static void Render(ReplayEventsData eventsData)
+	public static void Render(ReplayEventsData eventsData, float startTime)
 	{
 		const int maxTicks = 60;
 
@@ -190,7 +191,17 @@ public static class ReplayEventsChild
 		if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Handle, iconSize))
 			_startTick = eventsData.TickCount - maxTicks;
 
-		ImGui.Text(UnsafeSpan.Get($"Showing {_startTick} - {_startTick + maxTicks - 1} of {eventsData.TickCount}"));
+		ImGui.Text("Go to:");
+		ImGui.PushItemWidth(120);
+		if (ImGui.InputFloat("##target_time", ref _targetTime))
+			_startTick = TimeUtils.TimeToTick(_targetTime, startTime);
+
+		ImGui.PopItemWidth();
+
+		_startTick = Math.Max(0, Math.Min(_startTick, eventsData.TickCount - maxTicks));
+
+		int endTick = Math.Min(_startTick + maxTicks - 1, eventsData.TickCount);
+		ImGui.Text(UnsafeSpan.Get($"Showing {_startTick} - {endTick} of {eventsData.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, startTime):0.0000} - {TimeUtils.TickToTime(endTick, startTime):0.0000}"));
 
 		ImGui.Checkbox("Show events", ref _showEvents);
 		ImGui.SameLine();
@@ -250,7 +261,7 @@ public static class ReplayEventsChild
 					ImGui.TableNextRow();
 
 					ImGui.TableNextColumn();
-					ImGui.Text(UnsafeSpan.Get($"{i / 60f + ReplayState.Replay.Header.StartTime:0.0000} ({i})"));
+					ImGui.Text(UnsafeSpan.Get($"{TimeUtils.TickToTime(i, startTime):0.0000} ({i})"));
 					ImGui.TableNextColumn();
 					if (inputsEvent != null)
 						RenderInputsEvent(inputsEvent);
