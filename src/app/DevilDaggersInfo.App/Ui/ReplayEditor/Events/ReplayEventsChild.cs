@@ -181,94 +181,102 @@ public static class ReplayEventsChild
 		const int height = 216;
 		const int filteringHeight = 160;
 
-		if (ImGui.BeginChild("TickNavigation", new(448 + 8, height)))
+		ImGui.PushStyleColor(ImGuiCol.ChildBg, Color.Gray(0.13f));
+		if (ImGui.BeginChild("NavigationAndFilteringWrapper", new(0, height)))
 		{
-			Vector2 iconSize = new(16);
-			if (ImGuiImage.ImageButton("Start", Root.InternalResources.ArrowStartTexture.Handle, iconSize))
-				_startTick = 0;
-			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Back", Root.InternalResources.ArrowLeftTexture.Handle, iconSize))
-				_startTick = Math.Max(0, _startTick - maxTicks);
-			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Forward", Root.InternalResources.ArrowRightTexture.Handle, iconSize))
-				_startTick = Math.Min(eventsData.TickCount - maxTicks, _startTick + maxTicks);
-			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Handle, iconSize))
-				_startTick = eventsData.TickCount - maxTicks;
+			if (ImGui.BeginChild("TickNavigation", new(448 + 8, height)))
+			{
+				Vector2 iconSize = new(16);
+				if (ImGuiImage.ImageButton("Start", Root.InternalResources.ArrowStartTexture.Handle, iconSize))
+					_startTick = 0;
+				ImGui.SameLine();
+				if (ImGuiImage.ImageButton("Back", Root.InternalResources.ArrowLeftTexture.Handle, iconSize))
+					_startTick = Math.Max(0, _startTick - maxTicks);
+				ImGui.SameLine();
+				if (ImGuiImage.ImageButton("Forward", Root.InternalResources.ArrowRightTexture.Handle, iconSize))
+					_startTick = Math.Min(eventsData.TickCount - maxTicks, _startTick + maxTicks);
+				ImGui.SameLine();
+				if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Handle, iconSize))
+					_startTick = eventsData.TickCount - maxTicks;
+
+				ImGui.SameLine();
+				ImGui.Text("Go to:");
+				ImGui.SameLine();
+				ImGui.PushItemWidth(120);
+
+				// TODO: EnterReturnsTrue only works when the value is not the same?
+				if (ImGui.InputFloat("##target_time", ref _targetTime, 1, 1, "%.4f", ImGuiInputTextFlags.CharsDecimal | ImGuiInputTextFlags.EnterReturnsTrue | ImGuiInputTextFlags.AlwaysOverwrite))
+					_startTick = TimeUtils.TimeToTick(_targetTime, startTime);
+
+				ImGui.PopItemWidth();
+
+				_startTick = Math.Max(0, Math.Min(_startTick, eventsData.TickCount - maxTicks));
+
+				ImGui.Separator();
+
+				int endTick = Math.Min(_startTick + maxTicks - 1, eventsData.TickCount);
+				ImGui.Text(UnsafeSpan.Get($"Showing {_startTick} - {endTick} of {eventsData.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, startTime):0.0000} - {TimeUtils.TickToTime(endTick, startTime):0.0000}"));
+			}
+
+			ImGui.EndChild(); // TickNavigation
 
 			ImGui.SameLine();
-			ImGui.Text("Go to:");
-			ImGui.SameLine();
-			ImGui.PushItemWidth(120);
 
-			// TODO: EnterReturnsTrue only works when the value is not the same?
-			if (ImGui.InputFloat("##target_time", ref _targetTime, 1, 1, "%.4f", ImGuiInputTextFlags.CharsDecimal | ImGuiInputTextFlags.EnterReturnsTrue | ImGuiInputTextFlags.AlwaysOverwrite))
-				_startTick = TimeUtils.TimeToTick(_targetTime, startTime);
+			if (ImGui.BeginChild("EventTypeFiltering", new(0, height)))
+			{
+				ImGui.Checkbox("Show events", ref _showEvents);
+				ImGui.SameLine();
+				ImGui.Checkbox("Show ticks without events", ref _showTicksWithoutEvents);
 
-			ImGui.PopItemWidth();
+				ImGui.Separator();
 
-			_startTick = Math.Max(0, Math.Min(_startTick, eventsData.TickCount - maxTicks));
+				ImGui.BeginDisabled(!_showEvents);
 
-			ImGui.Separator();
+				if (ImGui.BeginChild("EventTypeFilteringLeft", new(256, filteringHeight)))
+				{
+					for (int i = 0; i < EnumUtils.EventTypes.Count / 2; i++)
+						EventTypeFilterCheckbox(i);
+				}
 
-			int endTick = Math.Min(_startTick + maxTicks - 1, eventsData.TickCount);
-			ImGui.Text(UnsafeSpan.Get($"Showing {_startTick} - {endTick} of {eventsData.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, startTime):0.0000} - {TimeUtils.TickToTime(endTick, startTime):0.0000}"));
+				ImGui.EndChild(); // EventTypeFilteringLeft
+
+				ImGui.SameLine();
+
+				if (ImGui.BeginChild("EventTypeFilteringRight", new(256, filteringHeight)))
+				{
+					for (int i = EnumUtils.EventTypes.Count / 2; i < EnumUtils.EventTypes.Count; i++)
+						EventTypeFilterCheckbox(i);
+				}
+
+				ImGui.EndChild(); // EventTypeFilteringRight
+
+				static void EventTypeFilterCheckbox(int i)
+				{
+					EventType eventType = EnumUtils.EventTypes[i];
+					bool temp = _eventTypeEnabled[eventType];
+					if (ImGui.Checkbox(EventTypeRendererUtils.EventTypeNames[eventType], ref temp))
+						_eventTypeEnabled[eventType] = temp;
+				}
+
+				ImGui.EndDisabled();
+
+				ImGui.Separator();
+
+				if (ImGui.Button("Enable all"))
+					ToggleAll(true);
+
+				ImGui.SameLine();
+
+				if (ImGui.Button("Disable all"))
+					ToggleAll(false);
+			}
+
+			ImGui.EndChild(); // EventTypeFiltering
 		}
 
-		ImGui.EndChild(); // TickNavigation
+		ImGui.EndChild(); // NavigationAndFilteringWrapper
 
-		ImGui.SameLine();
-
-		if (ImGui.BeginChild("EventTypeFiltering", new(0, height)))
-		{
-			ImGui.Checkbox("Show events", ref _showEvents);
-			ImGui.SameLine();
-			ImGui.Checkbox("Show ticks without events", ref _showTicksWithoutEvents);
-
-			ImGui.Separator();
-
-			ImGui.BeginDisabled(!_showEvents);
-
-			if (ImGui.BeginChild("EventTypeFilteringLeft", new(256, filteringHeight)))
-			{
-				for (int i = 0; i < EnumUtils.EventTypes.Count / 2; i++)
-					EventTypeFilterCheckbox(i);
-			}
-
-			ImGui.EndChild(); // EventTypeFilteringLeft
-
-			ImGui.SameLine();
-
-			if (ImGui.BeginChild("EventTypeFilteringRight", new(256, filteringHeight)))
-			{
-				for (int i = EnumUtils.EventTypes.Count / 2; i < EnumUtils.EventTypes.Count; i++)
-					EventTypeFilterCheckbox(i);
-			}
-
-			ImGui.EndChild(); // EventTypeFilteringRight
-
-			static void EventTypeFilterCheckbox(int i)
-			{
-				EventType eventType = EnumUtils.EventTypes[i];
-				bool temp = _eventTypeEnabled[eventType];
-				if (ImGui.Checkbox(EventTypeRendererUtils.EventTypeNames[eventType], ref temp))
-					_eventTypeEnabled[eventType] = temp;
-			}
-
-			ImGui.EndDisabled();
-
-			ImGui.Separator();
-
-			if (ImGui.Button("Enable all"))
-				ToggleAll(true);
-
-			ImGui.SameLine();
-
-			if (ImGui.Button("Disable all"))
-				ToggleAll(false);
-		}
-
-		ImGui.EndChild(); // EventTypeFiltering
+		ImGui.PopStyleColor();
 
 		if (ImGui.BeginChild("ReplayEventsChild", new(0, 0)))
 		{
