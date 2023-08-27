@@ -52,10 +52,6 @@ public static class EventTypeRendererUtils
 		ImGui.TableNextColumn();
 		ImGui.Text(UnsafeSpan.Get(entityId));
 		ImGui.SameLine();
-		ImGui.Text("(");
-		ImGui.SameLine();
 		ImGui.TextColored(entityType.GetColor(), entityType.HasValue ? EnumUtils.EntityTypeNames[entityType.Value] : "???");
-		ImGui.SameLine();
-		ImGui.Text(")");
 	}
 }

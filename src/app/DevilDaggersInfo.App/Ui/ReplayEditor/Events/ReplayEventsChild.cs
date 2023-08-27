@@ -1,8 +1,8 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.ReplayEditor.Events.EventTypes;
+using DevilDaggersInfo.App.Ui.ReplayEditor.State;
 using DevilDaggersInfo.App.Utils;
 using DevilDaggersInfo.App.ZeroAllocation;
-using DevilDaggersInfo.Common;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
@@ -18,138 +18,138 @@ public static class ReplayEventsChild
 
 	private static readonly List<EventColumn> _columnsBoidSpawn = new()
 	{
-		new("Event Index", EventTableColumnFlags, 96),
-		new("Entity Id", EventTableColumnFlags, 128),
-		new("Spawner Entity Id", EventTableColumnFlags, 196),
-		new("Type", EventTableColumnFlags, 128),
-		new("Position", EventTableColumnFlags, 196),
-		new("?", EventTableColumnFlags, 128),
-		new("?", EventTableColumnFlags, 128),
-		new("?", EventTableColumnFlags, 128),
-		new("?", EventTableColumnFlags, 128),
-		new("Speed", EventTableColumnFlags, 128),
+		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		new("Spawner Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		new("Type", ImGuiTableColumnFlags.None, 128),
+		new("Position", ImGuiTableColumnFlags.None, 196),
+		new("?", ImGuiTableColumnFlags.None, 128),
+		new("?", ImGuiTableColumnFlags.None, 128),
+		new("?", ImGuiTableColumnFlags.None, 128),
+		new("?", ImGuiTableColumnFlags.None, 128),
+		new("Speed", ImGuiTableColumnFlags.None, 128),
 	};
 
 	private static readonly List<EventColumn> _columnsLeviathanSpawn = new()
 	{
-		new("Event Index", EventTableColumnFlags, 96),
-		new("Entity Id", EventTableColumnFlags, 128),
-		new("?", EventTableColumnFlags, 128),
+		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		new("?", ImGuiTableColumnFlags.None, 128),
 	};
 
 	private static readonly List<EventColumn> _columnsPedeSpawn = new()
 	{
-		new("Event Index", EventTableColumnFlags, 96),
-		new("Entity Id", EventTableColumnFlags, 128),
-		new("Type", EventTableColumnFlags, 128),
-		new("?", EventTableColumnFlags, 128),
-		new("Position", EventTableColumnFlags, 196),
-		new("?", EventTableColumnFlags, 128),
-		new("Orientation", EventTableColumnFlags, 196),
+		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		new("Type", ImGuiTableColumnFlags.None, 128),
+		new("?", ImGuiTableColumnFlags.None, 128),
+		new("Position", ImGuiTableColumnFlags.None, 196),
+		new("?", ImGuiTableColumnFlags.None, 128),
+		new("Orientation", ImGuiTableColumnFlags.None, 196),
 	};
 
 	private static readonly List<EventColumn> _columnsSpiderEggSpawn = new()
 	{
-		new("Event Index", EventTableColumnFlags, 96),
-		new("Entity Id", EventTableColumnFlags, 128),
-		new("Spawner Entity Id", EventTableColumnFlags, 196),
-		new("Position", EventTableColumnFlags, 196),
-		new("Target Position", EventTableColumnFlags, 196),
+		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		new("Spawner Entity Id", ImGuiTableColumnFlags.None, 196),
+		new("Position", ImGuiTableColumnFlags.None, 196),
+		new("Target Position", ImGuiTableColumnFlags.None, 196),
 	};
 
 	private static readonly List<EventColumn> _columnsSpiderSpawn = new()
 	{
-		new("Event Index", EventTableColumnFlags, 96),
-		new("Entity Id", EventTableColumnFlags, 128),
-		new("Type", EventTableColumnFlags, 128),
-		new("?", EventTableColumnFlags, 128),
-		new("Position", EventTableColumnFlags, 196),
+		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		new("Type", ImGuiTableColumnFlags.None, 128),
+		new("?", ImGuiTableColumnFlags.None, 128),
+		new("Position", ImGuiTableColumnFlags.None, 196),
 	};
 
 	private static readonly List<EventColumn> _columnsSquidSpawn = new()
 	{
-		new("Event Index", EventTableColumnFlags, 96),
-		new("Entity Id", EventTableColumnFlags, 128),
-		new("Type", EventTableColumnFlags, 128),
-		new("?", EventTableColumnFlags, 128),
-		new("Position", EventTableColumnFlags, 196),
-		new("Direction", EventTableColumnFlags, 196),
-		new("Rotation", EventTableColumnFlags, 196),
+		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		new("Type", ImGuiTableColumnFlags.None, 128),
+		new("?", ImGuiTableColumnFlags.None, 128),
+		new("Position", ImGuiTableColumnFlags.None, 196),
+		new("Direction", ImGuiTableColumnFlags.None, 196),
+		new("Rotation", ImGuiTableColumnFlags.None, 196),
 	};
 
 	private static readonly List<EventColumn> _columnsThornSpawn = new()
 	{
-		new("Event Index", EventTableColumnFlags, 96),
-		new("Entity Id", EventTableColumnFlags, 128),
-		new("Type", EventTableColumnFlags, 128),
-		new("?", EventTableColumnFlags, 128),
-		new("Position", EventTableColumnFlags, 196),
+		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		new("Type", ImGuiTableColumnFlags.None, 128),
+		new("?", ImGuiTableColumnFlags.None, 128),
+		new("Position", ImGuiTableColumnFlags.None, 196),
 	};
 
 	private static readonly List<EventColumn> _columnsDaggerSpawn = new()
 	{
-		new("Event Index", EventTableColumnFlags, 96),
-		new("Entity Id", EventTableColumnFlags, 128),
-		new("Type", EventTableColumnFlags, 128),
-		new("?", EventTableColumnFlags, 128),
-		new("Position", EventTableColumnFlags, 196),
-		new("Orientation", EventTableColumnFlags, 196),
-		new("Shot / Rapid", EventTableColumnFlags, 128),
+		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		new("Type", ImGuiTableColumnFlags.None, 128),
+		new("?", ImGuiTableColumnFlags.None, 128),
+		new("Position", ImGuiTableColumnFlags.None, 196),
+		new("Orientation", ImGuiTableColumnFlags.None, 196),
+		new("Shot / Rapid", ImGuiTableColumnFlags.None, 128),
 	};
 
 	private static readonly List<EventColumn> _columnsEntityOrientation = new()
 	{
-		new("Event Index", EventTableColumnFlags, 96),
-		new("Entity Id", EventTableColumnFlags, 128),
-		new("Orientation", EventTableColumnFlags, 196),
+		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		new("Orientation", ImGuiTableColumnFlags.None, 196),
 	};
 
 	private static readonly List<EventColumn> _columnsEntityPosition = new()
 	{
-		new("Event Index", EventTableColumnFlags, 96),
-		new("Entity Id", EventTableColumnFlags, 128),
-		new("Position", EventTableColumnFlags, 196),
+		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		new("Position", ImGuiTableColumnFlags.None, 196),
 	};
 
 	private static readonly List<EventColumn> _columnsEntityTarget = new()
 	{
-		new("Event Index", EventTableColumnFlags, 96),
-		new("Entity Id", EventTableColumnFlags, 128),
-		new("Target Position", EventTableColumnFlags, 196),
+		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		new("Target Position", ImGuiTableColumnFlags.None, 196),
 	};
 
 	private static readonly List<EventColumn> _columnsGem = new()
 	{
-		new("Event Index", EventTableColumnFlags, 96),
+		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
 	};
 
 	private static readonly List<EventColumn> _columnsHit = new()
 	{
-		new("Event Index", EventTableColumnFlags, 96),
-		new("Entity Id A", EventTableColumnFlags, 128),
-		new("Entity Id B", EventTableColumnFlags, 128),
-		new("User Data", EventTableColumnFlags, 128),
+		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		new("Entity Id A", ImGuiTableColumnFlags.WidthFixed, 160),
+		new("Entity Id B", ImGuiTableColumnFlags.WidthFixed, 160),
+		new("User Data", ImGuiTableColumnFlags.WidthFixed, 128),
 	};
 
 	private static readonly List<EventColumn> _columnsTransmute = new()
 	{
-		new("Event Index", EventTableColumnFlags, 96),
-		new("Entity Id", EventTableColumnFlags, 128),
-		new("?", EventTableColumnFlags, 128),
-		new("?", EventTableColumnFlags, 128),
-		new("?", EventTableColumnFlags, 128),
-		new("?", EventTableColumnFlags, 128),
+		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		new("?", ImGuiTableColumnFlags.None, 128),
+		new("?", ImGuiTableColumnFlags.None, 128),
+		new("?", ImGuiTableColumnFlags.None, 128),
+		new("?", ImGuiTableColumnFlags.None, 128),
 	};
 
 	private static readonly List<EventColumn> _columnsDeath = new()
 	{
-		new("Event Index", EventTableColumnFlags, 96),
-		new("Death Type", EventTableColumnFlags, 128),
+		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		new("Death Type", ImGuiTableColumnFlags.WidthFixed, 160),
 	};
 
 	private static readonly List<EventColumn> _columnsEnd = new()
 	{
-		new("Event Index", EventTableColumnFlags, 96),
+		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
 	};
 
 	private static readonly Dictionary<EventType, bool> _eventTypeEnabled = Enum.GetValues<EventType>().ToDictionary(et => et, _ => true);
@@ -158,8 +158,6 @@ public static class ReplayEventsChild
 
 	private static bool _showEvents = true;
 	private static bool _showTicksWithoutEvents = true;
-
-	private static ImGuiTableColumnFlags EventTableColumnFlags => ImGuiTableColumnFlags.None;
 
 	public static void Reset()
 	{
@@ -223,12 +221,9 @@ public static class ReplayEventsChild
 
 		if (ImGui.BeginChild("ReplayEventsChild", new(0, 0)))
 		{
-			Color rowOdd = Color.Gray(0.1f);
-			Color rowEven = Color.Gray(0.05f);
-			if (ImGui.BeginTable("ReplayEventsTable", 4, ImGuiTableFlags.None))
+			if (ImGui.BeginTable("ReplayEventsTable", 3, ImGuiTableFlags.BordersInnerH))
 			{
-				ImGui.TableSetupColumn("Tick", ImGuiTableColumnFlags.None, 32);
-				ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.None, 32);
+				ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.None, 56);
 				ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.None, 128);
 				ImGui.TableSetupColumn("Events", ImGuiTableColumnFlags.None, 384);
 				ImGui.TableHeadersRow();
@@ -254,12 +249,8 @@ public static class ReplayEventsChild
 
 					ImGui.TableNextRow();
 
-					ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, ImGui.GetColorU32(i % 2 == 0 ? rowEven : rowOdd));
-
 					ImGui.TableNextColumn();
-					ImGui.Text(UnsafeSpan.Get(i));
-					ImGui.TableNextColumn();
-					ImGui.Text(UnsafeSpan.Get(i / 60f, StringFormats.TimeFormat));
+					ImGui.Text(UnsafeSpan.Get($"{i / 60f + ReplayState.Replay.Header.StartTime:0.0000} ({i})"));
 					ImGui.TableNextColumn();
 					if (inputsEvent != null)
 						RenderInputsEvent(inputsEvent);
@@ -340,9 +331,9 @@ public static class ReplayEventsChild
 		ImGui.SameLine();
 		ImGui.TextColored(GetShootTypeColor(ie.ShootHoming), "[RMB]");
 		ImGui.SameLine();
-		ImGui.TextColored(ie.MouseX == 0 ? Color.White : Color.Red, UnsafeSpan.Get($"X: {ie.MouseX}"));
+		ImGui.TextColored(ie.MouseX == 0 ? Color.White : Color.Red, UnsafeSpan.Get($"X:{ie.MouseX}"));
 		ImGui.SameLine();
-		ImGui.TextColored(ie.MouseY == 0 ? Color.White : Color.Red, UnsafeSpan.Get($"X: {ie.MouseY}"));
+		ImGui.TextColored(ie.MouseY == 0 ? Color.White : Color.Red, UnsafeSpan.Get($"Y:{ie.MouseY}"));
 
 		if (ie is InitialInputsEvent initial)
 			ImGui.TextColored(Color.White, UnsafeSpan.Get($"Look Speed: {initial.LookSpeed}"));
