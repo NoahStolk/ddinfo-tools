@@ -18,9 +18,48 @@ public static class ReplayEventsChild
 {
 	private static readonly EventCache _eventCache = new();
 
+	private static readonly IReadOnlyDictionary<EventType, string> _eventTypeNames = new Dictionary<EventType, string>
+	{
+		[EventType.BoidSpawn] = "Boid Spawn events",
+		[EventType.LeviathanSpawn] = "Leviathan Spawn events",
+		[EventType.PedeSpawn] = "Pede Spawn events",
+		[EventType.SpiderEggSpawn] = "Spider Egg Spawn events",
+		[EventType.SpiderSpawn] = "Spider Spawn events",
+		[EventType.SquidSpawn] = "Squid Spawn events",
+		[EventType.ThornSpawn] = "Thorn Spawn events",
+		[EventType.DaggerSpawn] = "Dagger Spawn events",
+		[EventType.EntityOrientation] = "Entity Orientation events",
+		[EventType.EntityPosition] = "Entity Position events",
+		[EventType.EntityTarget] = "Entity Target events",
+		[EventType.Gem] = "Gem events",
+		[EventType.Hit] = "Hit events",
+		[EventType.Transmute] = "Transmute events",
+	};
+
+	private static readonly Dictionary<EventType, bool> _eventTypeEnabled = Enum.GetValues<EventType>().ToDictionary(et => et, _ => true);
+
 	private static int _startTick;
+
 	private static bool _showEvents = true;
 	private static bool _showTicksWithoutEvents = true;
+
+	private enum EventType
+	{
+		BoidSpawn,
+		LeviathanSpawn,
+		PedeSpawn,
+		SpiderEggSpawn,
+		SpiderSpawn,
+		SquidSpawn,
+		ThornSpawn,
+		DaggerSpawn,
+		EntityOrientation,
+		EntityPosition,
+		EntityTarget,
+		Gem,
+		Hit,
+		Transmute,
+	}
 
 	private static ImGuiTableFlags EventTableFlags => ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX;
 	private static ImGuiTableColumnFlags EventTableColumnFlags => ImGuiTableColumnFlags.None;
@@ -28,6 +67,12 @@ public static class ReplayEventsChild
 	public static void Reset()
 	{
 		_startTick = 0;
+	}
+
+	private static void ToggleAll(bool enabled)
+	{
+		foreach (EventType eventType in Enum.GetValues<EventType>())
+			_eventTypeEnabled[eventType] = enabled;
 	}
 
 	public static void Render(ReplayEventsData eventsData)
@@ -52,6 +97,28 @@ public static class ReplayEventsChild
 		ImGui.Checkbox("Show events", ref _showEvents);
 		ImGui.SameLine();
 		ImGui.Checkbox("Show ticks without events", ref _showTicksWithoutEvents);
+
+		ImGui.Separator();
+
+		ImGui.BeginDisabled(!_showEvents);
+		foreach (EventType eventType in Enum.GetValues<EventType>())
+		{
+			bool temp = _eventTypeEnabled[eventType];
+			if (ImGui.Checkbox(_eventTypeNames[eventType], ref temp))
+				_eventTypeEnabled[eventType] = temp;
+		}
+
+		ImGui.EndDisabled();
+
+		ImGui.Separator();
+
+		if (ImGui.Button("Enable all"))
+			ToggleAll(true);
+
+		ImGui.SameLine();
+
+		if (ImGui.Button("Disable all"))
+			ToggleAll(false);
 
 		Color rowOdd = Color.Gray(0.1f);
 		Color rowEven = Color.Gray(0.05f);
@@ -98,27 +165,59 @@ public static class ReplayEventsChild
 
 				ImGui.TableNextColumn();
 
-				if (_showEvents)
-				{
+				if (!_showEvents)
+					continue;
+
+				// Enemy spawn events
+				if (_eventTypeEnabled[EventType.BoidSpawn] && _eventCache.BoidSpawnEvents.Count > 0)
 					RenderBoidSpawnEvents(_eventCache.BoidSpawnEvents, eventsData.EntityTypes);
+
+				if (_eventTypeEnabled[EventType.LeviathanSpawn] && _eventCache.LeviathanSpawnEvents.Count > 0)
 					RenderLeviathanSpawnEvents(_eventCache.LeviathanSpawnEvents, eventsData.EntityTypes);
+
+				if (_eventTypeEnabled[EventType.PedeSpawn] && _eventCache.PedeSpawnEvents.Count > 0)
 					RenderPedeSpawnEvents(_eventCache.PedeSpawnEvents, eventsData.EntityTypes);
+
+				if (_eventTypeEnabled[EventType.SpiderEggSpawn] && _eventCache.SpiderEggSpawnEvents.Count > 0)
 					RenderSpiderEggSpawnEvents(_eventCache.SpiderEggSpawnEvents, eventsData.EntityTypes);
+
+				if (_eventTypeEnabled[EventType.SpiderSpawn] && _eventCache.SpiderSpawnEvents.Count > 0)
 					RenderSpiderSpawnEvents(_eventCache.SpiderSpawnEvents, eventsData.EntityTypes);
+
+				if (_eventTypeEnabled[EventType.SquidSpawn] && _eventCache.SquidSpawnEvents.Count > 0)
 					RenderSquidSpawnEvents(_eventCache.SquidSpawnEvents, eventsData.EntityTypes);
+
+				if (_eventTypeEnabled[EventType.ThornSpawn] && _eventCache.ThornSpawnEvents.Count > 0)
 					RenderThornSpawnEvents(_eventCache.ThornSpawnEvents, eventsData.EntityTypes);
 
+				// Other events
+				if (_eventTypeEnabled[EventType.DaggerSpawn] && _eventCache.DaggerSpawnEvents.Count > 0)
 					RenderDaggerSpawnEvents(_eventCache.DaggerSpawnEvents, eventsData.EntityTypes);
+
+				if (_eventTypeEnabled[EventType.EntityOrientation] && _eventCache.EntityOrientationEvents.Count > 0)
 					RenderEntityOrientationEvents(_eventCache.EntityOrientationEvents, eventsData.EntityTypes);
+
+				if (_eventTypeEnabled[EventType.EntityPosition] && _eventCache.EntityPositionEvents.Count > 0)
 					RenderEntityPositionEvents(_eventCache.EntityPositionEvents, eventsData.EntityTypes);
+
+				if (_eventTypeEnabled[EventType.EntityTarget] && _eventCache.EntityTargetEvents.Count > 0)
 					RenderEntityTargetEvents(_eventCache.EntityTargetEvents, eventsData.EntityTypes);
+
+				if (_eventTypeEnabled[EventType.Gem] && _eventCache.GemEvents.Count > 0)
 					RenderGemEvents(_eventCache.GemEvents);
+
+				if (_eventTypeEnabled[EventType.Hit] && _eventCache.HitEvents.Count > 0)
 					RenderHitEvents(_eventCache.HitEvents, eventsData.EntityTypes);
+
+				if (_eventTypeEnabled[EventType.Transmute] && _eventCache.TransmuteEvents.Count > 0)
 					RenderTransmuteEvents(_eventCache.TransmuteEvents, eventsData.EntityTypes);
 
+				// Final events
+				if (_eventCache.DeathEvents.Count > 0)
 					RenderDeathEvents(_eventCache.DeathEvents);
+
+				if (_eventCache.EndEvents.Count > 0)
 					RenderEndEvents(_eventCache.EndEvents);
-				}
 			}
 
 			ImGui.EndTable();
@@ -153,12 +252,9 @@ public static class ReplayEventsChild
 
 	private static void RenderBoidSpawnEvents(IReadOnlyList<(int Index, BoidSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
 	{
-		if (events.Count == 0)
-			return;
+		ImGui.TextColored(EnemiesV3_2.Skull4.Color, _eventTypeNames[EventType.BoidSpawn]);
 
-		ImGui.TextColored(EnemiesV3_2.Skull4.Color, "Boid Spawn events");
-
-		if (ImGui.BeginTable("BoidSpawnEvents", 10, EventTableFlags))
+		if (ImGui.BeginTable(_eventTypeNames[EventType.BoidSpawn], 10, EventTableFlags))
 		{
 			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
 			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
@@ -195,12 +291,9 @@ public static class ReplayEventsChild
 
 	private static void RenderLeviathanSpawnEvents(IReadOnlyList<(int Index, LeviathanSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
 	{
-		if (events.Count == 0)
-			return;
+		ImGui.TextColored(EnemiesV3_2.Leviathan.Color, _eventTypeNames[EventType.LeviathanSpawn]);
 
-		ImGui.TextColored(EnemiesV3_2.Leviathan.Color, "Leviathan Spawn events");
-
-		if (ImGui.BeginTable("LeviathanSpawnEvents", 3, EventTableFlags))
+		if (ImGui.BeginTable(_eventTypeNames[EventType.LeviathanSpawn], 3, EventTableFlags))
 		{
 			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
 			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
@@ -223,12 +316,9 @@ public static class ReplayEventsChild
 
 	private static void RenderPedeSpawnEvents(IReadOnlyList<(int Index, PedeSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
 	{
-		if (events.Count == 0)
-			return;
+		ImGui.TextColored(EnemiesV3_2.Gigapede.Color, _eventTypeNames[EventType.PedeSpawn]);
 
-		ImGui.TextColored(EnemiesV3_2.Gigapede.Color, "Pede Spawn events");
-
-		if (ImGui.BeginTable("PedeSpawnEvents", 7, EventTableFlags))
+		if (ImGui.BeginTable(_eventTypeNames[EventType.PedeSpawn], 7, EventTableFlags))
 		{
 			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
 			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
@@ -259,12 +349,9 @@ public static class ReplayEventsChild
 
 	private static void RenderSpiderEggSpawnEvents(IReadOnlyList<(int Index, SpiderEggSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
 	{
-		if (events.Count == 0)
-			return;
+		ImGui.TextColored(EnemiesV3_2.SpiderEgg1.Color, _eventTypeNames[EventType.SpiderEggSpawn]);
 
-		ImGui.TextColored(EnemiesV3_2.SpiderEgg1.Color, "Spider Egg Spawn events");
-
-		if (ImGui.BeginTable("SpiderEggSpawnEvents", 5, EventTableFlags))
+		if (ImGui.BeginTable(_eventTypeNames[EventType.SpiderEggSpawn], 5, EventTableFlags))
 		{
 			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
 			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
@@ -291,12 +378,9 @@ public static class ReplayEventsChild
 
 	private static void RenderSpiderSpawnEvents(IReadOnlyList<(int Index, SpiderSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
 	{
-		if (events.Count == 0)
-			return;
+		ImGui.TextColored(EnemiesV3_2.Spider2.Color, _eventTypeNames[EventType.SpiderSpawn]);
 
-		ImGui.TextColored(EnemiesV3_2.Spider2.Color, "Spider Spawn events");
-
-		if (ImGui.BeginTable("SpiderSpawnEvents", 5, EventTableFlags))
+		if (ImGui.BeginTable(_eventTypeNames[EventType.SpiderSpawn], 5, EventTableFlags))
 		{
 			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
 			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
@@ -323,12 +407,9 @@ public static class ReplayEventsChild
 
 	private static void RenderSquidSpawnEvents(IReadOnlyList<(int Index, SquidSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
 	{
-		if (events.Count == 0)
-			return;
+		ImGui.TextColored(EnemiesV3_2.Squid3.Color, _eventTypeNames[EventType.SquidSpawn]);
 
-		ImGui.TextColored(EnemiesV3_2.Squid3.Color, "Squid Spawn events");
-
-		if (ImGui.BeginTable("SquidSpawnEvents", 6, EventTableFlags))
+		if (ImGui.BeginTable(_eventTypeNames[EventType.SquidSpawn], 6, EventTableFlags))
 		{
 			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
 			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
@@ -357,12 +438,9 @@ public static class ReplayEventsChild
 
 	private static void RenderThornSpawnEvents(IReadOnlyList<(int Index, ThornSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
 	{
-		if (events.Count == 0)
-			return;
+		ImGui.TextColored(EnemiesV3_2.Thorn.Color, _eventTypeNames[EventType.ThornSpawn]);
 
-		ImGui.TextColored(EnemiesV3_2.Thorn.Color, "Thorn Spawn events");
-
-		if (ImGui.BeginTable("ThornSpawnEvents", 5, EventTableFlags))
+		if (ImGui.BeginTable(_eventTypeNames[EventType.ThornSpawn], 5, EventTableFlags))
 		{
 			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
 			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
@@ -391,12 +469,9 @@ public static class ReplayEventsChild
 
 	private static void RenderDaggerSpawnEvents(IReadOnlyList<(int Index, DaggerSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
 	{
-		if (events.Count == 0)
-			return;
+		ImGui.TextColored(Color.Purple, _eventTypeNames[EventType.DaggerSpawn]);
 
-		ImGui.TextColored(Color.Purple, "Dagger Spawn events");
-
-		if (ImGui.BeginTable("DaggerSpawnEvents", 7, EventTableFlags))
+		if (ImGui.BeginTable(_eventTypeNames[EventType.DaggerSpawn], 7, EventTableFlags))
 		{
 			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
 			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 192);
@@ -425,64 +500,11 @@ public static class ReplayEventsChild
 		}
 	}
 
-	private static void RenderDeathEvents(IReadOnlyList<(int Index, DeathEvent Event)> events)
-	{
-		if (events.Count == 0)
-			return;
-
-		ImGui.TextColored(Color.Red, "Death");
-
-		if (ImGui.BeginTable("Death", 2, EventTableFlags))
-		{
-			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
-			ImGui.TableSetupColumn("Death Type", EventTableColumnFlags, 192);
-			ImGui.TableHeadersRow();
-
-			for (int i = 0; i < events.Count; i++)
-			{
-				ImGui.TableNextRow();
-
-				(int index, DeathEvent e) = events[i];
-				NextColumnText(UnsafeSpan.Get(index));
-				NextColumnText(UnsafeSpan.Get(Deaths.GetDeathByType(GameConstants.CurrentVersion, (byte)e.DeathType)?.Name ?? "???"));
-			}
-
-			ImGui.EndTable();
-		}
-	}
-
-	private static void RenderEndEvents(IReadOnlyList<(int Index, EndEvent Event)> events)
-	{
-		if (events.Count == 0)
-			return;
-
-		ImGui.TextColored(Color.Red, "End");
-
-		if (ImGui.BeginTable("End", 1, EventTableFlags))
-		{
-			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
-			ImGui.TableHeadersRow();
-
-			for (int i = 0; i < events.Count; i++)
-			{
-				ImGui.TableNextRow();
-
-				(int index, _) = events[i];
-				NextColumnText(UnsafeSpan.Get(index));
-			}
-
-			ImGui.EndTable();
-		}
-	}
-
 	private static void RenderEntityOrientationEvents(IReadOnlyList<(int Index, EntityOrientationEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
 	{
-		if (events.Count == 0)
-			return;
+		ImGui.TextColored(Color.Yellow, _eventTypeNames[EventType.EntityOrientation]);
 
-		ImGui.TextColored(Color.Yellow, "Entity Orientation events");
-
-		if (ImGui.BeginTable("EntityOrientationEvents", 3, EventTableFlags))
+		if (ImGui.BeginTable(_eventTypeNames[EventType.EntityOrientation], 3, EventTableFlags))
 		{
 			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
 			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
@@ -505,12 +527,9 @@ public static class ReplayEventsChild
 
 	private static void RenderEntityPositionEvents(IReadOnlyList<(int Index, EntityPositionEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
 	{
-		if (events.Count == 0)
-			return;
+		ImGui.TextColored(Color.Yellow, _eventTypeNames[EventType.EntityPosition]);
 
-		ImGui.TextColored(Color.Yellow, "Entity Position events");
-
-		if (ImGui.BeginTable("EntityPositionEvents", 3, EventTableFlags))
+		if (ImGui.BeginTable(_eventTypeNames[EventType.EntityPosition], 3, EventTableFlags))
 		{
 			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
 			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
@@ -533,12 +552,9 @@ public static class ReplayEventsChild
 
 	private static void RenderEntityTargetEvents(IReadOnlyList<(int Index, EntityTargetEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
 	{
-		if (events.Count == 0)
-			return;
+		ImGui.TextColored(Color.Yellow, _eventTypeNames[EventType.EntityTarget]);
 
-		ImGui.TextColored(Color.Yellow, "Entity Target events");
-
-		if (ImGui.BeginTable("EntityTargetEvents", 3, EventTableFlags))
+		if (ImGui.BeginTable(_eventTypeNames[EventType.EntityTarget], 3, EventTableFlags))
 		{
 			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
 			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
@@ -561,12 +577,9 @@ public static class ReplayEventsChild
 
 	private static void RenderGemEvents(IReadOnlyList<(int Index, GemEvent Event)> events)
 	{
-		if (events.Count == 0)
-			return;
+		ImGui.TextColored(Color.Yellow, _eventTypeNames[EventType.Gem]);
 
-		ImGui.TextColored(Color.Yellow, "Gem events");
-
-		if (ImGui.BeginTable("GemEvents", 1, EventTableFlags))
+		if (ImGui.BeginTable(_eventTypeNames[EventType.Gem], 1, EventTableFlags))
 		{
 			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
 			ImGui.TableHeadersRow();
@@ -585,12 +598,9 @@ public static class ReplayEventsChild
 
 	private static void RenderHitEvents(IReadOnlyList<(int Index, HitEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
 	{
-		if (events.Count == 0)
-			return;
+		ImGui.TextColored(Color.Orange, _eventTypeNames[EventType.Hit]);
 
-		ImGui.TextColored(Color.Orange, "Hit events");
-
-		if (ImGui.BeginTable("HitEvents", 4, EventTableFlags))
+		if (ImGui.BeginTable(_eventTypeNames[EventType.Hit], 4, EventTableFlags))
 		{
 			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
 			ImGui.TableSetupColumn("Entity Id A", EventTableColumnFlags, 128);
@@ -615,12 +625,9 @@ public static class ReplayEventsChild
 
 	private static void RenderTransmuteEvents(IReadOnlyList<(int Index, TransmuteEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
 	{
-		if (events.Count == 0)
-			return;
+		ImGui.TextColored(Color.Yellow, _eventTypeNames[EventType.Transmute]);
 
-		ImGui.TextColored(Color.Yellow, "Transmute events");
-
-		if (ImGui.BeginTable("TransmuteEvents", 6, EventTableFlags))
+		if (ImGui.BeginTable(_eventTypeNames[EventType.Transmute], 6, EventTableFlags))
 		{
 			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
 			ImGui.TableSetupColumn("Entity Id", EventTableColumnFlags, 128);
@@ -641,6 +648,50 @@ public static class ReplayEventsChild
 				NextColumnText(UnsafeSpan.Get(e.B));
 				NextColumnText(UnsafeSpan.Get(e.C));
 				NextColumnText(UnsafeSpan.Get(e.D));
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void RenderDeathEvents(IReadOnlyList<(int Index, DeathEvent Event)> events)
+	{
+		ImGui.TextColored(Color.Red, "Death");
+
+		if (ImGui.BeginTable("Death", 2, EventTableFlags))
+		{
+			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
+			ImGui.TableSetupColumn("Death Type", EventTableColumnFlags, 192);
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < events.Count; i++)
+			{
+				ImGui.TableNextRow();
+
+				(int index, DeathEvent e) = events[i];
+				NextColumnText(UnsafeSpan.Get(index));
+				NextColumnText(UnsafeSpan.Get(Deaths.GetDeathByType(GameConstants.CurrentVersion, (byte)e.DeathType)?.Name ?? "???"));
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void RenderEndEvents(IReadOnlyList<(int Index, EndEvent Event)> events)
+	{
+		ImGui.TextColored(Color.Red, "End");
+
+		if (ImGui.BeginTable("End", 1, EventTableFlags))
+		{
+			ImGui.TableSetupColumn("Event Index", EventTableColumnFlags, 96);
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < events.Count; i++)
+			{
+				ImGui.TableNextRow();
+
+				(int index, _) = events[i];
+				NextColumnText(UnsafeSpan.Get(index));
 			}
 
 			ImGui.EndTable();
