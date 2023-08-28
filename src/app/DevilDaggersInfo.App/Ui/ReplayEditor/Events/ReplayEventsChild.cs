@@ -184,6 +184,9 @@ public static class ReplayEventsChild
 		{
 			if (ImGui.BeginChild("TickNavigation", new(448 + 8, height)))
 			{
+				const int padding = 4;
+				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
+
 				Vector2 iconSize = new(16);
 				if (ImGuiImage.ImageButton("Start", Root.InternalResources.ArrowStartTexture.Handle, iconSize))
 					_startTick = 0;
@@ -209,10 +212,9 @@ public static class ReplayEventsChild
 				ImGui.PopItemWidth();
 
 				_startTick = Math.Max(0, Math.Min(_startTick, eventsData.TickCount - maxTicks));
-
-				ImGui.Separator();
-
 				int endTick = Math.Min(_startTick + maxTicks - 1, eventsData.TickCount);
+
+				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
 				ImGui.Text(UnsafeSpan.Get($"Showing {_startTick} - {endTick} of {eventsData.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, startTime):0.0000} - {TimeUtils.TickToTime(endTick, startTime):0.0000}"));
 			}
 

@@ -91,5 +91,8 @@ public static class Colors
 		style.Colors[(int)ImGuiCol.FrameBgActive] = colorConfiguration.Primary with { A = _alphaFrameBackgroundActive };
 		style.Colors[(int)ImGuiCol.SeparatorHovered] = colorConfiguration.Quaternary with { A = _alphaSeparatorHovered };
 		style.Colors[(int)ImGuiCol.SeparatorActive] = colorConfiguration.Quaternary;
+		style.Colors[(int)ImGuiCol.Tab] = colorConfiguration.Tertiary;
+		style.Colors[(int)ImGuiCol.TabHovered] = colorConfiguration.Secondary;
+		style.Colors[(int)ImGuiCol.TabActive] = colorConfiguration.Primary;
 	}
 }
