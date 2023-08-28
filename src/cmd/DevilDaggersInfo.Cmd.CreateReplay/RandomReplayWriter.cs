@@ -22,7 +22,7 @@ public class RandomReplayWriter : IReplayWriter
 				events.Add(new SquidSpawnEvent(1, SquidType.Squid2, -1, new(0, 0, 20), new(0, 2, 0), -549.1759f));
 
 			if (i is >= 60 and <= 70)
-				events.Add(new BoidSpawnEvent(i - 58, 1, BoidType.Skull2, new(20, 20, 20), Int16Vec3.Zero, Int16Vec3.Zero, Int16Vec3.Zero, Vector3.Zero, 4));
+				events.Add(new BoidSpawnEvent(i - 58, 1, BoidType.Skull2, new(20, 20, 20), Int16Mat3x3.Identity, Vector3.Zero, 4));
 
 			if (i == 80)
 			{
@@ -70,9 +70,9 @@ public class RandomReplayWriter : IReplayWriter
 
 			if (i == 720)
 			{
-				events.Add(new BoidSpawnEvent(1000, 1, BoidType.Skull4, new(-250, 20, -250), Int16Vec3.Zero, Int16Vec3.Zero, Int16Vec3.Zero, Vector3.Zero, 10000));
-				events.Add(new BoidSpawnEvent(1001, 1, BoidType.Skull4, new(-250, 150, -280), Int16Vec3.Zero, Int16Vec3.Zero, Int16Vec3.Zero, Vector3.Zero, 10000));
-				events.Add(new BoidSpawnEvent(1002, 1, BoidType.Skull4, new(-250, 20, -310), Int16Vec3.Zero, Int16Vec3.Zero, Int16Vec3.Zero, Vector3.Zero, 10000));
+				events.Add(new BoidSpawnEvent(1000, 1, BoidType.Skull4, new(-250, 20, -250), Int16Mat3x3.Identity, Vector3.Zero, 10000));
+				events.Add(new BoidSpawnEvent(1001, 1, BoidType.Skull4, new(-250, 150, -280), Int16Mat3x3.Identity, Vector3.Zero, 10000));
+				events.Add(new BoidSpawnEvent(1002, 1, BoidType.Skull4, new(-250, 20, -310), Int16Mat3x3.Identity, Vector3.Zero, 10000));
 			}
 
 			if (i == 780)

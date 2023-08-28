@@ -22,11 +22,9 @@ public static class ReplayEventsChild
 		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
 		new("Spawner Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
 		new("Type", ImGuiTableColumnFlags.None, 128),
-		new("Position", ImGuiTableColumnFlags.None, 196),
-		new("?", ImGuiTableColumnFlags.None, 128),
-		new("?", ImGuiTableColumnFlags.None, 128),
-		new("?", ImGuiTableColumnFlags.None, 128),
-		new("?", ImGuiTableColumnFlags.None, 128),
+		new("Position", ImGuiTableColumnFlags.None, 128),
+		new("Orientation", ImGuiTableColumnFlags.None, 196),
+		new("Velocity", ImGuiTableColumnFlags.None, 128),
 		new("Speed", ImGuiTableColumnFlags.None, 128),
 	};
 

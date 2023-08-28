@@ -27,10 +27,8 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEvent>
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.SpawnerEntityId);
 				EventTypeRendererUtils.NextColumnText(GetBoidTypeText(e.BoidType));
 				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.Position));
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.A));
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.B));
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.C));
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.D));
+				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.Orientation));
+				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.Velocity));
 				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.Speed, "0.00"));
 			}
 
