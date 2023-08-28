@@ -3,6 +3,7 @@ using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Extensions;
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.App.Ui.ReplayEditor.Events.EventTypes;
 
@@ -49,9 +50,17 @@ public static class EventTypeRendererUtils
 	{
 		EntityType? entityType = entityId >= 0 && entityId < entityTypes.Count ? entityTypes[entityId] : null;
 
+		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
+
 		ImGui.TableNextColumn();
 		ImGui.Text(UnsafeSpan.Get(entityId));
 		ImGui.SameLine();
+		ImGui.Text(" (");
+		ImGui.SameLine();
 		ImGui.TextColored(entityType.GetColor(), entityType.HasValue ? EnumUtils.EntityTypeNames[entityType.Value] : "???");
+		ImGui.SameLine();
+		ImGui.Text(")");
+
+		ImGui.PopStyleVar();
 	}
 }

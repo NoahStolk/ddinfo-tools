@@ -156,7 +156,7 @@ public static class ReplayEventsChild
 	private static float _targetTime;
 
 	private static bool _showEvents = true;
-	private static bool _showTicksWithoutEvents = true;
+	private static bool _onlyShowTicksWithEnabledEvents;
 
 	public static void Reset()
 	{
@@ -224,7 +224,7 @@ public static class ReplayEventsChild
 			{
 				ImGui.Checkbox("Show events", ref _showEvents);
 				ImGui.SameLine();
-				ImGui.Checkbox("Show ticks without events", ref _showTicksWithoutEvents);
+				ImGui.Checkbox("Only show ticks with enabled events", ref _onlyShowTicksWithEnabledEvents);
 
 				ImGui.Separator();
 
@@ -292,16 +292,45 @@ public static class ReplayEventsChild
 
 					IInputsEvent? inputsEvent = null;
 					_eventCache.Clear();
+					bool showTick = !_onlyShowTicksWithEnabledEvents;
 					for (int j = offset; j < offset + count; j++)
 					{
 						IEvent @event = eventsData.Events[j];
 						if (@event is IInputsEvent ie)
+						{
 							inputsEvent = ie;
+						}
 						else
+						{
 							_eventCache.Add(j, @event);
+
+							if (!showTick)
+							{
+								EventType? eventType = @event switch
+								{
+									BoidSpawnEvent => EventType.BoidSpawn,
+									LeviathanSpawnEvent => EventType.LeviathanSpawn,
+									PedeSpawnEvent => EventType.PedeSpawn,
+									SpiderEggSpawnEvent => EventType.SpiderEggSpawn,
+									SpiderSpawnEvent => EventType.SpiderSpawn,
+									SquidSpawnEvent => EventType.SquidSpawn,
+									ThornSpawnEvent => EventType.ThornSpawn,
+									DaggerSpawnEvent => EventType.DaggerSpawn,
+									EntityOrientationEvent => EventType.EntityOrientation,
+									EntityPositionEvent => EventType.EntityPosition,
+									EntityTargetEvent => EventType.EntityTarget,
+									GemEvent => EventType.Gem,
+									HitEvent => EventType.Hit,
+									TransmuteEvent => EventType.Transmute,
+									_ => null,
+								};
+								if (eventType.HasValue && _eventTypeEnabled[eventType.Value])
+									showTick = true;
+							}
+						}
 					}
 
-					if (!_showTicksWithoutEvents && _eventCache.Count == 0)
+					if (!showTick)
 						continue;
 
 					ImGui.TableNextRow();
