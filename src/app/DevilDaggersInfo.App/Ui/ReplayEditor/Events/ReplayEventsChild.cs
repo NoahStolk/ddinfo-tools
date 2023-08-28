@@ -41,9 +41,9 @@ public static class ReplayEventsChild
 		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
 		new("Type", ImGuiTableColumnFlags.None, 128),
 		new("?", ImGuiTableColumnFlags.None, 128),
-		new("Position", ImGuiTableColumnFlags.None, 196),
+		new("Position", ImGuiTableColumnFlags.None, 128),
 		new("?", ImGuiTableColumnFlags.None, 128),
-		new("Orientation", ImGuiTableColumnFlags.None, 196),
+		new("Orientation", ImGuiTableColumnFlags.None, 128),
 	};
 
 	private static readonly List<EventColumn> _columnsSpiderEggSpawn = new()
@@ -51,8 +51,8 @@ public static class ReplayEventsChild
 		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
 		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
 		new("Spawner Entity Id", ImGuiTableColumnFlags.None, 196),
-		new("Position", ImGuiTableColumnFlags.None, 196),
-		new("Target Position", ImGuiTableColumnFlags.None, 196),
+		new("Position", ImGuiTableColumnFlags.None, 128),
+		new("Target Position", ImGuiTableColumnFlags.None, 128),
 	};
 
 	private static readonly List<EventColumn> _columnsSpiderSpawn = new()
@@ -61,7 +61,7 @@ public static class ReplayEventsChild
 		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
 		new("Type", ImGuiTableColumnFlags.None, 128),
 		new("?", ImGuiTableColumnFlags.None, 128),
-		new("Position", ImGuiTableColumnFlags.None, 196),
+		new("Position", ImGuiTableColumnFlags.None, 128),
 	};
 
 	private static readonly List<EventColumn> _columnsSquidSpawn = new()
@@ -70,9 +70,9 @@ public static class ReplayEventsChild
 		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
 		new("Type", ImGuiTableColumnFlags.None, 128),
 		new("?", ImGuiTableColumnFlags.None, 128),
-		new("Position", ImGuiTableColumnFlags.None, 196),
-		new("Direction", ImGuiTableColumnFlags.None, 196),
-		new("Rotation", ImGuiTableColumnFlags.None, 196),
+		new("Position", ImGuiTableColumnFlags.None, 128),
+		new("Direction", ImGuiTableColumnFlags.None, 128),
+		new("Rotation", ImGuiTableColumnFlags.None, 128),
 	};
 
 	private static readonly List<EventColumn> _columnsThornSpawn = new()
@@ -81,7 +81,7 @@ public static class ReplayEventsChild
 		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
 		new("Type", ImGuiTableColumnFlags.None, 128),
 		new("?", ImGuiTableColumnFlags.None, 128),
-		new("Position", ImGuiTableColumnFlags.None, 196),
+		new("Position", ImGuiTableColumnFlags.None, 128),
 	};
 
 	private static readonly List<EventColumn> _columnsDaggerSpawn = new()
@@ -90,7 +90,7 @@ public static class ReplayEventsChild
 		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
 		new("Type", ImGuiTableColumnFlags.None, 128),
 		new("?", ImGuiTableColumnFlags.None, 128),
-		new("Position", ImGuiTableColumnFlags.None, 196),
+		new("Position", ImGuiTableColumnFlags.None, 128),
 		new("Orientation", ImGuiTableColumnFlags.None, 196),
 		new("Shot / Rapid", ImGuiTableColumnFlags.None, 128),
 	};
@@ -106,14 +106,14 @@ public static class ReplayEventsChild
 	{
 		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
 		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Position", ImGuiTableColumnFlags.None, 196),
+		new("Position", ImGuiTableColumnFlags.None, 128),
 	};
 
 	private static readonly List<EventColumn> _columnsEntityTarget = new()
 	{
 		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
 		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Target Position", ImGuiTableColumnFlags.None, 196),
+		new("Target Position", ImGuiTableColumnFlags.None, 128),
 	};
 
 	private static readonly List<EventColumn> _columnsGem = new()

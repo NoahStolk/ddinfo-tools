@@ -35,6 +35,7 @@ public class Skull2TargetVisualizerReplayWriter : IReplayWriter
 			kills: original.Header.Kills,
 			playerId: original.Header.PlayerId,
 			username: original.Header.Username,
+			unknown: original.Header.Unknown,
 			spawnsetBuffer: original.Header.SpawnsetBuffer);
 
 		return new(

@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Cmd.CreateReplay;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Events.Interfaces;
 
@@ -5,6 +6,10 @@ using DevilDaggersInfo.Core.Replay.Events.Interfaces;
 // File.WriteAllBytes(@"C:\Users\NOAH\AppData\Roaming\DevilDaggers\replays\skull-2-analysis-done_113.72-xvlv-0be4d3b8[2d05a83a].ddreplay", new Skull2TargetVisualizerReplayWriter().Write().Compile());
 // File.WriteAllBytes(@"C:\Users\NOAH\AppData\Roaming\DevilDaggers\replays\deaths_1.00-xvlv-0be4d3b8[2d05a83a].ddreplay", new DeathsReplayWriter().Write().Compile());
 // File.WriteAllBytes(@"C:\Users\NOAH\AppData\Roaming\DevilDaggers\replays\DJUMPMODIFIED.ddreplay", new DaggerDirectionModifier().Write().Compile());
+
+File.WriteAllBytes(@"C:\Users\NOAH\AppData\Roaming\DevilDaggers\replays\doublesquid-skulltest_429.12-LocoCaesarIV-0bed0c5b.ddreplay", new NaNBoids().Write().Compile());
+
+return;
 
 ReplayBinary<LocalReplayBinaryHeader> original = new(File.ReadAllBytes(@"C:\Users\NOAH\AppData\Roaming\DevilDaggers\replays\PSY_DJUMP.ddreplay"));
 

@@ -73,23 +73,12 @@ public static class LeaderboardChild
 
 			ImGui.SameLine();
 
-			const string view = "View ";
-			const string inGameText = "'s replay in game";
-			Span<char> viewInGameText = stackalloc char[256];
-			view.AsSpan().CopyTo(viewInGameText);
-			_selectedCustomEntry.PlayerName.AsSpan().CopyTo(viewInGameText[view.Length..]);
-			inGameText.AsSpan().CopyTo(viewInGameText[(view.Length + _selectedCustomEntry.PlayerName.Length)..]);
-			if (ImGui.Button(viewInGameText[..(view.Length + _selectedCustomEntry.PlayerName.Length + inGameText.Length)]))
+			if (ImGui.Button(UnsafeSpan.Get($"View {_selectedCustomEntry.PlayerName}'s replay in game")))
 				WatchInGame(_selectedCustomEntry.Id);
 
 			ImGui.SameLine();
 
-			const string inReplayViewerText = "'s replay in replay viewer";
-			Span<char> viewInReplayViewerText = stackalloc char[256];
-			view.AsSpan().CopyTo(viewInReplayViewerText);
-			_selectedCustomEntry.PlayerName.AsSpan().CopyTo(viewInReplayViewerText[view.Length..]);
-			inReplayViewerText.AsSpan().CopyTo(viewInReplayViewerText[(view.Length + _selectedCustomEntry.PlayerName.Length)..]);
-			if (ImGui.Button(viewInReplayViewerText[..(view.Length + _selectedCustomEntry.PlayerName.Length + inReplayViewerText.Length)]))
+			if (ImGui.Button(UnsafeSpan.Get($"View {_selectedCustomEntry.PlayerName}'s replay in replay viewer")))
 				WatchInReplayViewer(_selectedCustomEntry.Id);
 
 			ImGui.EndDisabled();

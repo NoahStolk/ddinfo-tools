@@ -27,7 +27,7 @@ public static class ReplayFileInfo
 		RenderAccuracy(header);
 		RenderData("Death Type", Deaths.GetDeathByType(GameConstants.CurrentVersion, (byte)header.DeathType)?.Name ?? "?");
 		RenderSpawnsetMd5(header);
-		RenderData("UTC Date", UnsafeSpan.Get(LocalReplayBinaryHeader.GetTimestampFromTimestampSinceGameRelease(header.TimestampSinceGameRelease), "yyyy-MM-dd HH:mm:ss"));
+		RenderData("UTC Date", UnsafeSpan.Get(LocalReplayBinaryHeader.GetDateTimeOffsetFromTimestampSinceGameRelease(header.TimestampSinceGameRelease), "yyyy-MM-dd HH:mm:ss"));
 	}
 
 	// Separate method so hot reload doesn't complain about stackalloc.

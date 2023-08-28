@@ -36,6 +36,7 @@ public class DeathsReplayWriter : IReplayWriter
 			kills: 0,
 			playerId: 0,
 			username: "Deaths test 2",
+			unknown: new byte[10],
 			spawnsetBuffer: spawnsetBuffer);
 
 		return new(

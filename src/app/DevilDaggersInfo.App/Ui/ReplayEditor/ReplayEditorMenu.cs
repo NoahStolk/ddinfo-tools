@@ -34,6 +34,11 @@ public static class ReplayEditorMenu
 
 		ImGui.Separator();
 
+		if (ImGui.MenuItem("Inject", "Ctrl+I"))
+			InjectReplay();
+
+		ImGui.Separator();
+
 		if (ImGui.MenuItem("Close", "Esc"))
 			Close();
 	}
@@ -84,6 +89,14 @@ public static class ReplayEditorMenu
 		string? filePath = NativeFileDialog.CreateSaveFileDialog("Devil Daggers replay files (*.ddreplay)|*.ddreplay");
 		if (filePath != null)
 			File.WriteAllBytes(filePath, ReplayState.Replay.Compile());
+	}
+
+	public static void InjectReplay()
+	{
+		if (!GameMemoryServiceWrapper.Scan() || !Root.GameMemoryService.IsInitialized)
+			return;
+
+		Root.GameMemoryService.WriteReplayToMemory(ReplayState.Replay.Compile());
 	}
 
 	public static void Close()
