@@ -29,7 +29,7 @@ public static class ReplayEditorMenu
 		if (ImGui.MenuItem("Open", "Ctrl+O"))
 			OpenReplay();
 
-		if (ImGui.MenuItem("Open from official leaderboard", "Ctrl+Shift+O"))
+		if (ImGui.MenuItem("Open from leaderboard", "Ctrl+Shift+O"))
 			OpenLeaderboardReplay();
 
 		if (ImGui.MenuItem("Save", "Ctrl+S"))

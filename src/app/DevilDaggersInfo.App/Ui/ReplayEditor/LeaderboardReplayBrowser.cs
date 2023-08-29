@@ -25,12 +25,16 @@ public static class LeaderboardReplayBrowser
 		ImGui.SetNextWindowSize(new(256, 128));
 		if (ImGui.Begin("Leaderboard Replay Browser", ref _showWindow, ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse))
 		{
-			ImGui.InputInt("Player ID", ref _selectedPlayerId);
+			ImGui.InputInt("Player ID", ref _selectedPlayerId, 1, 1, ImGuiInputTextFlags.CharsDecimal);
+
+			ImGui.BeginDisabled(_isDownloading);
 			if (ImGui.Button("Download and open"))
 			{
 				_isDownloading = true;
 				AsyncHandler.Run(HandleDownloadedReplay, () => DownloadReplayAsync(_selectedPlayerId));
 			}
+
+			ImGui.EndDisabled();
 
 			if (_isDownloading)
 				ImGui.Text("Downloading...");
@@ -39,15 +43,28 @@ public static class LeaderboardReplayBrowser
 		ImGui.End(); // Leaderboard Replay Browser
 	}
 
-	private static void HandleDownloadedReplay(byte[]? data)
+	private static void HandleDownloadedReplay(Response? response)
 	{
-		if (data == null)
+		if (response == null)
 		{
+			Modals.ShowError("The Devil Daggers leaderboard servers did not return a successful response.");
 			_isDownloading = false;
 			return;
 		}
 
-		ReplayBinary<LeaderboardReplayBinaryHeader> leaderboardReplay = new(data);
+		ReplayBinary<LeaderboardReplayBinaryHeader>? leaderboardReplay;
+
+		try
+		{
+			leaderboardReplay = new(response.Data);
+		}
+		catch (Exception ex)
+		{
+			Root.Log.Warning(ex, "The replay could not be parsed.");
+			Modals.ShowError("The replay could not be parsed.");
+			_isDownloading = false;
+			return;
+		}
 
 		LocalReplayBinaryHeader header = new(
 			version: 1,
@@ -59,8 +76,8 @@ public static class LeaderboardReplayBrowser
 			gems: 0,
 			daggersHit: 0,
 			kills: 0,
-			playerId: 0,
-			username: string.Empty,
+			playerId: response.PlayerId,
+			username: leaderboardReplay.Header.Username,
 			unknown: new byte[10],
 			spawnsetBuffer: SpawnsetBinary.CreateDefault().ToBytes());
 		ReplayState.Replay = new(header, leaderboardReplay.EventsData);
@@ -69,14 +86,17 @@ public static class LeaderboardReplayBrowser
 		_showWindow = false;
 	}
 
-	private static async Task<byte[]> DownloadReplayAsync(int id)
+	private static async Task<Response?> DownloadReplayAsync(int id)
 	{
 		using FormUrlEncodedContent content = new(new List<KeyValuePair<string, string>> { new("replay", id.ToString()) });
 		using HttpClient httpClient = new();
 		using HttpResponseMessage response = await httpClient.PostAsync("http://dd.hasmodai.com/backend16/get_replay.php", content);
-		if (!response.IsSuccessStatusCode)
-			throw new($"The leaderboard servers returned an unsuccessful response (HTTP {(int)response.StatusCode} {response.StatusCode}).");
+		if (response.IsSuccessStatusCode)
+			return new(await response.Content.ReadAsByteArrayAsync(), id);
 
-		return await response.Content.ReadAsByteArrayAsync();
+		Root.Log.Warning($"The leaderboard servers returned an unsuccessful response (HTTP {(int)response.StatusCode} {response.StatusCode}).");
+		return null;
 	}
+
+	private sealed record Response(byte[] Data, int PlayerId);
 }
