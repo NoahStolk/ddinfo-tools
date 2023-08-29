@@ -5,6 +5,7 @@ using DevilDaggersInfo.App.Utils;
 using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Spawnset;
 using ImGuiNET;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace DevilDaggersInfo.App.Ui.SpawnsetEditor;
@@ -31,7 +32,7 @@ public static class SettingsChild
 
 	public static void Render()
 	{
-		if (ImGui.BeginChild("SettingsChild", new(288, 416)))
+		if (ImGui.BeginChild("SettingsChild", new(284, 416)))
 		{
 			RenderFormat();
 			RenderGameMode();
@@ -96,7 +97,15 @@ public static class SettingsChild
 
 		foreach (GameMode gameMode in EnumUtils.GameModes)
 		{
-			if (ImGui.RadioButton(EnumUtils.GameModeNames[gameMode], gameMode == SpawnsetState.Spawnset.GameMode) && SpawnsetState.Spawnset.GameMode != gameMode)
+			ReadOnlySpan<char> displayGameMode = gameMode switch
+			{
+				GameMode.Survival => "Survival",
+				GameMode.TimeAttack => "Time Attack",
+				GameMode.Race => "Race",
+				_ => throw new UnreachableException(),
+			};
+
+			if (ImGui.RadioButton(displayGameMode, gameMode == SpawnsetState.Spawnset.GameMode) && SpawnsetState.Spawnset.GameMode != gameMode)
 			{
 				SpawnsetState.Spawnset = SpawnsetState.Spawnset with { GameMode = gameMode };
 				SpawnsetHistoryUtils.Save(SpawnsetEditType.GameMode);

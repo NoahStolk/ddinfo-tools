@@ -33,7 +33,7 @@ public static class HistoryChild
 	public static void Render()
 	{
 		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(8, 1));
-		if (ImGui.BeginChild("HistoryChild", new(244, 712)))
+		if (ImGui.BeginChild("HistoryChild", new(244, 512)))
 		{
 			for (int i = 0; i < History.Count; i++)
 			{

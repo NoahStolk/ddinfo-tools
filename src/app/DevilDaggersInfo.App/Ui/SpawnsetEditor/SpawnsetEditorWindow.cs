@@ -23,10 +23,18 @@ public static class SpawnsetEditorWindow
 			ArenaChild.Render(isWindowFocused, !_isWindowFocusedPrevious && isWindowFocused);
 
 			ImGui.SameLine();
-			SettingsChild.Render();
 
-			ImGui.SameLine();
-			HistoryChild.Render();
+			if (ImGui.BeginChild("SettingsAndHistoryChild"))
+			{
+				SettingsChild.Render();
+
+				ImGui.SameLine();
+				HistoryChild.Render();
+
+				SpawnsetWarningsChild.Render();
+			}
+
+			ImGui.EndChild(); // End SettingsAndHistoryChild
 
 			_isWindowFocusedPrevious = isWindowFocused;
 		}
