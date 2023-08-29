@@ -73,5 +73,15 @@ public static class Shortcuts
 			};
 			action?.Invoke();
 		}
+
+		if (ctrl && shift)
+		{
+			Action? action = key switch
+			{
+				Key.O => ReplayEditorMenu.OpenLeaderboardReplay,
+				_ => null,
+			};
+			action?.Invoke();
+		}
 	}
 }

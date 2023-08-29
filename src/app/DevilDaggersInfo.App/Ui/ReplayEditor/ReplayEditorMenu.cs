@@ -29,6 +29,9 @@ public static class ReplayEditorMenu
 		if (ImGui.MenuItem("Open", "Ctrl+O"))
 			OpenReplay();
 
+		if (ImGui.MenuItem("Open from official leaderboard", "Ctrl+Shift+O"))
+			OpenLeaderboardReplay();
+
 		if (ImGui.MenuItem("Save", "Ctrl+S"))
 			SaveReplay();
 
@@ -82,6 +85,11 @@ public static class ReplayEditorMenu
 
 		ReplaySimulation replaySimulation = ReplaySimulationBuilder.Build(ReplayState.Replay);
 		ReplayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
+	}
+
+	public static void OpenLeaderboardReplay()
+	{
+		LeaderboardReplayBrowser.Show();
 	}
 
 	public static void SaveReplay()

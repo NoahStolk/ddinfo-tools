@@ -101,6 +101,8 @@ public static class ReplayEntitiesChild
 		}
 		else
 		{
+			ImGui.Text("NOTE: This feature is a work in progress and not entirely accurate for some enemy types.");
+
 			ImGui.Text(UnsafeSpan.Get($"Enemy hit log for {EnumUtils.EntityTypeNames[_enemyHitLog.EntityType]} (id {_enemyHitLog.EntityId}):"));
 
 			int initialHp = _enemyHitLog.EntityType.GetInitialHp();

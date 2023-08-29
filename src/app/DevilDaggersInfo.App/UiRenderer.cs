@@ -80,6 +80,7 @@ public static class UiRenderer
 				ReplayEditorWindow.Update(delta);
 				ReplayEditorWindow.Render();
 				ReplayEditor3DWindow.Render(delta);
+				LeaderboardReplayBrowser.Render();
 				break;
 			case LayoutType.Practice:
 				PracticeWindow.Render();
