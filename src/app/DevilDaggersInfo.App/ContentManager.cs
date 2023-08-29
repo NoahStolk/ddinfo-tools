@@ -44,9 +44,8 @@ public static class ContentManager
 		if (!SpawnsetBinary.TryParse(survivalBytes, out SpawnsetBinary? defaultSpawnset))
 			throw new InvalidGameInstallationException("File 'dd/survival' could not be parsed.");
 
-		Span<byte> defaultHash = stackalloc byte[16] { 0x56, 0x9f, 0xea, 0xd8, 0x7a, 0xbf, 0x4d, 0x30, 0xfd, 0xee, 0x42, 0x31, 0xa6, 0x39, 0x80, 0x51 };
 		byte[] survivalHash = MD5.HashData(survivalBytes);
-		if (!defaultHash.SequenceEqual(survivalHash))
+		if (!SpawnsetBinary.V3Hash.SequenceEqual(survivalHash))
 			throw new InvalidGameInstallationException("File 'dd/survival' is invalid. Make sure you have not modified the file. Validate your game files and try again.");
 
 		if (Directory.Exists(UserSettings.ModsSurvivalPath))
