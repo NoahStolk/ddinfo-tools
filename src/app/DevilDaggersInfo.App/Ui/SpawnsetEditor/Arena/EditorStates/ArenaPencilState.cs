@@ -13,12 +13,15 @@ public class ArenaPencilState : IArenaState
 {
 	private Session? _session;
 
+	public void InitializeSession(ArenaMousePosition mousePosition)
+	{
+		_session ??= new(mousePosition.Real);
+	}
+
 	public void Handle(ArenaMousePosition mousePosition)
 	{
-		if (ImGui.IsMouseDown(ImGuiMouseButton.Left))
+		if (_session != null && ImGui.IsMouseDown(ImGuiMouseButton.Left))
 		{
-			_session ??= new(mousePosition.Real);
-
 			Vector2 pencilEnd = mousePosition.Real;
 			Vector2 start = ArenaEditingUtils.Snap(_session.StartPosition, ArenaChild.TileSize) + ArenaChild.HalfTileSizeAsVector2;
 			Vector2 end = ArenaEditingUtils.Snap(pencilEnd, ArenaChild.TileSize) + ArenaChild.HalfTileSizeAsVector2;

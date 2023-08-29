@@ -42,7 +42,7 @@ public static class ArenaChild
 		 _ => throw new UnreachableException(),
 	};
 
-	public static void Render(bool isSpawnsetEditorWindowFocused)
+	public static void Render(bool isSpawnsetEditorWindowFocused, bool isSpawnsetEditorWindowFocusedFirstFrame)
 	{
 		if (ImGui.BeginChild("ArenaChild", new(416 - 8, 768 - 64)))
 		{
@@ -66,6 +66,15 @@ public static class ArenaChild
 				}
 
 				IArenaState activeState = GetActiveState();
+
+				Vector2 pos = ImGui.GetCursorScreenPos();
+				bool isArenaHovered = ImGui.IsMouseHoveringRect(pos, pos + ArenaSize);
+
+				if (isSpawnsetEditorWindowFocusedFirstFrame && ImGui.IsMouseDown(ImGuiMouseButton.Left) ||
+					isSpawnsetEditorWindowFocused && isArenaHovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+				{
+					activeState.InitializeSession(mousePosition);
+				}
 
 				if (isSpawnsetEditorWindowFocused)
 				{

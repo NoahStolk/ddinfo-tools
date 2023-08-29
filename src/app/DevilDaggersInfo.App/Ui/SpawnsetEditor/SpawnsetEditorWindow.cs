@@ -5,6 +5,8 @@ namespace DevilDaggersInfo.App.Ui.SpawnsetEditor;
 
 public static class SpawnsetEditorWindow
 {
+	private static bool _isWindowFocusedPrevious;
+
 	public static void Render()
 	{
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, Constants.MinWindowSize);
@@ -18,13 +20,15 @@ public static class SpawnsetEditorWindow
 			SpawnsChild.Render();
 
 			ImGui.SameLine();
-			ArenaChild.Render(isWindowFocused);
+			ArenaChild.Render(isWindowFocused, !_isWindowFocusedPrevious && isWindowFocused);
 
 			ImGui.SameLine();
 			SettingsChild.Render();
 
 			ImGui.SameLine();
 			HistoryChild.Render();
+
+			_isWindowFocusedPrevious = isWindowFocused;
 		}
 		else
 		{

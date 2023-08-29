@@ -14,13 +14,20 @@ public class ArenaBucketState : IArenaState
 	private readonly HashSet<Vector2D<int>> _targetCoords = new();
 	private Vector2D<int> _cachedPosition;
 	private bool _isFilling;
+	private bool _isInitialized;
+
+	public void InitializeSession(ArenaMousePosition mousePosition)
+	{
+		// TODO: Fix this.
+		_isInitialized = true;
+	}
 
 	public void Handle(ArenaMousePosition mousePosition)
 	{
 		if (ImGui.IsMouseReleased(ImGuiMouseButton.Left) && _isFilling)
 			_isFilling = false;
 
-		if (!ImGui.IsMouseDown(ImGuiMouseButton.Left) && _cachedPosition == mousePosition.Tile)
+		if (!_isInitialized || !ImGui.IsMouseDown(ImGuiMouseButton.Left) && _cachedPosition == mousePosition.Tile)
 			return;
 
 		_targetCoords.Clear();

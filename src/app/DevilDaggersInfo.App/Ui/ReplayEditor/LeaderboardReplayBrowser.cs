@@ -60,6 +60,9 @@ public static class LeaderboardReplayBrowser
 		}
 		catch (Exception ex)
 		{
+			// When using an id like -1, this gives us the following data:
+			// DF_RPL0Replay not found.
+			// We could parse this, but it's not worth the effort.
 			Root.Log.Warning(ex, "The replay could not be parsed.");
 			Modals.ShowError("The replay could not be parsed.");
 			_isDownloading = false;

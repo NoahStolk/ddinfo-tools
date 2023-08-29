@@ -12,11 +12,14 @@ public class ArenaEllipseState : IArenaState
 {
 	private Session? _session;
 
+	public void InitializeSession(ArenaMousePosition mousePosition)
+	{
+		_session ??= new(mousePosition.Real, SpawnsetState.Spawnset.ArenaTiles.GetMutableClone());
+	}
+
 	public void Handle(ArenaMousePosition mousePosition)
 	{
-		if (ImGui.IsMouseDown(ImGuiMouseButton.Left))
-			_session ??= new(mousePosition.Real, SpawnsetState.Spawnset.ArenaTiles.GetMutableClone());
-		else if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+		if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 			Emit(mousePosition);
 	}
 
