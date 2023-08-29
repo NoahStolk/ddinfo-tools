@@ -14,12 +14,67 @@ public class ArenaBucketState : IArenaState
 	private readonly HashSet<Vector2D<int>> _targetCoords = new();
 	private Vector2D<int> _cachedPosition;
 	private bool _isFilling;
-	private bool _isInitialized;
+
+	private void FillNeighbors(int x, int y)
+	{
+		int dimension = SpawnsetState.Spawnset.ArenaDimension;
+		if (x < 0 || y < 0 || x >= dimension || y >= dimension)
+			return;
+
+		float targetHeight = SpawnsetState.Spawnset.ArenaTiles[x, y];
+
+		_targetCoords.Add(new(x, y));
+
+		int leftX = x - 1;
+		int rightX = x + 1;
+		int topY = y - 1;
+		int bottomY = y + 1;
+
+		if (leftX >= 0)
+			FillIfApplicable(leftX, y);
+		if (rightX < dimension)
+			FillIfApplicable(rightX, y);
+		if (topY >= 0)
+			FillIfApplicable(x, topY);
+		if (bottomY < dimension)
+			FillIfApplicable(x, bottomY);
+
+		void FillIfApplicable(int newX, int newY)
+		{
+			if (_targetCoords.Contains(new(newX, newY)))
+				return;
+
+			float tileHeight = SpawnsetState.Spawnset.ArenaTiles[newX, newY];
+
+			float clampedTargetHeight = targetHeight;
+			if (targetHeight < BucketChild.VoidHeight)
+				clampedTargetHeight = BucketChild.VoidHeight;
+			if (tileHeight < BucketChild.VoidHeight)
+				tileHeight = BucketChild.VoidHeight;
+
+			if (MathF.Abs(tileHeight - clampedTargetHeight) < BucketChild.Tolerance)
+				FillNeighbors(newX, newY);
+		}
+	}
+
+	private void SaveCurrentFill()
+	{
+		if (_isFilling)
+			return;
+
+		_isFilling = true;
+		float[,] newArena = SpawnsetState.Spawnset.ArenaTiles.GetMutableClone();
+		foreach (Vector2D<int> coord in _targetCoords)
+			newArena[coord.X, coord.Y] = ArenaChild.SelectedHeight;
+
+		SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ArenaTiles = new(SpawnsetState.Spawnset.ArenaDimension, newArena) };
+		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaBucket);
+	}
 
 	public void InitializeSession(ArenaMousePosition mousePosition)
 	{
-		// TODO: Fix this.
-		_isInitialized = true;
+		FillNeighbors(mousePosition.Tile.X, mousePosition.Tile.Y);
+		SaveCurrentFill();
 	}
 
 	public void Handle(ArenaMousePosition mousePosition)
@@ -27,62 +82,15 @@ public class ArenaBucketState : IArenaState
 		if (ImGui.IsMouseReleased(ImGuiMouseButton.Left) && _isFilling)
 			_isFilling = false;
 
-		if (!_isInitialized || !ImGui.IsMouseDown(ImGuiMouseButton.Left) && _cachedPosition == mousePosition.Tile)
+		if (!ImGui.IsMouseDown(ImGuiMouseButton.Left) && _cachedPosition == mousePosition.Tile)
 			return;
 
 		_targetCoords.Clear();
 		_cachedPosition = mousePosition.Tile;
 
-		int dimension = SpawnsetState.Spawnset.ArenaDimension;
-		float targetHeight = SpawnsetState.Spawnset.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y];
 		FillNeighbors(mousePosition.Tile.X, mousePosition.Tile.Y);
-
-		if (ImGui.IsMouseDown(ImGuiMouseButton.Left) && !_isFilling)
-		{
-			_isFilling = true;
-			float[,] newArena = SpawnsetState.Spawnset.ArenaTiles.GetMutableClone();
-			foreach (Vector2D<int> coord in _targetCoords)
-				newArena[coord.X, coord.Y] = ArenaChild.SelectedHeight;
-
-			SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ArenaTiles = new(SpawnsetState.Spawnset.ArenaDimension, newArena) };
-			SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaBucket);
-		}
-
-		void FillNeighbors(int x, int y)
-		{
-			_targetCoords.Add(new(x, y));
-
-			int leftX = x - 1;
-			int rightX = x + 1;
-			int topY = y - 1;
-			int bottomY = y + 1;
-
-			if (leftX >= 0)
-				FillIfApplicable(leftX, y);
-			if (rightX < dimension)
-				FillIfApplicable(rightX, y);
-			if (topY >= 0)
-				FillIfApplicable(x, topY);
-			if (bottomY < dimension)
-				FillIfApplicable(x, bottomY);
-
-			void FillIfApplicable(int newX, int newY)
-			{
-				if (_targetCoords.Contains(new(newX, newY)))
-					return;
-
-				float tileHeight = SpawnsetState.Spawnset.ArenaTiles[newX, newY];
-
-				float clampedTargetHeight = targetHeight;
-				if (targetHeight < BucketChild.VoidHeight)
-					clampedTargetHeight = BucketChild.VoidHeight;
-				if (tileHeight < BucketChild.VoidHeight)
-					tileHeight = BucketChild.VoidHeight;
-
-				if (MathF.Abs(tileHeight - clampedTargetHeight) < BucketChild.Tolerance)
-					FillNeighbors(newX, newY);
-			}
-		}
+		if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+			SaveCurrentFill();
 	}
 
 	public void HandleOutOfRange(ArenaMousePosition mousePosition)
