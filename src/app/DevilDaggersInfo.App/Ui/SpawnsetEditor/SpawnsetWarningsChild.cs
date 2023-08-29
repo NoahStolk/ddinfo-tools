@@ -11,7 +11,7 @@ public static class SpawnsetWarningsChild
 	{
 		const int padding = 6;
 
-		ImGui.PushStyleColor(ImGuiCol.ChildBg, Color.Gray(0.02f));
+		ImGui.PushStyleColor(ImGuiCol.ChildBg, Color.Gray(0.035f));
 		if (ImGui.BeginChild("Warnings", new(528, 192)))
 		{
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + padding);
@@ -28,12 +28,10 @@ public static class SpawnsetWarningsChild
 
 			ImGui.PushTextWrapPos(512);
 
-			ImGui.PushFont(Root.FontGoetheBold20);
 			if (warningCount == 0)
 				ImGui.TextColored(Color.Green, "No warnings");
 			else
 				ImGui.TextColored(Color.Red, warningCount == 1 ? "1 warning" : $"{warningCount} warnings");
-			ImGui.PopFont();
 
 			if (isEndLoopTooShort)
 				ImGui.Text($"The end loop is only {endLoopLength} seconds long, which will probably result in severe lag or a crash.");
