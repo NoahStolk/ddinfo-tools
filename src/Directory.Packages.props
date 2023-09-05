@@ -85,7 +85,7 @@
 	<ItemGroup Label="Static code analysis">
 		<PackageVersion Include="Nullable.Extended.Analyzer" Version="1.10.4539" />
 		<PackageVersion Include="Roslynator.Analyzers" Version="4.5.0" />
-		<PackageVersion Include="SonarAnalyzer.CSharp" Version="9.8.0.76515" />
+		<PackageVersion Include="SonarAnalyzer.CSharp" Version="9.9.0.77355" />
 		<PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.507" />
 	</ItemGroup>
 
