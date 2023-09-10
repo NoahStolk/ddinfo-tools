@@ -27,8 +27,8 @@ public static class DebugLayout
 		ImDrawListPtr drawList = ImGui.GetForegroundDrawList();
 		const uint textColor = 0xffffffff;
 		float y = 0;
-		AddText(ref y, "FPS (smoothed)", UnsafeSpan.Get(Application.RenderCounter.CountPerSecond));
-		AddText(ref y, "FPS", UnsafeSpan.Get(1f / Application.LastRenderDelta, "000.000"));
+		AddText(ref y, "FPS (smoothed)", UnsafeSpan.Get(Root.Application.RenderCounter.CountPerSecond));
+		AddText(ref y, "FPS", UnsafeSpan.Get(1f / Root.Application.LastRenderDelta, "000.000"));
 
 		long allocatedBytes = GC.GetAllocatedBytesForCurrentThread();
 		AddText(ref y, "Total managed heap alloc in bytes", UnsafeSpan.Get(allocatedBytes));

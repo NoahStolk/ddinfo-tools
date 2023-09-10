@@ -50,8 +50,8 @@ public class Application
 		AppVersion = appVersion;
 	}
 
-	public static PerSecondCounter RenderCounter { get; } = new();
-	public static float LastRenderDelta { get; private set; }
+	public PerSecondCounter RenderCounter { get; } = new();
+	public float LastRenderDelta { get; set; }
 
 	public Version AppVersion { get; }
 
