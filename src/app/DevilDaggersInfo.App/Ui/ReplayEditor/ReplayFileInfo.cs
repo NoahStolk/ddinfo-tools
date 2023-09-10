@@ -17,47 +17,17 @@ public static class ReplayFileInfo
 #if DEBUG
 		RenderData("Version", UnsafeSpan.Get(header.Version));
 		RenderData("Timestamp", UnsafeSpan.Get(header.TimestampSinceGameRelease));
+		RenderSpawnsetMd5(header);
 #endif
-		RenderPlayer(header);
+		RenderData("Player", UnsafeSpan.Get(header.PlayerId == 0 ? "N/A" : $"{header.Username} ({header.PlayerId})"));
 		RenderData("Time", UnsafeSpan.Get(header.Time, StringFormats.TimeFormat));
 		RenderData("Start Time", UnsafeSpan.Get(header.StartTime, StringFormats.TimeFormat));
 		RenderData("Kills", UnsafeSpan.Get(header.Kills));
 		RenderData("Gems", UnsafeSpan.Get(header.Gems));
 
-		RenderAccuracy(header);
+		RenderData("Accuracy", UnsafeSpan.Get($"{header.Accuracy:0.00%} ({header.DaggersHit}/{header.DaggersFired})"));
 		RenderData("Death Type", Deaths.GetDeathByType(GameConstants.CurrentVersion, (byte)header.DeathType)?.Name ?? "?");
-		RenderSpawnsetMd5(header);
 		RenderData("UTC Date", UnsafeSpan.Get(LocalReplayBinaryHeader.GetDateTimeOffsetFromTimestampSinceGameRelease(header.TimestampSinceGameRelease), "yyyy-MM-dd HH:mm:ss"));
-	}
-
-	// Separate method so hot reload doesn't complain about stackalloc.
-	private static void RenderPlayer(LocalReplayBinaryHeader header)
-	{
-		Span<char> player = stackalloc char[64];
-		header.Username.CopyTo(player);
-		player[header.Username.Length] = ' ';
-		player[header.Username.Length + 1] = '(';
-		header.PlayerId.TryFormat(player[(header.Username.Length + 2)..], out int charsWrittenPlayerId);
-		player[header.Username.Length + 2 + charsWrittenPlayerId] = ')';
-
-		RenderData("Player", player);
-	}
-
-	// Separate method so hot reload doesn't complain about stackalloc.
-	private static void RenderAccuracy(LocalReplayBinaryHeader header)
-	{
-		Span<char> accuracy = stackalloc char[32];
-		header.Accuracy.TryFormat(accuracy, out int charsWritten, StringFormats.AccuracyFormat);
-		accuracy[charsWritten++] = ' ';
-		accuracy[charsWritten++] = '(';
-		header.DaggersHit.TryFormat(accuracy[charsWritten..], out int charsWrittenDaggersHit);
-		charsWritten += charsWrittenDaggersHit;
-		accuracy[charsWritten++] = '/';
-		header.DaggersFired.TryFormat(accuracy[charsWritten..], out int charsWrittenDaggersFired);
-		charsWritten += charsWrittenDaggersFired;
-		accuracy[charsWritten] = ')';
-
-		RenderData("Accuracy", accuracy);
 	}
 
 	// Separate method so hot reload doesn't complain about stackalloc.
