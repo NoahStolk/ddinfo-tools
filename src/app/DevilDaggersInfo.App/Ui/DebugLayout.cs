@@ -43,6 +43,8 @@ public static class DebugLayout
 
 		AddText(ref y, "Modal active", Modals.IsAnyOpen ? bool.TrueString : bool.FalseString);
 
+		AddText(ref y, "Devil Daggers window position", UnsafeSpan.Get(Root.GameWindowService.GetWindowPosition()));
+
 		void AddText(ref float posY, ReadOnlySpan<char> textLeft, ReadOnlySpan<char> textRight)
 		{
 			drawList.AddText(new(0, posY), textColor, textLeft);

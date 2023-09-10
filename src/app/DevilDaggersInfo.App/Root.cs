@@ -1,4 +1,5 @@
 using DevilDaggersInfo.App.Core.GameMemory;
+using DevilDaggersInfo.App.GameWindow;
 using DevilDaggersInfo.App.Platforms;
 using DevilDaggersInfo.App.Utils;
 using ImGuiNET;
@@ -91,8 +92,10 @@ public static class Root
 #if WINDOWS
 	public static IPlatformSpecificValues PlatformSpecificValues { get; } = new WindowsValues();
 	public static GameMemoryService GameMemoryService { get; } = new(new WindowsMemoryService());
+	public static GameWindowService GameWindowService { get; } = new(new WindowsWindowingService());
 #elif LINUX
 	public static IPlatformSpecificValues PlatformSpecificValues { get; } = new LinuxValues();
 	public static GameMemoryService GameMemoryService { get; } = new(new LinuxMemoryService());
+	public static GameWindowService GameWindowService { get; } = new(new LinuxWindowingService());
 #endif
 }
