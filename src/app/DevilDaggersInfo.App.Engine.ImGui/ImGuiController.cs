@@ -6,7 +6,7 @@ using Silk.NET.Windowing;
 
 namespace DevilDaggersInfo.App.Engine.ImGui;
 
-public class ImGuiController : IDisposable
+public sealed class ImGuiController : IDisposable
 {
 	private static readonly Key[] _keyEnumArr = (Key[])Enum.GetValues(typeof(Key));
 
@@ -32,7 +32,7 @@ public class ImGuiController : IDisposable
 	private int _windowWidth;
 	private int _windowHeight;
 
-	public IntPtr _context;
+	private IntPtr _context;
 
 	/// <summary>
 	/// Constructs a new ImGuiController with font configuration.
