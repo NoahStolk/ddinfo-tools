@@ -32,6 +32,9 @@ public static class ReplayEditorMenu
 		if (ImGui.MenuItem("Open from leaderboard", "Ctrl+Shift+O"))
 			OpenLeaderboardReplay();
 
+		if (ImGui.MenuItem("Open from game (local replays only)", "Ctrl+G"))
+			OpenReplayFromGameMemory();
+
 		if (ImGui.MenuItem("Save", "Ctrl+S"))
 			SaveReplay();
 
@@ -90,6 +93,32 @@ public static class ReplayEditorMenu
 	public static void OpenLeaderboardReplay()
 	{
 		LeaderboardReplayBrowser.Show();
+	}
+
+	public static void OpenReplayFromGameMemory()
+	{
+		if (!GameMemoryServiceWrapper.Scan() || !Root.GameMemoryService.IsInitialized)
+		{
+			Modals.ShowError("Could not read replay from game memory. Make sure the game is running.");
+			return;
+		}
+
+		byte[] replayBytes = Root.GameMemoryService.ReadReplayFromMemory();
+		if (ReplayBinary<LocalReplayBinaryHeader>.TryParse(replayBytes, out ReplayBinary<LocalReplayBinaryHeader>? replayBinary))
+		{
+			ReplayState.ReplayName = "(untitled from game memory)";
+			ReplayState.Replay = replayBinary;
+		}
+		else
+		{
+			Modals.ShowError("The data from game memory could not be parsed as a local replay. Make sure to open a replay first.");
+			return;
+		}
+
+		ReplayEditorWindow.Reset();
+
+		ReplaySimulation replaySimulation = ReplaySimulationBuilder.Build(ReplayState.Replay);
+		ReplayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
 	}
 
 	public static void SaveReplay()

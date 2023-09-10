@@ -69,6 +69,7 @@ public static class Shortcuts
 				Key.O => ReplayEditorMenu.OpenReplay,
 				Key.S => ReplayEditorMenu.SaveReplay,
 				Key.I => ReplayEditorMenu.InjectReplay,
+				Key.G => ReplayEditorMenu.OpenReplayFromGameMemory,
 				_ => null,
 			};
 			action?.Invoke();
