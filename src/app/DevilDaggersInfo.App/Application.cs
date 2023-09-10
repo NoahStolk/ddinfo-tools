@@ -2,6 +2,7 @@ using DevilDaggersInfo.App.AppWindows;
 using DevilDaggersInfo.App.User.Cache;
 using DevilDaggersInfo.App.User.Settings;
 using DevilDaggersInfo.App.Utils;
+using Silk.NET.Windowing;
 
 namespace DevilDaggersInfo.App;
 
@@ -31,18 +32,7 @@ public class Application
 
 	public void Run()
 	{
-		_mainAppWindow.WindowInstance.Initialize();
-
-		_mainAppWindow.WindowInstance.Run(() =>
-		{
-			_mainAppWindow.WindowInstance.DoEvents();
-
-			if (!_mainAppWindow.WindowInstance.IsClosing)
-				_mainAppWindow.WindowInstance.DoUpdate();
-
-			if (!_mainAppWindow.WindowInstance.IsClosing)
-				_mainAppWindow.WindowInstance.DoRender();
-		});
+		_mainAppWindow.WindowInstance.Run();
 	}
 
 	public void Destroy()
