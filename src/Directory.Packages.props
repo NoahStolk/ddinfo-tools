@@ -96,7 +96,7 @@
 		<PackageVersion Include="MockQueryable.NSubstitute" Version="7.0.0" />
 		<PackageVersion Include="MSTest.TestAdapter" Version="3.1.1" />
 		<PackageVersion Include="MSTest.TestFramework" Version="3.1.1" />
-		<PackageVersion Include="NSubstitute" Version="5.0.0" />
+		<PackageVersion Include="NSubstitute" Version="5.1.0" />
 	</ItemGroup>
 
 	<ItemGroup Label="WebAssembly">
