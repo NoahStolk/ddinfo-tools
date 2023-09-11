@@ -47,7 +47,7 @@ public static class PracticeWindow
 
 		ImGui.End(); // End Practice
 
-		if (ImGui.IsKeyPressed(ImGuiKey.Escape) || ImGui.IsKeyPressed((ImGuiKey)526))
+		if (ImGui.IsKeyPressed(ImGuiKey.Escape))
 			UiRenderer.Layout = LayoutType.Main;
 	}
 
