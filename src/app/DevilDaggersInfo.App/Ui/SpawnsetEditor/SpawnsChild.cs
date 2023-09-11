@@ -116,7 +116,7 @@ public static class SpawnsChild
 						Array.Fill(_selected, false);
 				}
 
-				if (io.KeysDown[(int)Key.Delete])
+				if (io.KeysDown[(int)Key.Delete] && Array.Exists(_selected, b => b))
 				{
 					SpawnsetState.Spawnset = SpawnsetState.Spawnset with { Spawns = SpawnsetState.Spawnset.Spawns.Where((_, i) => !_selected[i]).ToImmutableArray() };
 					Array.Fill(_selected, false);
