@@ -78,7 +78,7 @@ public class MainAppWindow
 		}
 		else
 		{
-			Root.Keyboard.KeyDown += Shortcuts.OnKeyPressed;
+			Root.Keyboard.KeyDown += (keyboard, key, _) => Shortcuts.OnKeyPressed(keyboard, key);
 		}
 
 		ConfigLayout.ValidateInstallation();

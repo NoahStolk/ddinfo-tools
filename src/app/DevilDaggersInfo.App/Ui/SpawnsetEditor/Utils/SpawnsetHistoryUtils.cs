@@ -10,17 +10,16 @@ public static class SpawnsetHistoryUtils
 
 	public static void Save(SpawnsetEditType spawnsetEditType)
 	{
+		SpawnsetBinary copy = SpawnsetState.Spawnset.DeepCopy();
+		byte[] hash = MD5.HashData(copy.ToBytes());
+
 		if (spawnsetEditType == SpawnsetEditType.Reset)
 		{
-			SpawnsetBinary copy = SpawnsetState.Spawnset.DeepCopy();
-			byte[] hash = MD5.HashData(copy.ToBytes());
 			HistoryChild.UpdateHistory(new List<SpawnsetHistoryEntry> { new(copy, hash, spawnsetEditType) }, 0);
 		}
 		else
 		{
-			SpawnsetBinary copy = SpawnsetState.Spawnset.DeepCopy();
 			byte[] originalHash = HistoryChild.History[HistoryChild.CurrentHistoryIndex].Hash;
-			byte[] hash = MD5.HashData(copy.ToBytes());
 
 			if (originalHash.SequenceEqual(hash))
 				return;

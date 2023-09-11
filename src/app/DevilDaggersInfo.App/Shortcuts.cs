@@ -7,7 +7,7 @@ namespace DevilDaggersInfo.App;
 
 public static class Shortcuts
 {
-	public static void OnKeyPressed(IKeyboard keyboard, Key key, int arg3)
+	public static void OnKeyPressed(IKeyboard keyboard, Key key)
 	{
 		if (Modals.IsAnyOpen)
 			return;
