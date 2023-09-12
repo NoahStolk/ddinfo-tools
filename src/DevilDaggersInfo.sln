@@ -32,34 +32,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Engine
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Cmd.CreateReplay", "cmd\DevilDaggersInfo.Cmd.CreateReplay\DevilDaggersInfo.Cmd.CreateReplay.csproj", "{6BEED33C-F8F8-4884-85A3-FDD48C7C63E8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Common", "common\DevilDaggersInfo.Common\DevilDaggersInfo.Common.csproj", "{A45271DA-D8D2-4BAA-83BA-31115C4FD702}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Common.Test", "test\DevilDaggersInfo.Common.Test\DevilDaggersInfo.Common.Test.csproj", "{79C2EF91-46DF-4E4D-A083-57C34D15A890}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Asset", "core\DevilDaggersInfo.Core.Asset\DevilDaggersInfo.Core.Asset.csproj", "{E855606F-5DFB-407F-979B-C2F25DC05C5D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Core.CriteriaExpression", "core\DevilDaggersInfo.Core.CriteriaExpression\DevilDaggersInfo.Core.CriteriaExpression.csproj", "{E80EC34D-4FC7-44D1-BD96-857DD3700AED}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Core.CriteriaExpression.Test", "test\DevilDaggersInfo.Core.CriteriaExpression.Test\DevilDaggersInfo.Core.CriteriaExpression.Test.csproj", "{8D02A724-024B-4ED3-B64B-EA6B350926F0}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Encryption", "core\DevilDaggersInfo.Core.Encryption\DevilDaggersInfo.Core.Encryption.csproj", "{6F010EA4-496C-49C5-B947-82BA4EDA2648}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Mod", "core\DevilDaggersInfo.Core.Mod\DevilDaggersInfo.Core.Mod.csproj", "{1C25E368-6E37-4144-AAC7-EBA5475BD833}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Mod.Test", "test\DevilDaggersInfo.Core.Mod.Test\DevilDaggersInfo.Core.Mod.Test.csproj", "{4E3108DD-0F00-45E6-89E9-4F27BCAEF08E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Replay", "core\DevilDaggersInfo.Core.Replay\DevilDaggersInfo.Core.Replay.csproj", "{1FCF3262-FC25-43E1-BDFC-C10CCA94CCAC}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Replay.Test", "test\DevilDaggersInfo.Core.Replay.Test\DevilDaggersInfo.Core.Replay.Test.csproj", "{B8E3A732-CFDA-41B2-8680-9EA868516633}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Spawnset", "core\DevilDaggersInfo.Core.Spawnset\DevilDaggersInfo.Core.Spawnset.csproj", "{F899EBF6-12A0-49B8-A163-511F3E92E991}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Spawnset.Test", "test\DevilDaggersInfo.Core.Spawnset.Test\DevilDaggersInfo.Core.Spawnset.Test.csproj", "{77938023-7892-4211-8E07-03522DF7CFD7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Wiki", "core\DevilDaggersInfo.Core.Wiki\DevilDaggersInfo.Core.Wiki.csproj", "{BA3418E3-BC09-4F07-9A84-79379BA02DCC}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Core.Wiki.Test", "test\DevilDaggersInfo.Core.Wiki.Test\DevilDaggersInfo.Core.Wiki.Test.csproj", "{07BBEC96-50D3-49A2-934F-AC8BB7E8BB0D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.DevUtil.DistributeApp", "dev-util\DevilDaggersInfo.DevUtil.DistributeApp\DevilDaggersInfo.DevUtil.DistributeApp.csproj", "{884E21EB-C4F0-4E80-9BDB-E8A28171BAF0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.DevUtil.DistributeHistoryStats", "dev-util\DevilDaggersInfo.DevUtil.DistributeHistoryStats\DevilDaggersInfo.DevUtil.DistributeHistoryStats.csproj", "{B11627A5-9A22-4E5F-8B35-C27869339BA7}"
@@ -93,10 +65,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{D980D7F3-20FC-46AB-A443-3238FE1FAEC0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cmd", "cmd", "{C7C1269A-F5FF-4BC3-885B-10FC693C9062}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{187CBC4C-3F78-477E-AA33-7FA956DDF4A3}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{1B091174-9983-4BF5-AF9C-034AE3D6D7B4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dev-util", "dev-util", "{3DD4B364-6321-42CA-8CF0-0C82429E5714}"
 EndProject
