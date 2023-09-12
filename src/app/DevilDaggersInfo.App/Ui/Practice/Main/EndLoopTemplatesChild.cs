@@ -1,7 +1,7 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Extensions;
 using DevilDaggersInfo.App.ZeroAllocation;
-using DevilDaggersInfo.Common;
+using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Spawnset.View;
 using DevilDaggersInfo.Core.Wiki;

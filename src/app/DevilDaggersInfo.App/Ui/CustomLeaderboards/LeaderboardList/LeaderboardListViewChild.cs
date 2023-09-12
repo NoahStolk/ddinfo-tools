@@ -4,7 +4,7 @@ using DevilDaggersInfo.App.Networking;
 using DevilDaggersInfo.App.Networking.TaskHandlers;
 using DevilDaggersInfo.App.Ui.CustomLeaderboards.Leaderboard;
 using DevilDaggersInfo.App.ZeroAllocation;
-using DevilDaggersInfo.Common;
+using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.CriteriaExpression;
 using DevilDaggersInfo.Core.CriteriaExpression.Extensions;
 using DevilDaggersInfo.Core.CriteriaExpression.Parts;

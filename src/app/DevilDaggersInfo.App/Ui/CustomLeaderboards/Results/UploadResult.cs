@@ -2,7 +2,7 @@ using DevilDaggersInfo.Api.App.CustomLeaderboards;
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Extensions;
 using DevilDaggersInfo.App.ZeroAllocation;
-using DevilDaggersInfo.Common;
+using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.CriteriaExpression.Extensions;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;

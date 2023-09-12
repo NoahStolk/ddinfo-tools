@@ -17,6 +17,10 @@
 		<PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
 	</ItemGroup>
 
+	<ItemGroup Label="DevilDaggersInfo">
+		<PackageVersion Include="DevilDaggersInfo.Core" Version="0.1.0" />
+	</ItemGroup>
+
 	<ItemGroup Label="Discord">
 		<PackageVersion Include="DSharpPlus" Version="4.4.2" />
 	</ItemGroup>

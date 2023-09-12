@@ -1,6 +1,6 @@
 using DevilDaggersInfo.App.Ui.ReplayEditor.State;
 using DevilDaggersInfo.App.ZeroAllocation;
-using DevilDaggersInfo.Common;
+using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Wiki;
 using ImGuiNET;

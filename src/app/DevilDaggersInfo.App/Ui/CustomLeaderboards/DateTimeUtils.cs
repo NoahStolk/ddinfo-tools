@@ -1,4 +1,4 @@
-using DevilDaggersInfo.Common;
+using DevilDaggersInfo.Core.Common;
 
 namespace DevilDaggersInfo.App.Ui.CustomLeaderboards;
 

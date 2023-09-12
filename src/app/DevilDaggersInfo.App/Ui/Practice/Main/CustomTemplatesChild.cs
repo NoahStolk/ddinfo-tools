@@ -4,7 +4,7 @@ using DevilDaggersInfo.App.User.Settings;
 using DevilDaggersInfo.App.User.Settings.Model;
 using DevilDaggersInfo.App.Utils;
 using DevilDaggersInfo.App.ZeroAllocation;
-using DevilDaggersInfo.Common;
+using DevilDaggersInfo.Core.Common;
 using ImGuiNET;
 using System.Numerics;
 

@@ -1,8 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\core\DevilDaggersInfo.Core.Replay\DevilDaggersInfo.Core.Replay.csproj" />
     <ProjectReference Include="..\DevilDaggersInfo.App.Core.NativeInterface\DevilDaggersInfo.App.Core.NativeInterface.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Label="External dependencies">
+    <PackageReference Include="DevilDaggersInfo.Core" />
   </ItemGroup>
 
 </Project>

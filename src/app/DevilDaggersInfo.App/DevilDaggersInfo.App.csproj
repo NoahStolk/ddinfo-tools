@@ -68,11 +68,6 @@
 
   <ItemGroup Label="Internal dependencies">
     <ProjectReference Include="..\..\api\DevilDaggersInfo.Api.App\DevilDaggersInfo.Api.App.csproj" />
-    <ProjectReference Include="..\..\common\DevilDaggersInfo.Common\DevilDaggersInfo.Common.csproj" />
-    <ProjectReference Include="..\..\core\DevilDaggersInfo.Core.CriteriaExpression\DevilDaggersInfo.Core.CriteriaExpression.csproj" />
-    <ProjectReference Include="..\..\core\DevilDaggersInfo.Core.Encryption\DevilDaggersInfo.Core.Encryption.csproj" />
-    <ProjectReference Include="..\..\core\DevilDaggersInfo.Core.Mod\DevilDaggersInfo.Core.Mod.csproj" />
-    <ProjectReference Include="..\..\core\DevilDaggersInfo.Core.Spawnset\DevilDaggersInfo.Core.Spawnset.csproj" />
     <ProjectReference Include="..\DevilDaggersInfo.App.Core.GameMemory\DevilDaggersInfo.App.Core.GameMemory.csproj" />
     <ProjectReference Include="..\DevilDaggersInfo.App.Engine\DevilDaggersInfo.App.Engine.csproj" />
   </ItemGroup>

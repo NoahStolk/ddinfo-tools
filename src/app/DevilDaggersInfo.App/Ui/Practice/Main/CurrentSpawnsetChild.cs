@@ -1,7 +1,7 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Utils;
 using DevilDaggersInfo.App.ZeroAllocation;
-using DevilDaggersInfo.Common;
+using DevilDaggersInfo.Core.Common;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.App.Ui.Practice.Main;
