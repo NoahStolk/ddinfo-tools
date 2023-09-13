@@ -19,7 +19,7 @@ public static class SurvivalFileWatcher
 	public static HandLevel HandLevel { get; private set; } = HandLevel.Level1;
 	public static int AdditionalGems { get; private set; }
 	public static float TimerStart { get; private set; }
-	public static EffectivePlayerSettings EffectivePlayerSettings { get; private set; }
+	public static EffectivePlayerSettings EffectivePlayerSettings { get; private set; } = new(HandLevel.Level1, 0, HandLevel.Level1);
 
 	public static void Initialize()
 	{
