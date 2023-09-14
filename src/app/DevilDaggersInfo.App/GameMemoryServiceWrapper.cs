@@ -2,6 +2,7 @@ using DevilDaggersInfo.Api.App.ProcessMemory;
 using DevilDaggersInfo.App.Networking;
 using DevilDaggersInfo.App.Networking.TaskHandlers;
 using DevilDaggersInfo.App.Ui;
+using DevilDaggersInfo.App.Ui.Popups;
 
 namespace DevilDaggersInfo.App;
 
@@ -35,7 +36,7 @@ public static class GameMemoryServiceWrapper
 		void SetMarker(GetMarker? getMarker)
 		{
 			if (getMarker == null)
-				Modals.ShowError("Failed to retrieve marker.");
+				PopupManager.ShowError("Failed to retrieve marker.");
 			else
 				Marker = getMarker.Value;
 		}

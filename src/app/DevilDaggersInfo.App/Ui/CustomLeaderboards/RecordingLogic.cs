@@ -3,6 +3,7 @@ using DevilDaggersInfo.App.Core.GameMemory;
 using DevilDaggersInfo.App.Networking;
 using DevilDaggersInfo.App.Networking.TaskHandlers;
 using DevilDaggersInfo.App.Ui.CustomLeaderboards.Results;
+using DevilDaggersInfo.App.Ui.Popups;
 using DevilDaggersInfo.App.User.Cache;
 using DevilDaggersInfo.Core.Common.Extensions;
 using DevilDaggersInfo.Core.Encryption;
@@ -256,7 +257,7 @@ public static class RecordingLogic
 	{
 		if (response == null)
 		{
-			Modals.ShowError("Failed to upload run.");
+			PopupManager.ShowError("Failed to upload run.");
 			return;
 		}
 

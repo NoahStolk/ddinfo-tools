@@ -3,6 +3,7 @@ using DevilDaggersInfo.App.Ui.Config;
 using DevilDaggersInfo.App.Ui.CustomLeaderboards;
 using DevilDaggersInfo.App.Ui.CustomLeaderboards.Results;
 using DevilDaggersInfo.App.Ui.Main;
+using DevilDaggersInfo.App.Ui.Popups;
 using DevilDaggersInfo.App.Ui.Practice.Main;
 using DevilDaggersInfo.App.Ui.Practice.RunAnalysis;
 using DevilDaggersInfo.App.Ui.ReplayEditor;
@@ -96,6 +97,6 @@ public static class UiRenderer
 		AboutWindow.Render(ref _showAbout);
 		UpdateWindow.Render(ref _showUpdateAvailable);
 
-		Modals.Render();
+		PopupManager.Render();
 	}
 }

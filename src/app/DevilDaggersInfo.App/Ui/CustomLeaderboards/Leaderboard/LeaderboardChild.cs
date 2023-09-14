@@ -5,6 +5,7 @@ using DevilDaggersInfo.App.Extensions;
 using DevilDaggersInfo.App.Networking;
 using DevilDaggersInfo.App.Networking.TaskHandlers;
 using DevilDaggersInfo.App.Ui.CustomLeaderboards.LeaderboardList;
+using DevilDaggersInfo.App.Ui.Popups;
 using DevilDaggersInfo.App.User.Cache;
 using DevilDaggersInfo.App.User.Settings;
 using DevilDaggersInfo.App.ZeroAllocation;
@@ -59,7 +60,7 @@ public static class LeaderboardChild
 			{
 				if (spawnset == null)
 				{
-					Modals.ShowError("Could not fetch spawnset.");
+					PopupManager.ShowError("Could not fetch spawnset.");
 					return;
 				}
 
@@ -249,7 +250,7 @@ public static class LeaderboardChild
 		{
 			if (getCustomEntryReplayBuffer == null)
 			{
-				Modals.ShowError("Could not fetch replay.");
+				PopupManager.ShowError("Could not fetch replay.");
 				return;
 			}
 
@@ -265,7 +266,7 @@ public static class LeaderboardChild
 		{
 			if (getCustomEntryReplayBuffer == null)
 			{
-				Modals.ShowError("Could not fetch replay.");
+				PopupManager.ShowError("Could not fetch replay.");
 				return;
 			}
 
@@ -277,7 +278,7 @@ public static class LeaderboardChild
 			catch (Exception ex)
 			{
 				Root.Log.Error(ex, "Could not parse replay.");
-				Modals.ShowError("Could not parse replay.");
+				PopupManager.ShowError("Could not parse replay.");
 				return;
 			}
 

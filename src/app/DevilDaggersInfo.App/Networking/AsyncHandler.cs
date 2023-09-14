@@ -1,4 +1,5 @@
 using DevilDaggersInfo.App.Ui;
+using DevilDaggersInfo.App.Ui.Popups;
 
 namespace DevilDaggersInfo.App.Networking;
 
@@ -29,7 +30,7 @@ public static class AsyncHandler
 			}
 			catch (Exception ex)
 			{
-				Modals.ShowError("API call failed.\n\n" + ex.Message);
+				PopupManager.ShowError("API call failed.\n\n" + ex.Message);
 				Root.Log.Error(ex, "API error");
 				return default;
 			}

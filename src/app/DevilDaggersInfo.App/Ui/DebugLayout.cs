@@ -1,4 +1,5 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
+using DevilDaggersInfo.App.Ui.Popups;
 using DevilDaggersInfo.App.ZeroAllocation;
 using ImGuiNET;
 
@@ -41,7 +42,7 @@ public static class DebugLayout
 		AddText(ref y, "Total GC pause duration", UnsafeSpan.Get(GC.GetTotalPauseDuration() ));
 		AddText(ref y, "Total app time", UnsafeSpan.Get(DateTime.UtcNow - _startUpTime));
 
-		AddText(ref y, "Modal active", Modals.IsAnyOpen ? bool.TrueString : bool.FalseString);
+		AddText(ref y, "Modal active", PopupManager.IsAnyOpen ? bool.TrueString : bool.FalseString);
 
 		AddText(ref y, "Devil Daggers window position", UnsafeSpan.Get(Root.GameWindowService.GetWindowPosition()));
 
@@ -56,7 +57,7 @@ public static class DebugLayout
 		if (ImGui.Begin("Debug"))
 		{
 			if (ImGui.Button("Error window"))
-				Modals.ShowError("Test error!");
+				PopupManager.ShowError("Test error!");
 
 			if (ImGui.Button("Warning log"))
 				Root.Log.Warning("Test warning! This should be logged as WARNING.");

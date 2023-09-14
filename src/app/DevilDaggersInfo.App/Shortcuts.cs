@@ -1,4 +1,5 @@
 using DevilDaggersInfo.App.Ui;
+using DevilDaggersInfo.App.Ui.Popups;
 using DevilDaggersInfo.App.Ui.ReplayEditor;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor;
 using Silk.NET.Input;
@@ -9,7 +10,7 @@ public static class Shortcuts
 {
 	public static void OnKeyPressed(IKeyboard keyboard, Key key)
 	{
-		if (Modals.IsAnyOpen)
+		if (PopupManager.IsAnyOpen)
 			return;
 
 		bool ctrl = keyboard.IsKeyPressed(Key.ControlLeft) || keyboard.IsKeyPressed(Key.ControlRight);
@@ -50,6 +51,7 @@ public static class Shortcuts
 				Action? action = key switch
 				{
 					Key.O => SpawnsetEditorMenu.OpenCurrentSpawnset,
+					Key.S => SpawnsetEditorMenu.SaveSpawnsetAs,
 					Key.D => SpawnsetEditorMenu.OpenDefaultSpawnset,
 					_ => null,
 				};

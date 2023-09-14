@@ -3,6 +3,7 @@ using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Networking;
 using DevilDaggersInfo.App.Networking.TaskHandlers;
 using DevilDaggersInfo.App.Ui.CustomLeaderboards.Leaderboard;
+using DevilDaggersInfo.App.Ui.Popups;
 using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.CriteriaExpression;
@@ -84,7 +85,7 @@ public static class LeaderboardListViewChild
 						{
 							if (cl == null)
 							{
-								Modals.ShowError("Could not fetch custom leaderboard.");
+								PopupManager.ShowError("Could not fetch custom leaderboard.");
 								LeaderboardChild.Data = null;
 							}
 							else

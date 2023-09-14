@@ -1,4 +1,5 @@
 using DevilDaggersInfo.App.Extensions;
+using DevilDaggersInfo.App.Ui.Popups;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.State;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.App.Utils;
@@ -48,7 +49,7 @@ public static class SpawnsChild
 					{
 						if (SpawnsetState.Spawnset.Spawns.Length >= MaxSpawns)
 						{
-							Modals.ShowError("Reached max amount of spawns.");
+							PopupManager.ShowError("Reached max amount of spawns.");
 						}
 						else
 						{
@@ -67,7 +68,7 @@ public static class SpawnsChild
 
 						if (SpawnsetState.Spawnset.Spawns.Length >= MaxSpawns)
 						{
-							Modals.ShowError("Reached max amount of spawns.");
+							PopupManager.ShowError("Reached max amount of spawns.");
 						}
 						else
 						{

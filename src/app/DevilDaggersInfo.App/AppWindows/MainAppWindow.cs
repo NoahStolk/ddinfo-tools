@@ -3,6 +3,7 @@ using DevilDaggersInfo.App.Networking;
 using DevilDaggersInfo.App.Networking.TaskHandlers;
 using DevilDaggersInfo.App.Ui;
 using DevilDaggersInfo.App.Ui.Config;
+using DevilDaggersInfo.App.Ui.Popups;
 using DevilDaggersInfo.App.User.Cache;
 using DevilDaggersInfo.App.Utils;
 using ImGuiNET;
@@ -67,13 +68,13 @@ public class MainAppWindow
 
 		if (Root.Mouse == null)
 		{
-			Modals.ShowError("No mouse available!");
+			PopupManager.ShowError("No mouse available!");
 			Root.Log.Error("No mouse available!");
 		}
 
 		if (Root.Keyboard == null)
 		{
-			Modals.ShowError("No keyboard available!");
+			PopupManager.ShowError("No keyboard available!");
 			Root.Log.Error("No keyboard available!");
 		}
 		else

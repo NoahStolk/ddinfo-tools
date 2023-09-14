@@ -1,4 +1,6 @@
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.Arena;
+using DevilDaggersInfo.App.Ui.SpawnsetEditor.State;
+using DevilDaggersInfo.App.ZeroAllocation;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.App.Ui.SpawnsetEditor;
@@ -10,7 +12,7 @@ public static class SpawnsetEditorWindow
 	public static void Render()
 	{
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, Constants.MinWindowSize);
-		if (ImGui.Begin("Spawnset Editor", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.MenuBar | ImGuiWindowFlags.NoScrollWithMouse))
+		if (ImGui.Begin(UnsafeSpan.Get($"Spawnset Editor - {SpawnsetState.SpawnsetName ?? SpawnsetState.UntitledName}{(SpawnsetState.IsSpawnsetModified && SpawnsetState.SpawnsetName != null ? "*" : string.Empty)}###spawnset_editor"), ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.MenuBar | ImGuiWindowFlags.NoScrollWithMouse))
 		{
 			bool isWindowFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows);
 

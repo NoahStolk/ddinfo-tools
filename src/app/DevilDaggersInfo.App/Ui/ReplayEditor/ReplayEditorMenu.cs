@@ -1,3 +1,4 @@
+using DevilDaggersInfo.App.Ui.Popups;
 using DevilDaggersInfo.App.Ui.ReplayEditor.State;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
@@ -68,7 +69,7 @@ public static class ReplayEditorMenu
 		}
 		catch (Exception ex)
 		{
-			Modals.ShowError($"Could not open file '{filePath}'.");
+			PopupManager.ShowError($"Could not open file '{filePath}'.");
 			Root.Log.Error(ex, "Could not open file");
 			return;
 		}
@@ -80,7 +81,7 @@ public static class ReplayEditorMenu
 		}
 		else
 		{
-			Modals.ShowError($"The file '{filePath}' could not be parsed as a local replay.");
+			PopupManager.ShowError($"The file '{filePath}' could not be parsed as a local replay.");
 			return;
 		}
 
@@ -99,7 +100,7 @@ public static class ReplayEditorMenu
 	{
 		if (!GameMemoryServiceWrapper.Scan() || !Root.GameMemoryService.IsInitialized)
 		{
-			Modals.ShowError("Could not read replay from game memory. Make sure the game is running.");
+			PopupManager.ShowError("Could not read replay from game memory. Make sure the game is running.");
 			return;
 		}
 
@@ -111,7 +112,7 @@ public static class ReplayEditorMenu
 		}
 		else
 		{
-			Modals.ShowError("The data from game memory could not be parsed as a local replay. Make sure to open a replay first.");
+			PopupManager.ShowError("The data from game memory could not be parsed as a local replay. Make sure to open a replay first.");
 			return;
 		}
 

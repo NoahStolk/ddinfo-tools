@@ -1,4 +1,5 @@
 using DevilDaggersInfo.App.Networking;
+using DevilDaggersInfo.App.Ui.Popups;
 using DevilDaggersInfo.App.Ui.ReplayEditor.State;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Spawnset;
@@ -47,7 +48,7 @@ public static class LeaderboardReplayBrowser
 	{
 		if (response == null)
 		{
-			Modals.ShowError("The Devil Daggers leaderboard servers did not return a successful response.");
+			PopupManager.ShowError("The Devil Daggers leaderboard servers did not return a successful response.");
 			_isDownloading = false;
 			return;
 		}
@@ -64,7 +65,7 @@ public static class LeaderboardReplayBrowser
 			// DF_RPL0Replay not found.
 			// We could parse this, but it's not worth the effort.
 			Root.Log.Warning(ex, "The replay could not be parsed.");
-			Modals.ShowError("The replay could not be parsed.");
+			PopupManager.ShowError("The replay could not be parsed.");
 			_isDownloading = false;
 			return;
 		}
