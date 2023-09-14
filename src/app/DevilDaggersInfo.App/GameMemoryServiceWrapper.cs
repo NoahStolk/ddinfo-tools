@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Api.App.ProcessMemory;
 using DevilDaggersInfo.App.Networking;
 using DevilDaggersInfo.App.Networking.TaskHandlers;
-using DevilDaggersInfo.App.Ui;
 using DevilDaggersInfo.App.Ui.Popups;
 
 namespace DevilDaggersInfo.App;

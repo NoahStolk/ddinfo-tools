@@ -1,5 +1,4 @@
 using DevilDaggersInfo.App.Ui.SpawnsetEditor;
-using DevilDaggersInfo.App.Ui.SpawnsetEditor.State;
 using ImGuiNET;
 using System.Numerics;
 
@@ -7,34 +6,24 @@ namespace DevilDaggersInfo.App.Ui.Popups;
 
 public static class PopupManager
 {
-	private const string _errorId = "Error";
-	private const string _replacedSurvivalFileId = "Successfully replaced current survival file";
-	private const string _deletedSurvivalFileId = "Successfully deleted current survival file";
-	private const string _saveSpawnsetId = "Save spawnset?";
-
 	private static readonly List<Popup> _openPopups = new();
 
 	public static bool IsAnyOpen => _openPopups.Count > 0;
 
 	public static void ShowError(string errorText)
 	{
-		_openPopups.Add(new ErrorMessage(_errorId, errorText));
+		_openPopups.Add(new ErrorMessage("Error", errorText));
 	}
 
-	public static void ShowReplacedSurvivalFile()
+	public static void ShowMessage(string title, string text)
 	{
-		_openPopups.Add(new Message(_replacedSurvivalFileId, "The current survival file has been replaced with the current spawnset."));
-	}
-
-	public static void ShowDeletedSurvivalFile()
-	{
-		_openPopups.Add(new Message(_deletedSurvivalFileId, "The current survival file has been deleted."));
+		_openPopups.Add(new Message(title, text));
 	}
 
 	public static void ShowSaveSpawnsetPrompt(Action action)
 	{
 		_openPopups.Add(new Question(
-			_saveSpawnsetId,
+			"Save spawnset?",
 			"Do you want to save the current spawnset?",
 			() =>
 			{

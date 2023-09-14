@@ -168,7 +168,7 @@ public static class SpawnsetEditorMenu
 	public static void ReplaceCurrentSpawnset()
 	{
 		File.WriteAllBytes(UserSettings.ModsSurvivalPath, SpawnsetState.Spawnset.ToBytes());
-		PopupManager.ShowReplacedSurvivalFile();
+		PopupManager.ShowMessage("Successfully replaced current survival file", "The current survival file has been replaced with the current spawnset.");
 	}
 
 	public static void DeleteCurrentSpawnset()
@@ -176,7 +176,7 @@ public static class SpawnsetEditorMenu
 		if (File.Exists(UserSettings.ModsSurvivalPath))
 			File.Delete(UserSettings.ModsSurvivalPath);
 
-		PopupManager.ShowDeletedSurvivalFile();
+		PopupManager.ShowMessage("Successfully deleted current survival file", "The current survival file has been deleted.");
 	}
 
 	public static void Close()

@@ -1,4 +1,3 @@
-using DevilDaggersInfo.App.Ui;
 using DevilDaggersInfo.App.Ui.Popups;
 
 namespace DevilDaggersInfo.App.Networking;
