@@ -2,7 +2,6 @@ using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.ReplayEditor.Events.EventTypes;
 using DevilDaggersInfo.App.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.App.Utils;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
@@ -215,7 +214,7 @@ public static class ReplayEventsChild
 				int endTick = Math.Min(_startTick + maxTicks - 1, eventsData.TickCount);
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
-				ImGui.Text(UnsafeSpan.Get($"Showing {_startTick} - {endTick} of {eventsData.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, startTime):0.0000} - {TimeUtils.TickToTime(endTick, startTime):0.0000}"));
+				ImGui.Text(Inline.Span($"Showing {_startTick} - {endTick} of {eventsData.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, startTime):0.0000} - {TimeUtils.TickToTime(endTick, startTime):0.0000}"));
 			}
 
 			ImGui.EndChild(); // TickNavigation
@@ -338,7 +337,7 @@ public static class ReplayEventsChild
 					ImGui.TableNextRow();
 
 					ImGui.TableNextColumn();
-					ImGui.Text(UnsafeSpan.Get($"{TimeUtils.TickToTime(i, startTime):0.0000} ({i})"));
+					ImGui.Text(Inline.Span($"{TimeUtils.TickToTime(i, startTime):0.0000} ({i})"));
 					ImGui.TableNextColumn();
 					if (inputsEvent != null)
 						RenderInputsEvent(inputsEvent);
@@ -419,12 +418,12 @@ public static class ReplayEventsChild
 		ImGui.SameLine();
 		ImGui.TextColored(GetShootTypeColor(ie.ShootHoming), "[RMB]");
 		ImGui.SameLine();
-		ImGui.TextColored(ie.MouseX == 0 ? Color.White : Color.Red, UnsafeSpan.Get($"X:{ie.MouseX}"));
+		ImGui.TextColored(ie.MouseX == 0 ? Color.White : Color.Red, Inline.Span($"X:{ie.MouseX}"));
 		ImGui.SameLine();
-		ImGui.TextColored(ie.MouseY == 0 ? Color.White : Color.Red, UnsafeSpan.Get($"Y:{ie.MouseY}"));
+		ImGui.TextColored(ie.MouseY == 0 ? Color.White : Color.Red, Inline.Span($"Y:{ie.MouseY}"));
 
 		if (ie is InitialInputsEvent initial)
-			ImGui.TextColored(Color.White, UnsafeSpan.Get($"Look Speed: {initial.LookSpeed}"));
+			ImGui.TextColored(Color.White, Inline.Span($"Look Speed: {initial.LookSpeed}"));
 
 		static Color GetJumpTypeColor(JumpType jumpType) => jumpType switch
 		{

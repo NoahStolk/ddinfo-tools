@@ -1,6 +1,5 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Utils;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Common;
 using ImGuiNET;
 
@@ -21,12 +20,12 @@ public static class CurrentSpawnsetChild
 						ImGui.TextColored(Color.Yellow, "Effective values");
 
 						if (SurvivalFileWatcher.EffectivePlayerSettings.HandLevel != SurvivalFileWatcher.EffectivePlayerSettings.HandMesh)
-							ImGui.Text(UnsafeSpan.Get($"{EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]} ({EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandMesh]} mesh)"));
+							ImGui.Text(Inline.Span($"{EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]} ({EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandMesh]} mesh)"));
 						else
 							ImGui.Text(EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]);
 
-						ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.EffectivePlayerSettings.GemsOrHoming));
-						ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
+						ImGui.Text(Inline.Span(SurvivalFileWatcher.EffectivePlayerSettings.GemsOrHoming));
+						ImGui.Text(Inline.Span(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
 					}
 
 					ImGui.EndChild(); // End CurrentPracticeValuesLeft
@@ -38,8 +37,8 @@ public static class CurrentSpawnsetChild
 						ImGui.TextColored(Color.Yellow, "Spawnset values");
 
 						ImGui.Text(EnumUtils.HandLevelNames[SurvivalFileWatcher.HandLevel]);
-						ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.AdditionalGems));
-						ImGui.Text(UnsafeSpan.Get(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
+						ImGui.Text(Inline.Span(SurvivalFileWatcher.AdditionalGems));
+						ImGui.Text(Inline.Span(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
 					}
 
 					ImGui.EndChild(); // End CurrentPracticeValuesRight

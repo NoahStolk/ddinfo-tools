@@ -1,4 +1,3 @@
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Wiki;
@@ -22,14 +21,14 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEvent>
 				ImGui.TableNextRow();
 
 				(int index, BoidSpawnEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(index));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.SpawnerEntityId);
 				EventTypeRendererUtils.NextColumnText(GetBoidTypeText(e.BoidType));
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.Position));
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.Orientation));
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.Velocity));
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.Speed, "0.00"));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Position));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Orientation));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Velocity));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Speed, "0.00"));
 			}
 
 			ImGui.EndTable();

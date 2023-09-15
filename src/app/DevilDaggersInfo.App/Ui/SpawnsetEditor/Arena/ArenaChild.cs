@@ -1,7 +1,6 @@
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.Arena.EditorStates;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.State;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.Utils;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Spawnset;
 using ImGuiNET;
 using System.Diagnostics;
@@ -54,7 +53,7 @@ public static class ArenaChild
 
 				if (mousePosition.IsValid && isSpawnsetEditorWindowFocused)
 				{
-					ImGui.SetTooltip(UnsafeSpan.Get($"{SpawnsetState.Spawnset.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y]}\n<{mousePosition.Tile.X}, {mousePosition.Tile.Y}>"));
+					ImGui.SetTooltip(Inline.Span($"{SpawnsetState.Spawnset.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y]}\n<{mousePosition.Tile.X}, {mousePosition.Tile.Y}>"));
 
 					if (io.MouseWheel != 0)
 					{

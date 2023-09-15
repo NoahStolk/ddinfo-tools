@@ -1,6 +1,5 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.Utils;
-using DevilDaggersInfo.App.ZeroAllocation;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.App.Ui.SpawnsetEditor.Arena;
@@ -46,7 +45,7 @@ public static class ArenaHeightButtons
 			ImGui.PushStyleColor(ImGuiCol.Border, Math.Abs(ArenaChild.SelectedHeight - height) < 0.001f ? Color.Invert(heightColor) : Color.Lerp(heightColor, Color.Black, 0.2f));
 
 			ImGui.SetCursorPos(new(offsetX + borderSize * 2, offsetY + borderSize));
-			if (ImGui.Button(UnsafeSpan.Get(height), new(width - 1, _arenaButtonSize - 1)))
+			if (ImGui.Button(Inline.Span(height), new(width - 1, _arenaButtonSize - 1)))
 				ArenaChild.SelectedHeight = height;
 
 			ImGui.PopStyleColor(5);

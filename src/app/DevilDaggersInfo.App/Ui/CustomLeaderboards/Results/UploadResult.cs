@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Api.App.CustomLeaderboards;
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Extensions;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.CriteriaExpression.Extensions;
 using DevilDaggersInfo.Core.Wiki;
@@ -243,7 +242,7 @@ public class UploadResult
 
 			ReadOnlySpan<char> format = "HH:mm:ss";
 			ImGui.SameLine(ImGui.GetWindowWidth() - ImGui.CalcTextSize(format).X - 8);
-			ImGui.Text(UnsafeSpan.Get(SubmittedAt, format));
+			ImGui.Text(Inline.Span(SubmittedAt, format));
 
 			ImGui.Text(title);
 		}

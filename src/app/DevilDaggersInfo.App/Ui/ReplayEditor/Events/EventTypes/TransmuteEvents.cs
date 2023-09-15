@@ -1,4 +1,3 @@
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using ImGuiNET;
@@ -20,12 +19,12 @@ public sealed class TransmuteEvents : IEventTypeRenderer<TransmuteEvent>
 				ImGui.TableNextRow();
 
 				(int index, TransmuteEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(index));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.A));
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.B));
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.C));
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.D));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(e.A));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(e.B));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(e.C));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(e.D));
 			}
 
 			ImGui.EndTable();

@@ -3,7 +3,6 @@ using DevilDaggersInfo.App.Extensions;
 using DevilDaggersInfo.App.User.Settings;
 using DevilDaggersInfo.App.User.Settings.Model;
 using DevilDaggersInfo.App.Utils;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Common;
 using ImGuiNET;
 using System.Numerics;
@@ -63,7 +62,7 @@ public static class CustomTemplatesChild
 	private static void RenderTemplateButton(UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
 	{
 		Vector2 buttonSize = new(PracticeWindow.TemplateWidth - 96, 48);
-		ReadOnlySpan<char> buttonName = UnsafeSpan.Get($"{EnumUtils.HandLevelNames[customTemplate.HandLevel]}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart}");
+		ReadOnlySpan<char> buttonName = Inline.Span($"{EnumUtils.HandLevelNames[customTemplate.HandLevel]}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart}");
 
 		Color color = Color.White;
 
@@ -80,7 +79,7 @@ public static class CustomTemplatesChild
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
 
-			if (ImGui.BeginChild(UnsafeSpan.Get($"{buttonName}Child"), buttonSize, false, ImGuiWindowFlags.NoInputs))
+			if (ImGui.BeginChild(Inline.Span($"{buttonName}Child"), buttonSize, false, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 				{
@@ -94,7 +93,7 @@ public static class CustomTemplatesChild
 
 				ImGui.TextColored(color with { A = textAlpha }, string.IsNullOrWhiteSpace(customTemplate.Name) ? "<untitled>" : customTemplate.Name);
 
-				ReadOnlySpan<char> timerStartString = UnsafeSpan.Get(customTemplate.TimerStart, StringFormats.TimeFormat);
+				ReadOnlySpan<char> timerStartString = Inline.Span(customTemplate.TimerStart, StringFormats.TimeFormat);
 				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(timerStartString).X - 8);
 				ImGui.TextColored(Color.White with { A = textAlpha }, timerStartString);
 
@@ -114,7 +113,7 @@ public static class CustomTemplatesChild
 
 		ImGui.EndChild(); // End {buttonName}
 
-		if (ImGui.BeginPopupContextItem(UnsafeSpan.Get($"{buttonName} rename"), ImGuiPopupFlags.MouseButtonRight))
+		if (ImGui.BeginPopupContextItem(Inline.Span($"{buttonName} rename"), ImGuiPopupFlags.MouseButtonRight))
 		{
 			string name = customTemplate.Name ?? string.Empty;
 			ImGui.SetKeyboardFocusHere();
@@ -148,7 +147,7 @@ public static class CustomTemplatesChild
 		ImGui.PushStyleColor(ImGuiCol.Button, gray with { A = 159 });
 		ImGui.PushStyleColor(ImGuiCol.ButtonActive, gray);
 		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, gray with { A = 223 });
-		ImGui.PushID(UnsafeSpan.Get($"drag indicator {i}"));
+		ImGui.PushID(Inline.Span($"drag indicator {i}"));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
 		ImGuiImage.ImageButton("CustomTemplateReorderImageButton", Root.InternalResources.DragIndicatorTexture.Handle, new(32, 48), _customTemplateIndexToReorder == i ? Color.Gray(0.7f) : gray);
@@ -176,7 +175,7 @@ public static class CustomTemplatesChild
 		ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 159 });
 		ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red);
 		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red with { A = 223 });
-		ImGui.PushID(UnsafeSpan.Get($"delete button {i}"));
+		ImGui.PushID(Inline.Span($"delete button {i}"));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(12));
 		if (ImGuiImage.ImageButton("CustomTemplateDeleteImageButton", Root.InternalResources.BinTexture.Handle, new(24)))

@@ -3,7 +3,6 @@ using DevilDaggersInfo.App.Ui.Popups;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.State;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.App.Utils;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Spawnset.Extensions;
@@ -151,7 +150,7 @@ public static class SpawnsChild
 					_scrollToIndex = null;
 				}
 
-				if (ImGui.Selectable(UnsafeSpan.Get(spawn.Index), ref _selected[spawn.Index], ImGuiSelectableFlags.SpanAllColumns))
+				if (ImGui.Selectable(Inline.Span(spawn.Index), ref _selected[spawn.Index], ImGuiSelectableFlags.SpanAllColumns))
 				{
 					if (!io.KeyCtrl)
 					{
@@ -177,16 +176,16 @@ public static class SpawnsChild
 				ImGui.TextColored(spawn.EnemyType.GetColor(GameConstants.CurrentVersion), EnumUtils.EnemyTypeNames[spawn.EnemyType]);
 				ImGui.TableNextColumn();
 
-				ImGui.Text(UnsafeSpan.Get(spawn.Seconds, StringFormats.TimeFormat));
+				ImGui.Text(Inline.Span(spawn.Seconds, StringFormats.TimeFormat));
 				ImGui.TableNextColumn();
 
-				ImGui.Text(UnsafeSpan.Get(spawn.Delay, StringFormats.TimeFormat));
+				ImGui.Text(Inline.Span(spawn.Delay, StringFormats.TimeFormat));
 				ImGui.TableNextColumn();
 
-				ImGui.Text(spawn.NoFarmGems == 0 ? "-" : UnsafeSpan.Get(spawn.NoFarmGems, "+0"));
+				ImGui.Text(spawn.NoFarmGems == 0 ? "-" : Inline.Span(spawn.NoFarmGems, "+0"));
 				ImGui.TableNextColumn();
 
-				ImGui.TextColored(spawn.GemState.HandLevel.GetColor(), UnsafeSpan.Get(spawn.GemState.Value));
+				ImGui.TextColored(spawn.GemState.HandLevel.GetColor(), Inline.Span(spawn.GemState.Value));
 				ImGui.TableNextColumn();
 			}
 
@@ -198,12 +197,12 @@ public static class SpawnsChild
 	private static void EditContextItem(SpawnUiEntry spawn)
 	{
 		bool saved = false;
-		if (ImGui.BeginPopupContextItem(UnsafeSpan.Get(spawn.Index)))
+		if (ImGui.BeginPopupContextItem(Inline.Span(spawn.Index)))
 		{
 			if (!_delayEdited)
 				_editDelay = (float)spawn.Delay;
 
-			ImGui.Text(UnsafeSpan.Get($"Edit #{spawn.Index} ({EnumUtils.EnemyTypeNames[spawn.EnemyType]} at {spawn.Seconds:0.0000})"));
+			ImGui.Text(Inline.Span($"Edit #{spawn.Index} ({EnumUtils.EnemyTypeNames[spawn.EnemyType]} at {spawn.Seconds:0.0000})"));
 
 			for (int i = 0; i < EnumUtils.EnemyTypes.Count; i++)
 			{

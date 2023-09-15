@@ -3,7 +3,6 @@ using DevilDaggersInfo.App.Extensions;
 using DevilDaggersInfo.App.User.Settings;
 using DevilDaggersInfo.App.User.Settings.Model;
 using DevilDaggersInfo.App.Utils;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Spawnset;
 using ImGuiNET;
 
@@ -20,7 +19,7 @@ public static class InputValuesChild
 			ImGui.SameLine();
 			foreach (HandLevel level in EnumUtils.HandLevels)
 			{
-				if (ImGui.RadioButton(UnsafeSpan.Get($"Lvl {(int)level}"), level == PracticeLogic.State.HandLevel) && PracticeLogic.State.HandLevel != level)
+				if (ImGui.RadioButton(Inline.Span($"Lvl {(int)level}"), level == PracticeLogic.State.HandLevel) && PracticeLogic.State.HandLevel != level)
 					PracticeLogic.State.HandLevel = level;
 
 				if (level != HandLevel.Level4)

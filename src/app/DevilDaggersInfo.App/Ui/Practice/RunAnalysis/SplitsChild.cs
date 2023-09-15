@@ -1,6 +1,5 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.Practice.RunAnalysis.Data;
-using DevilDaggersInfo.App.ZeroAllocation;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.App.Ui.Practice.RunAnalysis;
@@ -40,10 +39,10 @@ public static class SplitsChild
 					ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, backgroundColor);
 
 					ImGui.TableNextColumn();
-					ImGui.TextColored(textColor, UnsafeSpan.Get(displayTimer));
+					ImGui.TextColored(textColor, Inline.Span(displayTimer));
 
 					ImGui.TableNextColumn();
-					ImGui.TextColored(textColor, homing.HasValue ? UnsafeSpan.Get(homing.Value) : "-");
+					ImGui.TextColored(textColor, homing.HasValue ? Inline.Span(homing.Value) : "-");
 
 					ImGui.TableNextColumn();
 					int? delta = homing.HasValue && homingPrevious.HasValue ? homing.Value - homingPrevious.Value : null;
@@ -54,7 +53,7 @@ public static class SplitsChild
 						null => Color.Gray(0.5f),
 						_ => Color.White,
 					};
-					ImGui.TextColored(color, delta.HasValue ? UnsafeSpan.Get(delta.Value, "+0;-0;+0") : "-");
+					ImGui.TextColored(color, delta.HasValue ? Inline.Span(delta.Value, "+0;-0;+0") : "-");
 
 					ImGui.PopStyleColor();
 				}

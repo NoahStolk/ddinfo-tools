@@ -1,5 +1,4 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Wiki;
@@ -22,8 +21,8 @@ public sealed class DeathEvents : IEventTypeRenderer<DeathEvent>
 				ImGui.TableNextRow();
 
 				(int index, DeathEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(index));
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(Deaths.GetDeathByType(GameConstants.CurrentVersion, (byte)e.DeathType)?.Name ?? "???"));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(Deaths.GetDeathByType(GameConstants.CurrentVersion, (byte)e.DeathType)?.Name ?? "???"));
 			}
 
 			ImGui.EndTable();

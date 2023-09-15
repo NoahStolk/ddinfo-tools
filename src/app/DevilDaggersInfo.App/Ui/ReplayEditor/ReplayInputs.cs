@@ -1,5 +1,4 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using ImGuiNET;
@@ -27,7 +26,7 @@ public static class ReplayInputs
 		Vector2 mouseCoordinates = new(snapshot.MouseX, snapshot.MouseY);
 		Vector2 pointerCenter = origin + new Vector2(center) + Clamp(mouseCoordinates * pointerScale, -max, max);
 		drawList.AddRect(pointerCenter - new Vector2(pointerSize / 2f), pointerCenter + new Vector2(pointerSize / 2f), 0xFFFFFFFF);
-		drawList.AddText(origin + new Vector2(0, mousePointerAreaSize), 0xFFFFFFFF, UnsafeSpan.Get(mouseCoordinates, "+000;-000;+000"));
+		drawList.AddText(origin + new Vector2(0, mousePointerAreaSize), 0xFFFFFFFF, Inline.Span(mouseCoordinates, "+000;-000;+000"));
 
 		// Inputs
 		const int inputSize = 32;

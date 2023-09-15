@@ -1,5 +1,4 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using ImGuiNET;
@@ -21,9 +20,9 @@ public sealed class EntityPositionEvents : IEventTypeRenderer<EntityPositionEven
 				ImGui.TableNextRow();
 
 				(int index, EntityPositionEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(index));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.Position));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Position));
 			}
 
 			ImGui.EndTable();

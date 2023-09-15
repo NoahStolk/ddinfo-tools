@@ -1,6 +1,5 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.State;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Spawnset;
 using ImGuiNET;
 using System.Numerics;
@@ -55,7 +54,7 @@ public static class HistoryChild
 				ImGui.PushStyleColor(ImGuiCol.ButtonActive, color + new Vector4(0.5f, 0.5f, 0.5f, 0));
 				ImGui.PushStyleColor(ImGuiCol.Border, i == CurrentHistoryIndex ? Color.White : Color.Black);
 
-				ImGui.PushID(UnsafeSpan.Get($"HistoryButton{i}"));
+				ImGui.PushID(Inline.Span($"HistoryButton{i}"));
 				if (ImGui.Button(history.EditType.GetChange(), new(226, 20)))
 					SetHistoryIndex(i);
 

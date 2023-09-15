@@ -1,4 +1,3 @@
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Wiki;
@@ -21,11 +20,11 @@ public sealed class SpiderEggSpawnEvents : IEventTypeRenderer<SpiderEggSpawnEven
 				ImGui.TableNextRow();
 
 				(int index, SpiderEggSpawnEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(index));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.SpawnerEntityId);
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.Position, "0.00"));
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.TargetPosition, "0.00"));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Position, "0.00"));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(e.TargetPosition, "0.00"));
 			}
 
 			ImGui.EndTable();

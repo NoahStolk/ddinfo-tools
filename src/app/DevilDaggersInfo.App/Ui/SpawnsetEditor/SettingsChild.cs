@@ -2,7 +2,6 @@ using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.State;
 using DevilDaggersInfo.App.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.App.Utils;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Spawnset;
 using ImGuiNET;
 using System.Diagnostics;
@@ -57,7 +56,7 @@ public static class SettingsChild
 		ImGui.SameLine();
 		for (int i = 8; i < 10; i++)
 		{
-			if (ImGui.RadioButton(UnsafeSpan.Get(i), i == SpawnsetState.Spawnset.WorldVersion) && SpawnsetState.Spawnset.WorldVersion != i)
+			if (ImGui.RadioButton(Inline.Span(i), i == SpawnsetState.Spawnset.WorldVersion) && SpawnsetState.Spawnset.WorldVersion != i)
 			{
 				SpawnsetState.Spawnset = SpawnsetState.Spawnset with { WorldVersion = i };
 				SpawnsetHistoryUtils.Save(SpawnsetEditType.Format);
@@ -71,7 +70,7 @@ public static class SettingsChild
 		ImGui.SameLine();
 		for (int i = 4; i < 7; i++)
 		{
-			if (ImGui.RadioButton(UnsafeSpan.Get(i), i == SpawnsetState.Spawnset.SpawnVersion) && SpawnsetState.Spawnset.SpawnVersion != i)
+			if (ImGui.RadioButton(Inline.Span(i), i == SpawnsetState.Spawnset.SpawnVersion) && SpawnsetState.Spawnset.SpawnVersion != i)
 			{
 				SpawnsetState.Spawnset = SpawnsetState.Spawnset with { SpawnVersion = i };
 				SpawnsetHistoryUtils.Save(SpawnsetEditType.Format);
@@ -194,7 +193,7 @@ public static class SettingsChild
 		for (int i = 0; i < EnumUtils.HandLevels.Count; i++)
 		{
 			HandLevel level = EnumUtils.HandLevels[i];
-			if (ImGui.RadioButton(UnsafeSpan.Get($"Lvl {(int)level}"), level == SpawnsetState.Spawnset.HandLevel) && SpawnsetState.Spawnset.HandLevel != level)
+			if (ImGui.RadioButton(Inline.Span($"Lvl {(int)level}"), level == SpawnsetState.Spawnset.HandLevel) && SpawnsetState.Spawnset.HandLevel != level)
 			{
 				SpawnsetState.Spawnset = SpawnsetState.Spawnset with { HandLevel = level };
 				SpawnsetHistoryUtils.Save(SpawnsetEditType.HandLevel);

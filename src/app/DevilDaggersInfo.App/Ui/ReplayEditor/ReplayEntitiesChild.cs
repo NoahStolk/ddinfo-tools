@@ -1,7 +1,6 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.App.Utils;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Extensions;
@@ -42,7 +41,7 @@ public static class ReplayEntitiesChild
 			if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Handle, iconSize))
 				_startId = eventsData.EntityTypes.Count - maxIds;
 
-			ImGui.Text(UnsafeSpan.Get($"Showing {_startId} - {_startId + maxIds - 1} of {eventsData.EntityTypes.Count}"));
+			ImGui.Text(Inline.Span($"Showing {_startId} - {_startId + maxIds - 1} of {eventsData.EntityTypes.Count}"));
 
 			ImGui.Checkbox("Show enemies", ref _showEnemies);
 			ImGui.SameLine();
@@ -69,7 +68,7 @@ public static class ReplayEntitiesChild
 						ImGui.TableNextRow();
 
 						ImGui.TableNextColumn();
-						if (ImGui.Selectable(UnsafeSpan.Get(i), false, ImGuiSelectableFlags.SpanAllColumns))
+						if (ImGui.Selectable(Inline.Span(i), false, ImGuiSelectableFlags.SpanAllColumns))
 							_enemyHitLog = EnemyHitLogBuilder.Build(eventsData.Events, i);
 
 						ImGui.TableNextColumn();
@@ -103,7 +102,7 @@ public static class ReplayEntitiesChild
 		{
 			ImGui.Text("NOTE: This feature is a work in progress and not entirely accurate for some enemy types.");
 
-			ImGui.Text(UnsafeSpan.Get($"Enemy hit log for {EnumUtils.EntityTypeNames[_enemyHitLog.EntityType]} (id {_enemyHitLog.EntityId}):"));
+			ImGui.Text(Inline.Span($"Enemy hit log for {EnumUtils.EntityTypeNames[_enemyHitLog.EntityType]} (id {_enemyHitLog.EntityId}):"));
 
 			int initialHp = _enemyHitLog.EntityType.GetInitialHp();
 			if (ImGui.BeginTable("EnemyHitLog", 5, ImGuiTableFlags.None))
@@ -117,7 +116,7 @@ public static class ReplayEntitiesChild
 
 				ImGui.TableNextRow();
 				ImGui.TableNextColumn();
-				ImGui.Text(UnsafeSpan.Get($"{TimeUtils.TickToTime(_enemyHitLog.SpawnTick, startTime):0.0000} ({_enemyHitLog.SpawnTick})"));
+				ImGui.Text(Inline.Span($"{TimeUtils.TickToTime(_enemyHitLog.SpawnTick, startTime):0.0000} ({_enemyHitLog.SpawnTick})"));
 				ImGui.TableNextColumn();
 				ImGui.TextColored(Color.Green, "Spawn");
 				ImGui.TableNextColumn();
@@ -133,15 +132,15 @@ public static class ReplayEntitiesChild
 
 					ImGui.TableNextRow();
 					ImGui.TableNextColumn();
-					ImGui.Text(UnsafeSpan.Get($"{TimeUtils.TickToTime(hit.Tick, startTime):0.0000} ({hit.Tick})"));
+					ImGui.Text(Inline.Span($"{TimeUtils.TickToTime(hit.Tick, startTime):0.0000} ({hit.Tick})"));
 					ImGui.TableNextColumn();
-					ImGui.TextColored(hit.Hp < 0 ? Color.Red : Color.Lerp(Color.Red, Color.White, hit.Hp / (float)initialHp), hit.Hp <= 0 ? "Dead" : UnsafeSpan.Get($"{hit.Hp} / {initialHp}"));
+					ImGui.TextColored(hit.Hp < 0 ? Color.Red : Color.Lerp(Color.Red, Color.White, hit.Hp / (float)initialHp), hit.Hp <= 0 ? "Dead" : Inline.Span($"{hit.Hp} / {initialHp}"));
 					ImGui.TableNextColumn();
-					ImGui.TextColored(hit.Damage > 0 ? Color.Red : Color.White, UnsafeSpan.Get(hit.Damage));
+					ImGui.TextColored(hit.Damage > 0 ? Color.Red : Color.White, Inline.Span(hit.Damage));
 					ImGui.TableNextColumn();
 					ImGui.Text(EnumUtils.DaggerTypeNames[hit.DaggerType]);
 					ImGui.TableNextColumn();
-					ImGui.Text(UnsafeSpan.Get(hit.UserData));
+					ImGui.Text(Inline.Span(hit.UserData));
 				}
 
 				ImGui.EndTable();

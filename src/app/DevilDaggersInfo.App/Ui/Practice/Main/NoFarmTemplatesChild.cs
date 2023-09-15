@@ -2,7 +2,6 @@ using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Extensions;
 using DevilDaggersInfo.App.Ui.Practice.Main.Data;
 using DevilDaggersInfo.App.Utils;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Wiki;
@@ -70,7 +69,7 @@ public static class NoFarmTemplatesChild
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, noFarmTemplate.Color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
 
-			if (ImGui.BeginChild(UnsafeSpan.Get($"{noFarmTemplate.Name}Child"), buttonSize, false, ImGuiWindowFlags.NoInputs))
+			if (ImGui.BeginChild(Inline.Span($"{noFarmTemplate.Name}Child"), buttonSize, false, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 				{
@@ -83,8 +82,8 @@ public static class NoFarmTemplatesChild
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 8));
 
 				ImGui.TextColored(noFarmTemplate.Color with { A = textAlpha }, noFarmTemplate.Name);
-				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(UnsafeSpan.Get(noFarmTemplate.TimerStart, StringFormats.TimeFormat)).X - 8);
-				ImGui.TextColored(Color.White with { A = textAlpha }, UnsafeSpan.Get(noFarmTemplate.TimerStart, StringFormats.TimeFormat));
+				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(Inline.Span(noFarmTemplate.TimerStart, StringFormats.TimeFormat)).X - 8);
+				ImGui.TextColored(Color.White with { A = textAlpha }, Inline.Span(noFarmTemplate.TimerStart, StringFormats.TimeFormat));
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 0));
 

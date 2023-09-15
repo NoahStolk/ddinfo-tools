@@ -2,7 +2,6 @@ using DevilDaggersInfo.App.Engine.Maths;
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Extensions;
 using DevilDaggersInfo.App.Ui.Practice.RunAnalysis.Data;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Wiki;
 using ImGuiNET;
@@ -141,11 +140,11 @@ public static class GraphsChild
 
 				ImGui.BeginTooltip();
 
-				AddTooltipText("Time", UnsafeSpan.Get(GetTimeFromIndex(index), StringFormats.TimeFormat), Color.White);
-				AddTooltipText("Gems Collected", UnsafeSpan.Get(gemsCollected), Color.Red);
-				AddTooltipText("Gems Despawned", UnsafeSpan.Get(gemsDespawned), Color.Gray(0.5f));
-				AddTooltipText("Gems Eaten", UnsafeSpan.Get(gemsEaten), Color.Green);
-				AddTooltipText("Gems Total", UnsafeSpan.Get(gemsTotal), new(127, 0, 0, 255));
+				AddTooltipText("Time", Inline.Span(GetTimeFromIndex(index), StringFormats.TimeFormat), Color.White);
+				AddTooltipText("Gems Collected", Inline.Span(gemsCollected), Color.Red);
+				AddTooltipText("Gems Despawned", Inline.Span(gemsDespawned), Color.Gray(0.5f));
+				AddTooltipText("Gems Eaten", Inline.Span(gemsEaten), Color.Green);
+				AddTooltipText("Gems Total", Inline.Span(gemsTotal), new(127, 0, 0, 255));
 
 				ImGui.EndTooltip();
 			}
@@ -174,9 +173,9 @@ public static class GraphsChild
 
 				ImGui.BeginTooltip();
 
-				AddTooltipText("Time", UnsafeSpan.Get(GetTimeFromIndex(index), StringFormats.TimeFormat), Color.White);
-				AddTooltipText("Homing Stored", UnsafeSpan.Get(homingStored), UpgradeColors.Level4.ToEngineColor());
-				AddTooltipText("Homing Eaten", UnsafeSpan.Get(homingEaten), Color.Red);
+				AddTooltipText("Time", Inline.Span(GetTimeFromIndex(index), StringFormats.TimeFormat), Color.White);
+				AddTooltipText("Homing Stored", Inline.Span(homingStored), UpgradeColors.Level4.ToEngineColor());
+				AddTooltipText("Homing Eaten", Inline.Span(homingEaten), Color.Red);
 
 				ImGui.EndTooltip();
 			}
@@ -200,8 +199,8 @@ public static class GraphsChild
 			timerEndSpan = timerEndSpan.SliceUntilNull(timerEndBufferSize);
 			Vector2 timerEndTextSize = ImGui.CalcTextSize(timerEndSpan);
 
-			drawListPtr.AddText(pos, 0xffffffff, UnsafeSpan.Get(maxY));
-			drawListPtr.AddText(pos + new Vector2(0, size.Y - timerEndTextSize.Y), 0xffffffff, UnsafeSpan.Get(timerStart, StringFormats.TimeFormat));
+			drawListPtr.AddText(pos, 0xffffffff, Inline.Span(maxY));
+			drawListPtr.AddText(pos + new Vector2(0, size.Y - timerEndTextSize.Y), 0xffffffff, Inline.Span(timerStart, StringFormats.TimeFormat));
 			drawListPtr.AddText(pos + size - timerEndTextSize, 0xffffffff, timerEndSpan);
 		}
 

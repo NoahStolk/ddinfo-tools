@@ -1,6 +1,5 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
 using DevilDaggersInfo.App.Ui.Popups;
-using DevilDaggersInfo.App.ZeroAllocation;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.App.Ui;
@@ -28,23 +27,23 @@ public static class DebugLayout
 		ImDrawListPtr drawList = ImGui.GetForegroundDrawList();
 		const uint textColor = 0xffffffff;
 		float y = 0;
-		AddText(ref y, "FPS (smoothed)", UnsafeSpan.Get(Root.Application.RenderCounter.CountPerSecond));
-		AddText(ref y, "FPS", UnsafeSpan.Get(1f / Root.Application.LastRenderDelta, "000.000"));
+		AddText(ref y, "FPS (smoothed)", Inline.Span(Root.Application.RenderCounter.CountPerSecond));
+		AddText(ref y, "FPS", Inline.Span(1f / Root.Application.LastRenderDelta, "000.000"));
 
 		long allocatedBytes = GC.GetAllocatedBytesForCurrentThread();
-		AddText(ref y, "Total managed heap alloc in bytes", UnsafeSpan.Get(allocatedBytes));
-		AddText(ref y, "Heap alloc bytes since last frame", UnsafeSpan.Get(allocatedBytes - _previousAllocatedBytes));
+		AddText(ref y, "Total managed heap alloc in bytes", Inline.Span(allocatedBytes));
+		AddText(ref y, "Heap alloc bytes since last frame", Inline.Span(allocatedBytes - _previousAllocatedBytes));
 		_previousAllocatedBytes = allocatedBytes;
 
-		AddText(ref y, "Gen 0 GCs", UnsafeSpan.Get(GC.CollectionCount(0)));
-		AddText(ref y, "Gen 1 GCs", UnsafeSpan.Get(GC.CollectionCount(1)));
-		AddText(ref y, "Gen 2 GCs", UnsafeSpan.Get(GC.CollectionCount(2)));
-		AddText(ref y, "Total GC pause duration", UnsafeSpan.Get(GC.GetTotalPauseDuration() ));
-		AddText(ref y, "Total app time", UnsafeSpan.Get(DateTime.UtcNow - _startUpTime));
+		AddText(ref y, "Gen 0 GCs", Inline.Span(GC.CollectionCount(0)));
+		AddText(ref y, "Gen 1 GCs", Inline.Span(GC.CollectionCount(1)));
+		AddText(ref y, "Gen 2 GCs", Inline.Span(GC.CollectionCount(2)));
+		AddText(ref y, "Total GC pause duration", Inline.Span(GC.GetTotalPauseDuration() ));
+		AddText(ref y, "Total app time", Inline.Span(DateTime.UtcNow - _startUpTime));
 
 		AddText(ref y, "Modal active", PopupManager.IsAnyOpen ? bool.TrueString : bool.FalseString);
 
-		AddText(ref y, "Devil Daggers window position", UnsafeSpan.Get(Root.GameWindowService.GetWindowPosition()));
+		AddText(ref y, "Devil Daggers window position", Inline.Span(Root.GameWindowService.GetWindowPosition()));
 
 		void AddText(ref float posY, ReadOnlySpan<char> textLeft, ReadOnlySpan<char> textRight)
 		{

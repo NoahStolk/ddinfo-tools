@@ -1,5 +1,4 @@
 using DevilDaggersInfo.App.Utils;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Extensions;
 using ImGuiNET;
@@ -53,7 +52,7 @@ public static class EventTypeRendererUtils
 		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
 
 		ImGui.TableNextColumn();
-		ImGui.Text(UnsafeSpan.Get(entityId));
+		ImGui.Text(Inline.Span(entityId));
 		ImGui.SameLine();
 		ImGui.Text(" (");
 		ImGui.SameLine();

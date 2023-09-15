@@ -1,5 +1,4 @@
 using DevilDaggersInfo.App.Engine.Maths.Numerics;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using ImGuiNET;
@@ -21,10 +20,10 @@ public sealed class HitEvents : IEventTypeRenderer<HitEvent>
 				ImGui.TableNextRow();
 
 				(int index, HitEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(index));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityIdA);
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityIdB);
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.UserData));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(e.UserData));
 			}
 
 			ImGui.EndTable();

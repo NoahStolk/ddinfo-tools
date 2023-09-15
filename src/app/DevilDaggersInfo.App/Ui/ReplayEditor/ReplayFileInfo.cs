@@ -1,5 +1,4 @@
 using DevilDaggersInfo.App.Ui.ReplayEditor.State;
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Wiki;
@@ -15,19 +14,19 @@ public static class ReplayFileInfo
 		LocalReplayBinaryHeader header = ReplayState.Replay.Header;
 
 #if DEBUG
-		RenderData("Version", UnsafeSpan.Get(header.Version));
-		RenderData("Timestamp", UnsafeSpan.Get(header.TimestampSinceGameRelease));
+		RenderData("Version", Inline.Span(header.Version));
+		RenderData("Timestamp", Inline.Span(header.TimestampSinceGameRelease));
 		RenderSpawnsetMd5(header);
 #endif
-		RenderData("Player", UnsafeSpan.Get(header.PlayerId == 0 ? "N/A" : $"{header.Username} ({header.PlayerId})"));
-		RenderData("Time", UnsafeSpan.Get(header.Time, StringFormats.TimeFormat));
-		RenderData("Start Time", UnsafeSpan.Get(header.StartTime, StringFormats.TimeFormat));
-		RenderData("Kills", UnsafeSpan.Get(header.Kills));
-		RenderData("Gems", UnsafeSpan.Get(header.Gems));
+		RenderData("Player", Inline.Span(header.PlayerId == 0 ? "N/A" : $"{header.Username} ({header.PlayerId})"));
+		RenderData("Time", Inline.Span(header.Time, StringFormats.TimeFormat));
+		RenderData("Start Time", Inline.Span(header.StartTime, StringFormats.TimeFormat));
+		RenderData("Kills", Inline.Span(header.Kills));
+		RenderData("Gems", Inline.Span(header.Gems));
 
-		RenderData("Accuracy", UnsafeSpan.Get($"{header.Accuracy:0.00%} ({header.DaggersHit}/{header.DaggersFired})"));
+		RenderData("Accuracy", Inline.Span($"{header.Accuracy:0.00%} ({header.DaggersHit}/{header.DaggersFired})"));
 		RenderData("Death Type", Deaths.GetDeathByType(GameConstants.CurrentVersion, (byte)header.DeathType)?.Name ?? "?");
-		RenderData("UTC Date", UnsafeSpan.Get(LocalReplayBinaryHeader.GetDateTimeOffsetFromTimestampSinceGameRelease(header.TimestampSinceGameRelease), "yyyy-MM-dd HH:mm:ss"));
+		RenderData("UTC Date", Inline.Span(LocalReplayBinaryHeader.GetDateTimeOffsetFromTimestampSinceGameRelease(header.TimestampSinceGameRelease), "yyyy-MM-dd HH:mm:ss"));
 	}
 
 	// Separate method so hot reload doesn't complain about stackalloc.

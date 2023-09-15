@@ -1,4 +1,3 @@
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Wiki;
@@ -22,13 +21,13 @@ public sealed class SquidSpawnEvents : IEventTypeRenderer<SquidSpawnEvent>
 				ImGui.TableNextRow();
 
 				(int index, SquidSpawnEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(index));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
 				EventTypeRendererUtils.NextColumnText(GetSquidTypeText(e.SquidType));
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.A);
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.Position, "0.00"));
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.Direction, "0.00"));
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.RotationInRadians, "0.00"));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Position, "0.00"));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Direction, "0.00"));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(e.RotationInRadians, "0.00"));
 			}
 
 			ImGui.EndTable();

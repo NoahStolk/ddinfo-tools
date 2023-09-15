@@ -1,4 +1,3 @@
-using DevilDaggersInfo.App.ZeroAllocation;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Wiki;
@@ -21,9 +20,9 @@ public sealed class LeviathanSpawnEvents : IEventTypeRenderer<LeviathanSpawnEven
 				ImGui.TableNextRow();
 
 				(int index, LeviathanSpawnEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(index));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnText(UnsafeSpan.Get(e.A));
+				EventTypeRendererUtils.NextColumnText(Inline.Span(e.A));
 			}
 
 			ImGui.EndTable();
