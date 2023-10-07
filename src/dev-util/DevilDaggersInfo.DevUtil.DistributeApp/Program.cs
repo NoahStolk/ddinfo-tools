@@ -1,6 +1,5 @@
-using DevilDaggersInfo.Api.Admin.Tools;
-using DevilDaggersInfo.Api.Main.Authentication;
 using DevilDaggersInfo.DevUtil.DistributeApp;
+using DevilDaggersInfo.DevUtil.DistributeApp.ApiModel;
 using System.Diagnostics;
 using System.IO.Compression;
 

@@ -1,5 +1,4 @@
-using DevilDaggersInfo.Api.Admin.Tools;
-using DevilDaggersInfo.Api.Main.Authentication;
+using DevilDaggersInfo.DevUtil.DistributeApp.ApiModel;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
