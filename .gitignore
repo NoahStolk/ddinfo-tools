@@ -260,6 +260,9 @@ paket-files/
 __pycache__/
 *.pyc
 
+# OBJ mesh files
+!*.obj
+
 # App settings
 appsettings.json
 appsettings.Development.json
