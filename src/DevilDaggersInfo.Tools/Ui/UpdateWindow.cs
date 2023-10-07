@@ -18,7 +18,7 @@ public static class UpdateWindow
 
 		Vector2 center = ImGui.GetMainViewport().GetCenter();
 		Vector2 windowSize = new(384, 384);
-		ImGui.SetNextWindowPos(center, ImGuiCond.Always, new(0.5f, 0.5f));
+		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new(0.5f, 0.5f));
 		ImGui.SetNextWindowSize(windowSize);
 		if (ImGui.Begin("Update available", ref show, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize))
 		{
@@ -27,6 +27,7 @@ public static class UpdateWindow
 			ImGui.Text($"""
 				Version {AvailableUpdateVersion} is available.
 				The current version is {Root.Application.AppVersion}.
+				If you decide to update, the update will be downloaded from the devildaggers.info server.
 				""");
 			ImGui.Spacing();
 
