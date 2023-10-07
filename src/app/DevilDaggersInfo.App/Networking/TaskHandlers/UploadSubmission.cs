@@ -1,4 +1,4 @@
-using DevilDaggersInfo.Api.App.CustomLeaderboards;
+using DevilDaggersInfo.Web.ApiSpec.App.CustomLeaderboards;
 using System.Net;
 using System.Net.Http.Json;
 

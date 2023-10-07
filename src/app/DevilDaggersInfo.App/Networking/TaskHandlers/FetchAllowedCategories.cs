@@ -1,4 +1,4 @@
-using DevilDaggersInfo.Api.App.CustomLeaderboards;
+using DevilDaggersInfo.Web.ApiSpec.App.CustomLeaderboards;
 
 namespace DevilDaggersInfo.App.Networking.TaskHandlers;
 

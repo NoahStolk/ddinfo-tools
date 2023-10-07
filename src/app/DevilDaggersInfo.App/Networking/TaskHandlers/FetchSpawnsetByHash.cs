@@ -1,4 +1,4 @@
-using DevilDaggersInfo.Api.App.Spawnsets;
+using DevilDaggersInfo.Web.ApiSpec.App.Spawnsets;
 using System.Net;
 
 namespace DevilDaggersInfo.App.Networking.TaskHandlers;

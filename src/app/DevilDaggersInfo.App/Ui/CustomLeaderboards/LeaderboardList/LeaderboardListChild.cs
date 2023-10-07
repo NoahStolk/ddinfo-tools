@@ -1,4 +1,4 @@
-using DevilDaggersInfo.Api.App.CustomLeaderboards;
+using DevilDaggersInfo.Web.ApiSpec.App.CustomLeaderboards;
 using DevilDaggersInfo.App.Networking;
 using DevilDaggersInfo.App.Networking.TaskHandlers;
 using DevilDaggersInfo.App.User.Cache;

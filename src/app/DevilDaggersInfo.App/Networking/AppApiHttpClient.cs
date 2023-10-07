@@ -30,4 +30,13 @@ public partial class AppApiHttpClient
 
 		return await response.Content.ReadFromJsonAsync<T>() ?? throw new InvalidDataException($"Deserialization error in {url} for JSON '{response.Content}'.");
 	}
+
+	private static string BuildUrlWithQuery(string baseUrl, Dictionary<string, object?> queryParameters)
+	{
+		if (queryParameters.Count == 0)
+			return baseUrl;
+
+		string queryParameterString = string.Join('&', queryParameters.Select(kvp => $"{kvp.Key}={kvp.Value}"));
+		return $"{baseUrl.TrimEnd('/')}?{queryParameterString}";
+	}
 }

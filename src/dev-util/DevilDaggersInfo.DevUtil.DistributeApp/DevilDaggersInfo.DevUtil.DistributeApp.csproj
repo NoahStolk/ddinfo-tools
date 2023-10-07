@@ -4,7 +4,12 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Label="Internal dependencies">
+    <PackageReference Include="DevilDaggersInfo.Web.ApiSpec.Admin" />
+    <PackageReference Include="DevilDaggersInfo.Web.ApiSpec.Main" />
+  </ItemGroup>
+  
+  <ItemGroup Label="External dependencies">
     <PackageReference Include="CliWrap" />
   </ItemGroup>
 

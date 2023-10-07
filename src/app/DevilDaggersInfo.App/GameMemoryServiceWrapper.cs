@@ -1,4 +1,4 @@
-using DevilDaggersInfo.Api.App.ProcessMemory;
+using DevilDaggersInfo.Web.ApiSpec.App.ProcessMemory;
 using DevilDaggersInfo.App.Networking;
 using DevilDaggersInfo.App.Networking.TaskHandlers;
 using DevilDaggersInfo.App.Ui.Popups;

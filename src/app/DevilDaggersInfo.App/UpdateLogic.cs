@@ -1,4 +1,4 @@
-using DevilDaggersInfo.Api.App;
+using DevilDaggersInfo.Web.ApiSpec.App;
 using DevilDaggersInfo.App.Ui;
 using DevilDaggersInfo.App.Utils;
 using System.Diagnostics;
