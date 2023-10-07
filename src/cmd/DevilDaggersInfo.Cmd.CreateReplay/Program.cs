@@ -7,7 +7,7 @@ using DevilDaggersInfo.Core.Replay.Events.Interfaces;
 // File.WriteAllBytes(@"C:\Users\NOAH\AppData\Roaming\DevilDaggers\replays\deaths_1.00-xvlv-0be4d3b8[2d05a83a].ddreplay", new DeathsReplayWriter().Write().Compile());
 // File.WriteAllBytes(@"C:\Users\NOAH\AppData\Roaming\DevilDaggers\replays\DJUMPMODIFIED.ddreplay", new DaggerDirectionModifier().Write().Compile());
 
-File.WriteAllBytes(@"C:\Users\NOAH\AppData\Roaming\DevilDaggers\replays\doublesquid-skulltest_429.12-LocoCaesarIV-0bed0c5b.ddreplay", new NaNBoids().Write().Compile());
+File.WriteAllBytes(@"C:\Users\NOAH\AppData\Roaming\DevilDaggers\replays\test1_429.12-xvlv-0bed0c5b.ddreplay", new Skull1EverySec().Write().Compile());
 
 return;
 
