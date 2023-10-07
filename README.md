@@ -6,7 +6,7 @@ While the project provides many ways to practice and modify the game, it does **
 
 Most of these features have been discussed with the community and the developer of Devil Daggers (Sorath), some of which have been done in collaboration.
 
-(Note: This code was originally part of the [DevilDaggersInfo](https://github.com/NoahStolk/DevilDaggersInfo) repository (now ddinfo-web). It was moved to a separate repository on October 7th, 2023.)
+(Note: This code was originally part of the [DevilDaggersInfo](https://github.com/NoahStolk/ddinfo-web) repository (now ddinfo-web). It was moved to a separate repository on October 7th, 2023.)
 
 ## Features
 
