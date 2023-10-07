@@ -4,13 +4,11 @@ using DevilDaggersInfo.Web.ApiSpec.Main.Authentication;
 using System.Diagnostics;
 using System.IO.Compression;
 
-const string publishDirectoryName = "_temp-release";
-
 if (Question("Build app for Windows?"))
-	await DistributeAsync("ddinfo-tools", "app", "DevilDaggersInfo.App", ToolBuildType.WindowsWarp, ToolPublishMethod.SelfContained);
+	await DistributeAsync(ToolBuildType.WindowsWarp, ToolPublishMethod.SelfContained);
 
 if (Question("Build app for Linux?"))
-	await DistributeAsync("ddinfo-tools", "app", "DevilDaggersInfo.App", ToolBuildType.LinuxWarp, ToolPublishMethod.SelfContained);
+	await DistributeAsync(ToolBuildType.LinuxWarp, ToolPublishMethod.SelfContained);
 
 static bool Question(string question)
 {
@@ -20,11 +18,18 @@ static bool Question(string question)
 	return result;
 }
 
-static async Task DistributeAsync(string toolName, string srcDir, string projectName, ToolBuildType toolBuildType, ToolPublishMethod toolPublishMethod)
+static async Task DistributeAsync(ToolBuildType toolBuildType, ToolPublishMethod toolPublishMethod)
 {
-	string root = Path.Combine("..", "..", "..", "..", "..");
-	string projectFilePath = Path.Combine(root, srcDir, projectName, $"{projectName}.csproj");
-	string zipOutputDirectory = Path.Combine(root, srcDir, projectName, "bin");
+	const string toolName = "ddinfo-tools";
+	const string toolProjectName = "DevilDaggersInfo.Tools";
+	const string publishDirectoryName = "_temp-release";
+
+	string root = Path.Combine("..", "..", "..", "..");
+	string projectFilePath = Path.Combine(root, toolProjectName, $"{toolProjectName}.csproj");
+	if (!File.Exists(projectFilePath))
+		throw new($"Cannot find project file {projectFilePath}.");
+
+	string zipOutputDirectory = Path.Combine(root, toolProjectName, "bin");
 
 	Console.WriteLine("Building...");
 	await AppBuilder.BuildAsync(projectFilePath, publishDirectoryName, toolBuildType, toolPublishMethod);

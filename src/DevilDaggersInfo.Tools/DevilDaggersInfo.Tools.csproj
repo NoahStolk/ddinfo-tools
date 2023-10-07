@@ -57,7 +57,7 @@
   </Choose>
 
   <ItemGroup>
-    <AssemblyAttribute Include="DevilDaggersInfo.App.BuildTimeAttribute">
+    <AssemblyAttribute Include="DevilDaggersInfo.Tools.BuildTimeAttribute">
       <_Parameter1>$([System.DateTime]::UtcNow.ToString("yyyy-MM-dd HH:mm")) UTC</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>

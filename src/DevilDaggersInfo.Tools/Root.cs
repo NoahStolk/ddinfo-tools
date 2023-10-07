@@ -11,7 +11,7 @@ using Silk.NET.Windowing;
 #if WINDOWS
 using DevilDaggersInfo.Tools.NativeInterface.Services.Windows;
 #elif LINUX
-using DevilDaggersInfo.App.Core.NativeInterface.Services.Linux;
+using DevilDaggersInfo.Tools.NativeInterface.Services.Linux;
 #endif
 
 namespace DevilDaggersInfo.Tools;
