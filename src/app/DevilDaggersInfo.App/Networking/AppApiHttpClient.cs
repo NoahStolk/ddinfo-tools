@@ -14,12 +14,10 @@ public partial class AppApiHttpClient
 
 	private async Task<HttpResponseMessage> SendRequest(HttpMethod httpMethod, string url, JsonContent? body = null)
 	{
-		using HttpRequestMessage request = new()
-		{
-			RequestUri = new(url, UriKind.Relative),
-			Method = httpMethod,
-			Content = body,
-		};
+		using HttpRequestMessage request = new();
+		request.RequestUri = new(url, UriKind.Relative);
+		request.Method = httpMethod;
+		request.Content = body;
 
 		return await _client.SendAsync(request);
 	}
