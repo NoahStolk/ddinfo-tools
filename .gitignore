@@ -260,36 +260,9 @@ paket-files/
 __pycache__/
 *.pyc
 
-# Minified content
-*site.min.css
-*site.min.js
-
 # App settings
 appsettings.json
 appsettings.Development.json
-
-# Database backups
-database-exports/
-
-# Content
-*/**/DevilDaggersInfo.Web.Server/Data/CustomEntryReplays
-*/**/DevilDaggersInfo.Web.Server/Data/LeaderboardHistory
-*/**/DevilDaggersInfo.Web.Server/Data/LeaderboardStatistics
-*/**/DevilDaggersInfo.Web.Server/Data/Mods
-*/**/DevilDaggersInfo.Web.Server/Data/ModArchiveCache
-*/**/DevilDaggersInfo.Web.Server/Data/ModScreenshots
-*/**/DevilDaggersInfo.Web.Server/Data/ResponseTimes
-*/**/DevilDaggersInfo.Web.Server/Data/Tools/*.zip
-
-# Tailwind
-tailwind.min.css
-tailwind.css.map
-
-# Data protection
-*/**/DevilDaggersInfo.Web.Server/keys
-
-# OBJ mesh files for unit tests
-!*.obj
 
 # Value file
 */**/Blobs/Value.bin
