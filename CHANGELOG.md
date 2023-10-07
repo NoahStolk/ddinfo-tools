@@ -1,0 +1,250 @@
+# Changelog
+
+## [unreleased]
+
+- The spawnset editor now keeps track of unsaved changes and will ask you to save it when leaving the editor or opening a different spawnset.
+- Improved configuration layout.
+
+## [0.9.1.0] - 2023-09-13
+
+- Added menu item to replay editor to open the current local replay from game.
+- Fixed practice window crashing when survival file was not yet loaded.
+
+## [0.9.0.0] - 2023-08-29
+
+### Spawnset Editor
+
+- You can now select multiple tiles at once in the 3D arena editor.
+- The spawnset editor now shows warnings when the end loop is too short or when the player spawn tile is void.
+- The 3D arena editor is now only active when the window is focused.
+- The spawnset editor window no longer loses focus when using undo/redo.
+- Various other improvements to the 3D arena editor.
+
+### Replay Editor
+
+- Improved UI for current inputs.
+- Replay file data is now displayed.
+- Added event viewer. You can browse and filter events and view all the (known) data.
+- Added entity viewer. You can browse and select entities. For now, only enemy HP logs are shown (which are still a work in progress).
+- Added menu item to download and open a replay from the official leaderboards.
+- Added menu item to inject the current replay into the game.
+
+### Fixes
+
+- Fixed occasional crash when opening the custom leaderboards tool.
+- Fixed some textures being flipped incorrectly.
+- Fixed some possible crashes.
+- Fixed spawnset editor spawns selection not being cleared when using undo/redo.
+- Fixed spawnset editor spawns selection not being cleared when switching to a different spawnset.
+- Fixed 3D arena editor camera not stopping when the mouse leaves the window.
+- Fixed tiles being edited in the 2D arena editor using arena tools when the window was not focused.
+- Fixed tiles being edited in the 2D arena editor using scroll wheel when the window was not focused.
+- Fixed arena tooltip being shown when the window was not focused.
+- Fixed 3D arena editor not locking tiles while editing.
+
+### Other
+
+- Various performance improvements.
+
+## [0.8.0.0] - 2023-08-20
+
+- Added splits and graphs to practice tool.
+- Various performance improvements.
+
+## [0.7.3.0] - 2023-06-28
+
+- Added ability to name and reorder custom practice templates.
+- The practice window is now responsive.
+- The practice buttons are now highlighted based on the currently active spawnset instead of what's inside the input fields.
+
+## [0.7.2.0] - 2023-06-13
+
+- Bug fixes.
+
+## [0.7.1.0] - 2023-06-13
+
+- Some UI fixes.
+
+## [0.7.0.0] - 2023-06-13
+
+- Rewrote main menu.
+- Added 'about' window.
+- Fixed incorrect additional gems for 'First Centipede' practice template.
+- Effective hand and gems/homing values are now displayed in the practice window.
+- Improved debug output.
+
+## [0.6.4.0] - 2023-06-10
+
+- Fixed some end loop practice templates starting too late which results in the first spawns being skipped.
+- End loop practice templates now start earlier (0.1 sec after the last Squid II spawn of the previous wave). You can still manually change the timer start and save a custom template if the wait is too long.
+- Improved styling for practice templates.
+
+## [0.6.3.0] - 2023-06-09
+
+- Added button to delete current spawnset to practice tool.
+- The practice values for the currently active spawnset are now displayed for clarity.
+
+## [0.6.2.0] - 2023-06-01
+
+- Fixed some issues in the configuration screen layout.
+
+## [0.6.1.0] - 2023-06-01
+
+- Fixed end loop practice templates skipping the first spawns.
+
+## [0.6.0.0] - 2023-05-31
+
+### Practice tool
+
+Added practice tool. You can now select a template to practice specific sections of the game without having to download custom spawnsets. The app will generate a spawnset on the fly based on the template.
+
+No farm templates exist for various sections of the game, as well as end loop templates where you can fill in the homing value yourself.
+
+You can create custom templates with your preferred homing values. Custom templates are automatically saved locally.
+
+### App launcher
+
+Removed the app launcher. The app is now able to update itself.
+
+## [0.5.2.0] - 2023-05-22
+
+- Added support for new custom leaderboards rank sortings.
+
+## [0.5.1.2] - 2023-05-21
+
+- Fixed sorting bug.
+
+## [0.5.1.1] - 2023-05-21
+
+- Rebuilt for API update.
+
+## [0.5.1.0] - 2023-05-21
+
+- Completely changed all the UI. The new system is much more flexible and easier to use.
+- Added support for new custom leaderboards (gems, kills, homing).
+- Added icon to executable file.
+- Added options to delete and open the current survival.
+- Bug fixes and improved logging.
+
+## [0.4.2.0] - 2023-03-10
+
+### Custom leaderboards
+
+- Score difference with current highscore is now shown when not getting a highscore.
+- Added button to reload all leaderboards.
+- Bug fixes.
+
+## [0.4.1.0] - 2023-03-05
+
+### Custom leaderboards
+
+- Improved custom leaderboard UI.
+- Added spawnset and author filtering to custom leaderboard overview.
+- Added checkbox to filter out leaderboards that are not featured.
+- Added sorting to custom leaderboard overview.
+- Player ID is now cached so you don't need to open the game to view your own rank, score, etc.
+- Custom leaderboard pagination is now done client-side to improve performance and reduce network usage.
+
+## [0.4.0.0] - 2023-02-28
+
+- Added arena ellipse tool to spawnset editor.
+- Added more settings for the arena editor.
+  - Pencil
+    - Size
+  - Line
+    - Width
+  - Rectangle
+    - Border size
+    - Whether the rectangle should be filled
+  - Race dagger
+    - Snap to grid
+- Changed arena shrink colors.
+- Added controls and additional info text to 3D scenes.
+- The arena editor tooltip is now transparent.
+- Improved UI for survival editor height button and settings sections.
+- Improved pencil, line, and race dagger editor tools and visualizations.
+- Fixed arena tools being cancelled when the mouse leaves the arena.
+- Fixed race dagger always being in the center of a tile in the 3D editor.
+- Changes made in the 3D editor now affect the race dagger visualization.
+- Reversed arena editor scroll controls.
+
+## [0.3.0.0] - 2023-02-19
+
+- Added application settings.
+  - Scale UI to window
+  - Show debug output
+  - Render while window is inactive
+  - Max FPS
+  - Look speed
+  - Field of view
+- Improved 3D rendering.
+  - Added lighting.
+  - Improved shading.
+  - Now using the actual Devil Daggers hand mesh and texture.
+- Set up basic 3D tile editor (still work in progress).
+- You can now go to the Replay Editor. For now you can only select a replay to view in 3D (this helps me with testing the simulation). You can also view the input visualization of the replay.
+- Improved 3D replay simulation. It's still far from accurate (collisions, bhops, air control, and dagger jumps are missing).
+- Improved custom leaderboards UI coloring.
+- Fixed concurrency bug where the run would not upload when going to the menu too fast while the app is still waiting for the game to load memory stats and replay.
+- Fixed incorrect accuracy difference in highscore result.
+- Fixed performance issues.
+
+## [0.2.3.0] - 2023-02-14
+
+- Improved custom leaderboard upload result UI.
+- Added application icon.
+
+## [0.2.2.0] - 2023-02-13
+
+- Highscore difference is now displayed.
+- Fixed showing message box when playing an unknown spawnset.
+- The (updated, in case of a highscore) leaderboard is now displayed after completing a run.
+
+## [0.2.1.0] - 2023-02-12
+
+- Improved custom leaderboard UI.
+- Submission results are now displayed.
+- Fixed occasional crash that could happen when opening the custom leaderboards screen while Devil Daggers is open.
+
+## [0.2.0.4] - 2023-02-11
+
+- Replaced COM interop with native file dialog library.
+
+## [0.2.0.3] - 2023-02-10
+
+- Fixed IL trimmer breaking JSON serialization.
+
+## [0.2.0.2] - 2023-02-09
+
+- Fixed more COM interop crashes.
+
+## [0.2.0.1] - 2023-02-09
+
+- Fixed COM interop crashes.
+
+## [0.2.0.0] - 2023-02-09
+
+- Added custom leaderboard criteria icons.
+- Improved UI systems.
+- Fixed a lot of bugs.
+- Arena tools optimizations.
+- Added all memory data to the custom leaderboard screen.
+- Survival file change is now automatically detected by the custom leaderboards screen.
+- Now using native file system and message box dialogs.
+- Added directory picker to configuration screen.
+- Replaced auto update functionality with separate launcher app.
+
+## [0.1.0.0] - 2022-12-23
+
+- Custom leaderboard support, including spawnset/leaderboard browsing/installation, score browsing, replay injecting, and a WIP 3D previewer for replays.
+- More survival editor features including 3D viewer.
+- Rewrote and improved most UI.
+- New font.
+- Fixed threading problems, performance is now 10x better.
+- Auto update for future updates, just click button and new update will be downloaded and launched (still need to manually delete old files for now).
+- Settings are saved to appdata (Windows).
+- Fixed a lot of bugs.
+
+## [0.0.0.0] - 2022-10-09
+
+- Initial alpha release.
