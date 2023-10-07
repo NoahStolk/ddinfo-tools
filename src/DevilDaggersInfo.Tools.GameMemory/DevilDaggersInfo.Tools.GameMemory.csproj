@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\DevilDaggersInfo.Tools.NativeInterface\DevilDaggersInfo.Tools.NativeInterface.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Label="External dependencies">
+    <PackageReference Include="DevilDaggersInfo.Core" />
+  </ItemGroup>
+
+</Project>

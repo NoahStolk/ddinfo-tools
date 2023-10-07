@@ -2,15 +2,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31606.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App", "DevilDaggersInfo.App\DevilDaggersInfo.App.csproj", "{D5903E30-558A-40DF-B7A6-E7E1D014E2A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Tools", "DevilDaggersInfo.Tools\DevilDaggersInfo.Tools.csproj", "{D5903E30-558A-40DF-B7A6-E7E1D014E2A9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.Core.GameMemory", "DevilDaggersInfo.App.Core.GameMemory\DevilDaggersInfo.App.Core.GameMemory.csproj", "{F8DCF34B-4EF0-43AB-B578-D18B1417BD93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Tools.GameMemory", "DevilDaggersInfo.Tools.GameMemory\DevilDaggersInfo.Tools.GameMemory.csproj", "{F8DCF34B-4EF0-43AB-B578-D18B1417BD93}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.App.Core.NativeInterface", "DevilDaggersInfo.App.Core.NativeInterface\DevilDaggersInfo.App.Core.NativeInterface.csproj", "{6D7EE612-55E1-4609-ADA1-B612193232AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Tools.NativeInterface", "DevilDaggersInfo.Tools.NativeInterface\DevilDaggersInfo.Tools.NativeInterface.csproj", "{6D7EE612-55E1-4609-ADA1-B612193232AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Engine", "DevilDaggersInfo.App.Engine\DevilDaggersInfo.App.Engine.csproj", "{B84DBB9B-1C43-4F6C-8C19-B028F3B7C2D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Tools.Engine", "DevilDaggersInfo.Tools.Engine\DevilDaggersInfo.Tools.Engine.csproj", "{B84DBB9B-1C43-4F6C-8C19-B028F3B7C2D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.App.Engine.ImGui", "DevilDaggersInfo.App.Engine.ImGui\DevilDaggersInfo.App.Engine.ImGui.csproj", "{8127EC4B-2698-4593-AF1F-AB0DDCF3B0D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevilDaggersInfo.Tools.Engine.ImGui", "DevilDaggersInfo.Tools.Engine.ImGui\DevilDaggersInfo.Tools.Engine.ImGui.csproj", "{8127EC4B-2698-4593-AF1F-AB0DDCF3B0D1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevilDaggersInfo.Cmd.CreateReplay", "DevilDaggersInfo.Cmd.CreateReplay\DevilDaggersInfo.Cmd.CreateReplay.csproj", "{6BEED33C-F8F8-4884-85A3-FDD48C7C63E8}"
 EndProject
