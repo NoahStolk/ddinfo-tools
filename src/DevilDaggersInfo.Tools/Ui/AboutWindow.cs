@@ -85,7 +85,7 @@ public static class AboutWindow
 			if (ImGui.BeginChild("GitHubChild", buttonSize, false, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-					Process.Start(new ProcessStartInfo("https://github.com/NoahStolk/DevilDaggersInfo") { UseShellExecute = true });
+					Process.Start(new ProcessStartInfo("https://github.com/NoahStolk/ddinfo-tools") { UseShellExecute = true });
 
 				ImGui.SetCursorPos(new(8));
 				ImGuiImage.Image(Root.InternalResources.GitHubTexture.Handle, new(24));
