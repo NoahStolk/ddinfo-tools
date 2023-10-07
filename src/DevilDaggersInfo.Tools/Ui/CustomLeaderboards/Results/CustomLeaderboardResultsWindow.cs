@@ -1,6 +1,6 @@
 // #define TESTING
 #if TESTING
-using DevilDaggersInfo.Web.ApiSpec.App.CustomLeaderboards;
+using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 #endif
 using ImGuiNET;
 using System.Numerics;

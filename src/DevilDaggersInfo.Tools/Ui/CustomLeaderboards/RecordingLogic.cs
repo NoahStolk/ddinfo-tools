@@ -6,7 +6,7 @@ using DevilDaggersInfo.Tools.Networking.TaskHandlers;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
-using DevilDaggersInfo.Web.ApiSpec.App.CustomLeaderboards;
+using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using System.Web;
 #if !SKIP_VALUE
 using System.IO.Compression;

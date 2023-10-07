@@ -1,4 +1,4 @@
-using DevilDaggersInfo.Web.ApiSpec.App;
+using DevilDaggersInfo.Web.ApiSpec.Tools;
 
 namespace DevilDaggersInfo.Tools.Platforms;
 

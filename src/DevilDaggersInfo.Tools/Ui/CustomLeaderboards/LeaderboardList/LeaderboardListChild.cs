@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
 using DevilDaggersInfo.Tools.User.Cache;
-using DevilDaggersInfo.Web.ApiSpec.App.CustomLeaderboards;
+using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using ImGuiNET;
 using System.Diagnostics;
 using System.Numerics;

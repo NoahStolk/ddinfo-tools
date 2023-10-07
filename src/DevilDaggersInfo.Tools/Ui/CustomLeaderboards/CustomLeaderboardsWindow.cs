@@ -29,7 +29,7 @@ public static class CustomLeaderboardsWindow
 #if DEBUG
 		if (ImGui.Begin("Timestamps"))
 		{
-			foreach (DevilDaggersInfo.Web.ApiSpec.App.CustomLeaderboards.AddUploadRequestTimestamp timestamp in RecordingLogic.Timestamps)
+			foreach (DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards.AddUploadRequestTimestamp timestamp in RecordingLogic.Timestamps)
 			{
 				ImGui.Text($"{new DateTime(timestamp.Timestamp, DateTimeKind.Utc)} {timestamp.TimeInSeconds}");
 			}

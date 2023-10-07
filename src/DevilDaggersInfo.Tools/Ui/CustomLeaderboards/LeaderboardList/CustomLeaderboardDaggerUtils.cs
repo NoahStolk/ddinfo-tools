@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
-using DevilDaggersInfo.Web.ApiSpec.App.CustomLeaderboards;
+using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;

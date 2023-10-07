@@ -1,5 +1,5 @@
-using DevilDaggersInfo.Web.ApiSpec.App;
-using DevilDaggersInfo.Web.ApiSpec.App.ProcessMemory;
+using DevilDaggersInfo.Web.ApiSpec.Tools;
+using DevilDaggersInfo.Web.ApiSpec.Tools.ProcessMemory;
 
 namespace DevilDaggersInfo.Tools.Networking.TaskHandlers;
 

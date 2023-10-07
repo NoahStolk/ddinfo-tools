@@ -3,8 +3,8 @@
 	<ItemGroup Label="DevilDaggersInfo">
 		<PackageVersion Include="DevilDaggersInfo.Core" Version="0.1.0" />
 		<PackageVersion Include="DevilDaggersInfo.Web.ApiSpec.Admin" Version="1.0.0" />
-		<PackageVersion Include="DevilDaggersInfo.Web.ApiSpec.App" Version="1.0.0" />
 		<PackageVersion Include="DevilDaggersInfo.Web.ApiSpec.Main" Version="1.0.0" />
+		<PackageVersion Include="DevilDaggersInfo.Web.ApiSpec.Tools" Version="1.0.0" />
 	</ItemGroup>
 
 	<ItemGroup Label="Image processing">

@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
 using DevilDaggersInfo.Tools.Ui.Popups;
-using DevilDaggersInfo.Web.ApiSpec.App.ProcessMemory;
+using DevilDaggersInfo.Web.ApiSpec.Tools.ProcessMemory;
 
 namespace DevilDaggersInfo.Tools;
 

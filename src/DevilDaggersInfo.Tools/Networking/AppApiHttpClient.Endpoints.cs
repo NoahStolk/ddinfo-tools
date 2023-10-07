@@ -1,8 +1,8 @@
-using DevilDaggersInfo.Web.ApiSpec.App;
-using DevilDaggersInfo.Web.ApiSpec.App.CustomLeaderboards;
-using DevilDaggersInfo.Web.ApiSpec.App.ProcessMemory;
-using DevilDaggersInfo.Web.ApiSpec.App.Spawnsets;
-using DevilDaggersInfo.Web.ApiSpec.App.Updates;
+using DevilDaggersInfo.Web.ApiSpec.Tools;
+using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
+using DevilDaggersInfo.Web.ApiSpec.Tools.ProcessMemory;
+using DevilDaggersInfo.Web.ApiSpec.Tools.Spawnsets;
+using DevilDaggersInfo.Web.ApiSpec.Tools.Updates;
 using System.Net.Http.Json;
 
 namespace DevilDaggersInfo.Tools.Networking;

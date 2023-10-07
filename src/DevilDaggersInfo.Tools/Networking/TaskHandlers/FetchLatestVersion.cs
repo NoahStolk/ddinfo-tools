@@ -1,5 +1,5 @@
-using DevilDaggersInfo.Web.ApiSpec.App;
-using DevilDaggersInfo.Web.ApiSpec.App.Updates;
+using DevilDaggersInfo.Web.ApiSpec.Tools;
+using DevilDaggersInfo.Web.ApiSpec.Tools.Updates;
 
 namespace DevilDaggersInfo.Tools.Networking.TaskHandlers;
 

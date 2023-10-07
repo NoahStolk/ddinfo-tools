@@ -67,7 +67,7 @@
   </ItemGroup>
 
   <ItemGroup Label="Internal dependencies">
-    <PackageReference Include="DevilDaggersInfo.Web.ApiSpec.App" />
+    <PackageReference Include="DevilDaggersInfo.Web.ApiSpec.Tools" />
     <ProjectReference Include="..\DevilDaggersInfo.Tools.GameMemory\DevilDaggersInfo.Tools.GameMemory.csproj" />
     <ProjectReference Include="..\DevilDaggersInfo.Tools.Engine\DevilDaggersInfo.Tools.Engine.csproj" />
   </ItemGroup>

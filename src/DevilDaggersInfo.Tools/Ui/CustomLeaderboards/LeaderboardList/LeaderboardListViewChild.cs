@@ -7,7 +7,7 @@ using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
 using DevilDaggersInfo.Tools.Ui.Popups;
-using DevilDaggersInfo.Web.ApiSpec.App.CustomLeaderboards;
+using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using ImGuiNET;
 using System.Numerics;
 using System.Text;
