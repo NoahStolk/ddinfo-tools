@@ -1,6 +1,6 @@
 # ddinfo-tools
 
-The DevilDaggersInfo project offers cross-platform tools to practice and mod the game, and to connect to custom leaderboards.
+Cross-platform Devil Daggers modding tools, practice tools, and custom leaderboards client
 
 ## Features
 

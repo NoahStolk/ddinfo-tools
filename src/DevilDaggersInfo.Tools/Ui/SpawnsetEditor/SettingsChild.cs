@@ -31,7 +31,7 @@ public static class SettingsChild
 
 	public static void Render()
 	{
-		if (ImGui.BeginChild("SettingsChild", new(284, 416)))
+		if (ImGui.BeginChild("SettingsChild", new(280, 416)))
 		{
 			RenderFormat();
 			RenderGameMode();
