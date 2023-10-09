@@ -1,6 +1,7 @@
+using DevilDaggersInfo.Tools.GameMemory;
 using System.Diagnostics;
 
-namespace DevilDaggersInfo.Tools.GameMemory.Extensions;
+namespace DevilDaggersInfo.Tools.Extensions;
 
 public static class GameStatusExtensions
 {

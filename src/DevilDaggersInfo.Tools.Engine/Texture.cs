@@ -2,7 +2,7 @@ using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools.Engine;
 
-public class Texture : IDisposable
+public sealed class Texture : IDisposable
 {
 	private readonly GL _gl;
 

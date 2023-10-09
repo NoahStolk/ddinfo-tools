@@ -4,8 +4,11 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <ItemGroup Label="Internal dependencies">
-    <ProjectReference Include="..\DevilDaggersInfo.Tools.Engine.ImGui\DevilDaggersInfo.Tools.Engine.ImGui.csproj" />
+  <ItemGroup Label="External dependencies">
+    <PackageReference Include="ImGui.NET" />
+    <PackageReference Include="Silk.NET.Input.Glfw" />
+    <PackageReference Include="Silk.NET.OpenAL" />
+    <PackageReference Include="Silk.NET.OpenGL" />
   </ItemGroup>
 
 </Project>

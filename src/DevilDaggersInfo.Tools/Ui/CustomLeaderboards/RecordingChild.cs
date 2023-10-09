@@ -4,7 +4,6 @@ using DevilDaggersInfo.Core.Wiki.Objects;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.GameMemory;
-using DevilDaggersInfo.Tools.GameMemory.Extensions;
 using ImGuiNET;
 using System.Numerics;
 
