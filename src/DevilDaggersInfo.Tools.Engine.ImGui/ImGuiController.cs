@@ -427,7 +427,7 @@ public sealed class ImGuiController : IDisposable
 		// Render command lists
 		for (int n = 0; n < drawDataPtr.CmdListsCount; n++)
 		{
-			ImDrawListPtr cmdListPtr = drawDataPtr.CmdListsRange[n];
+			ImDrawListPtr cmdListPtr = drawDataPtr.CmdLists[n];
 
 			// Upload vertex/index buffers
 			_gl.BufferData(GLEnum.ArrayBuffer, (nuint)(cmdListPtr.VtxBuffer.Size * sizeof(ImDrawVert)), (void*)cmdListPtr.VtxBuffer.Data, GLEnum.StreamDraw);
