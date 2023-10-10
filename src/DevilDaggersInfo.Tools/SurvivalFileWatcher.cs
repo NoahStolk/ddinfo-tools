@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 
 namespace DevilDaggersInfo.Tools;
 
+// TODO: This should be a class implementing IDisposable.
 public static class SurvivalFileWatcher
 {
 #pragma warning disable S1450 // Cannot change this into a local. The events would not be raised.

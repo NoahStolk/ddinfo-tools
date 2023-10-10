@@ -7,12 +7,15 @@
 		<PackageVersion Include="DevilDaggersInfo.Web.ApiSpec.Tools" Version="1.0.0" />
 	</ItemGroup>
 
-	<ItemGroup Label="Image processing">
-		<PackageVersion Include="SixLabors.ImageSharp" Version="3.0.2" />
+	<ItemGroup Label="Graphics">
+		<PackageVersion Include="ImGui.NET" Version="1.89.9.2" />
+		<PackageVersion Include="Silk.NET.Input.Glfw" Version="2.17.1" />
+		<PackageVersion Include="Silk.NET.OpenAL" Version="2.17.1" />
+		<PackageVersion Include="Silk.NET.OpenGL" Version="2.17.1" />
 	</ItemGroup>
 
-	<ItemGroup Label="ImGui">
-		<PackageVersion Include="ImGui.NET" Version="1.89.9.2" />
+	<ItemGroup Label="Logging">
+		<PackageVersion Include="Serilog.Sinks.File" Version="5.0.0" />
 	</ItemGroup>
 
 	<ItemGroup Label="Misc">
@@ -21,16 +24,6 @@
 
 	<ItemGroup Label="Native">
 		<PackageVersion Include="NativeFileDialogSharp" Version="0.5.0" />
-	</ItemGroup>
-
-	<ItemGroup Label="Serilog">
-		<PackageVersion Include="Serilog.Sinks.File" Version="5.0.0" />
-	</ItemGroup>
-
-	<ItemGroup Label="Silk.NET">
-		<PackageVersion Include="Silk.NET.Input.Glfw" Version="2.17.1" />
-		<PackageVersion Include="Silk.NET.OpenAL" Version="2.17.1" />
-		<PackageVersion Include="Silk.NET.OpenGL" Version="2.17.1" />
 	</ItemGroup>
 
 	<ItemGroup Label="Static code analysis">
