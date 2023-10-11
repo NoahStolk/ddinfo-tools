@@ -57,7 +57,7 @@ public class FileState<T>
 		SetFile(path, Path.GetFileName(path));
 	}
 
-	public void PromptSaveSpawnset(Action action)
+	public void PromptSave(Action action)
 	{
 		if (!IsModified)
 			action();
