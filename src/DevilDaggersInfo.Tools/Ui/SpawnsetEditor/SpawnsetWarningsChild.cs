@@ -33,8 +33,8 @@ public static class SpawnsetWarningsChild
 			else
 				ImGui.TextColored(Color.Red, warningCount == 1 ? "1 warning" : $"{warningCount} warnings");
 
-			if (isEndLoopTooShort)
-				ImGui.Text($"The end loop is only {endLoopLength} seconds long, which will probably result in severe lag or a crash.");
+			if (endLoopLength.HasValue && isEndLoopTooShort) // endLoopLength.HasValue is always true here.
+				ImGui.Text(Inline.Span($"The end loop is only {endLoopLength.Value} seconds long, which will probably result in severe lag or a crash."));
 
 			if (isStartTileVoid)
 				ImGui.Text("The center tile of the arena is void, which means the player will die instantly.");
