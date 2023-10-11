@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Wiki;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.State;
+using DevilDaggersInfo.Tools.EditorFileState;
 using ImGuiNET;
 using System.Numerics;
 
@@ -11,7 +11,7 @@ public static class ReplayFileInfo
 {
 	public static void Render()
 	{
-		LocalReplayBinaryHeader header = ReplayState.Replay.Header;
+		LocalReplayBinaryHeader header = FileStates.Replay.Object.Header;
 
 #if DEBUG
 		RenderData("Version", Inline.Span(header.Version));

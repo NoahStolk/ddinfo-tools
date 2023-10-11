@@ -1,6 +1,6 @@
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.State;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using ImGuiNET;
 using System.Numerics;
@@ -20,7 +20,7 @@ public static class ReplayEditorWindow
 
 	public static void Update(float delta)
 	{
-		if (_time < ReplayState.Replay.Header.Time)
+		if (_time < FileStates.Replay.Object.Header.Time)
 			_time += delta;
 
 		ReplayEditor3DWindow.ArenaScene.CurrentTick = TimeUtils.TimeToTick(_time, 0);
@@ -37,7 +37,7 @@ public static class ReplayEditorWindow
 
 			ReplayFileInfo.Render();
 
-			ImGui.SliderFloat("Time", ref _time, 0, ReplayState.Replay.Header.Time, "%.4f", ImGuiSliderFlags.NoInput);
+			ImGui.SliderFloat("Time", ref _time, 0, FileStates.Replay.Object.Header.Time, "%.4f", ImGuiSliderFlags.NoInput);
 
 			PlayerInputSnapshot snapshot = default;
 			if (ReplayEditor3DWindow.ArenaScene.CurrentTick < ReplayEditor3DWindow.ArenaScene.ReplaySimulation?.InputSnapshots.Count)
@@ -52,13 +52,13 @@ public static class ReplayEditorWindow
 			{
 				if (ImGui.BeginTabItem("Events"))
 				{
-					ReplayEventsChild.Render(ReplayState.Replay.EventsData, ReplayState.Replay.Header.StartTime);
+					ReplayEventsChild.Render(FileStates.Replay.Object.EventsData, FileStates.Replay.Object.Header.StartTime);
 					ImGui.EndTabItem();
 				}
 
 				if (ImGui.BeginTabItem("Entities"))
 				{
-					ReplayEntitiesChild.Render(ReplayState.Replay.EventsData, ReplayState.Replay.Header.StartTime);
+					ReplayEntitiesChild.Render(FileStates.Replay.Object.EventsData, FileStates.Replay.Object.Header.StartTime);
 					ImGui.EndTabItem();
 				}
 

@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.Popups;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.State;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
@@ -52,8 +52,8 @@ public static class ReplayEditorMenu
 
 	public static void NewReplay()
 	{
-		ReplayState.ReplayName = "(untitled)";
-		ReplayState.Replay = ReplayBinary<LocalReplayBinaryHeader>.CreateDefault();
+		FileStates.Replay.Update(ReplayBinary<LocalReplayBinaryHeader>.CreateDefault());
+		FileStates.Replay.SetFile(null, null);
 	}
 
 	public static void OpenReplay()
@@ -76,8 +76,8 @@ public static class ReplayEditorMenu
 
 		if (ReplayBinary<LocalReplayBinaryHeader>.TryParse(fileContents, out ReplayBinary<LocalReplayBinaryHeader>? replayBinary))
 		{
-			ReplayState.ReplayName = Path.GetFileName(filePath);
-			ReplayState.Replay = replayBinary;
+			FileStates.Replay.Update(replayBinary);
+			FileStates.Replay.SetFile(filePath, Path.GetFileName(filePath));
 		}
 		else
 		{
@@ -87,7 +87,7 @@ public static class ReplayEditorMenu
 
 		ReplayEditorWindow.Reset();
 
-		ReplaySimulation replaySimulation = ReplaySimulationBuilder.Build(ReplayState.Replay);
+		ReplaySimulation replaySimulation = ReplaySimulationBuilder.Build(FileStates.Replay.Object);
 		ReplayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
 	}
 
@@ -107,8 +107,8 @@ public static class ReplayEditorMenu
 		byte[] replayBytes = Root.GameMemoryService.ReadReplayFromMemory();
 		if (ReplayBinary<LocalReplayBinaryHeader>.TryParse(replayBytes, out ReplayBinary<LocalReplayBinaryHeader>? replayBinary))
 		{
-			ReplayState.ReplayName = "(untitled from game memory)";
-			ReplayState.Replay = replayBinary;
+			FileStates.Replay.Update(replayBinary);
+			FileStates.Replay.SetFile(null, "(untitled from game memory)");
 		}
 		else
 		{
@@ -118,7 +118,7 @@ public static class ReplayEditorMenu
 
 		ReplayEditorWindow.Reset();
 
-		ReplaySimulation replaySimulation = ReplaySimulationBuilder.Build(ReplayState.Replay);
+		ReplaySimulation replaySimulation = ReplaySimulationBuilder.Build(FileStates.Replay.Object);
 		ReplayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
 	}
 
@@ -126,7 +126,7 @@ public static class ReplayEditorMenu
 	{
 		string? filePath = NativeFileDialog.CreateSaveFileDialog("Devil Daggers replay files (*.ddreplay)|*.ddreplay");
 		if (filePath != null)
-			File.WriteAllBytes(filePath, ReplayState.Replay.Compile());
+			File.WriteAllBytes(filePath, FileStates.Replay.Object.Compile());
 	}
 
 	public static void InjectReplay()
@@ -134,7 +134,7 @@ public static class ReplayEditorMenu
 		if (!GameMemoryServiceWrapper.Scan() || !Root.GameMemoryService.IsInitialized)
 			return;
 
-		Root.GameMemoryService.WriteReplayToMemory(ReplayState.Replay.Compile());
+		Root.GameMemoryService.WriteReplayToMemory(FileStates.Replay.Object.Compile());
 	}
 
 	public static void Close()

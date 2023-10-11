@@ -1,8 +1,8 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.Popups;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.State;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
@@ -84,7 +84,7 @@ public static class LeaderboardReplayBrowser
 			username: leaderboardReplay.Header.Username,
 			unknown: new byte[10],
 			spawnsetBuffer: SpawnsetBinary.CreateDefault().ToBytes());
-		ReplayState.Replay = new(header, leaderboardReplay.EventsData);
+		FileStates.Replay.Update(new(header, leaderboardReplay.EventsData));
 
 		_isDownloading = false;
 		_showWindow = false;

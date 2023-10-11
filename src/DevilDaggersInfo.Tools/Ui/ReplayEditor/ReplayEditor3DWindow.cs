@@ -1,5 +1,5 @@
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Scenes;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.State;
 using ImGuiNET;
 using System.Numerics;
 
@@ -15,7 +15,7 @@ public static class ReplayEditor3DWindow
 
 	public static void InitializeScene()
 	{
-		_arenaScene = new(static () => ReplayState.Replay.Header.Spawnset, false, false);
+		_arenaScene = new(static () => FileStates.Replay.Object.Header.Spawnset, false, false);
 	}
 
 	public static void Render(float delta)
