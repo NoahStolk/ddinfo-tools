@@ -25,14 +25,23 @@ public static class DebugLayout
 	public static void Render()
 	{
 		ImDrawListPtr drawList = ImGui.GetForegroundDrawList();
-		const uint textColor = 0xffffffff;
 		float y = 0;
 		AddText(ref y, "FPS (smoothed)", Inline.Span(Root.Application.RenderCounter.CountPerSecond));
 		AddText(ref y, "FPS", Inline.Span(1f / Root.Application.LastRenderDelta, "000.000"));
 
 		long allocatedBytes = GC.GetAllocatedBytesForCurrentThread();
 		AddText(ref y, "Total managed heap alloc in bytes", Inline.Span(allocatedBytes));
-		AddText(ref y, "Heap alloc bytes since last frame", Inline.Span(allocatedBytes - _previousAllocatedBytes));
+
+		long allocatedBytesDiff = allocatedBytes - _previousAllocatedBytes;
+		uint color = allocatedBytesDiff switch
+		{
+			> 10_000 => 0xff0000ff,
+			> 1_000 => 0xff0088ff,
+			> 500 => 0xff00ffff,
+			> 0 => 0xff88ffff,
+			_ => 0xff00ff00,
+		};
+		AddText(ref y, "Heap alloc bytes since last frame", Inline.Span(allocatedBytesDiff), color);
 		_previousAllocatedBytes = allocatedBytes;
 
 		AddText(ref y, "Gen 0 GCs", Inline.Span(GC.CollectionCount(0)));
@@ -45,7 +54,7 @@ public static class DebugLayout
 
 		AddText(ref y, "Devil Daggers window position", Inline.Span(Root.GameWindowService.GetWindowPosition()));
 
-		void AddText(ref float posY, ReadOnlySpan<char> textLeft, ReadOnlySpan<char> textRight)
+		void AddText(ref float posY, ReadOnlySpan<char> textLeft, ReadOnlySpan<char> textRight, uint textColor = 0xffffffff)
 		{
 			drawList.AddText(new(0, posY), textColor, textLeft);
 			drawList.AddText(new(256, posY), textColor, textRight);

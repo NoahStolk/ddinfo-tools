@@ -154,8 +154,8 @@ public static class LeaderboardListViewChild
 			return string.Empty;
 		}
 
-		DevilDaggersInfo.Core.CriteriaExpression.CustomLeaderboardCriteriaType criteriaType = criteria.Type.ToCore();
-		DevilDaggersInfo.Core.CriteriaExpression.CustomLeaderboardCriteriaOperator @operator = criteria.Operator.ToCore();
+		Core.CriteriaExpression.CustomLeaderboardCriteriaType criteriaType = criteria.Type.ToCore();
+		Core.CriteriaExpression.CustomLeaderboardCriteriaOperator @operator = criteria.Operator.ToCore();
 
 		StringBuilder sb = new();
 		sb.Append(criteriaType.Display());
