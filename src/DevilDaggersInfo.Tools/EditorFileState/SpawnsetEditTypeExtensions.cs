@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using System.Diagnostics;
 
-namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
+namespace DevilDaggersInfo.Tools.EditorFileState;
 
 public static class SpawnsetEditTypeExtensions
 {

@@ -2,7 +2,6 @@
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Intersections;
 using DevilDaggersInfo.Tools.Scenes.GameObjects;
-using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using ImGuiNET;
 using Silk.NET.Input;

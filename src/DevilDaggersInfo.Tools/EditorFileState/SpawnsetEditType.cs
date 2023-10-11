@@ -1,4 +1,4 @@
-namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
+namespace DevilDaggersInfo.Tools.EditorFileState;
 
 public enum SpawnsetEditType
 {

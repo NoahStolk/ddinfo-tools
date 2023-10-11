@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.Popups;
-using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Tools.User.Settings;
 using ImGuiNET;
