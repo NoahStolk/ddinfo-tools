@@ -103,6 +103,10 @@ public static class SpawnsChild
 		const int columnCount = 6;
 
 		ImGui.PushStyleVar(ImGuiStyleVar.CellPadding, new Vector2(4, 1));
+		ImGui.PushStyleColor(ImGuiCol.Header, Colors.SpawnsetEditor.Primary with { A = 50 });
+		ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.SpawnsetEditor.Primary with { A = 75 });
+		ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.SpawnsetEditor.Primary with { A = 100 });
+
 		if (ImGui.BeginTable("SpawnsTable", columnCount, ImGuiTableFlags.None))
 		{
 			ImGuiIOPtr io = ImGui.GetIO();
@@ -136,24 +140,24 @@ public static class SpawnsChild
 
 			for (int i = 0; i < columnCount; i++)
 			{
-				if (ImGui.TableSetColumnIndex(i))
-				{
-					ImGui.TableHeader(ImGui.TableGetColumnName(i));
-					if (!ImGui.IsItemHovered())
-						continue;
+				if (!ImGui.TableSetColumnIndex(i))
+					continue;
 
-					string tooltip = i switch
-					{
-						0 => "The spawn index",
-						1 => "The enemy type",
-						2 => "The in-game timer value at which the enemy spawns",
-						3 => "The amount of time between the previous and current spawn",
-						4 => "The amount of gems an enemy drops when killed without farming",
-						5 => "Total amount of gems dropped by all spawned enemies at this point without farming",
-						_ => string.Empty,
-					};
-					ImGui.SetTooltip(tooltip);
-				}
+				ImGui.TableHeader(ImGui.TableGetColumnName(i));
+				if (!ImGui.IsItemHovered())
+					continue;
+
+				string tooltip = i switch
+				{
+					0 => "The spawn index",
+					1 => "The enemy type",
+					2 => "The in-game timer value at which the enemy spawns",
+					3 => "The amount of time between the previous and current spawn",
+					4 => "The amount of gems an enemy drops when killed without farming",
+					5 => "Total amount of gems dropped by all spawned enemies at this point without farming",
+					_ => string.Empty,
+				};
+				ImGui.SetTooltip(tooltip);
 			}
 
 			EditSpawnContext.BuildFrom(FileStates.Spawnset.Object);
@@ -208,9 +212,11 @@ public static class SpawnsChild
 				ImGui.TableNextColumn();
 			}
 
-			ImGui.PopStyleVar();
 			ImGui.EndTable();
 		}
+
+		ImGui.PopStyleColor(3);
+		ImGui.PopStyleVar();
 	}
 
 	private static void EditContextItem(SpawnUiEntry spawn)
