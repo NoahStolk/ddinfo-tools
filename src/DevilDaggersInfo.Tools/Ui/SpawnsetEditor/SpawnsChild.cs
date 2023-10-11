@@ -100,8 +100,10 @@ public static class SpawnsChild
 
 	private static void RenderSpawnsTable()
 	{
+		const int columnCount = 6;
+
 		ImGui.PushStyleVar(ImGuiStyleVar.CellPadding, new Vector2(4, 1));
-		if (ImGui.BeginTable("SpawnsTable", 6, ImGuiTableFlags.None))
+		if (ImGui.BeginTable("SpawnsTable", columnCount, ImGuiTableFlags.None))
 		{
 			ImGuiIOPtr io = ImGui.GetIO();
 
@@ -129,13 +131,30 @@ public static class SpawnsChild
 			ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 72);
 			ImGui.TableSetupColumn("Delay", ImGuiTableColumnFlags.WidthFixed, 72);
 			ImGui.TableSetupColumn("Gems", ImGuiTableColumnFlags.WidthFixed, 48);
-			// ImGui.SameLine();
-			// ImGui.Text("(?)");
-			// if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-			// 	ImGui.SetTooltip("The amount of gems an enemy drops when killed without farming.\nThis is also the amount of gems that will be added to the total gems counter.");
-
 			ImGui.TableSetupColumn("Total", ImGuiTableColumnFlags.WidthFixed, 88);
 			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < columnCount; i++)
+			{
+				if (ImGui.TableSetColumnIndex(i))
+				{
+					ImGui.TableHeader(ImGui.TableGetColumnName(i));
+					if (!ImGui.IsItemHovered())
+						continue;
+
+					string tooltip = i switch
+					{
+						0 => "The spawn index",
+						1 => "The enemy type",
+						2 => "The in-game timer value at which the enemy spawns",
+						3 => "The amount of time between the previous and current spawn",
+						4 => "The amount of gems an enemy drops when killed without farming",
+						5 => "Total amount of gems dropped by all spawned enemies at this point without farming",
+						_ => string.Empty,
+					};
+					ImGui.SetTooltip(tooltip);
+				}
+			}
 
 			EditSpawnContext.BuildFrom(FileStates.Spawnset.Object);
 			for (int i = 0; i < EditSpawnContext.Spawns.Count; i++)

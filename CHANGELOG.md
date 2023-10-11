@@ -3,6 +3,7 @@
 ## [unreleased]
 
 - The spawnset editor now keeps track of unsaved changes and will ask you to save it when leaving the editor or opening a different spawnset.
+- Added tooltip information to spawns headers.
 - Improved configuration layout.
 
 ## [0.9.1.0] - 2023-09-13
