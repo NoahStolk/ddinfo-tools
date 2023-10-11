@@ -1,6 +1,6 @@
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Scenes;
-using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
 using ImGuiNET;
 using System.Numerics;
 
@@ -16,7 +16,7 @@ public static class SpawnsetEditor3DWindow
 
 	public static void InitializeScene()
 	{
-		_arenaScene = new(static () => SpawnsetState.Spawnset, false, true);
+		_arenaScene = new(static () => FileStates.Spawnset.Object, false, true);
 	}
 
 	public static void Render(float delta)

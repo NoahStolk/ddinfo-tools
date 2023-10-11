@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
 using System.Security.Cryptography;
 
@@ -10,7 +11,7 @@ public static class SpawnsetHistoryUtils
 
 	public static void Save(SpawnsetEditType spawnsetEditType)
 	{
-		SpawnsetBinary copy = SpawnsetState.Spawnset.DeepCopy();
+		SpawnsetBinary copy = FileStates.Spawnset.Object.DeepCopy();
 		byte[] hash = MD5.HashData(copy.ToBytes());
 
 		if (spawnsetEditType == SpawnsetEditType.Reset)

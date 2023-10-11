@@ -1,6 +1,6 @@
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
-using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using ImGuiNET;
 using System.Numerics;
@@ -17,15 +17,15 @@ public static class ArenaCanvas
 		drawList.AddRectFilled(origin, origin + ArenaChild.ArenaSize, ImGui.GetColorU32(new Vector4(0, 0, 0, 1)));
 
 		// TODO: Optimize this. Maybe we can draw to a texture and then draw that texture instead.
-		for (int i = 0; i < SpawnsetState.Spawnset.ArenaDimension; i++)
+		for (int i = 0; i < FileStates.Spawnset.Object.ArenaDimension; i++)
 		{
-			for (int j = 0; j < SpawnsetState.Spawnset.ArenaDimension; j++)
+			for (int j = 0; j < FileStates.Spawnset.Object.ArenaDimension; j++)
 			{
 				int x = i * ArenaChild.TileSize;
 				int y = j * ArenaChild.TileSize;
 
-				float actualHeight = SpawnsetState.Spawnset.GetActualTileHeight(i, j, ArenaChild.CurrentSecond);
-				float height = SpawnsetState.Spawnset.ArenaTiles[i, j];
+				float actualHeight = FileStates.Spawnset.Object.GetActualTileHeight(i, j, ArenaChild.CurrentSecond);
+				float height = FileStates.Spawnset.Object.ArenaTiles[i, j];
 				Color colorCurrent = TileUtils.GetColorFromHeight(actualHeight);
 				Color colorValue = TileUtils.GetColorFromHeight(height);
 				Vector2 min = origin + new Vector2(x, y);
@@ -54,15 +54,15 @@ public static class ArenaCanvas
 			}
 		}
 
-		if (SpawnsetState.Spawnset.GameMode == GameMode.Race)
+		if (FileStates.Spawnset.Object.GameMode == GameMode.Race)
 		{
-			int arenaMiddle = SpawnsetState.Spawnset.ArenaDimension / 2;
-			float realRaceX = SpawnsetState.Spawnset.RaceDaggerPosition.X / 4f + arenaMiddle;
-			float realRaceZ = SpawnsetState.Spawnset.RaceDaggerPosition.Y / 4f + arenaMiddle;
+			int arenaMiddle = FileStates.Spawnset.Object.ArenaDimension / 2;
+			float realRaceX = FileStates.Spawnset.Object.RaceDaggerPosition.X / 4f + arenaMiddle;
+			float realRaceZ = FileStates.Spawnset.Object.RaceDaggerPosition.Y / 4f + arenaMiddle;
 
 			const int halfSize = ArenaChild.TileSize / 2;
 
-			float? actualHeight = SpawnsetState.Spawnset.GetActualRaceDaggerHeight(ArenaChild.CurrentSecond);
+			float? actualHeight = FileStates.Spawnset.Object.GetActualRaceDaggerHeight(ArenaChild.CurrentSecond);
 			Color tileColor = actualHeight.HasValue ? TileUtils.GetColorFromHeight(actualHeight.Value) : Color.Black;
 			Color invertedTileColor = Color.Invert(tileColor);
 			Vector3 daggerColor = Vector3.Lerp(invertedTileColor, invertedTileColor.Intensify(96), MathF.Sin((float)ImGui.GetTime()) / 2 + 0.5f);
@@ -74,17 +74,17 @@ public static class ArenaCanvas
 		const int tileUnit = 4;
 		Vector2 arenaCenter = origin + new Vector2((int)(SpawnsetBinary.ArenaDimensionMax / 2f * ArenaChild.TileSize));
 
-		float shrinkStartRadius = SpawnsetState.Spawnset.ShrinkStart / tileUnit * ArenaChild.TileSize;
+		float shrinkStartRadius = FileStates.Spawnset.Object.ShrinkStart / tileUnit * ArenaChild.TileSize;
 		if (shrinkStartRadius is > 0 and < 300)
 			drawList.AddCircle(arenaCenter, shrinkStartRadius, ImGui.GetColorU32(Color.Blue));
 
-		float shrinkEndTime = SpawnsetState.Spawnset.GetShrinkEndTime();
-		float shrinkRadius = shrinkEndTime == 0 ? SpawnsetState.Spawnset.ShrinkStart : Math.Max(SpawnsetState.Spawnset.ShrinkStart - ArenaChild.CurrentSecond / shrinkEndTime * (SpawnsetState.Spawnset.ShrinkStart - SpawnsetState.Spawnset.ShrinkEnd), SpawnsetState.Spawnset.ShrinkEnd);
+		float shrinkEndTime = FileStates.Spawnset.Object.GetShrinkEndTime();
+		float shrinkRadius = shrinkEndTime == 0 ? FileStates.Spawnset.Object.ShrinkStart : Math.Max(FileStates.Spawnset.Object.ShrinkStart - ArenaChild.CurrentSecond / shrinkEndTime * (FileStates.Spawnset.Object.ShrinkStart - FileStates.Spawnset.Object.ShrinkEnd), FileStates.Spawnset.Object.ShrinkEnd);
 		float shrinkCurrentRadius = shrinkRadius / tileUnit * ArenaChild.TileSize;
 		if (shrinkCurrentRadius is > 0 and < 300)
 			drawList.AddCircle(arenaCenter, shrinkCurrentRadius, ImGui.GetColorU32(Color.Purple));
 
-		float shrinkEndRadius = SpawnsetState.Spawnset.ShrinkEnd / tileUnit * ArenaChild.TileSize;
+		float shrinkEndRadius = FileStates.Spawnset.Object.ShrinkEnd / tileUnit * ArenaChild.TileSize;
 		if (shrinkEndRadius is > 0 and < 300)
 			drawList.AddCircle(arenaCenter, shrinkEndRadius, ImGui.GetColorU32(Color.Red));
 	}

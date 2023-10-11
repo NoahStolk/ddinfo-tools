@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
@@ -71,25 +72,25 @@ public static class SpawnsetEditorMenu
 		if (ImGui.MenuItem("Redo", "Ctrl+Y"))
 			HistoryChild.Redo();
 
-		if (ImGui.MenuItem("Hardcode end loop") && SpawnsetState.Spawnset.HasEndLoop())
+		if (ImGui.MenuItem("Hardcode end loop") && FileStates.Spawnset.Object.HasEndLoop())
 		{
-			SpawnsetState.Spawnset = SpawnsetState.Spawnset.GetWithHardcodedEndLoop(20);
+			FileStates.Spawnset.Update(FileStates.Spawnset.Object.GetWithHardcodedEndLoop(20));
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnsTransformation);
 		}
 
 		if (ImGui.MenuItem("Trim start of spawns"))
 		{
-			SpawnsetState.Spawnset = SpawnsetState.Spawnset.GetWithTrimmedStart(100);
+			FileStates.Spawnset.Update(FileStates.Spawnset.Object.GetWithTrimmedStart(100));
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnsTransformation);
 		}
 	}
 
 	public static void NewSpawnset()
 	{
-		SpawnsetState.PromptSaveSpawnset(() =>
+		FileStates.Spawnset.PromptSaveSpawnset(() =>
 		{
-			SpawnsetState.Spawnset = SpawnsetBinary.CreateDefault();
-			SpawnsetState.SetFile(null, null);
+			FileStates.Spawnset.Update(SpawnsetBinary.CreateDefault());
+			FileStates.Spawnset.SetFile(null, null);
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.Reset);
 			SpawnsChild.ClearAllSelections();
 		});
@@ -99,7 +100,7 @@ public static class SpawnsetEditorMenu
 	{
 		string? filePath = NativeFileDialog.CreateOpenFileDialog(null);
 		if (filePath != null)
-			SpawnsetState.PromptSaveSpawnset(() => OpenSpawnset(filePath));
+			FileStates.Spawnset.PromptSaveSpawnset(() => OpenSpawnset(filePath));
 	}
 
 	private static void OpenSpawnset(string filePath)
@@ -118,8 +119,8 @@ public static class SpawnsetEditorMenu
 
 		if (SpawnsetBinary.TryParse(fileContents, out SpawnsetBinary? spawnsetBinary))
 		{
-			SpawnsetState.Spawnset = spawnsetBinary;
-			SpawnsetState.SetFile(filePath, Path.GetFileName(filePath));
+			FileStates.Spawnset.Update(spawnsetBinary);
+			FileStates.Spawnset.SetFile(filePath, Path.GetFileName(filePath));
 		}
 		else
 		{
@@ -133,10 +134,10 @@ public static class SpawnsetEditorMenu
 
 	public static void OpenDefaultSpawnset()
 	{
-		SpawnsetState.PromptSaveSpawnset(() =>
+		FileStates.Spawnset.PromptSaveSpawnset(() =>
 		{
-			SpawnsetState.Spawnset = ContentManager.Content.DefaultSpawnset.DeepCopy();
-			SpawnsetState.SetFile(null, "V3");
+			FileStates.Spawnset.Update(ContentManager.Content.DefaultSpawnset.DeepCopy());
+			FileStates.Spawnset.SetFile(null, "V3");
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.Reset);
 			SpawnsChild.ClearAllSelections();
 		});
@@ -144,8 +145,8 @@ public static class SpawnsetEditorMenu
 
 	public static void SaveSpawnset()
 	{
-		if (SpawnsetState.SpawnsetPath != null)
-			SpawnsetState.SaveFile(SpawnsetState.SpawnsetPath);
+		if (FileStates.Spawnset.FilePath != null)
+			FileStates.Spawnset.SaveFile(FileStates.Spawnset.FilePath);
 		else
 			SaveSpawnsetAs();
 	}
@@ -154,20 +155,20 @@ public static class SpawnsetEditorMenu
 	{
 		string? filePath = NativeFileDialog.CreateSaveFileDialog(null);
 		if (filePath != null)
-			SpawnsetState.SaveFile(filePath);
+			FileStates.Spawnset.SaveFile(filePath);
 	}
 
 	public static void OpenCurrentSpawnset()
 	{
 		if (File.Exists(UserSettings.ModsSurvivalPath))
-			SpawnsetState.PromptSaveSpawnset(() => OpenSpawnset(UserSettings.ModsSurvivalPath));
+			FileStates.Spawnset.PromptSaveSpawnset(() => OpenSpawnset(UserSettings.ModsSurvivalPath));
 		else
 			PopupManager.ShowError("There is no modded survival file to open.");
 	}
 
 	public static void ReplaceCurrentSpawnset()
 	{
-		File.WriteAllBytes(UserSettings.ModsSurvivalPath, SpawnsetState.Spawnset.ToBytes());
+		File.WriteAllBytes(UserSettings.ModsSurvivalPath, FileStates.Spawnset.Object.ToBytes());
 		PopupManager.ShowMessage("Successfully replaced current survival file", "The current survival file has been replaced with the current spawnset.");
 	}
 
@@ -181,6 +182,6 @@ public static class SpawnsetEditorMenu
 
 	public static void Close()
 	{
-		SpawnsetState.PromptSaveSpawnset(() => UiRenderer.Layout = LayoutType.Main);
+		FileStates.Spawnset.PromptSaveSpawnset(() => UiRenderer.Layout = LayoutType.Main);
 	}
 }

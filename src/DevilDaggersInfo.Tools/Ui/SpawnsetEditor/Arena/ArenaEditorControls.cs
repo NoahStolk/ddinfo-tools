@@ -1,6 +1,6 @@
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
-using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using System.Diagnostics;
@@ -26,7 +26,7 @@ public static class ArenaEditorControls
 				ImGui.SetCursorPos(new(offsetX + borderSize * 2, borderSize));
 
 				if (isDagger)
-					ImGui.BeginDisabled(SpawnsetState.Spawnset.GameMode != GameMode.Race);
+					ImGui.BeginDisabled(FileStates.Spawnset.Object.GameMode != GameMode.Race);
 
 				if (isCurrent)
 					ImGui.PushStyleColor(ImGuiCol.Button, ImGui.GetStyle().Colors[(int)ImGuiCol.ButtonHovered]);

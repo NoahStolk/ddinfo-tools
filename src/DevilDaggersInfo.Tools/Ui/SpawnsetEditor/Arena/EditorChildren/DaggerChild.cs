@@ -1,5 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
-using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
+using DevilDaggersInfo.Tools.EditorFileState;
 using ImGuiNET;
 using System.Numerics;
 
@@ -13,7 +13,7 @@ public static class DaggerChild
 
 	public static void Render()
 	{
-		ImGui.BeginDisabled(SpawnsetState.Spawnset.GameMode != GameMode.Race);
+		ImGui.BeginDisabled(FileStates.Spawnset.Object.GameMode != GameMode.Race);
 		ImGui.SliderFloat2("Snap", ref _snap, 0.25f, 2, "%.2f");
 		ImGui.EndDisabled();
 	}

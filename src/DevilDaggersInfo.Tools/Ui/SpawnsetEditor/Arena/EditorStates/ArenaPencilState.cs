@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
@@ -65,12 +66,12 @@ public class ArenaPencilState : IArenaState
 		if (_session == null)
 			return;
 
-		float[,] newArena = SpawnsetState.Spawnset.ArenaTiles.GetMutableClone();
+		float[,] newArena = FileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
 
 		foreach (Vector2D<int> position in _session.ModifiedCoords)
 			newArena[position.X, position.Y] = ArenaChild.SelectedHeight;
 
-		SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ArenaTiles = new(SpawnsetState.Spawnset.ArenaDimension, newArena) };
+		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, newArena) });
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaPencil);
 
 		Reset();

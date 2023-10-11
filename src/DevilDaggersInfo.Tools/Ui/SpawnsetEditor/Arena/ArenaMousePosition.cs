@@ -1,4 +1,4 @@
-using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
+using DevilDaggersInfo.Tools.EditorFileState;
 using ImGuiNET;
 using Silk.NET.Maths;
 using System.Numerics;
@@ -13,7 +13,7 @@ public readonly record struct ArenaMousePosition(Vector2 Real, Vector2D<int> Til
 		float realY = io.MousePos.Y - offset.Y;
 		Vector2 real = new(realX, realY);
 		Vector2D<int> tile = new((int)Math.Floor(real.X / ArenaChild.TileSize), (int)Math.Floor(real.Y / ArenaChild.TileSize));
-		bool isValid = tile is { X: >= 0, Y: >= 0 } && tile.X < SpawnsetState.Spawnset.ArenaDimension && tile.Y < SpawnsetState.Spawnset.ArenaDimension;
+		bool isValid = tile is { X: >= 0, Y: >= 0 } && tile.X < FileStates.Spawnset.Object.ArenaDimension && tile.Y < FileStates.Spawnset.Object.ArenaDimension;
 
 		return new()
 		{

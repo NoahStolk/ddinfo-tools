@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorStates;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
@@ -53,13 +54,13 @@ public static class ArenaChild
 
 				if (mousePosition.IsValid && isSpawnsetEditorWindowFocused)
 				{
-					ImGui.SetTooltip(Inline.Span($"{SpawnsetState.Spawnset.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y]}\n<{mousePosition.Tile.X}, {mousePosition.Tile.Y}>"));
+					ImGui.SetTooltip(Inline.Span($"{FileStates.Spawnset.Object.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y]}\n<{mousePosition.Tile.X}, {mousePosition.Tile.Y}>"));
 
 					if (io.MouseWheel != 0)
 					{
-						float[,] newTiles = SpawnsetState.Spawnset.ArenaTiles.GetMutableClone();
+						float[,] newTiles = FileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
 						newTiles[mousePosition.Tile.X, mousePosition.Tile.Y] -= io.MouseWheel;
-						SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ArenaTiles = new(SpawnsetState.Spawnset.ArenaDimension, newTiles) };
+						FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, newTiles) });
 						SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaTileHeight);
 					}
 				}
@@ -93,7 +94,7 @@ public static class ArenaChild
 
 			ImGui.EndChild(); // End Arena
 
-			ImGui.SliderFloat("Time", ref _currentSecond, 0, SpawnsetState.Spawnset.GetSliderMaxSeconds());
+			ImGui.SliderFloat("Time", ref _currentSecond, 0, FileStates.Spawnset.Object.GetSliderMaxSeconds());
 
 			SpawnsetEditor3DWindow.ArenaScene.CurrentTick = (int)MathF.Round(_currentSecond * 60);
 

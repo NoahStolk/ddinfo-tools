@@ -1,6 +1,6 @@
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
-using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
@@ -51,18 +51,18 @@ public static class SpawnsetWarningsChild
 
 	private static float? GetEndLoopLength()
 	{
-		if (SpawnsetState.Spawnset.GameMode != GameMode.Survival)
+		if (FileStates.Spawnset.Object.GameMode != GameMode.Survival)
 			return null;
 
-		(SpawnSectionInfo PreLoopSection, SpawnSectionInfo LoopSection) sections = SpawnsetState.Spawnset.CalculateSections();
+		(SpawnSectionInfo PreLoopSection, SpawnSectionInfo LoopSection) sections = FileStates.Spawnset.Object.CalculateSections();
 		return sections.LoopSection.Length;
 	}
 
 	private static bool IsStartTileVoid()
 	{
-		if (SpawnsetState.Spawnset.ArenaDimension <= 25)
+		if (FileStates.Spawnset.Object.ArenaDimension <= 25)
 			return false;
 
-		return SpawnsetState.Spawnset.ArenaTiles[25, 25] < -1;
+		return FileStates.Spawnset.Object.ArenaTiles[25, 25] < -1;
 	}
 }

@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
 using ImGuiNET;
@@ -101,7 +102,7 @@ public static class HistoryChild
 		ImGui.SetKeyboardFocusHere(-1);
 
 		CurrentHistoryIndex = Math.Clamp(index, 0, History.Count - 1);
-		SpawnsetState.Spawnset = History[CurrentHistoryIndex].Spawnset.DeepCopy();
+		FileStates.Spawnset.Update(History[CurrentHistoryIndex].Spawnset.DeepCopy());
 		_updateScroll = true;
 
 		SpawnsChild.ClearUnusedSelections();

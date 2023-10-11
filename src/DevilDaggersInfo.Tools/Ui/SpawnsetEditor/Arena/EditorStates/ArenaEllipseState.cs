@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
@@ -14,7 +15,7 @@ public class ArenaEllipseState : IArenaState
 
 	public void InitializeSession(ArenaMousePosition mousePosition)
 	{
-		_session ??= new(mousePosition.Real, SpawnsetState.Spawnset.ArenaTiles.GetMutableClone());
+		_session ??= new(mousePosition.Real, FileStates.Spawnset.Object.ArenaTiles.GetMutableClone());
 	}
 
 	public void Handle(ArenaMousePosition mousePosition)
@@ -36,7 +37,7 @@ public class ArenaEllipseState : IArenaState
 
 		Loop(mousePosition, (i, j) => _session.Value.NewArena[i, j] = ArenaChild.SelectedHeight);
 
-		SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ArenaTiles = new(SpawnsetState.Spawnset.ArenaDimension, _session.Value.NewArena) };
+		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, _session.Value.NewArena) });
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaEllipse);
 
 		Reset();
@@ -81,9 +82,9 @@ public class ArenaEllipseState : IArenaState
 
 		if (EllipseChild.Filled)
 		{
-			for (int i = 0; i < SpawnsetState.Spawnset.ArenaDimension; i++)
+			for (int i = 0; i < FileStates.Spawnset.Object.ArenaDimension; i++)
 			{
-				for (int j = 0; j < SpawnsetState.Spawnset.ArenaDimension; j++)
+				for (int j = 0; j < FileStates.Spawnset.Object.ArenaDimension; j++)
 				{
 					Vector2 visualTileCenter = new Vector2(i, j) * ArenaChild.TileSize + ArenaChild.HalfTileSizeAsVector2;
 
@@ -96,9 +97,9 @@ public class ArenaEllipseState : IArenaState
 		else
 		{
 			ArenaEditingUtils.AlignedEllipse innerEllipse = GetEllipse(_session.Value.StartPosition, mousePosition, (EllipseChild.Thickness - 1) * ArenaChild.TileSize);
-			for (int i = 0; i < SpawnsetState.Spawnset.ArenaDimension; i++)
+			for (int i = 0; i < FileStates.Spawnset.Object.ArenaDimension; i++)
 			{
-				for (int j = 0; j < SpawnsetState.Spawnset.ArenaDimension; j++)
+				for (int j = 0; j < FileStates.Spawnset.Object.ArenaDimension; j++)
 				{
 					Vector2 visualTileCenter = new Vector2(i, j) * ArenaChild.TileSize + ArenaChild.HalfTileSizeAsVector2;
 					ArenaEditingUtils.Square square = ArenaEditingUtils.Square.FromCenter(visualTileCenter, ArenaChild.TileSize);

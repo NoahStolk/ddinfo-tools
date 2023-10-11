@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
@@ -20,7 +21,7 @@ public class ArenaDaggerState : IArenaState
 
 	public void Handle(ArenaMousePosition mousePosition)
 	{
-		if (SpawnsetState.Spawnset.GameMode != GameMode.Race)
+		if (FileStates.Spawnset.Object.GameMode != GameMode.Race)
 			return;
 
 		if (_dragging && ImGui.IsMouseDown(ImGuiMouseButton.Left))
@@ -33,9 +34,9 @@ public class ArenaDaggerState : IArenaState
 				return;
 
 			Vector2 tileCoordinate = _position.Value / ArenaChild.TileSize;
-			Vector2 daggerPosition = new(SpawnsetState.Spawnset.TileToWorldCoordinate(tileCoordinate.X), SpawnsetState.Spawnset.TileToWorldCoordinate(tileCoordinate.Y));
+			Vector2 daggerPosition = new(FileStates.Spawnset.Object.TileToWorldCoordinate(tileCoordinate.X), FileStates.Spawnset.Object.TileToWorldCoordinate(tileCoordinate.Y));
 
-			SpawnsetState.Spawnset = SpawnsetState.Spawnset with { RaceDaggerPosition = daggerPosition };
+			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { RaceDaggerPosition = daggerPosition });
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.RaceDagger);
 
 			Reset();

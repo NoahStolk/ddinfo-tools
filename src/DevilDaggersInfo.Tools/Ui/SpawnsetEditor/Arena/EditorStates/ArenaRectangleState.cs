@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
@@ -14,7 +15,7 @@ public class ArenaRectangleState : IArenaState
 
 	public void InitializeSession(ArenaMousePosition mousePosition)
 	{
-		_session ??= new(mousePosition.Tile, SpawnsetState.Spawnset.ArenaTiles.GetMutableClone());
+		_session ??= new(mousePosition.Tile, FileStates.Spawnset.Object.ArenaTiles.GetMutableClone());
 	}
 
 	public void Handle(ArenaMousePosition mousePosition)
@@ -36,7 +37,7 @@ public class ArenaRectangleState : IArenaState
 
 		Loop(mousePosition, (i, j) => _session.Value.NewArena[i, j] = ArenaChild.SelectedHeight);
 
-		SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ArenaTiles = new(SpawnsetState.Spawnset.ArenaDimension, _session.Value.NewArena) };
+		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, _session.Value.NewArena) });
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaRectangle);
 
 		Reset();
@@ -68,8 +69,8 @@ public class ArenaRectangleState : IArenaState
 
 		int startXa = Math.Max(0, rectangle.X1);
 		int startYa = Math.Max(0, rectangle.Y1);
-		int endXa = Math.Min(SpawnsetState.Spawnset.ArenaDimension - 1, rectangle.X2);
-		int endYa = Math.Min(SpawnsetState.Spawnset.ArenaDimension - 1, rectangle.Y2);
+		int endXa = Math.Min(FileStates.Spawnset.Object.ArenaDimension - 1, rectangle.X2);
+		int endYa = Math.Min(FileStates.Spawnset.Object.ArenaDimension - 1, rectangle.Y2);
 
 		if (RectangleChild.Filled)
 		{
@@ -84,8 +85,8 @@ public class ArenaRectangleState : IArenaState
 			int addedSize = RectangleChild.Thickness;
 			int startXb = Math.Max(0, rectangle.X1 + addedSize);
 			int startYb = Math.Max(0, rectangle.Y1 + addedSize);
-			int endXb = Math.Min(SpawnsetState.Spawnset.ArenaDimension - 1, rectangle.X2 - addedSize);
-			int endYb = Math.Min(SpawnsetState.Spawnset.ArenaDimension - 1, rectangle.Y2 - addedSize);
+			int endXb = Math.Min(FileStates.Spawnset.Object.ArenaDimension - 1, rectangle.X2 - addedSize);
+			int endYb = Math.Min(FileStates.Spawnset.Object.ArenaDimension - 1, rectangle.Y2 - addedSize);
 
 			for (int i = startXa; i <= endXa; i++)
 			{

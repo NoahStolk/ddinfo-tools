@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
@@ -56,9 +57,9 @@ public static class SettingsChild
 		ImGui.SameLine();
 		for (int i = 8; i < 10; i++)
 		{
-			if (ImGui.RadioButton(Inline.Span(i), i == SpawnsetState.Spawnset.WorldVersion) && SpawnsetState.Spawnset.WorldVersion != i)
+			if (ImGui.RadioButton(Inline.Span(i), i == FileStates.Spawnset.Object.WorldVersion) && FileStates.Spawnset.Object.WorldVersion != i)
 			{
-				SpawnsetState.Spawnset = SpawnsetState.Spawnset with { WorldVersion = i };
+				FileStates.Spawnset.Update(FileStates.Spawnset.Object with { WorldVersion = i });
 				SpawnsetHistoryUtils.Save(SpawnsetEditType.Format);
 			}
 
@@ -70,9 +71,9 @@ public static class SettingsChild
 		ImGui.SameLine();
 		for (int i = 4; i < 7; i++)
 		{
-			if (ImGui.RadioButton(Inline.Span(i), i == SpawnsetState.Spawnset.SpawnVersion) && SpawnsetState.Spawnset.SpawnVersion != i)
+			if (ImGui.RadioButton(Inline.Span(i), i == FileStates.Spawnset.Object.SpawnVersion) && FileStates.Spawnset.Object.SpawnVersion != i)
 			{
-				SpawnsetState.Spawnset = SpawnsetState.Spawnset with { SpawnVersion = i };
+				FileStates.Spawnset.Update(FileStates.Spawnset.Object with { SpawnVersion = i });
 				SpawnsetHistoryUtils.Save(SpawnsetEditType.Format);
 			}
 
@@ -82,7 +83,7 @@ public static class SettingsChild
 
 		ImGui.Text("Supported in game version:");
 
-		SpawnsetSupportedGameVersion supportedGameVersion = SpawnsetState.Spawnset.GetSupportedGameVersion();
+		SpawnsetSupportedGameVersion supportedGameVersion = FileStates.Spawnset.Object.GetSupportedGameVersion();
 		ImGui.Text(EnumUtils.SpawnsetSupportedGameVersionNames[supportedGameVersion]);
 	}
 
@@ -104,9 +105,9 @@ public static class SettingsChild
 				_ => throw new UnreachableException(),
 			};
 
-			if (ImGui.RadioButton(displayGameMode, gameMode == SpawnsetState.Spawnset.GameMode) && SpawnsetState.Spawnset.GameMode != gameMode)
+			if (ImGui.RadioButton(displayGameMode, gameMode == FileStates.Spawnset.Object.GameMode) && FileStates.Spawnset.Object.GameMode != gameMode)
 			{
-				SpawnsetState.Spawnset = SpawnsetState.Spawnset with { GameMode = gameMode };
+				FileStates.Spawnset.Update(FileStates.Spawnset.Object with { GameMode = gameMode });
 				SpawnsetHistoryUtils.Save(SpawnsetEditType.GameMode);
 			}
 
@@ -117,21 +118,21 @@ public static class SettingsChild
 
 	private static void RenderRaceDagger()
 	{
-		ImGui.BeginDisabled(SpawnsetState.Spawnset.GameMode != GameMode.Race);
+		ImGui.BeginDisabled(FileStates.Spawnset.Object.GameMode != GameMode.Race);
 
 		ImGui.Spacing();
 		ImGui.Indent(-8);
 		ImGui.Text("Race dagger");
-		InfoTooltipWhenDisabled(SpawnsetState.Spawnset.GameMode != GameMode.Race, "Race dagger values can only be set when the game mode is set to Race.");
+		InfoTooltipWhenDisabled(FileStates.Spawnset.Object.GameMode != GameMode.Race, "Race dagger values can only be set when the game mode is set to Race.");
 		ImGui.Separator();
 		ImGui.Indent(8);
 
-		Vector2 raceDaggerPosition = SpawnsetState.Spawnset.RaceDaggerPosition;
+		Vector2 raceDaggerPosition = FileStates.Spawnset.Object.RaceDaggerPosition;
 		ImGui.InputFloat2("Position", ref raceDaggerPosition, "%.2f", ImGuiInputTextFlags.CharsDecimal);
-		if (Math.Abs(SpawnsetState.Spawnset.RaceDaggerPosition.X - raceDaggerPosition.X) > 0.001f ||
-		    Math.Abs(SpawnsetState.Spawnset.RaceDaggerPosition.Y - raceDaggerPosition.Y) > 0.001f)
+		if (Math.Abs(FileStates.Spawnset.Object.RaceDaggerPosition.X - raceDaggerPosition.X) > 0.001f ||
+		    Math.Abs(FileStates.Spawnset.Object.RaceDaggerPosition.Y - raceDaggerPosition.Y) > 0.001f)
 		{
-			SpawnsetState.Spawnset = SpawnsetState.Spawnset with { RaceDaggerPosition = raceDaggerPosition };
+			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { RaceDaggerPosition = raceDaggerPosition });
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.RaceDagger);
 		}
 
@@ -146,56 +147,56 @@ public static class SettingsChild
 		ImGui.Separator();
 		ImGui.Indent(8);
 
-		float shrinkStart = SpawnsetState.Spawnset.ShrinkStart;
+		float shrinkStart = FileStates.Spawnset.Object.ShrinkStart;
 		ImGui.InputFloat("Shrink start", ref shrinkStart, 1, 5, "%.1f");
-		if (Math.Abs(SpawnsetState.Spawnset.ShrinkStart - shrinkStart) > 0.001f)
+		if (Math.Abs(FileStates.Spawnset.Object.ShrinkStart - shrinkStart) > 0.001f)
 		{
-			SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ShrinkStart = shrinkStart };
+			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ShrinkStart = shrinkStart });
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.ShrinkStart);
 		}
 
-		float shrinkEnd = SpawnsetState.Spawnset.ShrinkEnd;
+		float shrinkEnd = FileStates.Spawnset.Object.ShrinkEnd;
 		ImGui.InputFloat("Shrink end", ref shrinkEnd, 1, 5, "%.1f");
-		if (Math.Abs(SpawnsetState.Spawnset.ShrinkEnd - shrinkEnd) > 0.001f)
+		if (Math.Abs(FileStates.Spawnset.Object.ShrinkEnd - shrinkEnd) > 0.001f)
 		{
-			SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ShrinkEnd = shrinkEnd };
+			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ShrinkEnd = shrinkEnd });
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.ShrinkEnd);
 		}
 
-		float shrinkRate = SpawnsetState.Spawnset.ShrinkRate;
+		float shrinkRate = FileStates.Spawnset.Object.ShrinkRate;
 		ImGui.InputFloat("Shrink rate", ref shrinkRate, 0.005f, 0.5f, "%.3f");
-		if (Math.Abs(SpawnsetState.Spawnset.ShrinkRate - shrinkRate) > 0.001f)
+		if (Math.Abs(FileStates.Spawnset.Object.ShrinkRate - shrinkRate) > 0.001f)
 		{
-			SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ShrinkRate = shrinkRate };
+			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ShrinkRate = shrinkRate });
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.ShrinkRate);
 		}
 
-		float brightness = SpawnsetState.Spawnset.Brightness;
+		float brightness = FileStates.Spawnset.Object.Brightness;
 		ImGui.InputFloat("Brightness", ref brightness, 5, 20, "%.1f");
-		if (Math.Abs(SpawnsetState.Spawnset.Brightness - brightness) > 0.001f)
+		if (Math.Abs(FileStates.Spawnset.Object.Brightness - brightness) > 0.001f)
 		{
-			SpawnsetState.Spawnset = SpawnsetState.Spawnset with { Brightness = brightness };
+			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Brightness = brightness });
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.Brightness);
 		}
 	}
 
 	private static void RenderPractice()
 	{
-		ImGui.BeginDisabled(SpawnsetState.Spawnset.SpawnVersion <= 4);
+		ImGui.BeginDisabled(FileStates.Spawnset.Object.SpawnVersion <= 4);
 
 		ImGui.Spacing();
 		ImGui.Indent(-8);
 		ImGui.Text("Practice");
-		InfoTooltipWhenDisabled(SpawnsetState.Spawnset.SpawnVersion <= 4, "Practice values are not supported in spawn version 4.");
+		InfoTooltipWhenDisabled(FileStates.Spawnset.Object.SpawnVersion <= 4, "Practice values are not supported in spawn version 4.");
 		ImGui.Separator();
 		ImGui.Indent(8);
 
 		for (int i = 0; i < EnumUtils.HandLevels.Count; i++)
 		{
 			HandLevel level = EnumUtils.HandLevels[i];
-			if (ImGui.RadioButton(Inline.Span($"Lvl {(int)level}"), level == SpawnsetState.Spawnset.HandLevel) && SpawnsetState.Spawnset.HandLevel != level)
+			if (ImGui.RadioButton(Inline.Span($"Lvl {(int)level}"), level == FileStates.Spawnset.Object.HandLevel) && FileStates.Spawnset.Object.HandLevel != level)
 			{
-				SpawnsetState.Spawnset = SpawnsetState.Spawnset with { HandLevel = level };
+				FileStates.Spawnset.Update(FileStates.Spawnset.Object with { HandLevel = level });
 				SpawnsetHistoryUtils.Save(SpawnsetEditType.HandLevel);
 			}
 
@@ -203,23 +204,23 @@ public static class SettingsChild
 				ImGui.SameLine();
 		}
 
-		int additionalGems = SpawnsetState.Spawnset.AdditionalGems;
+		int additionalGems = FileStates.Spawnset.Object.AdditionalGems;
 		ImGui.InputInt("Added gems", ref additionalGems, 1);
-		if (SpawnsetState.Spawnset.AdditionalGems != additionalGems)
+		if (FileStates.Spawnset.Object.AdditionalGems != additionalGems)
 		{
-			SpawnsetState.Spawnset = SpawnsetState.Spawnset with { AdditionalGems = additionalGems };
+			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { AdditionalGems = additionalGems });
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.AdditionalGems);
 		}
 
 		ImGui.EndDisabled();
 
-		ImGui.BeginDisabled(SpawnsetState.Spawnset.SpawnVersion <= 5);
+		ImGui.BeginDisabled(FileStates.Spawnset.Object.SpawnVersion <= 5);
 
-		float timerStart = SpawnsetState.Spawnset.TimerStart;
+		float timerStart = FileStates.Spawnset.Object.TimerStart;
 		ImGui.InputFloat("Timer start", ref timerStart, 1, 5, "%.4f");
-		if (Math.Abs(SpawnsetState.Spawnset.TimerStart - timerStart) > 0.001f)
+		if (Math.Abs(FileStates.Spawnset.Object.TimerStart - timerStart) > 0.001f)
 		{
-			SpawnsetState.Spawnset = SpawnsetState.Spawnset with { TimerStart = timerStart };
+			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { TimerStart = timerStart });
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.TimerStart);
 		}
 

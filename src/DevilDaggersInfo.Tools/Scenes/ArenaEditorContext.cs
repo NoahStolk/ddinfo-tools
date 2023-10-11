@@ -1,4 +1,5 @@
 // ReSharper disable ForCanBeConvertedToForeach
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Intersections;
 using DevilDaggersInfo.Tools.Scenes.GameObjects;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
@@ -60,16 +61,16 @@ public sealed class ArenaEditorContext
 		if (scroll == 0 || _selectedTiles.Count == 0)
 			return;
 
-		float[,] newArena = SpawnsetState.Spawnset.ArenaTiles.GetMutableClone();
+		float[,] newArena = FileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
 		for (int i = 0; i < _selectedTiles.Count; i++)
 		{
 			Tile tile = _selectedTiles[i];
-			float height = SpawnsetState.Spawnset.ArenaTiles[tile.ArenaX, tile.ArenaY] - scroll;
+			float height = FileStates.Spawnset.Object.ArenaTiles[tile.ArenaX, tile.ArenaY] - scroll;
 			tile.SetDisplayHeight(height);
 			newArena[tile.ArenaX, tile.ArenaY] = height;
 		}
 
-		SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ArenaTiles = new(SpawnsetState.Spawnset.ArenaDimension, newArena) };
+		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, newArena) });
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaTileHeight);
 	}
 

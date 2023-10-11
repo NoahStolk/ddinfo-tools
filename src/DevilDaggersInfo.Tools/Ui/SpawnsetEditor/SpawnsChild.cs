@@ -3,6 +3,7 @@ using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Spawnset.Extensions;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Structs;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
@@ -46,16 +47,16 @@ public static class SpawnsChild
 				{
 					if (ImGui.Button("Add", new(64, 32)))
 					{
-						if (SpawnsetState.Spawnset.Spawns.Length >= MaxSpawns)
+						if (FileStates.Spawnset.Object.Spawns.Length >= MaxSpawns)
 						{
 							PopupManager.ShowError("Reached max amount of spawns.");
 						}
 						else
 						{
 							EnemyType enemyType = _addEnemyTypeIndex is >= 0 and <= 9 ? (EnemyType)_addEnemyTypeIndex : EnemyType.Empty;
-							SpawnsetState.Spawnset = SpawnsetState.Spawnset with { Spawns = SpawnsetState.Spawnset.Spawns.Add(new(enemyType, _addDelay)) };
+							FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Add(new(enemyType, _addDelay)) });
 							SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnAdd);
-							_scrollToIndex = SpawnsetState.Spawnset.Spawns.Length - 1;
+							_scrollToIndex = FileStates.Spawnset.Object.Spawns.Length - 1;
 						}
 					}
 
@@ -65,14 +66,14 @@ public static class SpawnsChild
 						if (selectedIndex == -1)
 							selectedIndex = 0;
 
-						if (SpawnsetState.Spawnset.Spawns.Length >= MaxSpawns)
+						if (FileStates.Spawnset.Object.Spawns.Length >= MaxSpawns)
 						{
 							PopupManager.ShowError("Reached max amount of spawns.");
 						}
 						else
 						{
 							EnemyType enemyType = _addEnemyTypeIndex is >= 0 and <= 9 ? (EnemyType)_addEnemyTypeIndex : EnemyType.Empty;
-							SpawnsetState.Spawnset = SpawnsetState.Spawnset with { Spawns = SpawnsetState.Spawnset.Spawns.Insert(selectedIndex, new(enemyType, _addDelay)) };
+							FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Insert(selectedIndex, new(enemyType, _addDelay)) });
 							SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnInsert);
 							_scrollToIndex = selectedIndex;
 						}
@@ -118,7 +119,7 @@ public static class SpawnsChild
 
 				if (io.KeysDown[(int)Key.Delete] && Array.Exists(_selected, b => b))
 				{
-					SpawnsetState.Spawnset = SpawnsetState.Spawnset with { Spawns = SpawnsetState.Spawnset.Spawns.Where((_, i) => !_selected[i]).ToImmutableArray() };
+					FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Where((_, i) => !_selected[i]).ToImmutableArray() });
 					Array.Fill(_selected, false);
 					SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnDelete);
 				}
@@ -137,7 +138,7 @@ public static class SpawnsChild
 			ImGui.TableSetupColumn("Total", ImGuiTableColumnFlags.WidthFixed, 88);
 			ImGui.TableHeadersRow();
 
-			EditSpawnContext.BuildFrom(SpawnsetState.Spawnset);
+			EditSpawnContext.BuildFrom(FileStates.Spawnset.Object);
 			for (int i = 0; i < EditSpawnContext.Spawns.Count; i++)
 			{
 				SpawnUiEntry spawn = EditSpawnContext.Spawns[i];
@@ -234,10 +235,10 @@ public static class SpawnsChild
 
 		static void SaveEditedSpawn(int spawnIndex, EnemyType enemyType, float delay)
 		{
-			SpawnsetState.Spawnset = SpawnsetState.Spawnset with
+			FileStates.Spawnset.Update(FileStates.Spawnset.Object with
 			{
-				Spawns = SpawnsetState.Spawnset.Spawns.SetItem(spawnIndex, new(enemyType, delay)),
-			};
+				Spawns = FileStates.Spawnset.Object.Spawns.SetItem(spawnIndex, new(enemyType, delay)),
+			});
 
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnEdit);
 			ImGui.CloseCurrentPopup();
@@ -247,7 +248,7 @@ public static class SpawnsChild
 
 	public static void ClearUnusedSelections()
 	{
-		for (int i = SpawnsetState.Spawnset.Spawns.Length; i < _selected.Length; i++)
+		for (int i = FileStates.Spawnset.Object.Spawns.Length; i < _selected.Length; i++)
 			_selected[i] = false;
 	}
 

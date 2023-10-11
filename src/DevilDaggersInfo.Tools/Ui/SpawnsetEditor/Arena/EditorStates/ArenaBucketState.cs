@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
@@ -17,11 +18,11 @@ public class ArenaBucketState : IArenaState
 
 	private void FillNeighbors(int x, int y)
 	{
-		int dimension = SpawnsetState.Spawnset.ArenaDimension;
+		int dimension = FileStates.Spawnset.Object.ArenaDimension;
 		if (x < 0 || y < 0 || x >= dimension || y >= dimension)
 			return;
 
-		float targetHeight = SpawnsetState.Spawnset.ArenaTiles[x, y];
+		float targetHeight = FileStates.Spawnset.Object.ArenaTiles[x, y];
 
 		_targetCoords.Add(new(x, y));
 
@@ -44,7 +45,7 @@ public class ArenaBucketState : IArenaState
 			if (_targetCoords.Contains(new(newX, newY)))
 				return;
 
-			float tileHeight = SpawnsetState.Spawnset.ArenaTiles[newX, newY];
+			float tileHeight = FileStates.Spawnset.Object.ArenaTiles[newX, newY];
 
 			float clampedTargetHeight = targetHeight;
 			if (targetHeight < BucketChild.VoidHeight)
@@ -63,11 +64,11 @@ public class ArenaBucketState : IArenaState
 			return;
 
 		_isFilling = true;
-		float[,] newArena = SpawnsetState.Spawnset.ArenaTiles.GetMutableClone();
+		float[,] newArena = FileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
 		foreach (Vector2D<int> coord in _targetCoords)
 			newArena[coord.X, coord.Y] = ArenaChild.SelectedHeight;
 
-		SpawnsetState.Spawnset = SpawnsetState.Spawnset with { ArenaTiles = new(SpawnsetState.Spawnset.ArenaDimension, newArena) };
+		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, newArena) });
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaBucket);
 	}
 
