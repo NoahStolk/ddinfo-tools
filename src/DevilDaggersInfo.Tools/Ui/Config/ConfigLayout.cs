@@ -79,10 +79,10 @@ public static class ConfigLayout
 			""";
 
 		Vector2 center = ImGui.GetMainViewport().GetCenter();
-		ImGui.SetNextWindowPos(center, ImGuiCond.Always, new(0.5f, 0.5f));
+		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new(0.5f, 0.5f));
 		ImGui.SetNextWindowSize(new(768, 512));
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(16, 16));
-		const ImGuiWindowFlags flags = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoNavFocus;
+		const ImGuiWindowFlags flags = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoNavFocus;
 		if (ImGui.Begin("Configuration", flags))
 		{
 			ImGui.Text(text);
