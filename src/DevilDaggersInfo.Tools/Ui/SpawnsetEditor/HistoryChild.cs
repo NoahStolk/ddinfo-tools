@@ -1,6 +1,6 @@
+using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
-using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using ImGuiNET;
 using System.Numerics;
@@ -18,7 +18,7 @@ public static class HistoryChild
 		{
 			for (int i = 0; i < SpawnsetHistoryUtils.History.Count; i++)
 			{
-				SpawnsetHistoryEntry history = SpawnsetHistoryUtils.History[i];
+				HistoryEntry<SpawnsetBinary, SpawnsetEditType> history = SpawnsetHistoryUtils.History[i];
 
 				if (UpdateScroll && i == SpawnsetHistoryUtils.CurrentHistoryIndex)
 				{

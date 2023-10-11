@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
-using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.State;
 using System.Security.Cryptography;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
@@ -12,15 +11,15 @@ public static class SpawnsetHistoryUtils
 	static SpawnsetHistoryUtils()
 	{
 		SpawnsetBinary spawnset = SpawnsetBinary.CreateDefault();
-		History = new List<SpawnsetHistoryEntry> { new(spawnset, MD5.HashData(spawnset.ToBytes()), SpawnsetEditType.Reset) };
+		History = new List<HistoryEntry<SpawnsetBinary, SpawnsetEditType>> { new(spawnset, MD5.HashData(spawnset.ToBytes()), SpawnsetEditType.Reset) };
 	}
 
 	// Note; the history should never be empty.
-	public static IReadOnlyList<SpawnsetHistoryEntry> History { get; private set; }
+	public static IReadOnlyList<HistoryEntry<SpawnsetBinary, SpawnsetEditType>> History { get; private set; }
 
 	public static int CurrentHistoryIndex { get; private set; }
 
-	private static void UpdateHistory(IReadOnlyList<SpawnsetHistoryEntry> history, int currentHistoryIndex)
+	private static void UpdateHistory(IReadOnlyList<HistoryEntry<SpawnsetBinary, SpawnsetEditType>> history, int currentHistoryIndex)
 	{
 		History = history;
 		CurrentHistoryIndex = currentHistoryIndex;
@@ -30,7 +29,7 @@ public static class SpawnsetHistoryUtils
 	public static void SetHistoryIndex(int index)
 	{
 		CurrentHistoryIndex = Math.Clamp(index, 0, History.Count - 1);
-		FileStates.Spawnset.Update(History[CurrentHistoryIndex].Spawnset.DeepCopy());
+		FileStates.Spawnset.Update(History[CurrentHistoryIndex].Object.DeepCopy());
 	}
 
 	public static void Save(SpawnsetEditType spawnsetEditType)
@@ -40,7 +39,7 @@ public static class SpawnsetHistoryUtils
 
 		if (spawnsetEditType == SpawnsetEditType.Reset)
 		{
-			UpdateHistory(new List<SpawnsetHistoryEntry> { new(copy, hash, spawnsetEditType) }, 0);
+			UpdateHistory(new List<HistoryEntry<SpawnsetBinary, SpawnsetEditType>> { new(copy, hash, spawnsetEditType) }, 0);
 		}
 		else
 		{
@@ -49,10 +48,10 @@ public static class SpawnsetHistoryUtils
 			if (originalHash.SequenceEqual(hash))
 				return;
 
-			SpawnsetHistoryEntry historyEntry = new(copy, hash, spawnsetEditType);
+			HistoryEntry<SpawnsetBinary, SpawnsetEditType> historyEntry = new(copy, hash, spawnsetEditType);
 
 			// Clear any newer history.
-			List<SpawnsetHistoryEntry> newHistory = History.ToList();
+			List<HistoryEntry<SpawnsetBinary, SpawnsetEditType>> newHistory = History.ToList();
 			newHistory = newHistory.Take(CurrentHistoryIndex + 1).Append(historyEntry).ToList();
 
 			// Remove history if there are too many entries.
