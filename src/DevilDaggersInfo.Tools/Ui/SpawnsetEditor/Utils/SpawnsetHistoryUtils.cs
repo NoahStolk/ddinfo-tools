@@ -9,6 +9,30 @@ public static class SpawnsetHistoryUtils
 {
 	private const int _maxHistoryEntries = 100;
 
+	static SpawnsetHistoryUtils()
+	{
+		SpawnsetBinary spawnset = SpawnsetBinary.CreateDefault();
+		History = new List<SpawnsetHistoryEntry> { new(spawnset, MD5.HashData(spawnset.ToBytes()), SpawnsetEditType.Reset) };
+	}
+
+	// Note; the history should never be empty.
+	public static IReadOnlyList<SpawnsetHistoryEntry> History { get; private set; }
+
+	public static int CurrentHistoryIndex { get; private set; }
+
+	private static void UpdateHistory(IReadOnlyList<SpawnsetHistoryEntry> history, int currentHistoryIndex)
+	{
+		History = history;
+		CurrentHistoryIndex = currentHistoryIndex;
+		HistoryChild.UpdateScroll = true;
+	}
+
+	public static void SetHistoryIndex(int index)
+	{
+		CurrentHistoryIndex = Math.Clamp(index, 0, History.Count - 1);
+		FileStates.Spawnset.Update(History[CurrentHistoryIndex].Spawnset.DeepCopy());
+	}
+
 	public static void Save(SpawnsetEditType spawnsetEditType)
 	{
 		SpawnsetBinary copy = FileStates.Spawnset.Object.DeepCopy();
@@ -16,11 +40,11 @@ public static class SpawnsetHistoryUtils
 
 		if (spawnsetEditType == SpawnsetEditType.Reset)
 		{
-			HistoryChild.UpdateHistory(new List<SpawnsetHistoryEntry> { new(copy, hash, spawnsetEditType) }, 0);
+			UpdateHistory(new List<SpawnsetHistoryEntry> { new(copy, hash, spawnsetEditType) }, 0);
 		}
 		else
 		{
-			byte[] originalHash = HistoryChild.History[HistoryChild.CurrentHistoryIndex].Hash;
+			byte[] originalHash = History[CurrentHistoryIndex].Hash;
 
 			if (originalHash.SequenceEqual(hash))
 				return;
@@ -28,18 +52,18 @@ public static class SpawnsetHistoryUtils
 			SpawnsetHistoryEntry historyEntry = new(copy, hash, spawnsetEditType);
 
 			// Clear any newer history.
-			List<SpawnsetHistoryEntry> newHistory = HistoryChild.History.ToList();
-			newHistory = newHistory.Take(HistoryChild.CurrentHistoryIndex + 1).Append(historyEntry).ToList();
+			List<SpawnsetHistoryEntry> newHistory = History.ToList();
+			newHistory = newHistory.Take(CurrentHistoryIndex + 1).Append(historyEntry).ToList();
 
 			// Remove history if there are too many entries.
-			int newCurrentIndex = HistoryChild.CurrentHistoryIndex + 1;
+			int newCurrentIndex = CurrentHistoryIndex + 1;
 			if (newHistory.Count > _maxHistoryEntries)
 			{
 				newHistory.RemoveAt(0);
 				newCurrentIndex--;
 			}
 
-			HistoryChild.UpdateHistory(newHistory, newCurrentIndex);
+			UpdateHistory(newHistory, newCurrentIndex);
 		}
 	}
 }
