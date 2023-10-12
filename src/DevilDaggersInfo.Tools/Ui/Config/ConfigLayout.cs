@@ -128,5 +128,8 @@ public static class ConfigLayout
 		ImGui.End(); // End Configuration
 
 		ImGui.PopStyleVar();
+
+		if (ImGui.IsKeyPressed(ImGuiKey.Escape))
+			ValidateInstallation();
 	}
 }

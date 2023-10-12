@@ -12,6 +12,7 @@
 
 - Improved configuration layout.
 - Fixed numpad enter key not registering.
+- Pressing ESC now leaves the configuration window.
 
 ## [0.9.1.0] - 2023-09-13
 
