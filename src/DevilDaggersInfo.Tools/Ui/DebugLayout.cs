@@ -83,9 +83,6 @@ public static class DebugLayout
 			ImGui.Text("Other debug options are not available in RELEASE builds.");
 #endif
 		}
-#else
-		ImGui.Text("Other debug options are not available in RELEASE builds.");
-#endif
 
 		ImGui.End(); // End Debug
 	}

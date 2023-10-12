@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
+using DevilDaggersInfo.Tools.Ui.ModManager;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using System.Numerics;
@@ -70,7 +71,11 @@ public static class MainWindow
 				static void GoToSpawnsetEditor() => UiRenderer.Layout = LayoutType.SpawnsetEditor;
 				static void GoToReplayEditor() => UiRenderer.Layout = LayoutType.ReplayEditor;
 				static void GoToPractice() => UiRenderer.Layout = LayoutType.Practice;
-				static void GoToModManager() => UiRenderer.Layout = LayoutType.ModManager;
+				static void GoToModManager()
+				{
+					UiRenderer.Layout = LayoutType.ModManager;
+					ModsDirectoryWindow.LoadModsDirectory();
+				}
 
 				static void GoToCustomLeaderboards()
 				{
