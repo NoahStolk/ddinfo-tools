@@ -58,7 +58,7 @@ public static class MainWindow
 				ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 16);
 				ToolButton(GetColor(Colors.CustomLeaderboards.Primary), "Custom Leaderboards", GoToCustomLeaderboards, ref _hoveredButtonAction, RenderCustomLeaderboardsPreview);
 				ToolButton(GetColor(Colors.Practice.Primary), "Practice", GoToPractice, ref _hoveredButtonAction, RenderPracticePreview);
-				ToolButton(GetColor(Colors.ModManager.Primary), "Mod Manager", static () => { }, ref _hoveredButtonAction, RenderModManagerPreview);
+				ToolButton(GetColor(Colors.ModManager.Primary), "Mod Manager", GoToModManager, ref _hoveredButtonAction, RenderModManagerPreview);
 
 				static Color GetColor(Color primary)
 				{
@@ -70,6 +70,7 @@ public static class MainWindow
 				static void GoToSpawnsetEditor() => UiRenderer.Layout = LayoutType.SpawnsetEditor;
 				static void GoToReplayEditor() => UiRenderer.Layout = LayoutType.ReplayEditor;
 				static void GoToPractice() => UiRenderer.Layout = LayoutType.Practice;
+				static void GoToModManager() => UiRenderer.Layout = LayoutType.ModManager;
 
 				static void GoToCustomLeaderboards()
 				{
@@ -239,7 +240,7 @@ public static class MainWindow
 	{
 		ImGuiExt.Title("Mod Manager");
 		ImGui.Text("""
-			NOT IMPLEMENTED YET
+			WORK IN PROGRESS
 
 			Manage mods downloaded from the website.
 			""");

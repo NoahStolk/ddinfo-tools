@@ -67,10 +67,10 @@ public static class Colors
 
 	public static ColorConfiguration ModManager { get; } = new()
 	{
-		Primary = new(66, 250, 150, 255),
-		Secondary = new(61, 224, 133, 255),
-		Tertiary = new(41, 122, 74, 255),
-		Quaternary = new(26, 191, 102, 255),
+		Primary = new(150, 150, 66, 255),
+		Secondary = new(133, 133, 61, 255),
+		Tertiary = new(74, 74, 41, 255),
+		Quaternary = new(102, 102, 26, 255),
 	};
 
 	public static void SetColors(ColorConfiguration colorConfiguration)
