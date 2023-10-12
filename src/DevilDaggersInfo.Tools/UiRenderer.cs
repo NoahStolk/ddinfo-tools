@@ -16,6 +16,7 @@ public static class UiRenderer
 {
 	private static LayoutType _layout;
 
+	private static bool _showDemoWindow;
 	private static bool _showSettings;
 	private static bool _showAbout;
 	private static bool _showUpdateAvailable;
@@ -38,6 +39,11 @@ public static class UiRenderer
 		}
 	}
 
+	public static void ShowDemoWindow()
+	{
+		_showDemoWindow = true;
+	}
+
 	public static void ShowSettings()
 	{
 		_showSettings = true;
@@ -55,8 +61,8 @@ public static class UiRenderer
 
 	public static void Render(float delta)
 	{
-		//ImGuiNET.ImGui.ShowUserGuide();
-		//ImGuiNET.ImGui.ShowDemoWindow();
+		if (_showDemoWindow)
+			ImGuiNET.ImGui.ShowDemoWindow(ref _showDemoWindow);
 
 		switch (Layout)
 		{

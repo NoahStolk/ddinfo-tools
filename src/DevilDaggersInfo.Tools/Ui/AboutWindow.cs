@@ -8,7 +8,7 @@ namespace DevilDaggersInfo.Tools.Ui;
 
 public static class AboutWindow
 {
-	private static readonly string _versionInfo = $"Version {AssemblyUtils.EntryAssemblyVersion} (build time {AssemblyUtils.EntryAssemblyBuildTime})";
+	private static readonly string _versionInfo = $"Version {AssemblyUtils.EntryAssemblyVersion} (build time: {AssemblyUtils.EntryAssemblyBuildTime})";
 
 	public static void Render(ref bool show)
 	{

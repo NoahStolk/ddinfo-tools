@@ -64,6 +64,9 @@ public static class DebugLayout
 #if DEBUG
 		if (ImGui.Begin("Debug"))
 		{
+			if (ImGui.Button("Show demo window"))
+				UiRenderer.ShowDemoWindow();
+
 			if (ImGui.Button("Error window"))
 				PopupManager.ShowError("Test error!");
 
@@ -77,7 +80,6 @@ public static class DebugLayout
 			ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red);
 			if (ImGui.Button("FATAL CRASH"))
 				throw new("Test crash! This should be logged as FATAL.");
-
 			ImGui.PopStyleColor(2);
 
 			if (ImGui.Button("Clear"))
