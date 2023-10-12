@@ -21,6 +21,7 @@ public static class ModManagerWindow
 
 				if (ImGui.BeginTabItem("Mods installation"))
 				{
+					ModsDirectoryWindow.Render();
 					ImGui.EndTabItem();
 				}
 
