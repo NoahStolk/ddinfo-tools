@@ -11,6 +11,7 @@
 ### Other
 
 - Improved configuration layout.
+- Fixed numpad enter key not registering.
 
 ## [0.9.1.0] - 2023-09-13
 
