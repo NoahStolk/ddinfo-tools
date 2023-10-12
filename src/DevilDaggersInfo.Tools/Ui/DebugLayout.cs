@@ -67,6 +67,8 @@ public static class DebugLayout
 			if (ImGui.Button("Show demo window"))
 				UiRenderer.ShowDemoWindow();
 
+			ImGui.Separator();
+
 			if (ImGui.Button("Error window"))
 				PopupManager.ShowError("Test error!");
 
@@ -82,11 +84,33 @@ public static class DebugLayout
 				throw new("Test crash! This should be logged as FATAL.");
 			ImGui.PopStyleColor(2);
 
+			ImGui.Separator();
+
 			if (ImGui.Button("Clear"))
 				_debugMessages.Clear();
 
 			for (int i = 0; i < _debugMessages.Count; i++)
 				ImGui.Text(_debugMessages[i]);
+
+			ImGui.Separator();
+
+			ColorsButton("Main Colors", Colors.Main);
+			ColorsButton("Spawnset Editor Colors", Colors.SpawnsetEditor);
+			ColorsButton("Asset Editor Colors", Colors.AssetEditor);
+			ColorsButton("Replay Editor Colors", Colors.ReplayEditor);
+			ColorsButton("Custom Leaderboards Colors", Colors.CustomLeaderboards);
+			ColorsButton("Practice Colors", Colors.Practice);
+			ColorsButton("Mod Manager Colors", Colors.ModManager);
+
+			static void ColorsButton(ReadOnlySpan<char> label, ColorConfiguration colorConfiguration)
+			{
+				ImGui.PushStyleColor(ImGuiCol.Button, colorConfiguration.Tertiary);
+				ImGui.PushStyleColor(ImGuiCol.ButtonHovered, colorConfiguration.Secondary);
+				ImGui.PushStyleColor(ImGuiCol.ButtonActive, colorConfiguration.Primary);
+				if (ImGui.Button(label))
+					Colors.SetColors(colorConfiguration);
+				ImGui.PopStyleColor(3);
+			}
 		}
 
 		ImGui.End(); // End Debug
