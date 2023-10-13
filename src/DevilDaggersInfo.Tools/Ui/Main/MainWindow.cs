@@ -75,7 +75,7 @@ public static class MainWindow
 				static void GoToModManager()
 				{
 					UiRenderer.Layout = LayoutType.ModManager;
-					ModsDirectoryWindow.Initialize();
+					ModsDirectoryLogic.LoadModsDirectory();
 				}
 
 				static void GoToCustomLeaderboards()

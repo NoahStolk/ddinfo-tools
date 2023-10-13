@@ -107,7 +107,7 @@ public static class ModPreviewWindow
 				}
 
 				if (ImGui.Button("Toggle prohibited"))
-					ModsDirectoryWindow.Logic.ToggleProhibitedAssets(_selectedFileName);
+					ModsDirectoryLogic.ToggleProhibitedAssets(_selectedFileName);
 
 				if (ImGui.BeginTable("Chunks", 4, ImGuiTableFlags.Resizable | ImGuiTableFlags.Sortable))
 				{

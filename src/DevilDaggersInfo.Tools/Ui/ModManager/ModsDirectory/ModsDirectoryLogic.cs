@@ -7,21 +7,21 @@ using System.Text;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 
-public class ModsDirectoryLogic
+public static class ModsDirectoryLogic
 {
-	private List<ModFile> _modFiles = new();
-	private string _originalFileName = string.Empty;
-	public string NewFileName = string.Empty;
+	private static List<ModFile> _modFiles = new();
+	private static string _originalFileName = string.Empty;
+	public static string NewFileName = string.Empty;
 
-	public IReadOnlyList<ModFile> ModFiles => _modFiles;
+	public static IReadOnlyList<ModFile> ModFiles => _modFiles;
 
-	public void InitializeRename(string fileName)
+	public static void InitializeRename(string fileName)
 	{
 		_originalFileName = fileName;
 		NewFileName = fileName;
 	}
 
-	public void LoadModsDirectory()
+	public static void LoadModsDirectory()
 	{
 		try
 		{
@@ -42,7 +42,7 @@ public class ModsDirectoryLogic
 		}
 	}
 
-	public void SortModFiles(uint sorting, bool sortAscending)
+	public static void SortModFiles(uint sorting, bool sortAscending)
 	{
 		_modFiles = sorting switch
 		{
@@ -57,7 +57,7 @@ public class ModsDirectoryLogic
 	/// <summary>
 	/// Renames the mod file and returns an error message if the renaming failed.
 	/// </summary>
-	public string? RenameModFile()
+	public static string? RenameModFile()
 	{
 		string originalPath = Path.Combine(UserSettings.ModsDirectory, _originalFileName);
 		string newPath = Path.Combine(UserSettings.ModsDirectory, NewFileName);
@@ -102,7 +102,7 @@ public class ModsDirectoryLogic
 		return null;
 	}
 
-	public void DeleteModFile(string fileName)
+	public static void DeleteModFile(string fileName)
 	{
 		string path = Path.Combine(UserSettings.ModsDirectory, fileName);
 
@@ -123,7 +123,7 @@ public class ModsDirectoryLogic
 			_modFiles.Remove(modFile);
 	}
 
-	public void ToggleModFile(string originalFileName)
+	public static void ToggleModFile(string originalFileName)
 	{
 		if (!originalFileName.StartsWith("audio") && !originalFileName.StartsWith("dd") && !originalFileName.StartsWith("_audio") && !originalFileName.StartsWith("_dd"))
 			return;
@@ -160,7 +160,7 @@ public class ModsDirectoryLogic
 		}
 	}
 
-	public void ToggleProhibitedAssets(string fileName)
+	public static void ToggleProhibitedAssets(string fileName)
 	{
 		try
 		{
