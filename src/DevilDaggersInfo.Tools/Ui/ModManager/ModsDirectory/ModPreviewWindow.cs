@@ -125,7 +125,7 @@ public static class ModPreviewWindow
 						ImGui.Text(chunk.Name);
 
 						ImGui.TableNextColumn();
-						ImGui.Text(EnumUtils.AssetTypeNames[chunk.AssetType]);
+						ImGui.TextColored(GetColor(chunk.AssetType), EnumUtils.AssetTypeNames[chunk.AssetType]);
 
 						ImGui.TableNextColumn();
 						if (AssetContainer.GetIsProhibited(chunk.AssetType, chunk.Name))
@@ -154,4 +154,14 @@ public static class ModPreviewWindow
 			ImGui.Text(span);
 		}
 	}
+
+	private static Vector4 GetColor(this AssetType assetType) => assetType switch
+	{
+		AssetType.Audio => new(1, 0.25f, 1, 1),
+		AssetType.ObjectBinding => new(0.25f, 1, 1, 1),
+		AssetType.Mesh => new(1, 0.25f, 0.25f, 1),
+		AssetType.Shader => new(0.25f, 1, 0.25f, 1),
+		AssetType.Texture => new(1, 0.66f, 0.25f, 1),
+		_ => Vector4.One,
+	};
 }
