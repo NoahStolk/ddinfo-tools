@@ -12,7 +12,7 @@ namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 
 public static class ModInstallationWindow
 {
-	private static readonly Dictionary<string, List<EffectiveChunk>> _effectiveAssets = new();
+	private static Dictionary<string, List<EffectiveChunk>> _effectiveAssets = new();
 	private static int _activeAssets;
 	private static int _activeProhibitedAssets;
 
@@ -72,6 +72,8 @@ public static class ModInstallationWindow
 			_effectiveAssets[effectiveChunk.ContainingModFileName].Add(effectiveChunk);
 		}
 
+		_effectiveAssets = _effectiveAssets.OrderByDescending(kvp => kvp.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
 		_activeAssets = _effectiveAssets.Sum(kvp => kvp.Value.Count(c => c.OverriddenByModFileName == null));
 		_activeProhibitedAssets = _effectiveAssets.Sum(kvp => kvp.Value.Count(c => c.OverriddenByModFileName == null && AssetContainer.GetIsProhibited(c.Chunk.AssetType, c.Chunk.Name)));
 	}
@@ -113,6 +115,8 @@ public static class ModInstallationWindow
 				When two mods contain the same asset, the last mod loaded (alphabetically) will be the effective one.
 
 				For example, if you have two mods named "dd_blue_gem" and "dd_yellow_gem" installed, which both change the gem texture, "dd_yellow_gem" will be the effective one.
+
+				In the table below, mods listed at the top take precedence over mods listed at the bottom.
 				""");
 
 			if (_errors.Count > 0)
@@ -166,7 +170,7 @@ public static class ModInstallationWindow
 						Vector4 disabledColor = Color.Gray(0.4f);
 
 						ImGui.TableNextColumn();
-						ImGui.TextColored(isOverridden ? disabledColor : Color.Gray(0.8f), chunk.Chunk.Name);
+						ImGui.TextColored(isOverridden ? disabledColor : Color.White, chunk.Chunk.Name);
 
 						ImGui.TableNextColumn();
 						ImGui.TextColored(isOverridden ? disabledColor : chunk.Chunk.AssetType.GetColor(), EnumUtils.AssetTypeNames[chunk.Chunk.AssetType]);
