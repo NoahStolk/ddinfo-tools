@@ -127,7 +127,7 @@ public static class ModsDirectoryWindow
 				ImGui.TableNextRow();
 				ImGui.TableNextColumn();
 
-				ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, modFile.FileType == ModFileType.EnabledMod ? 0x4400ff00U : 0x00000000);
+				ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, modFile.FileName == ModPreviewWindow.SelectedFileName ? 0x4400ffffU : modFile.FileType == ModFileType.EnabledMod ? 0x4400ff00U : 0x00000000U);
 
 				bool setFocus = false;
 				if (ImGui.SmallButton(Inline.Span($"Rename##{i}")))
@@ -178,7 +178,7 @@ public static class ModsDirectoryWindow
 				ImGui.PushStyleColor(ImGuiCol.Text, GetColor(modFile.FileType));
 				bool temp = false;
 				if (ImGui.Selectable(modFile.FileName, ref temp, ImGuiSelectableFlags.SpanAllColumns))
-					ModPreviewWindow.SelectedFileName = modFile.FileName;
+					ModPreviewWindow.SelectedFileName = ModPreviewWindow.SelectedFileName == modFile.FileName ? null : modFile.FileName;
 				ImGui.PopStyleColor();
 
 				ImGui.TableNextColumn();
