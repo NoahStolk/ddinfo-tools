@@ -11,5 +11,9 @@ public abstract class Popup
 
 	public bool HasOpened { get; set; }
 
+	/// <summary>
+	/// Renders the popup and returns whether the popup should be closed.
+	/// </summary>
+	/// <returns>Whether the popup should be closed.</returns>
 	public abstract bool Render();
 }

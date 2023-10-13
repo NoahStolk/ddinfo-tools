@@ -134,7 +134,7 @@ public static class CustomTemplatesChild
 				};
 			}
 
-			if (ImGui.IsKeyPressed(ImGuiKey.Enter))
+			if (ImGuiUtils.IsEnterPressed())
 				ImGui.CloseCurrentPopup();
 
 			ImGui.EndPopup();

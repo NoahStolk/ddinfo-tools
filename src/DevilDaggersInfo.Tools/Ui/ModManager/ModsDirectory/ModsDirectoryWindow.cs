@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
@@ -15,6 +16,8 @@ public static class ModsDirectoryWindow
 	private static bool _showModsWithInvalidPrefix = true;
 	private static bool _showOtherFiles;
 	private static bool _showErrors = true;
+
+	private static string? _renameErrorMessage;
 
 	public static void Initialize()
 	{
@@ -83,7 +86,7 @@ public static class ModsDirectoryWindow
 				string tooltip = i switch
 				{
 					0 => "The name of the file in the mods folder",
-					1 => "The mod type (audio or dd, core mods are not supported by the game)",
+					1 => "The mod type ('audio' or 'dd')",
 					2 => "The chunk count is typically the amount of game assets changed by the mod",
 					3 => "The mod's file size",
 					_ => string.Empty,
@@ -124,6 +127,36 @@ public static class ModsDirectoryWindow
 				ImGui.TableNextRow();
 				ImGui.TableNextColumn();
 
+				bool setFocus = false;
+				if (ImGui.SmallButton(Inline.Span($"Rename##{i}")))
+				{
+					ImGui.OpenPopup(Inline.Span($"Rename##rename_mod_file_{i}"));
+					_logic.InitializeRename(modFile.FileName);
+					setFocus = true;
+				}
+
+				ImGui.SetNextWindowSize(new(512, 128), ImGuiCond.Appearing);
+				if (ImGui.BeginPopupModal(Inline.Span($"Rename##rename_mod_file_{i}")))
+				{
+					if (setFocus)
+						ImGui.SetKeyboardFocusHere(0);
+
+					ImGui.InputText("##rename", ref _logic.NewFileName, 128);
+
+					if (_renameErrorMessage != null)
+						ImGui.TextColored(Color.Red, _renameErrorMessage);
+
+					if (ImGui.Button("OK", new(128, 0)) || ImGuiUtils.IsEnterPressed())
+					{
+						_renameErrorMessage = _logic.RenameModFile();
+						if (_renameErrorMessage == null)
+							ImGui.CloseCurrentPopup();
+					}
+
+					ImGui.EndPopup();
+				}
+
+				ImGui.SameLine();
 				ImGui.TextColored(GetColor(modFile.FileType), modFile.FileName);
 
 				ImGui.TableNextColumn();
@@ -141,12 +174,12 @@ public static class ModsDirectoryWindow
 
 			ImGui.EndTable();
 		}
-	}
 
-	private static void ColumnTextRight(ReadOnlySpan<char> span)
-	{
-		ImGui.SetCursorPosX(ImGui.GetCursorPosX() + ImGui.GetColumnWidth() - ImGui.CalcTextSize(span).X - ImGui.GetScrollX());
-		ImGui.Text(span);
+		static void ColumnTextRight(ReadOnlySpan<char> span)
+		{
+			ImGui.SetCursorPosX(ImGui.GetCursorPosX() + ImGui.GetColumnWidth() - ImGui.CalcTextSize(span).X - ImGui.GetScrollX());
+			ImGui.Text(span);
+		}
 	}
 
 	private static Vector4 GetColor(ModFileType modFileType)

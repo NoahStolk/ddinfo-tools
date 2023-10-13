@@ -9,8 +9,16 @@ namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 public class ModsDirectoryLogic
 {
 	private List<ModFile> _modFiles = new();
+	private string _originalFileName = string.Empty;
+	public string NewFileName = string.Empty;
 
 	public IReadOnlyList<ModFile> ModFiles => _modFiles;
+
+	public void InitializeRename(string fileName)
+	{
+		_originalFileName = fileName;
+		NewFileName = fileName;
+	}
 
 	public void LoadModsDirectory()
 	{
@@ -37,12 +45,51 @@ public class ModsDirectoryLogic
 	{
 		_modFiles = sorting switch
 		{
-			0 => sortAscending ? _modFiles.OrderBy(m => m.FileName).ToList() : _modFiles.OrderByDescending(m => m.FileName).ToList(),
+			0 => sortAscending ? _modFiles.OrderBy(m => m.FileName.ToLower()).ToList() : _modFiles.OrderByDescending(m => m.FileName.ToLower()).ToList(),
 			1 => sortAscending ? _modFiles.OrderBy(m => m.Type).ToList() : _modFiles.OrderByDescending(m => m.Type).ToList(),
 			2 => sortAscending ? _modFiles.OrderBy(m => m.ChunkCount).ToList() : _modFiles.OrderByDescending(m => m.ChunkCount).ToList(),
 			3 => sortAscending ? _modFiles.OrderBy(m => m.FileSize).ToList() : _modFiles.OrderByDescending(m => m.FileSize).ToList(),
 			_ => throw new InvalidOperationException($"Invalid sorting column '{sorting}'."),
 		};
+	}
+
+	/// <summary>
+	/// Renames the mod file and returns an error message if the renaming failed.
+	/// </summary>
+	public string? RenameModFile()
+	{
+		string originalPath = Path.Combine(UserSettings.ModsDirectory, _originalFileName);
+		string newPath = Path.Combine(UserSettings.ModsDirectory, NewFileName);
+		if (originalPath == newPath)
+			return null;
+
+		if (NewFileName.Any(c => Path.GetInvalidFileNameChars().Contains(c)))
+			return $"File '{NewFileName}' contains invalid characters.";
+
+		if (File.Exists(newPath))
+			return $"File '{NewFileName}' already exists in the mods directory.";
+
+		try
+		{
+			File.Move(originalPath, newPath);
+		}
+		catch (Exception ex)
+		{
+			Root.Log.Error(ex, $"Error renaming file '{_originalFileName}' to '{NewFileName}'.");
+			return $"Error renaming file '{_originalFileName}' to '{NewFileName}'.\n\n" + ex.Message;
+		}
+
+		ModFile? originalModFile = _modFiles.Find(m => m.FileName == _originalFileName);
+		if (originalModFile == null)
+		{
+			Root.Log.Warning("Renamed file does not exist in memory.");
+			return null;
+		}
+
+		int originalIndex = _modFiles.IndexOf(originalModFile);
+		_modFiles.Remove(originalModFile);
+		_modFiles.Insert(originalIndex, originalModFile with { FileName = NewFileName });
+		return null;
 	}
 
 	private static ModFile ReadModFile(string filePath)
