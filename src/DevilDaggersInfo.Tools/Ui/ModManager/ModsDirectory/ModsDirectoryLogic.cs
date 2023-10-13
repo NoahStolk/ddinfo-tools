@@ -33,6 +33,7 @@ public static class ModsDirectoryLogic
 				_modFiles.Add(ModFile.FromPath(file));
 			}
 
+			// TODO: Sort by current sorting.
 			_modFiles = _modFiles.OrderBy(m => m.FileName).ToList();
 		}
 		catch (Exception ex)
@@ -40,6 +41,8 @@ public static class ModsDirectoryLogic
 			PopupManager.ShowError("Error loading files in the mods directory.\n\n" + ex.Message);
 			Root.Log.Error(ex, "Error loading files in the mods directory.");
 		}
+
+		ModInstallationWindow.LoadEffectiveAssets();
 	}
 
 	public static void SortModFiles(uint sorting, bool sortAscending)
@@ -99,6 +102,8 @@ public static class ModsDirectoryLogic
 			});
 		}
 
+		ModInstallationWindow.LoadEffectiveAssets();
+
 		return null;
 	}
 
@@ -121,6 +126,8 @@ public static class ModsDirectoryLogic
 			Root.Log.Warning("Deleted file does not exist in memory.");
 		else
 			_modFiles.Remove(modFile);
+
+		ModInstallationWindow.LoadEffectiveAssets();
 	}
 
 	public static void ToggleModFile(string originalFileName)
@@ -158,6 +165,8 @@ public static class ModsDirectoryLogic
 				FileType = ModFile.GetFileType(newFileName),
 			});
 		}
+
+		ModInstallationWindow.LoadEffectiveAssets();
 	}
 
 	public static void ToggleProhibitedAssets(string fileName)
@@ -200,5 +209,6 @@ public static class ModsDirectoryLogic
 		}
 
 		ModPreviewWindow.LoadChunks();
+		ModInstallationWindow.LoadEffectiveAssets();
 	}
 }

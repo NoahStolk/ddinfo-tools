@@ -2,6 +2,7 @@ using DevilDaggersInfo.Core.Asset;
 using DevilDaggersInfo.Core.Mod;
 using DevilDaggersInfo.Core.Mod.Exceptions;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
@@ -71,74 +72,12 @@ public static class ModPreviewWindow
 			}
 			else
 			{
-				if (ImGui.BeginTable("File info", 2, ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.Borders, new(400, 0)))
-				{
-					ImGui.TableNextColumn();
-					ImGui.Text("File name");
-
-					ImGui.TableNextColumn();
-					ImGui.Text(_selectedFileName);
-
-					ImGui.TableNextColumn();
-					ImGui.Text("Binary type");
-
-					ImGui.TableNextColumn();
-					ImGui.Text(EnumUtils.ModBinaryTypeNames[_modBinaryToc.Type]);
-
-					ImGui.TableNextColumn();
-					ImGui.Text("File size");
-
-					ImGui.TableNextColumn();
-					ImGui.Text(FileSizeUtils.Format(_modFileSize ?? 0));
-
-					ImGui.TableNextColumn();
-					ImGui.Text("Asset count");
-
-					ImGui.TableNextColumn();
-					ImGui.Text(Inline.Span(_modBinaryToc.Chunks.Count));
-
-					ImGui.TableNextColumn();
-					ImGui.Text("Prohibited asset count");
-
-					ImGui.TableNextColumn();
-					ImGui.Text(Inline.Span(_modBinaryToc.Chunks.Count(c => AssetContainer.GetIsProhibited(c.AssetType, c.Name))));
-
-					ImGui.EndTable();
-				}
+				RenderFileInfoTable(_modBinaryToc);
 
 				if (ImGui.Button("Toggle prohibited"))
 					ModsDirectoryLogic.ToggleProhibitedAssets(_selectedFileName);
 
-				if (ImGui.BeginTable("Chunks", 4, ImGuiTableFlags.Resizable | ImGuiTableFlags.Sortable))
-				{
-					ImGui.TableSetupColumn("Asset name", ImGuiTableColumnFlags.DefaultSort, 256, 0);
-					ImGui.TableSetupColumn("Asset type", ImGuiTableColumnFlags.None, 128, 1);
-					ImGui.TableSetupColumn("Prohibited", ImGuiTableColumnFlags.None, 64, 2);
-					ImGui.TableSetupColumn("Raw size", ImGuiTableColumnFlags.None, 64, 3);
-					ImGui.TableHeadersRow();
-
-					for (int i = 0; i < _modBinaryToc.Chunks.Count; i++)
-					{
-						ModBinaryChunk chunk = _modBinaryToc.Chunks[i];
-
-						ImGui.TableNextColumn();
-						ImGui.Text(chunk.Name);
-
-						ImGui.TableNextColumn();
-						ImGui.TextColored(GetColor(chunk.AssetType), EnumUtils.AssetTypeNames[chunk.AssetType]);
-
-						ImGui.TableNextColumn();
-						if (AssetContainer.GetIsProhibited(chunk.AssetType, chunk.Name))
-							ImGui.TextColored(Color.Orange, "Prohibited");
-						else
-							ImGui.TextColored(Color.Green, "OK");
-
-						ImGui.TableNextColumn();
-						ColumnTextRight(FileSizeUtils.Format(chunk.Size));
-					}
-
-					ImGui.EndTable();
-				}
+				RenderChunksTable(_modBinaryToc);
 			}
 		}
 		else
@@ -147,21 +86,88 @@ public static class ModPreviewWindow
 		}
 
 		ImGui.End(); // End Mod preview
+	}
 
-		static void ColumnTextRight(ReadOnlySpan<char> span)
+	private static void RenderFileInfoTable(ModBinaryToc modBinaryToc)
+	{
+		if (ImGui.BeginTable("File info", 2, ImGuiTableFlags.Borders, new(512, 0)))
 		{
-			ImGui.SetCursorPosX(ImGui.GetCursorPosX() + ImGui.GetColumnWidth() - ImGui.CalcTextSize(span).X - ImGui.GetScrollX());
-			ImGui.Text(span);
+			ImGui.TableSetupColumn("##left", ImGuiTableColumnFlags.WidthStretch);
+			ImGui.TableSetupColumn("##right", ImGuiTableColumnFlags.WidthFixed, 256);
+
+			NextColumnText("File name");
+			NextColumnText(_selectedFileName);
+
+			NextColumnText("Binary type");
+			NextColumnText(EnumUtils.ModBinaryTypeNames[modBinaryToc.Type]);
+
+			NextColumnText("File size");
+			NextColumnText(FileSizeUtils.Format(_modFileSize ?? 0));
+
+			NextColumnText("Asset count");
+			NextColumnText(Inline.Span(modBinaryToc.Chunks.Count));
+
+			NextColumnText("Prohibited asset count");
+			NextColumnText(Inline.Span(modBinaryToc.Chunks.Count(c => AssetContainer.GetIsProhibited(c.AssetType, c.Name)))); // TODO: Cache.
+
+			ImGui.EndTable();
 		}
 	}
 
-	private static Vector4 GetColor(this AssetType assetType) => assetType switch
+	private static unsafe void RenderChunksTable(ModBinaryToc modBinaryToc)
 	{
-		AssetType.Audio => new(1, 0.25f, 1, 1),
-		AssetType.ObjectBinding => new(0.25f, 1, 1, 1),
-		AssetType.Mesh => new(1, 0.25f, 0.25f, 1),
-		AssetType.Shader => new(0.25f, 1, 0.25f, 1),
-		AssetType.Texture => new(1, 0.66f, 0.25f, 1),
-		_ => Vector4.One,
-	};
+		if (ImGui.BeginTable("Chunks", 4, ImGuiTableFlags.Resizable | ImGuiTableFlags.Sortable))
+		{
+			ImGui.TableSetupColumn("Asset name", ImGuiTableColumnFlags.DefaultSort, 256, 0);
+			ImGui.TableSetupColumn("Asset type", ImGuiTableColumnFlags.None, 128, 1);
+			ImGui.TableSetupColumn("Prohibited", ImGuiTableColumnFlags.None, 64, 2);
+			ImGui.TableSetupColumn("Raw size", ImGuiTableColumnFlags.None, 64, 3);
+			ImGui.TableHeadersRow();
+
+			ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
+			if (sortsSpecs.NativePtr != (void*)0 && sortsSpecs.SpecsDirty)
+			{
+				uint sorting = sortsSpecs.Specs.ColumnUserID;
+				bool sortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
+
+				// ModsDirectoryLogic.SortModFiles(sorting, sortAscending);
+
+				sortsSpecs.SpecsDirty = false;
+			}
+
+			for (int i = 0; i < modBinaryToc.Chunks.Count; i++)
+			{
+				ModBinaryChunk chunk = modBinaryToc.Chunks[i];
+
+				ImGui.TableNextColumn();
+				ImGui.Text(chunk.Name);
+
+				ImGui.TableNextColumn();
+				ImGui.TextColored(chunk.AssetType.GetColor(), EnumUtils.AssetTypeNames[chunk.AssetType]);
+
+				ImGui.TableNextColumn();
+				if (AssetContainer.GetIsProhibited(chunk.AssetType, chunk.Name))
+					ImGui.TextColored(Color.Orange, "Prohibited");
+				else
+					ImGui.TextColored(Color.Green, "OK");
+
+				ImGui.TableNextColumn();
+				ColumnTextRight(FileSizeUtils.Format(chunk.Size));
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void ColumnTextRight(ReadOnlySpan<char> label)
+	{
+		ImGui.SetCursorPosX(ImGui.GetCursorPosX() + ImGui.GetColumnWidth() - ImGui.CalcTextSize(label).X - ImGui.GetScrollX());
+		ImGui.Text(label);
+	}
+
+	private static void NextColumnText(ReadOnlySpan<char> label)
+	{
+		ImGui.TableNextColumn();
+		ImGui.Text(label);
+	}
 }

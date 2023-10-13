@@ -24,6 +24,7 @@ public static class ModManagerWindow
 				{
 					ModsDirectoryWindow.Render();
 					ModPreviewWindow.Render();
+					ModInstallationWindow.Render();
 					ImGui.EndTabItem();
 				}
 
