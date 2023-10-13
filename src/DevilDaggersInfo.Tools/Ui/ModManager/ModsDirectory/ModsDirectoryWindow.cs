@@ -168,15 +168,21 @@ public static class ModsDirectoryWindow
 				}
 
 				ImGui.SameLine();
+				ImGui.BeginDisabled(modFile.FileType is not ModFileType.EnabledMod and not ModFileType.DisabledMod);
+				if (ImGui.SmallButton(Inline.Span($"Toggle##{i}")))
+					_logic.ToggleModFile(modFile.FileName);
+				ImGui.EndDisabled();
+
+				ImGui.SameLine();
 				ImGui.TextColored(GetColor(modFile.FileType), modFile.FileName);
 
 				ImGui.TableNextColumn();
-				if (modFile.Type.HasValue)
-					ImGui.Text(EnumUtils.ModBinaryTypeNames[modFile.Type.Value]);
+				if (modFile.BinaryType.HasValue)
+					ImGui.Text(EnumUtils.ModBinaryTypeNames[modFile.BinaryType.Value]);
 
 				ImGui.TableNextColumn();
-				if (modFile.ChunkCount.HasValue)
-					ColumnTextRight(Inline.Span(modFile.ChunkCount.Value));
+				if (modFile is { ChunkCount: not null, ProhibitedChunkCount: not null })
+					ColumnTextRight(Inline.Span($"{modFile.ProhibitedChunkCount.Value} / {modFile.ChunkCount.Value} prohibited"), modFile.ProhibitedChunkCount.Value > 0 ? Color.Orange : Color.Green);
 
 				ImGui.TableNextColumn();
 
@@ -186,10 +192,13 @@ public static class ModsDirectoryWindow
 			ImGui.EndTable();
 		}
 
-		static void ColumnTextRight(ReadOnlySpan<char> span)
+		static void ColumnTextRight(ReadOnlySpan<char> span, Vector4? color = null)
 		{
 			ImGui.SetCursorPosX(ImGui.GetCursorPosX() + ImGui.GetColumnWidth() - ImGui.CalcTextSize(span).X - ImGui.GetScrollX());
-			ImGui.Text(span);
+			if (color.HasValue)
+				ImGui.TextColored(color.Value, span);
+			else
+				ImGui.Text(span);
 		}
 	}
 

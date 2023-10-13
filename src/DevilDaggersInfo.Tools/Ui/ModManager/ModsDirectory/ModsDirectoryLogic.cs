@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Core.Asset;
 using DevilDaggersInfo.Core.Mod;
 using DevilDaggersInfo.Core.Mod.Exceptions;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
@@ -39,6 +40,40 @@ public class ModsDirectoryLogic
 			PopupManager.ShowError("Error loading files in the mods directory.\n\n" + ex.Message);
 			Root.Log.Error(ex, "Error loading files in the mods directory.");
 		}
+
+		static ModFile ReadModFile(string filePath)
+		{
+			string fileName = Path.GetFileName(filePath);
+
+			long fileSize = 0;
+			try
+			{
+				using FileStream fs = new(filePath, FileMode.Open);
+				fileSize = fs.Length;
+				using BinaryReader reader = new(fs);
+				ModBinaryToc modBinaryToc = ModBinaryToc.FromReader(reader);
+
+				int prohibitedCount = modBinaryToc.Chunks.Count(c => AssetContainer.GetIsProhibited(c.AssetType, c.Name));
+				return new(fileName, GetModFileType(fileName), modBinaryToc.Type, modBinaryToc.Chunks.Count, prohibitedCount, fileSize);
+			}
+			catch (InvalidModBinaryException)
+			{
+				return new(fileName, ModFileType.Other, null, null, null, fileSize);
+			}
+			catch (Exception ex)
+			{
+				PopupManager.ShowError($"Error loading file '{filePath}'.\n\n" + ex.Message);
+				Root.Log.Error(ex, $"Error loading file '{filePath}'.");
+				return new(fileName, ModFileType.Error, null, null, null, fileSize);
+			}
+		}
+	}
+
+	private static ModFileType GetModFileType(string fileName)
+	{
+		return fileName.StartsWith("audio") || fileName.StartsWith("dd") ? ModFileType.EnabledMod :
+			fileName.StartsWith("_audio") || fileName.StartsWith("_dd") ? ModFileType.DisabledMod :
+			ModFileType.ModWithInvalidPrefix;
 	}
 
 	public void SortModFiles(uint sorting, bool sortAscending)
@@ -46,7 +81,7 @@ public class ModsDirectoryLogic
 		_modFiles = sorting switch
 		{
 			0 => sortAscending ? _modFiles.OrderBy(m => m.FileName.ToLower()).ToList() : _modFiles.OrderByDescending(m => m.FileName.ToLower()).ToList(),
-			1 => sortAscending ? _modFiles.OrderBy(m => m.Type).ToList() : _modFiles.OrderByDescending(m => m.Type).ToList(),
+			1 => sortAscending ? _modFiles.OrderBy(m => m.BinaryType).ToList() : _modFiles.OrderByDescending(m => m.BinaryType).ToList(),
 			2 => sortAscending ? _modFiles.OrderBy(m => m.ChunkCount).ToList() : _modFiles.OrderByDescending(m => m.ChunkCount).ToList(),
 			3 => sortAscending ? _modFiles.OrderBy(m => m.FileSize).ToList() : _modFiles.OrderByDescending(m => m.FileSize).ToList(),
 			_ => throw new InvalidOperationException($"Invalid sorting column '{sorting}'."),
@@ -62,6 +97,9 @@ public class ModsDirectoryLogic
 		string newPath = Path.Combine(UserSettings.ModsDirectory, NewFileName);
 		if (originalPath == newPath)
 			return null;
+
+		if (NewFileName.Length == 0)
+			return "File name cannot be empty.";
 
 		if (NewFileName.Any(c => Path.GetInvalidFileNameChars().Contains(c)))
 			return $"File '{NewFileName}' contains invalid characters.";
@@ -83,12 +121,18 @@ public class ModsDirectoryLogic
 		if (originalModFile == null)
 		{
 			Root.Log.Warning("Renamed file does not exist in memory.");
-			return null;
+		}
+		else
+		{
+			int originalIndex = _modFiles.IndexOf(originalModFile);
+			_modFiles.Remove(originalModFile);
+			_modFiles.Insert(originalIndex, originalModFile with
+			{
+				FileName = NewFileName,
+				FileType = GetModFileType(NewFileName),
+			});
 		}
 
-		int originalIndex = _modFiles.IndexOf(originalModFile);
-		_modFiles.Remove(originalModFile);
-		_modFiles.Insert(originalIndex, originalModFile with { FileName = NewFileName });
 		return null;
 	}
 
@@ -108,42 +152,45 @@ public class ModsDirectoryLogic
 
 		ModFile? modFile = _modFiles.Find(m => m.FileName == fileName);
 		if (modFile == null)
-		{
 			Root.Log.Warning("Deleted file does not exist in memory.");
-			return;
-		}
-
-		_modFiles.Remove(modFile);
+		else
+			_modFiles.Remove(modFile);
 	}
 
-	private static ModFile ReadModFile(string filePath)
+	public void ToggleModFile(string originalFileName)
 	{
-		string fileName = Path.GetFileName(filePath);
+		if (!originalFileName.StartsWith("audio") && !originalFileName.StartsWith("dd") && !originalFileName.StartsWith("_audio") && !originalFileName.StartsWith("_dd"))
+			return;
 
-		long fileSize = 0;
+		string newFileName = originalFileName.StartsWith("audio") || originalFileName.StartsWith("dd") ? $"_{originalFileName}" : originalFileName[1..];
+
+		string originalPath = Path.Combine(UserSettings.ModsDirectory, originalFileName);
+		string newPath = Path.Combine(UserSettings.ModsDirectory, newFileName);
+
 		try
 		{
-			using FileStream fs = new(filePath, FileMode.Open);
-			fileSize = fs.Length;
-			using BinaryReader reader = new(fs);
-			ModBinaryToc modBinaryToc = ModBinaryToc.FromReader(reader);
-
-			ModFileType fileType =
-				fileName.StartsWith("audio") || fileName.StartsWith("dd") ? ModFileType.EnabledMod :
-				fileName.StartsWith("_audio") || fileName.StartsWith("_dd") ? ModFileType.DisabledMod :
-				ModFileType.ModWithInvalidPrefix;
-
-			return new(fileName, fileType, modBinaryToc.Type, modBinaryToc.Chunks.Count, fileSize);
-		}
-		catch (InvalidModBinaryException)
-		{
-			return new(fileName, ModFileType.Other, null, null, fileSize);
+			File.Move(originalPath, newPath);
 		}
 		catch (Exception ex)
 		{
-			PopupManager.ShowError($"Error loading file '{filePath}'.\n\n" + ex.Message);
-			Root.Log.Error(ex, $"Error loading file '{filePath}'.");
-			return new(fileName, ModFileType.Error, null, null, fileSize);
+			Root.Log.Error(ex, $"Error toggling file '{originalFileName}'.");
+			PopupManager.ShowError($"Error toggling file '{originalFileName}'.\n\n" + ex.Message);
+		}
+
+		ModFile? originalModFile = _modFiles.Find(m => m.FileName == originalFileName);
+		if (originalModFile == null)
+		{
+			Root.Log.Warning("Renamed file does not exist in memory.");
+		}
+		else
+		{
+			int originalIndex = _modFiles.IndexOf(originalModFile);
+			_modFiles.Remove(originalModFile);
+			_modFiles.Insert(originalIndex, originalModFile with
+			{
+				FileName = newFileName,
+				FileType = GetModFileType(newFileName),
+			});
 		}
 	}
 }
