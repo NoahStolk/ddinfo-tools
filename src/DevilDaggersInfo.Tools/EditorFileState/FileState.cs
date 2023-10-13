@@ -1,4 +1,3 @@
-using DevilDaggersInfo.Tools.Ui.Popups;
 using System.Security.Cryptography;
 
 namespace DevilDaggersInfo.Tools.EditorFileState;
@@ -13,18 +12,26 @@ public class FileState<TObject, TEditType>
 	private readonly Func<TObject, byte[]> _toBytes;
 	private readonly Func<TObject, TObject> _deepCopy;
 	private readonly Func<TEditType, TEditType, bool> _editTypeEquals;
+	private readonly Action<Action> _savePromptAction;
 
 	private TObject _obj;
 	private byte[] _memoryMd5Hash;
 	private byte[] _fileMd5Hash;
 
-	public FileState(TObject obj, TEditType defaultEditType, Func<TObject, byte[]> toBytes, Func<TObject, TObject> deepCopy, Func<TEditType, TEditType, bool> editTypeEquals)
+	public FileState(
+		TObject obj,
+		TEditType defaultEditType,
+		Func<TObject, byte[]> toBytes,
+		Func<TObject, TObject> deepCopy,
+		Func<TEditType, TEditType, bool> editTypeEquals,
+		Action<Action> savePromptAction)
 	{
 		_obj = obj;
 		_toBytes = toBytes;
 		_deepCopy = deepCopy;
 		_defaultEditType = defaultEditType;
 		_editTypeEquals = editTypeEquals;
+		_savePromptAction = savePromptAction;
 
 		byte[] fileBytes = _toBytes(obj);
 		_memoryMd5Hash = MD5.HashData(fileBytes);
@@ -79,7 +86,7 @@ public class FileState<TObject, TEditType>
 		if (!IsModified)
 			action();
 		else
-			PopupManager.ShowSaveSpawnsetPrompt(action);
+			_savePromptAction(action);
 	}
 
 	private void UpdateHistory(IReadOnlyList<HistoryEntry<TObject, TEditType>> history, int currentHistoryIndex)

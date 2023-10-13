@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.Ui.Popups;
 
 namespace DevilDaggersInfo.Tools.EditorFileState;
 
@@ -12,12 +13,14 @@ public static class FileStates
 		defaultEditType: SpawnsetEditType.Reset,
 		toBytes: s => s.ToBytes(),
 		deepCopy: s => s.DeepCopy(),
-		editTypeEquals: (a, b) => a == b);
+		editTypeEquals: (a, b) => a == b,
+		savePromptAction: PopupManager.ShowSaveSpawnsetPrompt);
 
 	public static FileState<ReplayBinary<LocalReplayBinaryHeader>, ReplayEditType> Replay { get; } = new(
 		obj: ReplayBinary<LocalReplayBinaryHeader>.CreateDefault(),
 		defaultEditType: ReplayEditType.Reset,
 		toBytes: r => r.Compile(),
 		deepCopy: _ => throw new NotImplementedException(),
-		editTypeEquals: (a, b) => a == b);
+		editTypeEquals: (a, b) => a == b,
+		savePromptAction: _ => throw new NotImplementedException());
 }
