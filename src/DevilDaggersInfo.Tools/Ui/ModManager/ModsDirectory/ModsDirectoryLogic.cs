@@ -1,9 +1,9 @@
 using DevilDaggersInfo.Core.Asset;
 using DevilDaggersInfo.Core.Mod;
-using DevilDaggersInfo.Core.Mod.Exceptions;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Settings;
+using System.Text;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 
@@ -30,7 +30,7 @@ public class ModsDirectoryLogic
 			string[] files = Directory.GetFiles(UserSettings.ModsDirectory);
 			foreach (string file in files)
 			{
-				_modFiles.Add(ReadModFile(file));
+				_modFiles.Add(ModFile.FromPath(file));
 			}
 
 			_modFiles = _modFiles.OrderBy(m => m.FileName).ToList();
@@ -40,40 +40,6 @@ public class ModsDirectoryLogic
 			PopupManager.ShowError("Error loading files in the mods directory.\n\n" + ex.Message);
 			Root.Log.Error(ex, "Error loading files in the mods directory.");
 		}
-
-		static ModFile ReadModFile(string filePath)
-		{
-			string fileName = Path.GetFileName(filePath);
-
-			long fileSize = 0;
-			try
-			{
-				using FileStream fs = new(filePath, FileMode.Open);
-				fileSize = fs.Length;
-				using BinaryReader reader = new(fs);
-				ModBinaryToc modBinaryToc = ModBinaryToc.FromReader(reader);
-
-				int prohibitedCount = modBinaryToc.Chunks.Count(c => AssetContainer.GetIsProhibited(c.AssetType, c.Name));
-				return new(fileName, GetModFileType(fileName), modBinaryToc.Type, modBinaryToc.Chunks.Count, prohibitedCount, fileSize);
-			}
-			catch (InvalidModBinaryException)
-			{
-				return new(fileName, ModFileType.Other, null, null, null, fileSize);
-			}
-			catch (Exception ex)
-			{
-				PopupManager.ShowError($"Error loading file '{filePath}'.\n\n" + ex.Message);
-				Root.Log.Error(ex, $"Error loading file '{filePath}'.");
-				return new(fileName, ModFileType.Error, null, null, null, fileSize);
-			}
-		}
-	}
-
-	private static ModFileType GetModFileType(string fileName)
-	{
-		return fileName.StartsWith("audio") || fileName.StartsWith("dd") ? ModFileType.EnabledMod :
-			fileName.StartsWith("_audio") || fileName.StartsWith("_dd") ? ModFileType.DisabledMod :
-			ModFileType.ModWithInvalidPrefix;
 	}
 
 	public void SortModFiles(uint sorting, bool sortAscending)
@@ -129,7 +95,7 @@ public class ModsDirectoryLogic
 			_modFiles.Insert(originalIndex, originalModFile with
 			{
 				FileName = NewFileName,
-				FileType = GetModFileType(NewFileName),
+				FileType = ModFile.GetFileType(NewFileName),
 			});
 		}
 
@@ -189,8 +155,50 @@ public class ModsDirectoryLogic
 			_modFiles.Insert(originalIndex, originalModFile with
 			{
 				FileName = newFileName,
-				FileType = GetModFileType(newFileName),
+				FileType = ModFile.GetFileType(newFileName),
 			});
 		}
+	}
+
+	public void ToggleProhibitedAssets(string fileName)
+	{
+		try
+		{
+			string path = Path.Combine(UserSettings.ModsDirectory, fileName);
+			using FileStream fs = new(path, FileMode.Open);
+			using BinaryReader reader = new(fs);
+			ModBinaryToc modBinaryToc = ModBinaryToc.FromReader(reader);
+
+			bool anyProhibited = modBinaryToc.Chunks.Any(c => AssetContainer.GetIsProhibited(c.AssetType, c.Name));
+			ModBinaryToc toggledToc = anyProhibited ? ModBinaryToc.DisableProhibitedAssets(modBinaryToc) : ModBinaryToc.EnableAllAssets(modBinaryToc);
+
+			fs.Seek(12, SeekOrigin.Begin); // Skip file header
+			foreach (ModBinaryChunk chunk in toggledToc.Chunks)
+			{
+				fs.Seek(sizeof(ushort), SeekOrigin.Current); // Skip asset type
+				fs.Write(Encoding.UTF8.GetBytes(chunk.Name));
+				fs.Seek(sizeof(byte), SeekOrigin.Current); // Skip null terminator
+				fs.Seek(sizeof(int) * 3, SeekOrigin.Current); // Skip offset, size, and unknown
+			}
+		}
+		catch (Exception ex)
+		{
+			Root.Log.Error(ex, $"Error toggling prohibited assets for file '{fileName}'.");
+			PopupManager.ShowError($"Error toggling prohibited assets for file '{fileName}'.\n\n" + ex.Message);
+		}
+
+		ModFile? originalModFile = _modFiles.Find(m => m.FileName == fileName);
+		if (originalModFile == null)
+		{
+			Root.Log.Warning("File with toggled assets does not exist in memory.");
+		}
+		else
+		{
+			int originalIndex = _modFiles.IndexOf(originalModFile);
+			_modFiles.Remove(originalModFile);
+			_modFiles.Insert(originalIndex, ModFile.FromPath(Path.Combine(UserSettings.ModsDirectory, fileName)));
+		}
+
+		ModPreviewWindow.LoadChunks();
 	}
 }

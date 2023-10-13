@@ -23,6 +23,7 @@ public static class ModManagerWindow
 				if (ImGui.BeginTabItem("Mods installation"))
 				{
 					ModsDirectoryWindow.Render();
+					ModPreviewWindow.Render();
 					ImGui.EndTabItem();
 				}
 

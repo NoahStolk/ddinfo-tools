@@ -10,8 +10,6 @@ namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 
 public static class ModsDirectoryWindow
 {
-	private static readonly ModsDirectoryLogic _logic = new();
-
 	private static bool _showEnabledMods = true;
 	private static bool _showDisabledMods = true;
 	private static bool _showModsWithInvalidPrefix = true;
@@ -20,9 +18,11 @@ public static class ModsDirectoryWindow
 
 	private static string? _renameErrorMessage;
 
+	public static ModsDirectoryLogic Logic { get; } = new();
+
 	public static void Initialize()
 	{
-		_logic.LoadModsDirectory();
+		Logic.LoadModsDirectory();
 	}
 
 	public static void Render()
@@ -38,7 +38,7 @@ public static class ModsDirectoryWindow
 			"""));
 
 		if (ImGui.Button("Reload"))
-			_logic.LoadModsDirectory();
+			Logic.LoadModsDirectory();
 
 		ImGui.Separator();
 
@@ -107,14 +107,14 @@ public static class ModsDirectoryWindow
 				uint sorting = sortsSpecs.Specs.ColumnUserID;
 				bool sortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
 
-				_logic.SortModFiles(sorting, sortAscending);
+				Logic.SortModFiles(sorting, sortAscending);
 
 				sortsSpecs.SpecsDirty = false;
 			}
 
-			for (int i = 0; i < _logic.ModFiles.Count; i++)
+			for (int i = 0; i < Logic.ModFiles.Count; i++)
 			{
-				ModFile modFile = _logic.ModFiles[i];
+				ModFile modFile = Logic.ModFiles[i];
 				if (!_showEnabledMods && modFile.FileType == ModFileType.EnabledMod ||
 				    !_showDisabledMods && modFile.FileType == ModFileType.DisabledMod ||
 				    !_showModsWithInvalidPrefix && modFile.FileType == ModFileType.ModWithInvalidPrefix ||
@@ -133,7 +133,7 @@ public static class ModsDirectoryWindow
 				if (ImGui.SmallButton(Inline.Span($"Rename##{i}")))
 				{
 					ImGui.OpenPopup(Inline.Span($"Rename##rename_mod_file_{i}"));
-					_logic.InitializeRename(modFile.FileName);
+					Logic.InitializeRename(modFile.FileName);
 					setFocus = true;
 				}
 
@@ -143,14 +143,14 @@ public static class ModsDirectoryWindow
 					if (setFocus)
 						ImGui.SetKeyboardFocusHere(0);
 
-					ImGui.InputText("##rename", ref _logic.NewFileName, 128);
+					ImGui.InputText("##rename", ref Logic.NewFileName, 128);
 
 					if (_renameErrorMessage != null)
 						ImGui.TextColored(Color.Red, _renameErrorMessage);
 
 					if (ImGui.Button("OK", new(128, 0)) || ImGuiUtils.IsEnterPressed())
 					{
-						_renameErrorMessage = _logic.RenameModFile();
+						_renameErrorMessage = Logic.RenameModFile();
 						if (_renameErrorMessage == null)
 							ImGui.CloseCurrentPopup();
 					}
@@ -164,18 +164,22 @@ public static class ModsDirectoryWindow
 					PopupManager.ShowQuestion(
 						"Delete mod file?",
 						$"Are you sure you want to delete the mod file '{modFile.FileName}'?",
-						() => _logic.DeleteModFile(modFile.FileName),
+						() => Logic.DeleteModFile(modFile.FileName),
 						() => { });
 				}
 
 				ImGui.SameLine();
 				ImGui.BeginDisabled(modFile.FileType is not ModFileType.EnabledMod and not ModFileType.DisabledMod);
 				if (ImGui.SmallButton(Inline.Span($"Toggle##{i}")))
-					_logic.ToggleModFile(modFile.FileName);
+					Logic.ToggleModFile(modFile.FileName);
 				ImGui.EndDisabled();
 
 				ImGui.SameLine();
-				ImGui.TextColored(GetColor(modFile.FileType), modFile.FileName);
+				ImGui.PushStyleColor(ImGuiCol.Text, GetColor(modFile.FileType));
+				bool temp = false;
+				if (ImGui.Selectable(modFile.FileName, ref temp, ImGuiSelectableFlags.SpanAllColumns))
+					ModPreviewWindow.SelectedFileName = modFile.FileName;
+				ImGui.PopStyleColor();
 
 				ImGui.TableNextColumn();
 				if (modFile.BinaryType.HasValue)
