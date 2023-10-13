@@ -15,16 +15,17 @@ public static class ModManagerWindow
 
 			if (ImGui.BeginTabBar("mod_manager"))
 			{
-				if (ImGui.BeginTabItem("Browse mods online"))
-				{
-					ImGui.EndTabItem();
-				}
-
-				if (ImGui.BeginTabItem("Mods installation"))
+				if (ImGui.BeginTabItem("Mods Folder"))
 				{
 					ModsDirectoryWindow.Render();
 					ModPreviewWindow.Render();
 					ModInstallationWindow.Render();
+					ImGui.EndTabItem();
+				}
+
+				if (ImGui.BeginTabItem("Install New Mods"))
+				{
+					ImGui.Text("Not implemented yet.");
 					ImGui.EndTabItem();
 				}
 

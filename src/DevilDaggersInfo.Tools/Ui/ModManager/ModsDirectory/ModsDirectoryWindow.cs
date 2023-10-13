@@ -44,6 +44,8 @@ public static class ModsDirectoryWindow
 		if (ImGui.BeginChild("table_child"))
 			RenderTable();
 
+		ImGui.EndChild(); // End table_child
+
 		static void CheckboxColored(ReadOnlySpan<char> label, Vector4 color, ref bool value, ReadOnlySpan<char> tooltip)
 		{
 			ImGui.PushStyleColor(ImGuiCol.Text, color);

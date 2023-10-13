@@ -134,7 +134,7 @@ public static class ModPreviewWindow
 		{
 			ImGui.TableSetupColumn("Asset name", ImGuiTableColumnFlags.DefaultSort, 256, 0);
 			ImGui.TableSetupColumn("Asset type", ImGuiTableColumnFlags.None, 128, 1);
-			ImGui.TableSetupColumn("Prohibited", ImGuiTableColumnFlags.None, 64, 2);
+			ImGui.TableSetupColumn("Prohibited", ImGuiTableColumnFlags.None, 72, 2);
 			ImGui.TableSetupColumn("Raw size", ImGuiTableColumnFlags.None, 64, 3);
 			ImGui.TableHeadersRow();
 
