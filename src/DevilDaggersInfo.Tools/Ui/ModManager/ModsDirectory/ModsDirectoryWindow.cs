@@ -154,11 +154,14 @@ public static class ModsDirectoryWindow
 				ImGui.SameLine();
 				if (ImGui.SmallButton(Inline.Span($"Delete##{i}")))
 				{
+					// Only capture the fileName variable when needed.
+					// If we use modFile.FileName directly in the onConfirm lambda, it will capture the variable every frame, which allocates a couple kilobytes of memory per frame.
+					string fileName = modFile.FileName;
 					PopupManager.ShowQuestion(
 						"Delete mod file?",
 						$"Are you sure you want to delete the mod file '{modFile.FileName}'?",
-						() => ModsDirectoryLogic.DeleteModFile(modFile.FileName),
-						() => { });
+						() => ModsDirectoryLogic.DeleteModFile(fileName),
+						static () => { });
 				}
 
 				ImGui.SameLine();

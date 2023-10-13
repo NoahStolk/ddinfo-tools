@@ -26,7 +26,7 @@ public sealed record ModFile(string FileName, ModFileType FileType, ModBinaryTyp
 			using BinaryReader reader = new(fs);
 			ModBinaryToc modBinaryToc = ModBinaryToc.FromReader(reader);
 
-			int prohibitedCount = modBinaryToc.Chunks.Count(c => AssetContainer.GetIsProhibited(c.AssetType, c.Name));
+			int prohibitedCount = modBinaryToc.Chunks.Count(c => AssetContainer.IsProhibited(c.AssetType, c.Name));
 			return new(fileName, GetFileType(fileName), modBinaryToc.Type, modBinaryToc.Chunks.Count, prohibitedCount, fileSize);
 		}
 		catch (InvalidModBinaryException)

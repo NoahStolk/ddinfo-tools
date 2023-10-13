@@ -75,7 +75,7 @@ public static class ModInstallationWindow
 		_effectiveAssets = _effectiveAssets.OrderByDescending(kvp => kvp.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
 		_activeAssets = _effectiveAssets.Sum(kvp => kvp.Value.Count(c => c.OverriddenByModFileName == null));
-		_activeProhibitedAssets = _effectiveAssets.Sum(kvp => kvp.Value.Count(c => c.OverriddenByModFileName == null && AssetContainer.GetIsProhibited(c.Chunk.AssetType, c.Chunk.Name)));
+		_activeProhibitedAssets = _effectiveAssets.Sum(kvp => kvp.Value.Count(c => c.OverriddenByModFileName == null && AssetContainer.IsProhibited(c.Chunk.AssetType, c.Chunk.Name)));
 	}
 
 	public static void Render()
@@ -123,8 +123,11 @@ public static class ModInstallationWindow
 			{
 				ImGui.Separator();
 				ImGui.TextColored(Color.Red, "Errors:");
-				foreach (string error in _errors)
+				for (int i = 0; i < _errors.Count; i++)
+				{
+					string error = _errors[i];
 					ImGui.Text(error);
+				}
 			}
 
 			RenderChunksTable();
@@ -178,7 +181,7 @@ public static class ModInstallationWindow
 						ImGui.TableNextColumn();
 						if (isOverridden)
 							ImGui.TextColored(new(1, 0.2f, 0.4f, 1), Inline.Span($"Overridden by {chunk.OverriddenByModFileName}"));
-						else if (AssetContainer.GetIsProhibited(chunk.Chunk.AssetType, chunk.Chunk.Name))
+						else if (AssetContainer.IsProhibited(chunk.Chunk.AssetType, chunk.Chunk.Name))
 							ImGui.TextColored(Color.Orange, "Prohibited");
 						else if (chunk.Chunk.Name.Any(char.IsUpper)) // TODO: Check if name exists in AssetContainer instead.
 							ImGui.TextColored(Color.Gray(0.4f), "Disabled");

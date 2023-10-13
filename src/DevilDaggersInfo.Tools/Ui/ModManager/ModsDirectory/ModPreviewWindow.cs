@@ -47,7 +47,7 @@ public static class ModPreviewWindow
 			ModBinaryToc modBinaryToc = ModBinaryToc.FromReader(reader);
 			_binaryType = modBinaryToc.Type;
 			_chunkCount = modBinaryToc.Chunks.Count;
-			_prohibitedChunkCount = modBinaryToc.Chunks.Count(c => AssetContainer.GetIsProhibited(c.AssetType, c.Name));
+			_prohibitedChunkCount = modBinaryToc.Chunks.Count(c => AssetContainer.IsProhibited(c.AssetType, c.Name));
 			_displayedChunks.Clear();
 			_displayedChunks.AddRange(modBinaryToc.Chunks);
 		}
@@ -148,7 +148,7 @@ public static class ModPreviewWindow
 				{
 					0 => sortAscending ? _displayedChunks.OrderBy(c => c.Name.ToLower()).ToList() : _displayedChunks.OrderByDescending(c => c.Name.ToLower()).ToList(),
 					1 => sortAscending ? _displayedChunks.OrderBy(c => c.AssetType).ToList() : _displayedChunks.OrderByDescending(c => c.AssetType).ToList(),
-					2 => sortAscending ? _displayedChunks.OrderBy(c => AssetContainer.GetIsProhibited(c.AssetType, c.Name)).ToList() : _displayedChunks.OrderByDescending(c => AssetContainer.GetIsProhibited(c.AssetType, c.Name)).ToList(),
+					2 => sortAscending ? _displayedChunks.OrderBy(c => AssetContainer.IsProhibited(c.AssetType, c.Name)).ToList() : _displayedChunks.OrderByDescending(c => AssetContainer.IsProhibited(c.AssetType, c.Name)).ToList(),
 					3 => sortAscending ? _displayedChunks.OrderBy(c => c.Size).ToList() : _displayedChunks.OrderByDescending(c => c.Size).ToList(),
 					_ => throw new InvalidOperationException($"Invalid sorting column '{sorting}'."),
 				};
@@ -167,7 +167,7 @@ public static class ModPreviewWindow
 				ImGui.TextColored(chunk.AssetType.GetColor(), EnumUtils.AssetTypeNames[chunk.AssetType]);
 
 				ImGui.TableNextColumn();
-				if (AssetContainer.GetIsProhibited(chunk.AssetType, chunk.Name))
+				if (AssetContainer.IsProhibited(chunk.AssetType, chunk.Name))
 					ImGui.TextColored(Color.Orange, "Prohibited");
 				else
 					ImGui.TextColored(Color.Green, "OK");

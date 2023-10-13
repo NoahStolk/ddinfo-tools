@@ -178,7 +178,7 @@ public static class ModsDirectoryLogic
 			using BinaryReader reader = new(fs);
 			ModBinaryToc modBinaryToc = ModBinaryToc.FromReader(reader);
 
-			bool anyProhibited = modBinaryToc.Chunks.Any(c => AssetContainer.GetIsProhibited(c.AssetType, c.Name));
+			bool anyProhibited = modBinaryToc.Chunks.Any(c => AssetContainer.IsProhibited(c.AssetType, c.Name));
 			ModBinaryToc toggledToc = anyProhibited ? ModBinaryToc.DisableProhibitedAssets(modBinaryToc) : ModBinaryToc.EnableAllAssets(modBinaryToc);
 
 			fs.Seek(12, SeekOrigin.Begin); // Skip file header
