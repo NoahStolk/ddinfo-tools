@@ -1,3 +1,5 @@
+using DevilDaggersInfo.Core.Asset;
+using DevilDaggersInfo.Core.Mod;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Spawnset.Extensions;
@@ -31,4 +33,10 @@ public static class EnumUtils
 
 	public static readonly IReadOnlyList<EventType> EventTypes = Enum.GetValues<EventType>();
 	public static readonly IReadOnlyDictionary<EventType, string> EventTypeNames = EventTypes.ToDictionary(et => et, et => et.ToString());
+
+	public static readonly IReadOnlyList<ModBinaryType> ModBinaryTypes = Enum.GetValues<ModBinaryType>();
+	public static readonly IReadOnlyDictionary<ModBinaryType, string> ModBinaryTypeNames = ModBinaryTypes.ToDictionary(mbt => mbt, mbt => mbt.ToString().ToLower());
+
+	public static readonly IReadOnlyList<AssetType> AssetTypes = Enum.GetValues<AssetType>();
+	public static readonly IReadOnlyDictionary<AssetType, string> AssetTypeNames = AssetTypes.ToDictionary(at => at, at => at.ToString());
 }

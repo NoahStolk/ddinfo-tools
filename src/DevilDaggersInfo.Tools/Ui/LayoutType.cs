@@ -8,4 +8,5 @@ public enum LayoutType
 	CustomLeaderboards,
 	ReplayEditor,
 	Practice,
+	ModManager,
 }

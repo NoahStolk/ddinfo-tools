@@ -3,6 +3,7 @@ using DevilDaggersInfo.Tools.Ui.Config;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 using DevilDaggersInfo.Tools.Ui.Main;
+using DevilDaggersInfo.Tools.Ui.ModManager;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.Practice.Main;
 using DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
@@ -34,6 +35,7 @@ public static class UiRenderer
 				LayoutType.CustomLeaderboards => Colors.CustomLeaderboards,
 				LayoutType.ReplayEditor => Colors.ReplayEditor,
 				LayoutType.Practice => Colors.Practice,
+				LayoutType.ModManager => Colors.ModManager,
 				_ => throw new ArgumentOutOfRangeException(nameof(value), value, null),
 			});
 		}
@@ -93,6 +95,9 @@ public static class UiRenderer
 				PracticeWindow.Render();
 				RunAnalysisWindow.Update(delta);
 				RunAnalysisWindow.Render();
+				break;
+			case LayoutType.ModManager:
+				ModManagerWindow.Render();
 				break;
 		}
 

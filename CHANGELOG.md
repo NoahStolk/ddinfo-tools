@@ -2,6 +2,27 @@
 
 ## [unreleased]
 
+### Mod Manager
+
+Added mod manager. You can now manage installed mods in the mods folder.
+
+#### Mods Folder Window
+
+- All files from the mods folder are displayed, including mod type, file size, and information about their prohibited assets.
+- The files can be filtered and sorted.
+- The files can be enabled, disabled, renamed, and deleted.
+
+#### Mod Preview Window
+
+- Mod file contents can be previewed. All assets are displayed, including their type, size, and whether they are prohibited.
+- Prohibited assets can be enabled and disabled.
+
+#### Mod Installation Window
+
+- A summary of the current mod installation is displayed.
+- All effective assets are displayed, including their type, size, and whether they are prohibited.
+- Whenever an asset is overridden by another mod, the mod that overrides it is displayed.
+
 ### Spawnset Editor
 
 - The spawnset editor now keeps track of unsaved changes and will ask you to save it when leaving the editor or opening a different spawnset.

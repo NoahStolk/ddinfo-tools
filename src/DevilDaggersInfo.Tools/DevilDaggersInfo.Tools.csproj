@@ -56,11 +56,27 @@
     </When>
   </Choose>
 
-  <ItemGroup>
-    <AssemblyAttribute Include="DevilDaggersInfo.Tools.BuildTimeAttribute">
-      <_Parameter1>$([System.DateTime]::UtcNow.ToString("yyyy-MM-dd HH:mm")) UTC</_Parameter1>
-    </AssemblyAttribute>
-  </ItemGroup>
+  <Choose>
+    <When Condition="'$(Configuration)' == 'Debug'">
+      <ItemGroup>
+        <AssemblyAttribute Include="DevilDaggersInfo.Tools.BuildTimeAttribute">
+          <!--
+          Do not use the current date in DEBUG builds.
+          Sometimes this error appears during runtime: DevilDaggersInfo.Tools.AssemblyInfo.cs(13, 12): [ENC0003] Updating 'attribute' requires restarting the application.
+          Not sure why that happens but it breaks hot reload.
+          -->
+          <_Parameter1>DEBUG BUILD</_Parameter1>
+        </AssemblyAttribute>
+      </ItemGroup>
+    </When>
+    <When Condition="'$(Configuration)' == 'Release'">
+      <ItemGroup>
+        <AssemblyAttribute Include="DevilDaggersInfo.Tools.BuildTimeAttribute">
+          <_Parameter1>$([System.DateTime]::UtcNow.ToString("yyyy-MM-dd HH:mm")) UTC</_Parameter1>
+        </AssemblyAttribute>
+      </ItemGroup>
+    </When>
+  </Choose>
 
   <ItemGroup Label="Trimming configuration">
     <TrimmerRootDescriptor Include="TrimmerRoots.xml" />
