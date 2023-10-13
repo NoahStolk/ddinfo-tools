@@ -82,7 +82,7 @@ public class ModsDirectoryLogic
 		{
 			0 => sortAscending ? _modFiles.OrderBy(m => m.FileName.ToLower()).ToList() : _modFiles.OrderByDescending(m => m.FileName.ToLower()).ToList(),
 			1 => sortAscending ? _modFiles.OrderBy(m => m.BinaryType).ToList() : _modFiles.OrderByDescending(m => m.BinaryType).ToList(),
-			2 => sortAscending ? _modFiles.OrderBy(m => m.ChunkCount).ToList() : _modFiles.OrderByDescending(m => m.ChunkCount).ToList(),
+			2 => sortAscending ? _modFiles.OrderBy(m => m.ProhibitedChunkCount).ToList() : _modFiles.OrderByDescending(m => m.ProhibitedChunkCount).ToList(),
 			3 => sortAscending ? _modFiles.OrderBy(m => m.FileSize).ToList() : _modFiles.OrderByDescending(m => m.FileSize).ToList(),
 			_ => throw new InvalidOperationException($"Invalid sorting column '{sorting}'."),
 		};

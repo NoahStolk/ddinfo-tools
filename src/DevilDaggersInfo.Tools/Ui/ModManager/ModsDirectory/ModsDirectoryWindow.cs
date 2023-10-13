@@ -71,7 +71,7 @@ public static class ModsDirectoryWindow
 		{
 			ImGui.TableSetupColumn("File name", ImGuiTableColumnFlags.DefaultSort, 256, 0);
 			ImGui.TableSetupColumn("Mod type", ImGuiTableColumnFlags.None, 128, 1);
-			ImGui.TableSetupColumn("Chunk count", ImGuiTableColumnFlags.None, 64, 2);
+			ImGui.TableSetupColumn("Prohibited", ImGuiTableColumnFlags.None, 64, 2);
 			ImGui.TableSetupColumn("File size", ImGuiTableColumnFlags.None, 64, 3);
 			ImGui.TableHeadersRow();
 
@@ -88,7 +88,13 @@ public static class ModsDirectoryWindow
 				{
 					0 => "The name of the file in the mods folder",
 					1 => "The mod type ('audio' or 'dd')",
-					2 => "The chunk count is typically the amount of game assets changed by the mod",
+					2 => """
+						Whether prohibited assets are included in the mod
+
+						Prohibited mods prevent scores of 1000 seconds or higher from being submitted to the official leaderboards.
+
+						It is completely safe to use these mods if you're not going for a 1000+ score.
+						""",
 					3 => "The mod's file size",
 					_ => string.Empty,
 				};
@@ -109,24 +115,19 @@ public static class ModsDirectoryWindow
 			for (int i = 0; i < _logic.ModFiles.Count; i++)
 			{
 				ModFile modFile = _logic.ModFiles[i];
-
-				if (!_showEnabledMods && modFile.FileType == ModFileType.EnabledMod)
+				if (!_showEnabledMods && modFile.FileType == ModFileType.EnabledMod ||
+				    !_showDisabledMods && modFile.FileType == ModFileType.DisabledMod ||
+				    !_showModsWithInvalidPrefix && modFile.FileType == ModFileType.ModWithInvalidPrefix ||
+				    !_showOtherFiles && modFile.FileType == ModFileType.Other ||
+				    !_showErrors && modFile.FileType == ModFileType.Error)
+				{
 					continue;
-
-				if (!_showDisabledMods && modFile.FileType == ModFileType.DisabledMod)
-					continue;
-
-				if (!_showModsWithInvalidPrefix && modFile.FileType == ModFileType.ModWithInvalidPrefix)
-					continue;
-
-				if (!_showOtherFiles && modFile.FileType == ModFileType.Other)
-					continue;
-
-				if (!_showErrors && modFile.FileType == ModFileType.Error)
-					continue;
+				}
 
 				ImGui.TableNextRow();
 				ImGui.TableNextColumn();
+
+				ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, modFile.FileType == ModFileType.EnabledMod ? 0x4400ff00U : 0x00000000);
 
 				bool setFocus = false;
 				if (ImGui.SmallButton(Inline.Span($"Rename##{i}")))
@@ -182,7 +183,15 @@ public static class ModsDirectoryWindow
 
 				ImGui.TableNextColumn();
 				if (modFile is { ChunkCount: not null, ProhibitedChunkCount: not null })
-					ColumnTextRight(Inline.Span($"{modFile.ProhibitedChunkCount.Value} / {modFile.ChunkCount.Value} prohibited"), modFile.ProhibitedChunkCount.Value > 0 ? Color.Orange : Color.Green);
+				{
+					if (modFile.ProhibitedChunkCount.Value > 0)
+						ImGui.TextColored(Color.Orange, Inline.Span($"Prohibited ({modFile.ProhibitedChunkCount.Value} of {modFile.ChunkCount.Value})"));
+					else
+						ImGui.TextColored(Color.Green, "OK");
+
+					if (ImGui.IsItemHovered())
+						ImGui.SetTooltip(Inline.Span($"{modFile.ProhibitedChunkCount.Value} out of {modFile.ChunkCount.Value} assets prohibited"));
+				}
 
 				ImGui.TableNextColumn();
 

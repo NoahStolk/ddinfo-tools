@@ -55,7 +55,7 @@ public static class SplitsChild
 					};
 					ImGui.TextColored(color, delta.HasValue ? Inline.Span(delta.Value, "+0;-0;+0") : "-");
 
-					ImGui.PopStyleColor();
+					ImGui.PopStyleColor(); // TODO: Remove?
 				}
 
 				ImGui.EndTable();
