@@ -78,7 +78,7 @@ public static class ModInstallationWindow
 
 	public static void Render()
 	{
-		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, new Vector2(640, 360));
+		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, new Vector2(768, 384));
 		if (ImGui.Begin("Mod Installation", ImGuiWindowFlags.NoCollapse))
 		{
 			ImGui.PopStyleVar();
@@ -135,19 +135,32 @@ public static class ModInstallationWindow
 
 	private static void RenderChunksTable()
 	{
-		foreach (KeyValuePair<string, List<EffectiveChunk>> kvp in _effectiveAssets)
+		if (ImGui.BeginTable("Mods", 2, ImGuiTableFlags.Borders))
 		{
-			ImGui.SetNextItemOpen(true, ImGuiCond.Appearing);
-			if (ImGui.TreeNode(kvp.Key))
+			ImGui.TableSetupColumn("Mod file", ImGuiTableColumnFlags.WidthFixed, 192);
+			ImGui.TableSetupColumn("Assets", ImGuiTableColumnFlags.WidthStretch);
+			ImGui.TableHeadersRow();
+
+			foreach (KeyValuePair<string, List<EffectiveChunk>> kvp in _effectiveAssets)
 			{
-				if (ImGui.BeginTable(Inline.Span($"Chunks {kvp.Key}"), 3, ImGuiTableFlags.None))
+				ImGui.TableNextRow();
+
+				ImGui.TableNextColumn();
+				ImGui.Text(kvp.Key);
+
+				ImGui.TableNextColumn();
+				if (ImGui.BeginTable("Chunks", 3, ImGuiTableFlags.None))
 				{
-					ImGui.TableSetupColumn("Asset name", ImGuiTableColumnFlags.WidthFixed, 96);
+					ImGui.TableSetupColumn("Asset name", ImGuiTableColumnFlags.WidthFixed, 128);
 					ImGui.TableSetupColumn("Asset type", ImGuiTableColumnFlags.WidthFixed, 96);
 					ImGui.TableSetupColumn("Status", ImGuiTableColumnFlags.WidthStretch);
 
 					for (int i = 0; i < kvp.Value.Count; i++)
 					{
+						ImGui.PushStyleColor(ImGuiCol.Border, i % 2 == 0 ? Color.Invisible : Color.White);
+
+						ImGui.TableNextRow();
+
 						EffectiveChunk chunk = kvp.Value[i];
 						bool isOverridden = chunk.OverriddenByModFileName != null;
 						Vector4 disabledColor = Color.Gray(0.4f);
@@ -163,15 +176,19 @@ public static class ModInstallationWindow
 							ImGui.TextColored(new(1, 0.2f, 0.4f, 1), Inline.Span($"Overridden by {chunk.OverriddenByModFileName}"));
 						else if (AssetContainer.GetIsProhibited(chunk.Chunk.AssetType, chunk.Chunk.Name))
 							ImGui.TextColored(Color.Orange, "Prohibited");
+						else if (chunk.Chunk.Name.Any(char.IsUpper)) // TODO: Check if name exists in AssetContainer instead.
+							ImGui.TextColored(Color.Gray(0.4f), "Disabled");
 						else
 							ImGui.TextColored(Color.Green, "OK");
+
+						ImGui.PopStyleColor();
 					}
 				}
 
 				ImGui.EndTable();
-
-				ImGui.TreePop();
 			}
+
+			ImGui.EndTable();
 		}
 	}
 
