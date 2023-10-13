@@ -92,6 +92,30 @@ public class ModsDirectoryLogic
 		return null;
 	}
 
+	public void DeleteModFile(string fileName)
+	{
+		string path = Path.Combine(UserSettings.ModsDirectory, fileName);
+
+		try
+		{
+			File.Delete(path);
+		}
+		catch (Exception ex)
+		{
+			Root.Log.Error(ex, $"Error deleting file '{fileName}'.");
+			PopupManager.ShowError($"Error deleting file '{fileName}'.\n\n" + ex.Message);
+		}
+
+		ModFile? modFile = _modFiles.Find(m => m.FileName == fileName);
+		if (modFile == null)
+		{
+			Root.Log.Warning("Deleted file does not exist in memory.");
+			return;
+		}
+
+		_modFiles.Remove(modFile);
+	}
+
 	private static ModFile ReadModFile(string filePath)
 	{
 		string fileName = Path.GetFileName(filePath);

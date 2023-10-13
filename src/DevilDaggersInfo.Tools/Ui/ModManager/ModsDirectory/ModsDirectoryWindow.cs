@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
+using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
@@ -154,6 +155,16 @@ public static class ModsDirectoryWindow
 					}
 
 					ImGui.EndPopup();
+				}
+
+				ImGui.SameLine();
+				if (ImGui.SmallButton(Inline.Span($"Delete##{i}")))
+				{
+					PopupManager.ShowQuestion(
+						"Delete mod file?",
+						$"Are you sure you want to delete the mod file '{modFile.FileName}'?",
+						() => _logic.DeleteModFile(modFile.FileName),
+						() => { });
 				}
 
 				ImGui.SameLine();

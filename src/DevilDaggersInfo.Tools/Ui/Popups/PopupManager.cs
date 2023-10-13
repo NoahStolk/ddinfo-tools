@@ -22,7 +22,7 @@ public static class PopupManager
 
 	public static void ShowSaveSpawnsetPrompt(Action action)
 	{
-		_openPopups.Add(new Question(
+		ShowQuestion(
 			"Save spawnset?",
 			"Do you want to save the current spawnset?",
 			() =>
@@ -30,7 +30,12 @@ public static class PopupManager
 				SpawnsetEditorMenu.SaveSpawnset();
 				action();
 			},
-			action));
+			action);
+	}
+
+	public static void ShowQuestion(string title, string text, Action onConfirm, Action onDeny)
+	{
+		_openPopups.Add(new Question(title, text, onConfirm, onDeny));
 	}
 
 	public static void Render()
