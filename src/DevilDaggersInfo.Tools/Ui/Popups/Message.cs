@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
@@ -19,6 +20,6 @@ public class Message : Popup
 		ImGui.Spacing();
 		ImGui.Separator();
 		ImGui.Spacing();
-		return ImGui.Button("OK", new(120, 0));
+		return ImGui.Button("OK", new(120, 0)) || ImGuiUtils.IsEnterPressed();
 	}
 }

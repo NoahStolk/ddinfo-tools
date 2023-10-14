@@ -39,6 +39,7 @@ Added mod manager. You can now manage installed mods in the mods folder.
 - Improved configuration layout.
 - Fixed numpad enter key not registering.
 - Pressing ESC now leaves the configuration window.
+- Pressing ENTER now closes the message box.
 
 ## [0.9.1.0] - 2023-09-13
 
