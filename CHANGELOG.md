@@ -37,6 +37,8 @@ Added mod manager. You can now manage installed mods in the mods folder.
 ### Replay Editor
 
 - Improve replay editor UI.
+- Fixed Thorn spawn events not being displayed correctly.
+- Fixed not showing error when injecting replay into game memory fails.
 
 ### Other
 
