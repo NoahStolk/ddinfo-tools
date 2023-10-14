@@ -1,33 +1,16 @@
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
-using DevilDaggersInfo.Core.Wiki;
-using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
 public sealed class ThornSpawnEvents : IEventTypeRenderer<ThornSpawnEvent>
 {
-	public static void Render(IReadOnlyList<(int Index, ThornSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes, IReadOnlyList<EventColumn> columns)
+	public static void Render(int index, ThornSpawnEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
-		ImGui.TextColored(EnemiesV3_2.Thorn.Color, EventTypeRendererUtils.EventTypeNames[EventType.ThornSpawn]);
-
-		if (ImGui.BeginTable(EventTypeRendererUtils.EventTypeNames[EventType.ThornSpawn], columns.Count, EventTypeRendererUtils.EventTableFlags))
-		{
-			EventTypeRendererUtils.SetupColumns(columns);
-
-			for (int i = 0; i < events.Count; i++)
-			{
-				ImGui.TableNextRow();
-
-				(int index, ThornSpawnEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnInputInt(index, nameof(ThornSpawnEvent.A), ref e.A);
-				EventTypeRendererUtils.NextColumnInputVector3(index, nameof(ThornSpawnEvent.Position), ref e.Position, "%.2f");
-				EventTypeRendererUtils.NextColumnInputFloat(index, nameof(ThornSpawnEvent.RotationInRadians), ref e.RotationInRadians, "%.2f");
-			}
-
-			ImGui.EndTable();
-		}
+		EventTypeRendererUtils.NextColumnText(Inline.Span(index));
+		EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
+		EventTypeRendererUtils.NextColumnInputInt(index, nameof(ThornSpawnEvent.A), ref e.A);
+		EventTypeRendererUtils.NextColumnInputVector3(index, nameof(ThornSpawnEvent.Position), ref e.Position, "%.2f");
+		EventTypeRendererUtils.NextColumnInputFloat(index, nameof(ThornSpawnEvent.RotationInRadians), ref e.RotationInRadians, "%.2f");
 	}
 }

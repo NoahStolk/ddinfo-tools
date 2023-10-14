@@ -1,33 +1,17 @@
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
-using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
 public sealed class TransmuteEvents : IEventTypeRenderer<TransmuteEvent>
 {
-	public static void Render(IReadOnlyList<(int Index, TransmuteEvent Event)> events, IReadOnlyList<EntityType> entityTypes, IReadOnlyList<EventColumn> columns)
+	public static void Render(int index, TransmuteEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
-		ImGui.TextColored(new(0.75f, 0, 0, 1), EventTypeRendererUtils.EventTypeNames[EventType.Transmute]);
-
-		if (ImGui.BeginTable(EventTypeRendererUtils.EventTypeNames[EventType.Transmute], columns.Count, EventTypeRendererUtils.EventTableFlags))
-		{
-			EventTypeRendererUtils.SetupColumns(columns);
-
-			for (int i = 0; i < events.Count; i++)
-			{
-				ImGui.TableNextRow();
-
-				(int index, TransmuteEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(TransmuteEvent.A), ref e.A);
-				EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(TransmuteEvent.B), ref e.B);
-				EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(TransmuteEvent.C), ref e.C);
-				EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(TransmuteEvent.D), ref e.D);
-			}
-
-			ImGui.EndTable();
-		}
+		EventTypeRendererUtils.NextColumnText(Inline.Span(index));
+		EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
+		EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(TransmuteEvent.A), ref e.A);
+		EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(TransmuteEvent.B), ref e.B);
+		EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(TransmuteEvent.C), ref e.C);
+		EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(TransmuteEvent.D), ref e.D);
 	}
 }

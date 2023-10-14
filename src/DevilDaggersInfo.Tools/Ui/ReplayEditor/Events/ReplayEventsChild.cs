@@ -97,9 +97,11 @@ public static class ReplayEventsChild
 
 				ImGui.BeginDisabled(!_showEvents);
 
+				const int checkboxesPerRow = 7;
+
 				if (ImGui.BeginChild("EventTypeFilteringLeft", new(256, filteringHeight)))
 				{
-					for (int i = 0; i < EnumUtils.EventTypes.Count / 2; i++)
+					for (int i = 0; i < checkboxesPerRow; i++)
 						EventTypeFilterCheckbox(i);
 				}
 
@@ -109,7 +111,7 @@ public static class ReplayEventsChild
 
 				if (ImGui.BeginChild("EventTypeFilteringRight", new(256, filteringHeight)))
 				{
-					for (int i = EnumUtils.EventTypes.Count / 2; i < EnumUtils.EventTypes.Count; i++)
+					for (int i = checkboxesPerRow; i < checkboxesPerRow * 2; i++)
 						EventTypeFilterCheckbox(i);
 				}
 
@@ -118,6 +120,11 @@ public static class ReplayEventsChild
 				static void EventTypeFilterCheckbox(int i)
 				{
 					EventType eventType = EnumUtils.EventTypes[i];
+
+					// These are always enabled.
+					if (eventType is EventType.Death or EventType.End)
+						return;
+
 					bool temp = _eventTypeEnabled[eventType];
 					if (ImGui.Checkbox(EventTypeRendererUtils.EventTypeNames[eventType], ref temp))
 						_eventTypeEnabled[eventType] = temp;
@@ -241,18 +248,7 @@ public static class ReplayEventsChild
 				where TRenderer : IEventTypeRenderer<TEvent>
 			{
 				if (_eventTypeEnabled[eventType] && events.Count > 0)
-					TRenderer.Render(events, entityTypes, columns);
-			}
-
-			static void RenderEvent<TEvent, TRenderer>(
-				IReadOnlyList<(int Index, TEvent Event)> events,
-				IReadOnlyList<EntityType> entityTypes,
-				IReadOnlyList<EventColumn> columns)
-				where TEvent : IEvent
-				where TRenderer : IEventTypeRenderer<TEvent>
-			{
-				if (events.Count > 0)
-					TRenderer.Render(events, entityTypes, columns);
+					EventTypeRendererUtils.RenderTable<TEvent, TRenderer>(EventTypeRendererUtils.GetEventTypeColor(eventType), eventType, events, entityTypes, columns);
 			}
 
 			// Enemy spawn events
@@ -274,8 +270,8 @@ public static class ReplayEventsChild
 			RenderEvents<TransmuteEvent, TransmuteEvents>(EventType.Transmute, _eventCache.TransmuteEvents, eventsData.EntityTypes, EventColumns.ColumnsTransmute);
 
 			// Final events
-			RenderEvent<DeathEvent, DeathEvents>(_eventCache.DeathEvents, eventsData.EntityTypes, EventColumns.ColumnsDeath);
-			RenderEvent<EndEvent, EndEvents>(_eventCache.EndEvents, eventsData.EntityTypes, EventColumns.ColumnsEnd);
+			RenderEvents<DeathEvent, DeathEvents>(EventType.Death, _eventCache.DeathEvents, eventsData.EntityTypes, EventColumns.ColumnsDeath);
+			RenderEvents<EndEvent, EndEvents>(EventType.End, _eventCache.EndEvents, eventsData.EntityTypes, EventColumns.ColumnsEnd);
 		}
 
 		ImGui.EndTable();

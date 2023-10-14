@@ -1,6 +1,9 @@
 using DevilDaggersInfo.Core.Replay.Events.Enums;
+using DevilDaggersInfo.Core.Replay.Events.Interfaces;
 using DevilDaggersInfo.Core.Replay.Extensions;
 using DevilDaggersInfo.Core.Replay.Numerics;
+using DevilDaggersInfo.Core.Wiki;
+using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using System.Numerics;
@@ -26,6 +29,8 @@ public static class EventTypeRendererUtils
 		[EventType.Gem] = "Gem events",
 		[EventType.Hit] = "Hit events",
 		[EventType.Transmute] = "Transmute events",
+		[EventType.Death] = "Death events",
+		[EventType.End] = "End events",
 	};
 
 	public static ImGuiTableFlags EventTableFlags => ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX;
@@ -39,6 +44,28 @@ public static class EventTypeRendererUtils
 		}
 
 		ImGui.TableHeadersRow();
+	}
+
+	public static void RenderTable<TEvent, TRenderer>(Vector4 color, EventType eventType, IReadOnlyList<(int Index, TEvent Event)> events, IReadOnlyList<EntityType> entityTypes, IReadOnlyList<EventColumn> columns)
+		where TEvent : IEvent
+		where TRenderer : IEventTypeRenderer<TEvent>
+	{
+		ImGui.TextColored(color, EventTypeNames[eventType]);
+
+		if (ImGui.BeginTable(EventTypeNames[eventType], columns.Count, EventTableFlags))
+		{
+			SetupColumns(columns);
+
+			for (int i = 0; i < events.Count; i++)
+			{
+				ImGui.TableNextRow();
+
+				(int index, TEvent e) = events[i];
+				TRenderer.Render(index, e, entityTypes);
+			}
+
+			ImGui.EndTable();
+		}
 	}
 
 	public static void NextColumnText(ReadOnlySpan<char> text)
@@ -122,5 +149,25 @@ public static class EventTypeRendererUtils
 	private static ReadOnlySpan<char> EditLabel(ReadOnlySpan<char> label, int index)
 	{
 		return Inline.Span($"##{label}{index}");
+	}
+
+	public static Vector4 GetEventTypeColor(EventType eventType)
+	{
+		return eventType switch
+		{
+			EventType.BoidSpawn => EnemiesV3_2.Skull4.Color,
+			EventType.DaggerSpawn => Color.Purple,
+			EventType.Death or EventType.End or EventType.Gem => Color.Red,
+			EventType.EntityOrientation or EventType.EntityPosition or EventType.EntityTarget => Color.Yellow,
+			EventType.Hit => Color.Orange,
+			EventType.LeviathanSpawn => EnemiesV3_2.Leviathan.Color,
+			EventType.PedeSpawn => EnemiesV3_2.Gigapede.Color,
+			EventType.SpiderEggSpawn => EnemiesV3_2.SpiderEgg1.Color,
+			EventType.SpiderSpawn => EnemiesV3_2.Spider2.Color,
+			EventType.SquidSpawn => EnemiesV3_2.Squid3.Color,
+			EventType.ThornSpawn => EnemiesV3_2.Thorn.Color,
+			EventType.Transmute => new(0.75f, 0, 0, 1),
+			_ => Color.White,
+		};
 	}
 }

@@ -2,7 +2,7 @@ using DevilDaggersInfo.Core.Replay.Events.Enums;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public interface IEventTypeRenderer<T>
+public interface IEventTypeRenderer<in T>
 {
-	static abstract void Render(IReadOnlyList<(int Index, T Event)> events, IReadOnlyList<EntityType> entityTypes, IReadOnlyList<EventColumn> columns);
+	static abstract void Render(int index, T e, IReadOnlyList<EntityType> entityTypes);
 }

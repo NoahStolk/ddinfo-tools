@@ -1,38 +1,21 @@
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
-using DevilDaggersInfo.Core.Wiki;
-using ImGuiNET;
 using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
 public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEvent>
 {
-	public static void Render(IReadOnlyList<(int Index, BoidSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes, IReadOnlyList<EventColumn> columns)
+	public static void Render(int index, BoidSpawnEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
-		ImGui.TextColored(EnemiesV3_2.Skull4.Color, EventTypeRendererUtils.EventTypeNames[EventType.BoidSpawn]);
-
-		if (ImGui.BeginTable(EventTypeRendererUtils.EventTypeNames[EventType.BoidSpawn], columns.Count, EventTypeRendererUtils.EventTableFlags))
-		{
-			EventTypeRendererUtils.SetupColumns(columns);
-
-			for (int i = 0; i < events.Count; i++)
-			{
-				ImGui.TableNextRow();
-
-				(int index, BoidSpawnEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.EntityColumn(entityTypes, e.SpawnerEntityId);
-				EventTypeRendererUtils.NextColumnText(GetBoidTypeText(e.BoidType)); // TODO: Make this a dropdown.
-				EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(BoidSpawnEvent.Position), ref e.Position);
-				EventTypeRendererUtils.NextColumnInputInt16Mat3x3(index, nameof(BoidSpawnEvent.Orientation), ref e.Orientation);
-				EventTypeRendererUtils.NextColumnInputVector3(index, nameof(BoidSpawnEvent.Velocity), ref e.Velocity, "%.2f");
-				EventTypeRendererUtils.NextColumnInputFloat(index, nameof(BoidSpawnEvent.Speed), ref e.Speed, "%.2f");
-			}
-
-			ImGui.EndTable();
-		}
+		EventTypeRendererUtils.NextColumnText(Inline.Span(index));
+		EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
+		EventTypeRendererUtils.EntityColumn(entityTypes, e.SpawnerEntityId);
+		EventTypeRendererUtils.NextColumnText(GetBoidTypeText(e.BoidType)); // TODO: Make this a dropdown.
+		EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(BoidSpawnEvent.Position), ref e.Position);
+		EventTypeRendererUtils.NextColumnInputInt16Mat3x3(index, nameof(BoidSpawnEvent.Orientation), ref e.Orientation);
+		EventTypeRendererUtils.NextColumnInputVector3(index, nameof(BoidSpawnEvent.Velocity), ref e.Velocity, "%.2f");
+		EventTypeRendererUtils.NextColumnInputFloat(index, nameof(BoidSpawnEvent.Speed), ref e.Speed, "%.2f");
 	}
 
 	private static ReadOnlySpan<char> GetBoidTypeText(BoidType boidType) => boidType switch
