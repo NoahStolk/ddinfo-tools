@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -7,15 +8,24 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
 public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEvent>
 {
-	private static readonly string[] _daggerTypeNamesArray = EnumUtils.DaggerTypeNames.Values.ToArray();
+	private static readonly string[] _daggerTypeNamesArray =
+	{
+		"Lvl1",
+		"Lvl2",
+		"Lvl3",
+		"Lvl3 Homing",
+		"Lvl4",
+		"Lvl4 Homing",
+		"Lvl4 Splash",
+	};
 
 	public static IReadOnlyList<EventColumn> EventColumns { get; } = new List<EventColumn>
 	{
 		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
 		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Type", ImGuiTableColumnFlags.WidthFixed, 128),
+		new("Type", ImGuiTableColumnFlags.WidthFixed, 96),
 		new("?", ImGuiTableColumnFlags.WidthFixed, 32),
-		new("Position", ImGuiTableColumnFlags.None, 128),
+		new("Position", ImGuiTableColumnFlags.WidthFixed, 128),
 		new("Orientation", ImGuiTableColumnFlags.None, 196),
 		new("Shot/Rapid", ImGuiTableColumnFlags.WidthFixed, 80),
 	};

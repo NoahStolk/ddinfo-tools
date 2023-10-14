@@ -196,8 +196,12 @@ public static class EventTypeRendererUtils
 		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
 
 		ImGui.TableNextColumn();
-		ImGui.Text(Inline.Span(entityId));
+		ReadOnlySpan<char> label = Inline.Span(entityId);
+		float labelWidth = ImGui.CalcTextSize(label).X;
+		ImGui.Text(label);
 		ImGui.SameLine();
+
+		ImGui.SetCursorPosX(ImGui.GetCursorPosX() + (40 - labelWidth));
 		ImGui.Text(" (");
 		ImGui.SameLine();
 		ImGui.TextColored(entityType.GetColor(), entityType.HasValue ? _entityTypeShortNames[entityType.Value] : "???");
@@ -218,6 +222,7 @@ public static class EventTypeRendererUtils
 		ImGui.InputInt(EditLabel(fieldName, eventIndex), ref entityId, 0, 0);
 		ImGui.PopItemWidth();
 		ImGui.SameLine();
+
 		ImGui.Text(" (");
 		ImGui.SameLine();
 		ImGui.TextColored(entityType.GetColor(), entityType.HasValue ? _entityTypeShortNames[entityType.Value] : "???");
