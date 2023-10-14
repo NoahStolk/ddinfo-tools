@@ -77,13 +77,19 @@ public static class EventTypeRendererUtils
 	public static void NextColumnInputInt(int eventIndex, ReadOnlySpan<char> fieldName, ref int value)
 	{
 		ImGui.TableNextColumn();
+
+		ImGui.PushItemWidth(-1);
 		ImGui.InputInt(EditLabel(fieldName, eventIndex), ref value, 0, 0);
+		ImGui.PopItemWidth();
 	}
 
 	public static void NextColumnInputFloat(int eventIndex, ReadOnlySpan<char> fieldName, ref float value, ReadOnlySpan<char> format = default)
 	{
 		ImGui.TableNextColumn();
+
+		ImGui.PushItemWidth(-1);
 		ImGui.InputFloat(EditLabel(fieldName, eventIndex), ref value, 0, 0, format);
+		ImGui.PopItemWidth();
 	}
 
 	public static void NextColumnInputVector3(int eventIndex, ReadOnlySpan<char> fieldName, ref Vector3 value, ReadOnlySpan<char> format = default)
@@ -122,10 +128,12 @@ public static class EventTypeRendererUtils
 		ImGui.PopItemWidth();
 	}
 
-	public static void NextColumnCheckbox(int eventIndex, ReadOnlySpan<char> fieldName, ref bool value)
+	public static void NextColumnCheckbox(int eventIndex, ReadOnlySpan<char> fieldName, ref bool value, ReadOnlySpan<char> trueText, ReadOnlySpan<char> falseText)
 	{
 		ImGui.TableNextColumn();
 		ImGui.Checkbox(EditLabel(fieldName, eventIndex), ref value);
+		ImGui.SameLine();
+		ImGui.Text(value ? trueText : falseText);
 	}
 
 	public static void EntityColumn(IReadOnlyList<EntityType> entityTypes, int entityId)
