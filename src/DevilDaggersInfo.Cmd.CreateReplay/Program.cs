@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Cmd.CreateReplay;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
-using DevilDaggersInfo.Core.Replay.Events.Interfaces;
 
 // File.WriteAllBytes(@"C:\Users\NOAH\AppData\Roaming\DevilDaggers\replays\TEST.ddreplay", new RandomReplayWriter().Write().Compile());
 // File.WriteAllBytes(@"C:\Users\NOAH\AppData\Roaming\DevilDaggers\replays\skull-2-analysis-done_113.72-xvlv-0be4d3b8[2d05a83a].ddreplay", new Skull2TargetVisualizerReplayWriter().Write().Compile());
@@ -16,7 +15,7 @@ ReplayBinary<LocalReplayBinaryHeader> original = new(File.ReadAllBytes(@"C:\User
 int tick = 0;
 int consecutiveHoldCount = 0;
 int consecutiveNoneCount = 0;
-foreach (IInputsEvent e in original.EventsData.Events.OfType<IInputsEvent>())
+foreach (InputsEvent e in original.EventsData.Events.OfType<InputsEvent>())
 {
 	if (e.Shoot == ShootType.None)
 	{

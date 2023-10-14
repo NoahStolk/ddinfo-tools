@@ -15,140 +15,6 @@ public static class ReplayEventsChild
 {
 	private static readonly EventCache _eventCache = new();
 
-	private static readonly List<EventColumn> _columnsBoidSpawn = new()
-	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Spawner Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Type", ImGuiTableColumnFlags.None, 128),
-		new("Position", ImGuiTableColumnFlags.None, 128),
-		new("Orientation", ImGuiTableColumnFlags.None, 196),
-		new("Velocity", ImGuiTableColumnFlags.None, 128),
-		new("Speed", ImGuiTableColumnFlags.None, 128),
-	};
-
-	private static readonly List<EventColumn> _columnsLeviathanSpawn = new()
-	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("?", ImGuiTableColumnFlags.None, 128),
-	};
-
-	private static readonly List<EventColumn> _columnsPedeSpawn = new()
-	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Type", ImGuiTableColumnFlags.None, 128),
-		new("?", ImGuiTableColumnFlags.None, 128),
-		new("Position", ImGuiTableColumnFlags.None, 128),
-		new("?", ImGuiTableColumnFlags.None, 128),
-		new("Orientation", ImGuiTableColumnFlags.None, 128),
-	};
-
-	private static readonly List<EventColumn> _columnsSpiderEggSpawn = new()
-	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Spawner Entity Id", ImGuiTableColumnFlags.None, 196),
-		new("Position", ImGuiTableColumnFlags.None, 128),
-		new("Target Position", ImGuiTableColumnFlags.None, 128),
-	};
-
-	private static readonly List<EventColumn> _columnsSpiderSpawn = new()
-	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Type", ImGuiTableColumnFlags.None, 128),
-		new("?", ImGuiTableColumnFlags.None, 128),
-		new("Position", ImGuiTableColumnFlags.None, 128),
-	};
-
-	private static readonly List<EventColumn> _columnsSquidSpawn = new()
-	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Type", ImGuiTableColumnFlags.None, 128),
-		new("?", ImGuiTableColumnFlags.None, 128),
-		new("Position", ImGuiTableColumnFlags.None, 128),
-		new("Direction", ImGuiTableColumnFlags.None, 128),
-		new("Rotation", ImGuiTableColumnFlags.None, 128),
-	};
-
-	private static readonly List<EventColumn> _columnsThornSpawn = new()
-	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Type", ImGuiTableColumnFlags.None, 128),
-		new("?", ImGuiTableColumnFlags.None, 128),
-		new("Position", ImGuiTableColumnFlags.None, 128),
-	};
-
-	private static readonly List<EventColumn> _columnsDaggerSpawn = new()
-	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Type", ImGuiTableColumnFlags.None, 128),
-		new("?", ImGuiTableColumnFlags.None, 128),
-		new("Position", ImGuiTableColumnFlags.None, 128),
-		new("Orientation", ImGuiTableColumnFlags.None, 196),
-		new("Shot / Rapid", ImGuiTableColumnFlags.None, 128),
-	};
-
-	private static readonly List<EventColumn> _columnsEntityOrientation = new()
-	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Orientation", ImGuiTableColumnFlags.None, 196),
-	};
-
-	private static readonly List<EventColumn> _columnsEntityPosition = new()
-	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Position", ImGuiTableColumnFlags.None, 128),
-	};
-
-	private static readonly List<EventColumn> _columnsEntityTarget = new()
-	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Target Position", ImGuiTableColumnFlags.None, 128),
-	};
-
-	private static readonly List<EventColumn> _columnsGem = new()
-	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-	};
-
-	private static readonly List<EventColumn> _columnsHit = new()
-	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Entity Id A", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Entity Id B", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("User Data", ImGuiTableColumnFlags.WidthFixed, 128),
-	};
-
-	private static readonly List<EventColumn> _columnsTransmute = new()
-	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("?", ImGuiTableColumnFlags.None, 128),
-		new("?", ImGuiTableColumnFlags.None, 128),
-		new("?", ImGuiTableColumnFlags.None, 128),
-		new("?", ImGuiTableColumnFlags.None, 128),
-	};
-
-	private static readonly List<EventColumn> _columnsDeath = new()
-	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Death Type", ImGuiTableColumnFlags.WidthFixed, 160),
-	};
-
-	private static readonly List<EventColumn> _columnsEnd = new()
-	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-	};
-
 	private static readonly Dictionary<EventType, bool> _eventTypeEnabled = Enum.GetValues<EventType>().ToDictionary(et => et, _ => true);
 
 	private static int _startTick;
@@ -279,151 +145,174 @@ public static class ReplayEventsChild
 
 		if (ImGui.BeginChild("ReplayEventsChild", new(0, 0)))
 		{
-			if (ImGui.BeginTable("ReplayEventsTable", 3, ImGuiTableFlags.BordersInnerH))
-			{
-				ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 128);
-				ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.WidthFixed, 320);
-				ImGui.TableSetupColumn("Events", ImGuiTableColumnFlags.None, 384);
-				ImGui.TableHeadersRow();
-
-				for (int i = _startTick; i < Math.Min(_startTick + maxTicks, eventsData.TickCount); i++)
-				{
-					int offset = eventsData.EventOffsetsPerTick[i];
-					int count = eventsData.EventOffsetsPerTick[i + 1] - offset;
-
-					IInputsEvent? inputsEvent = null;
-					_eventCache.Clear();
-					bool showTick = !_onlyShowTicksWithEnabledEvents;
-					for (int j = offset; j < offset + count; j++)
-					{
-						IEvent @event = eventsData.Events[j];
-						if (@event is IInputsEvent ie)
-						{
-							inputsEvent = ie;
-						}
-						else
-						{
-							_eventCache.Add(j, @event);
-
-							if (!showTick)
-							{
-								EventType? eventType = @event switch
-								{
-									BoidSpawnEvent => EventType.BoidSpawn,
-									LeviathanSpawnEvent => EventType.LeviathanSpawn,
-									PedeSpawnEvent => EventType.PedeSpawn,
-									SpiderEggSpawnEvent => EventType.SpiderEggSpawn,
-									SpiderSpawnEvent => EventType.SpiderSpawn,
-									SquidSpawnEvent => EventType.SquidSpawn,
-									ThornSpawnEvent => EventType.ThornSpawn,
-									DaggerSpawnEvent => EventType.DaggerSpawn,
-									EntityOrientationEvent => EventType.EntityOrientation,
-									EntityPositionEvent => EventType.EntityPosition,
-									EntityTargetEvent => EventType.EntityTarget,
-									GemEvent => EventType.Gem,
-									HitEvent => EventType.Hit,
-									TransmuteEvent => EventType.Transmute,
-									_ => null,
-								};
-								if (eventType.HasValue && _eventTypeEnabled[eventType.Value])
-									showTick = true;
-							}
-						}
-					}
-
-					if (!showTick)
-						continue;
-
-					ImGui.TableNextRow();
-
-					ImGui.TableNextColumn();
-					ImGui.Text(Inline.Span($"{TimeUtils.TickToTime(i, startTime):0.0000} ({i})"));
-					ImGui.TableNextColumn();
-					if (inputsEvent != null)
-						RenderInputsEvent(inputsEvent);
-					else
-						ImGui.Text("End of inputs");
-
-					ImGui.TableNextColumn();
-
-					if (!_showEvents)
-						continue;
-
-					static void RenderEvents<TEvent, TRenderer>(
-						EventType eventType,
-						IReadOnlyList<(int Index, TEvent Event)> events,
-						IReadOnlyList<EntityType> entityTypes,
-						IReadOnlyList<EventColumn> columns)
-						where TEvent : IEvent
-						where TRenderer : IEventTypeRenderer<TEvent>
-					{
-						if (_eventTypeEnabled[eventType] && events.Count > 0)
-							TRenderer.Render(events, entityTypes, columns);
-					}
-
-					static void RenderEvent<TEvent, TRenderer>(
-						IReadOnlyList<(int Index, TEvent Event)> events,
-						IReadOnlyList<EntityType> entityTypes,
-						IReadOnlyList<EventColumn> columns)
-						where TEvent : IEvent
-						where TRenderer : IEventTypeRenderer<TEvent>
-					{
-						if (events.Count > 0)
-							TRenderer.Render(events, entityTypes, columns);
-					}
-
-					// Enemy spawn events
-					RenderEvents<BoidSpawnEvent, BoidSpawnEvents>(EventType.BoidSpawn, _eventCache.BoidSpawnEvents, eventsData.EntityTypes, _columnsBoidSpawn);
-					RenderEvents<LeviathanSpawnEvent, LeviathanSpawnEvents>(EventType.LeviathanSpawn, _eventCache.LeviathanSpawnEvents, eventsData.EntityTypes, _columnsLeviathanSpawn);
-					RenderEvents<PedeSpawnEvent, PedeSpawnEvents>(EventType.PedeSpawn, _eventCache.PedeSpawnEvents, eventsData.EntityTypes, _columnsPedeSpawn);
-					RenderEvents<SpiderEggSpawnEvent, SpiderEggSpawnEvents>(EventType.SpiderEggSpawn, _eventCache.SpiderEggSpawnEvents, eventsData.EntityTypes, _columnsSpiderEggSpawn);
-					RenderEvents<SpiderSpawnEvent, SpiderSpawnEvents>(EventType.SpiderSpawn, _eventCache.SpiderSpawnEvents, eventsData.EntityTypes, _columnsSpiderSpawn);
-					RenderEvents<SquidSpawnEvent, SquidSpawnEvents>(EventType.SquidSpawn, _eventCache.SquidSpawnEvents, eventsData.EntityTypes, _columnsSquidSpawn);
-					RenderEvents<ThornSpawnEvent, ThornSpawnEvents>(EventType.ThornSpawn, _eventCache.ThornSpawnEvents, eventsData.EntityTypes, _columnsThornSpawn);
-
-					// Other events
-					RenderEvents<DaggerSpawnEvent, DaggerSpawnEvents>(EventType.DaggerSpawn, _eventCache.DaggerSpawnEvents, eventsData.EntityTypes, _columnsDaggerSpawn);
-					RenderEvents<EntityOrientationEvent, EntityOrientationEvents>(EventType.EntityOrientation, _eventCache.EntityOrientationEvents, eventsData.EntityTypes, _columnsEntityOrientation);
-					RenderEvents<EntityPositionEvent, EntityPositionEvents>(EventType.EntityPosition, _eventCache.EntityPositionEvents, eventsData.EntityTypes, _columnsEntityPosition);
-					RenderEvents<EntityTargetEvent, EntityTargetEvents>(EventType.EntityTarget, _eventCache.EntityTargetEvents, eventsData.EntityTypes, _columnsEntityTarget);
-					RenderEvents<GemEvent, GemEvents>(EventType.Gem, _eventCache.GemEvents, eventsData.EntityTypes, _columnsGem);
-					RenderEvents<HitEvent, HitEvents>(EventType.Hit, _eventCache.HitEvents, eventsData.EntityTypes, _columnsHit);
-					RenderEvents<TransmuteEvent, TransmuteEvents>(EventType.Transmute, _eventCache.TransmuteEvents, eventsData.EntityTypes, _columnsTransmute);
-
-					// Final events
-					RenderEvent<DeathEvent, DeathEvents>(_eventCache.DeathEvents, eventsData.EntityTypes, _columnsDeath);
-					RenderEvent<EndEvent, EndEvents>(_eventCache.EndEvents, eventsData.EntityTypes, _columnsEnd);
-				}
-
-				ImGui.EndTable();
-			}
+			RenderEventsTable(eventsData, startTime, maxTicks);
 		}
 
 		ImGui.EndChild(); // ReplayEventsChild
 	}
 
-	private static void RenderInputsEvent(IInputsEvent ie)
+	private static void RenderEventsTable(ReplayEventsData eventsData, float startTime, int maxTicks)
 	{
-		ImGui.TextColored(ie.Forward ? Color.Red : Color.White, "W");
-		ImGui.SameLine();
-		ImGui.TextColored(ie.Left ? Color.Red : Color.White, "A");
-		ImGui.SameLine();
-		ImGui.TextColored(ie.Backward ? Color.Red : Color.White, "S");
-		ImGui.SameLine();
-		ImGui.TextColored(ie.Right ? Color.Red : Color.White, "D");
-		ImGui.SameLine();
-		ImGui.TextColored(GetJumpTypeColor(ie.Jump), "[Space]");
-		ImGui.SameLine();
-		ImGui.TextColored(GetShootTypeColor(ie.Shoot), "[LMB]");
-		ImGui.SameLine();
-		ImGui.TextColored(GetShootTypeColor(ie.ShootHoming), "[RMB]");
-		ImGui.SameLine();
-		ImGui.TextColored(ie.MouseX == 0 ? Color.White : Color.Red, Inline.Span($"X:{ie.MouseX}"));
-		ImGui.SameLine();
-		ImGui.TextColored(ie.MouseY == 0 ? Color.White : Color.Red, Inline.Span($"Y:{ie.MouseY}"));
+		if (!ImGui.BeginTable("ReplayEventsTable", 3, ImGuiTableFlags.BordersInnerH))
+			return;
 
-		if (ie is InitialInputsEvent initial)
-			ImGui.TextColored(Color.White, Inline.Span($"Look Speed: {initial.LookSpeed}"));
+		ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 128);
+		ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.WidthFixed, 320);
+		ImGui.TableSetupColumn("Events", ImGuiTableColumnFlags.None, 384);
+		ImGui.TableHeadersRow();
+
+		for (int i = _startTick; i < Math.Min(_startTick + maxTicks, eventsData.TickCount); i++)
+		{
+			int offset = eventsData.EventOffsetsPerTick[i];
+			int count = eventsData.EventOffsetsPerTick[i + 1] - offset;
+
+			// TODO: Refactor using discriminated unions if they ever get added to C#.
+			InputsEvent? inputsE = null;
+			InitialInputsEvent? initInputsE = null;
+			_eventCache.Clear();
+			bool showTick = !_onlyShowTicksWithEnabledEvents;
+			for (int j = offset; j < offset + count; j++)
+			{
+				IEvent @event = eventsData.Events[j];
+				if (@event is InputsEvent ie)
+				{
+					inputsE = ie;
+				}
+				else if (@event is InitialInputsEvent iie)
+				{
+					initInputsE = iie;
+				}
+				else
+				{
+					_eventCache.Add(j, @event);
+
+					if (!showTick)
+					{
+						EventType? eventType = @event switch
+						{
+							BoidSpawnEvent => EventType.BoidSpawn,
+							LeviathanSpawnEvent => EventType.LeviathanSpawn,
+							PedeSpawnEvent => EventType.PedeSpawn,
+							SpiderEggSpawnEvent => EventType.SpiderEggSpawn,
+							SpiderSpawnEvent => EventType.SpiderSpawn,
+							SquidSpawnEvent => EventType.SquidSpawn,
+							ThornSpawnEvent => EventType.ThornSpawn,
+							DaggerSpawnEvent => EventType.DaggerSpawn,
+							EntityOrientationEvent => EventType.EntityOrientation,
+							EntityPositionEvent => EventType.EntityPosition,
+							EntityTargetEvent => EventType.EntityTarget,
+							GemEvent => EventType.Gem,
+							HitEvent => EventType.Hit,
+							TransmuteEvent => EventType.Transmute,
+							_ => null,
+						};
+						if (eventType.HasValue && _eventTypeEnabled[eventType.Value])
+							showTick = true;
+					}
+				}
+			}
+
+			if (!showTick)
+				continue;
+
+			ImGui.TableNextRow();
+
+			ImGui.TableNextColumn();
+			ImGui.Text(Inline.Span($"{TimeUtils.TickToTime(i, startTime):0.0000} ({i})"));
+			ImGui.TableNextColumn();
+			if (inputsE != null)
+				RenderInputsEvent(inputsE.Value.Left, inputsE.Value.Right, inputsE.Value.Forward, inputsE.Value.Backward, inputsE.Value.Jump, inputsE.Value.Shoot, inputsE.Value.ShootHoming, inputsE.Value.MouseX, inputsE.Value.MouseY, null);
+			else if (initInputsE != null)
+				RenderInputsEvent(initInputsE.Value.Left, initInputsE.Value.Right, initInputsE.Value.Forward, initInputsE.Value.Backward, initInputsE.Value.Jump, initInputsE.Value.Shoot, initInputsE.Value.ShootHoming, initInputsE.Value.MouseX, initInputsE.Value.MouseY, initInputsE.Value.LookSpeed);
+			else
+				ImGui.Text("End of inputs");
+
+			ImGui.TableNextColumn();
+
+			if (!_showEvents)
+				continue;
+
+			static void RenderEvents<TEvent, TRenderer>(
+				EventType eventType,
+				IReadOnlyList<(int Index, TEvent Event)> events,
+				IReadOnlyList<EntityType> entityTypes,
+				IReadOnlyList<EventColumn> columns)
+				where TEvent : IEvent
+				where TRenderer : IEventTypeRenderer<TEvent>
+			{
+				if (_eventTypeEnabled[eventType] && events.Count > 0)
+					TRenderer.Render(events, entityTypes, columns);
+			}
+
+			static void RenderEvent<TEvent, TRenderer>(
+				IReadOnlyList<(int Index, TEvent Event)> events,
+				IReadOnlyList<EntityType> entityTypes,
+				IReadOnlyList<EventColumn> columns)
+				where TEvent : IEvent
+				where TRenderer : IEventTypeRenderer<TEvent>
+			{
+				if (events.Count > 0)
+					TRenderer.Render(events, entityTypes, columns);
+			}
+
+			// Enemy spawn events
+			RenderEvents<BoidSpawnEvent, BoidSpawnEvents>(EventType.BoidSpawn, _eventCache.BoidSpawnEvents, eventsData.EntityTypes, EventColumns.ColumnsBoidSpawn);
+			RenderEvents<LeviathanSpawnEvent, LeviathanSpawnEvents>(EventType.LeviathanSpawn, _eventCache.LeviathanSpawnEvents, eventsData.EntityTypes, EventColumns.ColumnsLeviathanSpawn);
+			RenderEvents<PedeSpawnEvent, PedeSpawnEvents>(EventType.PedeSpawn, _eventCache.PedeSpawnEvents, eventsData.EntityTypes, EventColumns.ColumnsPedeSpawn);
+			RenderEvents<SpiderEggSpawnEvent, SpiderEggSpawnEvents>(EventType.SpiderEggSpawn, _eventCache.SpiderEggSpawnEvents, eventsData.EntityTypes, EventColumns.ColumnsSpiderEggSpawn);
+			RenderEvents<SpiderSpawnEvent, SpiderSpawnEvents>(EventType.SpiderSpawn, _eventCache.SpiderSpawnEvents, eventsData.EntityTypes, EventColumns.ColumnsSpiderSpawn);
+			RenderEvents<SquidSpawnEvent, SquidSpawnEvents>(EventType.SquidSpawn, _eventCache.SquidSpawnEvents, eventsData.EntityTypes, EventColumns.ColumnsSquidSpawn);
+			RenderEvents<ThornSpawnEvent, ThornSpawnEvents>(EventType.ThornSpawn, _eventCache.ThornSpawnEvents, eventsData.EntityTypes, EventColumns.ColumnsThornSpawn);
+
+			// Other events
+			RenderEvents<DaggerSpawnEvent, DaggerSpawnEvents>(EventType.DaggerSpawn, _eventCache.DaggerSpawnEvents, eventsData.EntityTypes, EventColumns.ColumnsDaggerSpawn);
+			RenderEvents<EntityOrientationEvent, EntityOrientationEvents>(EventType.EntityOrientation, _eventCache.EntityOrientationEvents, eventsData.EntityTypes, EventColumns.ColumnsEntityOrientation);
+			RenderEvents<EntityPositionEvent, EntityPositionEvents>(EventType.EntityPosition, _eventCache.EntityPositionEvents, eventsData.EntityTypes, EventColumns.ColumnsEntityPosition);
+			RenderEvents<EntityTargetEvent, EntityTargetEvents>(EventType.EntityTarget, _eventCache.EntityTargetEvents, eventsData.EntityTypes, EventColumns.ColumnsEntityTarget);
+			RenderEvents<GemEvent, GemEvents>(EventType.Gem, _eventCache.GemEvents, eventsData.EntityTypes, EventColumns.ColumnsGem);
+			RenderEvents<HitEvent, HitEvents>(EventType.Hit, _eventCache.HitEvents, eventsData.EntityTypes, EventColumns.ColumnsHit);
+			RenderEvents<TransmuteEvent, TransmuteEvents>(EventType.Transmute, _eventCache.TransmuteEvents, eventsData.EntityTypes, EventColumns.ColumnsTransmute);
+
+			// Final events
+			RenderEvent<DeathEvent, DeathEvents>(_eventCache.DeathEvents, eventsData.EntityTypes, EventColumns.ColumnsDeath);
+			RenderEvent<EndEvent, EndEvents>(_eventCache.EndEvents, eventsData.EntityTypes, EventColumns.ColumnsEnd);
+		}
+
+		ImGui.EndTable();
+	}
+
+	private static void RenderInputsEvent(
+		bool left,
+		bool right,
+		bool forward,
+		bool backward,
+		JumpType jump,
+		ShootType shoot,
+		ShootType shootHoming,
+		short mouseX,
+		short mouseY,
+		float? lookSpeed)
+	{
+		ImGui.TextColored(forward ? Color.Red : Color.White, "W");
+		ImGui.SameLine();
+		ImGui.TextColored(left ? Color.Red : Color.White, "A");
+		ImGui.SameLine();
+		ImGui.TextColored(backward ? Color.Red : Color.White, "S");
+		ImGui.SameLine();
+		ImGui.TextColored(right ? Color.Red : Color.White, "D");
+		ImGui.SameLine();
+		ImGui.TextColored(GetJumpTypeColor(jump), "[Space]");
+		ImGui.SameLine();
+		ImGui.TextColored(GetShootTypeColor(shoot), "[LMB]");
+		ImGui.SameLine();
+		ImGui.TextColored(GetShootTypeColor(shootHoming), "[RMB]");
+		ImGui.SameLine();
+		ImGui.TextColored(mouseX == 0 ? Color.White : Color.Red, Inline.Span($"X:{mouseX}"));
+		ImGui.SameLine();
+		ImGui.TextColored(mouseY == 0 ? Color.White : Color.Red, Inline.Span($"Y:{mouseY}"));
+
+		if (lookSpeed.HasValue)
+			ImGui.TextColored(Color.White, Inline.Span($"Look Speed: {lookSpeed.Value}"));
 
 		static Color GetJumpTypeColor(JumpType jumpType) => jumpType switch
 		{
