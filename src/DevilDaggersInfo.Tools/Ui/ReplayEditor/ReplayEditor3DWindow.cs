@@ -1,5 +1,7 @@
+using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Scenes;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using ImGuiNET;
 using System.Numerics;
 
@@ -8,6 +10,8 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 public static class ReplayEditor3DWindow
 {
 	private static readonly FramebufferData _framebufferData = new();
+
+	private static float _time;
 
 	private static ArenaScene? _arenaScene;
 
@@ -18,6 +22,19 @@ public static class ReplayEditor3DWindow
 		_arenaScene = new(static () => FileStates.Replay.Object.Header.Spawnset, false, false);
 	}
 
+	public static void Reset()
+	{
+		_time = 0;
+	}
+
+	public static void Update(float delta)
+	{
+		if (_time < FileStates.Replay.Object.Header.Time)
+			_time += delta;
+
+		ArenaScene.CurrentTick = TimeUtils.TimeToTick(_time, 0);
+	}
+
 	public static void Render(float delta)
 	{
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, Constants.MinWindowSize / 2);
@@ -26,12 +43,23 @@ public static class ReplayEditor3DWindow
 			if (ImGui.IsMouseDown(ImGuiMouseButton.Right) && ImGui.IsWindowHovered())
 				ImGui.SetWindowFocus();
 
-			float textHeight = ImGui.CalcTextSize(StringResources.ReplaySimulator3D).Y;
+			ImGui.Text(StringResources.ReplaySimulator3D);
+			ImGui.SliderFloat("Time", ref _time, 0, FileStates.Replay.Object.Header.Time, "%.4f", ImGuiSliderFlags.NoInput);
 
-			Vector2 framebufferSize = ImGui.GetWindowSize() - new Vector2(16, 48 + textHeight);
+			PlayerInputSnapshot snapshot = default;
+			if (ArenaScene.CurrentTick < ArenaScene.ReplaySimulation?.InputSnapshots.Count)
+				snapshot = ArenaScene.ReplaySimulation.InputSnapshots[ArenaScene.CurrentTick];
+
+			Vector2 origin = ImGui.GetCursorScreenPos();
+			ReplayInputs.Render(origin, snapshot);
+
+			const float framebufferYOffset = 96;
+			const float framebufferYSizeDecrement = 276;
+
+			Vector2 framebufferSize = ImGui.GetWindowSize() - new Vector2(16, framebufferYSizeDecrement);
 			_framebufferData.ResizeIfNecessary((int)framebufferSize.X, (int)framebufferSize.Y);
 
-			Vector2 cursorScreenPos = ImGui.GetCursorScreenPos() + new Vector2(0, textHeight);
+			Vector2 cursorScreenPos = ImGui.GetCursorScreenPos() + new Vector2(0, framebufferYOffset);
 			ArenaScene.Camera.FramebufferOffset = cursorScreenPos;
 
 			bool isWindowFocused = ImGui.IsWindowFocused();
@@ -40,8 +68,6 @@ public static class ReplayEditor3DWindow
 
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 			drawList.AddFramebufferImage(_framebufferData, cursorScreenPos, cursorScreenPos + new Vector2(_framebufferData.Width, _framebufferData.Height));
-
-			ImGui.Text(StringResources.ReplaySimulator3D);
 		}
 
 		ImGui.End(); // End 3D Replay Viewer

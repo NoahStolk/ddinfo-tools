@@ -34,6 +34,10 @@ Added mod manager. You can now manage installed mods in the mods folder.
 - Fixed not clearing "View replay" buttons when selecting a different leaderboard.
 - Added "Current spawnset" text to the displayed leaderboard if that spawnset is currently active.
 
+### Replay Editor
+
+- Improve replay editor UI.
+
 ### Other
 
 - Improved configuration layout.
