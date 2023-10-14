@@ -21,7 +21,7 @@ The new tools are currently in development. The new app is a complete rewrite of
 ![Spawnset editor](images/spawnset-editor-2.png)
 ![Spawnset editor](images/spawnset-editor-3.png)
 
-### Replay editor (viewer for now)
+### Replay editor
 
 ![Replay editor](images/replay-editor.png)
 
