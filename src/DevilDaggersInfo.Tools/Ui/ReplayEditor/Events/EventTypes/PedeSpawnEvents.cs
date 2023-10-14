@@ -13,8 +13,8 @@ public sealed class PedeSpawnEvents : IEventTypeRenderer<PedeSpawnEvent>
 	{
 		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
 		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Type", ImGuiTableColumnFlags.None, 128),
-		new("?", ImGuiTableColumnFlags.None, 128),
+		new("Type", ImGuiTableColumnFlags.WidthFixed, 128),
+		new("?", ImGuiTableColumnFlags.WidthFixed, 32),
 		new("Position", ImGuiTableColumnFlags.None, 128),
 		new("?", ImGuiTableColumnFlags.None, 128),
 		new("Orientation", ImGuiTableColumnFlags.None, 128),

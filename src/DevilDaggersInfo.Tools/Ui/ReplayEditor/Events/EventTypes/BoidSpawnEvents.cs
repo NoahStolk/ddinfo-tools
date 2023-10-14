@@ -14,7 +14,7 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEvent>
 		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
 		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
 		new("Spawner Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Type", ImGuiTableColumnFlags.None, 128),
+		new("Type", ImGuiTableColumnFlags.WidthFixed, 128),
 		new("Position", ImGuiTableColumnFlags.None, 128),
 		new("Orientation", ImGuiTableColumnFlags.None, 196),
 		new("Velocity", ImGuiTableColumnFlags.None, 128),

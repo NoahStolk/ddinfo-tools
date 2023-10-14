@@ -10,7 +10,7 @@ public sealed class LeviathanSpawnEvents : IEventTypeRenderer<LeviathanSpawnEven
 	{
 		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
 		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("?", ImGuiTableColumnFlags.None, 128),
+		new("?", ImGuiTableColumnFlags.WidthFixed, 32),
 	};
 
 	public static void Render(int index, LeviathanSpawnEvent e, IReadOnlyList<EntityType> entityTypes)
