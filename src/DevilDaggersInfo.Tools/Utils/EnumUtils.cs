@@ -39,4 +39,16 @@ public static class EnumUtils
 
 	public static readonly IReadOnlyList<AssetType> AssetTypes = Enum.GetValues<AssetType>();
 	public static readonly IReadOnlyDictionary<AssetType, string> AssetTypeNames = AssetTypes.ToDictionary(at => at, at => at.ToString());
+
+	public static readonly IReadOnlyList<BoidType> BoidTypes = Enum.GetValues<BoidType>();
+	public static readonly IReadOnlyDictionary<BoidType, string> BoidTypeNames = BoidTypes.ToDictionary(bt => bt, bt => bt.ToString());
+
+	public static readonly IReadOnlyList<PedeType> PedeTypes = Enum.GetValues<PedeType>();
+	public static readonly IReadOnlyDictionary<PedeType, string> PedeTypeNames = PedeTypes.ToDictionary(pt => pt, pt => pt.ToString());
+
+	public static readonly IReadOnlyList<SpiderType> SpiderTypes = Enum.GetValues<SpiderType>();
+	public static readonly IReadOnlyDictionary<SpiderType, string> SpiderTypeNames = SpiderTypes.ToDictionary(st => st, st => st.ToString());
+
+	public static readonly IReadOnlyList<SquidType> SquidTypes = Enum.GetValues<SquidType>();
+	public static readonly IReadOnlyDictionary<SquidType, string> SquidTypeNames = SquidTypes.ToDictionary(st => st, st => st.ToString());
 }

@@ -33,9 +33,9 @@ public static class EventTypeRendererUtils
 		[EventType.End] = "End events",
 	};
 
-	public static ImGuiTableFlags EventTableFlags => ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX;
+	private static ImGuiTableFlags EventTableFlags => ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX;
 
-	public static void SetupColumns(IReadOnlyList<EventColumn> columns)
+	private static void SetupColumns(IReadOnlyList<EventColumn> columns)
 	{
 		for (int i = 0; i < columns.Count; i++)
 		{
@@ -72,6 +72,31 @@ public static class EventTypeRendererUtils
 	{
 		ImGui.TableNextColumn();
 		ImGui.Text(text);
+	}
+
+	public static void NextColumnInputEnum<TEnum>(int eventIndex, ReadOnlySpan<char> fieldName, ref TEnum value, IReadOnlyList<TEnum> values, string[] names)
+		where TEnum : Enum
+	{
+		ImGui.TableNextColumn();
+
+		ImGui.PushItemWidth(-1);
+		int intValue = Convert.ToInt32(value);
+
+		int index = 0;
+		for (int i = 0; i < values.Count; i++)
+		{
+			// TODO: This allocates memory.
+			if (Convert.ToInt32(values[i]) == intValue)
+			{
+				index = i;
+				break;
+			}
+		}
+
+		if (ImGui.Combo(EditLabel(fieldName, eventIndex), ref index, names, values.Count))
+			value = values[index];
+
+		ImGui.PopItemWidth();
 	}
 
 	public static void NextColumnInputInt(int eventIndex, ReadOnlySpan<char> fieldName, ref int value)
@@ -144,6 +169,26 @@ public static class EventTypeRendererUtils
 
 		ImGui.TableNextColumn();
 		ImGui.Text(Inline.Span(entityId));
+		ImGui.SameLine();
+		ImGui.Text(" (");
+		ImGui.SameLine();
+		ImGui.TextColored(entityType.GetColor(), entityType.HasValue ? EnumUtils.EntityTypeNames[entityType.Value] : "???");
+		ImGui.SameLine();
+		ImGui.Text(")");
+
+		ImGui.PopStyleVar();
+	}
+
+	public static void EditableEntityColumn(int eventIndex, ReadOnlySpan<char> fieldName, IReadOnlyList<EntityType> entityTypes, ref int entityId)
+	{
+		EntityType? entityType = entityId >= 0 && entityId < entityTypes.Count ? entityTypes[entityId] : null;
+
+		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
+
+		ImGui.TableNextColumn();
+		ImGui.PushItemWidth(60);
+		ImGui.InputInt(EditLabel(fieldName, eventIndex), ref entityId, 0, 0);
+		ImGui.PopItemWidth();
 		ImGui.SameLine();
 		ImGui.Text(" (");
 		ImGui.SameLine();

@@ -8,8 +8,8 @@ public sealed class HitEvents : IEventTypeRenderer<HitEvent>
 	public static void Render(int index, HitEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
 		EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-		EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityIdA);
-		EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityIdB);
+		EventTypeRendererUtils.EditableEntityColumn(index, nameof(HitEvent.EntityIdA), entityTypes, ref e.EntityIdA);
+		EventTypeRendererUtils.EditableEntityColumn(index, nameof(HitEvent.EntityIdB), entityTypes, ref e.EntityIdB);
 		EventTypeRendererUtils.NextColumnInputInt(index, nameof(HitEvent.UserData), ref e.UserData);
 	}
 }
