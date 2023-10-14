@@ -22,7 +22,7 @@ public sealed class EntityPositionEvents : IEventTypeRenderer<EntityPositionEven
 				(int index, EntityPositionEvent e) = events[i];
 				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Position));
+				EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(EntityPositionEvent.Position), ref e.Position);
 			}
 
 			ImGui.EndTable();

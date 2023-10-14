@@ -23,7 +23,7 @@ public sealed class HitEvents : IEventTypeRenderer<HitEvent>
 				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityIdA);
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityIdB);
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.UserData));
+				EventTypeRendererUtils.NextColumnInputInt(index, nameof(HitEvent.UserData), ref e.UserData);
 			}
 
 			ImGui.EndTable();

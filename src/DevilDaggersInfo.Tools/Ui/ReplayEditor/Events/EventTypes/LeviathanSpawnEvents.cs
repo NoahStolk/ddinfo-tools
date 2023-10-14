@@ -22,7 +22,7 @@ public sealed class LeviathanSpawnEvents : IEventTypeRenderer<LeviathanSpawnEven
 				(int index, LeviathanSpawnEvent e) = events[i];
 				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.A));
+				EventTypeRendererUtils.NextColumnInputInt(index, nameof(LeviathanSpawnEvent.A), ref e.A);
 			}
 
 			ImGui.EndTable();

@@ -22,9 +22,9 @@ public sealed class ThornSpawnEvents : IEventTypeRenderer<ThornSpawnEvent>
 				(int index, ThornSpawnEvent e) = events[i];
 				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.A));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Position, "0.00"));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.RotationInRadians, "0.00"));
+				EventTypeRendererUtils.NextColumnInputInt(index, nameof(ThornSpawnEvent.A), ref e.A);
+				EventTypeRendererUtils.NextColumnInputVector3(index, nameof(ThornSpawnEvent.Position), ref e.Position, "%.2f");
+				EventTypeRendererUtils.NextColumnInputFloat(index, nameof(ThornSpawnEvent.RotationInRadians), ref e.RotationInRadians, "%.2f");
 			}
 
 			ImGui.EndTable();

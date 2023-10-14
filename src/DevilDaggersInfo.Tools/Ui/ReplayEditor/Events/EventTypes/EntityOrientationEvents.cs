@@ -22,7 +22,7 @@ public sealed class EntityOrientationEvents : IEventTypeRenderer<EntityOrientati
 				(int index, EntityOrientationEvent e) = events[i];
 				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Orientation));
+				EventTypeRendererUtils.NextColumnInputInt16Mat3x3(index, nameof(EntityOrientationEvent.Orientation), ref e.Orientation);
 			}
 
 			ImGui.EndTable();

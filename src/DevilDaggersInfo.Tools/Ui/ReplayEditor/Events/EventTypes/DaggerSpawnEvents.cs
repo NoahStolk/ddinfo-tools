@@ -23,11 +23,11 @@ public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEvent>
 				(int index, DaggerSpawnEvent e) = events[i];
 				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnText(EnumUtils.DaggerTypeNames[e.DaggerType]);
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.A));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Position));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Orientation));
-				EventTypeRendererUtils.NextColumnText(e.IsShot ? "Shot" : "Rapid");
+				EventTypeRendererUtils.NextColumnText(EnumUtils.DaggerTypeNames[e.DaggerType]); // TODO: Make this a dropdown.
+				EventTypeRendererUtils.NextColumnInputInt(index, nameof(DaggerSpawnEvent.A), ref e.A);
+				EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(DaggerSpawnEvent.Position), ref e.Position);
+				EventTypeRendererUtils.NextColumnInputInt16Mat3x3(index, nameof(DaggerSpawnEvent.Orientation), ref e.Orientation);
+				EventTypeRendererUtils.NextColumnCheckbox(index, nameof(DaggerSpawnEvent.IsShot), ref e.IsShot);
 			}
 
 			ImGui.EndTable();

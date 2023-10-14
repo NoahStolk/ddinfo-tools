@@ -22,9 +22,9 @@ public sealed class SpiderEggSpawnEvents : IEventTypeRenderer<SpiderEggSpawnEven
 				(int index, SpiderEggSpawnEvent e) = events[i];
 				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.EntityColumn(entityTypes, e.SpawnerEntityId);
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Position, "0.00"));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.TargetPosition, "0.00"));
+				EventTypeRendererUtils.NextColumnInputInt(index, nameof(SpiderEggSpawnEvent.SpawnerEntityId), ref e.SpawnerEntityId);
+				EventTypeRendererUtils.NextColumnInputVector3(index, nameof(SpiderEggSpawnEvent.Position), ref e.Position, "%.2f");
+				EventTypeRendererUtils.NextColumnInputVector3(index, nameof(SpiderEggSpawnEvent.TargetPosition), ref e.TargetPosition, "%.2f");
 			}
 
 			ImGui.EndTable();

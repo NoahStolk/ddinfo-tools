@@ -23,11 +23,11 @@ public sealed class PedeSpawnEvents : IEventTypeRenderer<PedeSpawnEvent>
 				(int index, PedeSpawnEvent e) = events[i];
 				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnText(GetPedeTypeText(e.PedeType));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.A));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Position, "0.00"));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.B));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Orientation));
+				EventTypeRendererUtils.NextColumnText(GetPedeTypeText(e.PedeType)); // TODO: Make this a dropdown.
+				EventTypeRendererUtils.NextColumnInputInt(index, nameof(PedeSpawnEvent.A), ref e.A);
+				EventTypeRendererUtils.NextColumnInputVector3(index, nameof(PedeSpawnEvent.Position), ref e.Position, "%.2f");
+				EventTypeRendererUtils.NextColumnInputVector3(index, nameof(PedeSpawnEvent.B), ref e.B);
+				EventTypeRendererUtils.NextColumnInputMatrix3x3(index, nameof(PedeSpawnEvent.Orientation), ref e.Orientation);
 			}
 
 			ImGui.EndTable();

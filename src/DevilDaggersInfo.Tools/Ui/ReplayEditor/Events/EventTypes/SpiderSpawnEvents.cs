@@ -23,9 +23,9 @@ public sealed class SpiderSpawnEvents : IEventTypeRenderer<SpiderSpawnEvent>
 				(int index, SpiderSpawnEvent e) = events[i];
 				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
 				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnText(GetSpiderTypeText(e.SpiderType));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.A));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Position, "0.00"));
+				EventTypeRendererUtils.NextColumnText(GetSpiderTypeText(e.SpiderType)); // TODO: Make this a dropdown.
+				EventTypeRendererUtils.NextColumnInputInt(index, nameof(SpiderSpawnEvent.A), ref e.A);
+				EventTypeRendererUtils.NextColumnInputVector3(index, nameof(SpiderSpawnEvent.Position), ref e.Position, "%.2f");
 			}
 
 			ImGui.EndTable();
