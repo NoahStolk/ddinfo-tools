@@ -228,9 +228,9 @@ public static class ReplayEventsChild
 			ImGui.Text(Inline.Span($"{TimeUtils.TickToTime(i, startTime):0.0000} ({i})"));
 			ImGui.TableNextColumn();
 			if (inputsE != null)
-				RenderInputsEvent(inputsE.Value.Left, inputsE.Value.Right, inputsE.Value.Forward, inputsE.Value.Backward, inputsE.Value.Jump, inputsE.Value.Shoot, inputsE.Value.ShootHoming, inputsE.Value.MouseX, inputsE.Value.MouseY, null);
+				RenderInputsEvent(inputsE.Left, inputsE.Right, inputsE.Forward, inputsE.Backward, inputsE.Jump, inputsE.Shoot, inputsE.ShootHoming, inputsE.MouseX, inputsE.MouseY, null);
 			else if (initInputsE != null)
-				RenderInputsEvent(initInputsE.Value.Left, initInputsE.Value.Right, initInputsE.Value.Forward, initInputsE.Value.Backward, initInputsE.Value.Jump, initInputsE.Value.Shoot, initInputsE.Value.ShootHoming, initInputsE.Value.MouseX, initInputsE.Value.MouseY, initInputsE.Value.LookSpeed);
+				RenderInputsEvent(initInputsE.Left, initInputsE.Right, initInputsE.Forward, initInputsE.Backward, initInputsE.Jump, initInputsE.Shoot, initInputsE.ShootHoming, initInputsE.MouseX, initInputsE.MouseY, initInputsE.LookSpeed);
 			else
 				ImGui.Text("End of inputs");
 
