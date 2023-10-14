@@ -46,15 +46,15 @@ public static class EventTypeRendererUtils
 		ImGui.TableHeadersRow();
 	}
 
-	public static void RenderTable<TEvent, TRenderer>(Vector4 color, EventType eventType, IReadOnlyList<(int Index, TEvent Event)> events, IReadOnlyList<EntityType> entityTypes, IReadOnlyList<EventColumn> columns)
+	public static void RenderTable<TEvent, TRenderer>(Vector4 color, EventType eventType, IReadOnlyList<(int Index, TEvent Event)> events, IReadOnlyList<EntityType> entityTypes)
 		where TEvent : IEvent
 		where TRenderer : IEventTypeRenderer<TEvent>
 	{
 		ImGui.TextColored(color, EventTypeNames[eventType]);
 
-		if (ImGui.BeginTable(EventTypeNames[eventType], columns.Count, EventTableFlags))
+		if (ImGui.BeginTable(EventTypeNames[eventType], TRenderer.EventColumns.Count, EventTableFlags))
 		{
-			SetupColumns(columns);
+			SetupColumns(TRenderer.EventColumns);
 
 			for (int i = 0; i < events.Count; i++)
 			{

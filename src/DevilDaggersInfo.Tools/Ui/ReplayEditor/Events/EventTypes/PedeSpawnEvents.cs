@@ -1,12 +1,24 @@
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Tools.Utils;
+using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
 public sealed class PedeSpawnEvents : IEventTypeRenderer<PedeSpawnEvent>
 {
 	private static readonly string[] _pedeTypeNamesArray = EnumUtils.PedeTypeNames.Values.ToArray();
+
+	public static IReadOnlyList<EventColumn> EventColumns { get; } = new List<EventColumn>
+	{
+		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		new("Type", ImGuiTableColumnFlags.None, 128),
+		new("?", ImGuiTableColumnFlags.None, 128),
+		new("Position", ImGuiTableColumnFlags.None, 128),
+		new("?", ImGuiTableColumnFlags.None, 128),
+		new("Orientation", ImGuiTableColumnFlags.None, 128),
+	};
 
 	public static void Render(int index, PedeSpawnEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
