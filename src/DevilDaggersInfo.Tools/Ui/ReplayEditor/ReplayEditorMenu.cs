@@ -132,7 +132,10 @@ public static class ReplayEditorMenu
 	public static void InjectReplay()
 	{
 		if (!GameMemoryServiceWrapper.Scan() || !Root.GameMemoryService.IsInitialized)
+		{
+			PopupManager.ShowError("Could not inject replay into game memory. Make sure the game is running.");
 			return;
+		}
 
 		Root.GameMemoryService.WriteReplayToMemory(FileStates.Replay.Object.Compile());
 	}
