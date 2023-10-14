@@ -29,6 +29,11 @@ Added mod manager. You can now manage installed mods in the mods folder.
 - Added tooltip information to spawns headers.
 - Changed spawns selection colors to make text more readable.
 
+### Custom Leaderboards
+
+- Fixed not clearing "View replay" buttons when selecting a different leaderboard.
+- Added "Current spawnset" text to the displayed leaderboard if that spawnset is currently active.
+
 ### Other
 
 - Improved configuration layout.

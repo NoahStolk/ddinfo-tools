@@ -32,6 +32,7 @@ public static class LeaderboardChild
 		{
 			_data = value;
 			_sortedEntries = value?.Leaderboard.SortedEntries ?? new();
+			_selectedCustomEntry = null;
 		}
 	}
 
@@ -65,6 +66,12 @@ public static class LeaderboardChild
 
 				File.WriteAllBytes(UserSettings.ModsSurvivalPath, spawnset.FileBytes);
 			}
+		}
+
+		if (SurvivalFileWatcher.SpawnsetName == data.Leaderboard.SpawnsetName)
+		{
+			ImGui.SameLine();
+			ImGui.TextColored(Color.Green, "Current spawnset");
 		}
 
 		if (_selectedCustomEntry != null)
