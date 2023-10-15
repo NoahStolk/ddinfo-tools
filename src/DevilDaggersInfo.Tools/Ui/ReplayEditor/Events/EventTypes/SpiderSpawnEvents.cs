@@ -20,8 +20,8 @@ public sealed class SpiderSpawnEvents : IEventTypeRenderer<SpiderSpawnEvent>
 
 	public static void Render(int index, SpiderSpawnEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
-		EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-		EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
+		EventTypeRendererUtils.NextColumnEventIndex(index);
+		EventTypeRendererUtils.NextColumnEntityId(entityTypes, e.EntityId);
 		EventTypeRendererUtils.NextColumnInputEnum(index, nameof(SpiderSpawnEvent.SpiderType), ref e.SpiderType, EnumUtils.SpiderTypes, _spiderTypeNamesArray);
 		EventTypeRendererUtils.NextColumnInputInt(index, nameof(SpiderSpawnEvent.A), ref e.A);
 		EventTypeRendererUtils.NextColumnInputVector3(index, nameof(SpiderSpawnEvent.Position), ref e.Position, "%.2f");

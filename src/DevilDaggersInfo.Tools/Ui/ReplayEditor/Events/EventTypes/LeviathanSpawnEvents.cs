@@ -15,8 +15,8 @@ public sealed class LeviathanSpawnEvents : IEventTypeRenderer<LeviathanSpawnEven
 
 	public static void Render(int index, LeviathanSpawnEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
-		EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-		EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
+		EventTypeRendererUtils.NextColumnEventIndex(index);
+		EventTypeRendererUtils.NextColumnEntityId(entityTypes, e.EntityId);
 		EventTypeRendererUtils.NextColumnInputInt(index, nameof(LeviathanSpawnEvent.A), ref e.A);
 	}
 }

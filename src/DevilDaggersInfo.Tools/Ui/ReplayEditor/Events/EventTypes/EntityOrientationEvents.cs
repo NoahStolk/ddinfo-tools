@@ -15,8 +15,8 @@ public sealed class EntityOrientationEvents : IEventTypeRenderer<EntityOrientati
 
 	public static void Render(int index, EntityOrientationEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
-		EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-		EventTypeRendererUtils.EditableEntityColumn(index, nameof(EntityOrientationEvent.EntityId), entityTypes, ref e.EntityId);
+		EventTypeRendererUtils.NextColumnEventIndex(index);
+		EventTypeRendererUtils.NextColumnEditableEntityId(index, nameof(EntityOrientationEvent.EntityId), entityTypes, ref e.EntityId);
 		EventTypeRendererUtils.NextColumnInputInt16Mat3x3(index, nameof(EntityOrientationEvent.Orientation), ref e.Orientation);
 	}
 }

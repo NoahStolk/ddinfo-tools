@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
-using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -32,8 +31,8 @@ public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEvent>
 
 	public static void Render(int index, DaggerSpawnEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
-		EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-		EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
+		EventTypeRendererUtils.NextColumnEventIndex(index);
+		EventTypeRendererUtils.NextColumnEntityId(entityTypes, e.EntityId);
 		EventTypeRendererUtils.NextColumnInputEnum(index, nameof(DaggerSpawnEvent.DaggerType), ref e.DaggerType, EnumUtils.DaggerTypes, _daggerTypeNamesArray);
 		EventTypeRendererUtils.NextColumnInputInt(index, nameof(DaggerSpawnEvent.A), ref e.A);
 		EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(DaggerSpawnEvent.Position), ref e.Position);

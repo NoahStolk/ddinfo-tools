@@ -13,6 +13,6 @@ public sealed class EndEvents : IEventTypeRenderer<EndEvent>
 
 	public static void Render(int index, EndEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
-		EventTypeRendererUtils.NextColumnText(Inline.Span(index));
+		EventTypeRendererUtils.NextColumnEventIndex(index);
 	}
 }

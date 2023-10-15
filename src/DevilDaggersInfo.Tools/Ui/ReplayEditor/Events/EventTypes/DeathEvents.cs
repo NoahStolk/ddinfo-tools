@@ -15,7 +15,9 @@ public sealed class DeathEvents : IEventTypeRenderer<DeathEvent>
 
 	public static void Render(int index, DeathEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
-		EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-		EventTypeRendererUtils.NextColumnText(Inline.Span(Deaths.GetDeathByType(GameConstants.CurrentVersion, (byte)e.DeathType)?.Name ?? "???"));
+		EventTypeRendererUtils.NextColumnEventIndex(index);
+
+		ImGui.TableNextColumn();
+		ImGui.Text(Inline.Span(Deaths.GetDeathByType(GameConstants.CurrentVersion, (byte)e.DeathType)?.Name ?? "???"));
 	}
 }

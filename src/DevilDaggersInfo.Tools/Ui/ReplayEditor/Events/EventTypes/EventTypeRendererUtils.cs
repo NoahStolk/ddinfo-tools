@@ -3,8 +3,8 @@ using DevilDaggersInfo.Core.Replay.Events.Interfaces;
 using DevilDaggersInfo.Core.Replay.Extensions;
 using DevilDaggersInfo.Core.Replay.Numerics;
 using DevilDaggersInfo.Core.Wiki;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
-using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -96,10 +96,16 @@ public static class EventTypeRendererUtils
 		}
 	}
 
-	public static void NextColumnText(ReadOnlySpan<char> text)
+	public static void NextColumnEventIndex(int index)
 	{
 		ImGui.TableNextColumn();
-		ImGui.Text(text);
+		ImGui.Text(Inline.Span(index));
+
+		ImGui.SameLine();
+		ImGui.PushID(Inline.Span($"delete_event_{index}"));
+		if (ImGui.Button("DEL"))
+			FileStates.Replay.Object.EventsData.RemoveEvent(index);
+		ImGui.PopID();
 	}
 
 	public static void NextColumnInputEnum<TEnum>(int eventIndex, ReadOnlySpan<char> fieldName, ref TEnum value, IReadOnlyList<TEnum> values, string[] names)
@@ -189,7 +195,7 @@ public static class EventTypeRendererUtils
 		ImGui.Text(value ? trueText : falseText);
 	}
 
-	public static void EntityColumn(IReadOnlyList<EntityType> entityTypes, int entityId)
+	public static void NextColumnEntityId(IReadOnlyList<EntityType> entityTypes, int entityId)
 	{
 		EntityType? entityType = entityId >= 0 && entityId < entityTypes.Count ? entityTypes[entityId] : null;
 
@@ -211,7 +217,7 @@ public static class EventTypeRendererUtils
 		ImGui.PopStyleVar();
 	}
 
-	public static void EditableEntityColumn(int eventIndex, ReadOnlySpan<char> fieldName, IReadOnlyList<EntityType> entityTypes, ref int entityId)
+	public static void NextColumnEditableEntityId(int eventIndex, ReadOnlySpan<char> fieldName, IReadOnlyList<EntityType> entityTypes, ref int entityId)
 	{
 		EntityType? entityType = entityId >= 0 && entityId < entityTypes.Count ? entityTypes[entityId] : null;
 
