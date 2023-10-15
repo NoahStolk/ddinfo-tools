@@ -304,6 +304,31 @@ public sealed class ImGuiController : IDisposable
 		io.KeySuper = keyboardState.IsKeyPressed(Key.SuperLeft) || keyboardState.IsKeyPressed(Key.SuperRight);
 	}
 
+	public void ForceClearImGuiInput()
+	{
+		ImGuiIOPtr io = ImGuiNET.ImGui.GetIO();
+		io.MouseDown[0] = false;
+		io.MouseDown[1] = false;
+		io.MouseDown[2] = false;
+		io.MousePos = default;
+		io.MouseWheel = 0;
+		io.MouseWheelH = 0;
+
+		for (int i = 0; i < _keyEnumArr.Length; i++)
+		{
+			Key key = _keyEnumArr[i];
+			if (key == Key.Unknown)
+				continue;
+
+			io.KeysDown[(int)key] = false;
+		}
+
+		io.KeyCtrl = false;
+		io.KeyAlt = false;
+		io.KeyShift = false;
+		io.KeySuper = false;
+	}
+
 	private static void SetKeyMappings()
 	{
 		ImGuiIOPtr io = ImGuiNET.ImGui.GetIO();

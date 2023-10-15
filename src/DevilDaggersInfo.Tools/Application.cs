@@ -8,8 +8,6 @@ namespace DevilDaggersInfo.Tools;
 
 public class Application
 {
-	private readonly MainAppWindow _mainAppWindow;
-
 	public Application()
 	{
 		UserSettings.Load();
@@ -20,7 +18,7 @@ public class Application
 
 		AppVersion = appVersion;
 
-		_mainAppWindow = new();
+		MainAppWindow = new();
 
 		Root.Application = this;
 	}
@@ -29,14 +27,15 @@ public class Application
 
 	public PerSecondCounter RenderCounter { get; } = new();
 	public float LastRenderDelta { get; set; }
+	public MainAppWindow MainAppWindow { get; }
 
 	public void Run()
 	{
-		_mainAppWindow.WindowInstance.Run();
+		MainAppWindow.WindowInstance.Run();
 	}
 
 	public void Destroy()
 	{
-		_mainAppWindow.WindowInstance.Dispose();
+		MainAppWindow.WindowInstance.Dispose();
 	}
 }
