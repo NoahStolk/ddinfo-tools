@@ -44,6 +44,12 @@ public static class ReplayEditorWindow
 					ImGui.EndTabItem();
 				}
 
+				if (ImGui.BeginTabItem("Inputs"))
+				{
+					ReplayInputsChild.Render(FileStates.Replay.Object.EventsData, FileStates.Replay.Object.Header.StartTime);
+					ImGui.EndTabItem();
+				}
+
 				if (ImGui.BeginTabItem("Debug"))
 				{
 					ImGui.Text("Event counts per tick:");

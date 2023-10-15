@@ -30,6 +30,8 @@ public static class EventTypeRendererUtils
 		[EventType.Gem] = "Gem events",
 		[EventType.Hit] = "Hit events",
 		[EventType.Transmute] = "Transmute events",
+		[EventType.InitialInputs] = "Initial Inputs events",
+		[EventType.Inputs] = "Inputs events",
 		[EventType.Death] = "Death events",
 		[EventType.End] = "End events",
 	};
@@ -204,6 +206,15 @@ public static class EventTypeRendererUtils
 
 		ImGui.PushItemWidth(-1);
 		ImGui.InputInt(EditLabel(fieldName, eventIndex), ref value, 0, 0);
+		ImGui.PopItemWidth();
+	}
+
+	public static unsafe void NextColumnInputShort(int eventIndex, ReadOnlySpan<char> fieldName, ref short value)
+	{
+		ImGui.TableNextColumn();
+
+		ImGui.PushItemWidth(-1);
+		ImGui.InputScalar(EditLabel(fieldName, eventIndex), ImGuiDataType.S16, (IntPtr)Unsafe.AsPointer(ref value), 0, 0);
 		ImGui.PopItemWidth();
 	}
 

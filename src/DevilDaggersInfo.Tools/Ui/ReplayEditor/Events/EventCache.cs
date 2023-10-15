@@ -15,6 +15,8 @@ public sealed class EventCache
 	private readonly List<(int Index, EntityTargetEvent Event)> _entityTargetEvents = new();
 	private readonly List<(int Index, GemEvent Event)> _gemEvents = new();
 	private readonly List<(int Index, HitEvent Event)> _hitEvents = new();
+	private readonly List<(int Index, InitialInputsEvent Event)> _initialInputsEvents = new();
+	private readonly List<(int Index, InputsEvent Event)> _inputsEvents = new();
 	private readonly List<(int Index, LeviathanSpawnEvent Event)> _leviathanSpawnEvents = new();
 	private readonly List<(int Index, PedeSpawnEvent Event)> _pedeSpawnEvents = new();
 	private readonly List<(int Index, SpiderEggSpawnEvent Event)> _spiderEggSpawnEvents = new();
@@ -32,6 +34,8 @@ public sealed class EventCache
 	public IReadOnlyList<(int Index, EntityTargetEvent Event)> EntityTargetEvents => _entityTargetEvents;
 	public IReadOnlyList<(int Index, GemEvent Event)> GemEvents => _gemEvents;
 	public IReadOnlyList<(int Index, HitEvent Event)> HitEvents => _hitEvents;
+	public IReadOnlyList<(int Index, InitialInputsEvent Event)> InitialInputsEvents => _initialInputsEvents;
+	public IReadOnlyList<(int Index, InputsEvent Event)> InputsEvents => _inputsEvents;
 	public IReadOnlyList<(int Index, LeviathanSpawnEvent Event)> LeviathanSpawnEvents => _leviathanSpawnEvents;
 	public IReadOnlyList<(int Index, PedeSpawnEvent Event)> PedeSpawnEvents => _pedeSpawnEvents;
 	public IReadOnlyList<(int Index, SpiderEggSpawnEvent Event)> SpiderEggSpawnEvents => _spiderEggSpawnEvents;
@@ -54,6 +58,8 @@ public sealed class EventCache
 		_entityTargetEvents.Clear();
 		_gemEvents.Clear();
 		_hitEvents.Clear();
+		_initialInputsEvents.Clear();
+		_inputsEvents.Clear();
 		_leviathanSpawnEvents.Clear();
 		_pedeSpawnEvents.Clear();
 		_spiderEggSpawnEvents.Clear();
@@ -78,6 +84,8 @@ public sealed class EventCache
 			case EntityTargetEvent ete: _entityTargetEvents.Add((index, ete)); break;
 			case GemEvent ge: _gemEvents.Add((index, ge)); break;
 			case HitEvent he: _hitEvents.Add((index, he)); break;
+			case InitialInputsEvent iie: _initialInputsEvents.Add((index, iie)); break;
+			case InputsEvent ie: _inputsEvents.Add((index, ie)); break;
 			case LeviathanSpawnEvent lse: _leviathanSpawnEvents.Add((index, lse)); break;
 			case PedeSpawnEvent pse: _pedeSpawnEvents.Add((index, pse)); break;
 			case SpiderEggSpawnEvent sese: _spiderEggSpawnEvents.Add((index, sese)); break;

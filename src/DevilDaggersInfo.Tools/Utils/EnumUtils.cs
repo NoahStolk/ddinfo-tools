@@ -51,4 +51,10 @@ public static class EnumUtils
 
 	public static readonly IReadOnlyList<SquidType> SquidTypes = Enum.GetValues<SquidType>();
 	public static readonly IReadOnlyDictionary<SquidType, string> SquidTypeNames = SquidTypes.ToDictionary(st => st, st => st.ToString());
+
+	public static readonly IReadOnlyList<JumpType> JumpTypes = Enum.GetValues<JumpType>();
+	public static readonly IReadOnlyDictionary<JumpType, string> JumpTypeNames = JumpTypes.ToDictionary(jt => jt, jt => jt.ToString());
+
+	public static readonly IReadOnlyList<ShootType> ShootTypes = Enum.GetValues<ShootType>();
+	public static readonly IReadOnlyDictionary<ShootType, string> ShootTypeNames = ShootTypes.ToDictionary(st => st, st => st.ToString());
 }

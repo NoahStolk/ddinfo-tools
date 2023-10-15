@@ -18,6 +18,8 @@ public enum EventType
 	Hit,
 	Transmute,
 
+	InitialInputs,
+	Inputs,
 	Death,
 	End,
 }

@@ -2,8 +2,6 @@ using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Events.Interfaces;
-using DevilDaggersInfo.Core.Replay.Numerics;
-using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
@@ -100,36 +98,25 @@ public static class ReplayEventsChild
 				ImGui.BeginDisabled(!_showEvents);
 
 				const int checkboxesPerRow = 7;
-
-				if (ImGui.BeginChild("EventTypeFilteringLeft", new(256, filteringHeight)))
+				int rows = (int)Math.Ceiling((float)EnumUtils.EventTypes.Count / checkboxesPerRow);
+				for (int i = 0; i < rows; i++)
 				{
-					for (int i = 0; i < checkboxesPerRow; i++)
-						EventTypeFilterCheckbox(i);
-				}
+					if (ImGui.BeginChild(Inline.Span($"EventTypeFiltering{i}"), new(256, filteringHeight)))
+					{
+						int start = i * checkboxesPerRow;
+						for (int j = start; j < Math.Min(EnumUtils.EventTypes.Count, start + checkboxesPerRow); j++)
+						{
+							EventType eventType = EnumUtils.EventTypes[j];
+							bool temp = _eventTypeEnabled[eventType];
+							if (ImGui.Checkbox(EventTypeRendererUtils.EventTypeNames[eventType], ref temp))
+								_eventTypeEnabled[eventType] = temp;
+						}
+					}
 
-				ImGui.EndChild(); // EventTypeFilteringLeft
+					ImGui.EndChild(); // EventTypeFilteringLeft
 
-				ImGui.SameLine();
-
-				if (ImGui.BeginChild("EventTypeFilteringRight", new(256, filteringHeight)))
-				{
-					for (int i = checkboxesPerRow; i < checkboxesPerRow * 2; i++)
-						EventTypeFilterCheckbox(i);
-				}
-
-				ImGui.EndChild(); // EventTypeFilteringRight
-
-				static void EventTypeFilterCheckbox(int i)
-				{
-					EventType eventType = EnumUtils.EventTypes[i];
-
-					// These are always enabled.
-					if (eventType is EventType.Death or EventType.End)
-						return;
-
-					bool temp = _eventTypeEnabled[eventType];
-					if (ImGui.Checkbox(EventTypeRendererUtils.EventTypeNames[eventType], ref temp))
-						_eventTypeEnabled[eventType] = temp;
+					if (i < rows - 1)
+						ImGui.SameLine();
 				}
 
 				ImGui.EndDisabled();
@@ -162,11 +149,10 @@ public static class ReplayEventsChild
 
 	private static void RenderEventsTable(ReplayEventsData eventsData, float startTime, int maxTicks)
 	{
-		if (!ImGui.BeginTable("ReplayEventsTable", 3, ImGuiTableFlags.BordersInnerH))
+		if (!ImGui.BeginTable("ReplayEventsTable", 2, ImGuiTableFlags.BordersInnerH))
 			return;
 
 		ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 128);
-		ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.WidthFixed, 320);
 		ImGui.TableSetupColumn("Events", ImGuiTableColumnFlags.None, 384);
 		ImGui.TableHeadersRow();
 
@@ -175,49 +161,41 @@ public static class ReplayEventsChild
 			int offset = eventsData.EventOffsetsPerTick[i];
 			int count = eventsData.EventOffsetsPerTick[i + 1] - offset;
 
-			// TODO: Refactor using discriminated unions (<InputsEvent, InitialInputsEvent>) if they ever get added to C#.
-			InputsEvent? inputsE = null;
-			InitialInputsEvent? initInputsE = null;
 			_eventCache.Clear();
 			bool showTick = !_onlyShowTicksWithEnabledEvents;
 			for (int j = offset; j < offset + count; j++)
 			{
 				IEvent @event = eventsData.Events[j];
-				if (@event is InputsEvent ie)
+				_eventCache.Add(j, @event);
+				if (!showTick)
 				{
-					inputsE = ie;
-				}
-				else if (@event is InitialInputsEvent iie)
-				{
-					initInputsE = iie;
-				}
-				else
-				{
-					_eventCache.Add(j, @event);
-
-					if (!showTick)
+					EventType? eventType = @event switch
 					{
-						EventType? eventType = @event switch
-						{
-							BoidSpawnEvent => EventType.BoidSpawn,
-							LeviathanSpawnEvent => EventType.LeviathanSpawn,
-							PedeSpawnEvent => EventType.PedeSpawn,
-							SpiderEggSpawnEvent => EventType.SpiderEggSpawn,
-							SpiderSpawnEvent => EventType.SpiderSpawn,
-							SquidSpawnEvent => EventType.SquidSpawn,
-							ThornSpawnEvent => EventType.ThornSpawn,
-							DaggerSpawnEvent => EventType.DaggerSpawn,
-							EntityOrientationEvent => EventType.EntityOrientation,
-							EntityPositionEvent => EventType.EntityPosition,
-							EntityTargetEvent => EventType.EntityTarget,
-							GemEvent => EventType.Gem,
-							HitEvent => EventType.Hit,
-							TransmuteEvent => EventType.Transmute,
-							_ => null,
-						};
-						if (eventType.HasValue && _eventTypeEnabled[eventType.Value])
-							showTick = true;
-					}
+						BoidSpawnEvent => EventType.BoidSpawn,
+						LeviathanSpawnEvent => EventType.LeviathanSpawn,
+						PedeSpawnEvent => EventType.PedeSpawn,
+						SpiderEggSpawnEvent => EventType.SpiderEggSpawn,
+						SpiderSpawnEvent => EventType.SpiderSpawn,
+						SquidSpawnEvent => EventType.SquidSpawn,
+						ThornSpawnEvent => EventType.ThornSpawn,
+
+						DaggerSpawnEvent => EventType.DaggerSpawn,
+						EntityOrientationEvent => EventType.EntityOrientation,
+						EntityPositionEvent => EventType.EntityPosition,
+						EntityTargetEvent => EventType.EntityTarget,
+						GemEvent => EventType.Gem,
+						HitEvent => EventType.Hit,
+						TransmuteEvent => EventType.Transmute,
+
+						InitialInputsEvent => EventType.InitialInputs,
+						InputsEvent => EventType.Inputs,
+						DeathEvent => EventType.Death,
+						EndEvent => EventType.End,
+
+						_ => null,
+					};
+					if (eventType.HasValue && _eventTypeEnabled[eventType.Value])
+						showTick = true;
 				}
 			}
 
@@ -228,13 +206,6 @@ public static class ReplayEventsChild
 
 			ImGui.TableNextColumn();
 			ImGui.Text(Inline.Span($"{TimeUtils.TickToTime(i, startTime):0.0000} ({i})"));
-			ImGui.TableNextColumn();
-			if (inputsE != null)
-				RenderInputsEvent(inputsE.Left, inputsE.Right, inputsE.Forward, inputsE.Backward, inputsE.Jump, inputsE.Shoot, inputsE.ShootHoming, inputsE.MouseX, inputsE.MouseY, null);
-			else if (initInputsE != null)
-				RenderInputsEvent(initInputsE.Left, initInputsE.Right, initInputsE.Forward, initInputsE.Backward, initInputsE.Jump, initInputsE.Shoot, initInputsE.ShootHoming, initInputsE.MouseX, initInputsE.MouseY, initInputsE.LookSpeed);
-			else
-				ImGui.Text("End of inputs");
 
 			ImGui.TableNextColumn();
 
@@ -271,58 +242,12 @@ public static class ReplayEventsChild
 			RenderEvents<TransmuteEvent, TransmuteEvents>(EventType.Transmute, _eventCache.TransmuteEvents, eventsData.EntityTypes);
 
 			// Final events
+			RenderEvents<InitialInputsEvent, InitialInputsEvents>(EventType.InitialInputs, _eventCache.InitialInputsEvents, eventsData.EntityTypes);
+			RenderEvents<InputsEvent, InputsEvents>(EventType.Inputs, _eventCache.InputsEvents, eventsData.EntityTypes);
 			RenderEvents<DeathEvent, DeathEvents>(EventType.Death, _eventCache.DeathEvents, eventsData.EntityTypes);
 			RenderEvents<EndEvent, EndEvents>(EventType.End, _eventCache.EndEvents, eventsData.EntityTypes);
 		}
 
 		ImGui.EndTable();
-	}
-
-	private static void RenderInputsEvent(
-		bool left,
-		bool right,
-		bool forward,
-		bool backward,
-		JumpType jump,
-		ShootType shoot,
-		ShootType shootHoming,
-		short mouseX,
-		short mouseY,
-		float? lookSpeed)
-	{
-		ImGui.TextColored(forward ? Color.Red : Color.White, "W");
-		ImGui.SameLine();
-		ImGui.TextColored(left ? Color.Red : Color.White, "A");
-		ImGui.SameLine();
-		ImGui.TextColored(backward ? Color.Red : Color.White, "S");
-		ImGui.SameLine();
-		ImGui.TextColored(right ? Color.Red : Color.White, "D");
-		ImGui.SameLine();
-		ImGui.TextColored(GetJumpTypeColor(jump), "[Space]");
-		ImGui.SameLine();
-		ImGui.TextColored(GetShootTypeColor(shoot), "[LMB]");
-		ImGui.SameLine();
-		ImGui.TextColored(GetShootTypeColor(shootHoming), "[RMB]");
-		ImGui.SameLine();
-		ImGui.TextColored(mouseX == 0 ? Color.White : Color.Red, Inline.Span($"X:{mouseX}"));
-		ImGui.SameLine();
-		ImGui.TextColored(mouseY == 0 ? Color.White : Color.Red, Inline.Span($"Y:{mouseY}"));
-
-		if (lookSpeed.HasValue)
-			ImGui.TextColored(Color.White, Inline.Span($"Look Speed: {lookSpeed.Value}"));
-
-		static Color GetJumpTypeColor(JumpType jumpType) => jumpType switch
-		{
-			JumpType.Hold => Color.Orange,
-			JumpType.StartedPress => Color.Red,
-			_ => Color.White,
-		};
-
-		static Color GetShootTypeColor(ShootType shootType) => shootType switch
-		{
-			ShootType.Hold => Color.Orange,
-			ShootType.Release => Color.Red,
-			_ => Color.White,
-		};
 	}
 }
