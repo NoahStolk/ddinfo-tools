@@ -116,7 +116,7 @@ public static class EventTypeRendererUtils
 			ImGui.SetTooltip(Inline.Span($"Delete event at index {index}"));
 
 		ImGui.SameLine();
-		if (ImGui.SmallButton($"INS##{index}"))
+		if (ImGui.SmallButton(Inline.Span($"INS##{index}")))
 			ImGui.OpenPopup(Inline.Span($"Insert event at index {index}"));
 
 		if (ImGui.IsItemHovered())
