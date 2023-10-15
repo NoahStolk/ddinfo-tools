@@ -41,6 +41,7 @@ Added mod manager. You can now manage installed mods in the mods folder.
 - Replay inputs have been moved to a separate tab. The input events themselves are now displayed in the same table as the other events.
 - Fixed Thorn spawn events not being displayed correctly.
 - Fixed not showing error when injecting replay into game memory fails.
+- Fixed not appending `.ddreplay` to replay file name when saving.
 
 ### Other
 
