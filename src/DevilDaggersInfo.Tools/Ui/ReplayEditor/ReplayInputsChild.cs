@@ -45,7 +45,14 @@ public static class ReplayInputsChild
 
 		ImGui.EndChild(); // TickNavigation
 
-		int i = 0;
+		if (!ImGui.BeginTable("ReplayInputsTable", 2, ImGuiTableFlags.BordersInnerH))
+			return;
+
+		ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 128);
+		ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.None, 384);
+		ImGui.TableHeadersRow();
+
+		int i = -1;
 		foreach (IEvent e in eventsData.Events)
 		{
 			if (e is not InputsEvent and not InitialInputsEvent)
@@ -58,11 +65,20 @@ public static class ReplayInputsChild
 			if (i < _startTick)
 				continue;
 
+			ImGui.TableNextRow();
+
+			ImGui.TableNextColumn();
+			ImGui.Text(Inline.Span($"{TimeUtils.TickToTime(i, startTime):0.0000} ({i})"));
+
+			ImGui.TableNextColumn();
+
 			if (e is InputsEvent inputsEvent)
 				RenderInputsEvent(inputsEvent.Left, inputsEvent.Right, inputsEvent.Forward, inputsEvent.Backward, inputsEvent.Jump, inputsEvent.Shoot, inputsEvent.ShootHoming, inputsEvent.MouseX, inputsEvent.MouseY, null);
 			else if (e is InitialInputsEvent initialInputsEvent)
 				RenderInputsEvent(initialInputsEvent.Left, initialInputsEvent.Right, initialInputsEvent.Forward, initialInputsEvent.Backward, initialInputsEvent.Jump, initialInputsEvent.Shoot, initialInputsEvent.ShootHoming, initialInputsEvent.MouseX, initialInputsEvent.MouseY, initialInputsEvent.LookSpeed);
 		}
+
+		ImGui.EndTable();
 	}
 
 	private static void RenderInputsEvent(
