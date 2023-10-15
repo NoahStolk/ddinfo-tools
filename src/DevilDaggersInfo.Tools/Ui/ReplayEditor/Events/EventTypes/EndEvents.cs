@@ -8,11 +8,13 @@ public sealed class EndEvents : IEventTypeRenderer<EndEvent>
 {
 	public static IReadOnlyList<EventColumn> EventColumns { get; } = new List<EventColumn>
 	{
+		EventColumn.Actions,
 		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
 	};
 
 	public static void Render(int index, EndEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
+		EventTypeRendererUtils.NextColumnActions(index);
 		EventTypeRendererUtils.NextColumnEventIndex(index);
 	}
 }

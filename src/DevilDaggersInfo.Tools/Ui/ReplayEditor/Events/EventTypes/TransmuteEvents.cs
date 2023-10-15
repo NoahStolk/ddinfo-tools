@@ -8,8 +8,9 @@ public sealed class TransmuteEvents : IEventTypeRenderer<TransmuteEvent>
 {
 	public static IReadOnlyList<EventColumn> EventColumns { get; } = new List<EventColumn>
 	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		EventColumn.Actions,
+		EventColumn.Index,
+		EventColumn.EntityId,
 		new("?", ImGuiTableColumnFlags.None, 128),
 		new("?", ImGuiTableColumnFlags.None, 128),
 		new("?", ImGuiTableColumnFlags.None, 128),
@@ -18,6 +19,7 @@ public sealed class TransmuteEvents : IEventTypeRenderer<TransmuteEvent>
 
 	public static void Render(int index, TransmuteEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
+		EventTypeRendererUtils.NextColumnActions(index);
 		EventTypeRendererUtils.NextColumnEventIndex(index);
 		EventTypeRendererUtils.NextColumnEditableEntityId(index, nameof(TransmuteEvent.EntityId), entityTypes, ref e.EntityId);
 		EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(TransmuteEvent.A), ref e.A);

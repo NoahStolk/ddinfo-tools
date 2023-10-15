@@ -8,8 +8,9 @@ public sealed class SpiderEggSpawnEvents : IEventTypeRenderer<SpiderEggSpawnEven
 {
 	public static IReadOnlyList<EventColumn> EventColumns { get; } = new List<EventColumn>
 	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		EventColumn.Actions,
+		EventColumn.Index,
+		EventColumn.EntityId,
 		new("Spawner Entity Id", ImGuiTableColumnFlags.None, 196),
 		new("Position", ImGuiTableColumnFlags.None, 128),
 		new("Target Position", ImGuiTableColumnFlags.None, 128),
@@ -17,6 +18,7 @@ public sealed class SpiderEggSpawnEvents : IEventTypeRenderer<SpiderEggSpawnEven
 
 	public static void Render(int index, SpiderEggSpawnEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
+		EventTypeRendererUtils.NextColumnActions(index);
 		EventTypeRendererUtils.NextColumnEventIndex(index);
 		EventTypeRendererUtils.NextColumnEntityId(entityTypes, e.EntityId);
 		EventTypeRendererUtils.NextColumnInputInt(index, nameof(SpiderEggSpawnEvent.SpawnerEntityId), ref e.SpawnerEntityId);

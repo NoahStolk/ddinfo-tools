@@ -12,7 +12,8 @@ public sealed class InitialInputsEvents : IEventTypeRenderer<InitialInputsEvent>
 
 	public static IReadOnlyList<EventColumn> EventColumns { get; } = new List<EventColumn>
 	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		EventColumn.Actions,
+		EventColumn.Index,
 		new("Left", ImGuiTableColumnFlags.WidthFixed, 64),
 		new("Right", ImGuiTableColumnFlags.WidthFixed, 64),
 		new("Forward", ImGuiTableColumnFlags.WidthFixed, 64),
@@ -27,6 +28,7 @@ public sealed class InitialInputsEvents : IEventTypeRenderer<InitialInputsEvent>
 
 	public static void Render(int index, InitialInputsEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
+		EventTypeRendererUtils.NextColumnActions(index);
 		EventTypeRendererUtils.NextColumnEventIndex(index);
 		EventTypeRendererUtils.NextColumnCheckbox(index, nameof(InitialInputsEvent.Left), ref e.Left, "On", "Off");
 		EventTypeRendererUtils.NextColumnCheckbox(index, nameof(InitialInputsEvent.Right), ref e.Right, "On", "Off");

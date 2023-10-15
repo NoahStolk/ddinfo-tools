@@ -11,8 +11,9 @@ public sealed class SquidSpawnEvents : IEventTypeRenderer<SquidSpawnEvent>
 
 	public static IReadOnlyList<EventColumn> EventColumns { get; } = new List<EventColumn>
 	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		EventColumn.Actions,
+		EventColumn.Index,
+		EventColumn.EntityId,
 		new("Type", ImGuiTableColumnFlags.WidthFixed, 80),
 		new("?", ImGuiTableColumnFlags.WidthFixed, 32),
 		new("Position", ImGuiTableColumnFlags.None, 128),
@@ -22,6 +23,7 @@ public sealed class SquidSpawnEvents : IEventTypeRenderer<SquidSpawnEvent>
 
 	public static void Render(int index, SquidSpawnEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
+		EventTypeRendererUtils.NextColumnActions(index);
 		EventTypeRendererUtils.NextColumnEventIndex(index);
 		EventTypeRendererUtils.NextColumnEntityId(entityTypes, e.EntityId);
 		EventTypeRendererUtils.NextColumnInputEnum(index, nameof(SquidSpawnEvent.SquidType), ref e.SquidType, EnumUtils.SquidTypes, _squidTypeNamesArray);

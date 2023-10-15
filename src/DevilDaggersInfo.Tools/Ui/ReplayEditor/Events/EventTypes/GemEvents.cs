@@ -8,11 +8,13 @@ public sealed class GemEvents : IEventTypeRenderer<GemEvent>
 {
 	public static IReadOnlyList<EventColumn> EventColumns { get; } = new List<EventColumn>
 	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		EventColumn.Actions,
+		EventColumn.Index,
 	};
 
 	public static void Render(int index, GemEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
+		EventTypeRendererUtils.NextColumnActions(index);
 		EventTypeRendererUtils.NextColumnEventIndex(index);
 	}
 }

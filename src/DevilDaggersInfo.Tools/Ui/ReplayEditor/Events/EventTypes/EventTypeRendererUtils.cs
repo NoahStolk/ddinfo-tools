@@ -99,12 +99,10 @@ public static class EventTypeRendererUtils
 		}
 	}
 
-	public static void NextColumnEventIndex(int index)
+	public static void NextColumnActions(int index)
 	{
 		ImGui.TableNextColumn();
-		ImGui.Text(Inline.Span(index));
 
-		ImGui.SameLine();
 		ImGui.PushID(Inline.Span($"delete_event_{index}"));
 		ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 159 });
 		ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red);
@@ -115,11 +113,14 @@ public static class EventTypeRendererUtils
 		ImGui.PopID();
 
 		if (ImGui.IsItemHovered())
-			ImGui.SetTooltip(Inline.Span($"Delete event {index}"));
+			ImGui.SetTooltip(Inline.Span($"Delete event at index {index}"));
 
 		ImGui.SameLine();
 		if (ImGui.SmallButton($"INS##{index}"))
 			ImGui.OpenPopup(Inline.Span($"Insert event at index {index}"));
+
+		if (ImGui.IsItemHovered())
+			ImGui.SetTooltip(Inline.Span($"Insert event at index {index}"));
 
 		ImGui.SetNextWindowSize(new(512, 512), ImGuiCond.Appearing);
 		if (ImGui.BeginPopupModal(Inline.Span($"Insert event at index {index}")))
@@ -173,6 +174,12 @@ public static class EventTypeRendererUtils
 
 			ImGui.EndPopup();
 		}
+	}
+
+	public static void NextColumnEventIndex(int index)
+	{
+		ImGui.TableNextColumn();
+		ImGui.Text(Inline.Span(index));
 	}
 
 	public static void NextColumnInputEnum<TEnum>(int eventIndex, ReadOnlySpan<char> fieldName, ref TEnum value, IReadOnlyList<TEnum> values, string[] names)
@@ -245,12 +252,12 @@ public static class EventTypeRendererUtils
 		ImGui.PopItemWidth();
 	}
 
-	public static unsafe void NextColumnInputMatrix3x3(int eventIndex, ReadOnlySpan<char> fieldName, ref Matrix3x3 value)
+	public static unsafe void NextColumnInputMatrix3x3(int eventIndex, ReadOnlySpan<char> fieldName, ref Matrix3x3 value, ReadOnlySpan<char> format = default)
 	{
 		ImGui.TableNextColumn();
 
 		ImGui.PushItemWidth(-1);
-		ImGui.InputScalarN(EditLabel(fieldName, eventIndex), ImGuiDataType.Float, (IntPtr)Unsafe.AsPointer(ref value), 9);
+		ImGui.InputScalarN(EditLabel(fieldName, eventIndex), ImGuiDataType.Float, (IntPtr)Unsafe.AsPointer(ref value), 9, 0, 0, format);
 		ImGui.PopItemWidth();
 	}
 

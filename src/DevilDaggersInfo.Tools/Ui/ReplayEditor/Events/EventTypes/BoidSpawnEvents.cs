@@ -11,8 +11,9 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEvent>
 
 	public static IReadOnlyList<EventColumn> EventColumns { get; } = new List<EventColumn>
 	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
+		EventColumn.Actions,
+		EventColumn.Index,
+		EventColumn.EntityId,
 		new("Spawner Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
 		new("Type", ImGuiTableColumnFlags.WidthFixed, 96),
 		new("Position", ImGuiTableColumnFlags.WidthFixed, 96),
@@ -23,6 +24,7 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEvent>
 
 	public static void Render(int index, BoidSpawnEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
+		EventTypeRendererUtils.NextColumnActions(index);
 		EventTypeRendererUtils.NextColumnEventIndex(index);
 		EventTypeRendererUtils.NextColumnEntityId(entityTypes, e.EntityId);
 		EventTypeRendererUtils.NextColumnEditableEntityId(index, nameof(BoidSpawnEvent.SpawnerEntityId), entityTypes, ref e.SpawnerEntityId);

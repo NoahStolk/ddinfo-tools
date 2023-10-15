@@ -9,12 +9,14 @@ public sealed class DeathEvents : IEventTypeRenderer<DeathEvent>
 {
 	public static IReadOnlyList<EventColumn> EventColumns { get; } = new List<EventColumn>
 	{
-		new("Index", ImGuiTableColumnFlags.WidthFixed, 64),
+		EventColumn.Actions,
+		EventColumn.Index,
 		new("Death Type", ImGuiTableColumnFlags.WidthFixed, 160),
 	};
 
 	public static void Render(int index, DeathEvent e, IReadOnlyList<EntityType> entityTypes)
 	{
+		EventTypeRendererUtils.NextColumnActions(index);
 		EventTypeRendererUtils.NextColumnEventIndex(index);
 
 		ImGui.TableNextColumn();
