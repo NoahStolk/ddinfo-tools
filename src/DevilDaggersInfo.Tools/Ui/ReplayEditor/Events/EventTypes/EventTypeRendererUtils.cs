@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Events.Interfaces;
 using DevilDaggersInfo.Core.Replay.Extensions;
@@ -103,9 +104,73 @@ public static class EventTypeRendererUtils
 
 		ImGui.SameLine();
 		ImGui.PushID(Inline.Span($"delete_event_{index}"));
-		if (ImGui.Button("DEL"))
+		ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 159 });
+		ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red);
+		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red with { A = 223 });
+		if (ImGui.SmallButton("DEL"))
 			FileStates.Replay.Object.EventsData.RemoveEvent(index);
+		ImGui.PopStyleColor(3);
 		ImGui.PopID();
+
+		if (ImGui.IsItemHovered())
+			ImGui.SetTooltip(Inline.Span($"Delete event {index}"));
+
+		ImGui.SameLine();
+		if (ImGui.SmallButton($"INS##{index}"))
+			ImGui.OpenPopup(Inline.Span($"Insert event at index {index}"));
+
+		ImGui.SetNextWindowSize(new(512, 512), ImGuiCond.Appearing);
+		if (ImGui.BeginPopupModal(Inline.Span($"Insert event at index {index}")))
+		{
+			IEvent? e = null;
+			if (ImGui.Button(nameof(BoidSpawnEvent)))
+				e = new BoidSpawnEvent(-1, 1, BoidType.Skull1, Int16Vec3.Zero, Int16Mat3x3.Identity, Vector3.Zero, 0f);
+			else if (ImGui.Button(nameof(DaggerSpawnEvent)))
+				e = new DaggerSpawnEvent(-1, -1, Int16Vec3.Zero, Int16Mat3x3.Identity, false, DaggerType.Level1);
+			else if (ImGui.Button(nameof(DeathEvent)))
+				e = new DeathEvent(0);
+			else if (ImGui.Button(nameof(EndEvent)))
+				e = new EndEvent();
+			else if (ImGui.Button(nameof(EntityOrientationEvent)))
+				e = new EntityOrientationEvent(0, Int16Mat3x3.Identity);
+			else if (ImGui.Button(nameof(EntityPositionEvent)))
+				e = new EntityPositionEvent(0, Int16Vec3.Zero);
+			else if (ImGui.Button(nameof(EntityTargetEvent)))
+				e = new EntityTargetEvent(0, Int16Vec3.Zero);
+			else if (ImGui.Button(nameof(GemEvent)))
+				e = new GemEvent();
+			else if (ImGui.Button(nameof(HitEvent)))
+				e = new HitEvent(0, 0, 0);
+			else if (ImGui.Button(nameof(InitialInputsEvent)))
+				e = new InitialInputsEvent(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0, 2);
+			else if (ImGui.Button(nameof(InputsEvent)))
+				e = new InputsEvent(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0);
+			else if (ImGui.Button(nameof(LeviathanSpawnEvent)))
+				e = new LeviathanSpawnEvent(-1, -1);
+			else if (ImGui.Button(nameof(PedeSpawnEvent)))
+				e = new PedeSpawnEvent(-1, PedeType.Centipede, -1, Vector3.Zero, Vector3.Zero, Matrix3x3.Identity);
+			else if (ImGui.Button(nameof(SpiderEggSpawnEvent)))
+				e = new SpiderEggSpawnEvent(-1, 0, Vector3.Zero, Vector3.Zero);
+			else if (ImGui.Button(nameof(SpiderSpawnEvent)))
+				e = new SpiderSpawnEvent(-1, SpiderType.Spider1, -1, Vector3.Zero);
+			else if (ImGui.Button(nameof(SquidSpawnEvent)))
+				e = new SquidSpawnEvent(-1, SquidType.Squid1, -1, Vector3.Zero, Vector3.Zero, 0f);
+			else if (ImGui.Button(nameof(ThornSpawnEvent)))
+				e = new ThornSpawnEvent(-1, -1, Vector3.Zero, 0f);
+			else if (ImGui.Button(nameof(TransmuteEvent)))
+				e = new TransmuteEvent(-1, Int16Vec3.Zero, Int16Vec3.Zero, Int16Vec3.Zero, Int16Vec3.Zero);
+
+			if (e != null)
+			{
+				FileStates.Replay.Object.EventsData.InsertEvent(index, e);
+				ImGui.CloseCurrentPopup();
+			}
+
+			if (ImGui.Button("Cancel"))
+				ImGui.CloseCurrentPopup();
+
+			ImGui.EndPopup();
+		}
 	}
 
 	public static void NextColumnInputEnum<TEnum>(int eventIndex, ReadOnlySpan<char> fieldName, ref TEnum value, IReadOnlyList<TEnum> values, string[] names)

@@ -15,10 +15,10 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEvent>
 		new("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
 		new("Spawner Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
 		new("Type", ImGuiTableColumnFlags.WidthFixed, 96),
-		new("Position", ImGuiTableColumnFlags.None, 128),
+		new("Position", ImGuiTableColumnFlags.WidthFixed, 96),
 		new("Orientation", ImGuiTableColumnFlags.None, 196),
-		new("Velocity", ImGuiTableColumnFlags.None, 128),
-		new("Speed", ImGuiTableColumnFlags.WidthFixed, 96),
+		new("Velocity", ImGuiTableColumnFlags.WidthFixed, 128),
+		new("Speed", ImGuiTableColumnFlags.WidthFixed, 64),
 	};
 
 	public static void Render(int index, BoidSpawnEvent e, IReadOnlyList<EntityType> entityTypes)

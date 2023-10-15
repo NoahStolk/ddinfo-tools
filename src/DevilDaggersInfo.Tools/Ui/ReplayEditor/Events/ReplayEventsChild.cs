@@ -2,6 +2,8 @@ using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Events.Interfaces;
+using DevilDaggersInfo.Core.Replay.Numerics;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
@@ -173,7 +175,7 @@ public static class ReplayEventsChild
 			int offset = eventsData.EventOffsetsPerTick[i];
 			int count = eventsData.EventOffsetsPerTick[i + 1] - offset;
 
-			// TODO: Refactor using discriminated unions if they ever get added to C#.
+			// TODO: Refactor using discriminated unions (<InputsEvent, InitialInputsEvent>) if they ever get added to C#.
 			InputsEvent? inputsE = null;
 			InitialInputsEvent? initInputsE = null;
 			_eventCache.Clear();
