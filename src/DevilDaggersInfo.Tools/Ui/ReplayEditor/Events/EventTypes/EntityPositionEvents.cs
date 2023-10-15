@@ -11,7 +11,7 @@ public sealed class EntityPositionEvents : IEventTypeRenderer<EntityPositionEven
 		EventColumn.Actions,
 		EventColumn.Index,
 		EventColumn.EntityId,
-		new("Position", ImGuiTableColumnFlags.None, 128),
+		new("Position", ImGuiTableColumnFlags.WidthFixed, 128),
 	};
 
 	public static void Render(int index, EntityPositionEvent e, IReadOnlyList<EntityType> entityTypes)

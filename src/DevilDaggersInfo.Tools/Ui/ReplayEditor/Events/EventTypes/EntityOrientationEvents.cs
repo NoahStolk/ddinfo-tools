@@ -11,7 +11,7 @@ public sealed class EntityOrientationEvents : IEventTypeRenderer<EntityOrientati
 		EventColumn.Actions,
 		EventColumn.Index,
 		EventColumn.EntityId,
-		new("Orientation", ImGuiTableColumnFlags.None, 196),
+		new("Orientation", ImGuiTableColumnFlags.WidthFixed, 384),
 	};
 
 	public static void Render(int index, EntityOrientationEvent e, IReadOnlyList<EntityType> entityTypes)

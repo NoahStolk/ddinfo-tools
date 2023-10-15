@@ -18,11 +18,11 @@ public sealed class InputsEvents : IEventTypeRenderer<InputsEvent>
 		new("Right", ImGuiTableColumnFlags.WidthFixed, 64),
 		new("Forward", ImGuiTableColumnFlags.WidthFixed, 64),
 		new("Backward", ImGuiTableColumnFlags.WidthFixed, 64),
-		new("Jump", ImGuiTableColumnFlags.WidthFixed, 128),
-		new("Shoot", ImGuiTableColumnFlags.WidthFixed, 128),
-		new("Shoot Homing", ImGuiTableColumnFlags.WidthFixed, 128),
-		new("Mouse X", ImGuiTableColumnFlags.WidthFixed, 96),
-		new("Mouse Y", ImGuiTableColumnFlags.WidthFixed, 96),
+		new("Jump", ImGuiTableColumnFlags.WidthFixed, 96),
+		new("Shoot", ImGuiTableColumnFlags.WidthFixed, 96),
+		new("Shoot Homing", ImGuiTableColumnFlags.WidthFixed, 96),
+		new("Mouse X", ImGuiTableColumnFlags.WidthFixed, 64),
+		new("Mouse Y", ImGuiTableColumnFlags.WidthFixed, 64),
 	};
 
 	public static void Render(int index, InputsEvent e, IReadOnlyList<EntityType> entityTypes)

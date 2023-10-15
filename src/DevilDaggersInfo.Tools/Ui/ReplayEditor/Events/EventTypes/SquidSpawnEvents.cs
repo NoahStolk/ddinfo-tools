@@ -16,9 +16,9 @@ public sealed class SquidSpawnEvents : IEventTypeRenderer<SquidSpawnEvent>
 		EventColumn.EntityId,
 		new("Type", ImGuiTableColumnFlags.WidthFixed, 80),
 		new("?", ImGuiTableColumnFlags.WidthFixed, 32),
-		new("Position", ImGuiTableColumnFlags.None, 128),
-		new("Direction", ImGuiTableColumnFlags.None, 128),
-		new("Rotation", ImGuiTableColumnFlags.None, 128),
+		new("Position", ImGuiTableColumnFlags.WidthFixed, 192),
+		new("Direction", ImGuiTableColumnFlags.WidthFixed, 192),
+		new("Rotation", ImGuiTableColumnFlags.WidthFixed, 64),
 	};
 
 	public static void Render(int index, SquidSpawnEvent e, IReadOnlyList<EntityType> entityTypes)

@@ -16,7 +16,7 @@ public sealed class SpiderSpawnEvents : IEventTypeRenderer<SpiderSpawnEvent>
 		EventColumn.EntityId,
 		new("Type", ImGuiTableColumnFlags.WidthFixed, 80),
 		new("?", ImGuiTableColumnFlags.WidthFixed, 32),
-		new("Position", ImGuiTableColumnFlags.None, 128),
+		new("Position", ImGuiTableColumnFlags.WidthFixed, 192),
 	};
 
 	public static void Render(int index, SpiderSpawnEvent e, IReadOnlyList<EntityType> entityTypes)

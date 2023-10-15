@@ -11,10 +11,10 @@ public sealed class TransmuteEvents : IEventTypeRenderer<TransmuteEvent>
 		EventColumn.Actions,
 		EventColumn.Index,
 		EventColumn.EntityId,
-		new("?", ImGuiTableColumnFlags.None, 128),
-		new("?", ImGuiTableColumnFlags.None, 128),
-		new("?", ImGuiTableColumnFlags.None, 128),
-		new("?", ImGuiTableColumnFlags.None, 128),
+		new("?", ImGuiTableColumnFlags.WidthFixed, 128),
+		new("?", ImGuiTableColumnFlags.WidthFixed, 128),
+		new("?", ImGuiTableColumnFlags.WidthFixed, 128),
+		new("?", ImGuiTableColumnFlags.WidthFixed, 128),
 	};
 
 	public static void Render(int index, TransmuteEvent e, IReadOnlyList<EntityType> entityTypes)

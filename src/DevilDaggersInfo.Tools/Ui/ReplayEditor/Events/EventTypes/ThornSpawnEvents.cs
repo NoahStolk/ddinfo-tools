@@ -12,8 +12,8 @@ public sealed class ThornSpawnEvents : IEventTypeRenderer<ThornSpawnEvent>
 		EventColumn.Index,
 		EventColumn.EntityId,
 		new("?", ImGuiTableColumnFlags.WidthFixed, 32),
-		new("Position", ImGuiTableColumnFlags.None, 128),
-		new("Rotation", ImGuiTableColumnFlags.None, 128),
+		new("Position", ImGuiTableColumnFlags.WidthFixed, 192),
+		new("Rotation", ImGuiTableColumnFlags.WidthFixed, 64),
 	};
 
 	public static void Render(int index, ThornSpawnEvent e, IReadOnlyList<EntityType> entityTypes)

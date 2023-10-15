@@ -26,7 +26,7 @@ public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEvent>
 		new("Type", ImGuiTableColumnFlags.WidthFixed, 96),
 		new("?", ImGuiTableColumnFlags.WidthFixed, 32),
 		new("Position", ImGuiTableColumnFlags.WidthFixed, 128),
-		new("Orientation", ImGuiTableColumnFlags.None, 196),
+		new("Orientation", ImGuiTableColumnFlags.WidthFixed, 384),
 		new("Shot/Rapid", ImGuiTableColumnFlags.WidthFixed, 80),
 	};
 
