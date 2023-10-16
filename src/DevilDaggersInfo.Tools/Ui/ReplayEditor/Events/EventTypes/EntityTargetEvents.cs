@@ -1,10 +1,10 @@
-using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
+using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class EntityTargetEvents : IEventTypeRenderer<EntityTargetEvent>
+public sealed class EntityTargetEvents : IEventTypeRenderer<EntityTargetEventData>
 {
 	public static IReadOnlyList<EventColumn> EventColumns { get; } = new List<EventColumn>
 	{
@@ -14,11 +14,11 @@ public sealed class EntityTargetEvents : IEventTypeRenderer<EntityTargetEvent>
 		new("Target Position", ImGuiTableColumnFlags.WidthFixed, 128),
 	};
 
-	public static void Render(int index, EntityTargetEvent e, IReadOnlyList<EntityType> entityTypes)
+	public static void Render(int eventIndex, int entityId, EntityTargetEventData e, ReplayEventsData replayEventsData)
 	{
-		EventTypeRendererUtils.NextColumnActions(index);
-		EventTypeRendererUtils.NextColumnEventIndex(index);
-		EventTypeRendererUtils.NextColumnEditableEntityId(index, nameof(EntityTargetEvent.EntityId), entityTypes, ref e.EntityId);
-		EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(EntityTargetEvent.TargetPosition), ref e.TargetPosition);
+		EventTypeRendererUtils.NextColumnActions(eventIndex);
+		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(EntityTargetEventData.EntityId), replayEventsData, ref e.EntityId);
+		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(EntityTargetEventData.TargetPosition), ref e.TargetPosition);
 	}
 }

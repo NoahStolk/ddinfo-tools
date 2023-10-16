@@ -1,10 +1,9 @@
-using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
-using ImGuiNET;
+using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class GemEvents : IEventTypeRenderer<GemEvent>
+public sealed class GemEvents : IEventTypeRenderer<GemEventData>
 {
 	public static IReadOnlyList<EventColumn> EventColumns { get; } = new List<EventColumn>
 	{
@@ -12,9 +11,9 @@ public sealed class GemEvents : IEventTypeRenderer<GemEvent>
 		EventColumn.Index,
 	};
 
-	public static void Render(int index, GemEvent e, IReadOnlyList<EntityType> entityTypes)
+	public static void Render(int eventIndex, int entityId, GemEventData e, ReplayEventsData replayEventsData)
 	{
-		EventTypeRendererUtils.NextColumnActions(index);
-		EventTypeRendererUtils.NextColumnEventIndex(index);
+		EventTypeRendererUtils.NextColumnActions(eventIndex);
+		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
 	}
 }

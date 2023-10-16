@@ -1,10 +1,10 @@
-using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
+using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class ThornSpawnEvents : IEventTypeRenderer<ThornSpawnEvent>
+public sealed class ThornSpawnEvents : IEventTypeRenderer<ThornSpawnEventData>
 {
 	public static IReadOnlyList<EventColumn> EventColumns { get; } = new List<EventColumn>
 	{
@@ -16,13 +16,13 @@ public sealed class ThornSpawnEvents : IEventTypeRenderer<ThornSpawnEvent>
 		new("Rotation", ImGuiTableColumnFlags.WidthFixed, 64),
 	};
 
-	public static void Render(int index, ThornSpawnEvent e, IReadOnlyList<EntityType> entityTypes)
+	public static void Render(int eventIndex, int entityId, ThornSpawnEventData e, ReplayEventsData replayEventsData)
 	{
-		EventTypeRendererUtils.NextColumnActions(index);
-		EventTypeRendererUtils.NextColumnEventIndex(index);
-		EventTypeRendererUtils.NextColumnEntityId(entityTypes, e.EntityId);
-		EventTypeRendererUtils.NextColumnInputInt(index, nameof(ThornSpawnEvent.A), ref e.A);
-		EventTypeRendererUtils.NextColumnInputVector3(index, nameof(ThornSpawnEvent.Position), ref e.Position, "%.2f");
-		EventTypeRendererUtils.NextColumnInputFloat(index, nameof(ThornSpawnEvent.RotationInRadians), ref e.RotationInRadians, "%.2f");
+		EventTypeRendererUtils.NextColumnActions(eventIndex);
+		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
+		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(ThornSpawnEventData.A), ref e.A);
+		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(ThornSpawnEventData.Position), ref e.Position, "%.2f");
+		EventTypeRendererUtils.NextColumnInputFloat(eventIndex, nameof(ThornSpawnEventData.RotationInRadians), ref e.RotationInRadians, "%.2f");
 	}
 }

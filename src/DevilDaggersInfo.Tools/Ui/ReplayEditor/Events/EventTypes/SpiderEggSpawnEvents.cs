@@ -1,10 +1,10 @@
-using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
+using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class SpiderEggSpawnEvents : IEventTypeRenderer<SpiderEggSpawnEvent>
+public sealed class SpiderEggSpawnEvents : IEventTypeRenderer<SpiderEggSpawnEventData>
 {
 	public static IReadOnlyList<EventColumn> EventColumns { get; } = new List<EventColumn>
 	{
@@ -16,13 +16,13 @@ public sealed class SpiderEggSpawnEvents : IEventTypeRenderer<SpiderEggSpawnEven
 		new("Target Position", ImGuiTableColumnFlags.WidthFixed, 192),
 	};
 
-	public static void Render(int index, SpiderEggSpawnEvent e, IReadOnlyList<EntityType> entityTypes)
+	public static void Render(int eventIndex, int entityId, SpiderEggSpawnEventData e, ReplayEventsData replayEventsData)
 	{
-		EventTypeRendererUtils.NextColumnActions(index);
-		EventTypeRendererUtils.NextColumnEventIndex(index);
-		EventTypeRendererUtils.NextColumnEntityId(entityTypes, e.EntityId);
-		EventTypeRendererUtils.NextColumnEditableEntityId(index, nameof(SpiderEggSpawnEvent.SpawnerEntityId), entityTypes, ref e.SpawnerEntityId);
-		EventTypeRendererUtils.NextColumnInputVector3(index, nameof(SpiderEggSpawnEvent.Position), ref e.Position, "%.2f");
-		EventTypeRendererUtils.NextColumnInputVector3(index, nameof(SpiderEggSpawnEvent.TargetPosition), ref e.TargetPosition, "%.2f");
+		EventTypeRendererUtils.NextColumnActions(eventIndex);
+		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
+		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(SpiderEggSpawnEventData.SpawnerEntityId), replayEventsData, ref e.SpawnerEntityId);
+		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(SpiderEggSpawnEventData.Position), ref e.Position, "%.2f");
+		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(SpiderEggSpawnEventData.TargetPosition), ref e.TargetPosition, "%.2f");
 	}
 }

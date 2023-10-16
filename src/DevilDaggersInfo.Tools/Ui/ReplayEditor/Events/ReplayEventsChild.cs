@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
-using DevilDaggersInfo.Core.Replay.Events.Interfaces;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
@@ -165,32 +164,32 @@ public static class ReplayEventsChild
 			bool showTick = !_onlyShowTicksWithEnabledEvents;
 			for (int j = offset; j < offset + count; j++)
 			{
-				IEvent @event = eventsData.Events[j];
+				ReplayEvent @event = eventsData.Events[j];
 				_eventCache.Add(j, @event);
 				if (!showTick)
 				{
-					EventType? eventType = @event switch
+					EventType? eventType = @event.Data switch
 					{
-						BoidSpawnEvent => EventType.BoidSpawn,
-						LeviathanSpawnEvent => EventType.LeviathanSpawn,
-						PedeSpawnEvent => EventType.PedeSpawn,
-						SpiderEggSpawnEvent => EventType.SpiderEggSpawn,
-						SpiderSpawnEvent => EventType.SpiderSpawn,
-						SquidSpawnEvent => EventType.SquidSpawn,
-						ThornSpawnEvent => EventType.ThornSpawn,
+						BoidSpawnEventData => EventType.BoidSpawn,
+						LeviathanSpawnEventData => EventType.LeviathanSpawn,
+						PedeSpawnEventData => EventType.PedeSpawn,
+						SpiderEggSpawnEventData => EventType.SpiderEggSpawn,
+						SpiderSpawnEventData => EventType.SpiderSpawn,
+						SquidSpawnEventData => EventType.SquidSpawn,
+						ThornSpawnEventData => EventType.ThornSpawn,
 
-						DaggerSpawnEvent => EventType.DaggerSpawn,
-						EntityOrientationEvent => EventType.EntityOrientation,
-						EntityPositionEvent => EventType.EntityPosition,
-						EntityTargetEvent => EventType.EntityTarget,
-						GemEvent => EventType.Gem,
-						HitEvent => EventType.Hit,
-						TransmuteEvent => EventType.Transmute,
+						DaggerSpawnEventData => EventType.DaggerSpawn,
+						EntityOrientationEventData => EventType.EntityOrientation,
+						EntityPositionEventData => EventType.EntityPosition,
+						EntityTargetEventData => EventType.EntityTarget,
+						GemEventData => EventType.Gem,
+						HitEventData => EventType.Hit,
+						TransmuteEventData => EventType.Transmute,
 
-						InitialInputsEvent => EventType.InitialInputs,
-						InputsEvent => EventType.Inputs,
-						DeathEvent => EventType.Death,
-						EndEvent => EventType.End,
+						InitialInputsEventData => EventType.InitialInputs,
+						InputsEventData => EventType.Inputs,
+						DeathEventData => EventType.Death,
+						EndEventData => EventType.End,
 
 						_ => null,
 					};
@@ -214,38 +213,38 @@ public static class ReplayEventsChild
 
 			static void RenderEvents<TEvent, TRenderer>(
 				EventType eventType,
-				IReadOnlyList<(int Index, TEvent Event)> events,
-				IReadOnlyList<EntityType> entityTypes)
-				where TEvent : IEvent
+				IReadOnlyList<(int EventIndex, int EntityId, TEvent Event)> events,
+				ReplayEventsData replayEventsData)
+				where TEvent : IEventData
 				where TRenderer : IEventTypeRenderer<TEvent>
 			{
 				if (_eventTypeEnabled[eventType] && events.Count > 0)
-					EventTypeRendererUtils.RenderTable<TEvent, TRenderer>(EventTypeRendererUtils.GetEventTypeColor(eventType), eventType, events, entityTypes);
+					EventTypeRendererUtils.RenderTable<TEvent, TRenderer>(EventTypeRendererUtils.GetEventTypeColor(eventType), eventType, events, replayEventsData);
 			}
 
 			// Enemy spawn events
-			RenderEvents<BoidSpawnEvent, BoidSpawnEvents>(EventType.BoidSpawn, _eventCache.BoidSpawnEvents, eventsData.EntityTypes);
-			RenderEvents<LeviathanSpawnEvent, LeviathanSpawnEvents>(EventType.LeviathanSpawn, _eventCache.LeviathanSpawnEvents, eventsData.EntityTypes);
-			RenderEvents<PedeSpawnEvent, PedeSpawnEvents>(EventType.PedeSpawn, _eventCache.PedeSpawnEvents, eventsData.EntityTypes);
-			RenderEvents<SpiderEggSpawnEvent, SpiderEggSpawnEvents>(EventType.SpiderEggSpawn, _eventCache.SpiderEggSpawnEvents, eventsData.EntityTypes);
-			RenderEvents<SpiderSpawnEvent, SpiderSpawnEvents>(EventType.SpiderSpawn, _eventCache.SpiderSpawnEvents, eventsData.EntityTypes);
-			RenderEvents<SquidSpawnEvent, SquidSpawnEvents>(EventType.SquidSpawn, _eventCache.SquidSpawnEvents, eventsData.EntityTypes);
-			RenderEvents<ThornSpawnEvent, ThornSpawnEvents>(EventType.ThornSpawn, _eventCache.ThornSpawnEvents, eventsData.EntityTypes);
+			RenderEvents<BoidSpawnEventData, BoidSpawnEvents>(EventType.BoidSpawn, _eventCache.BoidSpawnEvents, eventsData);
+			RenderEvents<LeviathanSpawnEventData, LeviathanSpawnEvents>(EventType.LeviathanSpawn, _eventCache.LeviathanSpawnEvents, eventsData);
+			RenderEvents<PedeSpawnEventData, PedeSpawnEvents>(EventType.PedeSpawn, _eventCache.PedeSpawnEvents, eventsData);
+			RenderEvents<SpiderEggSpawnEventData, SpiderEggSpawnEvents>(EventType.SpiderEggSpawn, _eventCache.SpiderEggSpawnEvents, eventsData);
+			RenderEvents<SpiderSpawnEventData, SpiderSpawnEvents>(EventType.SpiderSpawn, _eventCache.SpiderSpawnEvents, eventsData);
+			RenderEvents<SquidSpawnEventData, SquidSpawnEvents>(EventType.SquidSpawn, _eventCache.SquidSpawnEvents, eventsData);
+			RenderEvents<ThornSpawnEventData, ThornSpawnEvents>(EventType.ThornSpawn, _eventCache.ThornSpawnEvents, eventsData);
 
 			// Other events
-			RenderEvents<DaggerSpawnEvent, DaggerSpawnEvents>(EventType.DaggerSpawn, _eventCache.DaggerSpawnEvents, eventsData.EntityTypes);
-			RenderEvents<EntityOrientationEvent, EntityOrientationEvents>(EventType.EntityOrientation, _eventCache.EntityOrientationEvents, eventsData.EntityTypes);
-			RenderEvents<EntityPositionEvent, EntityPositionEvents>(EventType.EntityPosition, _eventCache.EntityPositionEvents, eventsData.EntityTypes);
-			RenderEvents<EntityTargetEvent, EntityTargetEvents>(EventType.EntityTarget, _eventCache.EntityTargetEvents, eventsData.EntityTypes);
-			RenderEvents<GemEvent, GemEvents>(EventType.Gem, _eventCache.GemEvents, eventsData.EntityTypes);
-			RenderEvents<HitEvent, HitEvents>(EventType.Hit, _eventCache.HitEvents, eventsData.EntityTypes);
-			RenderEvents<TransmuteEvent, TransmuteEvents>(EventType.Transmute, _eventCache.TransmuteEvents, eventsData.EntityTypes);
+			RenderEvents<DaggerSpawnEventData, DaggerSpawnEvents>(EventType.DaggerSpawn, _eventCache.DaggerSpawnEvents, eventsData);
+			RenderEvents<EntityOrientationEventData, EntityOrientationEvents>(EventType.EntityOrientation, _eventCache.EntityOrientationEvents, eventsData);
+			RenderEvents<EntityPositionEventData, EntityPositionEvents>(EventType.EntityPosition, _eventCache.EntityPositionEvents, eventsData);
+			RenderEvents<EntityTargetEventData, EntityTargetEvents>(EventType.EntityTarget, _eventCache.EntityTargetEvents, eventsData);
+			RenderEvents<GemEventData, GemEvents>(EventType.Gem, _eventCache.GemEvents, eventsData);
+			RenderEvents<HitEventData, HitEvents>(EventType.Hit, _eventCache.HitEvents, eventsData);
+			RenderEvents<TransmuteEventData, TransmuteEvents>(EventType.Transmute, _eventCache.TransmuteEvents, eventsData);
 
 			// Final events
-			RenderEvents<InitialInputsEvent, InitialInputsEvents>(EventType.InitialInputs, _eventCache.InitialInputsEvents, eventsData.EntityTypes);
-			RenderEvents<InputsEvent, InputsEvents>(EventType.Inputs, _eventCache.InputsEvents, eventsData.EntityTypes);
-			RenderEvents<DeathEvent, DeathEvents>(EventType.Death, _eventCache.DeathEvents, eventsData.EntityTypes);
-			RenderEvents<EndEvent, EndEvents>(EventType.End, _eventCache.EndEvents, eventsData.EntityTypes);
+			RenderEvents<InitialInputsEventData, InitialInputsEvents>(EventType.InitialInputs, _eventCache.InitialInputsEvents, eventsData);
+			RenderEvents<InputsEventData, InputsEvents>(EventType.Inputs, _eventCache.InputsEvents, eventsData);
+			RenderEvents<DeathEventData, DeathEvents>(EventType.Death, _eventCache.DeathEvents, eventsData);
+			RenderEvents<EndEventData, EndEvents>(EventType.End, _eventCache.EndEvents, eventsData);
 		}
 
 		ImGui.EndTable();

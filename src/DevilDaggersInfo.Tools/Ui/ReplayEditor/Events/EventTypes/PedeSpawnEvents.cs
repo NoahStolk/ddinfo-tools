@@ -1,11 +1,11 @@
-using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
+using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class PedeSpawnEvents : IEventTypeRenderer<PedeSpawnEvent>
+public sealed class PedeSpawnEvents : IEventTypeRenderer<PedeSpawnEventData>
 {
 	private static readonly string[] _pedeTypeNamesArray = EnumUtils.PedeTypeNames.Values.ToArray();
 
@@ -21,15 +21,15 @@ public sealed class PedeSpawnEvents : IEventTypeRenderer<PedeSpawnEvent>
 		new("Orientation", ImGuiTableColumnFlags.None, 128),
 	};
 
-	public static void Render(int index, PedeSpawnEvent e, IReadOnlyList<EntityType> entityTypes)
+	public static void Render(int eventIndex, int entityId, PedeSpawnEventData e, ReplayEventsData replayEventsData)
 	{
-		EventTypeRendererUtils.NextColumnActions(index);
-		EventTypeRendererUtils.NextColumnEventIndex(index);
-		EventTypeRendererUtils.NextColumnEntityId(entityTypes, e.EntityId);
-		EventTypeRendererUtils.NextColumnInputEnum(index, nameof(PedeSpawnEvent.PedeType), ref e.PedeType, EnumUtils.PedeTypes, _pedeTypeNamesArray);
-		EventTypeRendererUtils.NextColumnInputInt(index, nameof(PedeSpawnEvent.A), ref e.A);
-		EventTypeRendererUtils.NextColumnInputVector3(index, nameof(PedeSpawnEvent.Position), ref e.Position, "%.2f");
-		EventTypeRendererUtils.NextColumnInputVector3(index, nameof(PedeSpawnEvent.B), ref e.B, "%.0f");
-		EventTypeRendererUtils.NextColumnInputMatrix3x3(index, nameof(PedeSpawnEvent.Orientation), ref e.Orientation, "%.2f");
+		EventTypeRendererUtils.NextColumnActions(eventIndex);
+		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
+		EventTypeRendererUtils.NextColumnInputEnum(eventIndex, nameof(PedeSpawnEventData.PedeType), ref e.PedeType, EnumUtils.PedeTypes, _pedeTypeNamesArray);
+		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(PedeSpawnEventData.A), ref e.A);
+		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(PedeSpawnEventData.Position), ref e.Position, "%.2f");
+		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(PedeSpawnEventData.B), ref e.B, "%.0f");
+		EventTypeRendererUtils.NextColumnInputMatrix3x3(eventIndex, nameof(PedeSpawnEventData.Orientation), ref e.Orientation, "%.2f");
 	}
 }

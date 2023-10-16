@@ -1,11 +1,11 @@
-using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
+using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEvent>
+public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEventData>
 {
 	private static readonly string[] _daggerTypeNamesArray =
 	{
@@ -30,15 +30,15 @@ public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEvent>
 		new("Shot/Rapid", ImGuiTableColumnFlags.WidthFixed, 80),
 	};
 
-	public static void Render(int index, DaggerSpawnEvent e, IReadOnlyList<EntityType> entityTypes)
+	public static void Render(int eventIndex, int entityId, DaggerSpawnEventData e, ReplayEventsData replayEventsData)
 	{
-		EventTypeRendererUtils.NextColumnActions(index);
-		EventTypeRendererUtils.NextColumnEventIndex(index);
-		EventTypeRendererUtils.NextColumnEntityId(entityTypes, e.EntityId);
-		EventTypeRendererUtils.NextColumnInputEnum(index, nameof(DaggerSpawnEvent.DaggerType), ref e.DaggerType, EnumUtils.DaggerTypes, _daggerTypeNamesArray);
-		EventTypeRendererUtils.NextColumnInputInt(index, nameof(DaggerSpawnEvent.A), ref e.A);
-		EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(DaggerSpawnEvent.Position), ref e.Position);
-		EventTypeRendererUtils.NextColumnInputInt16Mat3x3(index, nameof(DaggerSpawnEvent.Orientation), ref e.Orientation);
-		EventTypeRendererUtils.NextColumnCheckbox(index, nameof(DaggerSpawnEvent.IsShot), ref e.IsShot, "Shot", "Rapid");
+		EventTypeRendererUtils.NextColumnActions(eventIndex);
+		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
+		EventTypeRendererUtils.NextColumnInputEnum(eventIndex, nameof(DaggerSpawnEventData.DaggerType), ref e.DaggerType, EnumUtils.DaggerTypes, _daggerTypeNamesArray);
+		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(DaggerSpawnEventData.A), ref e.A);
+		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(DaggerSpawnEventData.Position), ref e.Position);
+		EventTypeRendererUtils.NextColumnInputInt16Mat3x3(eventIndex, nameof(DaggerSpawnEventData.Orientation), ref e.Orientation);
+		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(DaggerSpawnEventData.IsShot), ref e.IsShot, "Shot", "Rapid");
 	}
 }

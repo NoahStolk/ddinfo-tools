@@ -1,48 +1,48 @@
 using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Interfaces;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 
 public sealed class EventCache
 {
-	private readonly List<(int Index, BoidSpawnEvent Event)> _boidSpawnEvents = new();
-	private readonly List<(int Index, DaggerSpawnEvent Event)> _daggerSpawnEvents = new();
-	private readonly List<(int Index, DeathEvent Event)> _deathEvents = new();
-	private readonly List<(int Index, EndEvent Event)> _endEvents = new();
-	private readonly List<(int Index, EntityOrientationEvent Event)> _entityOrientationEvents = new();
-	private readonly List<(int Index, EntityPositionEvent Event)> _entityPositionEvents = new();
-	private readonly List<(int Index, EntityTargetEvent Event)> _entityTargetEvents = new();
-	private readonly List<(int Index, GemEvent Event)> _gemEvents = new();
-	private readonly List<(int Index, HitEvent Event)> _hitEvents = new();
-	private readonly List<(int Index, InitialInputsEvent Event)> _initialInputsEvents = new();
-	private readonly List<(int Index, InputsEvent Event)> _inputsEvents = new();
-	private readonly List<(int Index, LeviathanSpawnEvent Event)> _leviathanSpawnEvents = new();
-	private readonly List<(int Index, PedeSpawnEvent Event)> _pedeSpawnEvents = new();
-	private readonly List<(int Index, SpiderEggSpawnEvent Event)> _spiderEggSpawnEvents = new();
-	private readonly List<(int Index, SpiderSpawnEvent Event)> _spiderSpawnEvents = new();
-	private readonly List<(int Index, SquidSpawnEvent Event)> _squidSpawnEvents = new();
-	private readonly List<(int Index, ThornSpawnEvent Event)> _thornSpawnEvents = new();
-	private readonly List<(int Index, TransmuteEvent Event)> _transmuteEvents = new();
+	private readonly List<(int EventIndex, int EntityId, BoidSpawnEventData Event)> _boidSpawnEvents = new();
+	private readonly List<(int EventIndex, int EntityId, DaggerSpawnEventData Event)> _daggerSpawnEvents = new();
+	private readonly List<(int EventIndex, int EntityId, DeathEventData Event)> _deathEvents = new();
+	private readonly List<(int EventIndex, int EntityId, EndEventData Event)> _endEvents = new();
+	private readonly List<(int EventIndex, int EntityId, EntityOrientationEventData Event)> _entityOrientationEvents = new();
+	private readonly List<(int EventIndex, int EntityId, EntityPositionEventData Event)> _entityPositionEvents = new();
+	private readonly List<(int EventIndex, int EntityId, EntityTargetEventData Event)> _entityTargetEvents = new();
+	private readonly List<(int EventIndex, int EntityId, GemEventData Event)> _gemEvents = new();
+	private readonly List<(int EventIndex, int EntityId, HitEventData Event)> _hitEvents = new();
+	private readonly List<(int EventIndex, int EntityId, InitialInputsEventData Event)> _initialInputsEvents = new();
+	private readonly List<(int EventIndex, int EntityId, InputsEventData Event)> _inputsEvents = new();
+	private readonly List<(int EventIndex, int EntityId, LeviathanSpawnEventData Event)> _leviathanSpawnEvents = new();
+	private readonly List<(int EventIndex, int EntityId, PedeSpawnEventData Event)> _pedeSpawnEvents = new();
+	private readonly List<(int EventIndex, int EntityId, SpiderEggSpawnEventData Event)> _spiderEggSpawnEvents = new();
+	private readonly List<(int EventIndex, int EntityId, SpiderSpawnEventData Event)> _spiderSpawnEvents = new();
+	private readonly List<(int EventIndex, int EntityId, SquidSpawnEventData Event)> _squidSpawnEvents = new();
+	private readonly List<(int EventIndex, int EntityId, ThornSpawnEventData Event)> _thornSpawnEvents = new();
+	private readonly List<(int EventIndex, int EntityId, TransmuteEventData Event)> _transmuteEvents = new();
 
-	public IReadOnlyList<(int Index, BoidSpawnEvent Event)> BoidSpawnEvents => _boidSpawnEvents;
-	public IReadOnlyList<(int Index, DaggerSpawnEvent Event)> DaggerSpawnEvents => _daggerSpawnEvents;
-	public IReadOnlyList<(int Index, DeathEvent Event)> DeathEvents => _deathEvents;
-	public IReadOnlyList<(int Index, EndEvent Event)> EndEvents => _endEvents;
-	public IReadOnlyList<(int Index, EntityOrientationEvent Event)> EntityOrientationEvents => _entityOrientationEvents;
-	public IReadOnlyList<(int Index, EntityPositionEvent Event)> EntityPositionEvents => _entityPositionEvents;
-	public IReadOnlyList<(int Index, EntityTargetEvent Event)> EntityTargetEvents => _entityTargetEvents;
-	public IReadOnlyList<(int Index, GemEvent Event)> GemEvents => _gemEvents;
-	public IReadOnlyList<(int Index, HitEvent Event)> HitEvents => _hitEvents;
-	public IReadOnlyList<(int Index, InitialInputsEvent Event)> InitialInputsEvents => _initialInputsEvents;
-	public IReadOnlyList<(int Index, InputsEvent Event)> InputsEvents => _inputsEvents;
-	public IReadOnlyList<(int Index, LeviathanSpawnEvent Event)> LeviathanSpawnEvents => _leviathanSpawnEvents;
-	public IReadOnlyList<(int Index, PedeSpawnEvent Event)> PedeSpawnEvents => _pedeSpawnEvents;
-	public IReadOnlyList<(int Index, SpiderEggSpawnEvent Event)> SpiderEggSpawnEvents => _spiderEggSpawnEvents;
-	public IReadOnlyList<(int Index, SpiderSpawnEvent Event)> SpiderSpawnEvents => _spiderSpawnEvents;
-	public IReadOnlyList<(int Index, SquidSpawnEvent Event)> SquidSpawnEvents => _squidSpawnEvents;
-	public IReadOnlyList<(int Index, ThornSpawnEvent Event)> ThornSpawnEvents => _thornSpawnEvents;
-	public IReadOnlyList<(int Index, TransmuteEvent Event)> TransmuteEvents => _transmuteEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, BoidSpawnEventData Event)> BoidSpawnEvents => _boidSpawnEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, DaggerSpawnEventData Event)> DaggerSpawnEvents => _daggerSpawnEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, DeathEventData Event)> DeathEvents => _deathEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, EndEventData Event)> EndEvents => _endEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, EntityOrientationEventData Event)> EntityOrientationEvents => _entityOrientationEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, EntityPositionEventData Event)> EntityPositionEvents => _entityPositionEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, EntityTargetEventData Event)> EntityTargetEvents => _entityTargetEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, GemEventData Event)> GemEvents => _gemEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, HitEventData Event)> HitEvents => _hitEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, InitialInputsEventData Event)> InitialInputsEvents => _initialInputsEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, InputsEventData Event)> InputsEvents => _inputsEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, LeviathanSpawnEventData Event)> LeviathanSpawnEvents => _leviathanSpawnEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, PedeSpawnEventData Event)> PedeSpawnEvents => _pedeSpawnEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, SpiderEggSpawnEventData Event)> SpiderEggSpawnEvents => _spiderEggSpawnEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, SpiderSpawnEventData Event)> SpiderSpawnEvents => _spiderSpawnEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, SquidSpawnEventData Event)> SquidSpawnEvents => _squidSpawnEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, ThornSpawnEventData Event)> ThornSpawnEvents => _thornSpawnEvents;
+	public IReadOnlyList<(int EventIndex, int EntityId, TransmuteEventData Event)> TransmuteEvents => _transmuteEvents;
 
 	public int Count { get; private set; }
 
@@ -69,31 +69,41 @@ public sealed class EventCache
 		_transmuteEvents.Clear();
 	}
 
-	public void Add(int index, IEvent e)
+	public void Add(int index, ReplayEvent e)
 	{
 		Count++;
 
-		switch (e)
+		if (e is EntitySpawnReplayEvent spawnEvent)
 		{
-			case BoidSpawnEvent bse: _boidSpawnEvents.Add((index, bse)); break;
-			case DaggerSpawnEvent dse: _daggerSpawnEvents.Add((index, dse)); break;
-			case DeathEvent de: _deathEvents.Add((index, de)); break;
-			case EndEvent ee: _endEvents.Add((index, ee)); break;
-			case EntityOrientationEvent eoe: _entityOrientationEvents.Add((index, eoe)); break;
-			case EntityPositionEvent epe: _entityPositionEvents.Add((index, epe)); break;
-			case EntityTargetEvent ete: _entityTargetEvents.Add((index, ete)); break;
-			case GemEvent ge: _gemEvents.Add((index, ge)); break;
-			case HitEvent he: _hitEvents.Add((index, he)); break;
-			case InitialInputsEvent iie: _initialInputsEvents.Add((index, iie)); break;
-			case InputsEvent ie: _inputsEvents.Add((index, ie)); break;
-			case LeviathanSpawnEvent lse: _leviathanSpawnEvents.Add((index, lse)); break;
-			case PedeSpawnEvent pse: _pedeSpawnEvents.Add((index, pse)); break;
-			case SpiderEggSpawnEvent sese: _spiderEggSpawnEvents.Add((index, sese)); break;
-			case SpiderSpawnEvent sse: _spiderSpawnEvents.Add((index, sse)); break;
-			case SquidSpawnEvent sse: _squidSpawnEvents.Add((index, sse)); break;
-			case ThornSpawnEvent tse: _thornSpawnEvents.Add((index, tse)); break;
-			case TransmuteEvent te: _transmuteEvents.Add((index, te)); break;
-			default: throw new UnreachableException();
+			switch (e.Data)
+			{
+				case BoidSpawnEventData bse: _boidSpawnEvents.Add((index, spawnEvent.EntityId, bse)); break;
+				case DaggerSpawnEventData dse: _daggerSpawnEvents.Add((index, spawnEvent.EntityId, dse)); break;
+				case LeviathanSpawnEventData lse: _leviathanSpawnEvents.Add((index, spawnEvent.EntityId, lse)); break;
+				case PedeSpawnEventData pse: _pedeSpawnEvents.Add((index, spawnEvent.EntityId, pse)); break;
+				case SpiderEggSpawnEventData sese: _spiderEggSpawnEvents.Add((index, spawnEvent.EntityId, sese)); break;
+				case SpiderSpawnEventData sse: _spiderSpawnEvents.Add((index, spawnEvent.EntityId, sse)); break;
+				case SquidSpawnEventData sse: _squidSpawnEvents.Add((index, spawnEvent.EntityId, sse)); break;
+				case ThornSpawnEventData tse: _thornSpawnEvents.Add((index, spawnEvent.EntityId, tse)); break;
+				default: throw new UnreachableException();
+			}
+		}
+		else
+		{
+			switch (e.Data)
+			{
+				case DeathEventData de: _deathEvents.Add((index, -1, de)); break;
+				case EndEventData ee: _endEvents.Add((index, -1, ee)); break;
+				case EntityOrientationEventData eoe: _entityOrientationEvents.Add((index, -1, eoe)); break;
+				case EntityPositionEventData epe: _entityPositionEvents.Add((index, -1, epe)); break;
+				case EntityTargetEventData ete: _entityTargetEvents.Add((index, -1, ete)); break;
+				case GemEventData ge: _gemEvents.Add((index, -1, ge)); break;
+				case HitEventData he: _hitEvents.Add((index, -1, he)); break;
+				case InitialInputsEventData iie: _initialInputsEvents.Add((index, -1, iie)); break;
+				case InputsEventData ie: _inputsEvents.Add((index, -1, ie)); break;
+				case TransmuteEventData te: _transmuteEvents.Add((index, -1, te)); break;
+				default: throw new UnreachableException();
+			}
 		}
 	}
 }

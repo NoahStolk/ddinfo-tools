@@ -1,10 +1,10 @@
-using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
+using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class TransmuteEvents : IEventTypeRenderer<TransmuteEvent>
+public sealed class TransmuteEvents : IEventTypeRenderer<TransmuteEventData>
 {
 	public static IReadOnlyList<EventColumn> EventColumns { get; } = new List<EventColumn>
 	{
@@ -17,14 +17,14 @@ public sealed class TransmuteEvents : IEventTypeRenderer<TransmuteEvent>
 		new("?", ImGuiTableColumnFlags.WidthFixed, 128),
 	};
 
-	public static void Render(int index, TransmuteEvent e, IReadOnlyList<EntityType> entityTypes)
+	public static void Render(int eventIndex, int entityId, TransmuteEventData e, ReplayEventsData replayEventsData)
 	{
-		EventTypeRendererUtils.NextColumnActions(index);
-		EventTypeRendererUtils.NextColumnEventIndex(index);
-		EventTypeRendererUtils.NextColumnEditableEntityId(index, nameof(TransmuteEvent.EntityId), entityTypes, ref e.EntityId);
-		EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(TransmuteEvent.A), ref e.A);
-		EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(TransmuteEvent.B), ref e.B);
-		EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(TransmuteEvent.C), ref e.C);
-		EventTypeRendererUtils.NextColumnInputInt16Vec3(index, nameof(TransmuteEvent.D), ref e.D);
+		EventTypeRendererUtils.NextColumnActions(eventIndex);
+		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(TransmuteEventData.EntityId), replayEventsData, ref e.EntityId);
+		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(TransmuteEventData.A), ref e.A);
+		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(TransmuteEventData.B), ref e.B);
+		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(TransmuteEventData.C), ref e.C);
+		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(TransmuteEventData.D), ref e.D);
 	}
 }

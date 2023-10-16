@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
-using DevilDaggersInfo.Core.Replay.Events.Interfaces;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using ImGuiNET;
@@ -53,9 +53,9 @@ public static class ReplayInputsChild
 		ImGui.TableHeadersRow();
 
 		int i = -1;
-		foreach (IEvent e in eventsData.Events)
+		foreach (ReplayEvent e in eventsData.Events)
 		{
-			if (e is not InputsEvent and not InitialInputsEvent)
+			if (e.Data is not InputsEventData and not InitialInputsEventData)
 				continue;
 
 			i++;
@@ -72,9 +72,9 @@ public static class ReplayInputsChild
 
 			ImGui.TableNextColumn();
 
-			if (e is InputsEvent inputsEvent)
+			if (e.Data is InputsEventData inputsEvent)
 				RenderInputsEvent(inputsEvent.Left, inputsEvent.Right, inputsEvent.Forward, inputsEvent.Backward, inputsEvent.Jump, inputsEvent.Shoot, inputsEvent.ShootHoming, inputsEvent.MouseX, inputsEvent.MouseY, null);
-			else if (e is InitialInputsEvent initialInputsEvent)
+			else if (e.Data is InitialInputsEventData initialInputsEvent)
 				RenderInputsEvent(initialInputsEvent.Left, initialInputsEvent.Right, initialInputsEvent.Forward, initialInputsEvent.Backward, initialInputsEvent.Jump, initialInputsEvent.Shoot, initialInputsEvent.ShootHoming, initialInputsEvent.MouseX, initialInputsEvent.MouseY, initialInputsEvent.LookSpeed);
 		}
 
