@@ -1,33 +1,43 @@
-using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
+using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class TransmuteEvents : IEventTypeRenderer<TransmuteEvent>
+public sealed class TransmuteEvents : IEventTypeRenderer<TransmuteEventData>
 {
-	public static void Render(IReadOnlyList<(int Index, TransmuteEvent Event)> events, IReadOnlyList<EntityType> entityTypes, IReadOnlyList<EventColumn> columns)
+	public static int ColumnCount => 7;
+	public static int ColumnCountData => 5;
+
+	public static void SetupColumns()
 	{
-		ImGui.TextColored(new(0.75f, 0, 0, 1), EventTypeRendererUtils.EventTypeNames[EventType.Transmute]);
+		EventTypeRendererUtils.SetupColumnActions();
+		EventTypeRendererUtils.SetupColumnIndex();
+		SetupColumnsData();
+	}
 
-		if (ImGui.BeginTable(EventTypeRendererUtils.EventTypeNames[EventType.Transmute], columns.Count, EventTypeRendererUtils.EventTableFlags))
-		{
-			EventTypeRendererUtils.SetupColumns(columns);
+	public static void SetupColumnsData()
+	{
+		EventTypeRendererUtils.SetupColumnEntityId();
+		ImGui.TableSetupColumn("?", ImGuiTableColumnFlags.WidthFixed, 128);
+		ImGui.TableSetupColumn("?", ImGuiTableColumnFlags.WidthFixed, 128);
+		ImGui.TableSetupColumn("?", ImGuiTableColumnFlags.WidthFixed, 128);
+		ImGui.TableSetupColumn("?", ImGuiTableColumnFlags.WidthFixed, 128);
+	}
 
-			for (int i = 0; i < events.Count; i++)
-			{
-				ImGui.TableNextRow();
+	public static void Render(int eventIndex, int entityId, TransmuteEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnActions(eventIndex);
+		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		RenderData(eventIndex, e, replayEventsData);
+	}
 
-				(int index, TransmuteEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.A));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.B));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.C));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.D));
-			}
-
-			ImGui.EndTable();
-		}
+	public static void RenderData(int eventIndex, TransmuteEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(TransmuteEventData.EntityId), replayEventsData, ref e.EntityId);
+		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(TransmuteEventData.A), ref e.A);
+		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(TransmuteEventData.B), ref e.B);
+		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(TransmuteEventData.C), ref e.C);
+		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(TransmuteEventData.D), ref e.D);
 	}
 }

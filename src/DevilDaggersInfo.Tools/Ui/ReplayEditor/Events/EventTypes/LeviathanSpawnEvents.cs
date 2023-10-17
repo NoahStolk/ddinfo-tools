@@ -1,31 +1,37 @@
-using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
-using DevilDaggersInfo.Core.Wiki;
+using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class LeviathanSpawnEvents : IEventTypeRenderer<LeviathanSpawnEvent>
+public sealed class LeviathanSpawnEvents : IEventTypeRenderer<LeviathanSpawnEventData>
 {
-	public static void Render(IReadOnlyList<(int Index, LeviathanSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes, IReadOnlyList<EventColumn> columns)
+	public static int ColumnCount => 4;
+	public static int ColumnCountData => 1;
+
+	public static void SetupColumns()
 	{
-		ImGui.TextColored(EnemiesV3_2.Leviathan.Color, EventTypeRendererUtils.EventTypeNames[EventType.LeviathanSpawn]);
+		EventTypeRendererUtils.SetupColumnActions();
+		EventTypeRendererUtils.SetupColumnIndex();
+		EventTypeRendererUtils.SetupColumnEntityId();
+		SetupColumnsData();
+	}
 
-		if (ImGui.BeginTable(EventTypeRendererUtils.EventTypeNames[EventType.LeviathanSpawn], columns.Count, EventTypeRendererUtils.EventTableFlags))
-		{
-			EventTypeRendererUtils.SetupColumns(columns);
+	public static void SetupColumnsData()
+	{
+		ImGui.TableSetupColumn("?", ImGuiTableColumnFlags.WidthFixed, 32);
+	}
 
-			for (int i = 0; i < events.Count; i++)
-			{
-				ImGui.TableNextRow();
+	public static void Render(int eventIndex, int entityId, LeviathanSpawnEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnActions(eventIndex);
+		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
+		RenderData(eventIndex, e, replayEventsData);
+	}
 
-				(int index, LeviathanSpawnEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.A));
-			}
-
-			ImGui.EndTable();
-		}
+	public static void RenderData(int eventIndex, LeviathanSpawnEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(LeviathanSpawnEventData.A), ref e.A);
 	}
 }

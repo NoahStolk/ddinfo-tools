@@ -23,6 +23,18 @@ Added mod manager. You can now manage installed mods in the mods folder.
 - All effective assets are displayed, including their type, size, and whether they are prohibited.
 - Whenever an asset is overridden by another mod, the mod that overrides it is displayed.
 
+### Replay Editor
+
+It is now possible to edit event data. This includes editing every piece of event data, as well as adding and removing events.
+
+#### Other Improvements
+
+- Replay preview timer and inputs visualization has been moved to the 3D window.
+- Replay inputs have been moved to a separate tab. The input events themselves are now displayed in the same table as the other events.
+- Fixed Thorn spawn events not being displayed correctly.
+- Fixed not showing error when injecting replay into game memory fails.
+- Fixed not appending `.ddreplay` to replay file name when saving.
+
 ### Spawnset Editor
 
 - The spawnset editor now keeps track of unsaved changes and will ask you to save it when leaving the editor or opening a different spawnset.
@@ -33,12 +45,6 @@ Added mod manager. You can now manage installed mods in the mods folder.
 
 - Fixed not clearing "View replay" buttons when selecting a different leaderboard.
 - Added "Current spawnset" text to the displayed leaderboard if that spawnset is currently active.
-
-### Replay Editor
-
-- Improve replay editor UI.
-- Fixed Thorn spawn events not being displayed correctly.
-- Fixed not showing error when injecting replay into game memory fails.
 
 ### Other
 

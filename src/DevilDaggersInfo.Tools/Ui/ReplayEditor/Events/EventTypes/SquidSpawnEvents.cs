@@ -1,44 +1,48 @@
-using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
-using DevilDaggersInfo.Core.Wiki;
+using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events.Data;
+using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
-using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class SquidSpawnEvents : IEventTypeRenderer<SquidSpawnEvent>
+public sealed class SquidSpawnEvents : IEventTypeRenderer<SquidSpawnEventData>
 {
-	public static void Render(IReadOnlyList<(int Index, SquidSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes, IReadOnlyList<EventColumn> columns)
+	private static readonly string[] _squidTypeNamesArray = EnumUtils.SquidTypeNames.Values.ToArray();
+
+	public static int ColumnCount => 8;
+	public static int ColumnCountData => 5;
+
+	public static void SetupColumns()
 	{
-		ImGui.TextColored(EnemiesV3_2.Squid3.Color, EventTypeRendererUtils.EventTypeNames[EventType.SquidSpawn]);
-
-		if (ImGui.BeginTable(EventTypeRendererUtils.EventTypeNames[EventType.SquidSpawn], columns.Count, EventTypeRendererUtils.EventTableFlags))
-		{
-			EventTypeRendererUtils.SetupColumns(columns);
-
-			for (int i = 0; i < events.Count; i++)
-			{
-				ImGui.TableNextRow();
-
-				(int index, SquidSpawnEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnText(GetSquidTypeText(e.SquidType));
-				EventTypeRendererUtils.EntityColumn(entityTypes, e.A);
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Position, "0.00"));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Direction, "0.00"));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.RotationInRadians, "0.00"));
-			}
-
-			ImGui.EndTable();
-		}
+		EventTypeRendererUtils.SetupColumnActions();
+		EventTypeRendererUtils.SetupColumnIndex();
+		EventTypeRendererUtils.SetupColumnEntityId();
+		SetupColumnsData();
 	}
 
-	private static ReadOnlySpan<char> GetSquidTypeText(SquidType squidType) => squidType switch
+	public static void SetupColumnsData()
 	{
-		SquidType.Squid1 => "Squid1",
-		SquidType.Squid2 => "Squid2",
-		SquidType.Squid3 => "Squid3",
-		_ => throw new UnreachableException(),
-	};
+		ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 80);
+		ImGui.TableSetupColumn("?", ImGuiTableColumnFlags.WidthFixed, 32);
+		ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 192);
+		ImGui.TableSetupColumn("Direction", ImGuiTableColumnFlags.WidthFixed, 192);
+		ImGui.TableSetupColumn("Rotation", ImGuiTableColumnFlags.WidthFixed, 64);
+	}
+
+	public static void Render(int eventIndex, int entityId, SquidSpawnEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnActions(eventIndex);
+		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
+		RenderData(eventIndex, e, replayEventsData);
+	}
+
+	public static void RenderData(int eventIndex, SquidSpawnEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(SquidSpawnEventData.SquidType), ref e.SquidType, EnumUtils.SquidTypes, _squidTypeNamesArray);
+		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(SquidSpawnEventData.A), ref e.A);
+		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(SquidSpawnEventData.Position), ref e.Position, "%.2f");
+		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(SquidSpawnEventData.Direction), ref e.Direction, "%.2f");
+		EventTypeRendererUtils.NextColumnInputFloat(eventIndex, nameof(SquidSpawnEventData.RotationInRadians), ref e.RotationInRadians, "%.2f");
+	}
 }

@@ -1,36 +1,57 @@
-using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEvent>
+public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEventData>
 {
-	public static void Render(IReadOnlyList<(int Index, DaggerSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes, IReadOnlyList<EventColumn> columns)
+	private static readonly string[] _daggerTypeNamesArray =
 	{
-		ImGui.TextColored(Color.Purple, EventTypeRendererUtils.EventTypeNames[EventType.DaggerSpawn]);
+		"Lvl1",
+		"Lvl2",
+		"Lvl3",
+		"Lvl3 Homing",
+		"Lvl4",
+		"Lvl4 Homing",
+		"Lvl4 Splash",
+	};
 
-		if (ImGui.BeginTable(EventTypeRendererUtils.EventTypeNames[EventType.DaggerSpawn], columns.Count, EventTypeRendererUtils.EventTableFlags))
-		{
-			EventTypeRendererUtils.SetupColumns(columns);
+	public static int ColumnCount => 8;
+	public static int ColumnCountData => 5;
 
-			for (int i = 0; i < events.Count; i++)
-			{
-				ImGui.TableNextRow();
+	public static void SetupColumns()
+	{
+		EventTypeRendererUtils.SetupColumnActions();
+		EventTypeRendererUtils.SetupColumnIndex();
+		EventTypeRendererUtils.SetupColumnEntityId();
+		SetupColumnsData();
+	}
 
-				(int index, DaggerSpawnEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnText(EnumUtils.DaggerTypeNames[e.DaggerType]);
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.A));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Position));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Orientation));
-				EventTypeRendererUtils.NextColumnText(e.IsShot ? "Shot" : "Rapid");
-			}
+	public static void SetupColumnsData()
+	{
+		ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 96);
+		ImGui.TableSetupColumn("?", ImGuiTableColumnFlags.WidthFixed, 32);
+		ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 128);
+		ImGui.TableSetupColumn("Orientation", ImGuiTableColumnFlags.WidthFixed, 384);
+		ImGui.TableSetupColumn("Shot/Rapid", ImGuiTableColumnFlags.WidthFixed, 80);
+	}
 
-			ImGui.EndTable();
-		}
+	public static void Render(int eventIndex, int entityId, DaggerSpawnEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnActions(eventIndex);
+		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
+		RenderData(eventIndex, e, replayEventsData);
+	}
+
+	public static void RenderData(int eventIndex, DaggerSpawnEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(DaggerSpawnEventData.DaggerType), ref e.DaggerType, EnumUtils.DaggerTypes, _daggerTypeNamesArray);
+		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(DaggerSpawnEventData.A), ref e.A);
+		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(DaggerSpawnEventData.Position), ref e.Position);
+		EventTypeRendererUtils.NextColumnInputInt16Mat3x3(eventIndex, nameof(DaggerSpawnEventData.Orientation), ref e.Orientation);
+		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(DaggerSpawnEventData.IsShot), ref e.IsShot, "Shot", "Rapid");
 	}
 }

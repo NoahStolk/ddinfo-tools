@@ -1,33 +1,41 @@
-using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
-using DevilDaggersInfo.Core.Wiki;
+using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class SpiderEggSpawnEvents : IEventTypeRenderer<SpiderEggSpawnEvent>
+public sealed class SpiderEggSpawnEvents : IEventTypeRenderer<SpiderEggSpawnEventData>
 {
-	public static void Render(IReadOnlyList<(int Index, SpiderEggSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes, IReadOnlyList<EventColumn> columns)
+	public static int ColumnCount => 6;
+	public static int ColumnCountData => 3;
+
+	public static void SetupColumns()
 	{
-		ImGui.TextColored(EnemiesV3_2.SpiderEgg1.Color, EventTypeRendererUtils.EventTypeNames[EventType.SpiderEggSpawn]);
+		EventTypeRendererUtils.SetupColumnActions();
+		EventTypeRendererUtils.SetupColumnIndex();
+		EventTypeRendererUtils.SetupColumnEntityId();
+		SetupColumnsData();
+	}
 
-		if (ImGui.BeginTable(EventTypeRendererUtils.EventTypeNames[EventType.SpiderEggSpawn], columns.Count, EventTypeRendererUtils.EventTableFlags))
-		{
-			EventTypeRendererUtils.SetupColumns(columns);
+	public static void SetupColumnsData()
+	{
+		ImGui.TableSetupColumn("Spawner Entity Id", ImGuiTableColumnFlags.WidthFixed, 160);
+		ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 192);
+		ImGui.TableSetupColumn("Target Position", ImGuiTableColumnFlags.WidthFixed, 192);
+	}
 
-			for (int i = 0; i < events.Count; i++)
-			{
-				ImGui.TableNextRow();
+	public static void Render(int eventIndex, int entityId, SpiderEggSpawnEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnActions(eventIndex);
+		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
+		RenderData(eventIndex, e, replayEventsData);
+	}
 
-				(int index, SpiderEggSpawnEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.EntityColumn(entityTypes, e.SpawnerEntityId);
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Position, "0.00"));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.TargetPosition, "0.00"));
-			}
-
-			ImGui.EndTable();
-		}
+	public static void RenderData(int eventIndex, SpiderEggSpawnEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(SpiderEggSpawnEventData.SpawnerEntityId), replayEventsData, ref e.SpawnerEntityId);
+		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(SpiderEggSpawnEventData.Position), ref e.Position, "%.2f");
+		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(SpiderEggSpawnEventData.TargetPosition), ref e.TargetPosition, "%.2f");
 	}
 }

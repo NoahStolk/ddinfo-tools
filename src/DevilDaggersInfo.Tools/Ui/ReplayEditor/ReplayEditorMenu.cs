@@ -126,7 +126,10 @@ public static class ReplayEditorMenu
 	{
 		string? filePath = NativeFileDialog.CreateSaveFileDialog("Devil Daggers replay files (*.ddreplay)|*.ddreplay");
 		if (filePath != null)
+		{
+			filePath = Path.ChangeExtension(filePath, ".ddreplay");
 			File.WriteAllBytes(filePath, FileStates.Replay.Object.Compile());
+		}
 	}
 
 	public static void InjectReplay()

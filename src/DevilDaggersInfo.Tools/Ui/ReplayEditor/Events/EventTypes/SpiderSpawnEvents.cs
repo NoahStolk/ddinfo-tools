@@ -1,41 +1,44 @@
-using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
-using DevilDaggersInfo.Core.Wiki;
+using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events.Data;
+using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
-using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class SpiderSpawnEvents : IEventTypeRenderer<SpiderSpawnEvent>
+public sealed class SpiderSpawnEvents : IEventTypeRenderer<SpiderSpawnEventData>
 {
-	public static void Render(IReadOnlyList<(int Index, SpiderSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes, IReadOnlyList<EventColumn> columns)
+	private static readonly string[] _spiderTypeNamesArray = EnumUtils.SpiderTypeNames.Values.ToArray();
+
+	public static int ColumnCount => 6;
+	public static int ColumnCountData => 3;
+
+	public static void SetupColumns()
 	{
-		ImGui.TextColored(EnemiesV3_2.Spider2.Color, EventTypeRendererUtils.EventTypeNames[EventType.SpiderSpawn]);
-
-		if (ImGui.BeginTable(EventTypeRendererUtils.EventTypeNames[EventType.SpiderSpawn], columns.Count, EventTypeRendererUtils.EventTableFlags))
-		{
-			EventTypeRendererUtils.SetupColumns(columns);
-
-			for (int i = 0; i < events.Count; i++)
-			{
-				ImGui.TableNextRow();
-
-				(int index, SpiderSpawnEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnText(GetSpiderTypeText(e.SpiderType));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.A));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Position, "0.00"));
-			}
-
-			ImGui.EndTable();
-		}
+		EventTypeRendererUtils.SetupColumnActions();
+		EventTypeRendererUtils.SetupColumnIndex();
+		EventTypeRendererUtils.SetupColumnEntityId();
+		SetupColumnsData();
 	}
 
-	private static ReadOnlySpan<char> GetSpiderTypeText(SpiderType spiderType) => spiderType switch
+	public static void SetupColumnsData()
 	{
-		SpiderType.Spider1 => "Spider1",
-		SpiderType.Spider2 => "Spider2",
-		_ => throw new UnreachableException(),
-	};
+		ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 80);
+		ImGui.TableSetupColumn("?", ImGuiTableColumnFlags.WidthFixed, 32);
+		ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 192);
+	}
+
+	public static void Render(int eventIndex, int entityId, SpiderSpawnEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnActions(eventIndex);
+		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
+		RenderData(eventIndex, e, replayEventsData);
+	}
+
+	public static void RenderData(int eventIndex, SpiderSpawnEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(SpiderSpawnEventData.SpiderType), ref e.SpiderType, EnumUtils.SpiderTypes, _spiderTypeNamesArray);
+		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(SpiderSpawnEventData.A), ref e.A);
+		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(SpiderSpawnEventData.Position), ref e.Position, "%.2f");
+	}
 }

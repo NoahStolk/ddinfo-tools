@@ -17,4 +17,9 @@ public enum EventType
 	Gem,
 	Hit,
 	Transmute,
+
+	InitialInputs,
+	Inputs,
+	Death,
+	End,
 }

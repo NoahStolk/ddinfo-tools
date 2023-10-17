@@ -1,29 +1,32 @@
-using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
-using ImGuiNET;
+using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class GemEvents : IEventTypeRenderer<GemEvent>
+public sealed class GemEvents : IEventTypeRenderer<GemEventData>
 {
-	public static void Render(IReadOnlyList<(int Index, GemEvent Event)> events, IReadOnlyList<EntityType> entityTypes, IReadOnlyList<EventColumn> columns)
+	public static int ColumnCount => 2;
+	public static int ColumnCountData => 0;
+
+	public static void SetupColumns()
 	{
-		ImGui.TextColored(Color.Red, EventTypeRendererUtils.EventTypeNames[EventType.Gem]);
+		EventTypeRendererUtils.SetupColumnActions();
+		EventTypeRendererUtils.SetupColumnIndex();
+		SetupColumnsData();
+	}
 
-		if (ImGui.BeginTable(EventTypeRendererUtils.EventTypeNames[EventType.Gem], columns.Count, EventTypeRendererUtils.EventTableFlags))
-		{
-			EventTypeRendererUtils.SetupColumns(columns);
+	public static void SetupColumnsData()
+	{
+	}
 
-			for (int i = 0; i < events.Count; i++)
-			{
-				ImGui.TableNextRow();
+	public static void Render(int eventIndex, int entityId, GemEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnActions(eventIndex);
+		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		RenderData(eventIndex, e, replayEventsData);
+	}
 
-				(int index, _) = events[i];
-				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-			}
-
-			ImGui.EndTable();
-		}
+	public static void RenderData(int eventIndex, GemEventData e, ReplayEventsData replayEventsData)
+	{
 	}
 }

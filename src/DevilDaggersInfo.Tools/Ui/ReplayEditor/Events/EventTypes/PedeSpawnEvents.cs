@@ -1,44 +1,48 @@
-using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
-using DevilDaggersInfo.Core.Wiki;
+using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events.Data;
+using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
-using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class PedeSpawnEvents : IEventTypeRenderer<PedeSpawnEvent>
+public sealed class PedeSpawnEvents : IEventTypeRenderer<PedeSpawnEventData>
 {
-	public static void Render(IReadOnlyList<(int Index, PedeSpawnEvent Event)> events, IReadOnlyList<EntityType> entityTypes, IReadOnlyList<EventColumn> columns)
+	private static readonly string[] _pedeTypeNamesArray = EnumUtils.PedeTypeNames.Values.ToArray();
+
+	public static int ColumnCount => 8;
+	public static int ColumnCountData => 5;
+
+	public static void SetupColumns()
 	{
-		ImGui.TextColored(EnemiesV3_2.Gigapede.Color, EventTypeRendererUtils.EventTypeNames[EventType.PedeSpawn]);
-
-		if (ImGui.BeginTable(EventTypeRendererUtils.EventTypeNames[EventType.PedeSpawn], columns.Count, EventTypeRendererUtils.EventTableFlags))
-		{
-			EventTypeRendererUtils.SetupColumns(columns);
-
-			for (int i = 0; i < events.Count; i++)
-			{
-				ImGui.TableNextRow();
-
-				(int index, PedeSpawnEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityId);
-				EventTypeRendererUtils.NextColumnText(GetPedeTypeText(e.PedeType));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.A));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Position, "0.00"));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.B));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.Orientation));
-			}
-
-			ImGui.EndTable();
-		}
+		EventTypeRendererUtils.SetupColumnActions();
+		EventTypeRendererUtils.SetupColumnIndex();
+		EventTypeRendererUtils.SetupColumnEntityId();
+		SetupColumnsData();
 	}
 
-	private static ReadOnlySpan<char> GetPedeTypeText(PedeType pedeType) => pedeType switch
+	public static void SetupColumnsData()
 	{
-		PedeType.Centipede => "Centipede",
-		PedeType.Gigapede => "Gigapede",
-		PedeType.Ghostpede => "Ghostpede",
-		_ => throw new UnreachableException(),
-	};
+		ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 96);
+		ImGui.TableSetupColumn("?", ImGuiTableColumnFlags.WidthFixed, 32);
+		ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 128);
+		ImGui.TableSetupColumn("?", ImGuiTableColumnFlags.WidthFixed, 80);
+		ImGui.TableSetupColumn("Orientation", ImGuiTableColumnFlags.None, 128);
+	}
+
+	public static void Render(int eventIndex, int entityId, PedeSpawnEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnActions(eventIndex);
+		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
+		RenderData(eventIndex, e, replayEventsData);
+	}
+
+	public static void RenderData(int eventIndex, PedeSpawnEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(PedeSpawnEventData.PedeType), ref e.PedeType, EnumUtils.PedeTypes, _pedeTypeNamesArray);
+		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(PedeSpawnEventData.A), ref e.A);
+		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(PedeSpawnEventData.Position), ref e.Position, "%.2f");
+		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(PedeSpawnEventData.B), ref e.B, "%.0f");
+		EventTypeRendererUtils.NextColumnInputMatrix3x3(eventIndex, nameof(PedeSpawnEventData.Orientation), ref e.Orientation, "%.2f");
+	}
 }

@@ -1,31 +1,37 @@
-using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
+using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Core.Wiki;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class DeathEvents : IEventTypeRenderer<DeathEvent>
+public sealed class DeathEvents : IEventTypeRenderer<DeathEventData>
 {
-	public static void Render(IReadOnlyList<(int Index, DeathEvent Event)> events, IReadOnlyList<EntityType> entityTypes, IReadOnlyList<EventColumn> columns)
+	public static int ColumnCount => 3;
+	public static int ColumnCountData => 1;
+
+	public static void SetupColumns()
 	{
-		ImGui.TextColored(Color.Red, "Death");
+		EventTypeRendererUtils.SetupColumnActions();
+		EventTypeRendererUtils.SetupColumnIndex();
+		SetupColumnsData();
+	}
 
-		if (ImGui.BeginTable("Death", columns.Count, EventTypeRendererUtils.EventTableFlags))
-		{
-			EventTypeRendererUtils.SetupColumns(columns);
+	public static void SetupColumnsData()
+	{
+		ImGui.TableSetupColumn("Death Type", ImGuiTableColumnFlags.WidthFixed, 160);
+	}
 
-			for (int i = 0; i < events.Count; i++)
-			{
-				ImGui.TableNextRow();
+	public static void Render(int eventIndex, int entityId, DeathEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnActions(eventIndex);
+		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		RenderData(eventIndex, e, replayEventsData);
+	}
 
-				(int index, DeathEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-				EventTypeRendererUtils.NextColumnText(Inline.Span(Deaths.GetDeathByType(GameConstants.CurrentVersion, (byte)e.DeathType)?.Name ?? "???"));
-			}
-
-			ImGui.EndTable();
-		}
+	public static void RenderData(int eventIndex, DeathEventData e, ReplayEventsData replayEventsData)
+	{
+		ImGui.TableNextColumn();
+		ImGui.Text(Inline.Span(Deaths.GetDeathByType(GameConstants.CurrentVersion, (byte)e.DeathType)?.Name ?? "???"));
 	}
 }

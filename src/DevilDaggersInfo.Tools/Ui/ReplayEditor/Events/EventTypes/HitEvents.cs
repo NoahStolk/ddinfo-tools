@@ -1,32 +1,39 @@
-using DevilDaggersInfo.Core.Replay.Events;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class HitEvents : IEventTypeRenderer<HitEvent>
+public sealed class HitEvents : IEventTypeRenderer<HitEventData>
 {
-	public static void Render(IReadOnlyList<(int Index, HitEvent Event)> events, IReadOnlyList<EntityType> entityTypes, IReadOnlyList<EventColumn> columns)
+	public static int ColumnCount => 5;
+	public static int ColumnCountData => 3;
+
+	public static void SetupColumns()
 	{
-		ImGui.TextColored(Color.Orange, EventTypeRendererUtils.EventTypeNames[EventType.Hit]);
+		EventTypeRendererUtils.SetupColumnActions();
+		EventTypeRendererUtils.SetupColumnIndex();
+		SetupColumnsData();
+	}
 
-		if (ImGui.BeginTable(EventTypeRendererUtils.EventTypeNames[EventType.Hit], columns.Count, EventTypeRendererUtils.EventTableFlags))
-		{
-			EventTypeRendererUtils.SetupColumns(columns);
+	public static void SetupColumnsData()
+	{
+		ImGui.TableSetupColumn("Entity Id A", ImGuiTableColumnFlags.WidthFixed, 160);
+		ImGui.TableSetupColumn("Entity Id B", ImGuiTableColumnFlags.WidthFixed, 160);
+		ImGui.TableSetupColumn("User Data", ImGuiTableColumnFlags.WidthFixed, 128);
+	}
 
-			for (int i = 0; i < events.Count; i++)
-			{
-				ImGui.TableNextRow();
+	public static void Render(int eventIndex, int entityId, HitEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnActions(eventIndex);
+		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		RenderData(eventIndex, e, replayEventsData);
+	}
 
-				(int index, HitEvent e) = events[i];
-				EventTypeRendererUtils.NextColumnText(Inline.Span(index));
-				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityIdA);
-				EventTypeRendererUtils.EntityColumn(entityTypes, e.EntityIdB);
-				EventTypeRendererUtils.NextColumnText(Inline.Span(e.UserData));
-			}
-
-			ImGui.EndTable();
-		}
+	public static void RenderData(int eventIndex, HitEventData e, ReplayEventsData replayEventsData)
+	{
+		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(HitEventData.EntityIdA), replayEventsData, ref e.EntityIdA);
+		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(HitEventData.EntityIdB), replayEventsData, ref e.EntityIdB);
+		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(HitEventData.UserData), ref e.UserData);
 	}
 }
