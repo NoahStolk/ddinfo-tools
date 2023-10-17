@@ -45,40 +45,45 @@ public static class ReplayInputsChild
 
 		ImGui.EndChild(); // TickNavigation
 
-		if (!ImGui.BeginTable("ReplayInputsTable", 2, ImGuiTableFlags.BordersInnerH))
-			return;
-
-		ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 128);
-		ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.None, 384);
-		ImGui.TableHeadersRow();
-
-		int i = -1;
-		foreach (ReplayEvent e in eventsData.Events)
+		if (ImGui.BeginChild("ReplayInputsChild", new(0, 0)))
 		{
-			if (e.Data is not InputsEventData and not InitialInputsEventData)
-				continue;
+			if (!ImGui.BeginTable("ReplayInputsTable", 2, ImGuiTableFlags.BordersInnerH))
+				return;
 
-			i++;
-			if (i > _startTick + maxTicks)
-				break;
+			ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 128);
+			ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.None, 384);
+			ImGui.TableHeadersRow();
 
-			if (i < _startTick)
-				continue;
+			int i = -1;
+			foreach (ReplayEvent e in eventsData.Events)
+			{
+				if (e.Data is not InputsEventData and not InitialInputsEventData)
+					continue;
 
-			ImGui.TableNextRow();
+				i++;
+				if (i > _startTick + maxTicks)
+					break;
 
-			ImGui.TableNextColumn();
-			ImGui.Text(Inline.Span($"{TimeUtils.TickToTime(i, startTime):0.0000} ({i})"));
+				if (i < _startTick)
+					continue;
 
-			ImGui.TableNextColumn();
+				ImGui.TableNextRow();
 
-			if (e.Data is InputsEventData inputsEvent)
-				RenderInputsEvent(inputsEvent.Left, inputsEvent.Right, inputsEvent.Forward, inputsEvent.Backward, inputsEvent.Jump, inputsEvent.Shoot, inputsEvent.ShootHoming, inputsEvent.MouseX, inputsEvent.MouseY, null);
-			else if (e.Data is InitialInputsEventData initialInputsEvent)
-				RenderInputsEvent(initialInputsEvent.Left, initialInputsEvent.Right, initialInputsEvent.Forward, initialInputsEvent.Backward, initialInputsEvent.Jump, initialInputsEvent.Shoot, initialInputsEvent.ShootHoming, initialInputsEvent.MouseX, initialInputsEvent.MouseY, initialInputsEvent.LookSpeed);
+				ImGui.TableNextColumn();
+				ImGui.Text(Inline.Span($"{TimeUtils.TickToTime(i, startTime):0.0000} ({i})"));
+
+				ImGui.TableNextColumn();
+
+				if (e.Data is InputsEventData inputsEvent)
+					RenderInputsEvent(inputsEvent.Left, inputsEvent.Right, inputsEvent.Forward, inputsEvent.Backward, inputsEvent.Jump, inputsEvent.Shoot, inputsEvent.ShootHoming, inputsEvent.MouseX, inputsEvent.MouseY, null);
+				else if (e.Data is InitialInputsEventData initialInputsEvent)
+					RenderInputsEvent(initialInputsEvent.Left, initialInputsEvent.Right, initialInputsEvent.Forward, initialInputsEvent.Backward, initialInputsEvent.Jump, initialInputsEvent.Shoot, initialInputsEvent.ShootHoming, initialInputsEvent.MouseX, initialInputsEvent.MouseY, initialInputsEvent.LookSpeed);
+			}
+
+			ImGui.EndTable();
 		}
 
-		ImGui.EndTable();
+		ImGui.EndChild(); // ReplayInputsChild
 	}
 
 	private static void RenderInputsEvent(

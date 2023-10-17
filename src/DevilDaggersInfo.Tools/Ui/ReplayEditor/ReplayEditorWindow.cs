@@ -52,15 +52,20 @@ public static class ReplayEditorWindow
 
 				if (ImGui.BeginTabItem("Debug"))
 				{
-					ImGui.Text("Event counts per tick:");
-
-					for (int i = 0; i < FileStates.Replay.Object.EventsData.EventOffsetsPerTick.Count; i++)
+					if (ImGui.BeginChild("ReplayDebugChild", new(0, 0)))
 					{
-						int offset = FileStates.Replay.Object.EventsData.EventOffsetsPerTick[i];
-						ImGui.Text(Inline.Span($"{i} ({TimeUtils.TickToTime(i, 0):0.0000}): {offset}"));
+						ImGui.Text("Event counts per tick:");
+
+						for (int i = 0; i < FileStates.Replay.Object.EventsData.EventOffsetsPerTick.Count; i++)
+						{
+							int offset = FileStates.Replay.Object.EventsData.EventOffsetsPerTick[i];
+							ImGui.Text(Inline.Span($"{i} ({TimeUtils.TickToTime(i, 0):0.0000}): {offset}"));
+						}
+
+						ImGui.EndTabItem();
 					}
 
-					ImGui.EndTabItem();
+					ImGui.EndChild(); // ReplayDebugChild
 				}
 
 				ImGui.EndTabBar();
