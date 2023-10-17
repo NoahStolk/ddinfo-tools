@@ -12,6 +12,7 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 public static class ReplayInputsChild
 {
 	private static int _startTick;
+	private static int _endTick;
 
 	public static void Render(ReplayEventsData eventsData, float startTime)
 	{
@@ -37,10 +38,10 @@ public static class ReplayInputsChild
 				_startTick = eventsData.TickCount - maxTicks;
 
 			_startTick = Math.Max(0, Math.Min(_startTick, eventsData.TickCount - maxTicks));
-			int endTick = Math.Min(_startTick + maxTicks - 1, eventsData.TickCount);
+			_endTick = Math.Min(_startTick + maxTicks - 1, eventsData.TickCount);
 
 			ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
-			ImGui.Text(Inline.Span($"Showing {_startTick} - {endTick} of {eventsData.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, startTime):0.0000} - {TimeUtils.TickToTime(endTick, startTime):0.0000}"));
+			ImGui.Text(Inline.Span($"Showing {_startTick} - {_endTick} of {eventsData.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, startTime):0.0000} - {TimeUtils.TickToTime(_endTick, startTime):0.0000}"));
 		}
 
 		ImGui.EndChild(); // TickNavigation
@@ -54,17 +55,16 @@ public static class ReplayInputsChild
 			ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.None, 384);
 			ImGui.TableHeadersRow();
 
-			int i = -1;
+			int i = 0;
 			foreach (ReplayEvent e in eventsData.Events)
 			{
-				if (e.Data is not InputsEventData and not InitialInputsEventData)
-					continue;
-
-				i++;
-				if (i > _startTick + maxTicks)
-					break;
-
 				if (i < _startTick)
+				{
+					i++;
+					continue;
+				}
+
+				if (e.Data is not InputsEventData and not InitialInputsEventData)
 					continue;
 
 				ImGui.TableNextRow();
@@ -74,10 +74,14 @@ public static class ReplayInputsChild
 
 				ImGui.TableNextColumn();
 
-				if (e.Data is InputsEventData inputsEvent)
-					RenderInputsEvent(inputsEvent.Left, inputsEvent.Right, inputsEvent.Forward, inputsEvent.Backward, inputsEvent.Jump, inputsEvent.Shoot, inputsEvent.ShootHoming, inputsEvent.MouseX, inputsEvent.MouseY, null);
-				else if (e.Data is InitialInputsEventData initialInputsEvent)
-					RenderInputsEvent(initialInputsEvent.Left, initialInputsEvent.Right, initialInputsEvent.Forward, initialInputsEvent.Backward, initialInputsEvent.Jump, initialInputsEvent.Shoot, initialInputsEvent.ShootHoming, initialInputsEvent.MouseX, initialInputsEvent.MouseY, initialInputsEvent.LookSpeed);
+				if (e.Data is InputsEventData ie)
+					RenderInputsEvent(ie.Left, ie.Right, ie.Forward, ie.Backward, ie.Jump, ie.Shoot, ie.ShootHoming, ie.MouseX, ie.MouseY, null);
+				else if (e.Data is InitialInputsEventData iie)
+					RenderInputsEvent(iie.Left, iie.Right, iie.Forward, iie.Backward, iie.Jump, iie.Shoot, iie.ShootHoming, iie.MouseX, iie.MouseY, iie.LookSpeed);
+
+				i++;
+				if (i > _endTick)
+					break;
 			}
 
 			ImGui.EndTable();
