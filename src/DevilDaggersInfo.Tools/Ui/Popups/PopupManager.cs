@@ -57,7 +57,7 @@ public static class PopupManager
 	private static void RenderModal(Popup popup)
 	{
 		Vector2 center = ImGui.GetMainViewport().GetCenter();
-		ImGui.SetNextWindowPos(center, ImGuiCond.Always, new(0.5f, 0.5f));
+		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new(0.5f, 0.5f));
 
 		if (ImGui.BeginPopupModal(popup.Id))
 		{
