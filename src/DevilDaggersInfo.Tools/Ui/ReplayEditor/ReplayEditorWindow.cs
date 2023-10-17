@@ -50,6 +50,7 @@ public static class ReplayEditorWindow
 					ImGui.EndTabItem();
 				}
 
+#if DEBUG
 				if (ImGui.BeginTabItem("Debug"))
 				{
 					if (ImGui.BeginChild("ReplayDebugChild", new(0, 0)))
@@ -67,6 +68,7 @@ public static class ReplayEditorWindow
 
 					ImGui.EndTabItem();
 				}
+#endif
 
 				ImGui.EndTabBar();
 			}
