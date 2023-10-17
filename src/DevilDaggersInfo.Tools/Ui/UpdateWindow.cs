@@ -24,11 +24,17 @@ public static class UpdateWindow
 		{
 			ImGui.PushTextWrapPos(windowSize.X - 16);
 
-			ImGui.Text($"""
+			ImGui.Text(Inline.Span($"""
 				Version {AvailableUpdateVersion} is available.
+
 				The current version is {Root.Application.AppVersion}.
+
 				If you decide to update, the update will be downloaded from the devildaggers.info server.
-				""");
+				"""));
+			ImGui.Spacing();
+
+			const string changelogUrl = "https://github.com/NoahStolk/ddinfo-tools/blob/main/CHANGELOG.md";
+			ImGuiExt.Hyperlink(changelogUrl, Inline.Span($"What's new in version {AvailableUpdateVersion}?"));
 			ImGui.Spacing();
 
 			ImGui.BeginDisabled(_updateInProgress);
