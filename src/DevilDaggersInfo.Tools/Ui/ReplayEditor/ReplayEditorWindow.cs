@@ -61,11 +61,11 @@ public static class ReplayEditorWindow
 							int offset = FileStates.Replay.Object.EventsData.EventOffsetsPerTick[i];
 							ImGui.Text(Inline.Span($"{i} ({TimeUtils.TickToTime(i, 0):0.0000}): {offset}"));
 						}
-
-						ImGui.EndTabItem();
 					}
 
 					ImGui.EndChild(); // ReplayDebugChild
+
+					ImGui.EndTabItem();
 				}
 
 				ImGui.EndTabBar();
