@@ -112,7 +112,7 @@ public static class ReplayEventsChild
 						}
 					}
 
-					ImGui.EndChild(); // EventTypeFilteringLeft
+					ImGui.EndChild();
 
 					if (i < rows - 1)
 						ImGui.SameLine();
