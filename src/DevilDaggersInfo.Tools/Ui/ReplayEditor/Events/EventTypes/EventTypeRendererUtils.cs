@@ -183,19 +183,18 @@ public static class EventTypeRendererUtils
 		ImGui.Text(Inline.Span(index));
 	}
 
-	public static void NextColumnInputEnum<TEnum>(int eventIndex, ReadOnlySpan<char> fieldName, ref TEnum value, IReadOnlyList<TEnum> values, string[] names)
+	public static void NextColumnInputByteEnum<TEnum>(int eventIndex, ReadOnlySpan<char> fieldName, ref TEnum value, IReadOnlyList<TEnum> values, string[] names)
 		where TEnum : Enum
 	{
 		ImGui.TableNextColumn();
 
 		ImGui.PushItemWidth(-1);
-		int intValue = Convert.ToInt32(value);
+		int intValue = (byte)(object)value;
 
 		int index = 0;
 		for (int i = 0; i < values.Count; i++)
 		{
-			// TODO: This allocates memory.
-			if (Convert.ToInt32(values[i]) == intValue)
+			if ((byte)(object)values[i] == intValue)
 			{
 				index = i;
 				break;
