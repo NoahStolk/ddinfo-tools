@@ -9,24 +9,37 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEventData>
 {
 	private static readonly string[] _boidTypeNamesArray = EnumUtils.BoidTypeNames.Values.ToArray();
 
-	public static IReadOnlyList<EventColumn> EventColumns { get; } = new List<EventColumn>
+	public static int ColumnCount => 9;
+	public static int ColumnCountData => 6;
+
+	public static void SetupColumns()
 	{
-		EventColumn.Actions,
-		EventColumn.Index,
-		EventColumn.EntityId,
-		new("Spawner Entity Id", ImGuiTableColumnFlags.WidthFixed, 160),
-		new("Type", ImGuiTableColumnFlags.WidthFixed, 96),
-		new("Position", ImGuiTableColumnFlags.WidthFixed, 96),
-		new("Orientation", ImGuiTableColumnFlags.None, 196),
-		new("Velocity", ImGuiTableColumnFlags.WidthFixed, 128),
-		new("Speed", ImGuiTableColumnFlags.WidthFixed, 64),
-	};
+		EventTypeRendererUtils.SetupColumnActions();
+		EventTypeRendererUtils.SetupColumnIndex();
+		EventTypeRendererUtils.SetupColumnEntityId();
+		SetupColumnsData();
+	}
+
+	public static void SetupColumnsData()
+	{
+		ImGui.TableSetupColumn("Spawner Entity Id", ImGuiTableColumnFlags.WidthFixed, 160);
+		ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 96);
+		ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 96);
+		ImGui.TableSetupColumn("Orientation", ImGuiTableColumnFlags.None, 196);
+		ImGui.TableSetupColumn("Velocity", ImGuiTableColumnFlags.WidthFixed, 128);
+		ImGui.TableSetupColumn("Speed", ImGuiTableColumnFlags.WidthFixed, 64);
+	}
 
 	public static void Render(int eventIndex, int entityId, BoidSpawnEventData e, ReplayEventsData replayEventsData)
 	{
 		EventTypeRendererUtils.NextColumnActions(eventIndex);
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
+		RenderData(eventIndex, e, replayEventsData);
+	}
+
+	public static void RenderData(int eventIndex, BoidSpawnEventData e, ReplayEventsData replayEventsData)
+	{
 		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(BoidSpawnEventData.SpawnerEntityId), replayEventsData, ref e.SpawnerEntityId);
 		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(BoidSpawnEventData.BoidType), ref e.BoidType, EnumUtils.BoidTypes, _boidTypeNamesArray);
 		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(BoidSpawnEventData.Position), ref e.Position);

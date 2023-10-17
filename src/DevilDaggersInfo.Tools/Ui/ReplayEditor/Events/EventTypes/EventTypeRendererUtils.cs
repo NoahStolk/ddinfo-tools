@@ -66,15 +66,19 @@ public static class EventTypeRendererUtils
 
 	private static ImGuiTableFlags EventTableFlags => ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX;
 
-	private static void SetupColumns(IReadOnlyList<EventColumn> columns)
+	public static void SetupColumnActions()
 	{
-		for (int i = 0; i < columns.Count; i++)
-		{
-			EventColumn column = columns[i];
-			ImGui.TableSetupColumn(column.Name, column.Flags, column.Width);
-		}
+		ImGui.TableSetupColumn("Actions", ImGuiTableColumnFlags.WidthFixed, 64);
+	}
 
-		ImGui.TableHeadersRow();
+	public static void SetupColumnIndex()
+	{
+		ImGui.TableSetupColumn("Index", ImGuiTableColumnFlags.WidthFixed, 64);
+	}
+
+	public static void SetupColumnEntityId()
+	{
+		ImGui.TableSetupColumn("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160);
 	}
 
 	public static void RenderTable<TEvent, TRenderer>(Vector4 color, EventType eventType, IReadOnlyList<(int EventIndex, int EntityId, TEvent Event)> events, ReplayEventsData replayEventsData)
@@ -83,9 +87,11 @@ public static class EventTypeRendererUtils
 	{
 		ImGui.TextColored(color, EventTypeNames[eventType]);
 
-		if (ImGui.BeginTable(EventTypeNames[eventType], TRenderer.EventColumns.Count, EventTableFlags))
+		if (ImGui.BeginTable(EventTypeNames[eventType], TRenderer.ColumnCount, EventTableFlags))
 		{
-			SetupColumns(TRenderer.EventColumns);
+			TRenderer.SetupColumns();
+
+			ImGui.TableHeadersRow();
 
 			for (int i = 0; i < events.Count; i++)
 			{
@@ -122,59 +128,7 @@ public static class EventTypeRendererUtils
 		if (ImGui.IsItemHovered())
 			ImGui.SetTooltip(Inline.Span($"Insert event at index {index}"));
 
-		ImGui.SetNextWindowSize(new(512, 512), ImGuiCond.Appearing);
-		if (ImGui.BeginPopupModal(Inline.Span($"Insert event at index {index}")))
-		{
-			const int tempEntityId = 1;
-			IEventData? e = null;
-			if (ImGui.Button(nameof(BoidSpawnEventData)))
-				e = new BoidSpawnEventData(1, BoidType.Skull1, Int16Vec3.Zero, Int16Mat3x3.Identity, Vector3.Zero, 0f);
-			else if (ImGui.Button(nameof(DaggerSpawnEventData)))
-				e = new DaggerSpawnEventData(-1, Int16Vec3.Zero, Int16Mat3x3.Identity, false, DaggerType.Level1);
-			else if (ImGui.Button(nameof(DeathEventData)))
-				e = new DeathEventData(0);
-			else if (ImGui.Button(nameof(EndEventData)))
-				e = new EndEventData();
-			else if (ImGui.Button(nameof(EntityOrientationEventData)))
-				e = new EntityOrientationEventData(tempEntityId, Int16Mat3x3.Identity);
-			else if (ImGui.Button(nameof(EntityPositionEventData)))
-				e = new EntityPositionEventData(tempEntityId, Int16Vec3.Zero);
-			else if (ImGui.Button(nameof(EntityTargetEventData)))
-				e = new EntityTargetEventData(tempEntityId, Int16Vec3.Zero);
-			else if (ImGui.Button(nameof(GemEventData)))
-				e = new GemEventData();
-			else if (ImGui.Button(nameof(HitEventData)))
-				e = new HitEventData(tempEntityId, tempEntityId, 0);
-			else if (ImGui.Button(nameof(InitialInputsEventData)))
-				e = new InitialInputsEventData(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0, 2);
-			else if (ImGui.Button(nameof(InputsEventData)))
-				e = new InputsEventData(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0);
-			else if (ImGui.Button(nameof(LeviathanSpawnEventData)))
-				e = new LeviathanSpawnEventData(-1);
-			else if (ImGui.Button(nameof(PedeSpawnEventData)))
-				e = new PedeSpawnEventData(PedeType.Centipede, -1, Vector3.Zero, Vector3.Zero, Matrix3x3.Identity);
-			else if (ImGui.Button(nameof(SpiderEggSpawnEventData)))
-				e = new SpiderEggSpawnEventData(tempEntityId, Vector3.Zero, Vector3.Zero);
-			else if (ImGui.Button(nameof(SpiderSpawnEventData)))
-				e = new SpiderSpawnEventData(SpiderType.Spider1, -1, Vector3.Zero);
-			else if (ImGui.Button(nameof(SquidSpawnEventData)))
-				e = new SquidSpawnEventData(SquidType.Squid1, -1, Vector3.Zero, Vector3.Zero, 0f);
-			else if (ImGui.Button(nameof(ThornSpawnEventData)))
-				e = new ThornSpawnEventData(-1, Vector3.Zero, 0f);
-			else if (ImGui.Button(nameof(TransmuteEventData)))
-				e = new TransmuteEventData(tempEntityId, Int16Vec3.Zero, Int16Vec3.Zero, Int16Vec3.Zero, Int16Vec3.Zero);
-
-			if (e != null)
-			{
-				FileStates.Replay.Object.EventsData.InsertEvent(index, e);
-				ImGui.CloseCurrentPopup();
-			}
-
-			if (ImGui.Button("Cancel"))
-				ImGui.CloseCurrentPopup();
-
-			ImGui.EndPopup();
-		}
+		InsertEventPopup.Render(index);
 	}
 
 	public static void NextColumnEventIndex(int index)
