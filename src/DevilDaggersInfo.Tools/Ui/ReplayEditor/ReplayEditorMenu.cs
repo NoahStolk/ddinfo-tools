@@ -54,6 +54,7 @@ public static class ReplayEditorMenu
 	{
 		FileStates.Replay.Update(ReplayBinary<LocalReplayBinaryHeader>.CreateDefault());
 		FileStates.Replay.SetFile(null, null);
+		ReplayEditorWindow.Reset();
 	}
 
 	public static void OpenReplay()
