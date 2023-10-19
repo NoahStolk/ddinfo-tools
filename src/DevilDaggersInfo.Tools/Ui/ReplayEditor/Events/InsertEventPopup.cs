@@ -15,7 +15,6 @@ public static class InsertEventPopup
 	private const int _tempEntityId = 1;
 	private static readonly BoidSpawnEventData _boidSpawnEventData = new(1, BoidType.Skull1, Int16Vec3.Zero, Int16Mat3x3.Identity, Vector3.Zero, 0f);
 	private static readonly DaggerSpawnEventData _daggerSpawnEventData = new(-1, Int16Vec3.Zero, Int16Mat3x3.Identity, false, DaggerType.Level1);
-	private static readonly DeathEventData _deathEventData = new(0);
 	private static readonly EndEventData _endEventData = new();
 	private static readonly EntityOrientationEventData _entityOrientationEventData = new(_tempEntityId, Int16Mat3x3.Identity);
 	private static readonly EntityPositionEventData _entityPositionEventData = new(_tempEntityId, Int16Vec3.Zero);
@@ -42,7 +41,6 @@ public static class InsertEventPopup
 		{
 			RenderTabItem<BoidSpawnEventData, BoidSpawnEvents>("Boid Spawn event", EventType.BoidSpawn, index, _boidSpawnEventData, FileStates.Replay.Object.EventsData);
 			RenderTabItem<DaggerSpawnEventData, DaggerSpawnEvents>("Dagger Spawn event", EventType.DaggerSpawn, index, _daggerSpawnEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<DeathEventData, DeathEvents>("Death event", EventType.Death, index, _deathEventData, FileStates.Replay.Object.EventsData);
 			RenderTabItem<EndEventData, EndEvents>("End event", EventType.End, index, _endEventData, FileStates.Replay.Object.EventsData);
 			RenderTabItem<EntityOrientationEventData, EntityOrientationEvents>("Entity Orientation event", EventType.EntityOrientation, index, _entityOrientationEventData, FileStates.Replay.Object.EventsData);
 			RenderTabItem<EntityPositionEventData, EntityPositionEvents>("Entity Position event", EventType.EntityPosition, index, _entityPositionEventData, FileStates.Replay.Object.EventsData);
@@ -95,7 +93,6 @@ public static class InsertEventPopup
 			{
 				BoidSpawnEventData boid => new BoidSpawnEventData(boid.SpawnerEntityId, boid.BoidType, boid.Position, boid.Orientation, boid.Velocity, boid.Speed),
 				DaggerSpawnEventData dagger => new DaggerSpawnEventData(dagger.A, dagger.Position, dagger.Orientation, dagger.IsShot, dagger.DaggerType),
-				DeathEventData death => new DeathEventData(death.DeathType),
 				EndEventData => new EndEventData(),
 				EntityOrientationEventData entityOrientation => new EntityOrientationEventData(entityOrientation.EntityId, entityOrientation.Orientation),
 				EntityPositionEventData entityPosition => new EntityPositionEventData(entityPosition.EntityId, entityPosition.Position),

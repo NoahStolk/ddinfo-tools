@@ -8,7 +8,6 @@ public sealed class EventCache
 {
 	private readonly List<(int EventIndex, int EntityId, BoidSpawnEventData Event)> _boidSpawnEvents = new();
 	private readonly List<(int EventIndex, int EntityId, DaggerSpawnEventData Event)> _daggerSpawnEvents = new();
-	private readonly List<(int EventIndex, int EntityId, DeathEventData Event)> _deathEvents = new();
 	private readonly List<(int EventIndex, int EntityId, EndEventData Event)> _endEvents = new();
 	private readonly List<(int EventIndex, int EntityId, EntityOrientationEventData Event)> _entityOrientationEvents = new();
 	private readonly List<(int EventIndex, int EntityId, EntityPositionEventData Event)> _entityPositionEvents = new();
@@ -27,7 +26,6 @@ public sealed class EventCache
 
 	public IReadOnlyList<(int EventIndex, int EntityId, BoidSpawnEventData Event)> BoidSpawnEvents => _boidSpawnEvents;
 	public IReadOnlyList<(int EventIndex, int EntityId, DaggerSpawnEventData Event)> DaggerSpawnEvents => _daggerSpawnEvents;
-	public IReadOnlyList<(int EventIndex, int EntityId, DeathEventData Event)> DeathEvents => _deathEvents;
 	public IReadOnlyList<(int EventIndex, int EntityId, EndEventData Event)> EndEvents => _endEvents;
 	public IReadOnlyList<(int EventIndex, int EntityId, EntityOrientationEventData Event)> EntityOrientationEvents => _entityOrientationEvents;
 	public IReadOnlyList<(int EventIndex, int EntityId, EntityPositionEventData Event)> EntityPositionEvents => _entityPositionEvents;
@@ -51,7 +49,6 @@ public sealed class EventCache
 		Count = 0;
 		_boidSpawnEvents.Clear();
 		_daggerSpawnEvents.Clear();
-		_deathEvents.Clear();
 		_endEvents.Clear();
 		_entityOrientationEvents.Clear();
 		_entityPositionEvents.Clear();
@@ -92,7 +89,6 @@ public sealed class EventCache
 		{
 			switch (e.Data)
 			{
-				case DeathEventData de: _deathEvents.Add((index, -1, de)); break;
 				case EndEventData ee: _endEvents.Add((index, -1, ee)); break;
 				case EntityOrientationEventData eoe: _entityOrientationEvents.Add((index, -1, eoe)); break;
 				case EntityPositionEventData epe: _entityPositionEvents.Add((index, -1, epe)); break;

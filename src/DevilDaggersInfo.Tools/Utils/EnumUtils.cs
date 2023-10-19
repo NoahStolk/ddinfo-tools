@@ -26,7 +26,33 @@ public static class EnumUtils
 	public static readonly IReadOnlyDictionary<GameMode, string> GameModeNames = GameModes.ToDictionary(gm => gm, gm => gm.ToString());
 
 	public static readonly IReadOnlyList<EntityType> EntityTypes = Enum.GetValues<EntityType>();
-	public static readonly IReadOnlyDictionary<EntityType, string> EntityTypeNames = EntityTypes.ToDictionary(et => et, et => et.ToString());
+	public static readonly IReadOnlyDictionary<EntityType, string> EntityTypeShortNames = new Dictionary<EntityType, string>
+	{
+		[EntityType.Level1Dagger] = "Lvl1",
+		[EntityType.Level2Dagger] = "Lvl2",
+		[EntityType.Level3Dagger] = "Lvl3",
+		[EntityType.Level3HomingDagger] = "Lvl3 Homing",
+		[EntityType.Level4Dagger] = "Lvl4",
+		[EntityType.Level4HomingDagger] = "Lvl4 Homing",
+		[EntityType.Level4HomingSplash] = "Lvl4 Splash",
+		[EntityType.Squid1] = "Squid I",
+		[EntityType.Squid2] = "Squid II",
+		[EntityType.Squid3] = "Squid III",
+		[EntityType.Skull1] = "Skull I",
+		[EntityType.Skull2] = "Skull II",
+		[EntityType.Skull3] = "Skull III",
+		[EntityType.Spiderling] = "Spiderling",
+		[EntityType.Skull4] = "Skull IV",
+		[EntityType.Centipede] = "Centipede",
+		[EntityType.Gigapede] = "Gigapede",
+		[EntityType.Ghostpede] = "Ghostpede",
+		[EntityType.Spider1] = "Spider I",
+		[EntityType.Spider2] = "Spider II",
+		[EntityType.SpiderEgg] = "Spider Egg",
+		[EntityType.Leviathan] = "Leviathan",
+		[EntityType.Thorn] = "Thorn",
+		[EntityType.Zero] = "Zero",
+	};
 
 	public static readonly IReadOnlyList<DaggerType> DaggerTypes = Enum.GetValues<DaggerType>();
 	public static readonly IReadOnlyDictionary<DaggerType, string> DaggerTypeNames = DaggerTypes.ToDictionary(dt => dt, dt => dt.ToString());

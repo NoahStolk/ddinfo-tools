@@ -188,7 +188,6 @@ public static class ReplayEventsChild
 
 						InitialInputsEventData => EventType.InitialInputs,
 						InputsEventData => EventType.Inputs,
-						DeathEventData => EventType.Death,
 						EndEventData => EventType.End,
 
 						_ => null,
@@ -243,7 +242,6 @@ public static class ReplayEventsChild
 			// Final events
 			RenderEvents<InitialInputsEventData, InitialInputsEvents>(EventType.InitialInputs, _eventCache.InitialInputsEvents, eventsData);
 			RenderEvents<InputsEventData, InputsEvents>(EventType.Inputs, _eventCache.InputsEvents, eventsData);
-			RenderEvents<DeathEventData, DeathEvents>(EventType.Death, _eventCache.DeathEvents, eventsData);
 			RenderEvents<EndEventData, EndEvents>(EventType.End, _eventCache.EndEvents, eventsData);
 		}
 

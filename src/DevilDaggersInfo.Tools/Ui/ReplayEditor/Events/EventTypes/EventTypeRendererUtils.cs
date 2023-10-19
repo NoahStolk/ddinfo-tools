@@ -1,11 +1,12 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
-using DevilDaggersInfo.Core.Replay.Extensions;
 using DevilDaggersInfo.Core.Replay.Numerics;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using DevilDaggersInfo.Tools.Extensions;
+using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -32,36 +33,7 @@ public static class EventTypeRendererUtils
 		[EventType.Transmute] = "Transmute events",
 		[EventType.InitialInputs] = "Initial Inputs events",
 		[EventType.Inputs] = "Inputs events",
-		[EventType.Death] = "Death events",
 		[EventType.End] = "End events",
-	};
-
-	private static readonly IReadOnlyDictionary<EntityType, string> _entityTypeShortNames = new Dictionary<EntityType, string>
-	{
-		[EntityType.Level1Dagger] = "Lvl1",
-		[EntityType.Level2Dagger] = "Lvl2",
-		[EntityType.Level3Dagger] = "Lvl3",
-		[EntityType.Level3HomingDagger] = "Lvl3 Homing",
-		[EntityType.Level4Dagger] = "Lvl4",
-		[EntityType.Level4HomingDagger] = "Lvl4 Homing",
-		[EntityType.Level4HomingSplash] = "Lvl4 Splash",
-		[EntityType.Squid1] = "Squid I",
-		[EntityType.Squid2] = "Squid II",
-		[EntityType.Squid3] = "Squid III",
-		[EntityType.Skull1] = "Skull I",
-		[EntityType.Skull2] = "Skull II",
-		[EntityType.Skull3] = "Skull III",
-		[EntityType.Spiderling] = "Spiderling",
-		[EntityType.Skull4] = "Skull IV",
-		[EntityType.Centipede] = "Centipede",
-		[EntityType.Gigapede] = "Gigapede",
-		[EntityType.Ghostpede] = "Ghostpede",
-		[EntityType.Spider1] = "Spider I",
-		[EntityType.Spider2] = "Spider II",
-		[EntityType.SpiderEgg] = "Spider Egg",
-		[EntityType.Leviathan] = "Leviathan",
-		[EntityType.Thorn] = "Thorn",
-		[EntityType.Zero] = "Zero",
 	};
 
 	private static ImGuiTableFlags EventTableFlags => ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX;
@@ -244,10 +216,10 @@ public static class EventTypeRendererUtils
 		ImGui.Text(label);
 		ImGui.SameLine();
 
-		ImGui.SetCursorPosX(ImGui.GetCursorPosX() + (40 - labelWidth));
+		ImGui.SetCursorPosX(ImGui.GetCursorPosX() + (50 - labelWidth));
 		ImGui.Text(" (");
 		ImGui.SameLine();
-		ImGui.TextColored(entityType.GetColor(), entityType.HasValue ? _entityTypeShortNames[entityType.Value] : "???");
+		ImGui.TextColored(entityType.GetColor(), entityType.HasValue ? EnumUtils.EntityTypeShortNames[entityType.Value] : "???");
 		ImGui.SameLine();
 		ImGui.Text(")");
 
@@ -261,14 +233,14 @@ public static class EventTypeRendererUtils
 		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
 
 		ImGui.TableNextColumn();
-		ImGui.PushItemWidth(40);
+		ImGui.PushItemWidth(50);
 		ImGui.InputInt(EditLabel(fieldName, eventIndex), ref entityId, 0, 0);
 		ImGui.PopItemWidth();
 		ImGui.SameLine();
 
 		ImGui.Text(" (");
 		ImGui.SameLine();
-		ImGui.TextColored(entityType.GetColor(), entityType.HasValue ? _entityTypeShortNames[entityType.Value] : "???");
+		ImGui.TextColored(entityType.GetColor(), entityType.HasValue ? EnumUtils.EntityTypeShortNames[entityType.Value] : "???");
 		ImGui.SameLine();
 		ImGui.Text(")");
 
@@ -286,7 +258,7 @@ public static class EventTypeRendererUtils
 		{
 			EventType.BoidSpawn => EnemiesV3_2.Skull4.Color,
 			EventType.DaggerSpawn => Color.Purple,
-			EventType.Death or EventType.End or EventType.Gem => Color.Red,
+			EventType.End or EventType.Gem => Color.Red,
 			EventType.EntityOrientation or EventType.EntityPosition or EventType.EntityTarget => Color.Yellow,
 			EventType.Hit => Color.Orange,
 			EventType.LeviathanSpawn => EnemiesV3_2.Leviathan.Color,

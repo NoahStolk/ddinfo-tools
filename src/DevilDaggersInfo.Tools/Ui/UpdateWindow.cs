@@ -33,8 +33,10 @@ public static class UpdateWindow
 				"""));
 			ImGui.Spacing();
 
+ #pragma warning disable S1075
 			const string changelogUrl = "https://github.com/NoahStolk/ddinfo-tools/blob/main/CHANGELOG.md";
-			ImGuiExt.Hyperlink(changelogUrl, Inline.Span($"What's new in version {AvailableUpdateVersion}?"));
+ #pragma warning restore S1075
+			ImGuiExt.Hyperlink(changelogUrl, Inline.Span($"See what's new in version {AvailableUpdateVersion}"));
 			ImGui.Spacing();
 
 			ImGui.BeginDisabled(_updateInProgress);

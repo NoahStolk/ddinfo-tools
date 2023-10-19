@@ -3,6 +3,7 @@ using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Extensions;
 using DevilDaggersInfo.Core.Replay.PostProcessing.HitLog;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
@@ -72,7 +73,7 @@ public static class ReplayEntitiesChild
 							_enemyHitLog = EnemyHitLogBuilder.Build(eventsData.Events, i);
 
 						ImGui.TableNextColumn();
-						ImGui.TextColored(((EntityType?)entityType).GetColor(), EnumUtils.EntityTypeNames[entityType]);
+						ImGui.TextColored(((EntityType?)entityType).GetColor(), EnumUtils.EntityTypeShortNames[entityType]);
 					}
 
 					ImGui.EndTable();
@@ -102,7 +103,7 @@ public static class ReplayEntitiesChild
 		{
 			ImGui.Text("NOTE: This feature is a work in progress and not entirely accurate for some enemy types.");
 
-			ImGui.Text(Inline.Span($"Enemy hit log for {EnumUtils.EntityTypeNames[_enemyHitLog.EntityType]} (id {_enemyHitLog.EntityId}):"));
+			ImGui.Text(Inline.Span($"Enemy hit log for {EnumUtils.EntityTypeShortNames[_enemyHitLog.EntityType]} (id {_enemyHitLog.EntityId}):"));
 
 			int initialHp = _enemyHitLog.EntityType.GetInitialHp();
 			if (ImGui.BeginTable("EnemyHitLog", 5, ImGuiTableFlags.None))

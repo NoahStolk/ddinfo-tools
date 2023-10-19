@@ -20,6 +20,5 @@ public enum EventType
 
 	InitialInputs,
 	Inputs,
-	Death,
 	End,
 }
