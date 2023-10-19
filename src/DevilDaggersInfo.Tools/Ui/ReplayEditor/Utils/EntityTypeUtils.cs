@@ -12,7 +12,7 @@ public static class EntityTypeUtils
 	public static EntityType? GetEntityTypeIncludingNegated(ReplayEventsData replayEventsData, int entityId)
 	{
 		int absoluteEntityId = Math.Abs(entityId);
-		if (absoluteEntityId >= replayEventsData.SpawnEventCount)
+		if (absoluteEntityId > replayEventsData.SpawnEventCount)
 			return null;
 
 		EntityType entityType = replayEventsData.GetEntityType(absoluteEntityId);
