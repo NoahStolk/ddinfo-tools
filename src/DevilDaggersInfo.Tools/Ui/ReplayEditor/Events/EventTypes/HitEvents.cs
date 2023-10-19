@@ -6,6 +6,7 @@ using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -61,57 +62,68 @@ public sealed class HitEvents : IEventTypeRenderer<HitEventData>
 			return;
 		}
 
-		if (e.EntityIdA < 0 || e.EntityIdA >= replayEventsData.SpawnEventCount)
+		EntityType? entityTypeA = EntityTypeUtils.GetEntityTypeIncludingNegated(replayEventsData, e.EntityIdA);
+		if (!entityTypeA.HasValue)
 		{
 			ImGui.TextColored(Color.Red, "Entity Id A out of bounds");
 			return;
 		}
 
-		if (e.EntityIdB < 0 || e.EntityIdB >= replayEventsData.SpawnEventCount)
+		EntityType? entityTypeB = EntityTypeUtils.GetEntityTypeIncludingNegated(replayEventsData, e.EntityIdB);
+		if (!entityTypeB.HasValue)
 		{
 			ImGui.TextColored(Color.Red, "Entity Id B out of bounds");
 			return;
 		}
 
-		EntityType entityTypeA = replayEventsData.GetEntityType(e.EntityIdA);
-		if (entityTypeA.IsDagger() && e.EntityIdB == 0)
+		if (entityTypeA.Value.IsDagger() && e.EntityIdB == 0)
 		{
-			TextEntityType(entityTypeA, e.EntityIdA);
+			TextEntityType(entityTypeA.Value, e.EntityIdA);
 			ImGui.SameLine();
 			ImGui.Text("despawned");
 			return;
 		}
 
-		EntityType entityTypeB = replayEventsData.GetEntityType(e.EntityIdB);
 		if (entityTypeA == EntityType.Ghostpede && entityTypeB is EntityType.Level3HomingDagger or EntityType.Level4HomingDagger)
 		{
-			TextEntityType(entityTypeB, e.EntityIdB);
+			TextEntityType(entityTypeB.Value, e.EntityIdB);
 			ImGui.SameLine();
 			ImGui.Text("eaten by");
 			ImGui.SameLine();
-			TextEntityType(entityTypeA, e.EntityIdA);
+			TextEntityType(entityTypeA.Value, e.EntityIdA);
 			return;
 		}
 
-		if (entityTypeA.IsEnemy() && entityTypeB.IsDagger())
+		if (entityTypeA.Value.IsEnemy() && entityTypeB.Value.IsDagger())
 		{
-			TextEntityType(entityTypeA, e.EntityIdA);
+			TextEntityType(entityTypeA.Value, e.EntityIdA);
 			ImGui.SameLine();
 			ImGui.Text("hit by");
 			ImGui.SameLine();
-			TextEntityType(entityTypeB, e.EntityIdB);
+			TextEntityType(entityTypeB.Value, e.EntityIdB);
 			ImGui.SameLine();
 			ImGui.Text("-");
 			ImGui.SameLine();
 
 			Color noDamageColor = Color.Gray(0.5f);
-			int damage = entityTypeA.GetDamage(entityTypeB, e.UserData);
+
+			// Negative entity IDs are used for dead pede segments.
+			if (e.EntityIdA < 0)
+			{
+				ImGui.TextColored(noDamageColor, "Did not take damage");
+				return;
+			}
+
+			int damage = entityTypeA.Value.GetDamage(entityTypeB.Value, e.UserData);
 			int damageablePartCount = entityTypeA switch
 			{
 				EntityType.Squid1 or EntityType.Spider1 or EntityType.Spider2 => 1,
 				EntityType.Squid2 => 2,
 				EntityType.Squid3 => 3,
 				EntityType.Leviathan => 6,
+				EntityType.Centipede => 25,
+				EntityType.Gigapede => 50,
+				EntityType.Ghostpede => 10,
 				_ => 0,
 			};
 
@@ -121,6 +133,8 @@ public sealed class HitEvents : IEventTypeRenderer<HitEventData>
 				return;
 			}
 
+			// Negative user data is invalid.
+			// User data is the index of the gem that was hit, so if it is over the amount of damageable parts, no damage was taken.
 			if (e.UserData < 0 || e.UserData >= damageablePartCount)
 			{
 				ImGui.TextColored(noDamageColor, "Did not take damage");
@@ -149,9 +163,9 @@ public sealed class HitEvents : IEventTypeRenderer<HitEventData>
 
 		static void TextEntityType(EntityType entityType, int entityId)
 		{
-			ImGui.TextColored(Extensions.EntityTypeExtensions.GetColor(entityType), Inline.Span($"{EnumUtils.EntityTypeShortNames[entityType]}"));
+			ImGui.TextColored(entityType.GetColor(), Inline.Span($"{EnumUtils.EntityTypeShortNames[entityType]}"));
 			ImGui.SameLine();
-			ImGui.TextColored(Color.Gray(0.5f), Inline.Span($"(id {entityId})"));
+			ImGui.TextColored(Color.Gray(0.5f), Inline.Span($"(id {Math.Abs(entityId)})"));
 		}
 	}
 }

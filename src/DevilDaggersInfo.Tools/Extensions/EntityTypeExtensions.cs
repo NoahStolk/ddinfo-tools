@@ -8,6 +8,11 @@ public static class EntityTypeExtensions
 {
 	public static Color GetColor(this EntityType? entityType)
 	{
+		return !entityType.HasValue ? new(191, 0, 255, 255) : GetColor(entityType.Value);
+	}
+
+	public static Color GetColor(this EntityType entityType)
+	{
 		return (entityType switch
 		{
 			EntityType.Level1Dagger => UpgradesV3_2.Level1.Color,

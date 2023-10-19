@@ -6,6 +6,7 @@ using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using System.Numerics;
@@ -206,7 +207,7 @@ public static class EventTypeRendererUtils
 
 	public static void NextColumnEntityId(ReplayEventsData replayEventsData, int entityId)
 	{
-		EntityType? entityType = entityId >= 0 && entityId <= replayEventsData.SpawnEventCount ? replayEventsData.GetEntityType(entityId) : null;
+		EntityType? entityType = EntityTypeUtils.GetEntityTypeIncludingNegated(replayEventsData, entityId);
 
 		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
 
@@ -228,7 +229,7 @@ public static class EventTypeRendererUtils
 
 	public static void NextColumnEditableEntityId(int eventIndex, ReadOnlySpan<char> fieldName, ReplayEventsData replayEventsData, ref int entityId)
 	{
-		EntityType? entityType = entityId >= 0 && entityId < replayEventsData.SpawnEventCount ? replayEventsData.GetEntityType(entityId) : null;
+		EntityType? entityType = EntityTypeUtils.GetEntityTypeIncludingNegated(replayEventsData, entityId);
 
 		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
 
