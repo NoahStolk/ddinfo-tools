@@ -7,6 +7,8 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
 public static class ReplayEditorWindow
 {
+	private static float _gameMemoryTimer = 5;
+
 	public static void Reset()
 	{
 		ReplayEditor3DWindow.Reset();
@@ -17,6 +19,13 @@ public static class ReplayEditorWindow
 	public static void Update(float delta)
 	{
 		ReplayEditor3DWindow.Update(delta);
+
+		_gameMemoryTimer += delta;
+		if (_gameMemoryTimer < 5f)
+			return;
+
+		_gameMemoryTimer = 0;
+		GameMemoryServiceWrapper.Scan();
 	}
 
 	public static void Render()

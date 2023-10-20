@@ -28,20 +28,20 @@ public static class CustomLeaderboardResultsWindow
 			ImGui.PopStyleVar();
 
 #if TESTING
-		if (ImGui.Button("Random first score"))
-			AddRandomFirstScore();
+			if (ImGui.Button("Random first score"))
+				AddRandomFirstScore();
 
-		if (ImGui.Button("Random highscore"))
-			AddRandomHighscore();
+			if (ImGui.Button("Random highscore"))
+				AddRandomHighscore();
 
-		if (ImGui.Button("Random no highscore"))
-			AddRandomNoHighscore();
+			if (ImGui.Button("Random no highscore"))
+				AddRandomNoHighscore();
 
-		if (ImGui.Button("Random rejection"))
-			AddRandomRejection();
+			if (ImGui.Button("Random rejection"))
+				AddRandomRejection();
 
-		if (ImGui.Button("Clear"))
-			_results.Clear();
+			if (ImGui.Button("Clear"))
+				_results.Clear();
 #endif
 
 			if (ImGui.Button("Collapse all"))
