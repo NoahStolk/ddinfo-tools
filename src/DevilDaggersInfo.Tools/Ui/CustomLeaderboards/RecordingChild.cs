@@ -268,6 +268,6 @@ public static class RecordingChild
 
 	private static Death? GetDeath(MainBlock block)
 	{
-		return Deaths.GetDeathByLeaderboardType(GameConstants.CurrentVersion, block.DeathType);
+		return Deaths.GetDeathByType(GameConstants.CurrentVersion, block.DeathType);
 	}
 }

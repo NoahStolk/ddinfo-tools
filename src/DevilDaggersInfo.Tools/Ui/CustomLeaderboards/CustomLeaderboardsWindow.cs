@@ -31,7 +31,7 @@ public static class CustomLeaderboardsWindow
 		{
 			foreach (DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards.AddUploadRequestTimestamp timestamp in RecordingLogic.Timestamps)
 			{
-				ImGui.Text($"{new DateTime(timestamp.Timestamp, DateTimeKind.Utc)} {timestamp.TimeInSeconds}");
+				ImGui.Text(Inline.Span($"{new DateTime(timestamp.Timestamp, DateTimeKind.Utc)} {timestamp.TimeInSeconds}"));
 			}
 		}
 

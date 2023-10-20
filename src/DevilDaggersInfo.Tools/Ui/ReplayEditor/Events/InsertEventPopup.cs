@@ -39,23 +39,23 @@ public static class InsertEventPopup
 
 		if (ImGui.BeginTabBar("NewEventsTabBar", ImGuiTabBarFlags.None))
 		{
-			RenderTabItem<BoidSpawnEventData, BoidSpawnEvents>("Boid Spawn event", EventType.BoidSpawn, index, _boidSpawnEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<DaggerSpawnEventData, DaggerSpawnEvents>("Dagger Spawn event", EventType.DaggerSpawn, index, _daggerSpawnEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<EndEventData, EndEvents>("End event", EventType.End, index, _endEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<EntityOrientationEventData, EntityOrientationEvents>("Entity Orientation event", EventType.EntityOrientation, index, _entityOrientationEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<EntityPositionEventData, EntityPositionEvents>("Entity Position event", EventType.EntityPosition, index, _entityPositionEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<EntityTargetEventData, EntityTargetEvents>("Entity Target event", EventType.EntityTarget, index, _entityTargetEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<GemEventData, GemEvents>("Gem event", EventType.Gem, index, _gemEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<HitEventData, HitEvents>("Hit event", EventType.Hit, index, _hitEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<InitialInputsEventData, InitialInputsEvents>("Initial Inputs event", EventType.InitialInputs, index, _initialInputsEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<InputsEventData, InputsEvents>("Inputs event", EventType.Inputs, index, _inputsEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<LeviathanSpawnEventData, LeviathanSpawnEvents>("Leviathan Spawn event", EventType.LeviathanSpawn, index, _leviathanSpawnEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<PedeSpawnEventData, PedeSpawnEvents>("Pede Spawn event", EventType.PedeSpawn, index, _pedeSpawnEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<SpiderEggSpawnEventData, SpiderEggSpawnEvents>("Spider Egg Spawn event", EventType.SpiderEggSpawn, index, _spiderEggSpawnEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<SpiderSpawnEventData, SpiderSpawnEvents>("Spider Spawn event", EventType.SpiderSpawn, index, _spiderSpawnEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<SquidSpawnEventData, SquidSpawnEvents>("Squid Spawn event", EventType.SquidSpawn, index, _squidSpawnEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<ThornSpawnEventData, ThornSpawnEvents>("Thorn Spawn event", EventType.ThornSpawn, index, _thornSpawnEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<TransmuteEventData, TransmuteEvents>("Transmute event", EventType.Transmute, index, _transmuteEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<BoidSpawnEventData, BoidSpawnEvents>("Boid Spawn", EventType.BoidSpawn, index, _boidSpawnEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<DaggerSpawnEventData, DaggerSpawnEvents>("Dagger Spawn", EventType.DaggerSpawn, index, _daggerSpawnEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<EndEventData, EndEvents>("End", EventType.End, index, _endEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<EntityOrientationEventData, EntityOrientationEvents>("Entity Orientation", EventType.EntityOrientation, index, _entityOrientationEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<EntityPositionEventData, EntityPositionEvents>("Entity Position", EventType.EntityPosition, index, _entityPositionEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<EntityTargetEventData, EntityTargetEvents>("Entity Target", EventType.EntityTarget, index, _entityTargetEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<GemEventData, GemEvents>("Gem", EventType.Gem, index, _gemEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<HitEventData, HitEvents>("Hit", EventType.Hit, index, _hitEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<InitialInputsEventData, InitialInputsEvents>("Initial Inputs", EventType.InitialInputs, index, _initialInputsEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<InputsEventData, InputsEvents>("Inputs", EventType.Inputs, index, _inputsEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<LeviathanSpawnEventData, LeviathanSpawnEvents>("Leviathan Spawn", EventType.LeviathanSpawn, index, _leviathanSpawnEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<PedeSpawnEventData, PedeSpawnEvents>("Pede Spawn", EventType.PedeSpawn, index, _pedeSpawnEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<SpiderEggSpawnEventData, SpiderEggSpawnEvents>("Spider Egg Spawn", EventType.SpiderEggSpawn, index, _spiderEggSpawnEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<SpiderSpawnEventData, SpiderSpawnEvents>("Spider Spawn", EventType.SpiderSpawn, index, _spiderSpawnEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<SquidSpawnEventData, SquidSpawnEvents>("Squid Spawn", EventType.SquidSpawn, index, _squidSpawnEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<ThornSpawnEventData, ThornSpawnEvents>("Thorn Spawn", EventType.ThornSpawn, index, _thornSpawnEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<TransmuteEventData, TransmuteEvents>("Transmute", EventType.Transmute, index, _transmuteEventData, FileStates.Replay.Object.EventsData);
 
 			ImGui.EndTabBar();
 		}

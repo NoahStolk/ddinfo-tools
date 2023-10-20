@@ -25,10 +25,9 @@ Added mod manager. You can now manage installed mods in the mods folder.
 
 ### Replay Editor
 
-It is now possible to edit event data. This includes editing every piece of event data, as well as adding and removing events.
-
-#### Other Improvements
-
+- It is now possible to edit event data.
+  - This includes editing every piece of event data, as well as adding and removing events.
+  - Certain events are explained in more detail in the UI.
 - Replay preview timer and inputs visualization has been moved to the 3D window.
 - Replay inputs have been moved to a separate tab. The input events themselves are now displayed in the same table as the other events.
 - Fixed Thorn spawn events not being displayed correctly.
@@ -45,6 +44,7 @@ It is now possible to edit event data. This includes editing every piece of even
 
 - Fixed not clearing "View replay" buttons when selecting a different leaderboard.
 - Added "Current spawnset" text to the displayed leaderboard if that spawnset is currently active.
+- Performance improvements.
 
 ### Other
 

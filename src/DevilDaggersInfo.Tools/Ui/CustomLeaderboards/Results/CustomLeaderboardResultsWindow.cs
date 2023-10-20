@@ -9,7 +9,7 @@ namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 
 public static class CustomLeaderboardResultsWindow
 {
-	private static readonly List<UploadResult> _results = new();
+	private static List<UploadResult> _results = new();
 
 	public static void AddResult(UploadResult newResult)
 	{
@@ -17,6 +17,7 @@ public static class CustomLeaderboardResultsWindow
 			result.IsExpanded = false;
 
 		_results.Add(newResult);
+		_results = _results.OrderByDescending(ur => ur.SubmittedAt).ToList();
 	}
 
 	public static void Render()
@@ -51,8 +52,11 @@ public static class CustomLeaderboardResultsWindow
 			if (ImGui.Button("Expand all"))
 				_results.ForEach(r => r.IsExpanded = true);
 
-			foreach (UploadResult result in _results.OrderByDescending(ur => ur.SubmittedAt))
+			for (int i = 0; i < _results.Count; i++)
+			{
+				UploadResult result = _results[i];
 				result.Render();
+			}
 		}
 		else
 		{

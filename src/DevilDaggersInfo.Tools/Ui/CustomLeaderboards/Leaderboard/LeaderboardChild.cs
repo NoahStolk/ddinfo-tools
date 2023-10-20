@@ -239,7 +239,7 @@ public static class LeaderboardChild
 
 		static string? DeathSort(GetCustomEntry ce)
 		{
-			return Deaths.GetDeathByLeaderboardType(GameConstants.CurrentVersion, ce.DeathType)?.Name;
+			return Deaths.GetDeathByType(GameConstants.CurrentVersion, ce.DeathType)?.Name;
 		}
 	}
 

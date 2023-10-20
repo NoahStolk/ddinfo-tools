@@ -44,7 +44,7 @@ public class UploadResult
 
 		_isAscending = isAscending;
 		_spawnsetName = spawnsetName;
-		_death = Deaths.GetDeathByLeaderboardType(GameConstants.CurrentVersion, deathType);
+		_death = Deaths.GetDeathByType(GameConstants.CurrentVersion, deathType);
 		SubmittedAt = submittedAt;
 	}
 

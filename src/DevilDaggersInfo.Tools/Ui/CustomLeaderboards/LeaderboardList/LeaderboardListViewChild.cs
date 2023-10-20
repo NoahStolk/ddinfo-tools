@@ -68,8 +68,9 @@ public static class LeaderboardListViewChild
 				sortsSpecs.SpecsDirty = false;
 			}
 
-			foreach (GetCustomLeaderboardForOverview clOverview in LeaderboardListChild.PagedCustomLeaderboards)
+			for (int i = 0; i < LeaderboardListChild.PagedCustomLeaderboards.Count; i++)
 			{
+				GetCustomLeaderboardForOverview clOverview = LeaderboardListChild.PagedCustomLeaderboards[i];
 				ImGui.TableNextRow();
 				ImGui.TableNextColumn();
 
@@ -102,9 +103,9 @@ public static class LeaderboardListViewChild
 				ImGui.Text(clOverview.SpawnsetAuthorName);
 				ImGui.TableNextColumn();
 
-				for (int i = 0; i < clOverview.Criteria.Count; i++)
+				for (int j = 0; j < clOverview.Criteria.Count; j++)
 				{
-					GetCustomLeaderboardCriteria criteria = clOverview.Criteria[i];
+					GetCustomLeaderboardCriteria criteria = clOverview.Criteria[j];
 					ImGuiImage.Image(criteria.Type.GetTexture().Handle, new(16), criteria.Type.GetColor());
 					if (ImGui.IsItemHovered())
 					{
