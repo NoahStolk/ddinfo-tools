@@ -58,12 +58,14 @@ public static class ReplayEntitiesChild
 
 					for (int i = _startId; i < Math.Min(_startId + maxIds, eventsData.SpawnEventCount); i++)
 					{
-						EntityType entityType = eventsData.GetEntityType(i);
-
-						if (!_showDaggers && entityType.IsDagger())
+						EntityType? entityType = eventsData.GetEntityType(i);
+						if (!entityType.HasValue)
 							continue;
 
-						if (!_showEnemies && entityType.IsEnemy())
+						if (!_showDaggers && entityType.Value.IsDagger())
+							continue;
+
+						if (!_showEnemies && entityType.Value.IsEnemy())
 							continue;
 
 						ImGui.TableNextRow();
@@ -73,7 +75,7 @@ public static class ReplayEntitiesChild
 							_enemyHitLog = EnemyHitLogBuilder.Build(eventsData.Events, i);
 
 						ImGui.TableNextColumn();
-						ImGui.TextColored(((EntityType?)entityType).GetColor(), EnumUtils.EntityTypeShortNames[entityType]);
+						ImGui.TextColored(entityType.GetColor(), EnumUtils.EntityTypeShortNames[entityType.Value]);
 					}
 
 					ImGui.EndTable();

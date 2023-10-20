@@ -6,7 +6,6 @@ using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -62,14 +61,14 @@ public sealed class HitEvents : IEventTypeRenderer<HitEventData>
 			return;
 		}
 
-		EntityType? entityTypeA = EntityTypeUtils.GetEntityTypeIncludingNegated(replayEventsData, e.EntityIdA);
+		EntityType? entityTypeA = replayEventsData.GetEntityTypeIncludingNegated(e.EntityIdA);
 		if (!entityTypeA.HasValue)
 		{
 			ImGui.TextColored(Color.Red, "Entity Id A out of bounds");
 			return;
 		}
 
-		EntityType? entityTypeB = EntityTypeUtils.GetEntityTypeIncludingNegated(replayEventsData, e.EntityIdB);
+		EntityType? entityTypeB = replayEventsData.GetEntityTypeIncludingNegated(e.EntityIdB);
 		if (!entityTypeB.HasValue)
 		{
 			ImGui.TextColored(Color.Red, "Entity Id B out of bounds");
