@@ -157,7 +157,7 @@ public static class MainWindow
 
 			Note that using custom spawnsets will not submit your score to the official leaderboards.
 
-			Spawnsets can only be used to practice, not cheat. They're completely safe to use.
+			Spawnsets can only be used to practice the main game and play custom levels. They cannot be used to cheat and are completely safe to use.
 			""");
 	}
 
@@ -230,7 +230,7 @@ public static class MainWindow
 	{
 		ImGuiExt.Title("Practice");
 		ImGui.Text("""
-			Practice the main game by starting at any point in time with any hand upgrade and amount of gems/homing.
+			Practice the main game by starting at any point in time with any hand upgrade and amount of gems/homing, using custom spawnsets that are automatically generated.
 
 			Save templates to quickly load your desired practice settings.
 
@@ -238,6 +238,10 @@ public static class MainWindow
 			- Splits
 			- Homing usage
 			- Gem collection
+
+			Note that using practice will not submit your score to the official leaderboards.
+
+			Spawnsets can only be used to practice the main game and play custom levels. They cannot be used to cheat and are completely safe to use.
 			""");
 	}
 
@@ -247,7 +251,17 @@ public static class MainWindow
 		ImGui.Text("""
 			WORK IN PROGRESS
 
-			Manage mods downloaded from the website.
+			View all currently installed mods.
+
+			Enable/disable mods and change their load order to further customize the game.
+
+			Browse and find new mods to install directly from the devildaggers.info website.
+
+			View which assets are contained in each mod, and which ones are prohibited for 1000+ scores.
+
+			Enable/disable prohibited assets for each mod.
+
+			View all effective game assets and their source mod, including whether they're being overridden by another mod.
 			""");
 	}
 }
