@@ -18,6 +18,7 @@ namespace DevilDaggersInfo.Tools.AppWindows;
 
 public class MainAppWindow
 {
+	private ImGuiController? _imGuiController;
 	private GL? _gl;
 	private IInputContext? _inputContext;
 
@@ -39,13 +40,12 @@ public class MainAppWindow
 	}
 
 	public IWindow WindowInstance { get; }
-	public ImGuiController? ImGuiController { get; private set; }
 
 	private void OnWindowOnLoad()
 	{
 		_gl = WindowInstance.CreateOpenGL();
 		_inputContext = WindowInstance.CreateInput();
-		ImGuiController = new(_gl, WindowInstance, _inputContext, () =>
+		_imGuiController = new(_gl, WindowInstance, _inputContext, () =>
 		{
 			ImGuiIOPtr io = ImGui.GetIO();
 
@@ -124,7 +124,7 @@ public class MainAppWindow
 
 	private void OnWindowOnRender(double delta)
 	{
-		if (ImGuiController == null || _gl == null)
+		if (_imGuiController == null || _gl == null)
 			throw new InvalidOperationException("Window has not loaded.");
 
 		float deltaF = (float)delta;
@@ -132,13 +132,13 @@ public class MainAppWindow
 		Root.Application.RenderCounter.Increment();
 		Root.Application.LastRenderDelta = deltaF;
 
-		ImGuiController.Update(deltaF);
+		_imGuiController.Update(deltaF);
 
 		_gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 		UiRenderer.Render(deltaF);
 
-		ImGuiController.Render();
+		_imGuiController.Render();
 
 		if (Ui.Main.MainWindow.ShouldClose)
 			WindowInstance.Close();
@@ -146,7 +146,7 @@ public class MainAppWindow
 
 	private void OnWindowOnClosing()
 	{
-		ImGuiController?.Dispose();
+		_imGuiController?.Dispose();
 		_inputContext?.Dispose();
 		_gl?.Dispose();
 	}
