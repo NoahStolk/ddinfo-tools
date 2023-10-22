@@ -32,6 +32,17 @@ public static class DebugLayout
 			ImGui.Checkbox("Show overlay", ref _showOverlay);
 
 #if DEBUG
+			ImGuiIOPtr io = ImGui.GetIO();
+			ImGui.TextColored(io.KeyCtrl ? Color.White : Color.Gray(0.4f), "CTRL");
+			ImGui.SameLine();
+			ImGui.TextColored(io.KeyShift ? Color.White : Color.Gray(0.4f), "SHIFT");
+			ImGui.SameLine();
+			ImGui.TextColored(io.KeyAlt ? Color.White : Color.Gray(0.4f), "ALT");
+			ImGui.SameLine();
+			ImGui.TextColored(io.KeySuper ? Color.White : Color.Gray(0.4f), "SUPER");
+
+			ImGui.Separator();
+
 			if (ImGui.Button("Show demo window"))
 				UiRenderer.ShowDemoWindow();
 
