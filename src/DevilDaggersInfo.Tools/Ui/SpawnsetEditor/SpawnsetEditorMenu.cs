@@ -97,7 +97,11 @@ public static class SpawnsetEditorMenu
 
 	public static void OpenSpawnset()
 	{
-		string? filePath = NativeFileDialog.CreateOpenFileDialog(null);
+		NativeFileDialog.CreateOpenFileDialog(OpenSpawnsetCallback, null);
+	}
+
+	private static void OpenSpawnsetCallback(string? filePath)
+	{
 		if (filePath != null)
 			FileStates.Spawnset.PromptSave(() => OpenSpawnset(filePath));
 	}
@@ -152,7 +156,11 @@ public static class SpawnsetEditorMenu
 
 	public static void SaveSpawnsetAs()
 	{
-		string? filePath = NativeFileDialog.CreateSaveFileDialog(null);
+		NativeFileDialog.CreateSaveFileDialog(SaveSpawnsetAsCallback, null);
+	}
+
+	private static void SaveSpawnsetAsCallback(string? filePath)
+	{
 		if (filePath != null)
 			FileStates.Spawnset.SaveFile(filePath);
 	}
