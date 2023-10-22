@@ -94,9 +94,7 @@ public static class ConfigLayout
 			{
 				if (ImGui.Button("Browse", new(96, 20)))
 				{
-					string? directory = NativeFileDialog.SelectDirectory();
-					if (directory != null)
-						_installationDirectoryInput = directory;
+					NativeFileDialog.SelectDirectory(OpenInstallationDirectoryCallback);
 				}
 
 				ImGui.SameLine();
@@ -131,5 +129,11 @@ public static class ConfigLayout
 
 		if (ImGui.IsKeyPressed(ImGuiKey.Escape))
 			ValidateInstallation();
+	}
+
+	private static void OpenInstallationDirectoryCallback(string? directory)
+	{
+		if (directory != null)
+			_installationDirectoryInput = directory;
 	}
 }

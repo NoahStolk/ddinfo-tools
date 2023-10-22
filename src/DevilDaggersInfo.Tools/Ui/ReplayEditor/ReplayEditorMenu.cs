@@ -59,7 +59,11 @@ public static class ReplayEditorMenu
 
 	public static void OpenReplay()
 	{
-		string? filePath = NativeFileDialog.CreateOpenFileDialog("Devil Daggers replay files (*.ddreplay)|*.ddreplay");
+		NativeFileDialog.CreateOpenFileDialog(OpenReplayCallback, "Devil Daggers replay files (*.ddreplay)|*.ddreplay");
+	}
+
+	private static void OpenReplayCallback(string? filePath)
+	{
 		if (filePath == null)
 			return;
 
@@ -125,12 +129,16 @@ public static class ReplayEditorMenu
 
 	public static void SaveReplay()
 	{
-		string? filePath = NativeFileDialog.CreateSaveFileDialog("Devil Daggers replay files (*.ddreplay)|*.ddreplay");
-		if (filePath != null)
-		{
-			filePath = Path.ChangeExtension(filePath, ".ddreplay");
-			File.WriteAllBytes(filePath, FileStates.Replay.Object.Compile());
-		}
+		NativeFileDialog.CreateSaveFileDialog(SaveReplayCallback, "Devil Daggers replay files (*.ddreplay)|*.ddreplay");
+	}
+
+	private static void SaveReplayCallback(string? filePath)
+	{
+		if (filePath == null)
+			return;
+
+		filePath = Path.ChangeExtension(filePath, ".ddreplay");
+		File.WriteAllBytes(filePath, FileStates.Replay.Object.Compile());
 	}
 
 	public static void InjectReplay()

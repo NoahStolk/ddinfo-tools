@@ -41,6 +41,8 @@ public static class DebugLayout
 			ImGui.SameLine();
 			ImGui.TextColored(io.KeySuper ? Color.White : Color.Gray(0.4f), "SUPER");
 
+			ImGui.Text(Inline.Span($"Native dialog opened: {(NativeFileDialog.DialogOpen ? "True" : "False")}"));
+
 			ImGui.Separator();
 
 			if (ImGui.Button("Show demo window"))
