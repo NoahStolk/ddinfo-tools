@@ -128,8 +128,7 @@ public static class SettingsChild
 
 		Vector2 raceDaggerPosition = FileStates.Spawnset.Object.RaceDaggerPosition;
 		ImGui.InputFloat2("Position", ref raceDaggerPosition, "%.2f", ImGuiInputTextFlags.CharsDecimal);
-		if (Math.Abs(FileStates.Spawnset.Object.RaceDaggerPosition.X - raceDaggerPosition.X) > 0.001f ||
-		    Math.Abs(FileStates.Spawnset.Object.RaceDaggerPosition.Y - raceDaggerPosition.Y) > 0.001f)
+		if (ImGui.IsItemDeactivatedAfterEdit())
 		{
 			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { RaceDaggerPosition = raceDaggerPosition });
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.RaceDagger);
@@ -148,7 +147,7 @@ public static class SettingsChild
 
 		float shrinkStart = FileStates.Spawnset.Object.ShrinkStart;
 		ImGui.InputFloat("Shrink start", ref shrinkStart, 1, 5, "%.1f");
-		if (Math.Abs(FileStates.Spawnset.Object.ShrinkStart - shrinkStart) > 0.001f)
+		if (ImGui.IsItemDeactivatedAfterEdit())
 		{
 			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ShrinkStart = shrinkStart });
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.ShrinkStart);
@@ -156,7 +155,7 @@ public static class SettingsChild
 
 		float shrinkEnd = FileStates.Spawnset.Object.ShrinkEnd;
 		ImGui.InputFloat("Shrink end", ref shrinkEnd, 1, 5, "%.1f");
-		if (Math.Abs(FileStates.Spawnset.Object.ShrinkEnd - shrinkEnd) > 0.001f)
+		if (ImGui.IsItemDeactivatedAfterEdit())
 		{
 			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ShrinkEnd = shrinkEnd });
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.ShrinkEnd);
@@ -164,7 +163,7 @@ public static class SettingsChild
 
 		float shrinkRate = FileStates.Spawnset.Object.ShrinkRate;
 		ImGui.InputFloat("Shrink rate", ref shrinkRate, 0.005f, 0.5f, "%.3f");
-		if (Math.Abs(FileStates.Spawnset.Object.ShrinkRate - shrinkRate) > 0.001f)
+		if (ImGui.IsItemDeactivatedAfterEdit())
 		{
 			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ShrinkRate = shrinkRate });
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.ShrinkRate);
@@ -172,7 +171,7 @@ public static class SettingsChild
 
 		float brightness = FileStates.Spawnset.Object.Brightness;
 		ImGui.InputFloat("Brightness", ref brightness, 5, 20, "%.1f");
-		if (Math.Abs(FileStates.Spawnset.Object.Brightness - brightness) > 0.001f)
+		if (ImGui.IsItemDeactivatedAfterEdit())
 		{
 			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Brightness = brightness });
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.Brightness);
@@ -205,7 +204,7 @@ public static class SettingsChild
 
 		int additionalGems = FileStates.Spawnset.Object.AdditionalGems;
 		ImGui.InputInt("Added gems", ref additionalGems, 1);
-		if (FileStates.Spawnset.Object.AdditionalGems != additionalGems)
+		if (ImGui.IsItemDeactivatedAfterEdit())
 		{
 			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { AdditionalGems = additionalGems });
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.AdditionalGems);
@@ -217,7 +216,7 @@ public static class SettingsChild
 
 		float timerStart = FileStates.Spawnset.Object.TimerStart;
 		ImGui.InputFloat("Timer start", ref timerStart, 1, 5, "%.4f");
-		if (Math.Abs(FileStates.Spawnset.Object.TimerStart - timerStart) > 0.001f)
+		if (ImGui.IsItemDeactivatedAfterEdit())
 		{
 			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { TimerStart = timerStart });
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.TimerStart);

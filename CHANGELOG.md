@@ -40,6 +40,7 @@ Added mod manager. You can now manage installed mods in the mods folder.
 - The spawnset editor now keeps track of unsaved changes and will ask you to save it when leaving the editor or opening a different spawnset.
 - Added tooltip information to spawns headers.
 - Changed spawns selection colors to make text more readable.
+- Spawnset settings inputs no longer save a history state on every key press.
 
 ### Custom Leaderboards
 
