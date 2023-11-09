@@ -33,7 +33,8 @@ Added mod manager. You can now manage installed mods in the mods folder.
 - Fixed Thorn spawn events not being displayed correctly.
 - Fixed not showing error when injecting replay into game memory fails.
 - Fixed not appending `.ddreplay` to replay file name when saving.
-- Fixed not detecting game memory when injecting or opening a replay the first time. 
+- Fixed not detecting game memory when injecting or opening a replay the first time.
+- Fixed crash when entities list navigation goes out of range.
 
 ### Spawnset Editor
 

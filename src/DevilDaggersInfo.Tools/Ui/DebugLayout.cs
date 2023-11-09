@@ -59,6 +59,9 @@ public static class DebugLayout
 			if (ImGui.Button("Error window"))
 				PopupManager.ShowError("Test error!");
 
+			if (ImGui.Button("Message window"))
+				PopupManager.ShowMessage("Message", "Test message!");
+
 			if (ImGui.Button("Warning log"))
 				Root.Log.Warning("Test warning! This should be logged as WARNING.");
 

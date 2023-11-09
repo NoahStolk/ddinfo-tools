@@ -42,6 +42,8 @@ public static class ReplayEntitiesChild
 			if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Handle, iconSize))
 				_startId = eventsData.SpawnEventCount - maxIds;
 
+			_startId = Math.Max(0, Math.Min(_startId, eventsData.SpawnEventCount - maxIds));
+
 			ImGui.Text(Inline.Span($"Showing {_startId} - {_startId + maxIds - 1} of {eventsData.SpawnEventCount}"));
 
 			ImGui.Checkbox("Show enemies", ref _showEnemies);
