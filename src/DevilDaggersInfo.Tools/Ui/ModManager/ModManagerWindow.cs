@@ -23,7 +23,7 @@ public static class ModManagerWindow
 					ImGui.EndTabItem();
 				}
 
-				if (ImGui.BeginTabItem("Install New Mods"))
+				if (ImGui.BeginTabItem("Download New Mods"))
 				{
 					ImGui.Text("Not implemented yet.");
 					ImGui.EndTabItem();

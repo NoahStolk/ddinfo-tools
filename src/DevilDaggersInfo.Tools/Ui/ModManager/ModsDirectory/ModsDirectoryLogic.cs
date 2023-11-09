@@ -23,26 +23,31 @@ public static class ModsDirectoryLogic
 
 	public static void LoadModsDirectory()
 	{
-		try
+		Task.Run(async () =>
 		{
-			_modFiles.Clear();
+			await Task.Yield();
 
-			string[] files = Directory.GetFiles(UserSettings.ModsDirectory);
-			foreach (string file in files)
+			try
 			{
-				_modFiles.Add(ModFile.FromPath(file));
+				_modFiles.Clear();
+
+				string[] files = Directory.GetFiles(UserSettings.ModsDirectory);
+				foreach (string file in files)
+				{
+					_modFiles.Add(ModFile.FromPath(file));
+				}
+
+				// TODO: Sort by current sorting.
+				_modFiles = _modFiles.OrderBy(m => m.FileName).ToList();
+			}
+			catch (Exception ex)
+			{
+				PopupManager.ShowError("Error loading files in the mods directory.\n\n" + ex.Message);
+				Root.Log.Error(ex, "Error loading files in the mods directory.");
 			}
 
-			// TODO: Sort by current sorting.
-			_modFiles = _modFiles.OrderBy(m => m.FileName).ToList();
-		}
-		catch (Exception ex)
-		{
-			PopupManager.ShowError("Error loading files in the mods directory.\n\n" + ex.Message);
-			Root.Log.Error(ex, "Error loading files in the mods directory.");
-		}
-
-		ModInstallationWindow.LoadEffectiveAssets();
+			ModInstallationWindow.LoadEffectiveAssets();
+		});
 	}
 
 	public static void SortModFiles(uint sorting, bool sortAscending)
