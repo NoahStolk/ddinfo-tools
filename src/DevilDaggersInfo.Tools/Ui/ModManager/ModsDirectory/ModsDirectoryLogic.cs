@@ -14,6 +14,7 @@ public static class ModsDirectoryLogic
 	public static string NewFileName = string.Empty;
 
 	public static IReadOnlyList<ModFile> ModFiles => _modFiles;
+	public static bool IsLoading { get; private set; }
 
 	public static void InitializeRename(string fileName)
 	{
@@ -25,6 +26,11 @@ public static class ModsDirectoryLogic
 	{
 		Task.Run(async () =>
 		{
+			if (IsLoading)
+				return;
+
+			IsLoading = true;
+
 			await Task.Yield();
 
 			try
@@ -36,9 +42,6 @@ public static class ModsDirectoryLogic
 				{
 					_modFiles.Add(ModFile.FromPath(file));
 				}
-
-				// TODO: Sort by current sorting.
-				_modFiles = _modFiles.OrderBy(m => m.FileName).ToList();
 			}
 			catch (Exception ex)
 			{
@@ -47,11 +50,19 @@ public static class ModsDirectoryLogic
 			}
 
 			ModInstallationWindow.LoadEffectiveAssets();
+
+			IsLoading = false;
+
+			// TODO: Sort by current sorting.
+			SortModFiles(0, true);
 		});
 	}
 
 	public static void SortModFiles(uint sorting, bool sortAscending)
 	{
+		if (IsLoading)
+			return; // Cannot sort while loading because List<T> is not thread-safe.
+
 		_modFiles = sorting switch
 		{
 			0 => sortAscending ? _modFiles.OrderBy(m => m.FileName.ToLower()).ToList() : _modFiles.OrderByDescending(m => m.FileName.ToLower()).ToList(),
@@ -67,6 +78,9 @@ public static class ModsDirectoryLogic
 	/// </summary>
 	public static string? RenameModFile()
 	{
+		if (IsLoading)
+			return null;
+
 		string originalPath = Path.Combine(UserSettings.ModsDirectory, _originalFileName);
 		string newPath = Path.Combine(UserSettings.ModsDirectory, NewFileName);
 		if (originalPath == newPath)
@@ -114,6 +128,9 @@ public static class ModsDirectoryLogic
 
 	public static void DeleteModFile(string fileName)
 	{
+		if (IsLoading)
+			return;
+
 		string path = Path.Combine(UserSettings.ModsDirectory, fileName);
 
 		try
@@ -137,6 +154,9 @@ public static class ModsDirectoryLogic
 
 	public static void ToggleModFile(string originalFileName)
 	{
+		if (IsLoading)
+			return;
+
 		if (!originalFileName.StartsWith("audio") && !originalFileName.StartsWith("dd") && !originalFileName.StartsWith("_audio") && !originalFileName.StartsWith("_dd"))
 			return;
 
@@ -176,6 +196,9 @@ public static class ModsDirectoryLogic
 
 	public static void ToggleProhibitedAssets(string fileName)
 	{
+		if (IsLoading)
+			return;
+
 		try
 		{
 			string path = Path.Combine(UserSettings.ModsDirectory, fileName);

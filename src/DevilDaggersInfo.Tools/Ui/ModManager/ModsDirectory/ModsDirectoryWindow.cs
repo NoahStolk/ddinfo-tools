@@ -42,7 +42,12 @@ public static class ModsDirectoryWindow
 		CheckboxColored("Error loading file", GetColor(ModFileType.Error), ref _showErrors, "These are files that could not be loaded by the program. This could be because the program does not have the required permissions to read the file.");
 
 		if (ImGui.BeginChild("table_child"))
-			RenderTable();
+		{
+			if (ModsDirectoryLogic.IsLoading)
+				ImGui.Text("Loading...");
+			else
+				RenderTable();
+		}
 
 		ImGui.EndChild(); // End table_child
 
