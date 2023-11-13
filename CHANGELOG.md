@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.10.0.0] - 2023-11-13
 
 ### Mod Manager
 
@@ -25,9 +25,9 @@ Added mod manager. You can now manage installed mods in the mods folder.
 
 ### Replay Editor
 
-- It is now possible to edit event data.
-  - This includes editing every piece of event data, as well as adding and removing events.
-  - Certain events are explained in more detail in the UI.
+It is now possible to edit event data. This includes editing every piece of event data, as well as adding and removing events. The replay editor is still a work in progress.
+
+- Hit events are explained in more detail in the UI.
 - Replay preview timer and inputs visualization have been moved to the 3D window.
 - Replay inputs have been moved to a separate tab. The input events themselves are now displayed in the same table as the other events.
 - Fixed Thorn spawn events not being displayed correctly.

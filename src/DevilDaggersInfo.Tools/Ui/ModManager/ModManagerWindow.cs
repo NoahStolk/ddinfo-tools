@@ -37,7 +37,7 @@ public static class ModManagerWindow
 			ImGui.PopStyleVar();
 		}
 
-		ImGui.End(); // End Practice
+		ImGui.End(); // End Mod Manager
 
 		if (ImGui.IsKeyPressed(ImGuiKey.Escape))
 			UiRenderer.Layout = LayoutType.Main;

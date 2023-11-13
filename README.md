@@ -25,15 +25,15 @@ The new tools are currently in development. The new app is a complete rewrite of
 
 ![Replay editor](images/replay-editor.png)
 
+### Mod manager
+
+![Mod manager](images/mod-manager.png)
+
 ### Planned features
 
 These features are planned or in development:
 
-- Replay previewer including input visualization
-- Renewed spawnset manager
 - Renewed asset editor for mods
-- Renewed mod manager
-- Replay previewer (and possibly editor)
 - Replay enemy tracking
 
 These features are planned but may not be possible to implement:
