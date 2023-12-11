@@ -15,17 +15,9 @@
 		<RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
 	</PropertyGroup>
 
-	<PropertyGroup Label="Custom properties">
-		<TailwindBuild>true</TailwindBuild>
-	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<DebugType>None</DebugType>
 		<DebugSymbols>False</DebugSymbols>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(CI)' == 'true'">
-		<TailwindBuild>false</TailwindBuild>
 	</PropertyGroup>
 
 	<ItemGroup>
