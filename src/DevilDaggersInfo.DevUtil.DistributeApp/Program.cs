@@ -37,7 +37,7 @@ static async Task DistributeAsync(ToolBuildType toolBuildType, ToolPublishMethod
 	string publishDirectoryPath = Path.Combine(Path.GetDirectoryName(projectFilePath) ?? throw new($"Cannot get root directory of {projectFilePath}."), publishDirectoryName);
 
 	// Copy content file if it exists.
-	string contentFilePathSrc = Path.Combine(projectFilePath, "..", "bin", "Debug", "net7.0", "ddinfo-assets");
+	string contentFilePathSrc = Path.Combine(projectFilePath, "..", "bin", "Debug", "net8.0", "ddinfo-assets");
 	string contentFilePathDst = Path.Combine(publishDirectoryPath, "ddinfo-assets");
 	if (File.Exists(contentFilePathSrc))
 	{
