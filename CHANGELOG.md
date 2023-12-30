@@ -4,6 +4,7 @@
 
 ### Miscellaneous
 
+- Updated to .NET 8.0.
 - Updated to latest ImGui.NET and Silk.NET versions.
 
 ## [0.10.0.0] - 2023-11-13

@@ -24,14 +24,14 @@ public static class AppBuilder
 		};
 
 		// Example:
-		// dotnet publish -p:PublishTrimmed=True -p:EnableCompressionInSingleFile=True -p:PublishReadyToRun=False -p:PublishProtocol=FileSystem -p:TargetFramework=net7.0 -p:RuntimeIdentifier=win-x64 -p:Platform=x64 -p:Configuration=Release -p:PublishDir=bin\Release\net7.0\win-x64\publish -p:PublishSingleFile=True -p:SelfContained=True -p:PublishMethod=SELF_CONTAINED
+		// dotnet publish -p:PublishTrimmed=True -p:EnableCompressionInSingleFile=True -p:PublishReadyToRun=False -p:PublishProtocol=FileSystem -p:TargetFramework=net8.0 -p:RuntimeIdentifier=win-x64 -p:Platform=x64 -p:Configuration=Release -p:PublishDir=bin\Release\net8.0\win-x64\publish -p:PublishSingleFile=True -p:SelfContained=True -p:PublishMethod=SELF_CONTAINED
 		Dictionary<string, string> dictionary = new()
 		{
 			{ "PublishTrimmed", "True" },
 			{ "EnableCompressionInSingleFile", "True" },
 			{ "PublishReadyToRun", "False" },
 			{ "PublishProtocol", "FileSystem" },
-			{ "TargetFramework", "net7.0" },
+			{ "TargetFramework", "net8.0" },
 			{ "RuntimeIdentifier", runtimeIdentifier },
 			{ "Platform", "x64" },
 			{ "Configuration", "Release" },
