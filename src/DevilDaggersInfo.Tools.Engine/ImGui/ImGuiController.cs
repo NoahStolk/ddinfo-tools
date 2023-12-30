@@ -66,7 +66,6 @@ public sealed class ImGuiController : IDisposable
 
 	private void CreateDeviceResources()
 	{
-		// Backup GL state
 		_gl.GetInteger(GLEnum.TextureBinding2D, out int lastTexture);
 		_gl.GetInteger(GLEnum.ArrayBufferBinding, out int lastArrayBuffer);
 		_gl.GetInteger(GLEnum.VertexArrayBinding, out int lastVertexArray);
@@ -112,27 +111,20 @@ public sealed class ImGuiController : IDisposable
 		_vboHandle = _gl.GenBuffer();
 		_elementsHandle = _gl.GenBuffer();
 
-		RecreateFontDeviceTexture();
+		RecreateFontTexture();
 
-		// Restore modified GL state
 		_gl.BindTexture(GLEnum.Texture2D, (uint)lastTexture);
 		_gl.BindBuffer(GLEnum.ArrayBuffer, (uint)lastArrayBuffer);
 
 		_gl.BindVertexArray((uint)lastVertexArray);
 	}
 
-	/// <summary>
-	/// Creates the texture used to render text.
-	/// </summary>
-	private void RecreateFontDeviceTexture()
+	private void RecreateFontTexture()
 	{
-		// Build texture atlas
 		ImGuiIOPtr io = ImGuiNET.ImGui.GetIO();
 
-		// Load as RGBA 32-bit (75% of the memory is wasted, but default font is so small) because it is more likely to be compatible with user's existing shaders. If your ImTextureId represent a higher-level concept than just a GL texture id, consider calling GetTexDataAsAlpha8() instead to save on GPU memory.
 		io.Fonts.GetTexDataAsRGBA32(out IntPtr pixels, out int width, out int height, out int _);
 
-		// Upload texture to graphics system
 		_gl.GetInteger(GLEnum.TextureBinding2D, out int lastTexture);
 
 		_fontTexture = new Texture(_gl, width, height, pixels);
@@ -140,10 +132,8 @@ public sealed class ImGuiController : IDisposable
 		_fontTexture.SetMagFilter(TextureMagFilter.Linear);
 		_fontTexture.SetMinFilter(TextureMinFilter.Linear);
 
-		// Store our identifier
 		io.Fonts.SetTexID((IntPtr)_fontTexture.GlTexture);
 
-		// Restore state
 		_gl.BindTexture(GLEnum.Texture2D, (uint)lastTexture);
 	}
 
@@ -225,7 +215,7 @@ public sealed class ImGuiController : IDisposable
 	private void SetPerFrameImGuiData(float deltaSeconds)
 	{
 		ImGuiIOPtr io = ImGuiNET.ImGui.GetIO();
-		io.DisplaySize = new Vector2(_windowWidth, _windowHeight);
+		io.DisplaySize = new(_windowWidth, _windowHeight);
 
 		if (_windowWidth > 0 && _windowHeight > 0)
 			io.DisplayFramebufferScale = new Vector2(_view.FramebufferSize.X / _windowWidth, _view.FramebufferSize.Y / _windowHeight);
@@ -266,10 +256,6 @@ public sealed class ImGuiController : IDisposable
 
 		_pressedChars.Clear();
 
-		io.KeyCtrl = keyboardState.IsKeyPressed(Key.ControlLeft) || keyboardState.IsKeyPressed(Key.ControlRight);
-		io.KeyAlt = keyboardState.IsKeyPressed(Key.AltLeft) || keyboardState.IsKeyPressed(Key.AltRight);
-		io.KeyShift = keyboardState.IsKeyPressed(Key.ShiftLeft) || keyboardState.IsKeyPressed(Key.ShiftRight);
-		io.KeySuper = keyboardState.IsKeyPressed(Key.SuperLeft) || keyboardState.IsKeyPressed(Key.SuperRight);
 	}
 
 	private unsafe void SetupRenderState(ImDrawDataPtr drawDataPtr)
