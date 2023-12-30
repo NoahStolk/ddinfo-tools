@@ -34,38 +34,13 @@ public sealed class ImGuiController : IDisposable
 
 	private IntPtr _context;
 
-	/// <summary>
-	/// Constructs a new ImGuiController with font configuration.
-	/// </summary>
-	public ImGuiController(GL gl, IView view, IInputContext input, ImGuiFontConfig imGuiFontConfig)
-		: this(gl, view, input, imGuiFontConfig, null)
-	{
-	}
-
-	/// <summary>
-	/// Constructs a new ImGuiController with an onConfigureIO Action.
-	/// </summary>
 	public ImGuiController(GL gl, IView view, IInputContext input, Action onConfigureIo)
-		: this(gl, view, input, null, onConfigureIo)
-	{
-	}
-
-	/// <summary>
-	/// Constructs a new ImGuiController with font configuration and onConfigure Action.
-	/// </summary>
-	public ImGuiController(GL gl, IView view, IInputContext input, ImGuiFontConfig? imGuiFontConfig = null, Action? onConfigureIo = null)
 	{
 		Init(gl, view, input);
 
 		ImGuiIOPtr io = ImGuiNET.ImGui.GetIO();
-		if (imGuiFontConfig is not null)
-		{
-			IntPtr glyphRange = imGuiFontConfig.Value.GetGlyphRange?.Invoke(io) ?? default(IntPtr);
 
-			io.Fonts.AddFontFromFileTTF(imGuiFontConfig.Value.FontPath, imGuiFontConfig.Value.FontSize, null, glyphRange);
-		}
-
-		onConfigureIo?.Invoke();
+		onConfigureIo.Invoke();
 
 		io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
 
@@ -192,31 +167,25 @@ public sealed class ImGuiController : IDisposable
 		_windowHeight = size.Y;
 	}
 
-	/// <summary>
-	/// Renders the ImGui draw list data.
-	/// This method requires a <see cref="GraphicsDevice"/> because it may create new DeviceBuffers if the size of vertex
-	/// or index data has increased beyond the capacity of the existing buffers.
-	/// A <see cref="CommandList"/> is needed to submit drawing and resource update commands.
-	/// </summary>
 	public void Render()
 	{
-		if (_frameBegun)
+		if (!_frameBegun)
+			return;
+
+		IntPtr oldCtx = ImGuiNET.ImGui.GetCurrentContext();
+
+		if (oldCtx != _context)
 		{
-			IntPtr oldCtx = ImGuiNET.ImGui.GetCurrentContext();
+			ImGuiNET.ImGui.SetCurrentContext(_context);
+		}
 
-			if (oldCtx != _context)
-			{
-				ImGuiNET.ImGui.SetCurrentContext(_context);
-			}
+		_frameBegun = false;
+		ImGuiNET.ImGui.Render();
+		RenderImDrawData(ImGuiNET.ImGui.GetDrawData());
 
-			_frameBegun = false;
-			ImGuiNET.ImGui.Render();
-			RenderImDrawData(ImGuiNET.ImGui.GetDrawData());
-
-			if (oldCtx != _context)
-			{
-				ImGuiNET.ImGui.SetCurrentContext(oldCtx);
-			}
+		if (oldCtx != _context)
+		{
+			ImGuiNET.ImGui.SetCurrentContext(oldCtx);
 		}
 	}
 

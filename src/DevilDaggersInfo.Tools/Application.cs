@@ -1,21 +1,18 @@
 using DevilDaggersInfo.Tools.AppWindows;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
-using DevilDaggersInfo.Tools.Utils;
 using Silk.NET.Windowing;
 
 namespace DevilDaggersInfo.Tools;
 
 public class Application
 {
-	private readonly MainAppWindow _mainAppWindow;
-
 	public Application()
 	{
 		UserSettings.Load();
 		UserCache.Load();
 
-		_mainAppWindow = new();
+		MainAppWindow = new();
 
 		Root.Application = this;
 	}
@@ -23,13 +20,15 @@ public class Application
 	public PerSecondCounter RenderCounter { get; } = new();
 	public float LastRenderDelta { get; set; }
 
+	public MainAppWindow MainAppWindow { get; }
+
 	public void Run()
 	{
-		_mainAppWindow.WindowInstance.Run();
+		MainAppWindow.WindowInstance.Run();
 	}
 
 	public void Destroy()
 	{
-		_mainAppWindow.WindowInstance.Dispose();
+		MainAppWindow.WindowInstance.Dispose();
 	}
 }

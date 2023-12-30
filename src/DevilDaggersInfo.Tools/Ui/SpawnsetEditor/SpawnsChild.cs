@@ -9,7 +9,6 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
-using Silk.NET.Input;
 using System.Collections.Immutable;
 using System.Numerics;
 

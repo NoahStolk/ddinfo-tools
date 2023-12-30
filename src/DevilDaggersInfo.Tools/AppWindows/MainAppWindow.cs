@@ -41,6 +41,8 @@ public class MainAppWindow
 
 	public IWindow WindowInstance { get; }
 
+	public IInputContext InputContext => _inputContext ?? throw new InvalidOperationException("Window has not loaded.");
+
 	private void OnWindowOnLoad()
 	{
 		_gl = WindowInstance.CreateOpenGL();
