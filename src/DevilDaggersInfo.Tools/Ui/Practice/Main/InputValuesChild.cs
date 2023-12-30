@@ -12,7 +12,7 @@ public static class InputValuesChild
 {
 	public static void Render()
 	{
-		if (ImGui.BeginChild("InputValues", new(400, 160), true))
+		if (ImGui.BeginChild("InputValues", new(400, 160), ImGuiChildFlags.Border))
 		{
 			ImGui.Spacing();
 			ImGuiImage.Image(Root.InternalResources.IconHandTexture.Handle, new(16), PracticeLogic.State.HandLevel.GetColor());

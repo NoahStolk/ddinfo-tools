@@ -70,7 +70,6 @@ public sealed class ImGuiController : IDisposable
 		io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
 
 		CreateDeviceResources();
-		SetKeyMappings();
 
 		SetPerFrameImGuiData(1f / 60f);
 
@@ -287,7 +286,7 @@ public sealed class ImGuiController : IDisposable
 			if (key == Key.Unknown)
 				continue;
 
-			io.KeysDown[(int)key] = keyboardState.IsKeyPressed(key);
+			io.AddKeyEvent(GetImGuiKey(key), keyboardState.IsKeyPressed(key));
 		}
 
 		for (int i = 0; i < _pressedChars.Count; i++)
@@ -302,31 +301,6 @@ public sealed class ImGuiController : IDisposable
 		io.KeyAlt = keyboardState.IsKeyPressed(Key.AltLeft) || keyboardState.IsKeyPressed(Key.AltRight);
 		io.KeyShift = keyboardState.IsKeyPressed(Key.ShiftLeft) || keyboardState.IsKeyPressed(Key.ShiftRight);
 		io.KeySuper = keyboardState.IsKeyPressed(Key.SuperLeft) || keyboardState.IsKeyPressed(Key.SuperRight);
-	}
-
-	private static void SetKeyMappings()
-	{
-		ImGuiIOPtr io = ImGuiNET.ImGui.GetIO();
-		io.KeyMap[(int)ImGuiKey.Tab] = (int)Key.Tab;
-		io.KeyMap[(int)ImGuiKey.LeftArrow] = (int)Key.Left;
-		io.KeyMap[(int)ImGuiKey.RightArrow] = (int)Key.Right;
-		io.KeyMap[(int)ImGuiKey.UpArrow] = (int)Key.Up;
-		io.KeyMap[(int)ImGuiKey.DownArrow] = (int)Key.Down;
-		io.KeyMap[(int)ImGuiKey.PageUp] = (int)Key.PageUp;
-		io.KeyMap[(int)ImGuiKey.PageDown] = (int)Key.PageDown;
-		io.KeyMap[(int)ImGuiKey.Home] = (int)Key.Home;
-		io.KeyMap[(int)ImGuiKey.End] = (int)Key.End;
-		io.KeyMap[(int)ImGuiKey.Delete] = (int)Key.Delete;
-		io.KeyMap[(int)ImGuiKey.Backspace] = (int)Key.Backspace;
-		io.KeyMap[(int)ImGuiKey.Enter] = (int)Key.Enter;
-		io.KeyMap[(int)ImGuiKey.KeypadEnter] = (int)Key.KeypadEnter;
-		io.KeyMap[(int)ImGuiKey.Escape] = (int)Key.Escape;
-		io.KeyMap[(int)ImGuiKey.A] = (int)Key.A;
-		io.KeyMap[(int)ImGuiKey.C] = (int)Key.C;
-		io.KeyMap[(int)ImGuiKey.V] = (int)Key.V;
-		io.KeyMap[(int)ImGuiKey.X] = (int)Key.X;
-		io.KeyMap[(int)ImGuiKey.Y] = (int)Key.Y;
-		io.KeyMap[(int)ImGuiKey.Z] = (int)Key.Z;
 	}
 
 	private unsafe void SetupRenderState(ImDrawDataPtr drawDataPtr)
@@ -347,7 +321,7 @@ public sealed class ImGuiController : IDisposable
 		float t = drawDataPtr.DisplayPos.Y;
 		float b = drawDataPtr.DisplayPos.Y + drawDataPtr.DisplaySize.Y;
 
-		Span<float> orthoProjection = stackalloc float[]
+		Span<float> orthographicProjection = stackalloc float[]
 		{
 			2.0f / (r - l), 0.0f, 0.0f, 0.0f,
 			0.0f, 2.0f / (t - b), 0.0f, 0.0f,
@@ -357,7 +331,7 @@ public sealed class ImGuiController : IDisposable
 
 		_shader.UseShader();
 		_gl.Uniform1(_attribLocationTex, 0);
-		_gl.UniformMatrix4(_attribLocationProjMtx, 1, false, orthoProjection);
+		_gl.UniformMatrix4(_attribLocationProjMtx, 1, false, orthographicProjection);
 
 		_gl.BindSampler(0, 0);
 
@@ -529,5 +503,67 @@ public sealed class ImGuiController : IDisposable
 		_shader.Dispose();
 
 		ImGuiNET.ImGui.DestroyContext(_context);
+	}
+
+	private static ImGuiKey GetImGuiKey(Key key)
+	{
+		return key switch
+		{
+			>= Key.Number0 and <= Key.Number9 => key - Key.D0 + ImGuiKey._0,
+			>= Key.A and <= Key.Z => key - Key.A + ImGuiKey.A,
+			>= Key.Keypad0 and <= Key.Keypad9 => key - Key.Keypad0 + ImGuiKey.Keypad0,
+			>= Key.F1 and <= Key.F24 => key - Key.F1 + ImGuiKey.F24,
+			_ => key switch
+			{
+				Key.Tab => ImGuiKey.Tab,
+				Key.Left => ImGuiKey.LeftArrow,
+				Key.Right => ImGuiKey.RightArrow,
+				Key.Up => ImGuiKey.UpArrow,
+				Key.Down => ImGuiKey.DownArrow,
+				Key.PageUp => ImGuiKey.PageUp,
+				Key.PageDown => ImGuiKey.PageDown,
+				Key.Home => ImGuiKey.Home,
+				Key.End => ImGuiKey.End,
+				Key.Insert => ImGuiKey.Insert,
+				Key.Delete => ImGuiKey.Delete,
+				Key.Backspace => ImGuiKey.Backspace,
+				Key.Space => ImGuiKey.Space,
+				Key.Enter => ImGuiKey.Enter,
+				Key.Escape => ImGuiKey.Escape,
+				Key.Apostrophe => ImGuiKey.Apostrophe,
+				Key.Comma => ImGuiKey.Comma,
+				Key.Minus => ImGuiKey.Minus,
+				Key.Period => ImGuiKey.Period,
+				Key.Slash => ImGuiKey.Slash,
+				Key.Semicolon => ImGuiKey.Semicolon,
+				Key.Equal => ImGuiKey.Equal,
+				Key.LeftBracket => ImGuiKey.LeftBracket,
+				Key.BackSlash => ImGuiKey.Backslash,
+				Key.RightBracket => ImGuiKey.RightBracket,
+				Key.GraveAccent => ImGuiKey.GraveAccent,
+				Key.CapsLock => ImGuiKey.CapsLock,
+				Key.ScrollLock => ImGuiKey.ScrollLock,
+				Key.NumLock => ImGuiKey.NumLock,
+				Key.PrintScreen => ImGuiKey.PrintScreen,
+				Key.Pause => ImGuiKey.Pause,
+				Key.KeypadDecimal => ImGuiKey.KeypadDecimal,
+				Key.KeypadDivide => ImGuiKey.KeypadDivide,
+				Key.KeypadMultiply => ImGuiKey.KeypadMultiply,
+				Key.KeypadSubtract => ImGuiKey.KeypadSubtract,
+				Key.KeypadAdd => ImGuiKey.KeypadAdd,
+				Key.KeypadEnter => ImGuiKey.KeypadEnter,
+				Key.KeypadEqual => ImGuiKey.KeypadEqual,
+				Key.ShiftLeft => ImGuiKey.LeftShift,
+				Key.ControlLeft => ImGuiKey.LeftCtrl,
+				Key.AltLeft => ImGuiKey.LeftAlt,
+				Key.SuperLeft => ImGuiKey.LeftSuper,
+				Key.ShiftRight => ImGuiKey.RightShift,
+				Key.ControlRight => ImGuiKey.RightCtrl,
+				Key.AltRight => ImGuiKey.RightAlt,
+				Key.SuperRight => ImGuiKey.RightSuper,
+				Key.Menu => ImGuiKey.Menu,
+				_ => ImGuiKey.None,
+			},
+		};
 	}
 }

@@ -15,7 +15,7 @@ public static class CustomTemplatesChild
 
 	public static void Render()
 	{
-		if (ImGui.BeginChild("CustomTemplates", PracticeWindow.TemplateContainerSize, true))
+		if (ImGui.BeginChild("CustomTemplates", PracticeWindow.TemplateContainerSize, ImGuiChildFlags.Border))
 		{
 			ImGui.Text("Custom templates");
 
@@ -74,12 +74,12 @@ public static class CustomTemplatesChild
 		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(PracticeLogic.IsActive(customTemplate));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
-		if (ImGui.BeginChild(buttonName, buttonSize, true))
+		if (ImGui.BeginChild(buttonName, buttonSize, ImGuiChildFlags.Border))
 		{
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
 
-			if (ImGui.BeginChild(Inline.Span($"{buttonName}Child"), buttonSize, false, ImGuiWindowFlags.NoInputs))
+			if (ImGui.BeginChild(Inline.Span($"{buttonName}Child"), buttonSize, ImGuiChildFlags.None, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 				{

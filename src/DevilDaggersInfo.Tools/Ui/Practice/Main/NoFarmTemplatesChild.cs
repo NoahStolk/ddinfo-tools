@@ -25,7 +25,7 @@ public static class NoFarmTemplatesChild
 
 	public static void Render()
 	{
-		if (ImGui.BeginChild("NoFarmTemplates", PracticeWindow.TemplateContainerSize, true))
+		if (ImGui.BeginChild("NoFarmTemplates", PracticeWindow.TemplateContainerSize, ImGuiChildFlags.Border))
 		{
 			ImGui.Text("No farm templates");
 
@@ -64,12 +64,12 @@ public static class NoFarmTemplatesChild
 
 		Vector2 buttonSize = new(PracticeWindow.TemplateWidth, 48);
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
-		if (ImGui.BeginChild(noFarmTemplate.Name, buttonSize, true))
+		if (ImGui.BeginChild(noFarmTemplate.Name, buttonSize, ImGuiChildFlags.Border))
 		{
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, noFarmTemplate.Color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
 
-			if (ImGui.BeginChild(Inline.Span($"{noFarmTemplate.Name}Child"), buttonSize, false, ImGuiWindowFlags.NoInputs))
+			if (ImGui.BeginChild(Inline.Span($"{noFarmTemplate.Name}Child"), buttonSize, ImGuiChildFlags.None, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 				{

@@ -71,7 +71,7 @@ public static class DebugLayout
 			ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 127 });
 			ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red);
 			if (ImGui.Button("FATAL CRASH"))
-				throw new("Test crash! This should be logged as FATAL.");
+				throw new InvalidOperationException("Test crash! This should be logged as FATAL.");
 			ImGui.PopStyleColor(2);
 
 			ImGui.Separator();

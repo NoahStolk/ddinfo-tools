@@ -31,7 +31,7 @@ public static class EndLoopTemplatesChild
 
 	public static void Render()
 	{
-		if (ImGui.BeginChild("EndLoopTemplates", PracticeWindow.TemplateContainerSize, true))
+		if (ImGui.BeginChild("EndLoopTemplates", PracticeWindow.TemplateContainerSize, ImGuiChildFlags.Border))
 		{
 			ImGui.Text("End loop templates");
 
@@ -63,12 +63,12 @@ public static class EndLoopTemplatesChild
 		Color color = waveIndex % 3 == 2 ? EnemiesV3_2.Ghostpede.Color.ToEngineColor() : EnemiesV3_2.Gigapede.Color.ToEngineColor();
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
-		if (ImGui.BeginChild(Inline.Span($"Wave{waveIndex + 1}"), buttonSize, true))
+		if (ImGui.BeginChild(Inline.Span($"Wave{waveIndex + 1}"), buttonSize, ImGuiChildFlags.Border))
 		{
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
 
-			if (ImGui.BeginChild(Inline.Span($"WaveChild{waveIndex + 1}"), buttonSize, false, ImGuiWindowFlags.NoInputs))
+			if (ImGui.BeginChild(Inline.Span($"WaveChild{waveIndex + 1}"), buttonSize, ImGuiChildFlags.None, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 				{

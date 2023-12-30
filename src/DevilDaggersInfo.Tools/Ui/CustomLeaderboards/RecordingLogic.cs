@@ -6,6 +6,7 @@ using DevilDaggersInfo.Tools.Networking.TaskHandlers;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
+using DevilDaggersInfo.Tools.Utils;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using System.Web;
 #if !SKIP_VALUE
@@ -197,7 +198,7 @@ public static class RecordingLogic
 		{
 			DaggersFired = runToUpload.DaggersFired,
 			DaggersHit = runToUpload.DaggersHit,
-			ClientVersion = Root.Application.AppVersion.ToString(),
+			ClientVersion = AssemblyUtils.EntryAssemblyVersionString,
 			DeathType = runToUpload.DeathType,
 			EnemiesAlive = runToUpload.EnemiesAlive,
 			GemsCollected = runToUpload.GemsCollected,

@@ -8,7 +8,7 @@ namespace DevilDaggersInfo.Tools.Ui;
 
 public static class AboutWindow
 {
-	private static readonly string _versionInfo = $"Version {AssemblyUtils.EntryAssemblyVersion} (build time: {AssemblyUtils.EntryAssemblyBuildTime})";
+	private static readonly string _versionInfo = $"Version {AssemblyUtils.EntryAssemblyVersionString} (build time: {AssemblyUtils.EntryAssemblyBuildTime})";
 
 	public static void Render(ref bool show)
 	{
@@ -74,7 +74,7 @@ public static class AboutWindow
 		Vector2 buttonSize = new(168, 40);
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
-		if (ImGui.BeginChild("GitHub", buttonSize, true))
+		if (ImGui.BeginChild("GitHub", buttonSize, ImGuiChildFlags.Border))
 		{
 			ImGui.PopStyleVar();
 
@@ -82,7 +82,7 @@ public static class AboutWindow
 
 			ImGuiStylePtr style = ImGui.GetStyle();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, style.Colors[(int)(hover ? ImGuiCol.ButtonHovered : ImGuiCol.Button)]);
-			if (ImGui.BeginChild("GitHubChild", buttonSize, false, ImGuiWindowFlags.NoInputs))
+			if (ImGui.BeginChild("GitHubChild", buttonSize, ImGuiChildFlags.None, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 					Process.Start(new ProcessStartInfo("https://github.com/NoahStolk/ddinfo-tools") { UseShellExecute = true });
