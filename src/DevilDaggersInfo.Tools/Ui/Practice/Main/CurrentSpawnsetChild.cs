@@ -9,7 +9,7 @@ public static class CurrentSpawnsetChild
 {
 	public static void Render()
 	{
-		if (ImGui.BeginChild("CurrentSpawnset", new(400, 160), true))
+		if (ImGui.BeginChild("CurrentSpawnset", new(400, 160), ImGuiChildFlags.Border))
 		{
 			if (ImGui.BeginChild("CurrentPracticeValues", new(400, 64)))
 			{

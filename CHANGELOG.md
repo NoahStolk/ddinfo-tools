@@ -1,5 +1,11 @@
 # Changelog
 
+## [unreleased]
+
+### Miscellaneous
+
+- Updated to latest ImGui.NET and Silk.NET versions.
+
 ## [0.10.0.0] - 2023-11-13
 
 ### Mod Manager

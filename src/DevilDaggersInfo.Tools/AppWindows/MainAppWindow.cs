@@ -31,7 +31,7 @@ public class MainAppWindow
 		Vector2D<int> monitorSize = Silk.NET.Windowing.Monitor.GetMainMonitor(WindowInstance).Bounds.Size;
 		WindowInstance.Size = windowSize;
 		WindowInstance.Position = monitorSize / 2 - windowSize / 2;
-		WindowInstance.Title = $"ddinfo tools {AssemblyUtils.EntryAssemblyVersion}";
+		WindowInstance.Title = $"ddinfo tools {AssemblyUtils.EntryAssemblyVersionString}";
 
 		WindowInstance.Load += OnWindowOnLoad;
 		WindowInstance.FramebufferResize += OnWindowOnFramebufferResize;
@@ -40,6 +40,8 @@ public class MainAppWindow
 	}
 
 	public IWindow WindowInstance { get; }
+
+	public IInputContext InputContext => _inputContext ?? throw new InvalidOperationException("Window has not loaded.");
 
 	private void OnWindowOnLoad()
 	{
@@ -92,7 +94,7 @@ public class MainAppWindow
 				UiRenderer.ShowUpdateAvailable();
 				UpdateWindow.AvailableUpdateVersion = newVersion;
 			},
-			() => FetchLatestVersion.HandleAsync(Root.Application.AppVersion, Root.PlatformSpecificValues.AppOperatingSystem));
+			() => FetchLatestVersion.HandleAsync(AssemblyUtils.EntryAssemblyVersion, Root.PlatformSpecificValues.AppOperatingSystem));
 
 		RawImage rawImage = new(Root.InternalResources.ApplicationIconTexture.Width, Root.InternalResources.ApplicationIconTexture.Height, Root.InternalResources.ApplicationIconTexture.Pixels);
 		Span<RawImage> rawImages = MemoryMarshal.CreateSpan(ref rawImage, 1);

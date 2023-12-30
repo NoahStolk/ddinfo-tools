@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Tools.Engine.Intersections;
 using DevilDaggersInfo.Tools.Engine.Maths;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.User.Settings;
 using ImGuiNET;
 using Silk.NET.Input;
@@ -88,18 +89,18 @@ public class Camera
 	private void HandleKeys(ImGuiIOPtr io, float delta)
 	{
 		const float acceleration = 20;
-		const Key forwardInput = Key.W;
-		const Key leftInput = Key.A;
-		const Key backwardInput = Key.S;
-		const Key rightInput = Key.D;
-		const Key upInput = Key.Space;
-		const Key downInput = Key.ShiftLeft;
-		bool forwardHold = io.KeysDown[(int)forwardInput];
-		bool leftHold = io.KeysDown[(int)leftInput];
-		bool backwardHold = io.KeysDown[(int)backwardInput];
-		bool rightHold = io.KeysDown[(int)rightInput];
-		bool upHold = io.KeysDown[(int)upInput];
-		bool downHold = io.KeysDown[(int)downInput];
+		const ImGuiKey forwardInput = ImGuiKey.W;
+		const ImGuiKey leftInput = ImGuiKey.A;
+		const ImGuiKey backwardInput = ImGuiKey.S;
+		const ImGuiKey rightInput = ImGuiKey.D;
+		const ImGuiKey upInput = ImGuiKey.Space;
+		const ImGuiKey downInput = ImGuiKey.LeftShift;
+		bool forwardHold = io.IsKeyDown(forwardInput);
+		bool leftHold = io.IsKeyDown(leftInput);
+		bool backwardHold = io.IsKeyDown(backwardInput);
+		bool rightHold = io.IsKeyDown(rightInput);
+		bool upHold = io.IsKeyDown(upInput);
+		bool downHold = io.IsKeyDown(downInput);
 
 		float accelerationDt = acceleration * delta;
 		float frictionDt = _friction * delta;

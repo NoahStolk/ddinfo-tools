@@ -9,7 +9,7 @@ namespace DevilDaggersInfo.Tools.Ui.Main;
 
 public static class MainWindow
 {
-	private static readonly string _version = $"{AssemblyUtils.EntryAssemblyVersion} (ALPHA)";
+	private static readonly string _version = $"{AssemblyUtils.EntryAssemblyVersionString} (ALPHA)";
 
 	private static Action? _hoveredButtonAction;
 

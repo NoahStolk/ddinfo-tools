@@ -9,7 +9,6 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
-using Silk.NET.Input;
 using System.Collections.Immutable;
 using System.Numerics;
 
@@ -116,13 +115,13 @@ public static class SpawnsChild
 			{
 				if (io.KeyCtrl)
 				{
-					if (io.KeysDown[(int)Key.A])
+					if (io.IsKeyDown(ImGuiKey.A))
 						Array.Fill(_selected, true);
-					else if (io.KeysDown[(int)Key.D])
+					else if (io.IsKeyDown(ImGuiKey.D))
 						Array.Fill(_selected, false);
 				}
 
-				if (io.KeysDown[(int)Key.Delete] && Array.Exists(_selected, b => b))
+				if (io.IsKeyDown(ImGuiKey.Delete) && Array.Exists(_selected, b => b))
 				{
 					FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Where((_, i) => !_selected[i]).ToImmutableArray() });
 					Array.Fill(_selected, false);

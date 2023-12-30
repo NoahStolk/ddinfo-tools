@@ -231,7 +231,7 @@ public class UploadResult
 	{
 		ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = 32 });
 
-		if (ImGui.BeginChild(Inline.Span($"{SubmittedAt.Ticks}{_spawnsetName}"), new(_headerWidth, 48), true))
+		if (ImGui.BeginChild(Inline.Span($"{SubmittedAt.Ticks}{_spawnsetName}"), new(_headerWidth, 48), ImGuiChildFlags.Border))
 		{
 			bool hover = ImGui.IsWindowHovered();
 			if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
@@ -424,5 +424,7 @@ public class UploadResult
 	}
 
 	private static double GetAccuracy(int daggersFired, int daggersHit)
-		=> daggersFired == 0 ? 0 : daggersHit / (double)daggersFired;
+	{
+		return daggersFired == 0 ? 0 : daggersHit / (double)daggersFired;
+	}
 }

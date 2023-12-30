@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using ImGuiNET;
+using Silk.NET.Input;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
@@ -32,6 +33,8 @@ public static class DebugLayout
 			ImGui.Checkbox("Show overlay", ref _showOverlay);
 
 #if DEBUG
+			ImGui.Text("ImGui key modifiers:");
+
 			ImGuiIOPtr io = ImGui.GetIO();
 			ImGui.TextColored(io.KeyCtrl ? Color.White : Color.Gray(0.4f), "CTRL");
 			ImGui.SameLine();
@@ -40,6 +43,27 @@ public static class DebugLayout
 			ImGui.TextColored(io.KeyAlt ? Color.White : Color.Gray(0.4f), "ALT");
 			ImGui.SameLine();
 			ImGui.TextColored(io.KeySuper ? Color.White : Color.Gray(0.4f), "SUPER");
+
+			ImGui.Separator();
+			if (ImGui.CollapsingHeader("Silk.NET keys"))
+			{
+				IKeyboard keyboard = Root.Application.MainAppWindow.InputContext.Keyboards[0];
+
+				if (ImGui.BeginTable("SilkKeys", 8))
+				{
+					for (int i = 0; i < keyboard.SupportedKeys.Count; i++)
+					{
+						bool isDown = keyboard.IsKeyPressed(keyboard.SupportedKeys[i]);
+						if (i == 0)
+							ImGui.TableNextRow();
+
+						ImGui.TableNextColumn();
+						ImGui.TextColored(isDown ? Color.White : Color.Gray(0.4f), keyboard.SupportedKeys[i].ToString());
+					}
+
+					ImGui.EndTable();
+				}
+			}
 
 			ImGui.Text(Inline.Span($"Native dialog opened: {(NativeFileDialog.DialogOpen ? "True" : "False")}"));
 
@@ -71,7 +95,7 @@ public static class DebugLayout
 			ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 127 });
 			ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red);
 			if (ImGui.Button("FATAL CRASH"))
-				throw new("Test crash! This should be logged as FATAL.");
+				throw new InvalidOperationException("Test crash! This should be logged as FATAL.");
 			ImGui.PopStyleColor(2);
 
 			ImGui.Separator();

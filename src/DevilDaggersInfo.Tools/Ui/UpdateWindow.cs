@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using System.Numerics;
 
@@ -24,20 +25,28 @@ public static class UpdateWindow
 		{
 			ImGui.PushTextWrapPos(windowSize.X - 16);
 
-			ImGui.Text(Inline.Span($"""
-				Version {AvailableUpdateVersion} is available.
+			// TODO: Refactor this. AvailableUpdateVersion should never be null here.
+			if (AvailableUpdateVersion == null)
+			{
+				ImGui.Text("Internal error getting new version number.");
+			}
+			else
+			{
+				ImGui.Text(Inline.Span($"""
+					Version {AvailableUpdateVersion} is available.
 
-				The current version is {Root.Application.AppVersion}.
+					The current version is {AssemblyUtils.EntryAssemblyVersion}.
 
-				If you decide to update, the update will be downloaded from the devildaggers.info server.
-				"""));
-			ImGui.Spacing();
+					If you decide to update, the update will be downloaded from the devildaggers.info server.
+					"""));
+				ImGui.Spacing();
 
  #pragma warning disable S1075
-			const string changelogUrl = "https://github.com/NoahStolk/ddinfo-tools/blob/main/CHANGELOG.md";
+				const string changelogUrl = "https://github.com/NoahStolk/ddinfo-tools/blob/main/CHANGELOG.md";
  #pragma warning restore S1075
-			ImGuiExt.Hyperlink(changelogUrl, Inline.Span($"See what's new in version {AvailableUpdateVersion}"));
-			ImGui.Spacing();
+				ImGuiExt.Hyperlink(changelogUrl, Inline.Span($"See what's new in version {AvailableUpdateVersion}"));
+				ImGui.Spacing();
+			}
 
 			ImGui.BeginDisabled(_updateInProgress);
 			if (ImGui.Button("Update and restart", new(160, 24)))
