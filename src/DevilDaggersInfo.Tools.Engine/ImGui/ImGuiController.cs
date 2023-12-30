@@ -206,6 +206,14 @@ public sealed class ImGuiController : IDisposable
 		{
 			ImGuiNET.ImGui.SetCurrentContext(oldCtx);
 		}
+
+		// Since ImGui.NET 1.90.0.1, ImGui.NewFrame() overrides the key modifiers, so we need to set them after instead of before.
+		ImGuiIOPtr io = ImGuiNET.ImGui.GetIO();
+		IKeyboard keyboardState = _input.Keyboards[0];
+		io.KeyCtrl = keyboardState.IsKeyPressed(Key.ControlLeft) || keyboardState.IsKeyPressed(Key.ControlRight);
+		io.KeyAlt = keyboardState.IsKeyPressed(Key.AltLeft) || keyboardState.IsKeyPressed(Key.AltRight);
+		io.KeyShift = keyboardState.IsKeyPressed(Key.ShiftLeft) || keyboardState.IsKeyPressed(Key.ShiftRight);
+		io.KeySuper = keyboardState.IsKeyPressed(Key.SuperLeft) || keyboardState.IsKeyPressed(Key.SuperRight);
 	}
 
 	/// <summary>
@@ -255,7 +263,6 @@ public sealed class ImGuiController : IDisposable
 		}
 
 		_pressedChars.Clear();
-
 	}
 
 	private unsafe void SetupRenderState(ImDrawDataPtr drawDataPtr)
@@ -376,7 +383,7 @@ public sealed class ImGuiController : IDisposable
 				clipRect.Z = (cmdPtr.ClipRect.Z - clipOff.X) * clipScale.X;
 				clipRect.W = (cmdPtr.ClipRect.W - clipOff.Y) * clipScale.Y;
 
-				if (clipRect.X < framebufferWidth && clipRect.Y < framebufferHeight && clipRect.Z >= 0.0f && clipRect.W >= 0.0f)
+				if (clipRect.X < framebufferWidth && clipRect.Y < framebufferHeight && clipRect is { Z: >= 0.0f, W: >= 0.0f })
 				{
 					// Apply scissor/clipping rectangle
 					_gl.Scissor((int)clipRect.X, (int)(framebufferHeight - clipRect.W), (uint)(clipRect.Z - clipRect.X), (uint)(clipRect.W - clipRect.Y));
