@@ -44,7 +44,7 @@ public static class CustomTemplatesChild
 		ImGui.EndChild(); // End CustomTemplates
 	}
 
-	private static void RenderCustomTemplate(int i, UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
+	private static void RenderCustomTemplate(int i, UserSettingsPracticeTemplate customTemplate)
 	{
 		RenderTemplateButton(customTemplate);
 
@@ -59,7 +59,7 @@ public static class CustomTemplatesChild
 		RenderDragDropTarget(i);
 	}
 
-	private static void RenderTemplateButton(UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
+	private static void RenderTemplateButton(UserSettingsPracticeTemplate customTemplate)
 	{
 		Vector2 buttonSize = new(PracticeWindow.TemplateWidth - 96, 48);
 		ReadOnlySpan<char> buttonName = Inline.Span($"{EnumUtils.HandLevelNames[customTemplate.HandLevel]}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart}");
@@ -119,10 +119,10 @@ public static class CustomTemplatesChild
 			ImGui.SetKeyboardFocusHere();
 			if (ImGui.InputText("##name", ref name, 24))
 			{
-				UserSettingsModel.UserSettingsPracticeTemplate originalTemplate = UserSettings.Model.PracticeTemplates.First(pt => pt == customTemplate);
+				UserSettingsPracticeTemplate originalTemplate = UserSettings.Model.PracticeTemplates.First(pt => pt == customTemplate);
 				int index = UserSettings.Model.PracticeTemplates.IndexOf(originalTemplate);
 
-				List<UserSettingsModel.UserSettingsPracticeTemplate> newPracticeTemplates = UserSettings.Model.PracticeTemplates
+				List<UserSettingsPracticeTemplate> newPracticeTemplates = UserSettings.Model.PracticeTemplates
 					.Where(pt => pt != originalTemplate)
 					.ToList();
 
@@ -141,7 +141,7 @@ public static class CustomTemplatesChild
 		}
 	}
 
-	private static void RenderDragIndicator(int i, UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
+	private static void RenderDragIndicator(int i, UserSettingsPracticeTemplate customTemplate)
 	{
 		Color gray = Color.Gray(0.3f);
 		ImGui.PushStyleColor(ImGuiCol.Button, gray with { A = 159 });
@@ -170,7 +170,7 @@ public static class CustomTemplatesChild
 		ImGui.PopStyleColor(3);
 	}
 
-	private static void RenderDeleteButton(int i, UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
+	private static void RenderDeleteButton(int i, UserSettingsPracticeTemplate customTemplate)
 	{
 		ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 159 });
 		ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red);
@@ -218,9 +218,9 @@ public static class CustomTemplatesChild
 
 			if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 			{
-				UserSettingsModel.UserSettingsPracticeTemplate originalTemplate = UserSettings.Model.PracticeTemplates[_customTemplateIndexToReorder.Value];
+				UserSettingsPracticeTemplate originalTemplate = UserSettings.Model.PracticeTemplates[_customTemplateIndexToReorder.Value];
 
-				List<UserSettingsModel.UserSettingsPracticeTemplate> newPracticeTemplates = UserSettings.Model.PracticeTemplates
+				List<UserSettingsPracticeTemplate> newPracticeTemplates = UserSettings.Model.PracticeTemplates
 					.Where(pt => pt != originalTemplate)
 					.ToList();
 
