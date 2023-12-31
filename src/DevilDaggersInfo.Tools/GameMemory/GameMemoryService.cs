@@ -99,7 +99,7 @@ public class GameMemoryService
 
 		_nativeMemoryService.WriteMemory(_process, MainBlock.ReplayBase, replay, 0, replay.Length);
 		_nativeMemoryService.WriteMemory(_process, _memoryBlockAddress + 312, BitConverter.GetBytes(replay.Length), 0, sizeof(int));
-		_nativeMemoryService.WriteMemory(_process, _memoryBlockAddress + 316, new byte[] { 1 }, 0, 1);
+		_nativeMemoryService.WriteMemory(_process, _memoryBlockAddress + 316, [1], 0, 1);
 	}
 
 	public string? GetPathToSurvivalFile()

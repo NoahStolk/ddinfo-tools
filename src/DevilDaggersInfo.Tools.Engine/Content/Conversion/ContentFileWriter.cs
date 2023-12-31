@@ -15,7 +15,7 @@ internal static class ContentFileWriter
 	{
 		string[] contentPaths = Directory.GetFiles(inputContentRootDirectory, "*.*", SearchOption.AllDirectories);
 
-		List<TocEntry> tocEntries = new();
+		List<TocEntry> tocEntries = [];
 		using MemoryStream dataMemory = new();
 		using BinaryWriter dataWriter = new(dataMemory);
 

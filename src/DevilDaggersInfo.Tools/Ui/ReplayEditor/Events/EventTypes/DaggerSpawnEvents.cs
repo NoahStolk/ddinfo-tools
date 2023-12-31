@@ -8,7 +8,7 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEventData>
 {
 	private static readonly string[] _daggerTypeNamesArray =
-	{
+	[
 		"Lvl1",
 		"Lvl2",
 		"Lvl3",
@@ -16,7 +16,7 @@ public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEventData>
 		"Lvl4",
 		"Lvl4 Homing",
 		"Lvl4 Splash",
-	};
+	];
 
 	public static int ColumnCount => 8;
 	public static int ColumnCountData => 5;

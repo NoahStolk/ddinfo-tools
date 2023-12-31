@@ -26,7 +26,7 @@ public class SoundContent
 
 		fixed (byte* b = &Data[0])
 			Audio.Al.BufferData(bufferId, GetAudioFormat(), b, Data.Length, SampleRate);
-		uint[] buffers = { bufferId };
+		uint[] buffers = [bufferId];
 		fixed (uint* u = &buffers[0])
 			Audio.Al.SourceQueueBuffers(sourceId, 1, u);
 

@@ -12,8 +12,8 @@ namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
 public static class NoFarmTemplatesChild
 {
-	private static readonly List<NoFarmTemplate> _noFarmTemplates = new()
-	{
+	private static readonly List<NoFarmTemplate> _noFarmTemplates =
+	[
 		new("First Spider I & Squid II", EnemiesV3_2.Squid2.Color.ToEngineColor(), HandLevel.Level1, 8, 39),
 		new("First Centipede", EnemiesV3_2.Centipede.Color.ToEngineColor(), HandLevel.Level2, 25, 114),
 		new("Centipede & first triple Spider Is", EnemiesV3_2.Spider1.Color.ToEngineColor(), HandLevel.Level3, 11, 174),
@@ -21,7 +21,7 @@ public static class NoFarmTemplatesChild
 		new("Gigapedes", EnemiesV3_2.Gigapede.Color.ToEngineColor(), HandLevel.Level3, 81, 259),
 		new("Leviathan", EnemiesV3_2.Leviathan.Color.ToEngineColor(), HandLevel.Level4, 105, 350),
 		new("Post Orb", EnemiesV3_2.TheOrb.Color.ToEngineColor(), HandLevel.Level4, 129, 397),
-	};
+	];
 
 	public static void Render()
 	{

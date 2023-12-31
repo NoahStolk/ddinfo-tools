@@ -13,10 +13,10 @@ internal class Shader
 	{
 		_gl = gl;
 		(ShaderType Type, string Path)[] files =
-		{
+		[
 			(ShaderType.VertexShader, vertexShader),
 			(ShaderType.FragmentShader, fragmentShader),
-		};
+		];
 		Program = CreateProgram(files);
 	}
 

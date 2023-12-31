@@ -14,7 +14,7 @@ internal static class ContentFileReader
 	/// </summary>
 	public static DecompiledContentFile Read(string contentFilePath)
 	{
-		TextureContent blankTexture = new(1, 1, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF });
+		TextureContent blankTexture = new(1, 1, [0xFF, 0xFF, 0xFF, 0xFF]);
 
 		if (!File.Exists(contentFilePath))
 			throw new InvalidOperationException("Content file does not exist.");

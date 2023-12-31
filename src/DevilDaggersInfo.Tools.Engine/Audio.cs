@@ -48,7 +48,7 @@ public static class Audio
 		}
 		set
 		{
-			float[] values = { value.At.X, value.At.Y, value.At.Z, value.Up.X, value.Up.Y, value.Up.Z };
+			float[] values = [value.At.X, value.At.Y, value.At.Z, value.Up.X, value.Up.Y, value.Up.Z];
 			fixed (float* v = &values[0])
 				Al.SetListenerProperty(ListenerFloatArray.Orientation, v);
 		}

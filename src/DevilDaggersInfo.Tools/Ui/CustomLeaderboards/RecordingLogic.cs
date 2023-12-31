@@ -19,7 +19,7 @@ public static class RecordingLogic
 	private static readonly AesBase32Wrapper _aesBase32Wrapper;
 	private static MainBlock? _runToUpload;
 
-	private static readonly List<AddUploadRequestTimestamp> _timestamps = new();
+	private static readonly List<AddUploadRequestTimestamp> _timestamps = [];
 
 	static RecordingLogic()
 	{
@@ -263,50 +263,50 @@ public static class RecordingLogic
 
 	private static AddGameData GetGameDataForUpload(MainBlock block, byte[] statsBuffer)
 	{
-		List<int> gemsCollected = new();
-		List<int> enemiesKilled = new();
-		List<int> daggersFired = new();
-		List<int> daggersHit = new();
-		List<int> enemiesAlive = new();
-		List<int> homingStored = new();
-		List<int> gemsDespawned = new();
-		List<int> gemsEaten = new();
-		List<int> gemsTotal = new();
-		List<int> homingEaten = new();
-		List<ushort> skull1AliveCount = new();
-		List<ushort> skull2AliveCount = new();
-		List<ushort> skull3AliveCount = new();
-		List<ushort> spiderlingAliveCount = new();
-		List<ushort> skull4AliveCount = new();
-		List<ushort> squid1AliveCount = new();
-		List<ushort> squid2AliveCount = new();
-		List<ushort> squid3AliveCount = new();
-		List<ushort> centipedeAliveCount = new();
-		List<ushort> gigapedeAliveCount = new();
-		List<ushort> spider1AliveCount = new();
-		List<ushort> spider2AliveCount = new();
-		List<ushort> leviathanAliveCount = new();
-		List<ushort> orbAliveCount = new();
-		List<ushort> thornAliveCount = new();
-		List<ushort> ghostpedeAliveCount = new();
-		List<ushort> spiderEggAliveCount = new();
-		List<ushort> skull1KillCount = new();
-		List<ushort> skull2KillCount = new();
-		List<ushort> skull3KillCount = new();
-		List<ushort> spiderlingKillCount = new();
-		List<ushort> skull4KillCount = new();
-		List<ushort> squid1KillCount = new();
-		List<ushort> squid2KillCount = new();
-		List<ushort> squid3KillCount = new();
-		List<ushort> centipedeKillCount = new();
-		List<ushort> gigapedeKillCount = new();
-		List<ushort> spider1KillCount = new();
-		List<ushort> spider2KillCount = new();
-		List<ushort> leviathanKillCount = new();
-		List<ushort> orbKillCount = new();
-		List<ushort> thornKillCount = new();
-		List<ushort> ghostpedeKillCount = new();
-		List<ushort> spiderEggKillCount = new();
+		List<int> gemsCollected = [];
+		List<int> enemiesKilled = [];
+		List<int> daggersFired = [];
+		List<int> daggersHit = [];
+		List<int> enemiesAlive = [];
+		List<int> homingStored = [];
+		List<int> gemsDespawned = [];
+		List<int> gemsEaten = [];
+		List<int> gemsTotal = [];
+		List<int> homingEaten = [];
+		List<ushort> skull1AliveCount = [];
+		List<ushort> skull2AliveCount = [];
+		List<ushort> skull3AliveCount = [];
+		List<ushort> spiderlingAliveCount = [];
+		List<ushort> skull4AliveCount = [];
+		List<ushort> squid1AliveCount = [];
+		List<ushort> squid2AliveCount = [];
+		List<ushort> squid3AliveCount = [];
+		List<ushort> centipedeAliveCount = [];
+		List<ushort> gigapedeAliveCount = [];
+		List<ushort> spider1AliveCount = [];
+		List<ushort> spider2AliveCount = [];
+		List<ushort> leviathanAliveCount = [];
+		List<ushort> orbAliveCount = [];
+		List<ushort> thornAliveCount = [];
+		List<ushort> ghostpedeAliveCount = [];
+		List<ushort> spiderEggAliveCount = [];
+		List<ushort> skull1KillCount = [];
+		List<ushort> skull2KillCount = [];
+		List<ushort> skull3KillCount = [];
+		List<ushort> spiderlingKillCount = [];
+		List<ushort> skull4KillCount = [];
+		List<ushort> squid1KillCount = [];
+		List<ushort> squid2KillCount = [];
+		List<ushort> squid3KillCount = [];
+		List<ushort> centipedeKillCount = [];
+		List<ushort> gigapedeKillCount = [];
+		List<ushort> spider1KillCount = [];
+		List<ushort> spider2KillCount = [];
+		List<ushort> leviathanKillCount = [];
+		List<ushort> orbKillCount = [];
+		List<ushort> thornKillCount = [];
+		List<ushort> ghostpedeKillCount = [];
+		List<ushort> spiderEggKillCount = [];
 
 		using MemoryStream ms = new(statsBuffer);
 		using BinaryReader br = new(ms);
