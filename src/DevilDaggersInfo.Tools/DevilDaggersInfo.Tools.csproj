@@ -97,8 +97,9 @@
   </ItemGroup>
 
   <ItemGroup Label="Encryption">
+    <None Remove="Content\encryption.ini" />
     <EmbeddedResource Include="Content\encryption.ini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 
