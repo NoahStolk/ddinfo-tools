@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.JsonSerializerContexts;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using System.Net;
 using System.Net.Http.Json;
@@ -13,6 +14,6 @@ public static class UploadSubmission
 		if (response.StatusCode != HttpStatusCode.OK)
 			throw new HttpRequestException(await response.Content.ReadAsStringAsync(), null, response.StatusCode);
 
-		return await response.Content.ReadFromJsonAsync<GetUploadResponse>() ?? throw new InvalidDataException($"Deserialization error for JSON '{response.Content}'.");
+		return await response.Content.ReadFromJsonAsync(ApiModelsContext.Default.GetUploadResponse) ?? throw new InvalidDataException($"Deserialization error for JSON '{response.Content}'.");
 	}
 }

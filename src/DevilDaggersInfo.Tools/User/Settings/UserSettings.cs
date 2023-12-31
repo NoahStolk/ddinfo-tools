@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.JsonSerializerContexts;
 using DevilDaggersInfo.Tools.User.Settings.Model;
 using System.Text.Json;
 
@@ -40,7 +41,7 @@ public static class UserSettings
 		{
 			try
 			{
-				UserSettingsModel? deserializedModel = JsonSerializer.Deserialize<UserSettingsModel>(File.ReadAllText(_filePath));
+				UserSettingsModel? deserializedModel = JsonSerializer.Deserialize(File.ReadAllText(_filePath), UserJsonModelsContext.Default.UserSettingsModel);
 				if (deserializedModel != null)
 					_model = deserializedModel.Sanitize();
 			}
@@ -54,6 +55,6 @@ public static class UserSettings
 	private static void Save()
 	{
 		Directory.CreateDirectory(_fileDirectory);
-		File.WriteAllText(_filePath, JsonSerializer.Serialize(_model));
+		File.WriteAllText(_filePath, JsonSerializer.Serialize(_model, UserJsonModelsContext.Default.UserSettingsModel));
 	}
 }

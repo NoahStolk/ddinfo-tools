@@ -159,6 +159,9 @@ csharp_preserve_single_line_statements                                   = true
 # Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
 dotnet_diagnostic.CS4014.severity                                        = error
 
+# Members attributed with RequiresUnreferencedCode may break when trimming.
+dotnet_diagnostic.IL2026.severity                                        = error
+
 # Null-forgiving operator without justification
 dotnet_diagnostic.NX0001.severity                                        = error
 
