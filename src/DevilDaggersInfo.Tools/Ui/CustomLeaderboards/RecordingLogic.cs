@@ -8,11 +8,9 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.Utils;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
-using System.Web;
-#if !SKIP_VALUE
 using System.IO.Compression;
 using System.Text;
-#endif
+using System.Web;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
@@ -23,13 +21,8 @@ public static class RecordingLogic
 
 	private static readonly List<AddUploadRequestTimestamp> _timestamps = new();
 
-#pragma warning disable S3963
 	static RecordingLogic()
-#pragma warning restore S3963
 	{
-#if SKIP_VALUE
-		_aesBase32Wrapper = new(string.Empty, string.Empty, string.Empty);
-#else
 		using MemoryStream msIn = new(Root.InternalResources.Value.Data.Select((b, i) => i < 4 ? (byte)(b << 4 | b >> 4) : (byte)~b).ToArray());
 		using MemoryStream msOut = new();
 		using DeflateStream ds = new(msIn, CompressionMode.Decompress);
@@ -38,7 +31,6 @@ public static class RecordingLogic
 		br.BaseStream.Position = 0;
 		string[] values = Enumerable.Range(0, br.ReadByte()).Select(_ => Encoding.UTF8.GetString(br.ReadBytes(br.ReadByte()).Select((b, j) => j % 4 == 0 ? b : (byte)~b).ToArray())).ToArray();
 		_aesBase32Wrapper = new(values[0], values[1], values[2]);
-#endif
 	}
 
 	public static RecordingStateType RecordingStateType { get; private set; }
