@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.Popups;
+using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using Silk.NET.Input;
 
@@ -32,7 +33,10 @@ public static class DebugLayout
 		{
 			ImGui.Checkbox("Show overlay", ref _showOverlay);
 
-			ImGui.Text("ImGui key modifiers:");
+			ImGui.TextColored(PopupManager.IsAnyOpen ? Color.White : Color.Gray(0.4f), PopupManager.IsAnyOpen ? "Modal active" : "Modal inactive");
+			ImGui.TextColored(NativeFileDialog.DialogOpen ? Color.White : Color.Gray(0.4f), NativeFileDialog.DialogOpen ? "Native dialog open" : "Native dialog closed");
+
+			ImGui.Text("ImGui key modifiers");
 
 			ImGuiIOPtr io = ImGui.GetIO();
 			ImGui.TextColored(io.KeyCtrl ? Color.White : Color.Gray(0.4f), "CTRL");
@@ -46,25 +50,30 @@ public static class DebugLayout
 			ImGui.Separator();
 			if (ImGui.CollapsingHeader("Silk.NET keys"))
 			{
-				IKeyboard keyboard = Root.Application.MainAppWindow.InputContext.Keyboards[0];
+				IKeyboard? keyboard = Root.Keyboard;
 
-				if (ImGui.BeginTable("SilkKeys", 8))
+				if (keyboard == null)
 				{
-					for (int i = 0; i < keyboard.SupportedKeys.Count; i++)
+					ImGui.TextColored(Color.Red, "Keyboard unavailable");
+				}
+				else
+				{
+					if (ImGui.BeginTable("SilkKeys", 8))
 					{
-						bool isDown = keyboard.IsKeyPressed(keyboard.SupportedKeys[i]);
-						if (i == 0)
-							ImGui.TableNextRow();
+						for (int i = 0; i < keyboard.SupportedKeys.Count; i++)
+						{
+							bool isDown = keyboard.IsKeyPressed(keyboard.SupportedKeys[i]);
+							if (i == 0)
+								ImGui.TableNextRow();
 
-						ImGui.TableNextColumn();
-						ImGui.TextColored(isDown ? Color.White : Color.Gray(0.4f), keyboard.SupportedKeys[i].ToString());
+							ImGui.TableNextColumn();
+							ImGui.TextColored(isDown ? Color.White : Color.Gray(0.4f), EnumUtils.KeyNames[keyboard.SupportedKeys[i]]);
+						}
+
+						ImGui.EndTable();
 					}
-
-					ImGui.EndTable();
 				}
 			}
-
-			ImGui.Text(Inline.Span($"Native dialog opened: {(NativeFileDialog.DialogOpen ? "True" : "False")}"));
 
 #if DEBUG
 			ImGui.Separator();
@@ -160,9 +169,6 @@ public static class DebugLayout
 		AddText(ref y, "Gen 2 GCs", Inline.Span(GC.CollectionCount(2)));
 		AddText(ref y, "Total GC pause duration", Inline.Span(GC.GetTotalPauseDuration() ));
 		AddText(ref y, "Total app time", Inline.Span(DateTime.UtcNow - _startUpTime));
-
-		AddText(ref y, "Modal active", PopupManager.IsAnyOpen ? bool.TrueString : bool.FalseString);
-
 		AddText(ref y, "Devil Daggers window position", Inline.Span(Root.GameWindowService.GetWindowPosition()));
 
 		void AddText(ref float posY, ReadOnlySpan<char> textLeft, ReadOnlySpan<char> textRight, uint textColor = 0xffffffff)
