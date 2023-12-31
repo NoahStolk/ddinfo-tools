@@ -1,4 +1,3 @@
-using DevilDaggersInfo.Tools.Engine.Content.Conversion.Blobs;
 using DevilDaggersInfo.Tools.Engine.Content.Conversion.Models;
 using DevilDaggersInfo.Tools.Engine.Content.Conversion.Shaders;
 using DevilDaggersInfo.Tools.Engine.Content.Conversion.Sounds;
@@ -18,9 +17,6 @@ internal static class ContentFileWriter
 		List<TocEntry> tocEntries = [];
 		using MemoryStream dataMemory = new();
 		using BinaryWriter dataWriter = new(dataMemory);
-
-		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".bin"))
-			Write<BlobContentConverter, BlobBinary>(path, tocEntries, dataWriter);
 
 		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".obj"))
 			Write<ModelContentConverter, ModelBinary>(path, tocEntries, dataWriter);
