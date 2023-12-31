@@ -10,7 +10,7 @@ public static class DebugLayout
 	private static long _previousAllocatedBytes;
 	private static bool _showOverlay = true;
 
-	private static readonly List<string> _debugMessages = new();
+	private static readonly List<string> _debugMessages = [];
 	private static readonly DateTime _startUpTime = DateTime.UtcNow;
 
 	public static void Add(object? obj)
@@ -32,7 +32,6 @@ public static class DebugLayout
 		{
 			ImGui.Checkbox("Show overlay", ref _showOverlay);
 
-#if DEBUG
 			ImGui.Text("ImGui key modifiers:");
 
 			ImGuiIOPtr io = ImGui.GetIO();
@@ -67,6 +66,7 @@ public static class DebugLayout
 
 			ImGui.Text(Inline.Span($"Native dialog opened: {(NativeFileDialog.DialogOpen ? "True" : "False")}"));
 
+#if DEBUG
 			ImGui.Separator();
 
 			if (ImGui.Button("Show demo window"))
