@@ -4,7 +4,6 @@ using Silk.NET.OpenGL;
 namespace DevilDaggersInfo.Tools;
 
 public record InternalResources(
-	BlobContent Value,
 	Shader MeshShader,
 	TextureContent ApplicationIconTexture,
 	Texture ArrowEndTexture,
@@ -45,7 +44,6 @@ public record InternalResources(
 		DecompiledContentFile ddInfoToolsContent = DecompiledContentFile.Create(ddInfoToolsContentRootDirectory, "ddinfo-assets");
 
 		return new(
-			Value: GetBlobContent(ddInfoToolsContent, "Value"),
 			MeshShader: GetShader(ddInfoToolsContent, "Mesh"),
 			ApplicationIconTexture: GetTextureContent(ddInfoToolsContent, "ApplicationIcon"),
 			ArrowEndTexture: GetTexture(ddInfoToolsContent, "ArrowEnd"),
@@ -75,15 +73,6 @@ public record InternalResources(
 			SettingsTexture: GetTexture(ddInfoToolsContent, "Settings"),
 			TileHitboxTexture: GetTexture(ddInfoToolsContent, "TileHitbox"),
 			TileHitboxModel: GetModelContent(ddInfoToolsContent, "TileHitbox"));
-
-		static BlobContent GetBlobContent(DecompiledContentFile content, string name)
-		{
-			content.Blobs.TryGetValue(name, out BlobContent? blobContent);
-			if (blobContent == null)
-				return new(Array.Empty<byte>());
-
-			return blobContent;
-		}
 
 		Shader GetShader(DecompiledContentFile content, string name)
 		{
