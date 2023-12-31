@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Core.Encryption;
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.GameWindow;
 using DevilDaggersInfo.Tools.Platforms;
@@ -89,6 +90,8 @@ public static class Root
 		.WriteTo.File($"ddinfo-{AssemblyUtils.EntryAssemblyVersionString}.log", rollingInterval: RollingInterval.Infinite)
 		.CreateLogger();
 
+	public static AesBase32Wrapper? AesBase32Wrapper { get; } = CreateAesBase32Wrapper();
+
 #if WINDOWS
 	public static IPlatformSpecificValues PlatformSpecificValues { get; } = new WindowsValues();
 	public static GameMemoryService GameMemoryService { get; } = new(new WindowsMemoryService());
@@ -98,4 +101,15 @@ public static class Root
 	public static GameMemoryService GameMemoryService { get; } = new(new LinuxMemoryService());
 	public static GameWindowService GameWindowService { get; } = new(new LinuxWindowingService());
 #endif
+
+	private static AesBase32Wrapper? CreateAesBase32Wrapper()
+	{
+		string? iv = Environment.GetEnvironmentVariable("DDINFO_CL_IV", EnvironmentVariableTarget.Machine);
+		string? pass = Environment.GetEnvironmentVariable("DDINFO_CL_PASS", EnvironmentVariableTarget.Machine);
+		string? salt = Environment.GetEnvironmentVariable("DDINFO_CL_SALT", EnvironmentVariableTarget.Machine);
+		if (string.IsNullOrWhiteSpace(iv) || string.IsNullOrWhiteSpace(pass) || string.IsNullOrWhiteSpace(salt))
+			return null;
+
+		return new(iv, pass, salt);
+	}
 }
