@@ -104,9 +104,10 @@ public static class Root
 
 	private static AesBase32Wrapper? CreateAesBase32Wrapper()
 	{
-		string? iv = Environment.GetEnvironmentVariable("DDINFO_CL_IV", EnvironmentVariableTarget.Machine);
-		string? pass = Environment.GetEnvironmentVariable("DDINFO_CL_PASS", EnvironmentVariableTarget.Machine);
-		string? salt = Environment.GetEnvironmentVariable("DDINFO_CL_SALT", EnvironmentVariableTarget.Machine);
+		const EnvironmentVariableTarget target = EnvironmentVariableTarget.Process;
+		string? iv = Environment.GetEnvironmentVariable("DDINFO_CL_IV", target);
+		string? pass = Environment.GetEnvironmentVariable("DDINFO_CL_PASS", target);
+		string? salt = Environment.GetEnvironmentVariable("DDINFO_CL_SALT", target);
 		if (string.IsNullOrWhiteSpace(iv) || string.IsNullOrWhiteSpace(pass) || string.IsNullOrWhiteSpace(salt))
 			return null;
 

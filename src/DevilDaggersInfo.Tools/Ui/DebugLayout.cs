@@ -170,7 +170,6 @@ public static class DebugLayout
 		AddText(ref y, "Gen 2 GCs", Inline.Span(GC.CollectionCount(2)));
 		AddText(ref y, "Total GC pause duration", Inline.Span(GC.GetTotalPauseDuration()));
 		AddText(ref y, "Total app time", Inline.Span(DateTime.UtcNow - _startUpTime));
-
 		AddText(ref y, "Devil Daggers window position", Inline.Span(Root.GameWindowService.GetWindowPosition()));
 
 		void AddText(ref float posY, ReadOnlySpan<char> textLeft, ReadOnlySpan<char> textRight, uint textColor = 0xffffffff)
