@@ -6,6 +6,8 @@
 
 - Updated to .NET 8.0.
 - Updated to latest ImGui.NET and Silk.NET versions.
+- Now using faster JSON serialization when connecting to the web API.
+- Added debug UI for keyboard input.
 
 ## [0.10.0.0] - 2023-11-13
 
