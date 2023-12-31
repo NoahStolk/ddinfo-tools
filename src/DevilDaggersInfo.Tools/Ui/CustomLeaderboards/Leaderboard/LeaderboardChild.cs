@@ -22,7 +22,7 @@ public static class LeaderboardChild
 {
 	private static GetCustomEntry? _selectedCustomEntry;
 
-	private static List<GetCustomEntry> _sortedEntries = new();
+	private static List<GetCustomEntry> _sortedEntries = [];
 
 	private static LeaderboardData? _data;
 	public static LeaderboardData? Data
@@ -31,7 +31,7 @@ public static class LeaderboardChild
 		set
 		{
 			_data = value;
-			_sortedEntries = value?.Leaderboard.SortedEntries ?? new();
+			_sortedEntries = value?.Leaderboard.SortedEntries ?? [];
 			_selectedCustomEntry = null;
 		}
 	}

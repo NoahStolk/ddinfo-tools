@@ -6,7 +6,7 @@ public class PracticeStatsData
 {
 	private readonly byte[] _statsBuffer = new byte[GameMemoryService.StatsBufferSize * 60 * 60]; // Allow up to an hour of data (roughly 3600 seconds in game).
 
-	private readonly List<StatisticEntry> _statistics = new();
+	private readonly List<StatisticEntry> _statistics = [];
 
 	public SplitsData SplitsData { get; } = new();
 	public IReadOnlyList<StatisticEntry> Statistics => _statistics;

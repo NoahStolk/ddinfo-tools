@@ -16,7 +16,7 @@ public static class ModInstallationWindow
 	private static int _activeAssets;
 	private static int _activeProhibitedAssets;
 
-	private static readonly List<string> _errors = new();
+	private static readonly List<string> _errors = [];
 
 	public static void LoadEffectiveAssets()
 	{
@@ -24,7 +24,7 @@ public static class ModInstallationWindow
 		_errors.Clear();
 
 		string[] filePaths = Directory.GetFiles(UserSettings.ModsDirectory);
-		List<Mod> mods = new();
+		List<Mod> mods = [];
 		foreach (string filePath in filePaths)
 		{
 			string fileName = Path.GetFileName(filePath);
@@ -48,7 +48,7 @@ public static class ModInstallationWindow
 			}
 		}
 
-		List<EffectiveChunk> effectiveChunks = new();
+		List<EffectiveChunk> effectiveChunks = [];
 		foreach (Mod mod in mods.OrderBy(t => t.FileName))
 		{
 			foreach (ModBinaryChunk chunk in mod.Toc.Chunks)
@@ -67,7 +67,7 @@ public static class ModInstallationWindow
 		foreach (EffectiveChunk effectiveChunk in effectiveChunks.OrderBy(c => c.Chunk.AssetType).ThenBy(c => c.Chunk.Name))
 		{
 			if (!_effectiveAssets.ContainsKey(effectiveChunk.ContainingModFileName))
-				_effectiveAssets.Add(effectiveChunk.ContainingModFileName, new());
+				_effectiveAssets.Add(effectiveChunk.ContainingModFileName, []);
 
 			_effectiveAssets[effectiveChunk.ContainingModFileName].Add(effectiveChunk);
 		}

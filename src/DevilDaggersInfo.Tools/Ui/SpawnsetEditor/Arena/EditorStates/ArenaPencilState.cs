@@ -124,6 +124,6 @@ public class ArenaPencilState : IArenaState
 
 		public Vector2 StartPosition { get; set; }
 
-		public HashSet<Vector2D<int>> ModifiedCoords { get; } = new();
+		public HashSet<Vector2D<int>> ModifiedCoords { get; } = [];
 	}
 }

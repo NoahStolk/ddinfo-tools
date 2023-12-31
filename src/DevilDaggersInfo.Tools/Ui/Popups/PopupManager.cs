@@ -6,7 +6,7 @@ namespace DevilDaggersInfo.Tools.Ui.Popups;
 
 public static class PopupManager
 {
-	private static readonly List<Popup> _openPopups = new();
+	private static readonly List<Popup> _openPopups = [];
 
 	public static bool IsAnyOpen => _openPopups.Count > 0;
 

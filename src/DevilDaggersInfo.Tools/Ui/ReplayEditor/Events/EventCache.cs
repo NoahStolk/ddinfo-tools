@@ -6,23 +6,23 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 
 public sealed class EventCache
 {
-	private readonly List<(int EventIndex, int EntityId, BoidSpawnEventData Event)> _boidSpawnEvents = new();
-	private readonly List<(int EventIndex, int EntityId, DaggerSpawnEventData Event)> _daggerSpawnEvents = new();
-	private readonly List<(int EventIndex, int EntityId, EndEventData Event)> _endEvents = new();
-	private readonly List<(int EventIndex, int EntityId, EntityOrientationEventData Event)> _entityOrientationEvents = new();
-	private readonly List<(int EventIndex, int EntityId, EntityPositionEventData Event)> _entityPositionEvents = new();
-	private readonly List<(int EventIndex, int EntityId, EntityTargetEventData Event)> _entityTargetEvents = new();
-	private readonly List<(int EventIndex, int EntityId, GemEventData Event)> _gemEvents = new();
-	private readonly List<(int EventIndex, int EntityId, HitEventData Event)> _hitEvents = new();
-	private readonly List<(int EventIndex, int EntityId, InitialInputsEventData Event)> _initialInputsEvents = new();
-	private readonly List<(int EventIndex, int EntityId, InputsEventData Event)> _inputsEvents = new();
-	private readonly List<(int EventIndex, int EntityId, LeviathanSpawnEventData Event)> _leviathanSpawnEvents = new();
-	private readonly List<(int EventIndex, int EntityId, PedeSpawnEventData Event)> _pedeSpawnEvents = new();
-	private readonly List<(int EventIndex, int EntityId, SpiderEggSpawnEventData Event)> _spiderEggSpawnEvents = new();
-	private readonly List<(int EventIndex, int EntityId, SpiderSpawnEventData Event)> _spiderSpawnEvents = new();
-	private readonly List<(int EventIndex, int EntityId, SquidSpawnEventData Event)> _squidSpawnEvents = new();
-	private readonly List<(int EventIndex, int EntityId, ThornSpawnEventData Event)> _thornSpawnEvents = new();
-	private readonly List<(int EventIndex, int EntityId, TransmuteEventData Event)> _transmuteEvents = new();
+	private readonly List<(int EventIndex, int EntityId, BoidSpawnEventData Event)> _boidSpawnEvents = [];
+	private readonly List<(int EventIndex, int EntityId, DaggerSpawnEventData Event)> _daggerSpawnEvents = [];
+	private readonly List<(int EventIndex, int EntityId, EndEventData Event)> _endEvents = [];
+	private readonly List<(int EventIndex, int EntityId, EntityOrientationEventData Event)> _entityOrientationEvents = [];
+	private readonly List<(int EventIndex, int EntityId, EntityPositionEventData Event)> _entityPositionEvents = [];
+	private readonly List<(int EventIndex, int EntityId, EntityTargetEventData Event)> _entityTargetEvents = [];
+	private readonly List<(int EventIndex, int EntityId, GemEventData Event)> _gemEvents = [];
+	private readonly List<(int EventIndex, int EntityId, HitEventData Event)> _hitEvents = [];
+	private readonly List<(int EventIndex, int EntityId, InitialInputsEventData Event)> _initialInputsEvents = [];
+	private readonly List<(int EventIndex, int EntityId, InputsEventData Event)> _inputsEvents = [];
+	private readonly List<(int EventIndex, int EntityId, LeviathanSpawnEventData Event)> _leviathanSpawnEvents = [];
+	private readonly List<(int EventIndex, int EntityId, PedeSpawnEventData Event)> _pedeSpawnEvents = [];
+	private readonly List<(int EventIndex, int EntityId, SpiderEggSpawnEventData Event)> _spiderEggSpawnEvents = [];
+	private readonly List<(int EventIndex, int EntityId, SpiderSpawnEventData Event)> _spiderSpawnEvents = [];
+	private readonly List<(int EventIndex, int EntityId, SquidSpawnEventData Event)> _squidSpawnEvents = [];
+	private readonly List<(int EventIndex, int EntityId, ThornSpawnEventData Event)> _thornSpawnEvents = [];
+	private readonly List<(int EventIndex, int EntityId, TransmuteEventData Event)> _transmuteEvents = [];
 
 	public IReadOnlyList<(int EventIndex, int EntityId, BoidSpawnEventData Event)> BoidSpawnEvents => _boidSpawnEvents;
 	public IReadOnlyList<(int EventIndex, int EntityId, DaggerSpawnEventData Event)> DaggerSpawnEvents => _daggerSpawnEvents;

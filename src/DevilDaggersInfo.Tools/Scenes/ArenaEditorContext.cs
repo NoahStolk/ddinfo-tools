@@ -12,8 +12,8 @@ namespace DevilDaggersInfo.Tools.Scenes;
 public sealed class ArenaEditorContext
 {
 	private readonly ArenaScene _arenaScene;
-	private readonly List<(Tile Tile, float Distance)> _hitTiles = new();
-	private readonly List<Tile> _selectedTiles = new();
+	private readonly List<(Tile Tile, float Distance)> _hitTiles = [];
+	private readonly List<Tile> _selectedTiles = [];
 
 	private Tile? _closestHitTile;
 

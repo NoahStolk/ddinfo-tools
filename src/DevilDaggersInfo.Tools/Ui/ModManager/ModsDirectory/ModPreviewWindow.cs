@@ -13,7 +13,7 @@ namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 
 public static class ModPreviewWindow
 {
-	private static List<ModBinaryChunk> _displayedChunks = new();
+	private static List<ModBinaryChunk> _displayedChunks = [];
 	private static ModBinaryType? _binaryType;
 	private static int _chunkCount;
 	private static int _prohibitedChunkCount;

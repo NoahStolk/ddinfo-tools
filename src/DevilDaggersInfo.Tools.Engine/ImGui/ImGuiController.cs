@@ -14,7 +14,7 @@ public sealed class ImGuiController : IDisposable
 	private IView _view = null!;
 	private IInputContext _input = null!;
 	private bool _frameBegun;
-	private readonly List<char> _pressedChars = new();
+	private readonly List<char> _pressedChars = [];
 	private IKeyboard _keyboard = null!;
 
 	private int _attribLocationTex;

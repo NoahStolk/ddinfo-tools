@@ -7,7 +7,7 @@ namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 
 public static class EditSpawnContext
 {
-	private static readonly List<SpawnUiEntry> _spawns = new();
+	private static readonly List<SpawnUiEntry> _spawns = [];
 
 	public static IReadOnlyList<SpawnUiEntry> Spawns => _spawns;
 

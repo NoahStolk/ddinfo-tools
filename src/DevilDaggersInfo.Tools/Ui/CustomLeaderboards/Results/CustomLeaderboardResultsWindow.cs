@@ -9,7 +9,7 @@ namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 
 public static class CustomLeaderboardResultsWindow
 {
-	private static List<UploadResult> _results = new();
+	private static List<UploadResult> _results = [];
 
 	public static void AddResult(UploadResult newResult)
 	{

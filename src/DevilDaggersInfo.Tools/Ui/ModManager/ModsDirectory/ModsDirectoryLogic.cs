@@ -9,7 +9,7 @@ namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 
 public static class ModsDirectoryLogic
 {
-	private static List<ModFile> _modFiles = new();
+	private static List<ModFile> _modFiles = [];
 	private static string _originalFileName = string.Empty;
 	public static string NewFileName = string.Empty;
 

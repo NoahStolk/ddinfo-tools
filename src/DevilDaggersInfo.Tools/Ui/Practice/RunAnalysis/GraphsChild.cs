@@ -12,12 +12,12 @@ namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
 
 public static class GraphsChild
 {
-	private static readonly List<int> _gemsCollected = new();
-	private static readonly List<int> _gemsDespawned = new();
-	private static readonly List<int> _gemsEaten = new();
-	private static readonly List<int> _gemsTotal = new();
-	private static readonly List<int> _homingStored = new();
-	private static readonly List<int> _homingEaten = new();
+	private static readonly List<int> _gemsCollected = [];
+	private static readonly List<int> _gemsDespawned = [];
+	private static readonly List<int> _gemsEaten = [];
+	private static readonly List<int> _gemsTotal = [];
+	private static readonly List<int> _homingStored = [];
+	private static readonly List<int> _homingEaten = [];
 
 	// Allow up to an hour of data (roughly 3600 seconds in game).
 	private static readonly Vector2[] _gemsCollectedPoints = new Vector2[60 * 60];

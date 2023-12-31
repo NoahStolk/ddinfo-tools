@@ -11,7 +11,7 @@ namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorStates;
 
 public class ArenaBucketState : IArenaState
 {
-	private readonly HashSet<Vector2D<int>> _targetCoords = new();
+	private readonly HashSet<Vector2D<int>> _targetCoords = [];
 	private Vector2D<int> _cachedPosition;
 	private bool _isFilling;
 

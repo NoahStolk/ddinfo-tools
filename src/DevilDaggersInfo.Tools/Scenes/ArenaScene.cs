@@ -14,7 +14,7 @@ public sealed class ArenaScene
 	private readonly Tile[] _sortedTiles = new Tile[SpawnsetBinary.ArenaDimensionMax * SpawnsetBinary.ArenaDimensionMax];
 
 	private readonly RaceDagger _raceDagger = new();
-	private readonly List<LightObject> _lights = new();
+	private readonly List<LightObject> _lights = [];
 
 	private readonly ArenaEditorContext? _editorContext;
 	private readonly Func<SpawnsetBinary> _getSpawnset;

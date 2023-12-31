@@ -12,7 +12,7 @@ public static class LeaderboardListChild
 {
 	public const int PageSize = 20;
 
-	private static readonly List<GetCustomLeaderboardAllowedCategory> _categories = new();
+	private static readonly List<GetCustomLeaderboardAllowedCategory> _categories = [];
 	private static string[] _categoryNames = Array.Empty<string>();
 
 	private static int _categoryIndex;
@@ -20,14 +20,14 @@ public static class LeaderboardListChild
 	private static string _spawnsetFilter = string.Empty;
 	private static string _authorFilter = string.Empty;
 
-	private static readonly List<GetCustomLeaderboardForOverview> _customLeaderboards = new();
+	private static readonly List<GetCustomLeaderboardForOverview> _customLeaderboards = [];
 
 	private static CustomLeaderboardRankSorting RankSorting => _categories.Count > _categoryIndex ? _categories[_categoryIndex].RankSorting : CustomLeaderboardRankSorting.TimeDesc;
 	private static SpawnsetGameMode GameMode => _categories.Count > _categoryIndex ? _categories[_categoryIndex].GameMode : SpawnsetGameMode.Survival;
 
 	public static bool IsLoading { get; private set; }
 	public static int PageIndex { get; private set; }
-	public static List<GetCustomLeaderboardForOverview> PagedCustomLeaderboards { get; private set; } = new();
+	public static List<GetCustomLeaderboardForOverview> PagedCustomLeaderboards { get; private set; } = [];
 	public static LeaderboardListSorting Sorting { get; set; }
 	public static bool SortAscending { get; set; }
 
