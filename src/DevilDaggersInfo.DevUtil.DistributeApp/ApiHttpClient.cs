@@ -16,9 +16,9 @@ public static class ApiHttpClient
 		using HttpClient client = new();
 		HttpResponseMessage response = await client.SendAsync(loginRequest);
 		if (response.StatusCode != HttpStatusCode.OK)
-			throw new($"Unsuccessful status code from login '{response.StatusCode}'");
+			throw new InvalidOperationException($"Unsuccessful status code from login '{response.StatusCode}'");
 
-		return await response.Content.ReadFromJsonAsync<LoginResponse>() ?? throw new("Could not deserialize login response.");
+		return await response.Content.ReadFromJsonAsync<LoginResponse>() ?? throw new InvalidOperationException("Could not deserialize login response.");
 	}
 
 	public static async Task UploadAsync(string projectName, string projectVersion, ToolBuildType toolBuildType, ToolPublishMethod toolPublishMethod, string outputZipFilePath, string loginToken)
@@ -41,6 +41,6 @@ public static class ApiHttpClient
 		using HttpClient client = new();
 		HttpResponseMessage response = await client.SendAsync(uploadRequest);
 		if (response.StatusCode != HttpStatusCode.OK)
-			throw new($"Unsuccessful status code from upload '{response.StatusCode}'");
+			throw new InvalidOperationException($"Unsuccessful status code from upload '{response.StatusCode}'");
 	}
 }

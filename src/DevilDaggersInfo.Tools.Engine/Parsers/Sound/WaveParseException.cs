@@ -1,8 +1,5 @@
-using System.Runtime.Serialization;
-
 namespace DevilDaggersInfo.Tools.Engine.Parsers.Sound;
 
-[Serializable]
 public class WaveParseException : Exception
 {
 	public WaveParseException()
@@ -16,11 +13,6 @@ public class WaveParseException : Exception
 
 	public WaveParseException(string? message, Exception? innerException)
 		: base(message, innerException)
-	{
-	}
-
-	protected WaveParseException(SerializationInfo info, StreamingContext context)
-		: base(info, context)
 	{
 	}
 }

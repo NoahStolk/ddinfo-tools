@@ -2,7 +2,7 @@ using DevilDaggersInfo.Tools.Engine.Extensions;
 
 namespace DevilDaggersInfo.Tools.Engine.Content.Conversion.Textures;
 
-internal record TextureBinary(ushort Width, ushort Height, byte[] ColorData) : IBinary<TextureBinary>
+internal sealed record TextureBinary(ushort Width, ushort Height, byte[] ColorData) : IBinary<TextureBinary>
 {
 	public ContentType ContentType => ContentType.Texture;
 

@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main.Data;
 
 [StructLayout(LayoutKind.Sequential)]
-public struct PracticeState
+public record struct PracticeState
 {
 	public HandLevel HandLevel;
 	public int AdditionalGems;

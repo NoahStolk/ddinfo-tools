@@ -1,8 +1,5 @@
-using System.Runtime.Serialization;
-
 namespace DevilDaggersInfo.Tools.Engine.Parsers.Texture;
 
-[Serializable]
 public class TgaParseException : Exception
 {
 	public TgaParseException()
@@ -16,11 +13,6 @@ public class TgaParseException : Exception
 
 	public TgaParseException(string? message, Exception? innerException)
 		: base(message, innerException)
-	{
-	}
-
-	protected TgaParseException(SerializationInfo info, StreamingContext context)
-		: base(info, context)
 	{
 	}
 }

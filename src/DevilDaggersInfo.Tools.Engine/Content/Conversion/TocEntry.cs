@@ -3,7 +3,7 @@ namespace DevilDaggersInfo.Tools.Engine.Content.Conversion;
 /// <summary>
 /// Represents an entry in the table of contents (TOC) buffer in the content file.
 /// </summary>
-internal class TocEntry
+internal sealed class TocEntry
 {
 	public TocEntry(ContentType contentType, string name, uint length)
 	{

@@ -68,14 +68,14 @@ public static class UpdateLogic
 
 			UpdateWindow.LogMessages.Add("Opening ZIP...");
 
-			using MemoryStream ms = new(zipFileContents);
+			await using MemoryStream ms = new(zipFileContents);
 			using ZipArchive archive = new(ms);
 
 			UpdateWindow.LogMessages.Add("Installing update...");
 			archive.ExtractToDirectory(AssemblyUtils.InstallationDirectory, true);
 
 			UpdateWindow.LogMessages.Add("Launching new version...");
-			Process process = new();
+			using Process process = new();
 			process.StartInfo.FileName = _exeFileName;
 			process.StartInfo.WorkingDirectory = AssemblyUtils.InstallationDirectory;
 			process.Start();

@@ -9,7 +9,7 @@ public enum TextureCoordinate
 	R = TextureParameterName.TextureWrapR,
 }
 
-internal class Texture : IDisposable
+internal sealed class Texture : IDisposable
 {
 	public const SizedInternalFormat Srgb8Alpha8 = (SizedInternalFormat)GLEnum.Srgb8Alpha8;
 

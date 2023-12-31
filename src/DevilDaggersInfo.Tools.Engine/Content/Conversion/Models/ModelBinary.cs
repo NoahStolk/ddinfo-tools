@@ -3,7 +3,7 @@ using DevilDaggersInfo.Tools.Engine.Parsers.Model;
 
 namespace DevilDaggersInfo.Tools.Engine.Content.Conversion.Models;
 
-internal record ModelBinary(IReadOnlyList<Vector3> Positions, IReadOnlyList<Vector2> Textures, IReadOnlyList<Vector3> Normals, IReadOnlyList<MeshData> Meshes) : IBinary<ModelBinary>
+internal sealed record ModelBinary(IReadOnlyList<Vector3> Positions, IReadOnlyList<Vector2> Textures, IReadOnlyList<Vector3> Normals, IReadOnlyList<MeshData> Meshes) : IBinary<ModelBinary>
 {
 	public ContentType ContentType => ContentType.Model;
 

@@ -27,14 +27,14 @@ static async Task DistributeAsync(ToolBuildType toolBuildType, ToolPublishMethod
 	string root = Path.Combine("..", "..", "..", "..");
 	string projectFilePath = Path.Combine(root, toolProjectName, $"{toolProjectName}.csproj");
 	if (!File.Exists(projectFilePath))
-		throw new($"Cannot find project file {projectFilePath}.");
+		throw new InvalidOperationException($"Cannot find project file {projectFilePath}.");
 
 	string zipOutputDirectory = Path.Combine(root, toolProjectName, "bin");
 
 	Console.WriteLine("Building...");
 	await AppBuilder.BuildAsync(projectFilePath, publishDirectoryName, toolBuildType, toolPublishMethod);
 
-	string publishDirectoryPath = Path.Combine(Path.GetDirectoryName(projectFilePath) ?? throw new($"Cannot get root directory of {projectFilePath}."), publishDirectoryName);
+	string publishDirectoryPath = Path.Combine(Path.GetDirectoryName(projectFilePath) ?? throw new InvalidOperationException($"Cannot get root directory of {projectFilePath}."), publishDirectoryName);
 
 	// Copy content file if it exists.
 	string contentFilePathSrc = Path.Combine(projectFilePath, "..", "bin", "Debug", "net8.0", "ddinfo-assets");

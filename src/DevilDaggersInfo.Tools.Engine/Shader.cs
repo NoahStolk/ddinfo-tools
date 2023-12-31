@@ -111,7 +111,7 @@ public sealed class Shader : IDisposable
 		_gl.CompileShader(handle);
 		string infoLog = _gl.GetShaderInfoLog(handle);
 		if (!string.IsNullOrWhiteSpace(infoLog))
-			throw new Exception($"Error compiling shader of type {type}, failed with error {infoLog}");
+			throw new InvalidOperationException($"Error compiling shader of type {type}, failed with error {infoLog}");
 
 		return handle;
 	}

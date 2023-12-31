@@ -10,7 +10,7 @@ public static class UpdateWindow
 
 	public static Version? AvailableUpdateVersion { get; set; }
 
-	public static List<string> LogMessages { get; } = new();
+	public static List<string> LogMessages { get; } = [];
 
 	public static void Render(ref bool show)
 	{

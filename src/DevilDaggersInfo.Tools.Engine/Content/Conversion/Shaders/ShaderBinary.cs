@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Engine.Content.Conversion.Shaders;
 
-internal record ShaderBinary(ShaderContentType ShaderContentType, byte[] Code) : IBinary<ShaderBinary>
+internal sealed record ShaderBinary(ShaderContentType ShaderContentType, byte[] Code) : IBinary<ShaderBinary>
 {
 	public ContentType ContentType => ContentType.Shader;
 

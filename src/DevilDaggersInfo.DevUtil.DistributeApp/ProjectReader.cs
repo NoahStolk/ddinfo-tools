@@ -11,7 +11,7 @@ public static class ProjectReader
 
 		string? version = doc.SelectNodes("/Project/PropertyGroup/Version/text()")?.Item(0)?.InnerText;
 		if (version == null)
-			throw new("Version not found in project file.");
+			throw new InvalidOperationException("Version not found in project file.");
 
 		return version;
 	}

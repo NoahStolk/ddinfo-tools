@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Engine.Content.Conversion.Sounds;
 
-internal record SoundBinary(short Channels, int SampleRate, short BitsPerSample, byte[] Data) : IBinary<SoundBinary>
+internal sealed record SoundBinary(short Channels, int SampleRate, short BitsPerSample, byte[] Data) : IBinary<SoundBinary>
 {
 	public ContentType ContentType => ContentType.Sound;
 

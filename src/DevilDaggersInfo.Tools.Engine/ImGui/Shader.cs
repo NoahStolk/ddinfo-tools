@@ -2,7 +2,7 @@ using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools.Engine.ImGui;
 
-internal class Shader
+internal sealed class Shader
 {
 	private readonly Dictionary<string, int> _uniformToLocation = new();
 	private readonly Dictionary<string, int> _attribLocation = new();
