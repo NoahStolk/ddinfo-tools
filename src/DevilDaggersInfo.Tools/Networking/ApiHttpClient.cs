@@ -6,6 +6,7 @@ using DevilDaggersInfo.Web.ApiSpec.Tools.Spawnsets;
 using DevilDaggersInfo.Web.ApiSpec.Tools.Updates;
 using System.Net;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 
 namespace DevilDaggersInfo.Tools.Networking;
@@ -35,7 +36,15 @@ public class ApiHttpClient
 		if (response.StatusCode != HttpStatusCode.OK)
 			throw new HttpRequestException(await response.Content.ReadAsStringAsync(), null, response.StatusCode);
 
-		return await response.Content.ReadFromJsonAsync(jsonTypeInfo) ?? throw new InvalidDataException($"Deserialization error in {url} for JSON '{response.Content}'.");
+		try
+		{
+			return await response.Content.ReadFromJsonAsync(jsonTypeInfo) ?? throw new JsonException("JSON deserialization returned null.");
+		}
+		catch (JsonException ex)
+		{
+			string json = await response.Content.ReadAsStringAsync();
+			throw new InvalidDataException($"Deserialization error when requesting data from endpoint '{url}'. JSON:\n{json}", ex);
+		}
 	}
 
 	private static string BuildUrlWithQuery(string baseUrl, Dictionary<string, object?> queryParameters)
