@@ -11,11 +11,13 @@ namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
 public static class EndLoopTemplatesChild
 {
-	private static readonly List<float> _endLoopTimerStarts = new();
+	private static readonly List<float> _endLoopTimerStarts = CreateEndLoopTimerStarts();
 
-	static EndLoopTemplatesChild()
+	private static List<float> CreateEndLoopTimerStarts()
 	{
 		const int endLoopTemplateWaveCount = 33;
+
+		List<float> endLoopTimerStarts = [];
 		SpawnsView spawnsView = new(ContentManager.Content.DefaultSpawnset, GameVersion.V3_2, endLoopTemplateWaveCount);
 		for (int i = 0; i < endLoopTemplateWaveCount; i++)
 		{
@@ -25,8 +27,10 @@ public static class EndLoopTemplatesChild
 			else
 				timerStart = spawnsView.Waves[i - 1][^1].Seconds + 0.1f; // Make sure we don't accidentally include the last enemy of the previous wave.
 
-			_endLoopTimerStarts.Add(timerStart);
+			endLoopTimerStarts.Add(timerStart);
 		}
+
+		return endLoopTimerStarts;
 	}
 
 	public static void Render()

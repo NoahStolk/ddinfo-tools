@@ -167,7 +167,7 @@ public static class DebugLayout
 		AddText(ref y, "Gen 0 GCs", Inline.Span(GC.CollectionCount(0)));
 		AddText(ref y, "Gen 1 GCs", Inline.Span(GC.CollectionCount(1)));
 		AddText(ref y, "Gen 2 GCs", Inline.Span(GC.CollectionCount(2)));
-		AddText(ref y, "Total GC pause duration", Inline.Span(GC.GetTotalPauseDuration() ));
+		AddText(ref y, "Total GC pause duration", Inline.Span(GC.GetTotalPauseDuration()));
 		AddText(ref y, "Total app time", Inline.Span(DateTime.UtcNow - _startUpTime));
 		AddText(ref y, "Devil Daggers window position", Inline.Span(Root.GameWindowService.GetWindowPosition()));
 
