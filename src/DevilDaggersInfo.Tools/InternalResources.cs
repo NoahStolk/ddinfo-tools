@@ -80,7 +80,7 @@ public record InternalResources(
 		{
 			content.Blobs.TryGetValue(name, out BlobContent? blobContent);
 			if (blobContent == null)
-				throw new InvalidOperationException($"Could not find blob '{name}'.");
+				return new(Array.Empty<byte>());
 
 			return blobContent;
 		}
