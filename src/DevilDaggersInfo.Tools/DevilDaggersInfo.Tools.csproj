@@ -15,10 +15,6 @@
     <TrimMode>partial</TrimMode>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(CI)' == 'true'">
-    <DefineConstants>$(DefineConstants);SKIP_VALUE</DefineConstants>
-  </PropertyGroup>
-
   <Choose>
     <When Condition="'$(Configuration)' == 'Debug'">
       <Choose>
