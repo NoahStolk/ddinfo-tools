@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace DevilDaggersInfo.DevUtil.DistributeApp.Model;
 
-public record AppSettingsModel(LoginRequest LoginRequest, EncryptionModel Encryption)
+public record AppSettingsModel(LoginRequest LoginRequest)
 {
 	private static AppSettingsModel? _instance;
 

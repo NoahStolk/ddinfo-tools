@@ -5,6 +5,8 @@ namespace DevilDaggersInfo.Tools.Utils;
 
 public static class AssemblyUtils
 {
+	public static readonly Assembly EntryAssembly = Assembly.GetEntryAssembly() ?? throw new InvalidOperationException("Could not get entry assembly.");
+
 	public static readonly string EntryAssemblyVersionString = GetEntryAssemblyVersionString();
 
 	public static readonly Version EntryAssemblyVersion = new(EntryAssemblyVersionString);
@@ -15,11 +17,7 @@ public static class AssemblyUtils
 
 	private static string GetEntryAssemblyVersionString()
 	{
-		Assembly? entryAssembly = Assembly.GetEntryAssembly();
-		if (entryAssembly == null)
-			throw new InvalidOperationException("Could not get entry assembly.");
-
-		AssemblyInformationalVersionAttribute? attribute = entryAssembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+		AssemblyInformationalVersionAttribute? attribute = EntryAssembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
 		if (attribute == null)
 			throw new InvalidOperationException("Could not get informational version attribute.");
 
