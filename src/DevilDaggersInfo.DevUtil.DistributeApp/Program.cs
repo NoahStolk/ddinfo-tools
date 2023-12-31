@@ -5,11 +5,20 @@ using DevilDaggersInfo.Web.ApiSpec.Main.Authentication;
 using System.Diagnostics;
 using System.IO.Compression;
 
+AppSettingsModel appSettings = AppSettingsModel.Instance;
+Environment.SetEnvironmentVariable("DDINFO_CL_IV", appSettings.Encryption.Iv);
+Environment.SetEnvironmentVariable("DDINFO_CL_PASS", appSettings.Encryption.Pass);
+Environment.SetEnvironmentVariable("DDINFO_CL_SALT", appSettings.Encryption.Salt);
+
 if (Question("Build app for Windows?"))
 	await DistributeAsync(ToolBuildType.WindowsWarp, ToolPublishMethod.SelfContained);
 
 if (Question("Build app for Linux?"))
 	await DistributeAsync(ToolBuildType.LinuxWarp, ToolPublishMethod.SelfContained);
+
+Environment.SetEnvironmentVariable("DDINFO_CL_IV", null);
+Environment.SetEnvironmentVariable("DDINFO_CL_PASS", null);
+Environment.SetEnvironmentVariable("DDINFO_CL_SALT", null);
 
 static bool Question(string question)
 {
@@ -21,11 +30,6 @@ static bool Question(string question)
 
 static async Task DistributeAsync(ToolBuildType toolBuildType, ToolPublishMethod toolPublishMethod)
 {
-	AppSettingsModel appSettings = AppSettingsModel.Instance;
-	Environment.SetEnvironmentVariable("DDINFO_CL_IV", appSettings.Encryption.Iv);
-	Environment.SetEnvironmentVariable("DDINFO_CL_PASS", appSettings.Encryption.Pass);
-	Environment.SetEnvironmentVariable("DDINFO_CL_SALT", appSettings.Encryption.Salt);
-
 	const string toolName = "ddinfo-tools";
 	const string toolProjectName = "DevilDaggersInfo.Tools";
 	const string publishDirectoryName = "_temp-release";
