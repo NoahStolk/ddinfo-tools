@@ -28,7 +28,7 @@ public static class ReplayEditorWindow
 		GameMemoryServiceWrapper.Scan();
 	}
 
-	public static void Render()
+	public static unsafe void Render()
 	{
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, Constants.MinWindowSize);
 		if (ImGui.Begin("Replay Editor", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.MenuBar))
@@ -66,11 +66,18 @@ public static class ReplayEditorWindow
 					{
 						ImGui.Text("Event counts per tick:");
 
-						for (int i = 0; i < FileStates.Replay.Object.EventsData.EventOffsetsPerTick.Count; i++)
+						ImGuiListClipperPtr clipper = new(ImGuiNative.ImGuiListClipper_ImGuiListClipper());
+						clipper.Begin(FileStates.Replay.Object.EventsData.EventOffsetsPerTick.Count);
+						while (clipper.Step())
 						{
-							int offset = FileStates.Replay.Object.EventsData.EventOffsetsPerTick[i];
-							ImGui.Text(Inline.Span($"{i} ({TimeUtils.TickToTime(i, 0):0.0000}): {offset}"));
+							for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
+							{
+								int offset = FileStates.Replay.Object.EventsData.EventOffsetsPerTick[i];
+								ImGui.Text(Inline.Span($"{i} ({TimeUtils.TickToTime(i, 0):0.0000}): {offset}"));
+							}
 						}
+
+						clipper.End();
 					}
 
 					ImGui.EndChild(); // ReplayDebugChild
