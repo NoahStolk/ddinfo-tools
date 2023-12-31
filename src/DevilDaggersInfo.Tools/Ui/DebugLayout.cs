@@ -35,6 +35,7 @@ public static class DebugLayout
 
 			ImGui.TextColored(PopupManager.IsAnyOpen ? Color.White : Color.Gray(0.4f), PopupManager.IsAnyOpen ? "Modal active" : "Modal inactive");
 			ImGui.TextColored(NativeFileDialog.DialogOpen ? Color.White : Color.Gray(0.4f), NativeFileDialog.DialogOpen ? "Native dialog open" : "Native dialog closed");
+			ImGui.TextColored(Root.AesBase32Wrapper == null ? Color.Red : Color.Green, Root.AesBase32Wrapper == null ? "Encryption unavailable" : "Encryption available");
 
 			ImGui.Text("ImGui key modifiers");
 
@@ -169,6 +170,7 @@ public static class DebugLayout
 		AddText(ref y, "Gen 2 GCs", Inline.Span(GC.CollectionCount(2)));
 		AddText(ref y, "Total GC pause duration", Inline.Span(GC.GetTotalPauseDuration()));
 		AddText(ref y, "Total app time", Inline.Span(DateTime.UtcNow - _startUpTime));
+
 		AddText(ref y, "Devil Daggers window position", Inline.Span(Root.GameWindowService.GetWindowPosition()));
 
 		void AddText(ref float posY, ReadOnlySpan<char> textLeft, ReadOnlySpan<char> textRight, uint textColor = 0xffffffff)
