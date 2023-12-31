@@ -38,7 +38,7 @@ public static class PracticeLogic
 			File.Delete(UserSettings.ModsSurvivalPath);
 	}
 
-	public static bool IsActive(UserSettingsModel.UserSettingsPracticeTemplate customTemplate)
+	public static bool IsActive(UserSettingsPracticeTemplate customTemplate)
 	{
 		return IsActive(customTemplate.HandLevel, customTemplate.AdditionalGems, customTemplate.TimerStart);
 	}

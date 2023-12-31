@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.JsonSerializerContexts;
 using DevilDaggersInfo.Tools.User.Cache.Model;
 using System.Text.Json;
 
@@ -26,7 +27,7 @@ public static class UserCache
 		{
 			try
 			{
-				UserCacheModel? deserializedModel = JsonSerializer.Deserialize<UserCacheModel>(File.ReadAllText(_filePath));
+				UserCacheModel? deserializedModel = JsonSerializer.Deserialize(File.ReadAllText(_filePath), UserJsonModelsContext.Default.UserCacheModel);
 				if (deserializedModel != null)
 					_model = deserializedModel.Sanitize();
 			}
@@ -40,6 +41,6 @@ public static class UserCache
 	private static void Save()
 	{
 		Directory.CreateDirectory(_fileDirectory);
-		File.WriteAllText(_filePath, JsonSerializer.Serialize(_model));
+		File.WriteAllText(_filePath, JsonSerializer.Serialize(_model, UserJsonModelsContext.Default.UserCacheModel));
 	}
 }

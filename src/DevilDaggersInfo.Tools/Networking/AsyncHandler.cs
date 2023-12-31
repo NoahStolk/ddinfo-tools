@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.Ui.Popups;
+using System.Text;
 
 namespace DevilDaggersInfo.Tools.Networking;
 
@@ -29,7 +30,20 @@ public static class AsyncHandler
 			}
 			catch (Exception ex)
 			{
-				PopupManager.ShowError("API call failed.\n\n" + ex.Message);
+				StringBuilder sb = new();
+				sb.AppendLine(ex.Message);
+
+				// Recursively get all inner exceptions.
+				Exception? innerException = ex.InnerException;
+				const int maxDepth = 5;
+				int depth = 0;
+				while (innerException != null && depth++ < maxDepth)
+				{
+					sb.Append(new string('\t', depth)).AppendLine(innerException.Message);
+					innerException = innerException.InnerException;
+				}
+
+				PopupManager.ShowError("API call failed.\n\n" + sb);
 				Root.Log.Error(ex, "API error");
 				return default;
 			}

@@ -46,7 +46,7 @@ public static class InputValuesChild
 			ImGui.SameLine();
 			if (ImGui.Button("Save", new(80, 30)))
 			{
-				UserSettingsModel.UserSettingsPracticeTemplate newTemplate = new(null, PracticeLogic.State.HandLevel, PracticeLogic.State.AdditionalGems, PracticeLogic.State.TimerStart);
+				UserSettingsPracticeTemplate newTemplate = new(null, PracticeLogic.State.HandLevel, PracticeLogic.State.AdditionalGems, PracticeLogic.State.TimerStart);
 				if (!UserSettings.Model.PracticeTemplates.Contains(newTemplate))
 				{
 					UserSettings.Model = UserSettings.Model with

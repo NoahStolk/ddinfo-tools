@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.JsonSerializerContexts;
 using DevilDaggersInfo.Tools.User.Settings.Model;
 using System.Text.Json;
 
@@ -36,24 +37,26 @@ public static class UserSettings
 
 	public static void Load()
 	{
-		if (File.Exists(_filePath))
+		if (!File.Exists(_filePath))
+			return;
+
+		try
 		{
-			try
-			{
-				UserSettingsModel? deserializedModel = JsonSerializer.Deserialize<UserSettingsModel>(File.ReadAllText(_filePath));
-				if (deserializedModel != null)
-					_model = deserializedModel.Sanitize();
-			}
-			catch (Exception ex)
-			{
-				Root.Log.Error(ex, "Failed to load user settings.");
-			}
+			string json = File.ReadAllText(_filePath);
+
+			UserSettingsModel? deserializedModel = JsonSerializer.Deserialize(json, UserJsonModelsContext.Default.UserSettingsModel);
+			if (deserializedModel != null)
+				_model = deserializedModel.Sanitize();
+		}
+		catch (Exception ex)
+		{
+			Root.Log.Error(ex, "Failed to load user settings.");
 		}
 	}
 
 	private static void Save()
 	{
 		Directory.CreateDirectory(_fileDirectory);
-		File.WriteAllText(_filePath, JsonSerializer.Serialize(_model));
+		File.WriteAllText(_filePath, JsonSerializer.Serialize(_model, UserJsonModelsContext.Default.UserSettingsModel));
 	}
 }

@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.JsonSerializerContexts;
 using DevilDaggersInfo.Web.ApiSpec.Tools;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using DevilDaggersInfo.Web.ApiSpec.Tools.ProcessMemory;
@@ -5,6 +6,8 @@ using DevilDaggersInfo.Web.ApiSpec.Tools.Spawnsets;
 using DevilDaggersInfo.Web.ApiSpec.Tools.Updates;
 using System.Net;
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 
 namespace DevilDaggersInfo.Tools.Networking;
 
@@ -27,13 +30,21 @@ public class ApiHttpClient
 		return await _client.SendAsync(request);
 	}
 
-	private async Task<T> SendGetRequest<T>(string url)
+	private async Task<T> SendGetRequest<T>(string url, JsonTypeInfo<T> jsonTypeInfo)
 	{
 		using HttpResponseMessage response = await SendRequest(HttpMethod.Get, url);
 		if (response.StatusCode != HttpStatusCode.OK)
 			throw new HttpRequestException(await response.Content.ReadAsStringAsync(), null, response.StatusCode);
 
-		return await response.Content.ReadFromJsonAsync<T>() ?? throw new InvalidDataException($"Deserialization error in {url} for JSON '{response.Content}'.");
+		try
+		{
+			return await response.Content.ReadFromJsonAsync(jsonTypeInfo) ?? throw new JsonException("JSON deserialization returned null.");
+		}
+		catch (JsonException ex)
+		{
+			string json = await response.Content.ReadAsStringAsync();
+			throw new InvalidDataException($"Deserialization error when requesting data from endpoint '{url}'. JSON:\n{json}", ex);
+		}
 	}
 
 	private static string BuildUrlWithQuery(string baseUrl, Dictionary<string, object?> queryParameters)
@@ -47,12 +58,12 @@ public class ApiHttpClient
 
 	public async Task<GetCustomEntryReplayBuffer> GetCustomEntryReplayBufferById(int id)
 	{
-		return await SendGetRequest<GetCustomEntryReplayBuffer>($"api/app/custom-entries/{id}/replay-buffer");
+		return await SendGetRequest($"api/app/custom-entries/{id}/replay-buffer", ApiModelsContext.Default.GetCustomEntryReplayBuffer);
 	}
 
 	public async Task<HttpResponseMessage> SubmitScore(AddUploadRequest uploadRequest)
 	{
-		return await SendRequest(HttpMethod.Post, "api/app/custom-entries/submit", JsonContent.Create(uploadRequest));
+		return await SendRequest(HttpMethod.Post, "api/app/custom-entries/submit", JsonContent.Create(uploadRequest, ApiModelsContext.Default.AddUploadRequest));
 	}
 
 	public async Task<List<GetCustomLeaderboardForOverview>> GetCustomLeaderboards(int selectedPlayerId)
@@ -61,21 +72,12 @@ public class ApiHttpClient
 		{
 			{ nameof(selectedPlayerId), selectedPlayerId },
 		};
-		return await SendGetRequest<List<GetCustomLeaderboardForOverview>>(BuildUrlWithQuery("api/app/custom-leaderboards/", queryParameters));
+		return await SendGetRequest(BuildUrlWithQuery("api/app/custom-leaderboards/", queryParameters), ApiModelsContext.Default.ListGetCustomLeaderboardForOverview);
 	}
 
 	public async Task<GetCustomLeaderboard> GetCustomLeaderboardById(int id)
 	{
-		return await SendGetRequest<GetCustomLeaderboard>($"api/app/custom-leaderboards/{id}");
-	}
-
-	public async Task<GetCustomLeaderboard> GetCustomLeaderboardBySpawnsetHash(byte[] hash)
-	{
-		Dictionary<string, object?> queryParameters = new()
-		{
-			{ nameof(hash), Uri.EscapeDataString(Convert.ToBase64String(hash)) },
-		};
-		return await SendGetRequest<GetCustomLeaderboard>(BuildUrlWithQuery("api/app/custom-leaderboards/by-hash", queryParameters));
+		return await SendGetRequest($"api/app/custom-leaderboards/{id}", ApiModelsContext.Default.GetCustomLeaderboard);
 	}
 
 	public async Task<HttpResponseMessage> CustomLeaderboardExistsBySpawnsetHash(byte[] hash)
@@ -89,7 +91,7 @@ public class ApiHttpClient
 
 	public async Task<List<GetCustomLeaderboardAllowedCategory>> GetCustomLeaderboardAllowedCategories()
 	{
-		return await SendGetRequest<List<GetCustomLeaderboardAllowedCategory>>("api/app/custom-leaderboards/allowed-categories");
+		return await SendGetRequest("api/app/custom-leaderboards/allowed-categories", ApiModelsContext.Default.ListGetCustomLeaderboardAllowedCategory);
 	}
 
 	public async Task<GetMarker> GetMarker(AppOperatingSystem appOperatingSystem)
@@ -98,17 +100,12 @@ public class ApiHttpClient
 		{
 			{ nameof(appOperatingSystem), appOperatingSystem },
 		};
-		return await SendGetRequest<GetMarker>(BuildUrlWithQuery("api/app/process-memory/marker", queryParameters));
+		return await SendGetRequest(BuildUrlWithQuery("api/app/process-memory/marker", queryParameters), ApiModelsContext.Default.GetMarker);
 	}
 
 	public async Task<GetSpawnset> GetSpawnsetById(int id)
 	{
-		return await SendGetRequest<GetSpawnset>($"api/app/spawnsets/{id}");
-	}
-
-	public async Task<GetSpawnsetBuffer> GetSpawnsetBufferById(int id)
-	{
-		return await SendGetRequest<GetSpawnsetBuffer>($"api/app/spawnsets/{id}/buffer");
+		return await SendGetRequest($"api/app/spawnsets/{id}", ApiModelsContext.Default.GetSpawnset);
 	}
 
 	public async Task<GetSpawnsetByHash> GetSpawnsetByHash(byte[] hash)
@@ -117,7 +114,7 @@ public class ApiHttpClient
 		{
 			{ nameof(hash), Uri.EscapeDataString(Convert.ToBase64String(hash)) },
 		};
-		return await SendGetRequest<GetSpawnsetByHash>(BuildUrlWithQuery("api/app/spawnsets/by-hash", queryParameters));
+		return await SendGetRequest(BuildUrlWithQuery("api/app/spawnsets/by-hash", queryParameters), ApiModelsContext.Default.GetSpawnsetByHash);
 	}
 
 	public async Task<GetLatestVersion> GetLatest(AppOperatingSystem appOperatingSystem)
@@ -126,15 +123,6 @@ public class ApiHttpClient
 		{
 			{ nameof(appOperatingSystem), appOperatingSystem },
 		};
-		return await SendGetRequest<GetLatestVersion>(BuildUrlWithQuery("api/app/updates/latest", queryParameters));
-	}
-
-	public async Task<Task> GetLatestFile(AppOperatingSystem appOperatingSystem)
-	{
-		Dictionary<string, object?> queryParameters = new()
-		{
-			{ nameof(appOperatingSystem), appOperatingSystem },
-		};
-		return await SendGetRequest<Task>(BuildUrlWithQuery("api/app/updates/latest-file", queryParameters));
+		return await SendGetRequest(BuildUrlWithQuery("api/app/updates/latest", queryParameters), ApiModelsContext.Default.GetLatestVersion);
 	}
 }
