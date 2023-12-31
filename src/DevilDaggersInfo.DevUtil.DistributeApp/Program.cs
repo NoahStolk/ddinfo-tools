@@ -1,4 +1,5 @@
 using DevilDaggersInfo.DevUtil.DistributeApp;
+using DevilDaggersInfo.DevUtil.DistributeApp.Model;
 using DevilDaggersInfo.Web.ApiSpec.Admin.Tools;
 using DevilDaggersInfo.Web.ApiSpec.Main.Authentication;
 using System.Diagnostics;
@@ -20,6 +21,11 @@ static bool Question(string question)
 
 static async Task DistributeAsync(ToolBuildType toolBuildType, ToolPublishMethod toolPublishMethod)
 {
+	AppSettingsModel appSettings = AppSettingsModel.Instance;
+	Environment.SetEnvironmentVariable("DDINFO_CL_IV", appSettings.Encryption.Iv);
+	Environment.SetEnvironmentVariable("DDINFO_CL_PASS", appSettings.Encryption.Pass);
+	Environment.SetEnvironmentVariable("DDINFO_CL_SALT", appSettings.Encryption.Salt);
+
 	const string toolName = "ddinfo-tools";
 	const string toolProjectName = "DevilDaggersInfo.Tools";
 	const string publishDirectoryName = "_temp-release";

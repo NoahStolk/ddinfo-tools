@@ -1,8 +1,8 @@
+using DevilDaggersInfo.DevUtil.DistributeApp.Model;
 using DevilDaggersInfo.Web.ApiSpec.Admin.Tools;
 using DevilDaggersInfo.Web.ApiSpec.Main.Authentication;
 using System.Net;
 using System.Net.Http.Json;
-using System.Text.Json;
 
 namespace DevilDaggersInfo.DevUtil.DistributeApp;
 
@@ -11,7 +11,7 @@ public static class ApiHttpClient
 	public static async Task<LoginResponse> LoginAsync()
 	{
 		using HttpRequestMessage loginRequest = new(HttpMethod.Post, "https://devildaggers.info/api/authentication/login");
-		loginRequest.Content = JsonContent.Create(JsonSerializer.Deserialize<LoginRequest>(await File.ReadAllTextAsync("appsettings.json")));
+		loginRequest.Content = JsonContent.Create(AppSettingsModel.Instance.LoginRequest);
 
 		using HttpClient client = new();
 		HttpResponseMessage response = await client.SendAsync(loginRequest);
