@@ -17,7 +17,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Build and test
         run: dotnet test src/DevilDaggersInfo.Tools.sln -c Release
-      # TODO: Add encryption.ini via secrets.
+      - name: Create encryption.ini
+        run: echo "${{ secrets.ENCRYPTION }}" > src/DevilDaggersInfo.Tools/Content/encryption.ini
       - name: Build optimized release
         run: >
           dotnet publish src/DevilDaggersInfo.Tools/DevilDaggersInfo.Tools.csproj
