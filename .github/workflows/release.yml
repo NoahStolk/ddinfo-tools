@@ -1,51 +1,51 @@
 on:
-	push:
-		branches:
-			- main
-			# TODO: Remove.
-			- set-up-ci-release
+  push:
+    branches:
+      - main
+      # TODO: Remove.
+      - set-up-ci-release
 jobs:
-	release:
-		runs-on: ubuntu-latest
-		if: ${{ startsWith(github.event.head_commit.message, 'Release') }}
-		timeout-minutes: 5
-		steps:
-			- name: Set up dotnet
-			  uses: actions/setup-dotnet@v1
-			  with:
-				  dotnet-version: '8.0.100'
-				  include-prerelease: false
-			- name: Checkout
-			  uses: actions/checkout@v2
-			- name: Build and test
-			  run: dotnet test src/DevilDaggersInfo.Tools.sln -c Release
-			# TODO: Add encryption.ini via secrets.
-			- name: Build optimized release
-			  run: >
-				  dotnet publish src/DevilDaggersInfo.Tools/DevilDaggersInfo.Tools.csproj
-				  -p:PublishTrimmed=True
-				  -p:EnableCompressionInSingleFile=True
-				  -p:PublishReadyToRun=False
-				  -p:PublishProtocol=FileSystem
-				  -p:TargetFramework=net8.0
-				  -p:RuntimeIdentifier=win-x64
-				  -p:Platform=x64
-				  -p:Configuration=Release
-				  -p:PublishDir=release-win-x64
-				  -p:PublishSingleFile=True
-				  -p:SelfContained=True
-				  -p:PublishMethod=SELF_CONTAINED
-			- name: Install zip
-			  uses: montudor/action-zip@v1
-			- name: Zip output
-			  run: zip -qq -r ddinfo-tools-win-x64.zip release-win-x64
-			  working-directory: src/DevilDaggersInfo.Tools
-			- name: Generate release tag
-			  id: tag
-			  run: echo "::set-output name=release_tag::Build_$(date+"%Y.%m.%d_%H.%M")"
-			- name: Release
-			  uses: softprops/action-gh-release@v1
-			  with:
-				  tag_name: ${{ steps.tag.outputs.release_tag }}
-				  files: src/DevilDaggersInfo.Tools/ddinfo-tools-win-x64.zip
-				  token: ${{ secrets.GITHUB_TOKEN }}
+  release:
+    runs-on: ubuntu-latest
+    if: ${{ startsWith(github.event.head_commit.message, 'Release') }}
+    timeout-minutes: 5
+    steps:
+      - name: Set up dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.100'
+          include-prerelease: false
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build and test
+        run: dotnet test src/DevilDaggersInfo.Tools.sln -c Release
+      # TODO: Add encryption.ini via secrets.
+      - name: Build optimized release
+        run: >
+          dotnet publish src/DevilDaggersInfo.Tools/DevilDaggersInfo.Tools.csproj
+          -p:PublishTrimmed=True
+          -p:EnableCompressionInSingleFile=True
+          -p:PublishReadyToRun=False
+          -p:PublishProtocol=FileSystem
+          -p:TargetFramework=net8.0
+          -p:RuntimeIdentifier=win-x64
+          -p:Platform=x64
+          -p:Configuration=Release
+          -p:PublishDir=release-win-x64
+          -p:PublishSingleFile=True
+          -p:SelfContained=True
+          -p:PublishMethod=SELF_CONTAINED
+      - name: Install zip
+        uses: montudor/action-zip@v1
+      - name: Zip output
+        run: zip -qq -r ddinfo-tools-win-x64.zip release-win-x64
+        working-directory: src/DevilDaggersInfo.Tools
+      - name: Generate release tag
+        id: tag
+        run: echo "::set-output name=release_tag::Build_$(date+"%Y.%m.%d_%H.%M")"
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          files: src/DevilDaggersInfo.Tools/ddinfo-tools-win-x64.zip
+          token: ${{ secrets.GITHUB_TOKEN }}
