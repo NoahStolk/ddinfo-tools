@@ -1,10 +1,11 @@
 on:
     push:
-        tags:
-            - 'v*'
-
+        branches:
+            - main
+            # TODO: Remove.
+            - set-up-ci-release
 jobs:
-    gh_tagged_release:
+    release:
         runs-on: ubuntu-latest
         timeout-minutes: 5
         steps:
@@ -17,6 +18,7 @@ jobs:
                 uses: actions/checkout@v2
             -   name: Build and test
                 run: dotnet test src/DevilDaggersInfo.Tools.sln -c Release
+            # TODO: Add encryption.ini via secrets.
             -   name: Build optimized release
                 run: >
                     dotnet publish src/DevilDaggersInfo.Tools/DevilDaggersInfo.Tools.csproj
@@ -38,10 +40,28 @@ jobs:
             -   name: Zip output
                 run: zip -qq -r ddinfo-tools-win-x64.zip release-win-x64
                 working-directory: src/DevilDaggersInfo.Tools
-            -   name: Create release
-                id: create_release
-                uses: marvinpinto/action-automatic-releases@latest
+            -   name: Release
+                uses: softprops/action-gh-release@v1
+                if: ${{ startsWith(github.commit, 'Release') }}
                 with:
-                    repo_token: ${{ secrets.GITHUB_TOKEN }}
-                    prerelease: true
-                    files: src/DevilDaggersInfo.Tools/ddinfo-tools-win-x64.zip
+                    files: ddinfo-tools-win-x64.zip
+                    generate_release_notes: true
+#            -   name: Create release
+#                id: create_release
+#                uses: ChanTsune/release-with-commit@v2.8.0
+#                with:
+#                    regexp: "Release ((\\d+([.]\\d+)*)-(alpha|beta|rc)\\d*)((\\s|\\S)*)"
+#                    regexp_options: "us"
+#                    release_name: "Version $1"
+#                    tag_name: "v$1"
+#                    body: "$5"
+#                    draft: true
+#                    prerelease: true
+#                env:
+#                    GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+
+#                uses: marvinpinto/action-automatic-releases@latest
+#                with:
+#                    repo_token: ${{ secrets.GITHUB_TOKEN }}
+#                    prerelease: true
+#                    files: src/DevilDaggersInfo.Tools/ddinfo-tools-win-x64.zip
