@@ -1,6 +1,12 @@
 # Changelog
 
-## [0.10.2.0] - 2024-01-01
+## [0.10.2.1] - 2024-01-02
+
+### Fixed
+
+- Fixed app not starting due to incompatibility with optimized release.
+
+## [0.10.2.0] - 2024-01-02
 
 ### Fixed
 

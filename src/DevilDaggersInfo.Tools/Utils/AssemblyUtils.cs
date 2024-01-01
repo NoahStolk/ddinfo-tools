@@ -7,13 +7,11 @@ public static class AssemblyUtils
 {
 	public static readonly Assembly EntryAssembly = Assembly.GetEntryAssembly() ?? throw new InvalidOperationException("Could not get entry assembly.");
 
-	public static readonly string ExeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? throw new InvalidOperationException("Could not get executing assembly directory.");
-
 	public static readonly string EntryAssemblyVersionString = GetEntryAssemblyVersionString();
 
 	public static readonly Version EntryAssemblyVersion = new(EntryAssemblyVersionString);
 
-	public static readonly string EntryAssemblyBuildTime = Assembly.GetEntryAssembly()?.GetCustomAttribute<BuildTimeAttribute>()?.BuildTime ?? "Unknown build time";
+	public static readonly string EntryAssemblyBuildTime = EntryAssembly.GetCustomAttribute<BuildTimeAttribute>()?.BuildTime ?? "Unknown build time";
 
 	public static readonly string InstallationDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) ?? throw new InvalidOperationException("Could not get installation directory of the current executing assembly.");
 

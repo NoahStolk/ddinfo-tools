@@ -42,7 +42,7 @@ public record InternalResources(
 #else
 		const string? ddInfoToolsContentRootDirectory = null;
 #endif
-		DecompiledContentFile ddInfoToolsContent = DecompiledContentFile.Create(ddInfoToolsContentRootDirectory, Path.Combine(AssemblyUtils.ExeDirectory, "ddinfo-assets"));
+		DecompiledContentFile ddInfoToolsContent = DecompiledContentFile.Create(ddInfoToolsContentRootDirectory, Path.Combine(AssemblyUtils.InstallationDirectory, "ddinfo-assets"));
 
 		return new(
 			MeshShader: GetShader(ddInfoToolsContent, "Mesh"),
