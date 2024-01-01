@@ -266,4 +266,4 @@ __pycache__/
 # App settings
 appsettings.json
 appsettings.Development.json
-src/DevilDaggersInfo.Tools/Content/encryption.ini
+encryption.ini
