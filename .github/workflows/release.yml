@@ -7,6 +7,7 @@ on:
 jobs:
     release:
         runs-on: ubuntu-latest
+        if: ${{ startsWith(github.commit, 'Release') }}
         timeout-minutes: 5
         steps:
             -   name: Set up dotnet
@@ -34,7 +35,6 @@ jobs:
                     -p:PublishSingleFile=True
                     -p:SelfContained=True
                     -p:PublishMethod=SELF_CONTAINED
-                    -p:OutputType=WinExe
             -   name: Install zip
                 uses: montudor/action-zip@v1
             -   name: Zip output
@@ -42,7 +42,6 @@ jobs:
                 working-directory: src/DevilDaggersInfo.Tools
             -   name: Release
                 uses: softprops/action-gh-release@v1
-                if: ${{ startsWith(github.commit, 'Release') }}
                 with:
                     files: ddinfo-tools-win-x64.zip
                     generate_release_notes: true
