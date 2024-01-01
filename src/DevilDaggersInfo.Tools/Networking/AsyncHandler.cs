@@ -43,8 +43,8 @@ public static class AsyncHandler
 					innerException = innerException.InnerException;
 				}
 
-				PopupManager.ShowError("API call failed.\n\n" + sb);
-				Root.Log.Error(ex, "API error");
+				PopupManager.ShowError("API call failed. Check the logs for more information.");
+				Root.Log.Error(ex, "API error: " + sb);
 				return default;
 			}
 		}

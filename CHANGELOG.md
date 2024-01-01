@@ -1,5 +1,15 @@
 # Changelog
 
+## [unreleased]
+
+### Fixed
+
+- Fixed error popups stacking.
+
+### Miscellaneous
+
+- Improved error handing when API calls are failing.
+
 ## [0.10.1.0] - 2024-01-01
 
 ### Miscellaneous

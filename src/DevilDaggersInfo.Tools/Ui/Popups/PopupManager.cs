@@ -12,7 +12,7 @@ public static class PopupManager
 
 	public static void ShowError(string errorText)
 	{
-		_openPopups.Add(new ErrorMessage("Error", errorText));
+		_openPopups.Add(new ErrorMessage($"Error##{DateTime.UtcNow.Ticks}", errorText));
 	}
 
 	public static void ShowMessage(string title, string text)
