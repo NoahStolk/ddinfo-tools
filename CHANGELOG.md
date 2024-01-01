@@ -6,6 +6,7 @@
 
 - Fixed error popups stacking.
 - Fixed app crashing on start when not launching the executable from the root folder.
+- Fixed rare instance of mod manager crashing the app while loading mod files.
 
 ### Miscellaneous
 

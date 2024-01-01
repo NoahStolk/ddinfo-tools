@@ -85,30 +85,36 @@ public static class ModInstallationWindow
 		{
 			ImGui.PopStyleVar();
 
-			Title("Summary");
-
-			if (ImGui.BeginTable("Mod installation summary", 2, ImGuiTableFlags.Borders, new(256, 0)))
+			if (ModsDirectoryLogic.IsLoading)
 			{
-				ImGui.TableSetupColumn("##left", ImGuiTableColumnFlags.WidthStretch);
-				ImGui.TableSetupColumn("##right", ImGuiTableColumnFlags.WidthFixed, 48);
-
-				NextColumnText("Active mod files");
-				NextColumnText(Inline.Span(_effectiveAssets.Count));
-
-				NextColumnText("Active assets");
-				NextColumnText(Inline.Span(_activeAssets));
-
-				NextColumnText("Active prohibited assets");
-				NextColumnText(Inline.Span(_activeProhibitedAssets));
-
-				ImGui.EndTable();
+				ImGui.Text("Loading...");
 			}
+			else
+			{
+				Title("Summary");
 
-			ImGui.Spacing();
-			ImGui.Spacing();
-			Title("Effective Assets");
+				if (ImGui.BeginTable("Mod installation summary", 2, ImGuiTableFlags.Borders, new(256, 0)))
+				{
+					ImGui.TableSetupColumn("##left", ImGuiTableColumnFlags.WidthStretch);
+					ImGui.TableSetupColumn("##right", ImGuiTableColumnFlags.WidthFixed, 48);
 
-			ImGui.TextWrapped(
+					NextColumnText("Active mod files");
+					NextColumnText(Inline.Span(_effectiveAssets.Count));
+
+					NextColumnText("Active assets");
+					NextColumnText(Inline.Span(_activeAssets));
+
+					NextColumnText("Active prohibited assets");
+					NextColumnText(Inline.Span(_activeProhibitedAssets));
+
+					ImGui.EndTable();
+				}
+
+				ImGui.Spacing();
+				ImGui.Spacing();
+				Title("Effective Assets");
+
+				ImGui.TextWrapped(
 				"""
 				It is possible to play multiple mods at the same time, since the game replaces every asset individually.
 
@@ -119,18 +125,19 @@ public static class ModInstallationWindow
 				In the table below, mods listed at the top take precedence over mods listed at the bottom.
 				""");
 
-			if (_errors.Count > 0)
-			{
-				ImGui.Separator();
-				ImGui.TextColored(Color.Red, "Errors:");
-				for (int i = 0; i < _errors.Count; i++)
+				if (_errors.Count > 0)
 				{
-					string error = _errors[i];
-					ImGui.Text(error);
+					ImGui.Separator();
+					ImGui.TextColored(Color.Red, "Errors:");
+					for (int i = 0; i < _errors.Count; i++)
+					{
+						string error = _errors[i];
+						ImGui.Text(error);
+					}
 				}
-			}
 
-			RenderChunksTable();
+				RenderChunksTable();
+			}
 		}
 		else
 		{
