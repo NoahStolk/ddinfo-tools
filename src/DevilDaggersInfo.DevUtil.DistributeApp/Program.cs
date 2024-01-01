@@ -1,5 +1,6 @@
 using DevilDaggersInfo.DevUtil.DistributeApp;
 using DevilDaggersInfo.DevUtil.DistributeApp.Model;
+using DevilDaggersInfo.Tools.Engine.Content.Conversion;
 using DevilDaggersInfo.Web.ApiSpec.Admin.Tools;
 using DevilDaggersInfo.Web.ApiSpec.Main.Authentication;
 using System.Diagnostics;
@@ -37,20 +38,7 @@ static async Task DistributeAsync(ToolBuildType toolBuildType, ToolPublishMethod
 
 	string publishDirectoryPath = Path.Combine(Path.GetDirectoryName(projectFilePath) ?? throw new InvalidOperationException($"Cannot get root directory of {projectFilePath}."), publishDirectoryName);
 
-	// Copy content file if it exists.
-	string contentFilePathSrc = Path.Combine(projectFilePath, "..", "bin", "Debug", "net8.0", "ddinfo-assets");
-	string contentFilePathDst = Path.Combine(publishDirectoryPath, "ddinfo-assets");
-	if (File.Exists(contentFilePathSrc))
-	{
-		if (File.Exists(contentFilePathDst))
-		{
-			Console.WriteLine("Deleting old content file...");
-			File.Delete(contentFilePathDst);
-		}
-
-		Console.WriteLine("Copying new content file...");
-		File.Copy(contentFilePathSrc, contentFilePathDst);
-	}
+	ContentFileWriter.GenerateContentFile(Path.Combine(root, toolProjectName, "Content"), Path.Combine(publishDirectoryPath, "ddinfo-assets"));
 
 	if (!Question("Distribute?"))
 	{

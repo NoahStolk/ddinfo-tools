@@ -8,7 +8,7 @@ namespace DevilDaggersInfo.Tools.Engine.Content.Conversion;
 /// <summary>
 /// Turns all content source files into binary and writes everything to a single content file.
 /// </summary>
-internal static class ContentFileWriter
+public static class ContentFileWriter
 {
 	public static void GenerateContentFile(string inputContentRootDirectory, string outputContentFilePath)
 	{
