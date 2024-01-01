@@ -21,7 +21,7 @@ public sealed record ModFile(string FileName, ModFileType FileType, ModBinaryTyp
 		long fileSize = 0;
 		try
 		{
-			using FileStream fs = new(filePath, FileMode.Open);
+			using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read);
 			fileSize = fs.Length;
 			using BinaryReader reader = new(fs);
 			ModBinaryToc modBinaryToc = ModBinaryToc.FromReader(reader);

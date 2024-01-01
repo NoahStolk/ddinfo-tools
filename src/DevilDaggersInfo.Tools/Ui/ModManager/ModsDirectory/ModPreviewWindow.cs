@@ -41,7 +41,7 @@ public static class ModPreviewWindow
 
 		try
 		{
-			using FileStream fs = new(filePath, FileMode.Open);
+			using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read);
 			_modFileSize = fs.Length;
 			using BinaryReader reader = new(fs);
 			ModBinaryToc modBinaryToc = ModBinaryToc.FromReader(reader);

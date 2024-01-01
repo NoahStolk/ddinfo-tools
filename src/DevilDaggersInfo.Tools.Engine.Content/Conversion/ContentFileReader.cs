@@ -19,7 +19,7 @@ internal static class ContentFileReader
 		if (!File.Exists(contentFilePath))
 			throw new InvalidOperationException("Content file does not exist.");
 
-		using FileStream fs = new(contentFilePath, FileMode.Open);
+		using FileStream fs = new(contentFilePath, FileMode.Open, FileAccess.Read);
 		using BinaryReader br = new(fs);
 		ushort tocEntryCount = br.ReadUInt16();
 

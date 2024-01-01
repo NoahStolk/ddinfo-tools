@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.10.3.0] - 2024-01-02
+
+### Fixed
+
+- Fixed requesting read/write permissions for files when only read permissions are needed.
+
 ## [0.10.2.1] - 2024-01-02
 
 ### Fixed

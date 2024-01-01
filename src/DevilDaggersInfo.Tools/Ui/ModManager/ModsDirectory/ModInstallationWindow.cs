@@ -33,7 +33,7 @@ public static class ModInstallationWindow
 
 			try
 			{
-				using FileStream fs = new(filePath, FileMode.Open);
+				using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read);
 				using BinaryReader reader = new(fs);
 				mods.Add(new(ModBinaryToc.FromReader(reader), fileName));
 			}

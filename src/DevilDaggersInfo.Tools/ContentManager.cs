@@ -78,11 +78,11 @@ public static class ContentManager
 			new(AssetType.Audio, "jump3"));
 
 		ModBinary ddBinary;
-		using (FileStream fs = new(UserSettings.ResDdPath, FileMode.Open))
+		using (FileStream fs = new(UserSettings.ResDdPath, FileMode.Open, FileAccess.Read))
 			ddBinary = new(fs, ddReadFilter);
 
 		ModBinary audioBinary;
-		using (FileStream fs = new(UserSettings.ResAudioPath, FileMode.Open))
+		using (FileStream fs = new(UserSettings.ResAudioPath, FileMode.Open, FileAccess.Read))
 			audioBinary = new(fs, audioReadFilter);
 
 		Content = new(
