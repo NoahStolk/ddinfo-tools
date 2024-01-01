@@ -96,7 +96,7 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup Label="Encryption">
+  <ItemGroup Label="Encryption" Condition="Exists('Content\encryption.ini')">
     <None Remove="Content\encryption.ini" />
     <EmbeddedResource Include="Content\encryption.ini">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
