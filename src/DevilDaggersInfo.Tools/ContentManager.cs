@@ -3,7 +3,7 @@ using DevilDaggersInfo.Core.Mod;
 using DevilDaggersInfo.Core.Mod.Extensions;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Engine.Content;
-using DevilDaggersInfo.Tools.Engine.Parsers.Sound;
+using DevilDaggersInfo.Tools.Engine.Content.Parsers.Sound;
 using DevilDaggersInfo.Tools.User.Settings;
 using System.Security.Cryptography;
 
