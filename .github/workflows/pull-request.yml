@@ -1,20 +1,20 @@
 on:
-	pull_request:
-		branches:
-			- main
+  pull_request:
+    branches:
+      - main
 jobs:
-	build:
-		runs-on: ubuntu-latest
-		timeout-minutes: 5
-		steps:
-			- name: Set up dotnet
-			  uses: actions/setup-dotnet@v1
-			  with:
-				  dotnet-version: '8.0.100'
-				  include-prerelease: false
-			- name: Checkout
-			  uses: actions/checkout@v2
-			- name: Build
-			  run: dotnet build src/DevilDaggersInfo.Tools.sln -c Release
-			- name: Test
-			  run: dotnet test src/DevilDaggersInfo.Tools.sln -c Release --no-build
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Set up dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.100'
+          include-prerelease: false
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build
+        run: dotnet build src/DevilDaggersInfo.Tools.sln -c Release
+      - name: Test
+        run: dotnet test src/DevilDaggersInfo.Tools.sln -c Release --no-build
