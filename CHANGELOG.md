@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.10.1.0] - 2024-01-01
 
 ### Miscellaneous
 
@@ -9,6 +9,7 @@
 - Now using faster JSON serialization when connecting to the web API.
 - Added debug UI for keyboard input.
 - Custom leaderboards encryption has been changed to allow distributing the app via GitHub releases.
+- The releases can now be downloaded from the GitHub releases page. 
 
 ## [0.10.0.0] - 2023-11-13
 
