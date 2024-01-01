@@ -47,7 +47,7 @@ public static class AboutWindow
 
 			ImGui.SetCursorPos(new(8, windowSize.Y - 72));
 
-			ImGui.TextColored(Colors.TitleColor, "© DevilDaggers.info 2017-2023");
+			ImGui.TextColored(Colors.TitleColor, "© DevilDaggers.info 2017-2024");
 
 			ImGuiExt.Hyperlink("https://devildaggers.com/", "Devil Daggers");
 			ImGui.SameLine();
