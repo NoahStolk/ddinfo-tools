@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DevilDaggersInfo.Tools.Engine\DevilDaggersInfo.Tools.Engine.csproj" />
+    <ProjectReference Include="..\DevilDaggersInfo.Tools.Engine.Content\DevilDaggersInfo.Tools.Engine.Content.csproj" />
   </ItemGroup>
 
 </Project>

@@ -11,4 +11,8 @@
     <PackageReference Include="Silk.NET.OpenGL" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DevilDaggersInfo.Tools.Engine.Content\DevilDaggersInfo.Tools.Engine.Content.csproj" />
+  </ItemGroup>
+
 </Project>
