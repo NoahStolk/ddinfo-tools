@@ -6,6 +6,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    strategy:
+      matrix:
+        runtime: [ "win-x64", "linux-x64" ]
     steps:
       - name: Set up dotnet
         uses: actions/setup-dotnet@v1
@@ -26,10 +29,10 @@ jobs:
           -p:PublishReadyToRun=False
           -p:PublishProtocol=FileSystem
           -p:TargetFramework=net8.0
-          -p:RuntimeIdentifier=win-x64
+          -p:RuntimeIdentifier=${{ matrix.runtime }}
           -p:Platform=x64
           -p:Configuration=Release
-          -p:PublishDir=release-win-x64
+          -p:PublishDir=release-${{ matrix.runtime }}
           -p:PublishSingleFile=True
           -p:SelfContained=True
           -p:PublishMethod=SELF_CONTAINED
@@ -37,14 +40,14 @@ jobs:
         run: >
           dotnet run
           --project src/DevilDaggersInfo.DevUtil.BuildAssets/DevilDaggersInfo.DevUtil.BuildAssets.csproj
-          -- src/DevilDaggersInfo.Tools/Content src/DevilDaggersInfo.Tools/release-win-x64/ddinfo-assets
+          -- src/DevilDaggersInfo.Tools/Content src/DevilDaggersInfo.Tools/release-${{ matrix.runtime }}/ddinfo-assets
       - name: Install zip
         uses: montudor/action-zip@v1
       - name: Zip output
-        run: zip -qq -r ddinfo-tools-win-x64.zip release-win-x64
+        run: zip -qq -r ddinfo-tools-${{ matrix.runtime }}.zip release-${{ matrix.runtime }}
         working-directory: src/DevilDaggersInfo.Tools
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: src/DevilDaggersInfo.Tools/ddinfo-tools-win-x64.zip
+          files: src/DevilDaggersInfo.Tools/ddinfo-tools-${{ matrix.runtime }}.zip
           token: ${{ secrets.GITHUB_TOKEN }}
