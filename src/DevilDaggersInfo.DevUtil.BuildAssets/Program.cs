@@ -7,4 +7,5 @@ if (args.Length < 2)
 	return;
 }
 
+Console.WriteLine($"Generating content file from directory '{args[0]}'. Outputting to file '{args[1]}'...");
 ContentFileWriter.GenerateContentFile(args[0], args[1]);

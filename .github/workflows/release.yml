@@ -35,6 +35,11 @@ jobs:
           -p:PublishSingleFile=True
           -p:SelfContained=True
           -p:PublishMethod=SELF_CONTAINED
+      - name: Create ddinfo-assets
+        run: >
+          dotnet run
+          --project src/DevilDaggersInfo.DevUtil.BuildAssets/DevilDaggersInfo.DevUtil.BuildAssets.csproj
+          -- src/DevilDaggersInfo.Tools/Content src/DevilDaggersInfo.Tools/release-win-x64/ddinfo-assets
       - name: Install zip
         uses: montudor/action-zip@v1
       - name: Zip output
