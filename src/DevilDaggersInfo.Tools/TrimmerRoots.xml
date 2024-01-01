@@ -1,4 +1,5 @@
 <linker>
 	<!-- All API models must be preserved, otherwise trimming will remove property setters which breaks JSON deserialization. -->
-	<assembly fullname="DevilDaggersInfo.Web.ApiSpec.App" preserve="all" />
+	<!-- This is not needed anymore because JSON deserialization is now source-generated. However, removing the file breaks trimmed builds for some reason. -->
+	<assembly fullname="DevilDaggersInfo.Web.ApiSpec.Tools" preserve="all" />
 </linker>
