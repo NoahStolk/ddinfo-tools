@@ -8,6 +8,7 @@
 - Updated to latest ImGui.NET and Silk.NET versions.
 - Now using faster JSON serialization when connecting to the web API.
 - Added debug UI for keyboard input.
+- Custom leaderboards encryption has been changed to allow distributing the app via GitHub releases.
 
 ## [0.10.0.0] - 2023-11-13
 

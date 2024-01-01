@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Core.Common.Extensions;
-using DevilDaggersInfo.Core.Encryption;
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
@@ -8,30 +7,15 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.Utils;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
-using System.IO.Compression;
-using System.Text;
 using System.Web;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
 public static class RecordingLogic
 {
-	private static readonly AesBase32Wrapper _aesBase32Wrapper;
 	private static MainBlock? _runToUpload;
 
 	private static readonly List<AddUploadRequestTimestamp> _timestamps = [];
-
-	static RecordingLogic()
-	{
-		using MemoryStream msIn = new(Root.InternalResources.Value.Data.Select((b, i) => i < 4 ? (byte)(b << 4 | b >> 4) : (byte)~b).ToArray());
-		using MemoryStream msOut = new();
-		using DeflateStream ds = new(msIn, CompressionMode.Decompress);
-		ds.CopyTo(msOut);
-		using BinaryReader br = new(msOut);
-		br.BaseStream.Position = 0;
-		string[] values = Enumerable.Range(0, br.ReadByte()).Select(_ => Encoding.UTF8.GetString(br.ReadBytes(br.ReadByte()).Select((b, j) => j % 4 == 0 ? b : (byte)~b).ToArray())).ToArray();
-		_aesBase32Wrapper = new(values[0], values[1], values[2]);
-	}
 
 	public static RecordingStateType RecordingStateType { get; private set; }
 	public static DateTime? LastSubmission { get; private set; }
@@ -182,7 +166,7 @@ public static class RecordingLogic
 			runToUpload.GameMode,
 			runToUpload.TimeAttackOrRaceFinished,
 			runToUpload.ProhibitedMods);
-		string validation = _aesBase32Wrapper.EncryptAndEncode(toEncrypt);
+		string validation = Root.AesBase32Wrapper?.EncryptAndEncode(toEncrypt) ?? "Encryption not available.";
 
 		byte[] statsBuffer = Root.GameMemoryService.GetStatsBuffer();
 

@@ -266,6 +266,4 @@ __pycache__/
 # App settings
 appsettings.json
 appsettings.Development.json
-
-# Value file
-*/**/Blobs/Value.bin
+encryption.ini

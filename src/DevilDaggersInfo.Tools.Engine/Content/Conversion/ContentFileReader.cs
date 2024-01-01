@@ -1,4 +1,3 @@
-using DevilDaggersInfo.Tools.Engine.Content.Conversion.Blobs;
 using DevilDaggersInfo.Tools.Engine.Content.Conversion.Models;
 using DevilDaggersInfo.Tools.Engine.Content.Conversion.Shaders;
 using DevilDaggersInfo.Tools.Engine.Content.Conversion.Sounds;
@@ -33,7 +32,6 @@ internal static class ContentFileReader
 			tocEntries[i] = new(contentType, name, length);
 		}
 
-		Dictionary<string, BlobContent> blobs = new();
 		Dictionary<string, ModelContent> models = new();
 		Dictionary<string, ShaderContent> shaders = new();
 		Dictionary<string, SoundContent> sounds = new();
@@ -48,7 +46,6 @@ internal static class ContentFileReader
 
 			switch (tocEntry.ContentType)
 			{
-				case ContentType.Blob: blobs[tocEntry.Name] = GetBlob(br); break;
 				case ContentType.Model: modelContexts[tocEntry.Name] = GetModel(br); break;
 				case ContentType.Shader: SetShaderSource(shaderSourceCollections, br, tocEntry.Name); break;
 				case ContentType.Sound: sounds[tocEntry.Name] = GetSound(br); break;
@@ -84,13 +81,7 @@ internal static class ContentFileReader
 			shaders[shaderSource.Key] = new(shaderSource.Value.VertexCode, shaderSource.Value.GeometryCode, shaderSource.Value.FragmentCode);
 		}
 
-		return new(blobs, models, shaders, sounds, textures);
-	}
-
-	private static BlobContent GetBlob(BinaryReader br)
-	{
-		BlobBinary blobBinary = BlobBinary.FromStream(br);
-		return new(blobBinary.Data);
+		return new(models, shaders, sounds, textures);
 	}
 
 	private static ModelContext GetModel(BinaryReader br)
