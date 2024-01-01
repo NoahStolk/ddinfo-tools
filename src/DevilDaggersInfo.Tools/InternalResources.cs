@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.Engine.Content;
+using DevilDaggersInfo.Tools.Utils;
 using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools;
@@ -41,7 +42,7 @@ public record InternalResources(
 #else
 		const string? ddInfoToolsContentRootDirectory = null;
 #endif
-		DecompiledContentFile ddInfoToolsContent = DecompiledContentFile.Create(ddInfoToolsContentRootDirectory, "ddinfo-assets");
+		DecompiledContentFile ddInfoToolsContent = DecompiledContentFile.Create(ddInfoToolsContentRootDirectory, Path.Combine(AssemblyUtils.ExeDirectory, "ddinfo-assets"));
 
 		return new(
 			MeshShader: GetShader(ddInfoToolsContent, "Mesh"),

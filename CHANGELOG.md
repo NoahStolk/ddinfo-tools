@@ -5,6 +5,7 @@
 ### Fixed
 
 - Fixed error popups stacking.
+- Fixed app crashing on start when not launching the executable from the root folder.
 
 ### Miscellaneous
 

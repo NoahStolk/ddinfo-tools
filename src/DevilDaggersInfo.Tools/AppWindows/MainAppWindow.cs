@@ -53,9 +53,11 @@ public class MainAppWindow
 
 			// Add the default font first so it is actually used by default.
 			io.Fonts.AddFontDefault();
-			Root.FontGoetheBold20 = io.Fonts.AddFontFromFileTTF("goethebold.ttf", 20);
-			Root.FontGoetheBold30 = io.Fonts.AddFontFromFileTTF("goethebold.ttf", 30);
-			Root.FontGoetheBold60 = io.Fonts.AddFontFromFileTTF("goethebold.ttf", 60);
+
+			string fontPath = Path.Combine(AssemblyUtils.ExeDirectory, "goethebold.ttf");
+			Root.FontGoetheBold20 = io.Fonts.AddFontFromFileTTF(fontPath, 20);
+			Root.FontGoetheBold30 = io.Fonts.AddFontFromFileTTF(fontPath, 30);
+			Root.FontGoetheBold60 = io.Fonts.AddFontFromFileTTF(fontPath, 60);
 		});
 
 		_gl.ClearColor(0, 0, 0, 1);

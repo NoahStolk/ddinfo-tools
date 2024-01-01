@@ -1,5 +1,4 @@
 using DevilDaggersInfo.DevUtil.DistributeApp;
-using DevilDaggersInfo.DevUtil.DistributeApp.Model;
 using DevilDaggersInfo.Tools.Engine.Content.Conversion;
 using DevilDaggersInfo.Web.ApiSpec.Admin.Tools;
 using DevilDaggersInfo.Web.ApiSpec.Main.Authentication;

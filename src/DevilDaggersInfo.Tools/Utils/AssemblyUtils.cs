@@ -7,6 +7,8 @@ public static class AssemblyUtils
 {
 	public static readonly Assembly EntryAssembly = Assembly.GetEntryAssembly() ?? throw new InvalidOperationException("Could not get entry assembly.");
 
+	public static readonly string ExeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? throw new InvalidOperationException("Could not get executing assembly directory.");
+
 	public static readonly string EntryAssemblyVersionString = GetEntryAssemblyVersionString();
 
 	public static readonly Version EntryAssemblyVersion = new(EntryAssemblyVersionString);
