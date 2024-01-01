@@ -91,7 +91,7 @@ public static class DebugLayout
 			ImGui.Separator();
 
 			if (ImGui.Button("Error window"))
-				PopupManager.ShowError("Test error!");
+				PopupManager.ShowError("Test error!", "Test stack trace.");
 
 			if (ImGui.Button("Message window"))
 				PopupManager.ShowMessage("Message", "Test message!");

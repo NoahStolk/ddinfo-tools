@@ -10,9 +10,14 @@ public static class PopupManager
 
 	public static bool IsAnyOpen => _openPopups.Count > 0;
 
-	public static void ShowError(string errorText)
+	public static void ShowError(string errorText, Exception? exception)
 	{
-		_openPopups.Add(new ErrorMessage($"Error##{DateTime.UtcNow.Ticks}", errorText));
+		ShowError(errorText, exception?.Message);
+	}
+
+	public static void ShowError(string errorText, string? technicalDetails = null)
+	{
+		_openPopups.Add(new ErrorMessage($"Error##{DateTime.UtcNow.Ticks}", errorText, technicalDetails));
 	}
 
 	public static void ShowMessage(string title, string text)

@@ -9,7 +9,7 @@
 
 ### Miscellaneous
 
-- Improved error handing when API calls are failing.
+- Technical error details are now shown under a collapsible "Technical details" section in the error popups.
 
 ## [0.10.1.0] - 2024-01-01
 

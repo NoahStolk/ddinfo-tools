@@ -35,7 +35,7 @@ public sealed record ModFile(string FileName, ModFileType FileType, ModBinaryTyp
 		}
 		catch (Exception ex)
 		{
-			PopupManager.ShowError($"Error loading file '{filePath}'.\n\n" + ex.Message);
+			PopupManager.ShowError($"Error loading file '{filePath}'.", ex);
 			Root.Log.Error(ex, $"Error loading file '{filePath}'.");
 			return new(fileName, ModFileType.Error, null, null, null, fileSize);
 		}

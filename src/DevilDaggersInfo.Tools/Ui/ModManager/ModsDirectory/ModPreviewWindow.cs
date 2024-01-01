@@ -58,7 +58,7 @@ public static class ModPreviewWindow
 		catch (Exception ex)
 		{
 			Root.Log.Error(ex, $"Error loading mod binary '{_selectedFileName}'.");
-			PopupManager.ShowError($"Error loading mod binary '{_selectedFileName}'.\n\n" + ex.Message);
+			PopupManager.ShowError($"Error loading mod binary '{_selectedFileName}'.", ex);
 			ClearState();
 		}
 	}

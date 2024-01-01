@@ -115,7 +115,7 @@ public static class SpawnsetEditorMenu
 		}
 		catch (Exception ex)
 		{
-			PopupManager.ShowError($"Could not open file '{filePath}'.");
+			PopupManager.ShowError($"Could not open file '{filePath}'.", ex);
 			Root.Log.Error(ex, "Could not open file");
 			return;
 		}

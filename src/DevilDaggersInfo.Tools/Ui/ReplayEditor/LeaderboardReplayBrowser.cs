@@ -65,7 +65,7 @@ public static class LeaderboardReplayBrowser
 			// DF_RPL0Replay not found.
 			// We could parse this, but it's not worth the effort.
 			Root.Log.Warning(ex, "The replay could not be parsed.");
-			PopupManager.ShowError("The replay could not be parsed.");
+			PopupManager.ShowError("The replay could not be parsed.", ex);
 			_isDownloading = false;
 			return;
 		}

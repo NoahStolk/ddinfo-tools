@@ -45,7 +45,7 @@ public static class ModsDirectoryLogic
 			}
 			catch (Exception ex)
 			{
-				PopupManager.ShowError("Error loading files in the mods directory.\n\n" + ex.Message);
+				PopupManager.ShowError("Error loading files in the mods directory.", ex);
 				Root.Log.Error(ex, "Error loading files in the mods directory.");
 			}
 
@@ -140,7 +140,7 @@ public static class ModsDirectoryLogic
 		catch (Exception ex)
 		{
 			Root.Log.Error(ex, $"Error deleting file '{fileName}'.");
-			PopupManager.ShowError($"Error deleting file '{fileName}'.\n\n" + ex.Message);
+			PopupManager.ShowError($"Error deleting file '{fileName}'.", ex);
 		}
 
 		ModFile? modFile = _modFiles.Find(m => m.FileName == fileName);
@@ -172,7 +172,7 @@ public static class ModsDirectoryLogic
 		catch (Exception ex)
 		{
 			Root.Log.Error(ex, $"Error toggling file '{originalFileName}'.");
-			PopupManager.ShowError($"Error toggling file '{originalFileName}'.\n\n" + ex.Message);
+			PopupManager.ShowError($"Error toggling file '{originalFileName}'.", ex);
 		}
 
 		ModFile? originalModFile = _modFiles.Find(m => m.FileName == originalFileName);
@@ -221,7 +221,7 @@ public static class ModsDirectoryLogic
 		catch (Exception ex)
 		{
 			Root.Log.Error(ex, $"Error toggling prohibited assets for file '{fileName}'.");
-			PopupManager.ShowError($"Error toggling prohibited assets for file '{fileName}'.\n\n" + ex.Message);
+			PopupManager.ShowError($"Error toggling prohibited assets for file '{fileName}'.", ex);
 		}
 
 		ModFile? originalModFile = _modFiles.Find(m => m.FileName == fileName);

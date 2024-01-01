@@ -284,7 +284,7 @@ public static class LeaderboardChild
 			catch (Exception ex)
 			{
 				Root.Log.Error(ex, "Could not parse replay.");
-				PopupManager.ShowError("Could not parse replay.");
+				PopupManager.ShowError("Could not parse replay.", ex);
 				return;
 			}
 
