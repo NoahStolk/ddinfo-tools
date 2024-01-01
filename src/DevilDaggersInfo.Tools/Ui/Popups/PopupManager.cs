@@ -64,6 +64,7 @@ public static class PopupManager
 		Vector2 center = ImGui.GetMainViewport().GetCenter();
 		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new(0.5f, 0.5f));
 
+		ImGui.SetNextWindowSizeConstraints(new(192, 128), new(float.MaxValue, float.MaxValue));
 		if (ImGui.BeginPopupModal(popup.Id))
 		{
 			if (popup.Render())
