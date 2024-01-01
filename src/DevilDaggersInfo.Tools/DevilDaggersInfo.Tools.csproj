@@ -75,10 +75,6 @@
     </When>
   </Choose>
 
-  <ItemGroup Label="Trimming configuration">
-    <TrimmerRootDescriptor Include="TrimmerRoots.xml" />
-  </ItemGroup>
-
   <ItemGroup Label="Internal dependencies">
     <PackageReference Include="DevilDaggersInfo.Core" />
     <PackageReference Include="DevilDaggersInfo.Web.ApiSpec.Tools" />
