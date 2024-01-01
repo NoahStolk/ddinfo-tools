@@ -1,0 +1,53 @@
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        runtime: [ "win-x64", "linux-x64" ]
+    steps:
+      - name: Set up dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.100'
+          include-prerelease: false
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build and test
+        run: dotnet test src/DevilDaggersInfo.Tools.sln -c Release
+      - name: Create encryption.ini
+        run: echo "${{ secrets.ENCRYPTION }}" > src/DevilDaggersInfo.Tools/Content/encryption.ini
+      - name: Build optimized release
+        run: >
+          dotnet publish src/DevilDaggersInfo.Tools/DevilDaggersInfo.Tools.csproj
+          -p:PublishTrimmed=True
+          -p:EnableCompressionInSingleFile=True
+          -p:PublishReadyToRun=False
+          -p:PublishProtocol=FileSystem
+          -p:TargetFramework=net8.0
+          -p:RuntimeIdentifier=${{ matrix.runtime }}
+          -p:Platform=x64
+          -p:Configuration=Release
+          -p:PublishDir=release-${{ matrix.runtime }}
+          -p:PublishSingleFile=True
+          -p:SelfContained=True
+          -p:PublishMethod=SELF_CONTAINED
+      - name: Create ddinfo-assets
+        run: >
+          dotnet run
+          --project src/DevilDaggersInfo.DevUtil.BuildAssets/DevilDaggersInfo.DevUtil.BuildAssets.csproj
+          -- src/DevilDaggersInfo.Tools/Content src/DevilDaggersInfo.Tools/release-${{ matrix.runtime }}/ddinfo-assets
+      - name: Install zip
+        uses: montudor/action-zip@v1
+      - name: Zip output
+        run: zip -qq -r ddinfo-tools-${{ matrix.runtime }}.zip release-${{ matrix.runtime }}
+        working-directory: src/DevilDaggersInfo.Tools
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: src/DevilDaggersInfo.Tools/ddinfo-tools-${{ matrix.runtime }}.zip
+          token: ${{ secrets.GITHUB_TOKEN }}
