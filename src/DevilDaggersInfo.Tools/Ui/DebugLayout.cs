@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Utils;
@@ -37,7 +38,19 @@ public static class DebugLayout
 			ImGui.TextColored(NativeFileDialog.DialogOpen ? Color.White : Color.Gray(0.4f), NativeFileDialog.DialogOpen ? "Native dialog open" : "Native dialog closed");
 			ImGui.TextColored(Root.AesBase32Wrapper == null ? Color.Red : Color.Green, Root.AesBase32Wrapper == null ? "Encryption unavailable" : "Encryption available");
 
-			ImGui.Text("ImGui key modifiers");
+			ImGui.SeparatorText("Modded survival file");
+			if (SurvivalFileWatcher.Exists)
+			{
+				ImGui.Text(EnumUtils.HandLevelNames[SurvivalFileWatcher.HandLevel]);
+				ImGui.Text(Inline.Span(SurvivalFileWatcher.AdditionalGems));
+				ImGui.Text(Inline.Span(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
+			}
+			else
+			{
+				ImGui.Text("<No modded survival file>");
+			}
+
+			ImGui.SeparatorText("ImGui key modifiers");
 
 			ImGuiIOPtr io = ImGui.GetIO();
 			ImGui.TextColored(io.KeyCtrl ? Color.White : Color.Gray(0.4f), "CTRL");

@@ -35,6 +35,7 @@ public static class PracticeWindow
 
 			ImGui.SameLine();
 			CustomTemplatesChild.Render();
+
 			InputValuesChild.Render();
 
 			ImGui.SameLine();
