@@ -50,6 +50,9 @@ public static class PracticeLogic
 
 	public static bool IsActive(HandLevel handLevel, int additionalGems, float timerStart)
 	{
+		if (!SurvivalFileWatcher.Exists)
+			return false;
+
 		return handLevel == SurvivalFileWatcher.HandLevel && additionalGems == SurvivalFileWatcher.AdditionalGems && Math.Abs(timerStart - SurvivalFileWatcher.TimerStart) < PracticeDataConstants.TimerStartTolerance;
 	}
 }

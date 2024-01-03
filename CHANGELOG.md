@@ -1,5 +1,11 @@
 # Changelog
 
+## [unreleased]
+
+### Fixed
+
+- Fixed incorrectly highlighting practice template after removing survival file.
+
 ## [0.10.3.0] - 2024-01-02
 
 ### Fixed
