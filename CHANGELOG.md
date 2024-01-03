@@ -2,6 +2,15 @@
 
 ## [unreleased]
 
+### Practice
+
+- The practice tool has been made more intuitive.
+  - Certain UI has been rearranged.
+  - Clarified some of the button text.
+  - There is now a popup that shows up when the normal game has been restored.
+  - It is now shown whether practice is enabled in the bottom of the window.
+  - It is now shown that you need to restart a run when changing the practice settings. 
+
 ### Fixed
 
 - Fixed incorrectly highlighting practice template after removing survival file.

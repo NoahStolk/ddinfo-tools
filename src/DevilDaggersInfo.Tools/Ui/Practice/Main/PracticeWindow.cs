@@ -2,6 +2,7 @@ using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using ImGuiNET;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
@@ -15,13 +16,13 @@ public static class PracticeWindow
 
 	public static void Render()
 	{
-		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, new Vector2(1280, 768));
+		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, new Vector2(1208, 768));
 		if (ImGui.Begin("Practice", ImGuiWindowFlags.NoCollapse))
 		{
 			ImGui.PopStyleVar();
 
 			Vector2 windowSize = ImGui.GetWindowSize();
-			TemplateContainerSize = new(windowSize.X / 3 - 11, windowSize.Y - 220);
+			TemplateContainerSize = new(MathF.Ceiling(windowSize.X / 3 - 11), windowSize.Y - 260);
 			TemplateListSize = new(TemplateContainerSize.X - 20, TemplateContainerSize.Y - 88);
 			TemplateWidth = TemplateListSize.X - 20;
 
@@ -61,7 +62,7 @@ public static class PracticeWindow
 		{
 			case HandLevel.Level1 or HandLevel.Level2: " gems".AsSpan().CopyTo(text[charsWritten..]); break;
 			case HandLevel.Level3 or HandLevel.Level4: " homing".AsSpan().CopyTo(text[charsWritten..]); break;
-			default: throw new InvalidOperationException($"Invalid hand level '{handLevel}'.");
+			default: throw new UnreachableException($"Invalid hand level '{handLevel}'.");
 		}
 
 		textColor = effectivePlayerSettings.HandLevel switch

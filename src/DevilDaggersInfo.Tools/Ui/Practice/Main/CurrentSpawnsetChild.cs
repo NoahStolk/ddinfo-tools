@@ -1,5 +1,7 @@
 using DevilDaggersInfo.Core.Common;
+using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -9,53 +11,59 @@ public static class CurrentSpawnsetChild
 {
 	public static void Render()
 	{
-		if (ImGui.BeginChild("CurrentSpawnset", new(400, 160), ImGuiChildFlags.Border))
+		if (ImGui.BeginChild("CurrentSpawnset", new(0, 200), ImGuiChildFlags.Border))
 		{
-			if (ImGui.BeginChild("CurrentPracticeValues", new(400, 64)))
+			ImGui.SeparatorText("Current practice configuration");
+			ImGui.Spacing();
+
+			if (SurvivalFileWatcher.Exists)
 			{
-				if (SurvivalFileWatcher.Exists)
+				ImGui.PushFont(Root.FontGoetheBold20);
+				ImGui.Text("Practice is enabled!");
+				ImGui.PopFont();
+				ImGui.Spacing();
+				ImGui.Text("Press the restart button in the game to start practicing.");
+				ImGui.Spacing();
+				ImGui.Text("The current practice spawnset is enabled:");
+				ImGui.Spacing();
+
+				if (ImGui.BeginTable("CurrentSpawnsetTable", 2, ImGuiTableFlags.Borders, new(320, 0)))
 				{
-					if (ImGui.BeginChild("CurrentPracticeValuesLeft", new(160, 64)))
-					{
-						ImGui.TextColored(Color.Yellow, "Effective values");
+					ImGui.TableNextColumn();
+					ImGui.Text("Hand");
 
-						if (SurvivalFileWatcher.EffectivePlayerSettings.HandLevel != SurvivalFileWatcher.EffectivePlayerSettings.HandMesh)
-							ImGui.Text(Inline.Span($"{EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]} ({EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandMesh]} mesh)"));
-						else
-							ImGui.Text(EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]);
+					ImGui.TableNextColumn();
+					Color handColor = SurvivalFileWatcher.EffectivePlayerSettings.HandLevel.GetColor();
+					if (SurvivalFileWatcher.EffectivePlayerSettings.HandLevel != SurvivalFileWatcher.EffectivePlayerSettings.HandMesh)
+						ImGui.TextColored(handColor, Inline.Span($"{EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]} ({EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandMesh]} hand mesh)"));
+					else
+						ImGui.TextColored(handColor, EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]);
 
-						ImGui.Text(Inline.Span(SurvivalFileWatcher.EffectivePlayerSettings.GemsOrHoming));
-						ImGui.Text(Inline.Span(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
-					}
+					ImGui.TableNextColumn();
+					ImGui.Text("Gems/Homing");
 
-					ImGui.EndChild(); // End CurrentPracticeValuesLeft
+					ImGui.TableNextColumn();
+					if (SurvivalFileWatcher.EffectivePlayerSettings.HandLevel is HandLevel.Level3 or HandLevel.Level4)
+						ImGui.TextColored(handColor, Inline.Span($"{SurvivalFileWatcher.EffectivePlayerSettings.GemsOrHoming} homing"));
+					else
+						ImGui.TextColored(Color.Red, Inline.Span($"{SurvivalFileWatcher.EffectivePlayerSettings.GemsOrHoming} gems"));
 
-					ImGui.SameLine();
+					ImGui.TableNextColumn();
+					ImGui.Text("Starts at");
 
-					if (ImGui.BeginChild("CurrentPracticeValuesRight", new(160, 64)))
-					{
-						ImGui.TextColored(Color.Yellow, "Spawnset values");
+					ImGui.TableNextColumn();
+					ImGui.Text(Inline.Span(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
 
-						ImGui.Text(EnumUtils.HandLevelNames[SurvivalFileWatcher.HandLevel]);
-						ImGui.Text(Inline.Span(SurvivalFileWatcher.AdditionalGems));
-						ImGui.Text(Inline.Span(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
-					}
-
-					ImGui.EndChild(); // End CurrentPracticeValuesRight
-				}
-				else
-				{
-					ImGui.Text("<No spawnset enabled>");
+					ImGui.EndTable();
 				}
 			}
-
-			ImGui.EndChild(); // End CurrentPracticeValues
-
-			ImGui.BeginDisabled(!SurvivalFileWatcher.Exists);
-			if (ImGui.Button("Delete spawnset (restore default)", new(0, 30)))
-				PracticeLogic.DeleteModdedSpawnset();
-
-			ImGui.EndDisabled();
+			else
+			{
+				ImGui.PushFont(Root.FontGoetheBold20);
+				ImGui.Text("Practice is disabled.");
+				ImGui.PopFont();
+				ImGui.Text("Click on a template to enable practice, then press the restart button in the game.");
+			}
 		}
 
 		ImGui.EndChild(); // End CurrentSpawnset

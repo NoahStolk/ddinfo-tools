@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
+using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.User.Settings.Model;
 using DevilDaggersInfo.Tools.Utils;
@@ -12,8 +13,10 @@ public static class InputValuesChild
 {
 	public static void Render()
 	{
-		if (ImGui.BeginChild("InputValues", new(400, 160), ImGuiChildFlags.Border))
+		if (ImGui.BeginChild("InputValues", new(380, 200), ImGuiChildFlags.Border))
 		{
+			ImGui.SeparatorText("Inputs");
+
 			ImGui.Spacing();
 			ImGuiImage.Image(Root.InternalResources.IconHandTexture.Handle, new(16), PracticeLogic.State.HandLevel.GetColor());
 			ImGui.SameLine();
@@ -37,14 +40,14 @@ public static class InputValuesChild
 			ImGui.SameLine();
 			ImGui.InputFloat("Timer start", ref PracticeLogic.State.TimerStart, 1, 5, "%.4f");
 
-			for (int i = 0; i < 8; i++)
-				ImGui.Spacing();
+			ImGui.Spacing();
 
-			if (ImGui.Button("Apply", new(80, 30)))
+			const float buttonHeight = 30;
+			if (ImGui.Button("Apply inputs", new(0, buttonHeight)))
 				PracticeLogic.GenerateAndApplyPracticeSpawnset();
 
 			ImGui.SameLine();
-			if (ImGui.Button("Save", new(80, 30)))
+			if (ImGui.Button("Save template", new(0, buttonHeight)))
 			{
 				UserSettingsPracticeTemplate newTemplate = new(null, PracticeLogic.State.HandLevel, PracticeLogic.State.AdditionalGems, PracticeLogic.State.TimerStart);
 				if (!UserSettings.Model.PracticeTemplates.Contains(newTemplate))
@@ -57,6 +60,22 @@ public static class InputValuesChild
 					};
 				}
 			}
+
+			if (ImGui.IsItemHovered())
+				ImGui.SetTooltip("Save the current configuration as a custom template. Custom templates can be accessed on the right side of the window.");
+
+			ImGui.SameLine();
+			ImGui.BeginDisabled(!SurvivalFileWatcher.Exists);
+			if (ImGui.Button("Return to normal game", new(0, buttonHeight)))
+			{
+				PracticeLogic.DeleteModdedSpawnset();
+				PopupManager.ShowMessage("Default game restored", "The default game has been restored!\n\nMake sure to press the restart button in-game, or grab the dagger in the lobby, to apply the change.\n\nThere is no need to restart the game itself.");
+			}
+
+			if (ImGui.IsItemHovered())
+				ImGui.SetTooltip("This will delete the modded spawnset and return you to the normal game.");
+
+			ImGui.EndDisabled();
 		}
 
 		ImGui.EndChild(); // End InputValues

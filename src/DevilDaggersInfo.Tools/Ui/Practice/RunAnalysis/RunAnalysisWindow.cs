@@ -29,12 +29,15 @@ public static class RunAnalysisWindow
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, new Vector2(512, 1024));
 		if (ImGui.Begin("Run Analysis"))
 		{
+			ImGui.PopStyleVar();
 			SplitsChild.Render();
 			GraphsChild.Render();
 		}
+		else
+		{
+			ImGui.PopStyleVar();
+		}
 
 		ImGui.End(); // End Run Analysis
-
-		ImGui.PopStyleVar();
 	}
 }
