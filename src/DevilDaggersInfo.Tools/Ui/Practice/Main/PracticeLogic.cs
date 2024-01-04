@@ -1,8 +1,10 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Engine.Maths;
+using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.Practice.Main.Data;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.User.Settings.Model;
+using Serilog;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
@@ -29,7 +31,17 @@ public static class PracticeLogic
 			SpawnVersion = SpawnVersion,
 			ShrinkStart = shrinkStart,
 		};
-		File.WriteAllBytes(UserSettings.ModsSurvivalPath, generatedSpawnset.ToBytes());
+
+		try
+		{
+			File.WriteAllBytes(UserSettings.ModsSurvivalPath, generatedSpawnset.ToBytes());
+		}
+		catch (IOException ex)
+		{
+			const string message = "Could not write to the mods/survival file, probably because Devil Daggers is currently reading the file. Please try again.";
+			Log.Error(ex, message);
+			PopupManager.ShowError(message, ex);
+		}
 	}
 
 	public static void DeleteModdedSpawnset()

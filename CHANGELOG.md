@@ -13,6 +13,7 @@
 
 ### Fixed
 
+- Fixed crash when trying to write to the mods/survival while the file is currently being used by another process (e.g. the game).
 - Fixed incorrectly highlighting practice template after removing survival file.
 
 ## [0.10.3.0] - 2024-01-02
