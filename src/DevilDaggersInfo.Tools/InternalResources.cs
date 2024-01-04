@@ -30,7 +30,6 @@ public record InternalResources(
 	Texture PencilTexture,
 	Texture RectangleTexture,
 	Texture ReloadTexture,
-	Texture SettingsTexture,
 	Texture TileHitboxTexture,
 	ModelContent TileHitboxModel)
 {
@@ -69,7 +68,6 @@ public record InternalResources(
 			PencilTexture: GetTexture(ddInfoToolsContent, "Pencil"),
 			RectangleTexture: GetTexture(ddInfoToolsContent, "Rectangle"),
 			ReloadTexture: GetTexture(ddInfoToolsContent, "Reload"),
-			SettingsTexture: GetTexture(ddInfoToolsContent, "Settings"),
 			TileHitboxTexture: GetTexture(ddInfoToolsContent, "TileHitbox"),
 			TileHitboxModel: GetModelContent(ddInfoToolsContent, "TileHitbox"));
 
