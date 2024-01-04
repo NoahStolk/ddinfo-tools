@@ -3,7 +3,6 @@
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 #endif
 using ImGuiNET;
-using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 

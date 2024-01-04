@@ -1,7 +1,5 @@
 using DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis.Data;
-using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
-using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
 
