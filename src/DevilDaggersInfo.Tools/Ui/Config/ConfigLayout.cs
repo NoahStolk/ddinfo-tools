@@ -4,6 +4,7 @@ using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 using DevilDaggersInfo.Tools.User.Settings;
+using DevilDaggersInfo.Tools.User.Settings.Model;
 using ImGuiNET;
 using System.Numerics;
 
@@ -70,10 +71,10 @@ public static class ConfigLayout
 #endif
 #pragma warning restore S1075
 
-		const string text = $"""
-			Please configure your Devil Daggers installation directory.
+		const string installationConfigurationText = $"""
+			Please configure your Devil Daggers installation directory. This is the directory containing the executable.
 
-			This is the directory containing the executable.
+			The app will only start when a proper Devil Daggers installation is configured.
 
 			Example: {examplePath}
 			""";
@@ -81,21 +82,20 @@ public static class ConfigLayout
 		Vector2 center = ImGui.GetMainViewport().GetCenter();
 		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new(0.5f, 0.5f));
 		ImGui.SetNextWindowSize(new(768, 512));
-		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(16, 16));
 		const ImGuiWindowFlags flags = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoNavFocus;
 		if (ImGui.Begin("Configuration", flags))
 		{
-			ImGui.Text(text);
+			ImGui.SeparatorText("Installation Directory");
+
+			ImGui.TextWrapped(installationConfigurationText);
 
 			ImGui.Spacing();
 			ImGui.Spacing();
 
-			if (ImGui.BeginChild("Input", new(0, 316)))
+			if (ImGui.BeginChild("Input", new(0, 296)))
 			{
 				if (ImGui.Button("Browse", new(96, 20)))
-				{
 					NativeFileDialog.SelectDirectory(OpenInstallationDirectoryCallback);
-				}
 
 				ImGui.SameLine();
 				ImGui.InputText("##installationDirectoryInput", ref _installationDirectoryInput, 1024, ImGuiInputTextFlags.None);
@@ -105,12 +105,29 @@ public static class ConfigLayout
 
 				if (!string.IsNullOrWhiteSpace(_error))
 					ImGui.TextColored(new(1, 0, 0, 1), _error);
+
+				ImGui.SeparatorText("Settings");
+
+				float lookSpeed = UserSettings.Model.LookSpeed;
+				ImGui.SliderFloat("Look speed", ref lookSpeed, UserSettingsModel.LookSpeedMin, UserSettingsModel.LookSpeedMax, "%.2f");
+				if (Math.Abs(UserSettings.Model.LookSpeed - lookSpeed) > 0.001f)
+					UserSettings.Model = UserSettings.Model with { LookSpeed = lookSpeed };
+
+				int fieldOfView = UserSettings.Model.FieldOfView;
+				ImGui.SliderInt("Field of view", ref fieldOfView, UserSettingsModel.FieldOfViewMin, UserSettingsModel.FieldOfViewMax);
+				if (UserSettings.Model.FieldOfView != fieldOfView)
+					UserSettings.Model = UserSettings.Model with { FieldOfView = fieldOfView };
+
+				bool showDebug = UserSettings.Model.ShowDebug;
+				ImGui.Checkbox("Show debug", ref showDebug);
+				if (UserSettings.Model.ShowDebug != showDebug)
+					UserSettings.Model = UserSettings.Model with { ShowDebug = showDebug };
 			}
 
 			ImGui.EndChild(); // End Input
 
 			ImGui.PushFont(Root.FontGoetheBold30);
-			if (ImGui.Button("Save and continue", new(736, 64)))
+			if (ImGui.Button("Save and continue", new(752, 64)))
 			{
 				UserSettings.Model = UserSettings.Model with
 				{
@@ -124,8 +141,6 @@ public static class ConfigLayout
 		}
 
 		ImGui.End(); // End Configuration
-
-		ImGui.PopStyleVar();
 
 		if (ImGui.IsKeyPressed(ImGuiKey.Escape))
 			ValidateInstallation();
