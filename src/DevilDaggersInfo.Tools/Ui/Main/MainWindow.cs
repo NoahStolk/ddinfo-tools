@@ -37,11 +37,8 @@ public static class MainWindow
 			ImGui.Text(_version);
 			ImGui.Text("Developed by Noah Stolk");
 
-			ImGui.SetCursorPos(new(windowSize.X - 208, 8));
+			ImGui.SetCursorPos(new(windowSize.X - 156, 8));
 			AppButton(Root.InternalResources.ConfigurationTexture, "Configuration", static () => UiRenderer.Layout = LayoutType.Config);
-
-			ImGui.SameLine();
-			AppButton(Root.InternalResources.SettingsTexture, "Settings", UiRenderer.ShowSettings);
 
 			ImGui.SameLine();
 			AppButton(Root.InternalResources.InfoTexture, "About", UiRenderer.ShowAbout);
