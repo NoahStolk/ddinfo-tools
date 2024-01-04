@@ -1,5 +1,11 @@
 # Changelog
 
+## [unreleased]
+
+### Miscellaneous
+
+- The settings have been moved to the configuration screen.
+
 ## [0.11.0.0] - 2024-01-17
 
 ### Practice
@@ -11,7 +17,7 @@
   - It is now shown whether practice is enabled in the bottom of the window.
   - It is now shown that you need to restart a run when changing the practice settings. 
 
-### Fixed
+### Fixes
 
 - Fixed crash when trying to write to the mods/survival while the file is currently being used by another process (e.g. the game).
 - Fixed incorrectly highlighting practice template after removing survival file.
@@ -23,19 +29,19 @@
 
 ## [0.10.3.0] - 2024-01-02
 
-### Fixed
+### Fixes
 
 - Fixed requesting read/write permissions for files when only read permissions are needed.
 
 ## [0.10.2.1] - 2024-01-02
 
-### Fixed
+### Fixes
 
 - Fixed app not starting due to incompatibility with optimized release.
 
 ## [0.10.2.0] - 2024-01-02
 
-### Fixed
+### Fixes
 
 - Fixed error popups stacking.
 - Fixed app crashing on start when not launching the executable from the root folder.
