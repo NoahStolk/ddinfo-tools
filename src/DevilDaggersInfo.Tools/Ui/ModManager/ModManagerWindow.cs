@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 using ImGuiNET;
-using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager;
 
@@ -8,11 +7,9 @@ public static class ModManagerWindow
 {
 	public static void Render()
 	{
-		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, new Vector2(1280, 768));
+		ImGuiUtils.SetNextWindowMinSize(1280, 768);
 		if (ImGui.Begin("Mod Manager", ImGuiWindowFlags.NoCollapse))
 		{
-			ImGui.PopStyleVar();
-
 			if (ImGui.BeginTabBar("mod_manager"))
 			{
 				if (ImGui.BeginTabItem("Mods Folder"))
@@ -31,10 +28,6 @@ public static class ModManagerWindow
 
 				ImGui.EndTabBar();
 			}
-		}
-		else
-		{
-			ImGui.PopStyleVar();
 		}
 
 		ImGui.End(); // End Mod Manager

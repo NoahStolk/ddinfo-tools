@@ -40,14 +40,12 @@ public static class HistoryChild
 					SetHistoryIndex(i);
 
 				ImGui.PopID();
-
 				ImGui.PopStyleColor(4);
-
 				ImGui.PopStyleVar(2);
 			}
-
-			ImGui.PopStyleVar();
 		}
+
+		ImGui.PopStyleVar();
 
 		ImGui.EndChild(); // End HistoryChild
 

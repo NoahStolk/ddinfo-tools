@@ -7,7 +7,6 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
-using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 
@@ -75,11 +74,9 @@ public static class ModPreviewWindow
 
 	public static void Render()
 	{
-		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, new Vector2(640, 360));
+		ImGuiUtils.SetNextWindowMinSize(640, 360);
 		if (ImGui.Begin("Mod Preview", ImGuiWindowFlags.NoCollapse))
 		{
-			ImGui.PopStyleVar();
-
 			if (_selectedFileName == null || _binaryType == null)
 			{
 				ImGui.Text("Select a valid mod from the Mod Manager window to preview its contents.");
@@ -93,10 +90,6 @@ public static class ModPreviewWindow
 
 				RenderChunksTable();
 			}
-		}
-		else
-		{
-			ImGui.PopStyleVar();
 		}
 
 		ImGui.End(); // End Mod preview

@@ -10,11 +10,9 @@ public static class SpawnsetEditorWindow
 
 	public static void Render()
 	{
-		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, Constants.MinWindowSize);
+		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize);
 		if (ImGui.Begin(Inline.Span($"Spawnset Editor - {FileStates.Spawnset.FileName ?? FileStates.UntitledName}{(FileStates.Spawnset.IsModified && FileStates.Spawnset.FileName != null ? "*" : string.Empty)}###spawnset_editor"), ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.MenuBar | ImGuiWindowFlags.NoScrollWithMouse))
 		{
-			ImGui.PopStyleVar();
-
 			bool isWindowFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows);
 
 			SpawnsetEditorMenu.Render();
@@ -38,10 +36,6 @@ public static class SpawnsetEditorWindow
 			ImGui.EndChild(); // End SettingsAndHistoryChild
 
 			_isWindowFocusedPrevious = isWindowFocused;
-		}
-		else
-		{
-			ImGui.PopStyleVar();
 		}
 
 		ImGui.End(); // End Spawnset Editor

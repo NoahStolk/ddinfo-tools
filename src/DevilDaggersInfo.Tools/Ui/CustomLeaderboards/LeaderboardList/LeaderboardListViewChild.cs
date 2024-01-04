@@ -142,9 +142,10 @@ public static class LeaderboardListViewChild
 				ImGui.TableNextColumn();
 			}
 
-			ImGui.PopStyleVar();
 			ImGui.EndTable();
 		}
+
+		ImGui.PopStyleVar();
 	}
 
 	private static string GetText(GetCustomLeaderboardCriteria criteria)

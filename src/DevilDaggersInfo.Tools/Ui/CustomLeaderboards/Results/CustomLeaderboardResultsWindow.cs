@@ -3,7 +3,6 @@
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 #endif
 using ImGuiNET;
-using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 
@@ -23,11 +22,9 @@ public static class CustomLeaderboardResultsWindow
 	public static void Render()
 	{
 		ImGui.SetNextWindowSizeConstraints(new(388, 0), new(388, float.MaxValue));
-		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, new Vector2(0, 320));
+		ImGuiUtils.SetNextWindowMinSize(0, 320);
 		if (ImGui.Begin("Custom Leaderboard Submissions (this session)"))
 		{
-			ImGui.PopStyleVar();
-
 #if TESTING
 			if (ImGui.Button("Random first score"))
 				AddRandomFirstScore();
@@ -57,10 +54,6 @@ public static class CustomLeaderboardResultsWindow
 				UploadResult result = _results[i];
 				result.Render();
 			}
-		}
-		else
-		{
-			ImGui.PopStyleVar();
 		}
 
 		ImGui.End(); // End Custom Leaderboard Submissions (this session)

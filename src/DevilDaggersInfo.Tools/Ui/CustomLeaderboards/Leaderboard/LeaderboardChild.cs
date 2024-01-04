@@ -135,9 +135,10 @@ public static class LeaderboardChild
 				RenderCustomEntry(ce, rankSorting);
 			}
 
-			ImGui.PopStyleVar();
 			ImGui.EndTable();
 		}
+
+		ImGui.PopStyleVar();
 	}
 
 	private static void RenderCustomEntry(GetCustomEntry ce, CustomLeaderboardRankSorting rankSorting)
