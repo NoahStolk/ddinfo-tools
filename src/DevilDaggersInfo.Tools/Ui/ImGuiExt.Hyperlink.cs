@@ -7,7 +7,9 @@ namespace DevilDaggersInfo.Tools.Ui;
 public static partial class ImGuiExt
 {
 	public static void Hyperlink(ReadOnlySpan<char> url)
-		=> Hyperlink(url, url);
+	{
+		Hyperlink(url, url);
+	}
 
 	public static void Hyperlink(ReadOnlySpan<char> url, ReadOnlySpan<char> text)
 	{

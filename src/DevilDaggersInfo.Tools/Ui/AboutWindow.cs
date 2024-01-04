@@ -101,6 +101,10 @@ public static class AboutWindow
 
 			ImGui.PopStyleColor();
 		}
+		else
+		{
+			ImGui.PopStyleVar();
+		}
 
 		ImGui.EndChild(); // End GitHub
 	}

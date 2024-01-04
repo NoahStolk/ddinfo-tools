@@ -30,11 +30,9 @@ public static class ReplayEditorWindow
 
 	public static unsafe void Render()
 	{
-		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, Constants.MinWindowSize);
+		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize);
 		if (ImGui.Begin("Replay Editor", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.MenuBar))
 		{
-			ImGui.PopStyleVar();
-
 			ReplayEditorMenu.Render();
 
 			ReplayFileInfo.Render();
@@ -88,10 +86,6 @@ public static class ReplayEditorWindow
 
 				ImGui.EndTabBar();
 			}
-		}
-		else
-		{
-			ImGui.PopStyleVar();
 		}
 
 		ImGui.End(); // End Replay Editor

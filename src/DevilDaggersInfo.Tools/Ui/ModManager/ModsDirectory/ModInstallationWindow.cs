@@ -80,11 +80,9 @@ public static class ModInstallationWindow
 
 	public static void Render()
 	{
-		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, new Vector2(768, 384));
+		ImGuiUtils.SetNextWindowMinSize(768, 384);
 		if (ImGui.Begin("Mod Installation", ImGuiWindowFlags.NoCollapse))
 		{
-			ImGui.PopStyleVar();
-
 			if (ModsDirectoryLogic.IsLoading)
 			{
 				ImGui.Text("Loading...");
@@ -138,10 +136,6 @@ public static class ModInstallationWindow
 
 				RenderChunksTable();
 			}
-		}
-		else
-		{
-			ImGui.PopStyleVar();
 		}
 
 		ImGui.End(); // End Mod preview

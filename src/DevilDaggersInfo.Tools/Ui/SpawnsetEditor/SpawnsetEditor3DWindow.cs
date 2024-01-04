@@ -21,7 +21,7 @@ public static class SpawnsetEditor3DWindow
 
 	public static void Render(float delta)
 	{
-		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, Constants.MinWindowSize / 2);
+		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize / 2);
 		if (ImGui.Begin("3D Arena Editor"))
 		{
 			if (ImGui.IsMouseDown(ImGuiMouseButton.Right) && ImGui.IsWindowHovered())
@@ -54,7 +54,5 @@ public static class SpawnsetEditor3DWindow
 		}
 
 		ImGui.End(); // End 3D Arena Editor
-
-		ImGui.PopStyleVar();
 	}
 }

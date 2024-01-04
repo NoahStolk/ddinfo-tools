@@ -16,11 +16,9 @@ public static class PracticeWindow
 
 	public static void Render()
 	{
-		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, new Vector2(1208, 768));
+		ImGuiUtils.SetNextWindowMinSize(1208, 768);
 		if (ImGui.Begin("Practice", ImGuiWindowFlags.NoCollapse))
 		{
-			ImGui.PopStyleVar();
-
 			Vector2 windowSize = ImGui.GetWindowSize();
 			TemplateContainerSize = new(MathF.Ceiling(windowSize.X / 3 - 11), windowSize.Y - 260);
 			TemplateListSize = new(TemplateContainerSize.X - 20, TemplateContainerSize.Y - 88);
@@ -41,10 +39,6 @@ public static class PracticeWindow
 
 			ImGui.SameLine();
 			CurrentSpawnsetChild.Render();
-		}
-		else
-		{
-			ImGui.PopStyleVar();
 		}
 
 		ImGui.End(); // End Practice

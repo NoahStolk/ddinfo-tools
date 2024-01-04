@@ -38,11 +38,9 @@ public static class CustomLeaderboardsWindow
 		ImGui.End(); // End Timestamps
 #endif
 
-		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, Constants.MinWindowSize);
+		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize);
 		if (ImGui.Begin("Custom Leaderboards", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollWithMouse))
 		{
-			ImGui.PopStyleVar();
-
 			if (ImGui.BeginChild("LeftRow", new(288, 464)))
 			{
 				StateChild.Render();
@@ -62,10 +60,6 @@ public static class CustomLeaderboardsWindow
 			ImGui.EndChild(); // End RightRow
 
 			LeaderboardChild.Render();
-		}
-		else
-		{
-			ImGui.PopStyleVar();
 		}
 
 		ImGui.End(); // End Custom Leaderboards

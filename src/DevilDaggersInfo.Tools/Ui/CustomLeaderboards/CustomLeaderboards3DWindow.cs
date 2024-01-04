@@ -43,7 +43,7 @@ public static class CustomLeaderboards3DWindow
 
 	public static void Render(float delta)
 	{
-		ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, Constants.MinWindowSize / 2);
+		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize / 2);
 		if (ImGui.Begin("3D Replay Viewer"))
 		{
 			if (ImGui.IsMouseDown(ImGuiMouseButton.Right) && ImGui.IsWindowHovered())
@@ -68,7 +68,5 @@ public static class CustomLeaderboards3DWindow
 		}
 
 		ImGui.End(); // End 3D Replay Viewer
-
-		ImGui.PopStyleVar();
 	}
 }
