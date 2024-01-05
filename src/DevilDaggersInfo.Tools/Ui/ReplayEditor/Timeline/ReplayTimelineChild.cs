@@ -148,7 +148,8 @@ public static class ReplayTimelineChild
 					int eventTypeIndex = GetIndex(eventType);
 					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize, eventTypeIndex * _markerSize));
 					ImGui.PushStyleColor(ImGuiCol.Button, EventTypeRendererUtils.GetEventTypeColor(eventType) with { W = 0.4f });
-					if (ImGui.Button($"{(replayEvents.Count > 99 ? "XX" : replayEvents.Count)}##_{i}_{EnumUtils.EventTypeNames[eventType]}", new(_markerSize, _markerSize)))
+					string typeName = EnumUtils.EventTypeNames[eventType];
+					if (ImGui.Button(replayEvents.Count > 99 ? Inline.Span($"XX##_{i}_{typeName}") : Inline.Span($"{replayEvents.Count}##_{i}_{typeName}"), new(_markerSize, _markerSize)))
 						SelectEvents(replayEvents, eventType);
 
 					if (ImGui.IsItemHovered())
