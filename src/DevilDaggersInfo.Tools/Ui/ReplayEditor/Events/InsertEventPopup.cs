@@ -4,6 +4,7 @@ using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Numerics;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
+using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using System.Diagnostics;
 using System.Numerics;
@@ -39,23 +40,23 @@ public static class InsertEventPopup
 
 		if (ImGui.BeginTabBar("NewEventsTabBar", ImGuiTabBarFlags.None))
 		{
-			RenderTabItem<BoidSpawnEventData, BoidSpawnEvents>("Boid Spawn", EventType.BoidSpawn, index, _boidSpawnEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<DaggerSpawnEventData, DaggerSpawnEvents>("Dagger Spawn", EventType.DaggerSpawn, index, _daggerSpawnEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<EndEventData, EndEvents>("End", EventType.End, index, _endEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<EntityOrientationEventData, EntityOrientationEvents>("Entity Orientation", EventType.EntityOrientation, index, _entityOrientationEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<EntityPositionEventData, EntityPositionEvents>("Entity Position", EventType.EntityPosition, index, _entityPositionEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<EntityTargetEventData, EntityTargetEvents>("Entity Target", EventType.EntityTarget, index, _entityTargetEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<GemEventData, GemEvents>("Gem", EventType.Gem, index, _gemEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<HitEventData, HitEvents>("Hit", EventType.Hit, index, _hitEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<InitialInputsEventData, InitialInputsEvents>("Initial Inputs", EventType.InitialInputs, index, _initialInputsEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<InputsEventData, InputsEvents>("Inputs", EventType.Inputs, index, _inputsEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<LeviathanSpawnEventData, LeviathanSpawnEvents>("Leviathan Spawn", EventType.LeviathanSpawn, index, _leviathanSpawnEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<PedeSpawnEventData, PedeSpawnEvents>("Pede Spawn", EventType.PedeSpawn, index, _pedeSpawnEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<SpiderEggSpawnEventData, SpiderEggSpawnEvents>("Spider Egg Spawn", EventType.SpiderEggSpawn, index, _spiderEggSpawnEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<SpiderSpawnEventData, SpiderSpawnEvents>("Spider Spawn", EventType.SpiderSpawn, index, _spiderSpawnEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<SquidSpawnEventData, SquidSpawnEvents>("Squid Spawn", EventType.SquidSpawn, index, _squidSpawnEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<ThornSpawnEventData, ThornSpawnEvents>("Thorn Spawn", EventType.ThornSpawn, index, _thornSpawnEventData, FileStates.Replay.Object.EventsData);
-			RenderTabItem<TransmuteEventData, TransmuteEvents>("Transmute", EventType.Transmute, index, _transmuteEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<BoidSpawnEventData, BoidSpawnEvents>(EventType.BoidSpawn, index, _boidSpawnEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<DaggerSpawnEventData, DaggerSpawnEvents>(EventType.DaggerSpawn, index, _daggerSpawnEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<EndEventData, EndEvents>(EventType.End, index, _endEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<EntityOrientationEventData, EntityOrientationEvents>(EventType.EntityOrientation, index, _entityOrientationEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<EntityPositionEventData, EntityPositionEvents>(EventType.EntityPosition, index, _entityPositionEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<EntityTargetEventData, EntityTargetEvents>(EventType.EntityTarget, index, _entityTargetEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<GemEventData, GemEvents>(EventType.Gem, index, _gemEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<HitEventData, HitEvents>(EventType.Hit, index, _hitEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<InitialInputsEventData, InitialInputsEvents>(EventType.InitialInputs, index, _initialInputsEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<InputsEventData, InputsEvents>(EventType.Inputs, index, _inputsEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<LeviathanSpawnEventData, LeviathanSpawnEvents>(EventType.LeviathanSpawn, index, _leviathanSpawnEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<PedeSpawnEventData, PedeSpawnEvents>(EventType.PedeSpawn, index, _pedeSpawnEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<SpiderEggSpawnEventData, SpiderEggSpawnEvents>(EventType.SpiderEggSpawn, index, _spiderEggSpawnEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<SpiderSpawnEventData, SpiderSpawnEvents>(EventType.SpiderSpawn, index, _spiderSpawnEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<SquidSpawnEventData, SquidSpawnEvents>(EventType.SquidSpawn, index, _squidSpawnEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<ThornSpawnEventData, ThornSpawnEvents>(EventType.ThornSpawn, index, _thornSpawnEventData, FileStates.Replay.Object.EventsData);
+			RenderTabItem<TransmuteEventData, TransmuteEvents>(EventType.Transmute, index, _transmuteEventData, FileStates.Replay.Object.EventsData);
 
 			ImGui.EndTabBar();
 		}
@@ -66,11 +67,11 @@ public static class InsertEventPopup
 		ImGui.EndPopup();
 	}
 
-	private static void RenderTabItem<TEvent, TRenderer>(ReadOnlySpan<char> tabItemId, EventType eventType, int eventIndex, TEvent e, ReplayEventsData replayEventsData)
+	private static void RenderTabItem<TEvent, TRenderer>(EventType eventType, int eventIndex, TEvent e, ReplayEventsData replayEventsData)
 		where TEvent : IEventData
 		where TRenderer : IEventTypeRenderer<TEvent>
 	{
-		if (!ImGui.BeginTabItem(tabItemId))
+		if (!ImGui.BeginTabItem(EnumUtils.EventTypeFriendlyNames[eventType]))
 			return;
 
 		if (TRenderer.ColumnCountData > 0)
