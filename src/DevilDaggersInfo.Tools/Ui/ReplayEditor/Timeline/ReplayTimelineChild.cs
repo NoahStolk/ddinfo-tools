@@ -152,6 +152,8 @@ public static class ReplayTimelineChild
 					ImGui.TextColored(textColor, Inline.Span(i));
 				}
 			}
+
+			HandleInput();
 		}
 
 		ImGui.EndChild(); // End TimelineEditorChild
@@ -165,5 +167,25 @@ public static class ReplayTimelineChild
 		{
 			drawList.AddLine(origin + new Vector2(offsetX, 0), origin + new Vector2(offsetX, height), ImGui.GetColorU32(color));
 		}
+	}
+
+	private static void HandleInput()
+	{
+		ImGuiIOPtr io = ImGui.GetIO();
+		bool left = io.IsKeyDown(ImGuiKey.LeftArrow);
+		bool right = io.IsKeyDown(ImGuiKey.RightArrow);
+		if (left ^ right)
+		{
+			float increment = (io.KeyShift ? 3200 : 1200) * io.DeltaTime * (left ? -1 : 1);
+			ImGui.SetScrollX(ImGui.GetScrollX() + increment);
+		}
+
+		if (ImGui.IsKeyPressed(ImGuiKey.Home))
+			ImGui.SetScrollX(0);
+		else if (ImGui.IsKeyPressed(ImGuiKey.End))
+			ImGui.SetScrollX(TimelineCache.Markers.Count * _markerSize);
+
+		if (io.MouseWheel != 0)
+			ImGui.SetScrollX(ImGui.GetScrollX() - io.MouseWheel * _markerSize * 2.5f);
 	}
 }
