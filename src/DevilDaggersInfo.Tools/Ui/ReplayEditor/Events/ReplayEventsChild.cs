@@ -2,6 +2,7 @@ using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
@@ -164,34 +165,11 @@ public static class ReplayEventsChild
 			bool showTick = !_onlyShowTicksWithEnabledEvents;
 			for (int j = offset; j < offset + count; j++)
 			{
-				ReplayEvent @event = eventsData.Events[j];
-				_eventCache.Add(j, @event);
+				ReplayEvent replayEvent = eventsData.Events[j];
+				_eventCache.Add(j, replayEvent);
 				if (!showTick)
 				{
-					EventType? eventType = @event.Data switch
-					{
-						BoidSpawnEventData => EventType.BoidSpawn,
-						LeviathanSpawnEventData => EventType.LeviathanSpawn,
-						PedeSpawnEventData => EventType.PedeSpawn,
-						SpiderEggSpawnEventData => EventType.SpiderEggSpawn,
-						SpiderSpawnEventData => EventType.SpiderSpawn,
-						SquidSpawnEventData => EventType.SquidSpawn,
-						ThornSpawnEventData => EventType.ThornSpawn,
-
-						DaggerSpawnEventData => EventType.DaggerSpawn,
-						EntityOrientationEventData => EventType.EntityOrientation,
-						EntityPositionEventData => EventType.EntityPosition,
-						EntityTargetEventData => EventType.EntityTarget,
-						GemEventData => EventType.Gem,
-						HitEventData => EventType.Hit,
-						TransmuteEventData => EventType.Transmute,
-
-						InitialInputsEventData => EventType.InitialInputs,
-						InputsEventData => EventType.Inputs,
-						EndEventData => EventType.End,
-
-						_ => null,
-					};
+					EventType? eventType = replayEvent.GetEventType();
 					if (eventType.HasValue && _eventTypeEnabled[eventType.Value])
 						showTick = true;
 				}
