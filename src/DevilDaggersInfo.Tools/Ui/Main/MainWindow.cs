@@ -204,6 +204,15 @@ public static class MainWindow
 			WORK IN PROGRESS
 
 			Create, analyze, and edit replays for Devil Daggers.
+
+			You can download replays from the official leaderboards and save them as a local replay.
+
+			This tool will likely not be useful for most players; it is mostly intended to figure out how some things in the game work.
+
+			It could be used to:
+			- Figure out how homing daggers, gems, or certain enemies behave under certain conditions, since their behavior is implicit and cannot reliably be modified using replays.
+			- Figure out how certain movement techniques work in more detail (for optimizing race spawnsets).
+			- Detect cheated replays (for example, shotgun tech intervals could be analyzed to detect if a player is using a macro).
 			""");
 	}
 
