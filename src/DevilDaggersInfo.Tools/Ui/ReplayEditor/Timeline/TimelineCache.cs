@@ -7,15 +7,15 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 
 public static class TimelineCache
 {
-	private static readonly List<TickMarkers> _markers = [];
+	private static readonly List<Dictionary<EventType, List<ReplayEvent>>> _tickData = [];
 
-	public static IReadOnlyList<TickMarkers> Markers => _markers;
+	public static IReadOnlyList<Dictionary<EventType, List<ReplayEvent>>> TickData => _tickData;
 
-	public static bool IsEmpty => _markers.Count == 0;
+	public static bool IsEmpty => _tickData.Count == 0;
 
 	public static void Clear()
 	{
-		_markers.Clear();
+		_tickData.Clear();
 	}
 
 	public static void Build(ReplayEventsData replayEventsData)
@@ -29,22 +29,20 @@ public static class TimelineCache
 		foreach (ReplayEvent replayEvent in replayEventsData.Events)
 		{
 			EventType eventType = replayEvent.GetEventType();
-			if (tickIndex < _markers.Count)
+			if (tickIndex < _tickData.Count)
 			{
-				TickMarkers tickMarkers = _markers[tickIndex];
-				if (!tickMarkers.ReplayEvents.TryGetValue(eventType, out List<ReplayEvent>? replayEvents))
+				Dictionary<EventType, List<ReplayEvent>> tickMarkers = _tickData[tickIndex];
+				if (!tickMarkers.TryGetValue(eventType, out List<ReplayEvent>? replayEvents))
 				{
 					replayEvents = [];
-					tickMarkers.ReplayEvents[eventType] = replayEvents;
+					tickMarkers[eventType] = replayEvents;
 				}
 
 				replayEvents.Add(replayEvent);
 			}
 			else
 			{
-				TickMarkers tickMarkers = new(tickIndex, new());
-				tickMarkers.ReplayEvents.Add(eventType, [replayEvent]);
-				_markers.Add(tickMarkers);
+				_tickData.Add(new() { [eventType] = [replayEvent] });
 			}
 
 			if (eventType is EventType.InitialInputs or EventType.Inputs)
