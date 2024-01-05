@@ -19,6 +19,8 @@ public static class ReplayTimelineChild
 	private static readonly Color _lineColorDefault = Color.Gray(0.4f);
 	private static readonly Color _lineColorSub = Color.Gray(0.2f);
 
+	private static readonly TimelineCache _timelineCache = new();
+
 	private static int GetIndex(EventType eventType)
 	{
 		if (_indices.TryGetValue(eventType, out int index))
@@ -31,11 +33,17 @@ public static class ReplayTimelineChild
 
 	public static void Render(ReplayEventsData eventsData, float startTime)
 	{
+		if (_timelineCache.IsEmpty)
+			_timelineCache.Build(eventsData);
+
 		const float markerTextHeight = 32;
 		const float scrollBarHeight = 20;
 		if (ImGui.BeginChild("TimelineViewChild", new(0, EnumUtils.EventTypeNames.Count * _markerSize + markerTextHeight + scrollBarHeight)))
 		{
 			RenderTimeline(eventsData, startTime);
+
+			if (ImGui.Button("Rebuild"))
+				_timelineCache.Clear();
 		}
 
 		ImGui.EndChild(); // End TimelineViewChild
@@ -84,8 +92,8 @@ public static class ReplayTimelineChild
 
 			AddHorizontalLine(drawList, origin, EnumUtils.EventTypeNames.Count * _markerSize, lineWidth, _lineColorDefault);
 
-			int start = (int)Math.Floor(ImGui.GetScrollX() / _markerSize);
-			int end = (int)Math.Ceiling((ImGui.GetScrollX() + ImGui.GetWindowWidth()) / _markerSize); // eventsData.TickCount + 1
+			int startTickIndex = (int)Math.Floor(ImGui.GetScrollX() / _markerSize);
+			int endTickIndex = Math.Min((int)Math.Ceiling((ImGui.GetScrollX() + ImGui.GetWindowWidth()) / _markerSize), eventsData.TickCount);
 
 			// Always render these invisible buttons so the scroll bar is always visible.
 			ImGui.SetCursorScreenPos(origin);
@@ -93,25 +101,46 @@ public static class ReplayTimelineChild
 			ImGui.SetCursorScreenPos(origin + new Vector2((eventsData.TickCount - 1) * _markerSize, 0));
 			ImGui.InvisibleButton("InvisibleEndMarker", new(_markerSize, _markerSize));
 
-			int frameIndex = 0;
-			for (int i = 0; i < eventsData.Events.Count; i++)
+			for (int i = Math.Max(startTickIndex, 0); i < Math.Min(endTickIndex, _timelineCache.Markers.Count); i++)
 			{
-				ReplayEvent replayEvent = eventsData.Events[i];
-				EventType? eventType = replayEvent.GetEventType();
-				if (eventType.HasValue && (frameIndex >= start || frameIndex < end))
+				TickMarkers tickMarkers = _timelineCache.Markers[i];
+				foreach ((EventType eventType, List<ReplayEvent> replayEvents) in tickMarkers.ReplayEvents)
 				{
-					int eventTypeIndex = GetIndex(eventType.Value);
-					ImGui.SetCursorScreenPos(origin + new Vector2(frameIndex * _markerSize, eventTypeIndex * _markerSize));
-					ImGui.PushStyleColor(ImGuiCol.Button, EventTypeRendererUtils.GetEventTypeColor(eventType.Value) with { W = 0.4f });
-					ImGui.Button("1", new(_markerSize, _markerSize));
+					int eventTypeIndex = GetIndex(eventType);
+					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize, eventTypeIndex * _markerSize));
+					ImGui.PushStyleColor(ImGuiCol.Button, EventTypeRendererUtils.GetEventTypeColor(eventType) with { W = 0.4f });
+					ImGui.Button(replayEvents.Count > 99 ? "XX" : Inline.Span(replayEvents.Count), new(_markerSize, _markerSize));
+					if (ImGui.IsItemHovered())
+					{
+						ImGui.BeginTooltip();
+						ImGui.TextColored(EventTypeRendererUtils.GetEventTypeColor(eventType), EnumUtils.EventTypeNames[eventType]);
+						if (ImGui.BeginTable(Inline.Span($"MarkerTooltipTable_{i}_{EnumUtils.EventTypeNames[eventType]}"), 2, ImGuiTableFlags.Borders))
+						{
+							ImGui.TableNextColumn();
+							ImGui.Text("Events");
+
+							ImGui.TableNextColumn();
+							ImGui.Text(Inline.Span(replayEvents.Count));
+
+							ImGui.TableNextColumn();
+							ImGui.Text("Time");
+
+							ImGui.TableNextColumn();
+							ImGui.Text(Inline.Span(TimeUtils.TickToTime(i, startTime), StringFormats.TimeFormat));
+							ImGui.SameLine();
+							ImGui.Text(Inline.Span($"({i})"));
+
+							ImGui.EndTable();
+						}
+
+						ImGui.EndTooltip();
+					}
+
 					ImGui.PopStyleColor();
 				}
-
-				if (eventType is EventType.InitialInputs or EventType.Inputs)
-					frameIndex++;
 			}
 
-			for (int i = start; i < end; i++)
+			for (int i = startTickIndex; i < endTickIndex; i++)
 			{
 				bool showTimeText = i % 5 == 0;
 				float height = showTimeText ? EnumUtils.EventTypeNames.Count * _markerSize + 6 : EnumUtils.EventTypeNames.Count * _markerSize;
