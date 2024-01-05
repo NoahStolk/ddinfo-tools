@@ -26,6 +26,7 @@ public static class ReplayTimelineChild
 	private static readonly List<ReplayEvent> _selectedEvents = [];
 	private static readonly EventCache _selectedEventDataCache = new();
 	private static EventType _selectedEventType = EventType.BoidSpawn;
+	private static int _selectedTickIndex;
 
 	private static int GetIndex(EventType eventType)
 	{
@@ -159,7 +160,8 @@ public static class ReplayTimelineChild
 			{
 				AddHorizontalLine(drawList, origin, i * _markerSize, lineWidth, _lineColorDefault);
 
-				Vector4 backgroundColor = EventTypeRendererUtils.GetEventTypeColor(EnumUtils.EventTypes[i]) with { W = 0.1f };
+				bool isSelected = _selectedEventType == EnumUtils.EventTypes[i];
+				Vector4 backgroundColor = EventTypeRendererUtils.GetEventTypeColor(EnumUtils.EventTypes[i]) with { W = isSelected ? 0.3f : 0.1f };
 				drawList.AddRectFilled(origin + new Vector2(0, i * _markerSize), origin + new Vector2(lineWidth, (i + 1) * _markerSize), ImGui.GetColorU32(backgroundColor));
 			}
 
@@ -184,7 +186,7 @@ public static class ReplayTimelineChild
 					ImGui.PushStyleColor(ImGuiCol.Button, EventTypeRendererUtils.GetEventTypeColor(eventType) with { W = 0.4f });
 					string typeName = EnumUtils.EventTypeNames[eventType];
 					if (ImGui.Button(replayEvents.Count > 99 ? Inline.Span($"XX##_{i}_{typeName}") : Inline.Span($"{replayEvents.Count}##_{i}_{typeName}"), new(_markerSize, _markerSize)))
-						SelectEvents(replayEvents, eventType);
+						SelectEvents(replayEvents, eventType, i);
 
 					if (ImGui.IsItemHovered())
 					{
@@ -222,6 +224,9 @@ public static class ReplayTimelineChild
 				float height = showTimeText ? EnumUtils.EventTypes.Count * _markerSize + 6 : EnumUtils.EventTypes.Count * _markerSize;
 				Color color = showTimeText ? _lineColorDefault : _lineColorSub;
 				AddVerticalLine(drawList, origin, i * _markerSize, height, color);
+				if (i == _selectedTickIndex)
+					drawList.AddRectFilled(origin + new Vector2(i * _markerSize, 0), origin + new Vector2((i + 1) * _markerSize, EnumUtils.EventTypes.Count * _markerSize), ImGui.GetColorU32(new Vector4(1, 1, 1, 0.2f)));
+
 				if (showTimeText)
 				{
 #pragma warning disable S2583 // False positive
@@ -250,11 +255,12 @@ public static class ReplayTimelineChild
 		}
 	}
 
-	private static void SelectEvents(List<(ReplayEvent Event, int EventIndex)> replayEvents, EventType eventType)
+	private static void SelectEvents(List<(ReplayEvent Event, int EventIndex)> replayEvents, EventType eventType, int tickIndex)
 	{
 		_selectedEvents.Clear();
 		_selectedEvents.AddRange(replayEvents.Select(t => t.Event));
 		_selectedEventType = eventType;
+		_selectedTickIndex = tickIndex;
 
 		_selectedEventDataCache.Clear();
 		foreach ((ReplayEvent replayEvent, int eventIndex) in replayEvents)
