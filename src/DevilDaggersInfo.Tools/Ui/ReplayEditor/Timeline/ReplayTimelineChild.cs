@@ -96,10 +96,10 @@ public static class ReplayTimelineChild
 			ImGui.SetCursorScreenPos(origin + new Vector2((eventsData.TickCount - 1) * _markerSize, 0));
 			ImGui.InvisibleButton("InvisibleEndMarker", new(_markerSize, _markerSize));
 
-			for (int i = Math.Max(startTickIndex, 0); i < Math.Min(endTickIndex, TimelineCache.Markers.Count); i++)
+			for (int i = Math.Max(startTickIndex, 0); i < Math.Min(endTickIndex, TimelineCache.TickData.Count); i++)
 			{
-				TickMarkers tickMarkers = TimelineCache.Markers[i];
-				foreach ((EventType eventType, List<ReplayEvent> replayEvents) in tickMarkers.ReplayEvents)
+				Dictionary<EventType, List<ReplayEvent>> tickData = TimelineCache.TickData[i];
+				foreach ((EventType eventType, List<ReplayEvent> replayEvents) in tickData)
 				{
 					int eventTypeIndex = GetIndex(eventType);
 					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize, eventTypeIndex * _markerSize));
@@ -183,7 +183,7 @@ public static class ReplayTimelineChild
 		if (ImGui.IsKeyPressed(ImGuiKey.Home))
 			ImGui.SetScrollX(0);
 		else if (ImGui.IsKeyPressed(ImGuiKey.End))
-			ImGui.SetScrollX(TimelineCache.Markers.Count * _markerSize);
+			ImGui.SetScrollX(TimelineCache.TickData.Count * _markerSize);
 
 		if (io.MouseWheel != 0)
 			ImGui.SetScrollX(ImGui.GetScrollX() - io.MouseWheel * _markerSize * 2.5f);
