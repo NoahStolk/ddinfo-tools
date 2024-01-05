@@ -56,7 +56,6 @@ public static class ReplayEditorMenu
 		FileStates.Replay.Update(ReplayBinary<LocalReplayBinaryHeader>.CreateDefault());
 		FileStates.Replay.SetFile(null, null);
 		ReplayEditorWindow.Reset();
-		TimelineCache.Clear();
 	}
 
 	public static void OpenReplay()
@@ -93,7 +92,6 @@ public static class ReplayEditorMenu
 		}
 
 		ReplayEditorWindow.Reset();
-		TimelineCache.Clear();
 
 		ReplaySimulation replaySimulation = ReplaySimulationBuilder.Build(FileStates.Replay.Object);
 		ReplayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
@@ -125,7 +123,6 @@ public static class ReplayEditorMenu
 		}
 
 		ReplayEditorWindow.Reset();
-		TimelineCache.Clear();
 
 		ReplaySimulation replaySimulation = ReplaySimulationBuilder.Build(FileStates.Replay.Object);
 		ReplayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
