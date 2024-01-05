@@ -17,7 +17,7 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 public static class ReplayTimelineChild
 {
 	private const float _markerSize = 24;
-	private static readonly Dictionary<EventType, int> _indices = [];
+	private static readonly Dictionary<EventType, int> _eventTypeRowIndices = [];
 	private static readonly Color _lineColorDefault = Color.Gray(0.4f);
 	private static readonly Color _lineColorSub = Color.Gray(0.2f);
 
@@ -27,12 +27,19 @@ public static class ReplayTimelineChild
 
 	private static int GetIndex(EventType eventType)
 	{
-		if (_indices.TryGetValue(eventType, out int index))
+		if (_eventTypeRowIndices.TryGetValue(eventType, out int index))
 			return index;
 
 		index = EnumUtils.EventTypes.IndexOf(eventType);
-		_indices[eventType] = index;
+		_eventTypeRowIndices[eventType] = index;
 		return index;
+	}
+
+	public static void Reset()
+	{
+		TimelineCache.Clear();
+		_selectedEvents.Clear();
+		_selectedEventDataCache.Clear();
 	}
 
 	public static void Render(ReplayEventsData eventsData, float startTime)

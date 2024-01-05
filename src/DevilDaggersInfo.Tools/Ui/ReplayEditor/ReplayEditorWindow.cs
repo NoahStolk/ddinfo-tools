@@ -15,6 +15,7 @@ public static class ReplayEditorWindow
 		ReplayEditor3DWindow.Reset();
 		ReplayEventsChild.Reset();
 		ReplayEntitiesChild.Reset();
+		ReplayTimelineChild.Reset();
 	}
 
 	public static void Update(float delta)
