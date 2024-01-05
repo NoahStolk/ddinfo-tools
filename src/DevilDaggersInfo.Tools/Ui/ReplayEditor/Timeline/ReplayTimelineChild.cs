@@ -38,7 +38,7 @@ public static class ReplayTimelineChild
 
 		const float markerTextHeight = 32;
 		const float scrollBarHeight = 20;
-		if (ImGui.BeginChild("TimelineViewChild", new(0, EnumUtils.EventTypeNames.Count * _markerSize + markerTextHeight + scrollBarHeight)))
+		if (ImGui.BeginChild("TimelineViewChild", new(0, EnumUtils.EventTypes.Count * _markerSize + markerTextHeight + scrollBarHeight)))
 		{
 			RenderTimeline(eventsData, startTime);
 
@@ -57,10 +57,10 @@ public static class ReplayTimelineChild
 		{
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 			Vector2 origin = ImGui.GetCursorScreenPos();
-			for (int i = 0; i < EnumUtils.EventTypeNames.Count; i++)
+			for (int i = 0; i < EnumUtils.EventTypes.Count; i++)
 			{
 				EventType eventType = EnumUtils.EventTypes[i];
-				string name = EnumUtils.EventTypeNames[eventType];
+				string name = EnumUtils.EventTypeFriendlyNames[eventType];
 
 				ImGui.SetCursorScreenPos(origin + new Vector2(5, i * _markerSize + 5));
 				ImGui.TextColored(EventTypeRendererUtils.GetEventTypeColor(eventType), name);
@@ -68,7 +68,7 @@ public static class ReplayTimelineChild
 				AddHorizontalLine(drawList, origin, i * _markerSize, legendWidth, _lineColorDefault);
 			}
 
-			AddHorizontalLine(drawList, origin, EnumUtils.EventTypeNames.Count * _markerSize, legendWidth, _lineColorDefault);
+			AddHorizontalLine(drawList, origin, EnumUtils.EventTypes.Count * _markerSize, legendWidth, _lineColorDefault);
 		}
 
 		ImGui.PopStyleColor();
@@ -82,7 +82,7 @@ public static class ReplayTimelineChild
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 			Vector2 origin = ImGui.GetCursorScreenPos();
 			float lineWidth = eventsData.TickCount * _markerSize;
-			for (int i = 0; i < EnumUtils.EventTypeNames.Count; i++)
+			for (int i = 0; i < EnumUtils.EventTypes.Count; i++)
 			{
 				AddHorizontalLine(drawList, origin, i * _markerSize, lineWidth, _lineColorDefault);
 
@@ -90,7 +90,7 @@ public static class ReplayTimelineChild
 				drawList.AddRectFilled(origin + new Vector2(0, i * _markerSize), origin + new Vector2(lineWidth, (i + 1) * _markerSize), ImGui.GetColorU32(backgroundColor));
 			}
 
-			AddHorizontalLine(drawList, origin, EnumUtils.EventTypeNames.Count * _markerSize, lineWidth, _lineColorDefault);
+			AddHorizontalLine(drawList, origin, EnumUtils.EventTypes.Count * _markerSize, lineWidth, _lineColorDefault);
 
 			int startTickIndex = (int)Math.Floor(ImGui.GetScrollX() / _markerSize);
 			int endTickIndex = Math.Min((int)Math.Ceiling((ImGui.GetScrollX() + ImGui.GetWindowWidth()) / _markerSize), eventsData.TickCount);
@@ -113,7 +113,7 @@ public static class ReplayTimelineChild
 					if (ImGui.IsItemHovered())
 					{
 						ImGui.BeginTooltip();
-						ImGui.TextColored(EventTypeRendererUtils.GetEventTypeColor(eventType), EnumUtils.EventTypeNames[eventType]);
+						ImGui.TextColored(EventTypeRendererUtils.GetEventTypeColor(eventType), EnumUtils.EventTypeFriendlyNames[eventType]);
 						if (ImGui.BeginTable(Inline.Span($"MarkerTooltipTable_{i}_{EnumUtils.EventTypeNames[eventType]}"), 2, ImGuiTableFlags.Borders))
 						{
 							ImGui.TableNextColumn();
@@ -143,7 +143,7 @@ public static class ReplayTimelineChild
 			for (int i = startTickIndex; i < endTickIndex; i++)
 			{
 				bool showTimeText = i % 5 == 0;
-				float height = showTimeText ? EnumUtils.EventTypeNames.Count * _markerSize + 6 : EnumUtils.EventTypeNames.Count * _markerSize;
+				float height = showTimeText ? EnumUtils.EventTypes.Count * _markerSize + 6 : EnumUtils.EventTypes.Count * _markerSize;
 				Color color = showTimeText ? _lineColorDefault : _lineColorSub;
 				AddVerticalLine(drawList, origin, i * _markerSize, height, color);
 				if (showTimeText)
@@ -151,9 +151,9 @@ public static class ReplayTimelineChild
 #pragma warning disable S2583 // False positive
 					Color textColor = i % 60 == 0 ? Color.Yellow : ImGuiUtils.GetColorU32(ImGuiCol.Text);
 #pragma warning restore S2583 // False positive
-					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, EnumUtils.EventTypeNames.Count * _markerSize + 5));
+					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, EnumUtils.EventTypes.Count * _markerSize + 5));
 					ImGui.TextColored(textColor, Inline.Span(TimeUtils.TickToTime(i, startTime), StringFormats.TimeFormat));
-					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, EnumUtils.EventTypeNames.Count * _markerSize + 21));
+					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, EnumUtils.EventTypes.Count * _markerSize + 21));
 					ImGui.TextColored(textColor, Inline.Span(i));
 				}
 			}
