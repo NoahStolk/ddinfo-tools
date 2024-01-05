@@ -53,11 +53,11 @@ public static class EventTypeRendererUtils
 		ImGui.TableSetupColumn("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160);
 	}
 
-	public static void RenderTable<TEvent, TRenderer>(Vector4 color, EventType eventType, IReadOnlyList<(int EventIndex, int EntityId, TEvent Event)> events, ReplayEventsData replayEventsData)
+	public static void RenderTable<TEvent, TRenderer>(EventType eventType, IReadOnlyList<(int EventIndex, int EntityId, TEvent Event)> events, ReplayEventsData replayEventsData)
 		where TEvent : IEventData
 		where TRenderer : IEventTypeRenderer<TEvent>
 	{
-		ImGui.TextColored(color, EventTypeNames[eventType]);
+		ImGui.TextColored(GetEventTypeColor(eventType), EventTypeNames[eventType]);
 
 		if (ImGui.BeginTable(EventTypeNames[eventType], TRenderer.ColumnCount, EventTableFlags))
 		{
