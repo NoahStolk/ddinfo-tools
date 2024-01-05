@@ -5,20 +5,20 @@ using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 
-public sealed class TimelineCache
+public static class TimelineCache
 {
-	private readonly List<TickMarkers> _markers = [];
+	private static readonly List<TickMarkers> _markers = [];
 
-	public IReadOnlyList<TickMarkers> Markers => _markers;
+	public static IReadOnlyList<TickMarkers> Markers => _markers;
 
-	public bool IsEmpty => _markers.Count == 0;
+	public static bool IsEmpty => _markers.Count == 0;
 
-	public void Clear()
+	public static void Clear()
 	{
 		_markers.Clear();
 	}
 
-	public void Build(ReplayEventsData replayEventsData)
+	public static void Build(ReplayEventsData replayEventsData)
 	{
 		if (replayEventsData.Events.Count == 0)
 			return;

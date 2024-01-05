@@ -19,8 +19,6 @@ public static class ReplayTimelineChild
 	private static readonly Color _lineColorDefault = Color.Gray(0.4f);
 	private static readonly Color _lineColorSub = Color.Gray(0.2f);
 
-	private static readonly TimelineCache _timelineCache = new();
-
 	private static int GetIndex(EventType eventType)
 	{
 		if (_indices.TryGetValue(eventType, out int index))
@@ -33,17 +31,14 @@ public static class ReplayTimelineChild
 
 	public static void Render(ReplayEventsData eventsData, float startTime)
 	{
-		if (_timelineCache.IsEmpty)
-			_timelineCache.Build(eventsData);
+		if (TimelineCache.IsEmpty)
+			TimelineCache.Build(eventsData);
 
 		const float markerTextHeight = 32;
 		const float scrollBarHeight = 20;
 		if (ImGui.BeginChild("TimelineViewChild", new(0, EnumUtils.EventTypes.Count * _markerSize + markerTextHeight + scrollBarHeight)))
 		{
 			RenderTimeline(eventsData, startTime);
-
-			if (ImGui.Button("Rebuild"))
-				_timelineCache.Clear();
 		}
 
 		ImGui.EndChild(); // End TimelineViewChild
@@ -101,9 +96,9 @@ public static class ReplayTimelineChild
 			ImGui.SetCursorScreenPos(origin + new Vector2((eventsData.TickCount - 1) * _markerSize, 0));
 			ImGui.InvisibleButton("InvisibleEndMarker", new(_markerSize, _markerSize));
 
-			for (int i = Math.Max(startTickIndex, 0); i < Math.Min(endTickIndex, _timelineCache.Markers.Count); i++)
+			for (int i = Math.Max(startTickIndex, 0); i < Math.Min(endTickIndex, TimelineCache.Markers.Count); i++)
 			{
-				TickMarkers tickMarkers = _timelineCache.Markers[i];
+				TickMarkers tickMarkers = TimelineCache.Markers[i];
 				foreach ((EventType eventType, List<ReplayEvent> replayEvents) in tickMarkers.ReplayEvents)
 				{
 					int eventTypeIndex = GetIndex(eventType);
@@ -117,7 +112,7 @@ public static class ReplayTimelineChild
 						if (ImGui.BeginTable(Inline.Span($"MarkerTooltipTable_{i}_{EnumUtils.EventTypeNames[eventType]}"), 2, ImGuiTableFlags.Borders))
 						{
 							ImGui.TableNextColumn();
-							ImGui.Text("Events");
+							ImGui.Text("Event count");
 
 							ImGui.TableNextColumn();
 							ImGui.Text(Inline.Span(replayEvents.Count));
