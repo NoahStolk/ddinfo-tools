@@ -25,8 +25,8 @@ public static class ReplayTimelineChild
 
 	private static readonly List<ReplayEvent> _selectedEvents = [];
 	private static readonly EventCache _selectedEventDataCache = new();
-	private static EventType _selectedEventType = EventType.BoidSpawn;
-	private static int _selectedTickIndex;
+	private static EventType? _selectedEventType;
+	private static int? _selectedTickIndex;
 
 	private static int GetIndex(EventType eventType)
 	{
@@ -43,6 +43,8 @@ public static class ReplayTimelineChild
 		TimelineCache.Clear();
 		_selectedEvents.Clear();
 		_selectedEventDataCache.Clear();
+		_selectedEventType = null;
+		_selectedTickIndex = 0;
 	}
 
 	public static void Render(ReplayEventsData eventsData, float startTime)
@@ -94,7 +96,7 @@ public static class ReplayTimelineChild
 
 	private static void RenderSelectedEvents(ReplayEventsData replayEventsData)
 	{
-		if (_selectedEvents.Count == 0)
+		if (_selectedEventType == null || _selectedEvents.Count == 0)
 		{
 			ImGui.Text("No events selected");
 			return;
@@ -102,23 +104,23 @@ public static class ReplayTimelineChild
 
 		switch (_selectedEventType)
 		{
-			case EventType.BoidSpawn: EventTypeRendererUtils.RenderTable<BoidSpawnEventData, BoidSpawnEvents>(_selectedEventType, _selectedEventDataCache.BoidSpawnEvents, replayEventsData); break;
-			case EventType.LeviathanSpawn: EventTypeRendererUtils.RenderTable<LeviathanSpawnEventData, LeviathanSpawnEvents>(_selectedEventType, _selectedEventDataCache.LeviathanSpawnEvents, replayEventsData); break;
-			case EventType.PedeSpawn: EventTypeRendererUtils.RenderTable<PedeSpawnEventData, PedeSpawnEvents>(_selectedEventType, _selectedEventDataCache.PedeSpawnEvents, replayEventsData); break;
-			case EventType.SpiderEggSpawn: EventTypeRendererUtils.RenderTable<SpiderEggSpawnEventData, SpiderEggSpawnEvents>(_selectedEventType, _selectedEventDataCache.SpiderEggSpawnEvents, replayEventsData); break;
-			case EventType.SpiderSpawn: EventTypeRendererUtils.RenderTable<SpiderSpawnEventData, SpiderSpawnEvents>(_selectedEventType, _selectedEventDataCache.SpiderSpawnEvents, replayEventsData); break;
-			case EventType.SquidSpawn: EventTypeRendererUtils.RenderTable<SquidSpawnEventData, SquidSpawnEvents>(_selectedEventType, _selectedEventDataCache.SquidSpawnEvents, replayEventsData); break;
-			case EventType.ThornSpawn: EventTypeRendererUtils.RenderTable<ThornSpawnEventData, ThornSpawnEvents>(_selectedEventType, _selectedEventDataCache.ThornSpawnEvents, replayEventsData); break;
-			case EventType.DaggerSpawn: EventTypeRendererUtils.RenderTable<DaggerSpawnEventData, DaggerSpawnEvents>(_selectedEventType, _selectedEventDataCache.DaggerSpawnEvents, replayEventsData); break;
-			case EventType.EntityOrientation: EventTypeRendererUtils.RenderTable<EntityOrientationEventData, EntityOrientationEvents>(_selectedEventType, _selectedEventDataCache.EntityOrientationEvents, replayEventsData); break;
-			case EventType.EntityPosition: EventTypeRendererUtils.RenderTable<EntityPositionEventData, EntityPositionEvents>(_selectedEventType, _selectedEventDataCache.EntityPositionEvents, replayEventsData); break;
-			case EventType.EntityTarget: EventTypeRendererUtils.RenderTable<EntityTargetEventData, EntityTargetEvents>(_selectedEventType, _selectedEventDataCache.EntityTargetEvents, replayEventsData); break;
-			case EventType.Gem: EventTypeRendererUtils.RenderTable<GemEventData, GemEvents>(_selectedEventType, _selectedEventDataCache.GemEvents, replayEventsData); break;
-			case EventType.Hit: EventTypeRendererUtils.RenderTable<HitEventData, HitEvents>(_selectedEventType, _selectedEventDataCache.HitEvents, replayEventsData); break;
-			case EventType.Transmute: EventTypeRendererUtils.RenderTable<TransmuteEventData, TransmuteEvents>(_selectedEventType, _selectedEventDataCache.TransmuteEvents, replayEventsData); break;
-			case EventType.InitialInputs: EventTypeRendererUtils.RenderTable<InitialInputsEventData, InitialInputsEvents>(_selectedEventType, _selectedEventDataCache.InitialInputsEvents, replayEventsData); break;
-			case EventType.Inputs: EventTypeRendererUtils.RenderTable<InputsEventData, InputsEvents>(_selectedEventType, _selectedEventDataCache.InputsEvents, replayEventsData); break;
-			case EventType.End: EventTypeRendererUtils.RenderTable<EndEventData, EndEvents>(_selectedEventType, _selectedEventDataCache.EndEvents, replayEventsData); break;
+			case EventType.BoidSpawn: EventTypeRendererUtils.RenderTable<BoidSpawnEventData, BoidSpawnEvents>(_selectedEventType.Value, _selectedEventDataCache.BoidSpawnEvents, replayEventsData); break;
+			case EventType.LeviathanSpawn: EventTypeRendererUtils.RenderTable<LeviathanSpawnEventData, LeviathanSpawnEvents>(_selectedEventType.Value, _selectedEventDataCache.LeviathanSpawnEvents, replayEventsData); break;
+			case EventType.PedeSpawn: EventTypeRendererUtils.RenderTable<PedeSpawnEventData, PedeSpawnEvents>(_selectedEventType.Value, _selectedEventDataCache.PedeSpawnEvents, replayEventsData); break;
+			case EventType.SpiderEggSpawn: EventTypeRendererUtils.RenderTable<SpiderEggSpawnEventData, SpiderEggSpawnEvents>(_selectedEventType.Value, _selectedEventDataCache.SpiderEggSpawnEvents, replayEventsData); break;
+			case EventType.SpiderSpawn: EventTypeRendererUtils.RenderTable<SpiderSpawnEventData, SpiderSpawnEvents>(_selectedEventType.Value, _selectedEventDataCache.SpiderSpawnEvents, replayEventsData); break;
+			case EventType.SquidSpawn: EventTypeRendererUtils.RenderTable<SquidSpawnEventData, SquidSpawnEvents>(_selectedEventType.Value, _selectedEventDataCache.SquidSpawnEvents, replayEventsData); break;
+			case EventType.ThornSpawn: EventTypeRendererUtils.RenderTable<ThornSpawnEventData, ThornSpawnEvents>(_selectedEventType.Value, _selectedEventDataCache.ThornSpawnEvents, replayEventsData); break;
+			case EventType.DaggerSpawn: EventTypeRendererUtils.RenderTable<DaggerSpawnEventData, DaggerSpawnEvents>(_selectedEventType.Value, _selectedEventDataCache.DaggerSpawnEvents, replayEventsData); break;
+			case EventType.EntityOrientation: EventTypeRendererUtils.RenderTable<EntityOrientationEventData, EntityOrientationEvents>(_selectedEventType.Value, _selectedEventDataCache.EntityOrientationEvents, replayEventsData); break;
+			case EventType.EntityPosition: EventTypeRendererUtils.RenderTable<EntityPositionEventData, EntityPositionEvents>(_selectedEventType.Value, _selectedEventDataCache.EntityPositionEvents, replayEventsData); break;
+			case EventType.EntityTarget: EventTypeRendererUtils.RenderTable<EntityTargetEventData, EntityTargetEvents>(_selectedEventType.Value, _selectedEventDataCache.EntityTargetEvents, replayEventsData); break;
+			case EventType.Gem: EventTypeRendererUtils.RenderTable<GemEventData, GemEvents>(_selectedEventType.Value, _selectedEventDataCache.GemEvents, replayEventsData); break;
+			case EventType.Hit: EventTypeRendererUtils.RenderTable<HitEventData, HitEvents>(_selectedEventType.Value, _selectedEventDataCache.HitEvents, replayEventsData); break;
+			case EventType.Transmute: EventTypeRendererUtils.RenderTable<TransmuteEventData, TransmuteEvents>(_selectedEventType.Value, _selectedEventDataCache.TransmuteEvents, replayEventsData); break;
+			case EventType.InitialInputs: EventTypeRendererUtils.RenderTable<InitialInputsEventData, InitialInputsEvents>(_selectedEventType.Value, _selectedEventDataCache.InitialInputsEvents, replayEventsData); break;
+			case EventType.Inputs: EventTypeRendererUtils.RenderTable<InputsEventData, InputsEvents>(_selectedEventType.Value, _selectedEventDataCache.InputsEvents, replayEventsData); break;
+			case EventType.End: EventTypeRendererUtils.RenderTable<EndEventData, EndEvents>(_selectedEventType.Value, _selectedEventDataCache.EndEvents, replayEventsData); break;
 			default: throw new UnreachableException($"Unknown event type: {_selectedEventType}");
 		}
 	}
