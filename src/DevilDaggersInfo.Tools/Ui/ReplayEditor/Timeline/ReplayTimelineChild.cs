@@ -1,8 +1,10 @@
+using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using System.Numerics;
@@ -28,18 +30,21 @@ public static class ReplayTimelineChild
 
 	public static void Render(ReplayEventsData eventsData, float startTime)
 	{
-		if (ImGui.BeginChild("TimelineViewChild", new(0, EnumUtils.EventTypeNames.Count * _markerSize + 20)))
+		const float markerTextHeight = 32;
+		const float scrollBarHeight = 20;
+		if (ImGui.BeginChild("TimelineViewChild", new(0, EnumUtils.EventTypeNames.Count * _markerSize + markerTextHeight + scrollBarHeight)))
 		{
 			RenderTimeline(eventsData, startTime);
 		}
 
-		ImGui.EndChild(); // End TimelineChild
+		ImGui.EndChild(); // End TimelineViewChild
 	}
 
 	private static void RenderTimeline(ReplayEventsData eventsData, float startTime)
 	{
 		ImGui.PushStyleColor(ImGuiCol.ChildBg, Color.Gray(0.1f));
-		if (ImGui.BeginChild("LegendChild", new(128, 0)))
+		const float legendWidth = 160;
+		if (ImGui.BeginChild("LegendChild", new(legendWidth, 0)))
 		{
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 			Vector2 origin = ImGui.GetCursorScreenPos();
@@ -48,13 +53,13 @@ public static class ReplayTimelineChild
 				EventType eventType = EnumUtils.EventTypes[i];
 				string name = EnumUtils.EventTypeNames[eventType];
 
-				ImGui.SetCursorScreenPos(origin + new Vector2(0, i * _markerSize + 5));
+				ImGui.SetCursorScreenPos(origin + new Vector2(5, i * _markerSize + 5));
 				ImGui.Text(name);
 
-				AddHorizontalLine(drawList, origin, i * _markerSize, 128, _lineColorDefault);
+				AddHorizontalLine(drawList, origin, i * _markerSize, legendWidth, _lineColorDefault);
 			}
 
-			AddHorizontalLine(drawList, origin, EnumUtils.EventTypeNames.Count * _markerSize, 128, _lineColorDefault);
+			AddHorizontalLine(drawList, origin, EnumUtils.EventTypeNames.Count * _markerSize, legendWidth, _lineColorDefault);
 		}
 
 		ImGui.PopStyleColor();
@@ -91,7 +96,20 @@ public static class ReplayTimelineChild
 
 			for (int i = 0; i < eventsData.TickCount + 1; i++)
 			{
-				AddVerticalLine(drawList, origin, i * _markerSize, EnumUtils.EventTypeNames.Count * _markerSize, i % 5 == 0 ? _lineColorDefault : _lineColorSub);
+				bool showTimeText = i % 5 == 0;
+				float height = showTimeText ? EnumUtils.EventTypeNames.Count * _markerSize + 6 : EnumUtils.EventTypeNames.Count * _markerSize;
+				Color color = showTimeText ? _lineColorDefault : _lineColorSub;
+				AddVerticalLine(drawList, origin, i * _markerSize, height, color);
+				if (showTimeText)
+				{
+#pragma warning disable S2583 // False positive
+					Color textColor = i % 60 == 0 ? Color.Yellow : ImGuiUtils.GetColorU32(ImGuiCol.Text);
+#pragma warning restore S2583 // False positive
+					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, EnumUtils.EventTypeNames.Count * _markerSize + 5));
+					ImGui.TextColored(textColor, Inline.Span(TimeUtils.TickToTime(i, startTime), StringFormats.TimeFormat));
+					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, EnumUtils.EventTypeNames.Count * _markerSize + 21));
+					ImGui.TextColored(textColor, Inline.Span(i));
+				}
 			}
 		}
 
