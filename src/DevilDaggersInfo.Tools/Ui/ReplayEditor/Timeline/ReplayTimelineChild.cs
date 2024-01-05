@@ -84,25 +84,34 @@ public static class ReplayTimelineChild
 
 			AddHorizontalLine(drawList, origin, EnumUtils.EventTypeNames.Count * _markerSize, lineWidth, _lineColorDefault);
 
+			int start = (int)Math.Floor(ImGui.GetScrollX() / _markerSize);
+			int end = (int)Math.Ceiling((ImGui.GetScrollX() + ImGui.GetWindowWidth()) / _markerSize); // eventsData.TickCount + 1
+
+			// Always render these invisible buttons so the scroll bar is always visible.
+			ImGui.SetCursorScreenPos(origin);
+			ImGui.InvisibleButton("InvisibleStartMarker", new(_markerSize, _markerSize));
+			ImGui.SetCursorScreenPos(origin + new Vector2((eventsData.TickCount - 1) * _markerSize, 0));
+			ImGui.InvisibleButton("InvisibleEndMarker", new(_markerSize, _markerSize));
+
 			int frameIndex = 0;
 			for (int i = 0; i < eventsData.Events.Count; i++)
 			{
 				ReplayEvent replayEvent = eventsData.Events[i];
 				EventType? eventType = replayEvent.GetEventType();
-				if (eventType is null)
-					continue;
-
-				int eventTypeIndex = GetIndex(eventType.Value);
-				ImGui.SetCursorScreenPos(origin + new Vector2(frameIndex * _markerSize, eventTypeIndex * _markerSize));
-				ImGui.PushStyleColor(ImGuiCol.Button, EventTypeRendererUtils.GetEventTypeColor(eventType.Value) with { W = 0.4f });
-				ImGui.Button("1", new(_markerSize, _markerSize));
-				ImGui.PopStyleColor();
+				if (eventType.HasValue && (frameIndex >= start || frameIndex < end))
+				{
+					int eventTypeIndex = GetIndex(eventType.Value);
+					ImGui.SetCursorScreenPos(origin + new Vector2(frameIndex * _markerSize, eventTypeIndex * _markerSize));
+					ImGui.PushStyleColor(ImGuiCol.Button, EventTypeRendererUtils.GetEventTypeColor(eventType.Value) with { W = 0.4f });
+					ImGui.Button("1", new(_markerSize, _markerSize));
+					ImGui.PopStyleColor();
+				}
 
 				if (eventType is EventType.InitialInputs or EventType.Inputs)
 					frameIndex++;
 			}
 
-			for (int i = 0; i < eventsData.TickCount + 1; i++)
+			for (int i = start; i < end; i++)
 			{
 				bool showTimeText = i % 5 == 0;
 				float height = showTimeText ? EnumUtils.EventTypeNames.Count * _markerSize + 6 : EnumUtils.EventTypeNames.Count * _markerSize;
