@@ -196,7 +196,7 @@ public static class ReplayEventsChild
 				where TRenderer : IEventTypeRenderer<TEvent>
 			{
 				if (_eventTypeEnabled[eventType] && events.Count > 0)
-					EventTypeRendererUtils.RenderTable<TEvent, TRenderer>(EventTypeRendererUtils.GetEventTypeColor(eventType), eventType, events, replayEventsData);
+					EventTypeRendererUtils.RenderTable<TEvent, TRenderer>(eventType, events, replayEventsData);
 			}
 
 			// Enemy spawn events
