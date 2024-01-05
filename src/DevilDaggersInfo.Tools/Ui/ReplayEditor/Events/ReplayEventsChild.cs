@@ -169,8 +169,8 @@ public static class ReplayEventsChild
 				_eventCache.Add(j, replayEvent);
 				if (!showTick)
 				{
-					EventType? eventType = replayEvent.GetEventType();
-					if (eventType.HasValue && _eventTypeEnabled[eventType.Value])
+					EventType eventType = replayEvent.GetEventType();
+					if (_eventTypeEnabled[eventType])
 						showTick = true;
 				}
 			}
