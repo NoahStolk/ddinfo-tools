@@ -4,6 +4,7 @@ using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
@@ -54,7 +55,7 @@ public static class ReplayTimelineChild
 				string name = EnumUtils.EventTypeNames[eventType];
 
 				ImGui.SetCursorScreenPos(origin + new Vector2(5, i * _markerSize + 5));
-				ImGui.Text(name);
+				ImGui.TextColored(EventTypeRendererUtils.GetEventTypeColor(eventType), name);
 
 				AddHorizontalLine(drawList, origin, i * _markerSize, legendWidth, _lineColorDefault);
 			}
@@ -74,7 +75,12 @@ public static class ReplayTimelineChild
 			Vector2 origin = ImGui.GetCursorScreenPos();
 			float lineWidth = eventsData.TickCount * _markerSize;
 			for (int i = 0; i < EnumUtils.EventTypeNames.Count; i++)
+			{
 				AddHorizontalLine(drawList, origin, i * _markerSize, lineWidth, _lineColorDefault);
+
+				Vector4 backgroundColor = EventTypeRendererUtils.GetEventTypeColor(EnumUtils.EventTypes[i]) with { W = 0.1f };
+				drawList.AddRectFilled(origin + new Vector2(0, i * _markerSize), origin + new Vector2(lineWidth, (i + 1) * _markerSize), ImGui.GetColorU32(backgroundColor));
+			}
 
 			AddHorizontalLine(drawList, origin, EnumUtils.EventTypeNames.Count * _markerSize, lineWidth, _lineColorDefault);
 
@@ -88,7 +94,9 @@ public static class ReplayTimelineChild
 
 				int eventTypeIndex = GetIndex(eventType.Value);
 				ImGui.SetCursorScreenPos(origin + new Vector2(frameIndex * _markerSize, eventTypeIndex * _markerSize));
+				ImGui.PushStyleColor(ImGuiCol.Button, EventTypeRendererUtils.GetEventTypeColor(eventType.Value) with { W = 0.4f });
 				ImGui.Button("1", new(_markerSize, _markerSize));
+				ImGui.PopStyleColor();
 
 				if (eventType is EventType.InitialInputs or EventType.Inputs)
 					frameIndex++;
