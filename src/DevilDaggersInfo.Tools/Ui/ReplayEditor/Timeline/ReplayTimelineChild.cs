@@ -2,6 +2,8 @@ using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Data;
+using DevilDaggersInfo.Core.Replay.Events.Enums;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
@@ -55,6 +57,31 @@ public static class ReplayTimelineChild
 		}
 
 		ImGui.EndChild(); // End TimelineViewChild
+
+		if (ImGui.BeginChild("ActionsChild", new(0, 64)))
+		{
+			if (ImGui.Button("Add 1 second of data"))
+			{
+				ReplayEvent? lastEndEvent = eventsData.Events.LastOrDefault(e => e.GetEventType() == EventType.End);
+				if (lastEndEvent == null)
+				{
+					// Add 1 second of data at the end of the replay.
+					for (int i = 0; i < 60; i++)
+						FileStates.Replay.Object.EventsData.AddEvent(new InputsEventData(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0));
+				}
+				else
+				{
+					// Add 1 second of data before the last End event.
+					int indexOfLastEndEvent = eventsData.Events.IndexOf(lastEndEvent);
+					for (int i = 0; i < 60; i++)
+						FileStates.Replay.Object.EventsData.InsertEvent(indexOfLastEndEvent, new InputsEventData(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0));
+				}
+
+				TimelineCache.Clear();
+			}
+		}
+
+		ImGui.EndChild(); // End ActionsChild
 
 		if (ImGui.BeginChild("SelectedEventsChild"))
 		{
