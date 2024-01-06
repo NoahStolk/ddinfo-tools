@@ -2,7 +2,6 @@ using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Data;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
@@ -70,14 +69,14 @@ public static class ReplayTimelineChild
 				{
 					// Add 1 second of data at the end of the replay.
 					for (int i = 0; i < 60; i++)
-						FileStates.Replay.Object.EventsData.AddEvent(new InputsEventData(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0));
+						FileStates.Replay.Object.EventsData.AddEvent(InputsEventData.CreateDefault());
 				}
 				else
 				{
 					// Add 1 second of data before the last End event.
 					int indexOfLastEndEvent = eventsData.Events.IndexOf(lastEndEvent);
 					for (int i = 0; i < 60; i++)
-						FileStates.Replay.Object.EventsData.InsertEvent(indexOfLastEndEvent, new InputsEventData(false, false, false, false, JumpType.None, ShootType.None, ShootType.None, 0, 0));
+						FileStates.Replay.Object.EventsData.InsertEvent(indexOfLastEndEvent, InputsEventData.CreateDefault());
 				}
 
 				TimelineCache.Clear();
@@ -241,7 +240,7 @@ public static class ReplayTimelineChild
 				}
 			}
 
-			HandleInput();
+			HandleInput(origin);
 		}
 
 		ImGui.EndChild(); // End TimelineEditorChild
@@ -269,7 +268,7 @@ public static class ReplayTimelineChild
 			_selectedEventDataCache.Add(eventIndex, replayEvent);
 	}
 
-	private static void HandleInput()
+	private static void HandleInput(Vector2 origin)
 	{
 		if (!ImGui.IsWindowHovered())
 			return;
@@ -290,5 +289,46 @@ public static class ReplayTimelineChild
 
 		if (io.MouseWheel != 0)
 			ImGui.SetScrollX(ImGui.GetScrollX() - io.MouseWheel * _markerSize * 2.5f);
+
+		if (ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
+		{
+			Vector2 mousePos = ImGui.GetMousePos() - origin;
+
+			// TODO: Fix:
+			// - Tick index is not always correct.
+			// - Adding boid spawn event to 0th tick doesn't work.
+			int tickIndex = (int)Math.Floor(mousePos.X / _markerSize);
+			int eventTypeIndex = Math.Clamp((int)Math.Floor(mousePos.Y / _markerSize), 0, EnumUtils.EventTypes.Count - 1);
+			EventType eventType = EnumUtils.EventTypes[eventTypeIndex];
+
+			if (tickIndex >= 0 && tickIndex < FileStates.Replay.Object.EventsData.EventOffsetsPerTick.Count)
+			{
+				int eventIndex = FileStates.Replay.Object.EventsData.EventOffsetsPerTick[tickIndex];
+				IEventData eventData = eventType switch
+				{
+					EventType.BoidSpawn => BoidSpawnEventData.CreateDefault(),
+					EventType.LeviathanSpawn => LeviathanSpawnEventData.CreateDefault(),
+					EventType.PedeSpawn => PedeSpawnEventData.CreateDefault(),
+					EventType.SpiderEggSpawn => SpiderEggSpawnEventData.CreateDefault(),
+					EventType.SpiderSpawn => SpiderSpawnEventData.CreateDefault(),
+					EventType.SquidSpawn => SquidSpawnEventData.CreateDefault(),
+					EventType.ThornSpawn => ThornSpawnEventData.CreateDefault(),
+					EventType.DaggerSpawn => DaggerSpawnEventData.CreateDefault(),
+					EventType.EntityOrientation => EntityOrientationEventData.CreateDefault(),
+					EventType.EntityPosition => EntityPositionEventData.CreateDefault(),
+					EventType.EntityTarget => EntityTargetEventData.CreateDefault(),
+					EventType.Gem => GemEventData.CreateDefault(),
+					EventType.Hit => HitEventData.CreateDefault(),
+					EventType.Transmute => TransmuteEventData.CreateDefault(),
+					EventType.InitialInputs => InitialInputsEventData.CreateDefault(),
+					EventType.Inputs => InputsEventData.CreateDefault(),
+					EventType.End => EndEventData.CreateDefault(),
+					_ => throw new UnreachableException($"Unknown event type: {eventType}"),
+				};
+
+				FileStates.Replay.Object.EventsData.InsertEvent(eventIndex, eventData);
+				TimelineCache.Clear();
+			}
+		}
 	}
 }
