@@ -1,12 +1,13 @@
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
+using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Extensions;
 
 public static class ReplayEventExtensions
 {
-	public static EventType? GetEventType(this ReplayEvent replayEvent)
+	public static EventType GetEventType(this ReplayEvent replayEvent)
 	{
 		return replayEvent.Data switch
 		{
@@ -30,7 +31,7 @@ public static class ReplayEventExtensions
 			InputsEventData => EventType.Inputs,
 			EndEventData => EventType.End,
 
-			_ => null,
+			_ => throw new UnreachableException($"Unknown event type '{replayEvent.Data.GetType().Name}'."),
 		};
 	}
 }

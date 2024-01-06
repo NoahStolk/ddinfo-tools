@@ -60,6 +60,26 @@ public static class EnumUtils
 
 	public static readonly IReadOnlyList<EventType> EventTypes = Enum.GetValues<EventType>();
 	public static readonly IReadOnlyDictionary<EventType, string> EventTypeNames = EventTypes.ToDictionary(et => et, et => et.ToString());
+	public static readonly IReadOnlyDictionary<EventType, string> EventTypeFriendlyNames = new Dictionary<EventType, string>
+	{
+		[EventType.BoidSpawn] = "Boid Spawn",
+		[EventType.LeviathanSpawn] = "Leviathan Spawn",
+		[EventType.PedeSpawn] = "Pede Spawn",
+		[EventType.SpiderEggSpawn] = "Spider Egg Spawn",
+		[EventType.SpiderSpawn] = "Spider Spawn",
+		[EventType.SquidSpawn] = "Squid Spawn",
+		[EventType.ThornSpawn] = "Thorn Spawn",
+		[EventType.DaggerSpawn] = "Dagger Spawn",
+		[EventType.EntityOrientation] = "Entity Orientation",
+		[EventType.EntityPosition] = "Entity Position",
+		[EventType.EntityTarget] = "Entity Target",
+		[EventType.Gem] = "Gem",
+		[EventType.Hit] = "Hit",
+		[EventType.Transmute] = "Transmute",
+		[EventType.InitialInputs] = "Initial Inputs",
+		[EventType.Inputs] = "Inputs",
+		[EventType.End] = "End",
+	};
 
 	public static readonly IReadOnlyList<ModBinaryType> ModBinaryTypes = Enum.GetValues<ModBinaryType>();
 	public static readonly IReadOnlyDictionary<ModBinaryType, string> ModBinaryTypeNames = ModBinaryTypes.ToDictionary(mbt => mbt, mbt => mbt.ToString().ToLower());

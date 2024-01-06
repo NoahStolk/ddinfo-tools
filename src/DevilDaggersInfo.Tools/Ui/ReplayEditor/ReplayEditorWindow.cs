@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using ImGuiNET;
 
@@ -14,6 +15,7 @@ public static class ReplayEditorWindow
 		ReplayEditor3DWindow.Reset();
 		ReplayEventsChild.Reset();
 		ReplayEntitiesChild.Reset();
+		ReplayTimelineChild.Reset();
 	}
 
 	public static void Update(float delta)
@@ -39,26 +41,32 @@ public static class ReplayEditorWindow
 
 			if (ImGui.BeginTabBar("Replay Editor Tabs"))
 			{
-				if (ImGui.BeginTabItem("Events"))
+				if (ImGui.BeginTabItem("Timeline editor (recommended)"))
+				{
+					ReplayTimelineChild.Render(FileStates.Replay.Object.EventsData, FileStates.Replay.Object.Header.StartTime);
+					ImGui.EndTabItem();
+				}
+
+				if (ImGui.BeginTabItem("Table editor (advanced)"))
 				{
 					ReplayEventsChild.Render(FileStates.Replay.Object.EventsData, FileStates.Replay.Object.Header.StartTime);
 					ImGui.EndTabItem();
 				}
 
-				if (ImGui.BeginTabItem("Entities"))
+				if (ImGui.BeginTabItem("Entities viewer"))
 				{
 					ReplayEntitiesChild.Render(FileStates.Replay.Object.EventsData, FileStates.Replay.Object.Header.StartTime);
 					ImGui.EndTabItem();
 				}
 
-				if (ImGui.BeginTabItem("Inputs"))
+				if (ImGui.BeginTabItem("Inputs viewer"))
 				{
 					ReplayInputsChild.Render(FileStates.Replay.Object.EventsData, FileStates.Replay.Object.Header.StartTime);
 					ImGui.EndTabItem();
 				}
 
 #if DEBUG
-				if (ImGui.BeginTabItem("Debug"))
+				if (ImGui.BeginTabItem("Debug viewer"))
 				{
 					if (ImGui.BeginChild("ReplayDebugChild", new(0, 0)))
 					{
