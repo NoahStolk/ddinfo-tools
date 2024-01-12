@@ -12,7 +12,7 @@ public static class ReplayTimelineActionsChild
 {
 	private static bool _insertAtEnd;
 	private static int _tickIndex;
-	private static int _tickCount;
+	private static int _tickCount = 5;
 
 	public static void Render(ReplayEventsData eventsData)
 	{
@@ -21,9 +21,9 @@ public static class ReplayTimelineActionsChild
 			ImGui.PushItemWidth(128);
 			ImGui.Checkbox("Insert at end", ref _insertAtEnd);
 			ImGui.BeginDisabled(_insertAtEnd);
-			ImGui.InputInt("Insert at tick index", ref _tickIndex, 0, eventsData.TickCount - 1);
+			ImGui.InputInt("Insert at tick index", ref _tickIndex);
 			ImGui.EndDisabled();
-			ImGui.InputInt("Amount of ticks to insert", ref _tickCount, 0, 1000);
+			ImGui.InputInt("Amount of ticks to insert", ref _tickCount);
 			ImGui.PopItemWidth();
 
 			if (ImGui.Button("Insert empty data"))
@@ -41,14 +41,12 @@ public static class ReplayTimelineActionsChild
 					{
 						// Add 1 second of data before the last End event.
 						int indexOfLastEndEvent = eventsData.Events.IndexOf(lastEndEvent);
-						for (int i = 0; i < _tickCount; i++)
-							FileStates.Replay.Object.EventsData.InsertEvent(indexOfLastEndEvent, InputsEventData.CreateDefault());
+						InsertEmptyData(indexOfLastEndEvent);
 					}
 				}
 				else
 				{
-					for (int i = 0; i < _tickCount; i++)
-						FileStates.Replay.Object.EventsData.InsertEvent(_tickIndex, InputsEventData.CreateDefault());
+					InsertEmptyData(_tickIndex);
 				}
 
 				TimelineCache.Clear();
@@ -56,5 +54,17 @@ public static class ReplayTimelineActionsChild
 		}
 
 		ImGui.EndChild(); // End ActionsChild
+	}
+
+	private static void InsertEmptyData(int index)
+	{
+		ReplayEvent? lastInitialInputsEvent = FileStates.Replay.Object.EventsData.Events.LastOrDefault(e => e.GetEventType() == EventType.InitialInputs);
+		int indexOfLastInitialInputsEvent = FileStates.Replay.Object.EventsData.Events.IndexOf(lastInitialInputsEvent);
+		index = Math.Clamp(index, indexOfLastInitialInputsEvent + 1, FileStates.Replay.Object.EventsData.Events.Count - 1);
+
+		_tickCount = Math.Clamp(_tickCount, 1, 1000);
+
+		for (int i = 0; i < _tickCount; i++)
+			FileStates.Replay.Object.EventsData.InsertEvent(index, InputsEventData.CreateDefault());
 	}
 }
