@@ -53,6 +53,14 @@ The original tools are not included in this repository. Visit these repositories
 - [Custom Leaderboards](https://github.com/NoahStolk/DevilDaggersCustomLeaderboards) - old Windows-only custom leaderboards client (no longer works)
 - [Asset Editor](https://github.com/NoahStolk/DevilDaggersAssetEditor) - old Windows-only asset editor
 
+## Running from source
+
+1. Clone the repository.
+2. Install [the .NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) version 8.0.x or later. The SDK is available for Windows, macOS, and Linux.
+3. Run the project:
+   - Execute `dotnet run --project src/DevilDaggersInfo.Tools/DevilDaggersInfo.Tools.csproj` from the command line.
+   - Alternatively, you can open the `src/DevilDaggersInfo.Tools.sln` file in an IDE such as JetBrains Rider or Visual Studio and run the `DevilDaggersInfo.Tools` project.
+
 ## Disclaimer
 
 While the project provides many ways to practice and modify the game, it does **not** allow you to cheat, or encourage cheating at all. You are also asked to not redistribute the game's assets, and only use them for modding purposes.
