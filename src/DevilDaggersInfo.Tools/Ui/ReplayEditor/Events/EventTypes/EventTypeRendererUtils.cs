@@ -77,6 +77,28 @@ public static class EventTypeRendererUtils
 		}
 	}
 
+	public static void RenderInputsTable<TEvent, TRenderer>(ReadOnlySpan<char> tableId, IReadOnlyList<(int EventIndex, int EntityId, TEvent Event)> events, ReplayEventsData replayEventsData)
+		where TEvent : IEventData
+		where TRenderer : IEventTypeRenderer<TEvent>
+	{
+		if (ImGui.BeginTable(tableId, TRenderer.ColumnCountData, EventTableFlags))
+		{
+			TRenderer.SetupColumnsData();
+
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < events.Count; i++)
+			{
+				ImGui.TableNextRow();
+
+				(int eventIndex, int _, TEvent e) = events[i];
+				TRenderer.RenderData(eventIndex, e, replayEventsData);
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
 	public static void NextColumnActions(int index)
 	{
 		ImGui.TableNextColumn();
