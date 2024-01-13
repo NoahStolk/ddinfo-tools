@@ -47,7 +47,7 @@ public static class ReplayTimelineChild
 		TimelineCache.Clear();
 		_selectedEvents.Clear();
 		_selectedEventDataCache.Clear();
-		_selectedTickIndex = -1;
+		_selectedTickIndex = null;
 	}
 
 	public static void Render(ReplayEventsData eventsData, float startTime)
@@ -66,12 +66,24 @@ public static class ReplayTimelineChild
 
 		ReplayTimelineActionsChild.Render(eventsData);
 
-		if (ImGui.BeginChild("SelectedEventsChild"))
+		ImGui.PushStyleColor(ImGuiCol.ChildBg, Color.Gray(0.1f));
+		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8));
+		if (ImGui.BeginChild("SelectedEventsChild", default, ImGuiChildFlags.AlwaysUseWindowPadding))
 		{
+			if (_selectedTickIndex.HasValue)
+			{
+				ImGui.PushFont(Root.FontGoetheBold20);
+				ImGui.Text(Inline.Span($"Tick {_selectedTickIndex.Value} selected"));
+				ImGui.PopFont();
+			}
+
 			RenderSelectedEvents(eventsData);
 		}
 
 		ImGui.EndChild(); // End SelectedEventsChild
+
+		ImGui.PopStyleVar();
+		ImGui.PopStyleColor();
 	}
 
 	private static void RenderSelectedEvents(ReplayEventsData replayEventsData)
