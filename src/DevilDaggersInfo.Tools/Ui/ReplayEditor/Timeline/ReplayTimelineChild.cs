@@ -166,13 +166,13 @@ public static class ReplayTimelineChild
 			float lineWidth = eventsData.TickCount * _markerSize;
 			for (int i = 0; i < _shownEventTypes.Count; i++)
 			{
-				AddHorizontalLine(drawList, origin, i * _markerSize, lineWidth, _lineColorDefault);
+				AddHorizontalLine(drawList, origin, i * _markerSize, lineWidth, _lineColorSub);
 
 				Vector4 backgroundColor = EventTypeRendererUtils.GetEventTypeColor(_shownEventTypes[i]) with { W = 0.1f };
 				drawList.AddRectFilled(origin + new Vector2(0, i * _markerSize), origin + new Vector2(lineWidth, (i + 1) * _markerSize), ImGui.GetColorU32(backgroundColor));
 			}
 
-			AddHorizontalLine(drawList, origin, _shownEventTypes.Count * _markerSize, lineWidth, _lineColorDefault);
+			AddHorizontalLine(drawList, origin, _shownEventTypes.Count * _markerSize, lineWidth, _lineColorSub);
 
 			int startTickIndex = (int)Math.Floor(ImGui.GetScrollX() / _markerSize);
 			int endTickIndex = Math.Min((int)Math.Ceiling((ImGui.GetScrollX() + ImGui.GetWindowWidth()) / _markerSize), eventsData.TickCount);
