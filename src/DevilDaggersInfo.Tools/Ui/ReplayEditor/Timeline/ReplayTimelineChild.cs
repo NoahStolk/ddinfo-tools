@@ -18,6 +18,9 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 public static class ReplayTimelineChild
 {
 	private const float _markerSize = 24;
+
+	private static readonly List<EventType> _shownEventTypes = Enum.GetValues<EventType>().Where(et => et is not EventType.End and not EventType.InitialInputs and not EventType.Inputs).ToList();
+
 	private static readonly Dictionary<EventType, int> _eventTypeRowIndices = [];
 	private static readonly Color _lineColorDefault = Color.Gray(0.4f);
 	private static readonly Color _lineColorSub = Color.Gray(0.2f);
@@ -31,7 +34,10 @@ public static class ReplayTimelineChild
 		if (_eventTypeRowIndices.TryGetValue(eventType, out int index))
 			return index;
 
-		index = EnumUtils.EventTypes.IndexOf(eventType);
+		index = _shownEventTypes.IndexOf(eventType);
+		if (index == -1)
+			return -1;
+
 		_eventTypeRowIndices[eventType] = index;
 		return index;
 	}
@@ -41,7 +47,7 @@ public static class ReplayTimelineChild
 		TimelineCache.Clear();
 		_selectedEvents.Clear();
 		_selectedEventDataCache.Clear();
-		_selectedTickIndex = 0;
+		_selectedTickIndex = -1;
 	}
 
 	public static void Render(ReplayEventsData eventsData, float startTime)
@@ -51,7 +57,7 @@ public static class ReplayTimelineChild
 
 		const float markerTextHeight = 32;
 		const float scrollBarHeight = 20;
-		if (ImGui.BeginChild("TimelineViewChild", new(0, EnumUtils.EventTypes.Count * _markerSize + markerTextHeight + scrollBarHeight)))
+		if (ImGui.BeginChild("TimelineViewChild", new(0, _shownEventTypes.Count * _markerSize + markerTextHeight + scrollBarHeight)))
 		{
 			RenderTimeline(eventsData, startTime);
 		}
@@ -111,9 +117,9 @@ public static class ReplayTimelineChild
 		{
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 			Vector2 origin = ImGui.GetCursorScreenPos();
-			for (int i = 0; i < EnumUtils.EventTypes.Count; i++)
+			for (int i = 0; i < _shownEventTypes.Count; i++)
 			{
-				EventType eventType = EnumUtils.EventTypes[i];
+				EventType eventType = _shownEventTypes[i];
 				string name = EnumUtils.EventTypeFriendlyNames[eventType];
 
 				ImGui.SetCursorScreenPos(origin + new Vector2(5, i * _markerSize + 5));
@@ -122,7 +128,7 @@ public static class ReplayTimelineChild
 				AddHorizontalLine(drawList, origin, i * _markerSize, legendWidth, _lineColorDefault);
 			}
 
-			AddHorizontalLine(drawList, origin, EnumUtils.EventTypes.Count * _markerSize, legendWidth, _lineColorDefault);
+			AddHorizontalLine(drawList, origin, _shownEventTypes.Count * _markerSize, legendWidth, _lineColorDefault);
 		}
 
 		ImGui.PopStyleColor();
@@ -136,15 +142,15 @@ public static class ReplayTimelineChild
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 			Vector2 origin = ImGui.GetCursorScreenPos();
 			float lineWidth = eventsData.TickCount * _markerSize;
-			for (int i = 0; i < EnumUtils.EventTypes.Count; i++)
+			for (int i = 0; i < _shownEventTypes.Count; i++)
 			{
 				AddHorizontalLine(drawList, origin, i * _markerSize, lineWidth, _lineColorDefault);
 
-				Vector4 backgroundColor = EventTypeRendererUtils.GetEventTypeColor(EnumUtils.EventTypes[i]) with { W = 0.1f };
+				Vector4 backgroundColor = EventTypeRendererUtils.GetEventTypeColor(_shownEventTypes[i]) with { W = 0.1f };
 				drawList.AddRectFilled(origin + new Vector2(0, i * _markerSize), origin + new Vector2(lineWidth, (i + 1) * _markerSize), ImGui.GetColorU32(backgroundColor));
 			}
 
-			AddHorizontalLine(drawList, origin, EnumUtils.EventTypes.Count * _markerSize, lineWidth, _lineColorDefault);
+			AddHorizontalLine(drawList, origin, _shownEventTypes.Count * _markerSize, lineWidth, _lineColorDefault);
 
 			int startTickIndex = (int)Math.Floor(ImGui.GetScrollX() / _markerSize);
 			int endTickIndex = Math.Min((int)Math.Ceiling((ImGui.GetScrollX() + ImGui.GetWindowWidth()) / _markerSize), eventsData.TickCount);
@@ -201,20 +207,20 @@ public static class ReplayTimelineChild
 			for (int i = startTickIndex; i < endTickIndex; i++)
 			{
 				bool showTimeText = i % 5 == 0;
-				float height = showTimeText ? EnumUtils.EventTypes.Count * _markerSize + 6 : EnumUtils.EventTypes.Count * _markerSize;
+				float height = showTimeText ? _shownEventTypes.Count * _markerSize + 6 : _shownEventTypes.Count * _markerSize;
 				Color color = showTimeText ? _lineColorDefault : _lineColorSub;
 				AddVerticalLine(drawList, origin, i * _markerSize, height, color);
 				if (i == _selectedTickIndex)
-					drawList.AddRectFilled(origin + new Vector2(i * _markerSize, 0), origin + new Vector2((i + 1) * _markerSize, EnumUtils.EventTypes.Count * _markerSize), ImGui.GetColorU32(new Vector4(1, 1, 1, 0.2f)));
+					drawList.AddRectFilled(origin + new Vector2(i * _markerSize, 0), origin + new Vector2((i + 1) * _markerSize, _shownEventTypes.Count * _markerSize), ImGui.GetColorU32(new Vector4(1, 1, 1, 0.2f)));
 
 				if (showTimeText)
 				{
 #pragma warning disable S2583 // False positive
 					Color textColor = i % 60 == 0 ? Color.Yellow : ImGuiUtils.GetColorU32(ImGuiCol.Text);
 #pragma warning restore S2583 // False positive
-					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, EnumUtils.EventTypes.Count * _markerSize + 5));
+					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, _shownEventTypes.Count * _markerSize + 5));
 					ImGui.TextColored(textColor, Inline.Span(TimeUtils.TickToTime(i, startTime), StringFormats.TimeFormat));
-					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, EnumUtils.EventTypes.Count * _markerSize + 21));
+					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, _shownEventTypes.Count * _markerSize + 21));
 					ImGui.TextColored(textColor, Inline.Span(i));
 				}
 			}
@@ -286,10 +292,10 @@ public static class ReplayTimelineChild
 		if (isDoubleClicked)
 		{
 			int eventTypeIndex = (int)Math.Floor(mousePos.Y / _markerSize);
-			if (eventTypeIndex < 0 || eventTypeIndex >= EnumUtils.EventTypes.Count)
+			if (eventTypeIndex < 0 || eventTypeIndex >= _shownEventTypes.Count)
 				return;
 
-			EventType eventType = EnumUtils.EventTypes[eventTypeIndex];
+			EventType eventType = _shownEventTypes[eventTypeIndex];
 			IEventData eventData = eventType switch
 			{
 				EventType.BoidSpawn => BoidSpawnEventData.CreateDefault(),
@@ -306,9 +312,9 @@ public static class ReplayTimelineChild
 				EventType.Gem => GemEventData.CreateDefault(),
 				EventType.Hit => HitEventData.CreateDefault(),
 				EventType.Transmute => TransmuteEventData.CreateDefault(),
-				EventType.InitialInputs => InitialInputsEventData.CreateDefault(),
-				EventType.Inputs => InputsEventData.CreateDefault(),
-				EventType.End => EndEventData.CreateDefault(),
+				EventType.InitialInputs => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
+				EventType.Inputs => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
+				EventType.End => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
 				_ => throw new UnreachableException($"Unknown event type: {eventType}"),
 			};
 
