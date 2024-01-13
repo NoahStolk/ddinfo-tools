@@ -159,7 +159,7 @@ public static class ReplayTimelineChild
 
 		ImGui.SameLine();
 
-		if (ImGui.BeginChild("TimelineEditorChild", default, ImGuiChildFlags.None, ImGuiWindowFlags.HorizontalScrollbar))
+		if (ImGui.BeginChild("TimelineEditorChild", default, ImGuiChildFlags.None, ImGuiWindowFlags.HorizontalScrollbar | ImGuiWindowFlags.NoMove))
 		{
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 			Vector2 origin = ImGui.GetCursorScreenPos();
