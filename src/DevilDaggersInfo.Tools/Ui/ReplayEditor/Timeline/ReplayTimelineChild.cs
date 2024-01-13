@@ -160,13 +160,16 @@ public static class ReplayTimelineChild
 				foreach ((EventType eventType, List<(ReplayEvent Event, int EventIndex)> replayEvents) in tickData)
 				{
 					int eventTypeIndex = GetIndex(eventType);
-					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize, eventTypeIndex * _markerSize));
-					ImGui.PushStyleColor(ImGuiCol.Button, EventTypeRendererUtils.GetEventTypeColor(eventType) with { W = 0.4f });
-					string typeName = EnumUtils.EventTypeNames[eventType];
-					if (ImGui.Button(replayEvents.Count > 99 ? Inline.Span($"XX##_{i}_{typeName}") : Inline.Span($"{replayEvents.Count}##_{i}_{typeName}"), new(_markerSize, _markerSize)))
-						SelectEvents(replayEvents, eventType, i);
+					Vector2 rectOrigin = origin + new Vector2(i * _markerSize, eventTypeIndex * _markerSize);
+					Vector2 markerSizeVec = new(_markerSize, _markerSize);
+					bool isHovering = ImGui.IsMouseHoveringRect(rectOrigin, rectOrigin + markerSizeVec);
 
-					if (ImGui.IsItemHovered())
+					drawList.AddRectFilled(rectOrigin, rectOrigin + markerSizeVec, ImGui.GetColorU32(EventTypeRendererUtils.GetEventTypeColor(eventType) with { W = isHovering ? 0.7f : 0.4f }));
+
+					float xOffset = replayEvents.Count < 10 ? 9 : 5;
+					drawList.AddText(rectOrigin + new Vector2(xOffset, 5), 0xffffffff, replayEvents.Count > 99 ? Inline.Span("XX") : Inline.Span($"{replayEvents.Count}"));
+
+					if (isHovering)
 					{
 						ImGui.BeginTooltip();
 						ImGui.TextColored(EventTypeRendererUtils.GetEventTypeColor(eventType), EnumUtils.EventTypeFriendlyNames[eventType]);
@@ -191,8 +194,6 @@ public static class ReplayTimelineChild
 
 						ImGui.EndTooltip();
 					}
-
-					ImGui.PopStyleColor();
 				}
 			}
 
@@ -267,45 +268,58 @@ public static class ReplayTimelineChild
 		if (io.MouseWheel != 0)
 			ImGui.SetScrollX(ImGui.GetScrollX() - io.MouseWheel * _markerSize * 2.5f);
 
-		if (ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
+		bool isClicked = ImGui.IsMouseClicked(ImGuiMouseButton.Left);
+		bool isDoubleClicked = ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left);
+		if (isClicked || isDoubleClicked)
 		{
-			Vector2 mousePos = ImGui.GetMousePos() - origin;
-
-			// TODO: Fix:
-			// - Tick index is not always correct.
-			// - Adding boid spawn event to 0th tick doesn't work.
-			int tickIndex = (int)Math.Floor(mousePos.X / _markerSize);
-			int eventTypeIndex = Math.Clamp((int)Math.Floor(mousePos.Y / _markerSize), 0, EnumUtils.EventTypes.Count - 1);
-			EventType eventType = EnumUtils.EventTypes[eventTypeIndex];
-
-			if (tickIndex >= 0 && tickIndex < FileStates.Replay.Object.EventsData.EventOffsetsPerTick.Count)
-			{
-				int eventIndex = FileStates.Replay.Object.EventsData.EventOffsetsPerTick[tickIndex];
-				IEventData eventData = eventType switch
-				{
-					EventType.BoidSpawn => BoidSpawnEventData.CreateDefault(),
-					EventType.LeviathanSpawn => LeviathanSpawnEventData.CreateDefault(),
-					EventType.PedeSpawn => PedeSpawnEventData.CreateDefault(),
-					EventType.SpiderEggSpawn => SpiderEggSpawnEventData.CreateDefault(),
-					EventType.SpiderSpawn => SpiderSpawnEventData.CreateDefault(),
-					EventType.SquidSpawn => SquidSpawnEventData.CreateDefault(),
-					EventType.ThornSpawn => ThornSpawnEventData.CreateDefault(),
-					EventType.DaggerSpawn => DaggerSpawnEventData.CreateDefault(),
-					EventType.EntityOrientation => EntityOrientationEventData.CreateDefault(),
-					EventType.EntityPosition => EntityPositionEventData.CreateDefault(),
-					EventType.EntityTarget => EntityTargetEventData.CreateDefault(),
-					EventType.Gem => GemEventData.CreateDefault(),
-					EventType.Hit => HitEventData.CreateDefault(),
-					EventType.Transmute => TransmuteEventData.CreateDefault(),
-					EventType.InitialInputs => InitialInputsEventData.CreateDefault(),
-					EventType.Inputs => InputsEventData.CreateDefault(),
-					EventType.End => EndEventData.CreateDefault(),
-					_ => throw new UnreachableException($"Unknown event type: {eventType}"),
-				};
-
-				FileStates.Replay.Object.EventsData.InsertEvent(eventIndex, eventData);
-				TimelineCache.Clear();
-			}
+			HandleClick(isDoubleClicked, origin);
 		}
+	}
+
+	private static void HandleClick(bool isDoubleClicked, Vector2 origin)
+	{
+		Vector2 mousePos = ImGui.GetMousePos() - origin;
+
+		// TODO: Fix:
+		// - Adding boid spawn event to 0th tick doesn't work.
+		int tickIndex = (int)Math.Floor(mousePos.X / _markerSize);
+		if (tickIndex < 0 || tickIndex >= FileStates.Replay.Object.EventsData.EventOffsetsPerTick.Count || tickIndex >= TimelineCache.TickData.Count)
+			return;
+
+		int eventTypeIndex = Math.Clamp((int)Math.Floor(mousePos.Y / _markerSize), 0, EnumUtils.EventTypes.Count - 1);
+		EventType eventType = EnumUtils.EventTypes[eventTypeIndex];
+
+		// Handle double-click.
+		if (isDoubleClicked)
+		{
+			int eventIndex = FileStates.Replay.Object.EventsData.EventOffsetsPerTick[tickIndex];
+			IEventData eventData = eventType switch
+			{
+				EventType.BoidSpawn => BoidSpawnEventData.CreateDefault(),
+				EventType.LeviathanSpawn => LeviathanSpawnEventData.CreateDefault(),
+				EventType.PedeSpawn => PedeSpawnEventData.CreateDefault(),
+				EventType.SpiderEggSpawn => SpiderEggSpawnEventData.CreateDefault(),
+				EventType.SpiderSpawn => SpiderSpawnEventData.CreateDefault(),
+				EventType.SquidSpawn => SquidSpawnEventData.CreateDefault(),
+				EventType.ThornSpawn => ThornSpawnEventData.CreateDefault(),
+				EventType.DaggerSpawn => DaggerSpawnEventData.CreateDefault(),
+				EventType.EntityOrientation => EntityOrientationEventData.CreateDefault(),
+				EventType.EntityPosition => EntityPositionEventData.CreateDefault(),
+				EventType.EntityTarget => EntityTargetEventData.CreateDefault(),
+				EventType.Gem => GemEventData.CreateDefault(),
+				EventType.Hit => HitEventData.CreateDefault(),
+				EventType.Transmute => TransmuteEventData.CreateDefault(),
+				EventType.InitialInputs => InitialInputsEventData.CreateDefault(),
+				EventType.Inputs => InputsEventData.CreateDefault(),
+				EventType.End => EndEventData.CreateDefault(),
+				_ => throw new UnreachableException($"Unknown event type: {eventType}"),
+			};
+
+			FileStates.Replay.Object.EventsData.InsertEvent(eventIndex, eventData);
+			TimelineCache.Build(FileStates.Replay.Object.EventsData);
+		}
+
+		// Select in case of normal click, but select in case of double-click as well.
+		SelectEvents(TimelineCache.TickData[tickIndex].TryGetValue(eventType, out List<(ReplayEvent Event, int EventIndex)>? replayEvents) ? replayEvents : [], eventType, tickIndex);
 	}
 }
