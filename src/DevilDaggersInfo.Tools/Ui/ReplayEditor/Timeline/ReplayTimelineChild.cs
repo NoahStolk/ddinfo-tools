@@ -82,6 +82,19 @@ public static class ReplayTimelineChild
 			return;
 		}
 
+		ImGui.SeparatorText("Inputs");
+
+		if (_selectedEventDataCache.InitialInputsEvents.Count == 1)
+			EventTypeRendererUtils.RenderInputsTable<InitialInputsEventData, InitialInputsEvents>("InputsTable", _selectedEventDataCache.InitialInputsEvents, replayEventsData);
+		else if (_selectedEventDataCache.InputsEvents.Count == 1)
+			EventTypeRendererUtils.RenderInputsTable<InputsEventData, InputsEvents>("InputsTable", _selectedEventDataCache.InputsEvents, replayEventsData);
+		else if (_selectedEventDataCache.EndEvents.Count == 1)
+			ImGui.Text("End of replay / inputs");
+		else
+			ImGui.TextColored(Color.Red, "Invalid replay data");
+
+		ImGui.SeparatorText("Events");
+
 		RenderTable<BoidSpawnEventData, BoidSpawnEvents>(EventType.BoidSpawn, _selectedEventDataCache.BoidSpawnEvents);
 		RenderTable<LeviathanSpawnEventData, LeviathanSpawnEvents>(EventType.LeviathanSpawn, _selectedEventDataCache.LeviathanSpawnEvents);
 		RenderTable<PedeSpawnEventData, PedeSpawnEvents>(EventType.PedeSpawn, _selectedEventDataCache.PedeSpawnEvents);
@@ -96,9 +109,6 @@ public static class ReplayTimelineChild
 		RenderTable<GemEventData, GemEvents>(EventType.Gem, _selectedEventDataCache.GemEvents);
 		RenderTable<HitEventData, HitEvents>(EventType.Hit, _selectedEventDataCache.HitEvents);
 		RenderTable<TransmuteEventData, TransmuteEvents>(EventType.Transmute, _selectedEventDataCache.TransmuteEvents);
-		RenderTable<InitialInputsEventData, InitialInputsEvents>(EventType.InitialInputs, _selectedEventDataCache.InitialInputsEvents);
-		RenderTable<InputsEventData, InputsEvents>(EventType.Inputs, _selectedEventDataCache.InputsEvents);
-		RenderTable<EndEventData, EndEvents>(EventType.End, _selectedEventDataCache.EndEvents);
 
 		void RenderTable<TEvent, TRenderer>(EventType eventType, IReadOnlyList<(int EventIndex, int EntityId, TEvent Event)> events)
 			where TEvent : IEventData
