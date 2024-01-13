@@ -150,9 +150,9 @@ public static class ReplayTimelineChild
 
 			// Always render these invisible buttons so the scroll bar is always visible.
 			ImGui.SetCursorScreenPos(origin);
-			ImGui.InvisibleButton("InvisibleStartMarker", new(_markerSize, _markerSize));
+			ImGui.InvisibleButton("InvisibleStartMarker", default);
 			ImGui.SetCursorScreenPos(origin + new Vector2((eventsData.TickCount - 1) * _markerSize, 0));
-			ImGui.InvisibleButton("InvisibleEndMarker", new(_markerSize, _markerSize));
+			ImGui.InvisibleButton("InvisibleEndMarker", default);
 
 			for (int i = Math.Max(startTickIndex, 0); i < Math.Min(endTickIndex, TimelineCache.TickData.Count); i++)
 			{
@@ -279,17 +279,16 @@ public static class ReplayTimelineChild
 	private static void HandleClick(bool isDoubleClicked, Vector2 origin)
 	{
 		Vector2 mousePos = ImGui.GetMousePos() - origin;
-
-		// TODO: Fix:
-		// - Adding boid spawn event to 0th tick doesn't work.
 		int tickIndex = (int)Math.Floor(mousePos.X / _markerSize);
 		if (tickIndex < 0 || tickIndex >= FileStates.Replay.Object.EventsData.EventOffsetsPerTick.Count || tickIndex >= TimelineCache.TickData.Count)
 			return;
 
-		int eventTypeIndex = Math.Clamp((int)Math.Floor(mousePos.Y / _markerSize), 0, EnumUtils.EventTypes.Count - 1);
+		int eventTypeIndex = (int)Math.Floor(mousePos.Y / _markerSize);
+		if (eventTypeIndex < 0 || eventTypeIndex >= EnumUtils.EventTypes.Count)
+			return;
+
 		EventType eventType = EnumUtils.EventTypes[eventTypeIndex];
 
-		// Handle double-click.
 		if (isDoubleClicked)
 		{
 			int eventIndex = FileStates.Replay.Object.EventsData.EventOffsetsPerTick[tickIndex];
