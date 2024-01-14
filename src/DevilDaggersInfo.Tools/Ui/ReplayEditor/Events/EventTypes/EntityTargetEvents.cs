@@ -34,4 +34,36 @@ public sealed class EntityTargetEvents : IEventTypeRenderer<EntityTargetEventDat
 		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(EntityTargetEventData.EntityId), replayEventsData, ref e.EntityId);
 		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(EntityTargetEventData.TargetPosition), ref e.TargetPosition);
 	}
+
+	public static void RenderEdit(int eventIndex, EntityTargetEventData e, ReplayEventsData replayEventsData)
+	{
+		const float leftColumnWidth = 120;
+		const float rightColumnWidth = 160;
+		const float tableWidth = leftColumnWidth + rightColumnWidth;
+
+		if (ImGui.BeginChild(Inline.Span($"EntityTargetEdit{eventIndex}"), default, ImGuiChildFlags.AutoResizeY))
+		{
+			if (ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new(tableWidth, 0)))
+			{
+				ImGui.TableSetupColumn("LeftText", ImGuiTableColumnFlags.WidthFixed, leftColumnWidth);
+				ImGui.TableSetupColumn("LeftInput", ImGuiTableColumnFlags.None, rightColumnWidth);
+
+				ImGui.TableNextRow();
+
+				ImGui.TableNextColumn();
+				ImGui.Text("Entity Id");
+				ImGui.TableNextColumn();
+				EventTypeRendererUtils.EditableEntityId(eventIndex, nameof(EntityTargetEventData.EntityId), replayEventsData, ref e.EntityId);
+
+				ImGui.TableNextColumn();
+				ImGui.Text("Target Position");
+				ImGui.TableNextColumn();
+				EventTypeRendererUtils.InputInt16Vec3(eventIndex, nameof(EntityTargetEventData.TargetPosition), ref e.TargetPosition);
+
+				ImGui.EndTable();
+			}
+		}
+
+		ImGui.EndChild();
+	}
 }

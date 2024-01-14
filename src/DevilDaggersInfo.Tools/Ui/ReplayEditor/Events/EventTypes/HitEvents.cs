@@ -48,6 +48,48 @@ public sealed class HitEvents : IEventTypeRenderer<HitEventData>
 		ExplainHitEvent(e, replayEventsData);
 	}
 
+	public static void RenderEdit(int eventIndex, HitEventData e, ReplayEventsData replayEventsData)
+	{
+		const float leftColumnWidth = 120;
+		const float rightColumnWidth = 160;
+		const float tableWidth = leftColumnWidth + rightColumnWidth;
+
+		if (ImGui.BeginChild(Inline.Span($"HitEdit{eventIndex}"), default, ImGuiChildFlags.AutoResizeY))
+		{
+			if (ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new(tableWidth, 0)))
+			{
+				ImGui.TableSetupColumn("LeftText", ImGuiTableColumnFlags.WidthFixed, leftColumnWidth);
+				ImGui.TableSetupColumn("LeftInput", ImGuiTableColumnFlags.None, rightColumnWidth);
+
+				ImGui.TableNextRow();
+
+				ImGui.TableNextColumn();
+				ImGui.Text("Entity Id A");
+				ImGui.TableNextColumn();
+				EventTypeRendererUtils.EditableEntityId(eventIndex, nameof(HitEventData.EntityIdA), replayEventsData, ref e.EntityIdA);
+
+				ImGui.TableNextColumn();
+				ImGui.Text("Entity Id B");
+				ImGui.TableNextColumn();
+				EventTypeRendererUtils.EditableEntityId(eventIndex, nameof(HitEventData.EntityIdB), replayEventsData, ref e.EntityIdB);
+
+				ImGui.TableNextColumn();
+				ImGui.Text("User Data");
+				ImGui.TableNextColumn();
+				EventTypeRendererUtils.InputInt(eventIndex, nameof(HitEventData.UserData), ref e.UserData);
+
+				ImGui.EndTable();
+			}
+
+			ImGui.SameLine();
+
+			ImGui.Text("Explanation");
+			ExplainHitEvent(e, replayEventsData);
+		}
+
+		ImGui.EndChild();
+	}
+
 	private static void ExplainHitEvent(HitEventData e, ReplayEventsData replayEventsData)
 	{
 		if (e.EntityIdA == 0)

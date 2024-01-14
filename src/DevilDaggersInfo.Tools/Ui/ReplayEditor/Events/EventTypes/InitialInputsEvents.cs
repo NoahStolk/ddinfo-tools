@@ -54,4 +54,8 @@ public sealed class InitialInputsEvents : IEventTypeRenderer<InitialInputsEventD
 		EventTypeRendererUtils.NextColumnInputShort(eventIndex, nameof(InitialInputsEventData.MouseY), ref e.MouseY);
 		EventTypeRendererUtils.NextColumnInputFloat(eventIndex, nameof(InitialInputsEventData.LookSpeed), ref e.LookSpeed, "%.2f");
 	}
+
+	public static void RenderEdit(int eventIndex, InitialInputsEventData e, ReplayEventsData replayEventsData)
+	{
+	}
 }

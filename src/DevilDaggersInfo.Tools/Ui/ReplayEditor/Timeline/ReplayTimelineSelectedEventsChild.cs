@@ -39,16 +39,19 @@ public static class ReplayTimelineSelectedEventsChild
 		{
 			ImGui.TableSetupColumn("EventsTableColumnEventType", ImGuiTableColumnFlags.WidthFixed, 160);
 
+			int index = 0;
 			for (int i = 0; i < selectedEvents.Count; i++)
 			{
 				ReplayEvent replayEvent = selectedEvents[i];
+				EventType eventType = replayEvent.GetEventType();
+				if (eventType is EventType.InitialInputs or EventType.Inputs or EventType.End)
+					continue;
 
-				ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, i % 2 == 0 ? 0xff0f0f0fU : 0x00000000U);
+				ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, index++ % 2 == 0 ? 0xff0f0f0fU : 0x00000000U);
 
 				ImGui.TableNextRow();
 				ImGui.TableNextColumn();
 
-				EventType eventType = replayEvent.GetEventType();
 				bool temp = _checkedEvents.Contains(replayEvent);
 				if (ImGui.Checkbox(Inline.Span($"##EventCheckbox{i}"), ref temp))
 				{
@@ -63,13 +66,39 @@ public static class ReplayTimelineSelectedEventsChild
 
 				ImGui.TableNextColumn();
 
-				if (ImGui.CollapsingHeader(Inline.Span($"Event data##{i}")))
+				if (eventType is EventType.Gem)
+				{
+					ImGui.Text("No data");
+				}
+				else if (ImGui.CollapsingHeader(Inline.Span($"Event data##{i}")))
 				{
 					int eventIndex = replayEventsData.Events.IndexOf(replayEvent);
 					if (replayEvent.Data is BoidSpawnEventData boidSpawn)
 						BoidSpawnEvents.RenderEdit(eventIndex, boidSpawn, replayEventsData);
-					else
-						ImGui.Text("Not implemented");
+					else if (replayEvent.Data is DaggerSpawnEventData daggerSpawn)
+						DaggerSpawnEvents.RenderEdit(eventIndex, daggerSpawn, replayEventsData);
+					else if (replayEvent.Data is EntityOrientationEventData entityOrientation)
+						EntityOrientationEvents.RenderEdit(eventIndex, entityOrientation, replayEventsData);
+					else if (replayEvent.Data is EntityPositionEventData entityPosition)
+						EntityPositionEvents.RenderEdit(eventIndex, entityPosition, replayEventsData);
+					else if (replayEvent.Data is EntityTargetEventData entityTarget)
+						EntityTargetEvents.RenderEdit(eventIndex, entityTarget, replayEventsData);
+					else if (replayEvent.Data is HitEventData hitEvent)
+						HitEvents.RenderEdit(eventIndex, hitEvent, replayEventsData);
+					else if (replayEvent.Data is LeviathanSpawnEventData leviathanSpawn)
+						LeviathanSpawnEvents.RenderEdit(eventIndex, leviathanSpawn, replayEventsData);
+					else if (replayEvent.Data is PedeSpawnEventData pedeSpawn)
+						PedeSpawnEvents.RenderEdit(eventIndex, pedeSpawn, replayEventsData);
+					else if (replayEvent.Data is SpiderEggSpawnEventData spiderEggSpawn)
+						SpiderEggSpawnEvents.RenderEdit(eventIndex, spiderEggSpawn, replayEventsData);
+					else if (replayEvent.Data is SpiderSpawnEventData spiderSpawn)
+						SpiderSpawnEvents.RenderEdit(eventIndex, spiderSpawn, replayEventsData);
+					else if (replayEvent.Data is SquidSpawnEventData squidSpawn)
+						SquidSpawnEvents.RenderEdit(eventIndex, squidSpawn, replayEventsData);
+					else if (replayEvent.Data is ThornSpawnEventData thornSpawn)
+						ThornSpawnEvents.RenderEdit(eventIndex, thornSpawn, replayEventsData);
+					else if (replayEvent.Data is TransmuteEventData transmute)
+						TransmuteEvents.RenderEdit(eventIndex, transmute, replayEventsData);
 				}
 			}
 

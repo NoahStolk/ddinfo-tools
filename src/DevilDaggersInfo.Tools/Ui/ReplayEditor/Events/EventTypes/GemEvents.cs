@@ -29,4 +29,8 @@ public sealed class GemEvents : IEventTypeRenderer<GemEventData>
 	public static void RenderData(int eventIndex, GemEventData e, ReplayEventsData replayEventsData)
 	{
 	}
+
+	public static void RenderEdit(int eventIndex, GemEventData e, ReplayEventsData replayEventsData)
+	{
+	}
 }
