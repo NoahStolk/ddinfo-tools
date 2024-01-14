@@ -90,27 +90,7 @@ public static class InsertEventPopup
 
 		if (ImGui.Button("Insert"))
 		{
-			IEventData clonedEventData = e switch
-			{
-				BoidSpawnEventData boid => boid with { },
-				DaggerSpawnEventData dagger => dagger with { },
-				EndEventData end => end with { },
-				EntityOrientationEventData entityOrientation => entityOrientation with { },
-				EntityPositionEventData entityPosition => entityPosition with { },
-				EntityTargetEventData entityTarget => entityTarget with { },
-				GemEventData gem => gem with { },
-				HitEventData hit => hit with { },
-				InitialInputsEventData initialInputs => initialInputs with { },
-				InputsEventData inputs => inputs with { },
-				LeviathanSpawnEventData leviathan => leviathan with { },
-				PedeSpawnEventData pede => pede with { },
-				SpiderEggSpawnEventData spiderEgg => spiderEgg with { },
-				SpiderSpawnEventData spider => spider with { },
-				SquidSpawnEventData squid => squid with { },
-				ThornSpawnEventData thorn => thorn with { },
-				TransmuteEventData transmute => transmute with { },
-				_ => throw new UnreachableException($"Event type '{e.GetType().Name}' is not supported."),
-			};
+			IEventData clonedEventData = e.CloneEventData();
 			FileStates.Replay.Object.EventsData.InsertEvent(eventIndex, clonedEventData);
 			ImGui.CloseCurrentPopup();
 		}

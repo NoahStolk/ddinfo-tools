@@ -145,7 +145,7 @@ public static class ReplayTimelineSelectedEventsChild
 		int indexToInsertAt = _checkedEvents.Max(e => replayEventsData.Events.IndexOf(e));
 		foreach (ReplayEvent replayEvent in _checkedEvents.OrderByDescending(e => replayEventsData.Events.IndexOf(e)))
 		{
-			replayEventsData.InsertEvent(indexToInsertAt, replayEvent.Data); // TODO: Use with { }
+			replayEventsData.InsertEvent(indexToInsertAt, replayEvent.Data.CloneEventData());
 		}
 
 		// TODO: Reselect the current tick events.
