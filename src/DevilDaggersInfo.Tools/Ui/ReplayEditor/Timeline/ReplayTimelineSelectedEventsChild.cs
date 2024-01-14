@@ -115,6 +115,7 @@ public static class ReplayTimelineSelectedEventsChild
 			_checkedEvents.Clear();
 		}
 
+		ImGui.BeginDisabled(_checkedEvents.Count == 0);
 		if (ImGui.Button("Delete selected events"))
 		{
 			foreach (ReplayEvent replayEvent in _checkedEvents.OrderByDescending(e => replayEventsData.Events.IndexOf(e)))
@@ -130,15 +131,25 @@ public static class ReplayTimelineSelectedEventsChild
 
 		if (ImGui.Button("Duplicate selected events"))
 		{
-			int indexToInsertAt = _checkedEvents.Max(e => replayEventsData.Events.IndexOf(e));
-			foreach (ReplayEvent replayEvent in _checkedEvents.OrderByDescending(e => replayEventsData.Events.IndexOf(e)))
-			{
-				replayEventsData.InsertEvent(indexToInsertAt, replayEvent.Data); // TODO: Use with { }
-			}
-
-			// TODO: Reselect the current tick events.
-			TimelineCache.Clear();
-			_checkedEvents.Clear();
+			DuplicateSelectedEvents(replayEventsData);
 		}
+
+		ImGui.EndDisabled();
+	}
+
+	private static void DuplicateSelectedEvents(ReplayEventsData replayEventsData)
+	{
+		if (_checkedEvents.Count == 0)
+			return;
+
+		int indexToInsertAt = _checkedEvents.Max(e => replayEventsData.Events.IndexOf(e));
+		foreach (ReplayEvent replayEvent in _checkedEvents.OrderByDescending(e => replayEventsData.Events.IndexOf(e)))
+		{
+			replayEventsData.InsertEvent(indexToInsertAt, replayEvent.Data); // TODO: Use with { }
+		}
+
+		// TODO: Reselect the current tick events.
+		TimelineCache.Clear();
+		_checkedEvents.Clear();
 	}
 }
