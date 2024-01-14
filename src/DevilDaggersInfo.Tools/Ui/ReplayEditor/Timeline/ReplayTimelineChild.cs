@@ -66,7 +66,7 @@ public static class ReplayTimelineChild
 
 		ReplayTimelineActionsChild.Render(eventsData);
 
-		ImGui.PushStyleColor(ImGuiCol.ChildBg, Color.Gray(0.1f));
+		ImGui.PushStyleColor(ImGuiCol.ChildBg, Color.Gray(0.08f));
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8));
 		if (ImGui.BeginChild("SelectedEventsChild", default, ImGuiChildFlags.AlwaysUseWindowPadding))
 		{
@@ -77,58 +77,13 @@ public static class ReplayTimelineChild
 				ImGui.PopFont();
 			}
 
-			RenderSelectedEvents(eventsData);
+			ReplayTimelineSelectedEventsChild.Render(eventsData, _selectedEvents, _selectedEventDataCache);
 		}
 
 		ImGui.EndChild(); // End SelectedEventsChild
 
 		ImGui.PopStyleVar();
 		ImGui.PopStyleColor();
-	}
-
-	private static void RenderSelectedEvents(ReplayEventsData replayEventsData)
-	{
-		if (_selectedEvents.Count == 0)
-		{
-			ImGui.Text("No events selected");
-			return;
-		}
-
-		ImGui.SeparatorText("Inputs");
-
-		if (_selectedEventDataCache.InitialInputsEvents.Count == 1)
-			EventTypeRendererUtils.RenderInputsTable<InitialInputsEventData, InitialInputsEvents>("InputsTable", _selectedEventDataCache.InitialInputsEvents, replayEventsData);
-		else if (_selectedEventDataCache.InputsEvents.Count == 1)
-			EventTypeRendererUtils.RenderInputsTable<InputsEventData, InputsEvents>("InputsTable", _selectedEventDataCache.InputsEvents, replayEventsData);
-		else if (_selectedEventDataCache.EndEvents.Count == 1)
-			ImGui.Text("End of replay / inputs");
-		else
-			ImGui.TextColored(Color.Red, "Invalid replay data");
-
-		ImGui.SeparatorText("Events");
-
-		RenderTable<BoidSpawnEventData, BoidSpawnEvents>(EventType.BoidSpawn, _selectedEventDataCache.BoidSpawnEvents);
-		RenderTable<LeviathanSpawnEventData, LeviathanSpawnEvents>(EventType.LeviathanSpawn, _selectedEventDataCache.LeviathanSpawnEvents);
-		RenderTable<PedeSpawnEventData, PedeSpawnEvents>(EventType.PedeSpawn, _selectedEventDataCache.PedeSpawnEvents);
-		RenderTable<SpiderEggSpawnEventData, SpiderEggSpawnEvents>(EventType.SpiderEggSpawn, _selectedEventDataCache.SpiderEggSpawnEvents);
-		RenderTable<SpiderSpawnEventData, SpiderSpawnEvents>(EventType.SpiderSpawn, _selectedEventDataCache.SpiderSpawnEvents);
-		RenderTable<SquidSpawnEventData, SquidSpawnEvents>(EventType.SquidSpawn, _selectedEventDataCache.SquidSpawnEvents);
-		RenderTable<ThornSpawnEventData, ThornSpawnEvents>(EventType.ThornSpawn, _selectedEventDataCache.ThornSpawnEvents);
-		RenderTable<DaggerSpawnEventData, DaggerSpawnEvents>(EventType.DaggerSpawn, _selectedEventDataCache.DaggerSpawnEvents);
-		RenderTable<EntityOrientationEventData, EntityOrientationEvents>(EventType.EntityOrientation, _selectedEventDataCache.EntityOrientationEvents);
-		RenderTable<EntityPositionEventData, EntityPositionEvents>(EventType.EntityPosition, _selectedEventDataCache.EntityPositionEvents);
-		RenderTable<EntityTargetEventData, EntityTargetEvents>(EventType.EntityTarget, _selectedEventDataCache.EntityTargetEvents);
-		RenderTable<GemEventData, GemEvents>(EventType.Gem, _selectedEventDataCache.GemEvents);
-		RenderTable<HitEventData, HitEvents>(EventType.Hit, _selectedEventDataCache.HitEvents);
-		RenderTable<TransmuteEventData, TransmuteEvents>(EventType.Transmute, _selectedEventDataCache.TransmuteEvents);
-
-		void RenderTable<TEvent, TRenderer>(EventType eventType, IReadOnlyList<(int EventIndex, int EntityId, TEvent Event)> events)
-			where TEvent : IEventData
-			where TRenderer : IEventTypeRenderer<TEvent>
-		{
-			if (events.Count > 0)
-				EventTypeRendererUtils.RenderTable<TEvent, TRenderer>(eventType, events, replayEventsData);
-		}
 	}
 
 	private static void RenderTimeline(ReplayEventsData eventsData, float startTime)
