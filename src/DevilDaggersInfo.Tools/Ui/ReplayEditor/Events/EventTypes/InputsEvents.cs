@@ -52,4 +52,8 @@ public sealed class InputsEvents : IEventTypeRenderer<InputsEventData>
 		EventTypeRendererUtils.NextColumnInputShort(eventIndex, nameof(InputsEventData.MouseX), ref e.MouseX);
 		EventTypeRendererUtils.NextColumnInputShort(eventIndex, nameof(InputsEventData.MouseY), ref e.MouseY);
 	}
+
+	public static void RenderEdit(int eventIndex, InputsEventData e, ReplayEventsData replayEventsData)
+	{
+	}
 }

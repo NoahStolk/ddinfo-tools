@@ -34,4 +34,31 @@ public sealed class LeviathanSpawnEvents : IEventTypeRenderer<LeviathanSpawnEven
 	{
 		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(LeviathanSpawnEventData.A), ref e.A);
 	}
+
+	public static void RenderEdit(int eventIndex, LeviathanSpawnEventData e, ReplayEventsData replayEventsData)
+	{
+		const float leftColumnWidth = 120;
+		const float rightColumnWidth = 160;
+		const float tableWidth = leftColumnWidth + rightColumnWidth;
+
+		if (ImGui.BeginChild(Inline.Span($"LeviathanSpawnEdit{eventIndex}"), default, ImGuiChildFlags.AutoResizeY))
+		{
+			if (ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new(tableWidth, 0)))
+			{
+				ImGui.TableSetupColumn("LeftText", ImGuiTableColumnFlags.WidthFixed, leftColumnWidth);
+				ImGui.TableSetupColumn("LeftInput", ImGuiTableColumnFlags.None, rightColumnWidth);
+
+				ImGui.TableNextRow();
+
+				ImGui.TableNextColumn();
+				ImGui.Text("?");
+				ImGui.TableNextColumn();
+				EventTypeRendererUtils.EditableEntityId(eventIndex, nameof(EntityTargetEventData.EntityId), replayEventsData, ref e.A);
+
+				ImGui.EndTable();
+			}
+		}
+
+		ImGui.EndChild();
+	}
 }

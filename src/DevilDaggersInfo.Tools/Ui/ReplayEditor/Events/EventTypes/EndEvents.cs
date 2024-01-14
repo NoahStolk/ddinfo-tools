@@ -29,4 +29,8 @@ public sealed class EndEvents : IEventTypeRenderer<EndEventData>
 	public static void RenderData(int eventIndex, EndEventData e, ReplayEventsData replayEventsData)
 	{
 	}
+
+	public static void RenderEdit(int eventIndex, EndEventData e, ReplayEventsData replayEventsData)
+	{
+	}
 }

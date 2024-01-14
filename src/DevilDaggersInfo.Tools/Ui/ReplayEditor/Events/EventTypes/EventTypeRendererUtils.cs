@@ -245,6 +245,15 @@ public static class EventTypeRendererUtils
 		ImGui.PopItemWidth();
 	}
 
+	public static unsafe void InputMatrix3x3Square(int eventIndex, ReadOnlySpan<char> fieldName, ref Matrix3x3 value, ReadOnlySpan<char> format = default)
+	{
+		ImGui.PushItemWidth(-1);
+		ImGui.InputScalarN(EditLabel(fieldName, eventIndex), ImGuiDataType.Float, (IntPtr)Unsafe.AsPointer(ref value.M11), 3, 0, 0, format);
+		ImGui.InputScalarN(EditLabel(fieldName, eventIndex), ImGuiDataType.Float, (IntPtr)Unsafe.AsPointer(ref value.M21), 3, 0, 0, format);
+		ImGui.InputScalarN(EditLabel(fieldName, eventIndex), ImGuiDataType.Float, (IntPtr)Unsafe.AsPointer(ref value.M31), 3, 0, 0, format);
+		ImGui.PopItemWidth();
+	}
+
 	public static void NextColumnInputInt16Mat3x3(int eventIndex, ReadOnlySpan<char> fieldName, ref Int16Mat3x3 value)
 	{
 		ImGui.TableNextColumn();
@@ -259,7 +268,7 @@ public static class EventTypeRendererUtils
 		ImGui.PopItemWidth();
 	}
 
-	public static unsafe void InputInt16Mat3x3Matrix(int eventIndex, ReadOnlySpan<char> fieldName, ref Int16Mat3x3 value)
+	public static unsafe void InputInt16Mat3x3Square(int eventIndex, ReadOnlySpan<char> fieldName, ref Int16Mat3x3 value)
 	{
 		ImGui.PushItemWidth(-1);
 		ImGui.InputScalarN(EditLabel(fieldName, eventIndex), ImGuiDataType.S16, (IntPtr)Unsafe.AsPointer(ref value.M11), 3);
@@ -271,6 +280,11 @@ public static class EventTypeRendererUtils
 	public static void NextColumnCheckbox(int eventIndex, ReadOnlySpan<char> fieldName, ref bool value, ReadOnlySpan<char> trueText, ReadOnlySpan<char> falseText)
 	{
 		ImGui.TableNextColumn();
+		Checkbox(eventIndex, fieldName, ref value, trueText, falseText);
+	}
+
+	public static void Checkbox(int eventIndex, ReadOnlySpan<char> fieldName, ref bool value, ReadOnlySpan<char> trueText, ReadOnlySpan<char> falseText)
+	{
 		ImGui.Checkbox(EditLabel(fieldName, eventIndex), ref value);
 		ImGui.SameLine();
 		ImGui.Text(value ? trueText : falseText);

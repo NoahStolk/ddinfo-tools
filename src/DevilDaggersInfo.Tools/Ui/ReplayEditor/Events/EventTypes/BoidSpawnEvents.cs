@@ -64,12 +64,12 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEventData>
 				ImGui.TableNextRow();
 
 				ImGui.TableNextColumn();
-				ImGui.Text("Spawner entity id");
+				ImGui.Text("Spawner Entity Id");
 				ImGui.TableNextColumn();
 				EventTypeRendererUtils.EditableEntityId(eventIndex, nameof(BoidSpawnEventData.SpawnerEntityId), replayEventsData, ref e.SpawnerEntityId);
 
 				ImGui.TableNextColumn();
-				ImGui.Text("Boid type");
+				ImGui.Text("Type");
 				ImGui.TableNextColumn();
 				EventTypeRendererUtils.InputByteEnum(eventIndex, nameof(BoidSpawnEventData.BoidType), ref e.BoidType, EnumUtils.BoidTypes, _boidTypeNamesArray);
 
@@ -93,7 +93,7 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEventData>
 				ImGui.TableNextColumn();
 				ImGui.Text("Orientation");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt16Mat3x3Matrix(eventIndex, nameof(BoidSpawnEventData.Orientation), ref e.Orientation);
+				EventTypeRendererUtils.InputInt16Mat3x3Square(eventIndex, nameof(BoidSpawnEventData.Orientation), ref e.Orientation);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Velocity");
