@@ -14,7 +14,7 @@ public static class ReplayTimelineSelectedEventsChild
 {
 	private static readonly List<ReplayEvent> _checkedEvents = [];
 
-	public static void Render(ReplayEventsData replayEventsData, IReadOnlyList<ReplayEvent> selectedEvents, EventCache selectedEventDataCache)
+	public static void Render(ReplayEventsData replayEventsData, List<ReplayEvent> selectedEvents, EventCache selectedEventDataCache)
 	{
 		if (selectedEvents.Count == 0)
 		{
@@ -53,17 +53,16 @@ public static class ReplayTimelineSelectedEventsChild
 				ImGui.TableNextColumn();
 
 				bool temp = _checkedEvents.Contains(replayEvent);
-				if (ImGui.Checkbox(Inline.Span($"##EventCheckbox{i}"), ref temp))
+				ImGui.PushStyleColor(ImGuiCol.Text, EventTypeRendererUtils.GetEventTypeColor(eventType));
+				if (ImGui.Checkbox(Inline.Span($"{EnumUtils.EventTypeFriendlyNames[eventType]}##EventCheckbox{i}"), ref temp))
 				{
 					if (temp)
-						_checkedEvents.Remove(replayEvent);
-					else
 						_checkedEvents.Add(replayEvent);
+					else
+						_checkedEvents.Remove(replayEvent);
 				}
 
-				ImGui.SameLine();
-				ImGui.TextColored(EventTypeRendererUtils.GetEventTypeColor(eventType), EnumUtils.EventTypeFriendlyNames[eventType]);
-
+				ImGui.PopStyleColor();
 				ImGui.TableNextColumn();
 
 				if (eventType is EventType.Gem)
@@ -105,25 +104,40 @@ public static class ReplayTimelineSelectedEventsChild
 			ImGui.EndTable();
 		}
 
+		if (ImGui.Button("Select all"))
+		{
+			_checkedEvents.Clear();
+			_checkedEvents.AddRange(selectedEvents);
+		}
+
+		if (ImGui.Button("Deselect all"))
+		{
+			_checkedEvents.Clear();
+		}
+
 		if (ImGui.Button("Delete selected events"))
 		{
-			foreach (ReplayEvent replayEvent in _checkedEvents.OrderByDescending(e => e))
+			foreach (ReplayEvent replayEvent in _checkedEvents.OrderByDescending(e => replayEventsData.Events.IndexOf(e)))
 			{
 				int eventIndex = replayEventsData.Events.IndexOf(replayEvent);
 				replayEventsData.RemoveEvent(eventIndex);
+				selectedEvents.Remove(replayEvent);
 			}
 
+			TimelineCache.Clear();
 			_checkedEvents.Clear();
 		}
 
 		if (ImGui.Button("Duplicate selected events"))
 		{
 			int indexToInsertAt = _checkedEvents.Max(e => replayEventsData.Events.IndexOf(e));
-			foreach (ReplayEvent replayEvent in _checkedEvents.OrderByDescending(e => e))
+			foreach (ReplayEvent replayEvent in _checkedEvents.OrderByDescending(e => replayEventsData.Events.IndexOf(e)))
 			{
 				replayEventsData.InsertEvent(indexToInsertAt, replayEvent.Data); // TODO: Use with { }
 			}
 
+			// TODO: Reselect the current tick events.
+			TimelineCache.Clear();
 			_checkedEvents.Clear();
 		}
 	}
