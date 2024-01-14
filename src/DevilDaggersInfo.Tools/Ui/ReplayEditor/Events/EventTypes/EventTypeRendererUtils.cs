@@ -1,3 +1,4 @@
+// ReSharper disable InconsistentNaming
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
@@ -136,6 +137,12 @@ public static class EventTypeRendererUtils
 	{
 		ImGui.TableNextColumn();
 
+		InputByteEnum(eventIndex, fieldName, ref value, values, names);
+	}
+
+	public static void InputByteEnum<TEnum>(int eventIndex, ReadOnlySpan<char> fieldName, ref TEnum value, IReadOnlyList<TEnum> values, string[] names)
+		where TEnum : Enum
+	{
 		ImGui.PushItemWidth(-1);
 		int intValue = (byte)(object)value;
 
@@ -159,15 +166,25 @@ public static class EventTypeRendererUtils
 	{
 		ImGui.TableNextColumn();
 
+		InputInt(eventIndex, fieldName, ref value);
+	}
+
+	public static void InputInt(int eventIndex, ReadOnlySpan<char> fieldName, ref int value)
+	{
 		ImGui.PushItemWidth(-1);
 		ImGui.InputInt(EditLabel(fieldName, eventIndex), ref value, 0, 0);
 		ImGui.PopItemWidth();
 	}
 
-	public static unsafe void NextColumnInputShort(int eventIndex, ReadOnlySpan<char> fieldName, ref short value)
+	public static void NextColumnInputShort(int eventIndex, ReadOnlySpan<char> fieldName, ref short value)
 	{
 		ImGui.TableNextColumn();
 
+		InputShort(eventIndex, fieldName, ref value);
+	}
+
+	public static unsafe void InputShort(int eventIndex, ReadOnlySpan<char> fieldName, ref short value)
+	{
 		ImGui.PushItemWidth(-1);
 		ImGui.InputScalar(EditLabel(fieldName, eventIndex), ImGuiDataType.S16, (IntPtr)Unsafe.AsPointer(ref value), 0, 0);
 		ImGui.PopItemWidth();
@@ -177,6 +194,11 @@ public static class EventTypeRendererUtils
 	{
 		ImGui.TableNextColumn();
 
+		InputFloat(eventIndex, fieldName, ref value, format);
+	}
+
+	public static void InputFloat(int eventIndex, ReadOnlySpan<char> fieldName, ref float value, ReadOnlySpan<char> format = default)
+	{
 		ImGui.PushItemWidth(-1);
 		ImGui.InputFloat(EditLabel(fieldName, eventIndex), ref value, 0, 0, format);
 		ImGui.PopItemWidth();
@@ -186,35 +208,63 @@ public static class EventTypeRendererUtils
 	{
 		ImGui.TableNextColumn();
 
+		InputVector3(eventIndex, fieldName, ref value, format);
+	}
+
+	public static void InputVector3(int eventIndex, ReadOnlySpan<char> fieldName, ref Vector3 value, ReadOnlySpan<char> format = default)
+	{
 		ImGui.PushItemWidth(-1);
 		ImGui.InputFloat3(EditLabel(fieldName, eventIndex), ref value, format);
 		ImGui.PopItemWidth();
 	}
 
-	public static unsafe void NextColumnInputInt16Vec3(int eventIndex, ReadOnlySpan<char> fieldName, ref Int16Vec3 value)
+	public static void NextColumnInputInt16Vec3(int eventIndex, ReadOnlySpan<char> fieldName, ref Int16Vec3 value)
 	{
 		ImGui.TableNextColumn();
+		InputInt16Vec3(eventIndex, fieldName, ref value);
+	}
 
+	public static unsafe void InputInt16Vec3(int eventIndex, ReadOnlySpan<char> fieldName, ref Int16Vec3 value)
+	{
 		ImGui.PushItemWidth(-1);
 		ImGui.InputScalarN(EditLabel(fieldName, eventIndex), ImGuiDataType.S16, (IntPtr)Unsafe.AsPointer(ref value), 3);
 		ImGui.PopItemWidth();
 	}
 
-	public static unsafe void NextColumnInputMatrix3x3(int eventIndex, ReadOnlySpan<char> fieldName, ref Matrix3x3 value, ReadOnlySpan<char> format = default)
+	public static void NextColumnInputMatrix3x3(int eventIndex, ReadOnlySpan<char> fieldName, ref Matrix3x3 value, ReadOnlySpan<char> format = default)
 	{
 		ImGui.TableNextColumn();
 
+		InputMatrix3x3(eventIndex, fieldName, ref value, format);
+	}
+
+	public static unsafe void InputMatrix3x3(int eventIndex, ReadOnlySpan<char> fieldName, ref Matrix3x3 value, ReadOnlySpan<char> format = default)
+	{
 		ImGui.PushItemWidth(-1);
 		ImGui.InputScalarN(EditLabel(fieldName, eventIndex), ImGuiDataType.Float, (IntPtr)Unsafe.AsPointer(ref value), 9, 0, 0, format);
 		ImGui.PopItemWidth();
 	}
 
-	public static unsafe void NextColumnInputInt16Mat3x3(int eventIndex, ReadOnlySpan<char> fieldName, ref Int16Mat3x3 value)
+	public static void NextColumnInputInt16Mat3x3(int eventIndex, ReadOnlySpan<char> fieldName, ref Int16Mat3x3 value)
 	{
 		ImGui.TableNextColumn();
 
+		InputInt16Mat3x3(eventIndex, fieldName, ref value);
+	}
+
+	public static unsafe void InputInt16Mat3x3(int eventIndex, ReadOnlySpan<char> fieldName, ref Int16Mat3x3 value)
+	{
 		ImGui.PushItemWidth(-1);
 		ImGui.InputScalarN(EditLabel(fieldName, eventIndex), ImGuiDataType.S16, (IntPtr)Unsafe.AsPointer(ref value), 9);
+		ImGui.PopItemWidth();
+	}
+
+	public static unsafe void InputInt16Mat3x3Matrix(int eventIndex, ReadOnlySpan<char> fieldName, ref Int16Mat3x3 value)
+	{
+		ImGui.PushItemWidth(-1);
+		ImGui.InputScalarN(EditLabel(fieldName, eventIndex), ImGuiDataType.S16, (IntPtr)Unsafe.AsPointer(ref value.M11), 3);
+		ImGui.InputScalarN(EditLabel(fieldName, eventIndex), ImGuiDataType.S16, (IntPtr)Unsafe.AsPointer(ref value.M21), 3);
+		ImGui.InputScalarN(EditLabel(fieldName, eventIndex), ImGuiDataType.S16, (IntPtr)Unsafe.AsPointer(ref value.M31), 3);
 		ImGui.PopItemWidth();
 	}
 
@@ -250,11 +300,14 @@ public static class EventTypeRendererUtils
 
 	public static void NextColumnEditableEntityId(int eventIndex, ReadOnlySpan<char> fieldName, ReplayEventsData replayEventsData, ref int entityId)
 	{
-		EntityType? entityType = replayEventsData.GetEntityTypeIncludingNegated(entityId);
+		ImGui.TableNextColumn();
+		EditableEntityId(eventIndex, fieldName, replayEventsData, ref entityId);
+	}
 
+	public static void EditableEntityId(int eventIndex, ReadOnlySpan<char> fieldName, ReplayEventsData replayEventsData, ref int entityId)
+	{
 		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
 
-		ImGui.TableNextColumn();
 		ImGui.PushItemWidth(50);
 		ImGui.InputInt(EditLabel(fieldName, eventIndex), ref entityId, 0, 0);
 		ImGui.PopItemWidth();
@@ -262,6 +315,7 @@ public static class EventTypeRendererUtils
 
 		ImGui.Text(" (");
 		ImGui.SameLine();
+		EntityType? entityType = replayEventsData.GetEntityTypeIncludingNegated(entityId);
 		ImGui.TextColored(entityType.GetColor(), entityType.HasValue ? EnumUtils.EntityTypeShortNames[entityType.Value] : "???");
 		ImGui.SameLine();
 		ImGui.Text(")");
