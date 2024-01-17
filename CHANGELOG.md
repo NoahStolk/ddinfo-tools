@@ -16,6 +16,11 @@
 - Fixed crash when trying to write to the mods/survival while the file is currently being used by another process (e.g. the game).
 - Fixed incorrectly highlighting practice template after removing survival file.
 
+### Miscellaneous
+
+- Automatic updates have been removed due to anti-virus software not liking the way it was done. You will now have to manually download new versions from the GitHub releases page.
+- URLs are now displayed when hovering over links.
+
 ## [0.10.3.0] - 2024-01-02
 
 ### Fixed

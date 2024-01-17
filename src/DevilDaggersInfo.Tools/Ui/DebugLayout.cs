@@ -95,12 +95,6 @@ public static class DebugLayout
 			if (ImGui.Button("Show demo window"))
 				UiRenderer.ShowDemoWindow();
 
-			if (ImGui.Button("Show update available"))
-			{
-				UpdateWindow.AvailableUpdateVersion = new Version(0, 0, 0, 0);
-				UiRenderer.ShowUpdateAvailable();
-			}
-
 			ImGui.Separator();
 
 			if (ImGui.Button("Error window"))
