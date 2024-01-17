@@ -6,11 +6,7 @@ namespace DevilDaggersInfo.Tools.Ui;
 
 public static class UpdateWindow
 {
-	private static bool _updateInProgress;
-
 	public static Version? AvailableUpdateVersion { get; set; }
-
-	public static List<string> LogMessages { get; } = [];
 
 	public static void Render(ref bool show)
 	{
@@ -36,34 +32,15 @@ public static class UpdateWindow
 					Version {AvailableUpdateVersion} is available.
 
 					The current version is {AssemblyUtils.EntryAssemblyVersion}.
-
-					If you decide to update, the update will be downloaded from the devildaggers.info server.
 					"""));
 				ImGui.Spacing();
 
- #pragma warning disable S1075
-				const string changelogUrl = "https://github.com/NoahStolk/ddinfo-tools/blob/main/CHANGELOG.md";
- #pragma warning restore S1075
-				ImGuiExt.Hyperlink(changelogUrl, Inline.Span($"See what's new in version {AvailableUpdateVersion}"));
+				ImGuiExt.Hyperlink("https://github.com/NoahStolk/ddinfo-tools/releases", "Download from GitHub");
+				ImGui.Spacing();
+
+				ImGuiExt.Hyperlink("https://github.com/NoahStolk/ddinfo-tools/blob/main/CHANGELOG.md", "View the full changelog");
 				ImGui.Spacing();
 			}
-
-			ImGui.BeginDisabled(_updateInProgress);
-			if (ImGui.Button("Update and restart", new(160, 24)))
-			{
-				LogMessages.Clear();
-				_updateInProgress = true;
-				Task.Run(async () =>
-				{
-					await UpdateLogic.RunAsync();
-					_updateInProgress = false;
-				});
-			}
-
-			ImGui.EndDisabled();
-
-			for (int i = 0; i < LogMessages.Count; i++)
-				ImGui.Text(LogMessages[i]);
 
 			ImGui.PopTextWrapPos();
 		}
