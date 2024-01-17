@@ -6,11 +6,6 @@ namespace DevilDaggersInfo.Tools.Ui;
 
 public static partial class ImGuiExt
 {
-	public static void Hyperlink(ReadOnlySpan<char> url)
-	{
-		Hyperlink(url, url);
-	}
-
 	public static void Hyperlink(ReadOnlySpan<char> url, ReadOnlySpan<char> text)
 	{
 		Vector4 hyperlinkColor = new(0, 0.625f, 1, 1);
@@ -27,5 +22,8 @@ public static partial class ImGuiExt
 
 		ImGui.PopStyleColor(4);
 		ImGui.PopStyleVar();
+
+		if (ImGui.IsItemHovered())
+			ImGui.SetTooltip(url);
 	}
 }

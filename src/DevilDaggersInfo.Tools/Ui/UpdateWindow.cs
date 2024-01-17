@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.Utils;
+using DevilDaggersInfo.Web.ApiSpec.Tools;
 using ImGuiNET;
 using System.Numerics;
 
@@ -6,12 +7,6 @@ namespace DevilDaggersInfo.Tools.Ui;
 
 public static class UpdateWindow
 {
-	private static bool _updateInProgress;
-
-	public static Version? AvailableUpdateVersion { get; set; }
-
-	public static List<string> LogMessages { get; } = [];
-
 	public static void Render(ref bool show)
 	{
 		if (!show)
@@ -21,53 +16,55 @@ public static class UpdateWindow
 		Vector2 windowSize = new(384, 384);
 		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new(0.5f, 0.5f));
 		ImGui.SetNextWindowSize(windowSize);
-		if (ImGui.Begin("Update available", ref show, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize))
+		if (ImGui.Begin("Updates", ref show, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize))
 		{
 			ImGui.PushTextWrapPos(windowSize.X - 16);
 
-			// TODO: Refactor this. AvailableUpdateVersion should never be null here.
-			if (AvailableUpdateVersion == null)
-			{
-				ImGui.Text("Internal error getting new version number.");
-			}
-			else
-			{
-				ImGui.Text(Inline.Span($"""
-					Version {AvailableUpdateVersion} is available.
+			ImGui.Text(Inline.Span($"""
+                The current version is {AssemblyUtils.EntryAssemblyVersion}.
 
-					The current version is {AssemblyUtils.EntryAssemblyVersion}.
+                Unfortunately, since anti-virus software does not like the way automatic updates were implemented, the auto-update feature has been removed.
 
-					If you decide to update, the update will be downloaded from the devildaggers.info server.
-					"""));
-				ImGui.Spacing();
+                You can download the latest version from the GitHub releases (link below).
 
- #pragma warning disable S1075
-				const string changelogUrl = "https://github.com/NoahStolk/ddinfo-tools/blob/main/CHANGELOG.md";
- #pragma warning restore S1075
-				ImGuiExt.Hyperlink(changelogUrl, Inline.Span($"See what's new in version {AvailableUpdateVersion}"));
-				ImGui.Spacing();
-			}
+                1. Go to the the GitHub releases page.
+                2. Under "Assets", download the {GetZipAssetDisplayName()} file.
+                3. Extract the contents.
+                4. Run {GetExecutableDisplayName()}.
 
-			ImGui.BeginDisabled(_updateInProgress);
-			if (ImGui.Button("Update and restart", new(160, 24)))
-			{
-				LogMessages.Clear();
-				_updateInProgress = true;
-				Task.Run(async () =>
-				{
-					await UpdateLogic.RunAsync();
-					_updateInProgress = false;
-				});
-			}
+                Your user settings will be preserved.
+                """));
+			ImGui.Spacing();
 
-			ImGui.EndDisabled();
+			ImGuiExt.Hyperlink("https://github.com/NoahStolk/ddinfo-tools/releases", "Download from GitHub");
+			ImGui.Spacing();
 
-			for (int i = 0; i < LogMessages.Count; i++)
-				ImGui.Text(LogMessages[i]);
+			ImGuiExt.Hyperlink("https://github.com/NoahStolk/ddinfo-tools/blob/main/CHANGELOG.md", "View the full changelog");
+			ImGui.Spacing();
 
 			ImGui.PopTextWrapPos();
 		}
 
 		ImGui.End(); // End Update available
+	}
+
+	private static string GetZipAssetDisplayName()
+	{
+		return Root.PlatformSpecificValues.AppOperatingSystem switch
+		{
+			AppOperatingSystem.Windows => "ddinfo-tools-win-x64.zip",
+			AppOperatingSystem.Linux => "ddinfo-tools-linux-x64.zip",
+			_ => "zip",
+		};
+	}
+
+	private static string GetExecutableDisplayName()
+	{
+		return Root.PlatformSpecificValues.AppOperatingSystem switch
+		{
+			AppOperatingSystem.Windows => "ddinfo-tools.exe",
+			AppOperatingSystem.Linux => "ddinfo-tools",
+			_ => "the executable",
+		};
 	}
 }

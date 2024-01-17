@@ -20,7 +20,7 @@ public static class UiRenderer
 	private static bool _showDemoWindow;
 	private static bool _showSettings;
 	private static bool _showAbout;
-	private static bool _showUpdateAvailable;
+	private static bool _showUpdate;
 
 	public static LayoutType Layout
 	{
@@ -56,9 +56,9 @@ public static class UiRenderer
 		_showAbout = true;
 	}
 
-	public static void ShowUpdateAvailable()
+	public static void ShowUpdate()
 	{
-		_showUpdateAvailable = true;
+		_showUpdate = true;
 	}
 
 	public static void Render(float delta)
@@ -106,7 +106,7 @@ public static class UiRenderer
 
 		SettingsWindow.Render(ref _showSettings);
 		AboutWindow.Render(ref _showAbout);
-		UpdateWindow.Render(ref _showUpdateAvailable);
+		UpdateWindow.Render(ref _showUpdate);
 
 		PopupManager.Render();
 	}

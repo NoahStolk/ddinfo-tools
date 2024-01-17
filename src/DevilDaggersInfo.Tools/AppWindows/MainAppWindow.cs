@@ -1,6 +1,4 @@
 using DevilDaggersInfo.Tools.Engine.ImGui;
-using DevilDaggersInfo.Tools.Networking;
-using DevilDaggersInfo.Tools.Networking.TaskHandlers;
 using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.Config;
 using DevilDaggersInfo.Tools.Ui.Popups;
@@ -87,16 +85,6 @@ public class MainAppWindow
 		}
 
 		ConfigLayout.ValidateInstallation();
-		AsyncHandler.Run(
-			static newVersion =>
-			{
-				if (newVersion == null)
-					return;
-
-				UiRenderer.ShowUpdateAvailable();
-				UpdateWindow.AvailableUpdateVersion = newVersion;
-			},
-			() => FetchLatestVersion.HandleAsync(AssemblyUtils.EntryAssemblyVersion, Root.PlatformSpecificValues.AppOperatingSystem));
 
 		RawImage rawImage = new(Root.InternalResources.ApplicationIconTexture.Width, Root.InternalResources.ApplicationIconTexture.Height, Root.InternalResources.ApplicationIconTexture.Pixels);
 		Span<RawImage> rawImages = MemoryMarshal.CreateSpan(ref rawImage, 1);

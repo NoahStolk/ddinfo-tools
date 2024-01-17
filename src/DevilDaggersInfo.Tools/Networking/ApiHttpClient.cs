@@ -3,7 +3,6 @@ using DevilDaggersInfo.Web.ApiSpec.Tools;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using DevilDaggersInfo.Web.ApiSpec.Tools.ProcessMemory;
 using DevilDaggersInfo.Web.ApiSpec.Tools.Spawnsets;
-using DevilDaggersInfo.Web.ApiSpec.Tools.Updates;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -115,14 +114,5 @@ public class ApiHttpClient
 			{ nameof(hash), Uri.EscapeDataString(Convert.ToBase64String(hash)) },
 		};
 		return await SendGetRequest(BuildUrlWithQuery("api/app/spawnsets/by-hash", queryParameters), ApiModelsContext.Default.GetSpawnsetByHash);
-	}
-
-	public async Task<GetLatestVersion> GetLatest(AppOperatingSystem appOperatingSystem)
-	{
-		Dictionary<string, object?> queryParameters = new()
-		{
-			{ nameof(appOperatingSystem), appOperatingSystem },
-		};
-		return await SendGetRequest(BuildUrlWithQuery("api/app/updates/latest", queryParameters), ApiModelsContext.Default.GetLatestVersion);
 	}
 }
