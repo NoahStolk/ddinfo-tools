@@ -19,7 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup Label="Misc">
-		<PackageVersion Include="CliWrap" Version="3.6.5" />
+		<PackageVersion Include="CliWrap" Version="3.6.6" />
 	</ItemGroup>
 
 	<ItemGroup Label="Native">
