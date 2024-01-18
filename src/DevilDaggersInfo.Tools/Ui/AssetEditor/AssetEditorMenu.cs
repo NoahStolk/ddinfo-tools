@@ -101,7 +101,7 @@ public static class AssetEditorMenu
 			return;
 
 		filePath = Path.ChangeExtension(filePath, ".json");
-		File.WriteAllBytes(filePath, FileStates.Mod.Object.ToJsonBytes());
+		FileStates.Mod.SaveFile(filePath);
 	}
 
 	public static void Close()
