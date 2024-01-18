@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.Ui;
+using DevilDaggersInfo.Tools.Ui.AssetEditor;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
@@ -21,6 +22,7 @@ public static class Shortcuts
 			switch (UiRenderer.Layout)
 			{
 				case LayoutType.SpawnsetEditor: SpawnsetEditorMenu.Close(); break;
+				case LayoutType.AssetEditor: AssetEditorMenu.Close(); break;
 				case LayoutType.ReplayEditor: ReplayEditorMenu.Close(); break;
 				case LayoutType.Config: break;
 				default: UiRenderer.Layout = LayoutType.Main; break;
@@ -30,6 +32,7 @@ public static class Shortcuts
 		switch (UiRenderer.Layout)
 		{
 			case LayoutType.SpawnsetEditor: HandleSpawnsetEditorShortcuts(key, ctrl, shift); break;
+			case LayoutType.AssetEditor: HandleAssetEditorShortcuts(key, ctrl, shift); break;
 			case LayoutType.ReplayEditor: HandleReplayEditorShortcuts(key, ctrl, shift); break;
 		}
 	}
@@ -58,6 +61,24 @@ public static class Shortcuts
 					Key.O => SpawnsetEditorMenu.OpenCurrentSpawnset,
 					Key.S => SpawnsetEditorMenu.SaveSpawnsetAs,
 					Key.D => SpawnsetEditorMenu.OpenDefaultSpawnset,
+					_ => null,
+				};
+				action?.Invoke();
+			}
+		}
+	}
+
+	private static void HandleAssetEditorShortcuts(Key key, bool ctrl, bool shift)
+	{
+		if (ctrl)
+		{
+			if (!shift)
+			{
+				Action? action = key switch
+				{
+					Key.N => AssetEditorMenu.NewMod,
+					Key.O => AssetEditorMenu.OpenMod,
+					Key.S => AssetEditorMenu.SaveMod,
 					_ => null,
 				};
 				action?.Invoke();
