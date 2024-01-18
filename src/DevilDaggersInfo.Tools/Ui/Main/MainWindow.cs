@@ -68,19 +68,31 @@ public static class MainWindow
 					return primary.Desaturate(buttonColorDesaturation).Darken(0.2f) with { A = buttonAlpha };
 				}
 
-				static void GoToSpawnsetEditor() => UiRenderer.Layout = LayoutType.SpawnsetEditor;
-				static void GoToReplayEditor() => UiRenderer.Layout = LayoutType.ReplayEditor;
-				static void GoToPractice() => UiRenderer.Layout = LayoutType.Practice;
-				static void GoToModManager()
+				static void GoToSpawnsetEditor()
 				{
-					UiRenderer.Layout = LayoutType.ModManager;
-					ModsDirectoryLogic.LoadModsDirectory();
+					UiRenderer.Layout = LayoutType.SpawnsetEditor;
+				}
+
+				static void GoToReplayEditor()
+				{
+					UiRenderer.Layout = LayoutType.ReplayEditor;
 				}
 
 				static void GoToCustomLeaderboards()
 				{
 					UiRenderer.Layout = LayoutType.CustomLeaderboards;
 					LeaderboardListChild.LoadAll();
+				}
+
+				static void GoToPractice()
+				{
+					UiRenderer.Layout = LayoutType.Practice;
+				}
+
+				static void GoToModManager()
+				{
+					UiRenderer.Layout = LayoutType.ModManager;
+					ModsDirectoryLogic.LoadModsDirectory();
 				}
 			}
 

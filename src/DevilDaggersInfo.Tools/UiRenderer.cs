@@ -31,8 +31,8 @@ public static class UiRenderer
 			{
 				LayoutType.Config or LayoutType.Main => Colors.Main,
 				LayoutType.SpawnsetEditor => Colors.SpawnsetEditor,
-				LayoutType.CustomLeaderboards => Colors.CustomLeaderboards,
 				LayoutType.ReplayEditor => Colors.ReplayEditor,
+				LayoutType.CustomLeaderboards => Colors.CustomLeaderboards,
 				LayoutType.Practice => Colors.Practice,
 				LayoutType.ModManager => Colors.ModManager,
 				_ => throw new ArgumentOutOfRangeException(nameof(value), value, null),
@@ -62,28 +62,28 @@ public static class UiRenderer
 
 		switch (Layout)
 		{
+			case LayoutType.Config:
+				ConfigLayout.Render();
+				break;
 			case LayoutType.Main:
 				MainWindow.Render();
 				MainScene.Render(delta);
 				break;
-			case LayoutType.Config:
-				ConfigLayout.Render();
-				break;
 			case LayoutType.SpawnsetEditor:
 				SpawnsetEditorWindow.Render();
 				SpawnsetEditor3DWindow.Render(delta);
-				break;
-			case LayoutType.CustomLeaderboards:
-				CustomLeaderboardsWindow.Update(delta);
-				CustomLeaderboardsWindow.Render();
-				CustomLeaderboardResultsWindow.Render();
-				CustomLeaderboards3DWindow.Render(delta);
 				break;
 			case LayoutType.ReplayEditor:
 				ReplayEditorWindow.Update(delta);
 				ReplayEditorWindow.Render();
 				ReplayEditor3DWindow.Render(delta);
 				LeaderboardReplayBrowser.Render();
+				break;
+			case LayoutType.CustomLeaderboards:
+				CustomLeaderboardsWindow.Update(delta);
+				CustomLeaderboardsWindow.Render();
+				CustomLeaderboardResultsWindow.Render();
+				CustomLeaderboards3DWindow.Render(delta);
 				break;
 			case LayoutType.Practice:
 				PracticeWindow.Render();

@@ -5,8 +5,8 @@ public enum LayoutType
 	Config,
 	Main,
 	SpawnsetEditor,
-	CustomLeaderboards,
 	ReplayEditor,
+	CustomLeaderboards,
 	Practice,
 	ModManager,
 }
