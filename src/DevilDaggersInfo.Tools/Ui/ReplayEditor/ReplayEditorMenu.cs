@@ -138,7 +138,7 @@ public static class ReplayEditorMenu
 			return;
 
 		filePath = Path.ChangeExtension(filePath, ".ddreplay");
-		File.WriteAllBytes(filePath, FileStates.Replay.Object.Compile());
+		FileStates.Replay.SaveFile(filePath);
 	}
 
 	public static void InjectReplay()
