@@ -2,6 +2,7 @@ using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.Popups;
+using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
@@ -59,7 +60,7 @@ public static class ReplayEditorMenu
 
 	public static void OpenReplay()
 	{
-		NativeFileDialog.CreateOpenFileDialog(OpenReplayCallback, "Devil Daggers replay files (*.ddreplay)|*.ddreplay");
+		NativeFileDialog.CreateOpenFileDialog(OpenReplayCallback, PathConstants.FileExtensionFilterReplay);
 	}
 
 	private static void OpenReplayCallback(string? filePath)
@@ -129,7 +130,7 @@ public static class ReplayEditorMenu
 
 	public static void SaveReplay()
 	{
-		NativeFileDialog.CreateSaveFileDialog(SaveReplayCallback, "Devil Daggers replay files (*.ddreplay)|*.ddreplay");
+		NativeFileDialog.CreateSaveFileDialog(SaveReplayCallback, PathConstants.FileExtensionFilterReplay);
 	}
 
 	private static void SaveReplayCallback(string? filePath)
@@ -137,7 +138,7 @@ public static class ReplayEditorMenu
 		if (filePath == null)
 			return;
 
-		filePath = Path.ChangeExtension(filePath, ".ddreplay");
+		filePath = Path.ChangeExtension(filePath, PathConstants.FileExtensionReplay);
 		FileStates.Replay.SaveFile(filePath);
 	}
 
