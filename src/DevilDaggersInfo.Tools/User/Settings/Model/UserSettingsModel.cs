@@ -9,6 +9,8 @@ public record UserSettingsModel
 	public float LookSpeed { get; init; }
 	public int FieldOfView { get; init; }
 	public IReadOnlyList<UserSettingsPracticeTemplate> PracticeTemplates { get; init; } = new List<UserSettingsPracticeTemplate>();
+	public bool DoNotShowAgainPracticeSpawnsetApplied { get; init; }
+	public bool DoNotShowAgainPracticeSpawnsetDeleted { get; init; }
 
 	public static UserSettingsModel Default { get; } = new()
 	{
@@ -17,6 +19,8 @@ public record UserSettingsModel
 		LookSpeed = 20,
 		FieldOfView = 90,
 		PracticeTemplates = new List<UserSettingsPracticeTemplate>(),
+		DoNotShowAgainPracticeSpawnsetApplied = false,
+		DoNotShowAgainPracticeSpawnsetDeleted = false,
 	};
 
 	public static float LookSpeedMin => 1;

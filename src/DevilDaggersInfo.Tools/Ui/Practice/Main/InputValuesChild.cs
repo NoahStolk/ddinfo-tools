@@ -67,10 +67,7 @@ public static class InputValuesChild
 			ImGui.SameLine();
 			ImGui.BeginDisabled(!SurvivalFileWatcher.Exists);
 			if (ImGui.Button("Return to normal game", new(0, buttonHeight)))
-			{
 				PracticeLogic.DeleteModdedSpawnset();
-				PopupManager.ShowMessage("Default game restored", "The default game has been restored!\n\nMake sure to press the restart button in-game, or grab the dagger in the lobby, to apply the change.\n\nThere is no need to restart the game itself.");
-			}
 
 			if (ImGui.IsItemHovered())
 				ImGui.SetTooltip("This will delete the modded spawnset and return you to the normal game.");

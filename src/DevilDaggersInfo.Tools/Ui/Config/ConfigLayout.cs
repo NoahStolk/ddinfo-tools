@@ -127,6 +127,16 @@ public static class ConfigLayout
 				ImGui.Checkbox("Show debug", ref showDebug);
 				if (UserSettings.Model.ShowDebug != showDebug)
 					UserSettings.Model = UserSettings.Model with { ShowDebug = showDebug };
+
+				bool doNotShowAgainPracticeSpawnsetApplied = UserSettings.Model.DoNotShowAgainPracticeSpawnsetApplied;
+				ImGui.Checkbox("Do not show message again when applying practice spawnset", ref doNotShowAgainPracticeSpawnsetApplied);
+				if (UserSettings.Model.DoNotShowAgainPracticeSpawnsetApplied != doNotShowAgainPracticeSpawnsetApplied)
+					UserSettings.Model = UserSettings.Model with { DoNotShowAgainPracticeSpawnsetApplied = doNotShowAgainPracticeSpawnsetApplied };
+
+				bool doNotShowAgainPracticeSpawnsetDeleted = UserSettings.Model.DoNotShowAgainPracticeSpawnsetDeleted;
+				ImGui.Checkbox("Do not show message again when deleting practice spawnset", ref doNotShowAgainPracticeSpawnsetDeleted);
+				if (UserSettings.Model.DoNotShowAgainPracticeSpawnsetDeleted != doNotShowAgainPracticeSpawnsetDeleted)
+					UserSettings.Model = UserSettings.Model with { DoNotShowAgainPracticeSpawnsetDeleted = doNotShowAgainPracticeSpawnsetDeleted };
 			}
 
 			ImGui.EndChild(); // End Input

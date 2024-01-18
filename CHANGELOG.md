@@ -2,6 +2,11 @@
 
 ## [unreleased]
 
+### Practice
+
+- Added popup when applying practice spawnset.
+- Added "Do not show again" checkbox to practice popups. These are saved in the user settings.
+
 ### Miscellaneous
 
 - The settings have been moved to the configuration screen.

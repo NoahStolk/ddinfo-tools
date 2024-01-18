@@ -25,6 +25,14 @@ public static class PopupManager
 		_openPopups.Add(new Message(title, text));
 	}
 
+	public static void ShowMessageWithHideOption(string title, string text, bool doNotShowAgain, Action<bool> setDoNotShowAgain)
+	{
+		if (doNotShowAgain)
+			return;
+
+		_openPopups.Add(new MessageWithHideOption(title, text, setDoNotShowAgain, doNotShowAgain));
+	}
+
 	public static void ShowSaveSpawnsetPrompt(Action action)
 	{
 		ShowQuestion(

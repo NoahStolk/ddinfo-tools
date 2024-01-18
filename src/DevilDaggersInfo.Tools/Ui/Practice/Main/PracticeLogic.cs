@@ -35,6 +35,20 @@ public static class PracticeLogic
 		try
 		{
 			File.WriteAllBytes(UserSettings.ModsSurvivalPath, generatedSpawnset.ToBytes());
+
+			const string messageText = """
+				The practice spawnset has been applied!
+
+				Make sure to press the restart button in-game, or grab the dagger in the lobby, to apply the change.
+
+				There is no need to restart the game itself.
+				""";
+
+			PopupManager.ShowMessageWithHideOption(
+				"Practice spawnset applied",
+				messageText,
+				UserSettings.Model.DoNotShowAgainPracticeSpawnsetApplied,
+				b => UserSettings.Model = UserSettings.Model with { DoNotShowAgainPracticeSpawnsetApplied = b });
 		}
 		catch (IOException ex)
 		{
@@ -48,6 +62,20 @@ public static class PracticeLogic
 	{
 		if (File.Exists(UserSettings.ModsSurvivalPath))
 			File.Delete(UserSettings.ModsSurvivalPath);
+
+		const string messageText = """
+			The default game has been restored!
+
+			Make sure to press the restart button in-game, or grab the dagger in the lobby, to apply the change.
+
+			There is no need to restart the game itself.
+			""";
+
+		PopupManager.ShowMessageWithHideOption(
+			"Default game restored",
+			messageText,
+			UserSettings.Model.DoNotShowAgainPracticeSpawnsetDeleted,
+			b => UserSettings.Model = UserSettings.Model with { DoNotShowAgainPracticeSpawnsetDeleted = b });
 	}
 
 	public static bool IsActive(UserSettingsPracticeTemplate customTemplate)
