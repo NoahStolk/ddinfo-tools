@@ -42,9 +42,6 @@ public static class PracticeWindow
 		}
 
 		ImGui.End(); // End Practice
-
-		if (ImGui.IsKeyPressed(ImGuiKey.Escape))
-			UiRenderer.Layout = LayoutType.Main;
 	}
 
 	public static void GetGemsOrHomingText(HandLevel handLevel, int additionalGems, Span<char> text, out Color textColor)

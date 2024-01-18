@@ -63,8 +63,5 @@ public static class CustomLeaderboardsWindow
 		}
 
 		ImGui.End(); // End Custom Leaderboards
-
-		if (ImGui.IsKeyPressed(ImGuiKey.Escape))
-			UiRenderer.Layout = LayoutType.Main;
 	}
 }

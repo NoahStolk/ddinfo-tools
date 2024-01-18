@@ -16,6 +16,17 @@ public static class Shortcuts
 		bool ctrl = keyboard.IsKeyPressed(Key.ControlLeft) || keyboard.IsKeyPressed(Key.ControlRight);
 		bool shift = keyboard.IsKeyPressed(Key.ShiftLeft) || keyboard.IsKeyPressed(Key.ShiftRight);
 
+		if (key == Key.Escape)
+		{
+			switch (UiRenderer.Layout)
+			{
+				case LayoutType.SpawnsetEditor: SpawnsetEditorMenu.Close(); break;
+				case LayoutType.ReplayEditor: ReplayEditorMenu.Close(); break;
+				case LayoutType.Config: break;
+				default: UiRenderer.Layout = LayoutType.Main; break;
+			}
+		}
+
 		switch (UiRenderer.Layout)
 		{
 			case LayoutType.SpawnsetEditor: HandleSpawnsetEditorShortcuts(key, ctrl, shift); break;
@@ -25,12 +36,6 @@ public static class Shortcuts
 
 	private static void HandleSpawnsetEditorShortcuts(Key key, bool ctrl, bool shift)
 	{
-		if (key == Key.Escape)
-		{
-			SpawnsetEditorMenu.Close();
-			return;
-		}
-
 		if (ctrl)
 		{
 			if (!shift)
@@ -62,9 +67,6 @@ public static class Shortcuts
 
 	private static void HandleReplayEditorShortcuts(Key key, bool ctrl, bool shift)
 	{
-		if (key == Key.Escape)
-			ReplayEditorMenu.Close();
-
 		if (ctrl)
 		{
 			if (!shift)

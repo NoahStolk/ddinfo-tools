@@ -31,8 +31,5 @@ public static class ModManagerWindow
 		}
 
 		ImGui.End(); // End Mod Manager
-
-		if (ImGui.IsKeyPressed(ImGuiKey.Escape))
-			UiRenderer.Layout = LayoutType.Main;
 	}
 }
