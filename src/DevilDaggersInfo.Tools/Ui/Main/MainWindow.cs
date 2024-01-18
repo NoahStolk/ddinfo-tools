@@ -53,7 +53,7 @@ public static class MainWindow
 			if (ImGui.BeginChild("ToolButtons", mainButtonsSize))
 			{
 				ToolButton(GetColor(Colors.SpawnsetEditor.Primary), "Spawnset Editor", GoToSpawnsetEditor, ref _hoveredButtonAction, RenderSpawnsetEditorPreview);
-				ToolButton(GetColor(Colors.AssetEditor.Primary), "Asset Editor", static () => { }, ref _hoveredButtonAction, RenderAssetEditorPreview);
+				ToolButton(GetColor(Colors.AssetEditor.Primary), "Asset Editor", GoToAssetEditor, ref _hoveredButtonAction, RenderAssetEditorPreview);
 				ToolButton(GetColor(Colors.ReplayEditor.Primary), "Replay Editor", GoToReplayEditor, ref _hoveredButtonAction, RenderReplayEditorPreview);
 
 				ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 16);
@@ -71,6 +71,11 @@ public static class MainWindow
 				static void GoToSpawnsetEditor()
 				{
 					UiRenderer.Layout = LayoutType.SpawnsetEditor;
+				}
+
+				static void GoToAssetEditor()
+				{
+					UiRenderer.Layout = LayoutType.AssetEditor;
 				}
 
 				static void GoToReplayEditor()
@@ -177,7 +182,7 @@ public static class MainWindow
 	{
 		ImGuiExt.Title("Asset Editor");
 		ImGui.Text("""
-			NOT IMPLEMENTED YET
+			WORK IN PROGRESS
 
 			Create and edit mods for Devil Daggers.
 

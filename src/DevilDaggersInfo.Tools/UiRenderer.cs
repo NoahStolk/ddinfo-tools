@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.Ui;
+using DevilDaggersInfo.Tools.Ui.AssetEditor;
 using DevilDaggersInfo.Tools.Ui.Config;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
@@ -31,6 +32,7 @@ public static class UiRenderer
 			{
 				LayoutType.Config or LayoutType.Main => Colors.Main,
 				LayoutType.SpawnsetEditor => Colors.SpawnsetEditor,
+				LayoutType.AssetEditor => Colors.AssetEditor,
 				LayoutType.ReplayEditor => Colors.ReplayEditor,
 				LayoutType.CustomLeaderboards => Colors.CustomLeaderboards,
 				LayoutType.Practice => Colors.Practice,
@@ -72,6 +74,9 @@ public static class UiRenderer
 			case LayoutType.SpawnsetEditor:
 				SpawnsetEditorWindow.Render();
 				SpawnsetEditor3DWindow.Render(delta);
+				break;
+			case LayoutType.AssetEditor:
+				AssetEditorWindow.Render();
 				break;
 			case LayoutType.ReplayEditor:
 				ReplayEditorWindow.Update(delta);
