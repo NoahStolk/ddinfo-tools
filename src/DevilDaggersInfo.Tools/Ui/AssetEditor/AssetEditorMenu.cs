@@ -2,6 +2,7 @@ using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.JsonSerializerContexts;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using DevilDaggersInfo.Tools.Ui.Popups;
+using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using System.Security;
 using System.Text.Json;
@@ -49,7 +50,7 @@ public static class AssetEditorMenu
 
 	public static void OpenMod()
 	{
-		NativeFileDialog.CreateOpenFileDialog(OpenModCallback, "JSON files (*.json)|*.json");
+		NativeFileDialog.CreateOpenFileDialog(OpenModCallback, PathConstants.FileExtensionFilterMod);
 	}
 
 	private static void OpenModCallback(string? filePath)
@@ -92,7 +93,7 @@ public static class AssetEditorMenu
 
 	public static void SaveMod()
 	{
-		NativeFileDialog.CreateSaveFileDialog(SaveModCallback, "JSON files (*.json)|*.json");
+		NativeFileDialog.CreateSaveFileDialog(SaveModCallback, PathConstants.FileExtensionFilterMod);
 	}
 
 	private static void SaveModCallback(string? filePath)
@@ -100,7 +101,7 @@ public static class AssetEditorMenu
 		if (filePath == null)
 			return;
 
-		filePath = Path.ChangeExtension(filePath, ".json");
+		filePath = Path.ChangeExtension(filePath, PathConstants.FileExtensionMod);
 		FileStates.Mod.SaveFile(filePath);
 	}
 
