@@ -37,7 +37,7 @@ public static class MainWindow
 			ImGui.Text(_version);
 			ImGui.Text("Developed by Noah Stolk");
 
-			ImGui.SetCursorPos(new(windowSize.X - 204, 8));
+			ImGui.SetCursorPos(new(windowSize.X - 208, 8));
 			AppButton(Root.InternalResources.DownloadTexture, "Updates", UiRenderer.ShowUpdate);
 
 			ImGui.SameLine();
