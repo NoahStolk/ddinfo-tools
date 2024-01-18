@@ -18,7 +18,6 @@ public static class UiRenderer
 	private static LayoutType _layout;
 
 	private static bool _showDemoWindow;
-	private static bool _showSettings;
 	private static bool _showAbout;
 	private static bool _showUpdate;
 
@@ -44,11 +43,6 @@ public static class UiRenderer
 	public static void ShowDemoWindow()
 	{
 		_showDemoWindow = true;
-	}
-
-	public static void ShowSettings()
-	{
-		_showSettings = true;
 	}
 
 	public static void ShowAbout()
@@ -104,7 +98,6 @@ public static class UiRenderer
 		if (UserSettings.Model.ShowDebug)
 			DebugLayout.Render();
 
-		SettingsWindow.Render(ref _showSettings);
 		AboutWindow.Render(ref _showAbout);
 		UpdateWindow.Render(ref _showUpdate);
 
