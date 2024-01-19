@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Tools.EditorFileState;
-using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
-using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
@@ -14,33 +13,12 @@ public static class AssetEditorWindow
 		{
 			AssetEditorMenu.Render();
 
-			if (ImGui.BeginTable("Asset Editor Table", 3, ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable | ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.ScrollY))
-			{
-				ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 64);
-				ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 128);
-				ImGui.TableSetupColumn("Path", ImGuiTableColumnFlags.WidthStretch);
-				ImGui.TableHeadersRow();
-
-				for (int i = 0; i < FileStates.Mod.Object.Paths.Count; i++)
-				{
-					AssetPath path = FileStates.Mod.Object.Paths[i];
-
-					ImGui.TableNextRow();
-
-					ImGui.TableNextColumn();
-					ImGui.Text(EnumUtils.AssetTypeNames[path.AssetType]);
-
-					ImGui.TableNextColumn();
-					ImGui.Text(path.AssetName);
-
-					ImGui.TableNextColumn();
-					ImGui.Text(path.AbsolutePath);
-				}
-
-				ImGui.EndTable();
-
-				// TODO: Add button to add new asset.
-			}
+			Vector2 size = ImGui.GetContentRegionAvail();
+			size.Y /= 2;
+			size.Y -= 4;
+			AssetPathsChild.Render(size);
+			ImGui.Separator();
+			AssetBrowserChild.Render(size);
 		}
 
 		ImGui.End(); // End Asset Editor
