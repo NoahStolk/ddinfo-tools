@@ -77,6 +77,8 @@ public static class UiRenderer
 				break;
 			case LayoutType.AssetEditor:
 				AssetEditorWindow.Render();
+				CompileModWindow.Render();
+				ExtractModWindow.Render();
 				break;
 			case LayoutType.ReplayEditor:
 				ReplayEditorWindow.Update(delta);
