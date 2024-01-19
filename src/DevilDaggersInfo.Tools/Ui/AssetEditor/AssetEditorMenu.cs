@@ -36,6 +36,9 @@ public static class AssetEditorMenu
 		if (ImGui.MenuItem("Save", "Ctrl+S"))
 			SaveMod();
 
+		if (ImGui.MenuItem("Save as", "Ctrl+Shift+S"))
+			SaveModAs();
+
 		ImGui.Separator();
 
 		if (ImGui.MenuItem("Close", "Esc"))
@@ -93,6 +96,14 @@ public static class AssetEditorMenu
 
 	public static void SaveMod()
 	{
+		if (FileStates.Mod.FilePath != null)
+			FileStates.Mod.SaveFile(FileStates.Mod.FilePath);
+		else
+			SaveModAs();
+	}
+
+	public static void SaveModAs()
+	{
 		NativeFileDialog.CreateSaveFileDialog(SaveModCallback, PathUtils.FileExtensionMod);
 	}
 
@@ -107,6 +118,6 @@ public static class AssetEditorMenu
 
 	public static void Close()
 	{
-		UiRenderer.Layout = LayoutType.Main;
+		FileStates.Mod.PromptSave(() => UiRenderer.Layout = LayoutType.Main);
 	}
 }

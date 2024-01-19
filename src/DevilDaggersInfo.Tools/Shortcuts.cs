@@ -83,6 +83,15 @@ public static class Shortcuts
 				};
 				action?.Invoke();
 			}
+			else
+			{
+				Action? action = key switch
+				{
+					Key.S => AssetEditorMenu.SaveModAs,
+					_ => null,
+				};
+				action?.Invoke();
+			}
 		}
 	}
 
