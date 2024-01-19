@@ -202,7 +202,7 @@ public static class ModsDirectoryLogic
 		try
 		{
 			string path = Path.Combine(UserSettings.ModsDirectory, fileName);
-			using FileStream fs = new(path, FileMode.Open, FileAccess.Read);
+			using FileStream fs = new(path, FileMode.Open, FileAccess.ReadWrite);
 			using BinaryReader reader = new(fs);
 			ModBinaryToc modBinaryToc = ModBinaryToc.FromReader(reader);
 

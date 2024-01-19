@@ -7,6 +7,10 @@
 - Added popup when applying practice spawnset.
 - Added "Do not show again" checkbox to practice popups. These are saved in the user settings.
 
+### Fixes
+
+- Fixed toggling prohibited assets in the mod preview window not working.
+
 ### Miscellaneous
 
 - The settings have been moved to the configuration screen.
