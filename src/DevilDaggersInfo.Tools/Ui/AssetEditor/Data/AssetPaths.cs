@@ -6,10 +6,10 @@ namespace DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 public class AssetPaths
 {
 	public List<AudioAssetPath> Audio { get; init; } = [];
-	public List<AssetPath> Meshes { get; init; } = [];
-	public List<AssetPath> ObjectBindings { get; init; } = [];
+	public List<MeshAssetPath> Meshes { get; init; } = [];
+	public List<ObjectBindingAssetPath> ObjectBindings { get; init; } = [];
 	public List<ShaderAssetPath> Shaders { get; init; } = [];
-	public List<AssetPath> Textures { get; init; } = [];
+	public List<TextureAssetPath> Textures { get; init; } = [];
 
 	public void SortAudio(uint sorting, bool sortAscending)
 	{
@@ -18,12 +18,12 @@ public class AssetPaths
 
 	public void SortMeshes(uint sorting, bool sortAscending)
 	{
-		Meshes.Sort((a, b) => CompareAssets(a, b, sorting, sortAscending));
+		Meshes.Sort((a, b) => CompareMeshAssets(a, b, sorting, sortAscending));
 	}
 
 	public void SortObjectBindings(uint sorting, bool sortAscending)
 	{
-		ObjectBindings.Sort((a, b) => CompareAssets(a, b, sorting, sortAscending));
+		ObjectBindings.Sort((a, b) => CompareObjectBindingAssets(a, b, sorting, sortAscending));
 	}
 
 	public void SortShaders(uint sorting, bool sortAscending)
@@ -33,7 +33,7 @@ public class AssetPaths
 
 	public void SortTextures(uint sorting, bool sortAscending)
 	{
-		Textures.Sort((a, b) => CompareAssets(a, b, sorting, sortAscending));
+		Textures.Sort((a, b) => CompareTextureAssets(a, b, sorting, sortAscending));
 	}
 
 	private static int CompareAudioAssets(AudioAssetPath a, AudioAssetPath b, uint sorting, bool sortAscending)
@@ -43,6 +43,30 @@ public class AssetPaths
 			0 => string.Compare(a.AssetName, b.AssetName, StringComparison.OrdinalIgnoreCase),
 			1 => (a.Loudness ?? a.DefaultLoudness).CompareTo(b.Loudness ?? b.DefaultLoudness),
 			2 => string.Compare(a.AbsolutePath, b.AbsolutePath, StringComparison.OrdinalIgnoreCase),
+			_ => throw new InvalidOperationException($"Invalid sorting value {sorting}."),
+		};
+
+		return sortAscending ? result : -result;
+	}
+
+	private static int CompareMeshAssets(MeshAssetPath a, MeshAssetPath b, uint sorting, bool sortAscending)
+	{
+		int result = sorting switch
+		{
+			0 => string.Compare(a.AssetName, b.AssetName, StringComparison.OrdinalIgnoreCase),
+			1 => string.Compare(a.AbsolutePath, b.AbsolutePath, StringComparison.OrdinalIgnoreCase),
+			_ => throw new InvalidOperationException($"Invalid sorting value {sorting}."),
+		};
+
+		return sortAscending ? result : -result;
+	}
+
+	private static int CompareObjectBindingAssets(ObjectBindingAssetPath a, ObjectBindingAssetPath b, uint sorting, bool sortAscending)
+	{
+		int result = sorting switch
+		{
+			0 => string.Compare(a.AssetName, b.AssetName, StringComparison.OrdinalIgnoreCase),
+			1 => string.Compare(a.AbsolutePath, b.AbsolutePath, StringComparison.OrdinalIgnoreCase),
 			_ => throw new InvalidOperationException($"Invalid sorting value {sorting}."),
 		};
 
@@ -62,7 +86,7 @@ public class AssetPaths
 		return sortAscending ? result : -result;
 	}
 
-	private static int CompareAssets(AssetPath a, AssetPath b, uint sorting, bool sortAscending)
+	private static int CompareTextureAssets(TextureAssetPath a, TextureAssetPath b, uint sorting, bool sortAscending)
 	{
 		int result = sorting switch
 		{

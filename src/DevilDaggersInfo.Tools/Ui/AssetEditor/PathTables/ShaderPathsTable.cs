@@ -46,7 +46,7 @@ public sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
 
 	public static void Add(AssetInfo assetInfo)
 	{
-		FileStates.Mod.Object.Shaders.Add(new(assetInfo.AssetType, assetInfo.AssetName, null, null));
+		FileStates.Mod.Object.Shaders.Add(new(assetInfo.AssetName, null, null));
 	}
 
 	public static void Sort(uint sorting, bool sortAscending)

@@ -25,7 +25,7 @@ public sealed class TexturePathsTable : IPathTable<TexturePathsTable>
 
 	public static void RenderPath(int index)
 	{
-		AssetPath path = FileStates.Mod.Object.Textures[index];
+		TextureAssetPath path = FileStates.Mod.Object.Textures[index];
 
 		ImGui.TableNextColumn();
 		ImGui.Text(path.AssetName);
@@ -39,7 +39,7 @@ public sealed class TexturePathsTable : IPathTable<TexturePathsTable>
 
 	public static void Add(AssetInfo assetInfo)
 	{
-		FileStates.Mod.Object.Textures.Add(new(assetInfo.AssetType, assetInfo.AssetName, null));
+		FileStates.Mod.Object.Textures.Add(new(assetInfo.AssetName, null));
 	}
 
 	public static void Sort(uint sorting, bool sortAscending)

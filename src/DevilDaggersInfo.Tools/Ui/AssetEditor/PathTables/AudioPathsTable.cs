@@ -51,7 +51,7 @@ public sealed class AudioPathsTable : IPathTable<AudioPathsTable>
 
 	public static void Add(AssetInfo assetInfo)
 	{
-		FileStates.Mod.Object.Audio.Add(new(assetInfo.AssetType, assetInfo.AssetName, null, null));
+		FileStates.Mod.Object.Audio.Add(new(assetInfo.AssetName, null, null));
 	}
 
 	public static void Sort(uint sorting, bool sortAscending)

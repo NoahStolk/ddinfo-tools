@@ -25,7 +25,7 @@ public sealed class ObjectBindingPathsTable : IPathTable<ObjectBindingPathsTable
 
 	public static void RenderPath(int index)
 	{
-		AssetPath path = FileStates.Mod.Object.ObjectBindings[index];
+		ObjectBindingAssetPath path = FileStates.Mod.Object.ObjectBindings[index];
 
 		ImGui.TableNextColumn();
 		ImGui.Text(path.AssetName);
@@ -39,7 +39,7 @@ public sealed class ObjectBindingPathsTable : IPathTable<ObjectBindingPathsTable
 
 	public static void Add(AssetInfo assetInfo)
 	{
-		FileStates.Mod.Object.ObjectBindings.Add(new(assetInfo.AssetType, assetInfo.AssetName, null));
+		FileStates.Mod.Object.ObjectBindings.Add(new(assetInfo.AssetName, null));
 	}
 
 	public static void Sort(uint sorting, bool sortAscending)

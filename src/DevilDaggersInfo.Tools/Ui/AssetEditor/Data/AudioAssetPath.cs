@@ -1,12 +1,12 @@
 using DevilDaggersInfo.Core.Asset;
+using System.Text.Json.Serialization;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 
 public record AudioAssetPath : IAssetPath
 {
-	public AudioAssetPath(AssetType assetType, string assetName, string? absolutePath, float? loudness)
+	public AudioAssetPath(string assetName, string? absolutePath, float? loudness)
 	{
-		AssetType = assetType;
 		AssetName = assetName;
 		AbsolutePath = absolutePath;
 		Loudness = loudness;
@@ -14,11 +14,13 @@ public record AudioAssetPath : IAssetPath
 		DefaultLoudness = GetAudioAssetInfo(assetName)?.DefaultLoudness ?? 1;
 	}
 
-	public AssetType AssetType { get; init; }
-	public string AssetName { get; init; }
+	[JsonIgnore]
+	public AssetType AssetType => AssetType.Audio;
+	public string AssetName { get; }
 	public string? AbsolutePath { get; private set; }
 	public float? Loudness { get; private set; }
 
+	[JsonIgnore]
 	public float DefaultLoudness { get; }
 
 	private static AudioAssetInfo? GetAudioAssetInfo(string assetName)

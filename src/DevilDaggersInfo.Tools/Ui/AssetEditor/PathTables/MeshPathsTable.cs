@@ -25,7 +25,7 @@ public sealed class MeshPathsTable : IPathTable<MeshPathsTable>
 
 	public static void RenderPath(int index)
 	{
-		AssetPath path = FileStates.Mod.Object.Meshes[index];
+		MeshAssetPath path = FileStates.Mod.Object.Meshes[index];
 
 		ImGui.TableNextColumn();
 		ImGui.Text(path.AssetName);
@@ -39,7 +39,7 @@ public sealed class MeshPathsTable : IPathTable<MeshPathsTable>
 
 	public static void Add(AssetInfo assetInfo)
 	{
-		FileStates.Mod.Object.Meshes.Add(new(assetInfo.AssetType, assetInfo.AssetName, null));
+		FileStates.Mod.Object.Meshes.Add(new(assetInfo.AssetName, null));
 	}
 
 	public static void Sort(uint sorting, bool sortAscending)
