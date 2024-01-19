@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Tools.JsonSerializerContexts;
-using DevilDaggersInfo.Tools.Utils;
 using System.Text.Json;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
@@ -42,7 +41,7 @@ public class AssetPaths
 		int result = sorting switch
 		{
 			0 => string.Compare(a.AssetName, b.AssetName, StringComparison.OrdinalIgnoreCase),
-			1 => a.Loudness.HasValue && b.Loudness.HasValue ? a.Loudness.Value.CompareTo(b.Loudness.Value) : 0, // TODO: Test this.
+			1 => (a.Loudness ?? a.DefaultLoudness).CompareTo(b.Loudness ?? b.DefaultLoudness),
 			2 => string.Compare(a.AbsolutePath, b.AbsolutePath, StringComparison.OrdinalIgnoreCase),
 			_ => throw new InvalidOperationException($"Invalid sorting value {sorting}."),
 		};

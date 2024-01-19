@@ -8,7 +8,6 @@ public record AssetPath(AssetType AssetType, string AssetName, string? AbsoluteP
 
 	public void SetPath(string? path)
 	{
-		if (path != null)
-			AbsolutePath = path;
+		AbsolutePath = path;
 	}
 }

@@ -32,9 +32,15 @@ public sealed class AudioPathsTable : IPathTable<AudioPathsTable>
 		ImGui.Text(path.AssetName);
 
 		ImGui.TableNextColumn();
-		float loudness = path.Loudness ?? 0f;
+		bool hasLoudness = path.Loudness.HasValue;
+		if (ImGui.Checkbox(Inline.Span($"##CheckboxLoudness_{index}"), ref hasLoudness))
+			path.SetLoudness(hasLoudness ? path.DefaultLoudness : null);
+		ImGui.SameLine();
+		ImGui.BeginDisabled(!hasLoudness);
+		float loudness = path.Loudness ?? path.DefaultLoudness;
 		if (ImGui.InputFloat(Inline.Span($"##Loudness_{index}"), ref loudness, 0.1f, 1f, "%.1f"))
 			path.SetLoudness(loudness);
+		ImGui.EndDisabled();
 
 		ImGui.TableNextColumn();
 		if (ImGui.Button(Inline.Span($"Browse##Audio_{index}")))

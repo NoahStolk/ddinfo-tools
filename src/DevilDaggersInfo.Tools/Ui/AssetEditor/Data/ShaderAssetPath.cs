@@ -10,13 +10,11 @@ public record ShaderAssetPath(AssetType AssetType, string AssetName, string? Abs
 
 	public void SetVertexPath(string? path)
 	{
-		if (path != null)
-			AbsoluteVertexPath = path;
+		AbsoluteVertexPath = path;
 	}
 
 	public void SetFragmentPath(string? path)
 	{
-		if (path != null)
-			AbsoluteFragmentPath = path;
+		AbsoluteFragmentPath = path;
 	}
 }
