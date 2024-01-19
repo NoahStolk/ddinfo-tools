@@ -19,9 +19,9 @@ public sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
 
 	public static void SetupColumns()
 	{
-		ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 160, 1);
-		ImGui.TableSetupColumn("Vertex Path", ImGuiTableColumnFlags.WidthStretch, 0, 2);
-		ImGui.TableSetupColumn("Fragment Path", ImGuiTableColumnFlags.WidthStretch, 0, 3);
+		ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 160, 0);
+		ImGui.TableSetupColumn("Vertex Path", ImGuiTableColumnFlags.WidthStretch, 0, 1);
+		ImGui.TableSetupColumn("Fragment Path", ImGuiTableColumnFlags.WidthStretch, 0, 2);
 	}
 
 	public static void RenderPath(int index)
@@ -32,18 +32,14 @@ public sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
 		ImGui.Text(path.AssetName);
 
 		ImGui.TableNextColumn();
-
 		if (ImGui.Button(Inline.Span($"Browse##ShaderVertex_{index}")))
 			NativeFileDialog.CreateOpenFileDialog(path.SetVertexPath, PathUtils.GetFileFilter(path.AssetType));
-
 		ImGui.SameLine();
 		ImGui.Text(path.AbsoluteVertexPath ?? string.Empty);
 
 		ImGui.TableNextColumn();
-
 		if (ImGui.Button(Inline.Span($"Browse##ShaderFragment_{index}")))
 			NativeFileDialog.CreateOpenFileDialog(path.SetFragmentPath, PathUtils.GetFileFilter(path.AssetType));
-
 		ImGui.SameLine();
 		ImGui.Text(path.AbsoluteFragmentPath ?? string.Empty);
 	}

@@ -19,8 +19,8 @@ public sealed class MeshPathsTable : IPathTable<MeshPathsTable>
 
 	public static void SetupColumns()
 	{
-		ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 160, 1);
-		ImGui.TableSetupColumn("Path", ImGuiTableColumnFlags.WidthStretch, 0, 2);
+		ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 160, 0);
+		ImGui.TableSetupColumn("Path", ImGuiTableColumnFlags.WidthStretch, 0, 1);
 	}
 
 	public static void RenderPath(int index)
@@ -31,10 +31,8 @@ public sealed class MeshPathsTable : IPathTable<MeshPathsTable>
 		ImGui.Text(path.AssetName);
 
 		ImGui.TableNextColumn();
-
 		if (ImGui.Button(Inline.Span($"Browse##Mesh_{index}")))
 			NativeFileDialog.CreateOpenFileDialog(path.SetPath, PathUtils.GetFileFilter(path.AssetType));
-
 		ImGui.SameLine();
 		ImGui.Text(path.AbsolutePath ?? string.Empty);
 	}

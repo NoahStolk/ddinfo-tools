@@ -41,10 +41,9 @@ public class AssetPaths
 	{
 		int result = sorting switch
 		{
-			0 => string.Compare(EnumUtils.AssetTypeNames[a.AssetType], EnumUtils.AssetTypeNames[b.AssetType], StringComparison.OrdinalIgnoreCase),
-			1 => string.Compare(a.AssetName, b.AssetName, StringComparison.OrdinalIgnoreCase),
+			0 => string.Compare(a.AssetName, b.AssetName, StringComparison.OrdinalIgnoreCase),
+			1 => a.Loudness.HasValue && b.Loudness.HasValue ? a.Loudness.Value.CompareTo(b.Loudness.Value) : 0, // TODO: Test this.
 			2 => string.Compare(a.AbsolutePath, b.AbsolutePath, StringComparison.OrdinalIgnoreCase),
-			3 => a.Loudness.HasValue && b.Loudness.HasValue ? a.Loudness.Value.CompareTo(b.Loudness.Value) : 0, // TODO: Test this.
 			_ => throw new InvalidOperationException($"Invalid sorting value {sorting}."),
 		};
 
@@ -55,10 +54,9 @@ public class AssetPaths
 	{
 		int result = sorting switch
 		{
-			0 => string.Compare(EnumUtils.AssetTypeNames[a.AssetType], EnumUtils.AssetTypeNames[b.AssetType], StringComparison.OrdinalIgnoreCase),
-			1 => string.Compare(a.AssetName, b.AssetName, StringComparison.OrdinalIgnoreCase),
-			2 => string.Compare(a.AbsoluteVertexPath, b.AbsoluteVertexPath, StringComparison.OrdinalIgnoreCase),
-			3 => string.Compare(a.AbsoluteFragmentPath, b.AbsoluteFragmentPath, StringComparison.OrdinalIgnoreCase),
+			0 => string.Compare(a.AssetName, b.AssetName, StringComparison.OrdinalIgnoreCase),
+			1 => string.Compare(a.AbsoluteVertexPath, b.AbsoluteVertexPath, StringComparison.OrdinalIgnoreCase),
+			2 => string.Compare(a.AbsoluteFragmentPath, b.AbsoluteFragmentPath, StringComparison.OrdinalIgnoreCase),
 			_ => throw new InvalidOperationException($"Invalid sorting value {sorting}."),
 		};
 
@@ -69,9 +67,8 @@ public class AssetPaths
 	{
 		int result = sorting switch
 		{
-			0 => string.Compare(EnumUtils.AssetTypeNames[a.AssetType], EnumUtils.AssetTypeNames[b.AssetType], StringComparison.OrdinalIgnoreCase),
-			1 => string.Compare(a.AssetName, b.AssetName, StringComparison.OrdinalIgnoreCase),
-			2 => string.Compare(a.AbsolutePath, b.AbsolutePath, StringComparison.OrdinalIgnoreCase),
+			0 => string.Compare(a.AssetName, b.AssetName, StringComparison.OrdinalIgnoreCase),
+			1 => string.Compare(a.AbsolutePath, b.AbsolutePath, StringComparison.OrdinalIgnoreCase),
 			_ => throw new InvalidOperationException($"Invalid sorting value {sorting}."),
 		};
 
