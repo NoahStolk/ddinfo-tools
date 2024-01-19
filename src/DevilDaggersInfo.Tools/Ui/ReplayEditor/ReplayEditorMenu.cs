@@ -60,7 +60,7 @@ public static class ReplayEditorMenu
 
 	public static void OpenReplay()
 	{
-		NativeFileDialog.CreateOpenFileDialog(OpenReplayCallback, PathConstants.FileExtensionReplay);
+		NativeFileDialog.CreateOpenFileDialog(OpenReplayCallback, PathUtils.FileExtensionReplay);
 	}
 
 	private static void OpenReplayCallback(string? filePath)
@@ -130,7 +130,7 @@ public static class ReplayEditorMenu
 
 	public static void SaveReplay()
 	{
-		NativeFileDialog.CreateSaveFileDialog(SaveReplayCallback, PathConstants.FileExtensionReplay);
+		NativeFileDialog.CreateSaveFileDialog(SaveReplayCallback, PathUtils.FileExtensionReplay);
 	}
 
 	private static void SaveReplayCallback(string? filePath)
@@ -138,7 +138,7 @@ public static class ReplayEditorMenu
 		if (filePath == null)
 			return;
 
-		filePath = Path.ChangeExtension(filePath, PathConstants.FileExtensionReplay);
+		filePath = Path.ChangeExtension(filePath, PathUtils.FileExtensionReplay);
 		FileStates.Replay.SaveFile(filePath);
 	}
 

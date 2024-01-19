@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Tools.EditorFileState;
 using ImGuiNET;
-using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
@@ -13,12 +12,7 @@ public static class AssetEditorWindow
 		{
 			AssetEditorMenu.Render();
 
-			Vector2 size = ImGui.GetContentRegionAvail();
-			size.Y /= 2;
-			size.Y -= 4;
-			AssetPathsChild.Render(size);
-			ImGui.Separator();
-			AssetBrowserChild.Render(size);
+			AssetPathsChild.Render();
 		}
 
 		ImGui.End(); // End Asset Editor
