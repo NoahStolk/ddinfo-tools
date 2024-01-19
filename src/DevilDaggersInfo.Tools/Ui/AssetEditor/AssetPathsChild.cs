@@ -11,16 +11,27 @@ namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
 public static class AssetPathsChild
 {
-	public static void Render(Vector2 size)
+	public static unsafe void Render(Vector2 size)
 	{
 		if (ImGui.BeginChild("Asset Paths", size))
 		{
-			if (ImGui.BeginTable("Asset Paths Table", 3, ImGuiTableFlags.Borders | ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.ScrollY))
+			if (ImGui.BeginTable("Asset Paths Table", 3, ImGuiTableFlags.Borders | ImGuiTableFlags.Sortable | ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.ScrollY))
 			{
-				ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 64);
-				ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 160);
-				ImGui.TableSetupColumn("Path", ImGuiTableColumnFlags.WidthStretch);
+				ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 96, 0);
+				ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 160, 1);
+				ImGui.TableSetupColumn("Path", ImGuiTableColumnFlags.WidthStretch, 0, 2);
 				ImGui.TableHeadersRow();
+
+				ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
+				if (sortsSpecs.NativePtr != (void*)0 && sortsSpecs.SpecsDirty)
+				{
+					uint sorting = sortsSpecs.Specs.ColumnUserID;
+					bool sortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
+
+					FileStates.Mod.Object.Sort(sorting, sortAscending);
+
+					sortsSpecs.SpecsDirty = false;
+				}
 
 				for (int i = 0; i < FileStates.Mod.Object.Paths.Count; i++)
 				{
