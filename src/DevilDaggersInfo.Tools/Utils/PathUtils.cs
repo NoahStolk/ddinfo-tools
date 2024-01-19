@@ -22,7 +22,7 @@ public static class PathUtils
 			AssetType.Audio => FileExtensionAudio,
 			AssetType.Mesh => FileExtensionMesh,
 			AssetType.ObjectBinding => FileExtensionObjectBinding,
-			AssetType.Shader => string.Join(", ", FileExtensionShaderFragment, FileExtensionShaderVertex, FileExtensionShaderGeneric),
+			AssetType.Shader => string.Join(',', FileExtensionShaderFragment, FileExtensionShaderVertex, FileExtensionShaderGeneric),
 			AssetType.Texture => FileExtensionTexture,
 			_ => throw new UnreachableException($"Unknown asset type {assetType}."),
 		};
