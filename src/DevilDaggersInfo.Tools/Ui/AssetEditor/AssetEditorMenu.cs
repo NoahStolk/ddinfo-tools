@@ -50,7 +50,7 @@ public static class AssetEditorMenu
 
 	public static void OpenMod()
 	{
-		NativeFileDialog.CreateOpenFileDialog(OpenModCallback, PathConstants.FileExtensionFilterMod);
+		NativeFileDialog.CreateOpenFileDialog(OpenModCallback, PathConstants.FileExtensionMod);
 	}
 
 	private static void OpenModCallback(string? filePath)
@@ -93,7 +93,7 @@ public static class AssetEditorMenu
 
 	public static void SaveMod()
 	{
-		NativeFileDialog.CreateSaveFileDialog(SaveModCallback, PathConstants.FileExtensionFilterMod);
+		NativeFileDialog.CreateSaveFileDialog(SaveModCallback, PathConstants.FileExtensionMod);
 	}
 
 	private static void SaveModCallback(string? filePath)

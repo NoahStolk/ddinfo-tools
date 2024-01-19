@@ -1,8 +1,10 @@
+using DevilDaggersInfo.Core.Asset;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
@@ -35,6 +37,11 @@ public static class AssetPathsChild
 					ImGui.Text(path.AssetName);
 
 					ImGui.TableNextColumn();
+
+					if (ImGui.Button(Inline.Span($"Browse##{i}")))
+						NativeFileDialog.CreateOpenFileDialog(path.SetPath, GetFileFilter(path.AssetType));
+
+					ImGui.SameLine();
 					ImGui.Text(path.AbsolutePath);
 				}
 
@@ -43,5 +50,18 @@ public static class AssetPathsChild
 		}
 
 		ImGui.EndChild(); // End Asset Browser
+	}
+
+	private static string GetFileFilter(AssetType assetType)
+	{
+		return assetType switch
+		{
+			AssetType.Audio => PathConstants.FileExtensionAudio,
+			AssetType.Mesh => PathConstants.FileExtensionMesh,
+			AssetType.ObjectBinding => PathConstants.FileExtensionObjectBinding,
+			AssetType.Shader => string.Join(", ", PathConstants.FileExtensionShaderFragment, PathConstants.FileExtensionShaderVertex, PathConstants.FileExtensionShaderGeneric),
+			AssetType.Texture => PathConstants.FileExtensionTexture,
+			_ => throw new UnreachableException($"Unknown asset type {assetType}."),
+		};
 	}
 }

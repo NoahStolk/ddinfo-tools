@@ -21,7 +21,7 @@ public static class NativeFileDialog
 		OpenDialog(callback, async () =>
 		{
 			await Task.Yield();
-			DialogResult dialogResult = Dialog.FileOpen(); // TODO: extensionFilter
+			DialogResult dialogResult = Dialog.FileOpen(extensionFilter);
 			DialogOpen = false;
 			return dialogResult.Path;
 		});
@@ -36,7 +36,7 @@ public static class NativeFileDialog
 		OpenDialog(callback, async () =>
 		{
 			await Task.Yield();
-			DialogResult dialogResult = Dialog.FileSave(); // TODO: extensionFilter
+			DialogResult dialogResult = Dialog.FileSave(extensionFilter);
 			DialogOpen = false;
 			return dialogResult.Path;
 		});
