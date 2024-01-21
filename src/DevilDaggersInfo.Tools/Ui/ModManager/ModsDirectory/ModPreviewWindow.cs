@@ -12,10 +12,10 @@ namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 
 public static class ModPreviewWindow
 {
-	private static List<ModBinaryChunk> _displayedChunks = [];
+	private static List<ModBinaryTocEntry> _displayedTocEntries = [];
 	private static ModBinaryType? _binaryType;
-	private static int _chunkCount;
-	private static int _prohibitedChunkCount;
+	private static int _assetCount;
+	private static int _prohibitedAssetCount;
 	private static long? _modFileSize;
 	private static string? _selectedFileName;
 
@@ -25,11 +25,11 @@ public static class ModPreviewWindow
 		set
 		{
 			_selectedFileName = value;
-			LoadChunks();
+			LoadTocEntries();
 		}
 	}
 
-	public static void LoadChunks()
+	public static void LoadTocEntries()
 	{
 		if (_selectedFileName == null)
 			return;
@@ -45,10 +45,10 @@ public static class ModPreviewWindow
 			using BinaryReader reader = new(fs);
 			ModBinaryToc modBinaryToc = ModBinaryToc.FromReader(reader);
 			_binaryType = modBinaryToc.Type;
-			_chunkCount = modBinaryToc.Chunks.Count;
-			_prohibitedChunkCount = modBinaryToc.Chunks.Count(c => AssetContainer.IsProhibited(c.AssetType, c.Name));
-			_displayedChunks.Clear();
-			_displayedChunks.AddRange(modBinaryToc.Chunks);
+			_assetCount = modBinaryToc.Entries.Count;
+			_prohibitedAssetCount = modBinaryToc.Entries.Count(c => AssetContainer.IsProhibited(c.AssetType, c.Name));
+			_displayedTocEntries.Clear();
+			_displayedTocEntries.AddRange(modBinaryToc.Entries);
 		}
 		catch (InvalidModBinaryException)
 		{
@@ -64,10 +64,10 @@ public static class ModPreviewWindow
 
 	private static void ClearState()
 	{
-		_displayedChunks.Clear();
+		_displayedTocEntries.Clear();
 		_binaryType = null;
-		_chunkCount = 0;
-		_prohibitedChunkCount = 0;
+		_assetCount = 0;
+		_prohibitedAssetCount = 0;
 		_selectedFileName = null;
 		_modFileSize = null;
 	}
@@ -88,7 +88,7 @@ public static class ModPreviewWindow
 				if (ImGui.Button("Toggle prohibited"))
 					ModsDirectoryLogic.ToggleProhibitedAssets(_selectedFileName);
 
-				RenderChunksTable();
+				RenderTocEntriesTable();
 			}
 		}
 
@@ -112,18 +112,18 @@ public static class ModPreviewWindow
 			NextColumnText(FileSizeUtils.Format(_modFileSize ?? 0));
 
 			NextColumnText("Asset count");
-			NextColumnText(Inline.Span(_chunkCount));
+			NextColumnText(Inline.Span(_assetCount));
 
 			NextColumnText("Prohibited asset count");
-			NextColumnText(Inline.Span(_prohibitedChunkCount));
+			NextColumnText(Inline.Span(_prohibitedAssetCount));
 
 			ImGui.EndTable();
 		}
 	}
 
-	private static unsafe void RenderChunksTable()
+	private static unsafe void RenderTocEntriesTable()
 	{
-		if (ImGui.BeginTable("Chunks", 4, ImGuiTableFlags.Resizable | ImGuiTableFlags.Sortable))
+		if (ImGui.BeginTable("ModPreviewTocEntriesTable", 4, ImGuiTableFlags.Resizable | ImGuiTableFlags.Sortable))
 		{
 			ImGui.TableSetupColumn("Asset name", ImGuiTableColumnFlags.DefaultSort, 256, 0);
 			ImGui.TableSetupColumn("Asset type", ImGuiTableColumnFlags.None, 128, 1);
@@ -137,36 +137,36 @@ public static class ModPreviewWindow
 				uint sorting = sortsSpecs.Specs.ColumnUserID;
 				bool sortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
 
-				_displayedChunks = sorting switch
+				_displayedTocEntries = sorting switch
 				{
-					0 => sortAscending ? _displayedChunks.OrderBy(c => c.Name.ToLower()).ToList() : _displayedChunks.OrderByDescending(c => c.Name.ToLower()).ToList(),
-					1 => sortAscending ? _displayedChunks.OrderBy(c => c.AssetType).ToList() : _displayedChunks.OrderByDescending(c => c.AssetType).ToList(),
-					2 => sortAscending ? _displayedChunks.OrderBy(c => AssetContainer.IsProhibited(c.AssetType, c.Name)).ToList() : _displayedChunks.OrderByDescending(c => AssetContainer.IsProhibited(c.AssetType, c.Name)).ToList(),
-					3 => sortAscending ? _displayedChunks.OrderBy(c => c.Size).ToList() : _displayedChunks.OrderByDescending(c => c.Size).ToList(),
+					0 => sortAscending ? _displayedTocEntries.OrderBy(c => c.Name.ToLower()).ToList() : _displayedTocEntries.OrderByDescending(c => c.Name.ToLower()).ToList(),
+					1 => sortAscending ? _displayedTocEntries.OrderBy(c => c.AssetType).ToList() : _displayedTocEntries.OrderByDescending(c => c.AssetType).ToList(),
+					2 => sortAscending ? _displayedTocEntries.OrderBy(c => AssetContainer.IsProhibited(c.AssetType, c.Name)).ToList() : _displayedTocEntries.OrderByDescending(c => AssetContainer.IsProhibited(c.AssetType, c.Name)).ToList(),
+					3 => sortAscending ? _displayedTocEntries.OrderBy(c => c.Size).ToList() : _displayedTocEntries.OrderByDescending(c => c.Size).ToList(),
 					_ => throw new InvalidOperationException($"Invalid sorting column '{sorting}'."),
 				};
 
 				sortsSpecs.SpecsDirty = false;
 			}
 
-			for (int i = 0; i < _displayedChunks.Count; i++)
+			for (int i = 0; i < _displayedTocEntries.Count; i++)
 			{
-				ModBinaryChunk chunk = _displayedChunks[i];
+				ModBinaryTocEntry tocEntry = _displayedTocEntries[i];
 
 				ImGui.TableNextColumn();
-				ImGui.Text(chunk.Name);
+				ImGui.Text(tocEntry.Name);
 
 				ImGui.TableNextColumn();
-				ImGui.TextColored(chunk.AssetType.GetColor(), EnumUtils.AssetTypeNames[chunk.AssetType]);
+				ImGui.TextColored(tocEntry.AssetType.GetColor(), EnumUtils.AssetTypeNames[tocEntry.AssetType]);
 
 				ImGui.TableNextColumn();
-				if (AssetContainer.IsProhibited(chunk.AssetType, chunk.Name))
+				if (AssetContainer.IsProhibited(tocEntry.AssetType, tocEntry.Name))
 					ImGui.TextColored(Color.Orange, "Prohibited");
 				else
 					ImGui.TextColored(Color.Green, "OK");
 
 				ImGui.TableNextColumn();
-				ColumnTextRight(FileSizeUtils.Format(chunk.Size));
+				ColumnTextRight(FileSizeUtils.Format(tocEntry.Size));
 			}
 
 			ImGui.EndTable();

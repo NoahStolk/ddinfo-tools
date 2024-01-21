@@ -5,7 +5,7 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
 
-public sealed record ModFile(string FileName, ModFileType FileType, ModBinaryType? BinaryType, int? ChunkCount, int? ProhibitedChunkCount, long FileSize)
+public sealed record ModFile(string FileName, ModFileType FileType, ModBinaryType? BinaryType, int? AssetCount, int? ProhibitedAssetCount, long FileSize)
 {
 	public static ModFileType GetFileType(string fileName)
 	{
@@ -26,8 +26,8 @@ public sealed record ModFile(string FileName, ModFileType FileType, ModBinaryTyp
 			using BinaryReader reader = new(fs);
 			ModBinaryToc modBinaryToc = ModBinaryToc.FromReader(reader);
 
-			int prohibitedCount = modBinaryToc.Chunks.Count(c => AssetContainer.IsProhibited(c.AssetType, c.Name));
-			return new(fileName, GetFileType(fileName), modBinaryToc.Type, modBinaryToc.Chunks.Count, prohibitedCount, fileSize);
+			int prohibitedCount = modBinaryToc.Entries.Count(c => AssetContainer.IsProhibited(c.AssetType, c.Name));
+			return new(fileName, GetFileType(fileName), modBinaryToc.Type, modBinaryToc.Entries.Count, prohibitedCount, fileSize);
 		}
 		catch (InvalidModBinaryException)
 		{

@@ -189,15 +189,15 @@ public static class ModsDirectoryWindow
 					ImGui.Text(EnumUtils.ModBinaryTypeNames[modFile.BinaryType.Value]);
 
 				ImGui.TableNextColumn();
-				if (modFile is { ChunkCount: not null, ProhibitedChunkCount: not null })
+				if (modFile is { AssetCount: not null, ProhibitedAssetCount: not null })
 				{
-					if (modFile.ProhibitedChunkCount.Value > 0)
-						ImGui.TextColored(Color.Orange, Inline.Span($"Prohibited ({modFile.ProhibitedChunkCount.Value} of {modFile.ChunkCount.Value})"));
+					if (modFile.ProhibitedAssetCount.Value > 0)
+						ImGui.TextColored(Color.Orange, Inline.Span($"Prohibited ({modFile.ProhibitedAssetCount.Value} of {modFile.AssetCount.Value})"));
 					else
 						ImGui.TextColored(Color.Green, "OK");
 
 					if (ImGui.IsItemHovered())
-						ImGui.SetTooltip(Inline.Span($"{modFile.ProhibitedChunkCount.Value} out of {modFile.ChunkCount.Value} assets prohibited"));
+						ImGui.SetTooltip(Inline.Span($"{modFile.ProhibitedAssetCount.Value} out of {modFile.AssetCount.Value} assets prohibited"));
 				}
 
 				ImGui.TableNextColumn();
