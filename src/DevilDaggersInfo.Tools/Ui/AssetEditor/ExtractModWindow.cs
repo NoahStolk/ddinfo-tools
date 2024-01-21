@@ -10,6 +10,8 @@ public static class ExtractModWindow
 {
 	private static string? _inputFilePath;
 	private static string? _outputDirectory;
+	private static bool _isExtracting;
+	private static readonly List<string> _errors = [];
 
 	public static void Render()
 	{
@@ -44,11 +46,17 @@ public static class ExtractModWindow
 			ImGui.Text(_outputDirectory ?? "No directory selected");
 
 			ImGui.SeparatorText("Extract");
+			ImGui.BeginDisabled(_isExtracting);
 			if (ImGui.Button("Extract"))
 			{
-				// TODO: Show progress bar and hide button when extracting.
+				// TODO: Show progress bar.
 				Task.Run(async () => await ExtractAsync());
 			}
+
+			ImGui.EndDisabled();
+
+			if (_isExtracting)
+				ImGui.Text("Extracting...");
 		}
 
 		ImGui.End();
@@ -68,6 +76,7 @@ public static class ExtractModWindow
 			return;
 		}
 
+		_isExtracting = true;
 		await using FileStream fileStream = File.OpenRead(_inputFilePath);
 		ModBinary modBinary = new(fileStream, ModBinaryReadFilter.AllAssets);
 		foreach (ModBinaryTocEntry tocEntry in modBinary.Toc.Entries)
@@ -92,11 +101,23 @@ public static class ExtractModWindow
 						Directory.CreateDirectory(directory);
 					await File.WriteAllBytesAsync(Path.Combine(directory, fileName), buffer);
 				}
-				catch (Exception ex) // TODO: IOException etc.
+				catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or PathTooLongException)
 				{
-					PopupManager.ShowError($"Could not write file '{fileName}' to output directory.", ex);
+					_errors.Add($"Could not write file '{fileName}' to output directory.\n\n{ex.Message}");
 				}
 			}
+		}
+
+		_isExtracting = false;
+
+		if (_errors.Count > 0)
+		{
+			PopupManager.ShowError($"""
+				Extraction completed with {_errors.Count} error(s):
+
+				{string.Join("\n\n", _errors)}
+				""");
+			_errors.Clear();
 		}
 	}
 }

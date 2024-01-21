@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Mod.Builders;
+using DevilDaggersInfo.Core.Mod.Exceptions;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using DevilDaggersInfo.Tools.Ui.Popups;
@@ -12,6 +13,7 @@ public static class CompileModWindow
 {
 	private static string _outputDirectory = UserSettings.ModsDirectory;
 	private static string _outputFileName = "mod";
+	private static bool _isCompiling;
 
 	private static bool CreateAudio => FileStates.Mod.Object.Audio.Count > 0;
 	private static bool CreateDd => FileStates.Mod.Object.Meshes.Count > 0 || FileStates.Mod.Object.ObjectBindings.Count > 0 || FileStates.Mod.Object.Shaders.Count > 0 || FileStates.Mod.Object.Textures.Count > 0;
@@ -44,11 +46,17 @@ public static class CompileModWindow
 				if (CreateDd)
 					ImGui.BulletText(Inline.Span($"dd{_outputFileName}"));
 
+				ImGui.BeginDisabled(_isCompiling);
 				if (ImGui.Button("Compile"))
 				{
-					// TODO: Show progress bar and hide button when compiling.
+					// TODO: Show progress bar.
 					Task.Run(async () => await CompileAsync());
 				}
+
+				ImGui.EndDisabled();
+
+				if (_isCompiling)
+					ImGui.Text("Compiling...");
 			}
 			else
 			{
@@ -91,18 +99,61 @@ public static class CompileModWindow
 			return;
 		}
 
+		_isCompiling = true;
 		AssetPaths mod = FileStates.Mod.Object;
 
 		if (CreateAudio)
-		{
-			byte[] audioBinary = await BuildAudioBinaryAsync(mod.Audio);
-			await File.WriteAllBytesAsync(Path.Combine(_outputDirectory, $"audio{_outputFileName}"), audioBinary);
-		}
+			await CompileAudioAsync(mod);
 
 		if (CreateDd)
+			await CompileDdAsync(mod);
+
+		_isCompiling = false;
+	}
+
+	private static async Task CompileAudioAsync(AssetPaths mod)
+	{
+		byte[]? audioBinary;
+		try
 		{
-			byte[] ddBinary = await BuildDdBinaryAsync(mod.Meshes.Cast<IAssetPath>().Concat(mod.ObjectBindings).Concat(mod.Shaders).Concat(mod.Textures).ToList());
+			audioBinary = await BuildAudioBinaryAsync(mod.Audio);
+		}
+		catch (Exception ex) when (ex is InvalidModCompilationException or IOException)
+		{
+			PopupManager.ShowError("Could not compile audio binary.", ex);
+			return;
+		}
+
+		try
+		{
+			await File.WriteAllBytesAsync(Path.Combine(_outputDirectory, $"audio{_outputFileName}"), audioBinary);
+		}
+		catch (Exception ex) when (ex is IOException) // TODO: Catch more specific exceptions.
+		{
+			PopupManager.ShowError("Could not write audio binary to output directory.", ex);
+		}
+	}
+
+	private static async Task CompileDdAsync(AssetPaths mod)
+	{
+		byte[]? ddBinary;
+		try
+		{
+			ddBinary = await BuildDdBinaryAsync(mod.Meshes.Cast<IAssetPath>().Concat(mod.ObjectBindings).Concat(mod.Shaders).Concat(mod.Textures).ToList());
+		}
+		catch (Exception ex) when (ex is InvalidModCompilationException or IOException)
+		{
+			PopupManager.ShowError("Could not compile dd binary.", ex);
+			return;
+		}
+
+		try
+		{
 			await File.WriteAllBytesAsync(Path.Combine(_outputDirectory, $"dd{_outputFileName}"), ddBinary);
+		}
+		catch (Exception ex) when (ex is IOException) // TODO: Catch more specific exceptions.
+		{
+			PopupManager.ShowError("Could not write dd binary to output directory.", ex);
 		}
 	}
 
