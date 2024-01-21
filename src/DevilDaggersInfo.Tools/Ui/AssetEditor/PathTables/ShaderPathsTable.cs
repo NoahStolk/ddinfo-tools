@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Asset;
 using DevilDaggersInfo.Tools.EditorFileState;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
@@ -15,8 +14,7 @@ public sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
 
 	public static void SetupColumns()
 	{
-		ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 160, 0);
-		ImGui.TableSetupColumn("Prohibited for 1000+", ImGuiTableColumnFlags.WidthFixed, 160);
+		PathTableUtils.SetupDefaultColumns();
 		ImGui.TableSetupColumn("Vertex Path", ImGuiTableColumnFlags.WidthStretch, 0, 1);
 		ImGui.TableSetupColumn("Fragment Path", ImGuiTableColumnFlags.WidthStretch, 0, 2);
 	}
@@ -26,14 +24,7 @@ public sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
 		ShaderAssetInfo assetInfo = DdShaders.All[index];
 		ShaderAssetPath? path = FileStates.Mod.Object.Shaders.Find(a => a.AssetName == assetInfo.AssetName);
 
-		ImGui.TableNextColumn();
-		ImGui.Text(assetInfo.AssetName);
-
-		ImGui.TableNextColumn();
-		if (assetInfo.IsProhibited)
-			ImGui.TextColored(Color.Orange, "Prohibited");
-		else
-			ImGui.TextColored(Color.Green, "OK");
+		PathTableUtils.RenderDefaultColumns(assetInfo);
 
 		ImGui.TableNextColumn();
 		if (ImGui.Button(Inline.Span($"Browse##ShaderVertex_{index}")))

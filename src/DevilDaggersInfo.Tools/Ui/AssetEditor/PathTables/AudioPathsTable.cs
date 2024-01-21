@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Asset;
 using DevilDaggersInfo.Tools.EditorFileState;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
@@ -15,8 +14,7 @@ public sealed class AudioPathsTable : IPathTable<AudioPathsTable>
 
 	public static void SetupColumns()
 	{
-		ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 160, 0);
-		ImGui.TableSetupColumn("Prohibited for 1000+", ImGuiTableColumnFlags.WidthFixed, 160);
+		PathTableUtils.SetupDefaultColumns();
 		ImGui.TableSetupColumn("Loudness", ImGuiTableColumnFlags.WidthFixed, 160, 1);
 		ImGui.TableSetupColumn("Path", ImGuiTableColumnFlags.WidthStretch, 0, 2);
 	}
@@ -26,14 +24,7 @@ public sealed class AudioPathsTable : IPathTable<AudioPathsTable>
 		AudioAssetInfo assetInfo = AudioAudio.All[index];
 		AudioAssetPath? path = FileStates.Mod.Object.Audio.Find(a => a.AssetName == assetInfo.AssetName);
 
-		ImGui.TableNextColumn();
-		ImGui.Text(assetInfo.AssetName);
-
-		ImGui.TableNextColumn();
-		if (assetInfo.IsProhibited)
-			ImGui.TextColored(Color.Orange, "Prohibited");
-		else
-			ImGui.TextColored(Color.Green, "OK");
+		PathTableUtils.RenderDefaultColumns(assetInfo);
 
 		ImGui.TableNextColumn();
 		bool hasLoudness = path?.Loudness.HasValue ?? false;
