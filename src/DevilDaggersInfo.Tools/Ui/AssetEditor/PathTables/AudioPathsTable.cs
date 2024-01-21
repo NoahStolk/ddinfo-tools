@@ -22,7 +22,7 @@ public sealed class AudioPathsTable : IPathTable<AudioPathsTable>
 	public static void RenderPath(int index)
 	{
 		AudioAssetInfo assetInfo = AudioAudio.All[index];
-		AudioAssetPath? path = FileStates.Mod.Object.Audio.Find(a => a.AssetName == assetInfo.AssetName);
+		AudioAssetPath? path = PathTableUtils.Find(FileStates.Mod.Object.Audio, assetInfo.AssetName);
 
 		PathTableUtils.RenderDefaultColumns(assetInfo);
 

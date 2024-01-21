@@ -22,7 +22,7 @@ public sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
 	public static void RenderPath(int index)
 	{
 		ShaderAssetInfo assetInfo = DdShaders.All[index];
-		ShaderAssetPath? path = FileStates.Mod.Object.Shaders.Find(a => a.AssetName == assetInfo.AssetName);
+		ShaderAssetPath? path = PathTableUtils.Find(FileStates.Mod.Object.Shaders, assetInfo.AssetName);
 
 		PathTableUtils.RenderDefaultColumns(assetInfo);
 

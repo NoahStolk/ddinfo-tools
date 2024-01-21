@@ -21,7 +21,7 @@ public sealed class TexturePathsTable : IPathTable<TexturePathsTable>
 	public static void RenderPath(int index)
 	{
 		TextureAssetInfo assetInfo = DdTextures.All[index];
-		TextureAssetPath? path = FileStates.Mod.Object.Textures.Find(a => a.AssetName == assetInfo.AssetName);
+		TextureAssetPath? path = PathTableUtils.Find(FileStates.Mod.Object.Textures, assetInfo.AssetName);
 
 		PathTableUtils.RenderDefaultColumns(assetInfo);
 

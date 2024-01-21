@@ -21,7 +21,7 @@ public sealed class ObjectBindingPathsTable : IPathTable<ObjectBindingPathsTable
 	public static void RenderPath(int index)
 	{
 		ObjectBindingAssetInfo assetInfo = DdObjectBindings.All[index];
-		ObjectBindingAssetPath? path = FileStates.Mod.Object.ObjectBindings.Find(a => a.AssetName == assetInfo.AssetName);
+		ObjectBindingAssetPath? path = PathTableUtils.Find(FileStates.Mod.Object.ObjectBindings, assetInfo.AssetName);
 
 		PathTableUtils.RenderDefaultColumns(assetInfo);
 

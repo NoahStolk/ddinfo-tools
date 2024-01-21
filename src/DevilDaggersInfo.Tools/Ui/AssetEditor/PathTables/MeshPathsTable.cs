@@ -21,7 +21,7 @@ public sealed class MeshPathsTable : IPathTable<MeshPathsTable>
 	public static void RenderPath(int index)
 	{
 		MeshAssetInfo assetInfo = DdMeshes.All[index];
-		MeshAssetPath? path = FileStates.Mod.Object.Meshes.Find(a => a.AssetName == assetInfo.AssetName);
+		MeshAssetPath? path = PathTableUtils.Find(FileStates.Mod.Object.Meshes, assetInfo.AssetName);
 
 		PathTableUtils.RenderDefaultColumns(assetInfo);
 
