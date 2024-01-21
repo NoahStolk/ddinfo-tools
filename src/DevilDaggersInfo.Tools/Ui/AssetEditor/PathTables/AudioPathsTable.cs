@@ -15,8 +15,8 @@ public sealed class AudioPathsTable : IPathTable<AudioPathsTable>
 	public static void SetupColumns()
 	{
 		PathTableUtils.SetupDefaultColumns();
-		ImGui.TableSetupColumn("Loudness", ImGuiTableColumnFlags.WidthFixed, 160, 1);
-		ImGui.TableSetupColumn("Path", ImGuiTableColumnFlags.WidthStretch, 0, 2);
+		ImGui.TableSetupColumn("Loudness", ImGuiTableColumnFlags.WidthFixed, 160, 2);
+		ImGui.TableSetupColumn("Path", ImGuiTableColumnFlags.WidthStretch, 0, 3);
 	}
 
 	public static void RenderPath(int index)

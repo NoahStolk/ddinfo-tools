@@ -44,6 +44,7 @@ public static class AssetPathsChild
 		{
 			if (ImGui.BeginTable(Inline.Span($"{id}_PathsTable"), T.ColumnCount, ImGuiTableFlags.Borders | ImGuiTableFlags.Sortable | ImGuiTableFlags.Hideable | ImGuiTableFlags.Reorderable | ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.ScrollY))
 			{
+				ImGui.TableSetupScrollFreeze(0, 1); // Make top row always visible
 				T.SetupColumns();
 				ImGui.TableHeadersRow();
 

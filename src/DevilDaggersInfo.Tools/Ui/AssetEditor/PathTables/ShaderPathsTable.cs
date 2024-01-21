@@ -15,8 +15,8 @@ public sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
 	public static void SetupColumns()
 	{
 		PathTableUtils.SetupDefaultColumns();
-		ImGui.TableSetupColumn("Vertex Path", ImGuiTableColumnFlags.WidthStretch, 0, 1);
-		ImGui.TableSetupColumn("Fragment Path", ImGuiTableColumnFlags.WidthStretch, 0, 2);
+		ImGui.TableSetupColumn("Vertex Path", ImGuiTableColumnFlags.WidthStretch, 0, 2);
+		ImGui.TableSetupColumn("Fragment Path", ImGuiTableColumnFlags.WidthStretch, 0, 3);
 	}
 
 	public static void RenderPath(int index)

@@ -15,7 +15,7 @@ public sealed class MeshPathsTable : IPathTable<MeshPathsTable>
 	public static void SetupColumns()
 	{
 		PathTableUtils.SetupDefaultColumns();
-		ImGui.TableSetupColumn("Path", ImGuiTableColumnFlags.WidthStretch, 0, 1);
+		ImGui.TableSetupColumn("Path", ImGuiTableColumnFlags.WidthStretch, 0, 2);
 	}
 
 	public static void RenderPath(int index)

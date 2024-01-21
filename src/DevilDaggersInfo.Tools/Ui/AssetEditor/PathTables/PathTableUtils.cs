@@ -10,7 +10,7 @@ public static class PathTableUtils
 	public static void SetupDefaultColumns()
 	{
 		ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 160, 0);
-		ImGui.TableSetupColumn("Prohibited", ImGuiTableColumnFlags.WidthFixed, 80);
+		ImGui.TableSetupColumn("Prohibited", ImGuiTableColumnFlags.WidthFixed, 80, 1);
 	}
 
 	public static void RenderDefaultColumns(AssetInfo assetInfo)
