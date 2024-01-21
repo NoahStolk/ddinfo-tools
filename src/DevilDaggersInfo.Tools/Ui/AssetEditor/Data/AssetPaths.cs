@@ -1,102 +1,25 @@
 using DevilDaggersInfo.Tools.JsonSerializerContexts;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 
 public class AssetPaths
 {
+	[JsonRequired]
 	public List<AudioAssetPath> Audio { get; init; } = [];
+
+	[JsonRequired]
 	public List<MeshAssetPath> Meshes { get; init; } = [];
+
+	[JsonRequired]
 	public List<ObjectBindingAssetPath> ObjectBindings { get; init; } = [];
+
+	[JsonRequired]
 	public List<ShaderAssetPath> Shaders { get; init; } = [];
+
+	[JsonRequired]
 	public List<TextureAssetPath> Textures { get; init; } = [];
-
-	public void SortAudio(uint sorting, bool sortAscending)
-	{
-		Audio.Sort((a, b) => CompareAudioAssets(a, b, sorting, sortAscending));
-	}
-
-	public void SortMeshes(uint sorting, bool sortAscending)
-	{
-		Meshes.Sort((a, b) => CompareMeshAssets(a, b, sorting, sortAscending));
-	}
-
-	public void SortObjectBindings(uint sorting, bool sortAscending)
-	{
-		ObjectBindings.Sort((a, b) => CompareObjectBindingAssets(a, b, sorting, sortAscending));
-	}
-
-	public void SortShaders(uint sorting, bool sortAscending)
-	{
-		Shaders.Sort((a, b) => CompareShaderAssets(a, b, sorting, sortAscending));
-	}
-
-	public void SortTextures(uint sorting, bool sortAscending)
-	{
-		Textures.Sort((a, b) => CompareTextureAssets(a, b, sorting, sortAscending));
-	}
-
-	private static int CompareAudioAssets(AudioAssetPath a, AudioAssetPath b, uint sorting, bool sortAscending)
-	{
-		int result = sorting switch
-		{
-			0 => string.Compare(a.AssetName, b.AssetName, StringComparison.OrdinalIgnoreCase),
-			1 => (a.Loudness ?? a.DefaultLoudness).CompareTo(b.Loudness ?? b.DefaultLoudness),
-			2 => string.Compare(a.AbsolutePath, b.AbsolutePath, StringComparison.OrdinalIgnoreCase),
-			_ => throw new InvalidOperationException($"Invalid sorting value {sorting}."),
-		};
-
-		return sortAscending ? result : -result;
-	}
-
-	private static int CompareMeshAssets(MeshAssetPath a, MeshAssetPath b, uint sorting, bool sortAscending)
-	{
-		int result = sorting switch
-		{
-			0 => string.Compare(a.AssetName, b.AssetName, StringComparison.OrdinalIgnoreCase),
-			1 => string.Compare(a.AbsolutePath, b.AbsolutePath, StringComparison.OrdinalIgnoreCase),
-			_ => throw new InvalidOperationException($"Invalid sorting value {sorting}."),
-		};
-
-		return sortAscending ? result : -result;
-	}
-
-	private static int CompareObjectBindingAssets(ObjectBindingAssetPath a, ObjectBindingAssetPath b, uint sorting, bool sortAscending)
-	{
-		int result = sorting switch
-		{
-			0 => string.Compare(a.AssetName, b.AssetName, StringComparison.OrdinalIgnoreCase),
-			1 => string.Compare(a.AbsolutePath, b.AbsolutePath, StringComparison.OrdinalIgnoreCase),
-			_ => throw new InvalidOperationException($"Invalid sorting value {sorting}."),
-		};
-
-		return sortAscending ? result : -result;
-	}
-
-	private static int CompareShaderAssets(ShaderAssetPath a, ShaderAssetPath b, uint sorting, bool sortAscending)
-	{
-		int result = sorting switch
-		{
-			0 => string.Compare(a.AssetName, b.AssetName, StringComparison.OrdinalIgnoreCase),
-			1 => string.Compare(a.AbsoluteVertexPath, b.AbsoluteVertexPath, StringComparison.OrdinalIgnoreCase),
-			2 => string.Compare(a.AbsoluteFragmentPath, b.AbsoluteFragmentPath, StringComparison.OrdinalIgnoreCase),
-			_ => throw new InvalidOperationException($"Invalid sorting value {sorting}."),
-		};
-
-		return sortAscending ? result : -result;
-	}
-
-	private static int CompareTextureAssets(TextureAssetPath a, TextureAssetPath b, uint sorting, bool sortAscending)
-	{
-		int result = sorting switch
-		{
-			0 => string.Compare(a.AssetName, b.AssetName, StringComparison.OrdinalIgnoreCase),
-			1 => string.Compare(a.AbsolutePath, b.AbsolutePath, StringComparison.OrdinalIgnoreCase),
-			_ => throw new InvalidOperationException($"Invalid sorting value {sorting}."),
-		};
-
-		return sortAscending ? result : -result;
-	}
 
 	public byte[] ToJsonBytes()
 	{

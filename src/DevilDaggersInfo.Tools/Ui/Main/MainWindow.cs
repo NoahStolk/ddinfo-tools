@@ -188,8 +188,8 @@ public static class MainWindow
 
 			The following assets can be changed:
 			- Audio
-			- Bindings
 			- Meshes
+			- Object bindings
 			- Shaders
 			- Textures
 
