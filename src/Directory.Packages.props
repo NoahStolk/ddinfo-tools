@@ -1,7 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="Current">
 
 	<ItemGroup Label="DevilDaggersInfo">
-		<PackageVersion Include="DevilDaggersInfo.Core" Version="0.8.1" />
+		<PackageVersion Include="DevilDaggersInfo.Core" Version="0.9.1" />
 		<PackageVersion Include="DevilDaggersInfo.Web.ApiSpec.Admin" Version="1.0.2" />
 		<PackageVersion Include="DevilDaggersInfo.Web.ApiSpec.Main" Version="1.0.2" />
 		<PackageVersion Include="DevilDaggersInfo.Web.ApiSpec.Tools" Version="1.0.2" />

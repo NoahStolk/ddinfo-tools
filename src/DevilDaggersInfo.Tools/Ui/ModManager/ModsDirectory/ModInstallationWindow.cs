@@ -12,7 +12,7 @@ namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 
 public static class ModInstallationWindow
 {
-	private static Dictionary<string, List<EffectiveChunk>> _effectiveAssets = new();
+	private static Dictionary<string, List<EffectiveAsset>> _effectiveAssets = new();
 	private static int _activeAssets;
 	private static int _activeProhibitedAssets;
 
@@ -48,34 +48,34 @@ public static class ModInstallationWindow
 			}
 		}
 
-		List<EffectiveChunk> effectiveChunks = [];
+		List<EffectiveAsset> effectiveAssets = [];
 		foreach (Mod mod in mods.OrderBy(t => t.FileName))
 		{
-			foreach (ModBinaryChunk chunk in mod.Toc.Chunks)
+			foreach (ModBinaryTocEntry tocEntry in mod.Toc.Entries)
 			{
-				if (chunk.IsLoudness())
+				if (tocEntry.IsLoudness())
 					continue;
 
-				List<EffectiveChunk> existingChunks = effectiveChunks.Where(c => c.Chunk.AssetType == chunk.AssetType && c.Chunk.Name == chunk.Name).ToList();
-				foreach (EffectiveChunk existingChunk in existingChunks)
-					existingChunk.OverriddenByModFileName = mod.FileName;
+				List<EffectiveAsset> existingAssets = effectiveAssets.Where(c => c.TocEntry.AssetType == tocEntry.AssetType && c.TocEntry.Name == tocEntry.Name).ToList();
+				foreach (EffectiveAsset existingAsset in existingAssets)
+					existingAsset.OverriddenByModFileName = mod.FileName;
 
-				effectiveChunks.Add(new(chunk, mod.FileName, null));
+				effectiveAssets.Add(new(tocEntry, mod.FileName, null));
 			}
 		}
 
-		foreach (EffectiveChunk effectiveChunk in effectiveChunks.OrderBy(c => c.Chunk.AssetType).ThenBy(c => c.Chunk.Name))
+		foreach (EffectiveAsset effectiveAsset in effectiveAssets.OrderBy(c => c.TocEntry.AssetType).ThenBy(c => c.TocEntry.Name))
 		{
-			if (!_effectiveAssets.ContainsKey(effectiveChunk.ContainingModFileName))
-				_effectiveAssets.Add(effectiveChunk.ContainingModFileName, []);
+			if (!_effectiveAssets.ContainsKey(effectiveAsset.ContainingModFileName))
+				_effectiveAssets.Add(effectiveAsset.ContainingModFileName, []);
 
-			_effectiveAssets[effectiveChunk.ContainingModFileName].Add(effectiveChunk);
+			_effectiveAssets[effectiveAsset.ContainingModFileName].Add(effectiveAsset);
 		}
 
 		_effectiveAssets = _effectiveAssets.OrderByDescending(kvp => kvp.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
 		_activeAssets = _effectiveAssets.Sum(kvp => kvp.Value.Count(c => c.OverriddenByModFileName == null));
-		_activeProhibitedAssets = _effectiveAssets.Sum(kvp => kvp.Value.Count(c => c.OverriddenByModFileName == null && AssetContainer.IsProhibited(c.Chunk.AssetType, c.Chunk.Name)));
+		_activeProhibitedAssets = _effectiveAssets.Sum(kvp => kvp.Value.Count(c => c.OverriddenByModFileName == null && AssetContainer.IsProhibited(c.TocEntry.AssetType, c.TocEntry.Name)));
 	}
 
 	public static void Render()
@@ -134,22 +134,22 @@ public static class ModInstallationWindow
 					}
 				}
 
-				RenderChunksTable();
+				RenderEffectiveAssetsTable();
 			}
 		}
 
 		ImGui.End(); // End Mod preview
 	}
 
-	private static void RenderChunksTable()
+	private static void RenderEffectiveAssetsTable()
 	{
-		if (ImGui.BeginTable("Mods", 2, ImGuiTableFlags.Borders))
+		if (ImGui.BeginTable("EffectiveAssetsModsTable", 2, ImGuiTableFlags.Borders))
 		{
 			ImGui.TableSetupColumn("Mod file", ImGuiTableColumnFlags.WidthFixed, 192);
 			ImGui.TableSetupColumn("Assets", ImGuiTableColumnFlags.WidthStretch);
 			ImGui.TableHeadersRow();
 
-			foreach (KeyValuePair<string, List<EffectiveChunk>> kvp in _effectiveAssets)
+			foreach (KeyValuePair<string, List<EffectiveAsset>> kvp in _effectiveAssets)
 			{
 				ImGui.TableNextRow();
 
@@ -157,7 +157,7 @@ public static class ModInstallationWindow
 				ImGui.Text(kvp.Key);
 
 				ImGui.TableNextColumn();
-				if (ImGui.BeginTable("Chunks", 3, ImGuiTableFlags.None))
+				if (ImGui.BeginTable("TocEntriesTable", 3, ImGuiTableFlags.None))
 				{
 					ImGui.TableSetupColumn("Asset name", ImGuiTableColumnFlags.WidthFixed, 128);
 					ImGui.TableSetupColumn("Asset type", ImGuiTableColumnFlags.WidthFixed, 96);
@@ -169,22 +169,22 @@ public static class ModInstallationWindow
 
 						ImGui.TableNextRow();
 
-						EffectiveChunk chunk = kvp.Value[i];
-						bool isOverridden = chunk.OverriddenByModFileName != null;
+						EffectiveAsset effectiveAsset = kvp.Value[i];
+						bool isOverridden = effectiveAsset.OverriddenByModFileName != null;
 						Vector4 disabledColor = Color.Gray(0.4f);
 
 						ImGui.TableNextColumn();
-						ImGui.TextColored(isOverridden ? disabledColor : Color.White, chunk.Chunk.Name);
+						ImGui.TextColored(isOverridden ? disabledColor : Color.White, effectiveAsset.TocEntry.Name);
 
 						ImGui.TableNextColumn();
-						ImGui.TextColored(isOverridden ? disabledColor : chunk.Chunk.AssetType.GetColor(), EnumUtils.AssetTypeNames[chunk.Chunk.AssetType]);
+						ImGui.TextColored(isOverridden ? disabledColor : effectiveAsset.TocEntry.AssetType.GetColor(), EnumUtils.AssetTypeNames[effectiveAsset.TocEntry.AssetType]);
 
 						ImGui.TableNextColumn();
 						if (isOverridden)
-							ImGui.TextColored(new(1, 0.2f, 0.4f, 1), Inline.Span($"Overridden by {chunk.OverriddenByModFileName}"));
-						else if (AssetContainer.IsProhibited(chunk.Chunk.AssetType, chunk.Chunk.Name))
+							ImGui.TextColored(new(1, 0.2f, 0.4f, 1), Inline.Span($"Overridden by {effectiveAsset.OverriddenByModFileName}"));
+						else if (AssetContainer.IsProhibited(effectiveAsset.TocEntry.AssetType, effectiveAsset.TocEntry.Name))
 							ImGui.TextColored(Color.Orange, "Prohibited");
-						else if (chunk.Chunk.Name.Any(char.IsUpper)) // TODO: Check if name exists in AssetContainer instead.
+						else if (effectiveAsset.TocEntry.Name.Any(char.IsUpper)) // TODO: Check if name exists in AssetContainer instead.
 							ImGui.TextColored(Color.Gray(0.4f), "Disabled");
 						else
 							ImGui.TextColored(Color.Green, "OK");
@@ -215,7 +215,7 @@ public static class ModInstallationWindow
 
 	private sealed record Mod(ModBinaryToc Toc, string FileName);
 
-	private sealed record EffectiveChunk(ModBinaryChunk Chunk, string ContainingModFileName, string? OverriddenByModFileName)
+	private sealed record EffectiveAsset(ModBinaryTocEntry TocEntry, string ContainingModFileName, string? OverriddenByModFileName)
 	{
 		public string? OverriddenByModFileName { get; set; } = OverriddenByModFileName;
 	}

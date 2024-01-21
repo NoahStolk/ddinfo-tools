@@ -67,7 +67,7 @@ public static class ModsDirectoryLogic
 		{
 			0 => sortAscending ? _modFiles.OrderBy(m => m.FileName.ToLower()).ToList() : _modFiles.OrderByDescending(m => m.FileName.ToLower()).ToList(),
 			1 => sortAscending ? _modFiles.OrderBy(m => m.BinaryType).ToList() : _modFiles.OrderByDescending(m => m.BinaryType).ToList(),
-			2 => sortAscending ? _modFiles.OrderBy(m => m.ProhibitedChunkCount).ToList() : _modFiles.OrderByDescending(m => m.ProhibitedChunkCount).ToList(),
+			2 => sortAscending ? _modFiles.OrderBy(m => m.ProhibitedAssetCount).ToList() : _modFiles.OrderByDescending(m => m.ProhibitedAssetCount).ToList(),
 			3 => sortAscending ? _modFiles.OrderBy(m => m.FileSize).ToList() : _modFiles.OrderByDescending(m => m.FileSize).ToList(),
 			_ => throw new InvalidOperationException($"Invalid sorting column '{sorting}'."),
 		};
@@ -206,14 +206,14 @@ public static class ModsDirectoryLogic
 			using BinaryReader reader = new(fs);
 			ModBinaryToc modBinaryToc = ModBinaryToc.FromReader(reader);
 
-			bool anyProhibited = modBinaryToc.Chunks.Any(c => AssetContainer.IsProhibited(c.AssetType, c.Name));
+			bool anyProhibited = modBinaryToc.Entries.Any(c => AssetContainer.IsProhibited(c.AssetType, c.Name));
 			ModBinaryToc toggledToc = anyProhibited ? ModBinaryToc.DisableProhibitedAssets(modBinaryToc) : ModBinaryToc.EnableAllAssets(modBinaryToc);
 
 			fs.Seek(12, SeekOrigin.Begin); // Skip file header
-			foreach (ModBinaryChunk chunk in toggledToc.Chunks)
+			foreach (ModBinaryTocEntry tocEntry in toggledToc.Entries)
 			{
 				fs.Seek(sizeof(ushort), SeekOrigin.Current); // Skip asset type
-				fs.Write(Encoding.UTF8.GetBytes(chunk.Name));
+				fs.Write(Encoding.UTF8.GetBytes(tocEntry.Name));
 				fs.Seek(sizeof(byte), SeekOrigin.Current); // Skip null terminator
 				fs.Seek(sizeof(int) * 3, SeekOrigin.Current); // Skip offset, size, and unknown
 			}
@@ -236,7 +236,7 @@ public static class ModsDirectoryLogic
 			_modFiles.Insert(originalIndex, ModFile.FromPath(Path.Combine(UserSettings.ModsDirectory, fileName)));
 		}
 
-		ModPreviewWindow.LoadChunks();
+		ModPreviewWindow.LoadTocEntries();
 		ModInstallationWindow.LoadEffectiveAssets();
 	}
 }
