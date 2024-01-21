@@ -3,6 +3,7 @@ using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
@@ -10,7 +11,7 @@ public sealed class AudioPathsTable : IPathTable<AudioPathsTable>
 {
 	public static int ColumnCount => 4;
 
-	public static int PathCount => AudioAudio.All.Count;
+	public static int PathCount => PathTableUtils.Audio.Count;
 
 	public static void SetupColumns()
 	{
@@ -21,7 +22,7 @@ public sealed class AudioPathsTable : IPathTable<AudioPathsTable>
 
 	public static void RenderPath(int index)
 	{
-		AudioAssetInfo assetInfo = AudioAudio.All[index];
+		AudioAssetInfo assetInfo = PathTableUtils.Audio[index];
 		AudioAssetPath? path = PathTableUtils.Find(FileStates.Mod.Object.Audio, assetInfo.AssetName);
 
 		PathTableUtils.RenderDefaultColumns(assetInfo);
@@ -73,5 +74,20 @@ public sealed class AudioPathsTable : IPathTable<AudioPathsTable>
 
 	public static void Sort(uint sorting, bool sortAscending)
 	{
+		PathTableUtils.Audio.Sort((a, b) =>
+		{
+			int result = sorting switch
+			{
+				0 => string.CompareOrdinal(a.AssetName, b.AssetName),
+				1 => a.IsProhibited.CompareTo(b.IsProhibited),
+				2 => (Find(a.AssetName)?.Loudness ?? a.DefaultLoudness).CompareTo(Find(b.AssetName)?.Loudness ?? b.DefaultLoudness),
+				3 => string.CompareOrdinal(Find(a.AssetName)?.AbsolutePath ?? string.Empty, Find(b.AssetName)?.AbsolutePath ?? string.Empty),
+				_ => throw new UnreachableException($"Invalid sorting index {sorting}."),
+			};
+
+			return sortAscending ? result : -result;
+		});
+
+		static AudioAssetPath? Find(string assetName) => FileStates.Mod.Object.Audio.Find(audio => audio.AssetName == assetName);
 	}
 }

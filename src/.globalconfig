@@ -184,6 +184,12 @@ dotnet_diagnostic.S1135.severity                                         = sugge
 
 # Severity: none
 
+# Do not declare static members on generic types.
+dotnet_diagnostic.CA1000.severity                                        = none
+
+# Do not expose generic lists.
+dotnet_diagnostic.CA1002.severity                                        = none
+
 # Validate arguments of public methods.
 dotnet_diagnostic.CA1062.severity                                        = none
 

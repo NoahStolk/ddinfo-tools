@@ -7,6 +7,12 @@ namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
 public static class PathTableUtils
 {
+	public static List<AudioAssetInfo> Audio { get; } = AudioAudio.All.ToList();
+	public static List<MeshAssetInfo> Meshes { get; } = DdMeshes.All.ToList();
+	public static List<ObjectBindingAssetInfo> ObjectBindings { get; } = DdObjectBindings.All.ToList();
+	public static List<ShaderAssetInfo> Shaders { get; } = DdShaders.All.ToList();
+	public static List<TextureAssetInfo> Textures { get; } = DdTextures.All.ToList();
+
 	public static void SetupDefaultColumns()
 	{
 		ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 160, 0);

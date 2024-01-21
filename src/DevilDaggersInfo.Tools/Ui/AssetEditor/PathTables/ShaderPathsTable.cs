@@ -3,6 +3,7 @@ using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
@@ -10,7 +11,7 @@ public sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
 {
 	public static int ColumnCount => 4;
 
-	public static int PathCount => DdShaders.All.Count;
+	public static int PathCount => PathTableUtils.Shaders.Count;
 
 	public static void SetupColumns()
 	{
@@ -21,7 +22,7 @@ public sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
 
 	public static void RenderPath(int index)
 	{
-		ShaderAssetInfo assetInfo = DdShaders.All[index];
+		ShaderAssetInfo assetInfo = PathTableUtils.Shaders[index];
 		ShaderAssetPath? path = PathTableUtils.Find(FileStates.Mod.Object.Shaders, assetInfo.AssetName);
 
 		PathTableUtils.RenderDefaultColumns(assetInfo);
@@ -69,5 +70,20 @@ public sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
 
 	public static void Sort(uint sorting, bool sortAscending)
 	{
+		PathTableUtils.Shaders.Sort((a, b) =>
+		{
+			int result = sorting switch
+			{
+				0 => string.CompareOrdinal(a.AssetName, b.AssetName),
+				1 => a.IsProhibited.CompareTo(b.IsProhibited),
+				2 => string.CompareOrdinal(Find(a.AssetName)?.AbsoluteVertexPath ?? string.Empty, Find(b.AssetName)?.AbsoluteVertexPath ?? string.Empty),
+				3 => string.CompareOrdinal(Find(a.AssetName)?.AbsoluteFragmentPath ?? string.Empty, Find(b.AssetName)?.AbsoluteFragmentPath ?? string.Empty),
+				_ => throw new UnreachableException($"Invalid sorting index {sorting}."),
+			};
+
+			return sortAscending ? result : -result;
+		});
+
+		static ShaderAssetPath? Find(string assetName) => FileStates.Mod.Object.Shaders.Find(audio => audio.AssetName == assetName);
 	}
 }
