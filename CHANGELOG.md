@@ -2,12 +2,25 @@
 
 ## [unreleased]
 
+### Asset Editor
+
+The first version of the asset editor is now available.
+- You can edit all the assets in the game and create `audio` and `dd` binaries.
+- You can extract all the binaries from the game or from a mod.
+- Loudness values for audio mods are supported as well.
+
+More features will be added in the future.
+
 ### Practice
 
 - Added popup when applying practice spawnset.
 - Added "Do not show again" checkbox to practice popups. These are saved in the user settings.
 
-### Fixes
+### Replay Editor
+
+- Added file extension filter to file dialogs. 
+
+### Mod Manager
 
 - Fixed toggling prohibited assets in the mod preview window not working.
 
