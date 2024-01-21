@@ -9,6 +9,8 @@ The first version of the asset editor is now available.
 - You can extract all the binaries from the game or from a mod.
 - Loudness values for audio mods are supported as well.
 
+![Asset Editor](images/asset-editor.png)
+
 More features will be added in the future.
 
 ### Practice

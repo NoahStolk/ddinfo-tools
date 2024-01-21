@@ -21,13 +21,17 @@ The new tools are currently in development. The new app is a complete rewrite of
 ![Spawnset editor](images/spawnset-editor-2.png)
 ![Spawnset editor](images/spawnset-editor-3.png)
 
-### Replay editor
+### Asset Editor
 
-![Replay editor](images/replay-editor.png)
+![Asset Editor](images/asset-editor.png)
 
 ### Mod manager
 
 ![Mod manager](images/mod-manager.png)
+
+### Replay editor
+
+![Replay editor](images/replay-editor.png)
 
 ### Planned features
 
