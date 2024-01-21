@@ -29,6 +29,9 @@ public sealed class ObjectBindingPathsTable : IPathTable<ObjectBindingPathsTable
 		if (ImGui.Button(Inline.Span($"Browse##ObjectBinding_{index}")))
 			SetPath(assetInfo, path);
 		ImGui.SameLine();
+		if (ImGui.Button(Inline.Span($"Clear##ObjectBinding_{index}")) && path != null)
+			path.SetPath(null);
+		ImGui.SameLine();
 		ImGui.Text(path?.AbsolutePath ?? "<none>");
 	}
 

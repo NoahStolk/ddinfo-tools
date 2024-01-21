@@ -30,11 +30,17 @@ public sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
 		if (ImGui.Button(Inline.Span($"Browse##ShaderVertex_{index}")))
 			SetVertexPath(assetInfo, path);
 		ImGui.SameLine();
+		if (ImGui.Button(Inline.Span($"Clear##ShaderVertex_{index}")) && path != null)
+			path.SetVertexPath(null);
+		ImGui.SameLine();
 		ImGui.Text(path?.AbsoluteVertexPath ?? "<none>");
 
 		ImGui.TableNextColumn();
 		if (ImGui.Button(Inline.Span($"Browse##ShaderFragment_{index}")))
 			SetFragmentPath(assetInfo, path);
+		ImGui.SameLine();
+		if (ImGui.Button(Inline.Span($"Clear##ShaderFragment_{index}")) && path != null)
+			path.SetFragmentPath(null);
 		ImGui.SameLine();
 		ImGui.Text(path?.AbsoluteFragmentPath ?? "<none>");
 	}

@@ -43,6 +43,9 @@ public sealed class AudioPathsTable : IPathTable<AudioPathsTable>
 		if (ImGui.Button(Inline.Span($"Browse##Audio_{index}")))
 			SetPath(assetInfo, path);
 		ImGui.SameLine();
+		if (ImGui.Button(Inline.Span($"Clear##Audio_{index}")) && path != null)
+			path.SetPath(null);
+		ImGui.SameLine();
 		ImGui.Text(path?.AbsolutePath ?? "<none>");
 	}
 

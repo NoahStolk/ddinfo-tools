@@ -29,6 +29,9 @@ public sealed class MeshPathsTable : IPathTable<MeshPathsTable>
 		if (ImGui.Button(Inline.Span($"Browse##Mesh_{index}")))
 			SetPath(assetInfo, path);
 		ImGui.SameLine();
+		if (ImGui.Button(Inline.Span($"Clear##Mesh_{index}")) && path != null)
+			path.SetPath(null);
+		ImGui.SameLine();
 		ImGui.Text(path?.AbsolutePath ?? "<none>");
 	}
 
