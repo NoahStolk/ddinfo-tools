@@ -35,6 +35,8 @@ public sealed class AudioPathsTable : IPathTable<AudioPathsTable>
 		bool hasLoudness = path.Loudness.HasValue;
 		if (ImGui.Checkbox(Inline.Span($"##CheckboxLoudness_{index}"), ref hasLoudness))
 			path.SetLoudness(hasLoudness ? path.DefaultLoudness : null);
+		if (ImGui.IsItemHovered())
+			ImGui.SetTooltip("If checked, the loudness will be overridden by the specified value.");
 		ImGui.SameLine();
 		ImGui.BeginDisabled(!hasLoudness);
 		float loudness = path.Loudness ?? path.DefaultLoudness;
