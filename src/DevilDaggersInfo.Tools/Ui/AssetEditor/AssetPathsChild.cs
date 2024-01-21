@@ -40,9 +40,10 @@ public static class AssetPathsChild
 	private static unsafe void RenderAssets<T>(ReadOnlySpan<char> id, uint backgroundColor)
 		where T : IPathTable<T>
 	{
+		const ImGuiTableFlags tableFlags = ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable | ImGuiTableFlags.Sortable | ImGuiTableFlags.Hideable | ImGuiTableFlags.Reorderable | ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.ScrollY;
 		if (ImGui.BeginTabItem(Inline.Span($"{id}##Tab")))
 		{
-			if (ImGui.BeginTable(Inline.Span($"{id}_PathsTable"), T.ColumnCount, ImGuiTableFlags.Borders | ImGuiTableFlags.Sortable | ImGuiTableFlags.Hideable | ImGuiTableFlags.Reorderable | ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.ScrollY))
+			if (ImGui.BeginTable(Inline.Span($"{id}_PathsTable"), T.ColumnCount, tableFlags))
 			{
 				ImGui.TableSetupScrollFreeze(0, 1); // Make top row always visible
 				T.SetupColumns();
