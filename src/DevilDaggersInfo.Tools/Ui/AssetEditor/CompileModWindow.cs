@@ -179,7 +179,7 @@ public static class CompileModWindow
 				continue;
 
 			byte[] fileContents = await File.ReadAllBytesAsync(assetPath.AbsolutePath);
-			builder.AddAudio(assetPath.AssetName, fileContents);
+			builder.AddAudio(assetPath.AssetName, fileContents, assetPath.Loudness);
 		}
 
 		return builder.Compile();
