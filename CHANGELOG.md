@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.12.0.0] - 2024-01-21
 
 ### Asset Editor
 
