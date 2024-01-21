@@ -12,6 +12,8 @@ public static class ExtractModWindow
 	private static string? _outputDirectory;
 	private static bool _isExtracting;
 	private static readonly List<string> _errors = [];
+	private static DateTime? _lastStartTime;
+	private static DateTime? _lastEndTime;
 
 	public static void Render()
 	{
@@ -56,7 +58,16 @@ public static class ExtractModWindow
 			ImGui.EndDisabled();
 
 			if (_isExtracting)
+			{
 				ImGui.Text("Extracting...");
+			}
+			else
+			{
+				if (_lastStartTime != null && _lastEndTime != null)
+				{
+					ImGui.Text(Inline.Span($"Extracted in {(_lastEndTime.Value - _lastStartTime.Value).TotalSeconds:0.000} seconds ({DateTimeUtils.FormatTimeAgo(_lastEndTime.Value)})."));
+				}
+			}
 		}
 
 		ImGui.End();
@@ -77,6 +88,7 @@ public static class ExtractModWindow
 		}
 
 		_isExtracting = true;
+		_lastStartTime = DateTime.UtcNow;
 		await using FileStream fileStream = File.OpenRead(_inputFilePath);
 		ModBinary modBinary = new(fileStream, ModBinaryReadFilter.AllAssets);
 		foreach (ModBinaryTocEntry tocEntry in modBinary.Toc.Entries)
@@ -109,6 +121,7 @@ public static class ExtractModWindow
 		}
 
 		_isExtracting = false;
+		_lastEndTime = DateTime.UtcNow;
 
 		if (_errors.Count > 0)
 		{

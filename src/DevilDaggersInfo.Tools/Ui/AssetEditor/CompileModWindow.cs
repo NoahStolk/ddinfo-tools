@@ -14,6 +14,8 @@ public static class CompileModWindow
 	private static string _outputDirectory = UserSettings.ModsDirectory;
 	private static string _outputFileName = "mod";
 	private static bool _isCompiling;
+	private static DateTime? _lastStartTime;
+	private static DateTime? _lastEndTime;
 
 	private static bool CreateAudio => FileStates.Mod.Object.Audio.Count > 0;
 	private static bool CreateDd => FileStates.Mod.Object.Meshes.Count > 0 || FileStates.Mod.Object.ObjectBindings.Count > 0 || FileStates.Mod.Object.Shaders.Count > 0 || FileStates.Mod.Object.Textures.Count > 0;
@@ -56,7 +58,16 @@ public static class CompileModWindow
 				ImGui.EndDisabled();
 
 				if (_isCompiling)
+				{
 					ImGui.Text("Compiling...");
+				}
+				else
+				{
+					if (_lastStartTime != null && _lastEndTime != null)
+					{
+						ImGui.Text(Inline.Span($"Compiled in {(_lastEndTime.Value - _lastStartTime.Value).TotalSeconds:0.000} seconds ({DateTimeUtils.FormatTimeAgo(_lastEndTime.Value)})."));
+					}
+				}
 			}
 			else
 			{
@@ -100,6 +111,7 @@ public static class CompileModWindow
 		}
 
 		_isCompiling = true;
+		_lastStartTime = DateTime.UtcNow;
 		AssetPaths mod = FileStates.Mod.Object;
 
 		if (CreateAudio)
@@ -109,6 +121,7 @@ public static class CompileModWindow
 			await CompileDdAsync(mod);
 
 		_isCompiling = false;
+		_lastEndTime = DateTime.UtcNow;
 	}
 
 	private static async Task CompileAudioAsync(AssetPaths mod)
