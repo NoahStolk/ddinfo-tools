@@ -5,10 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup Label="External dependencies">
-    <PackageReference Include="ImGui.NET" />
-    <PackageReference Include="Silk.NET.Input.Glfw" />
-    <PackageReference Include="Silk.NET.OpenAL" />
-    <PackageReference Include="Silk.NET.OpenGL" />
+    <PackageReference Include="ImGui.NET" Version="1.90.1.1" />
+    <PackageReference Include="Silk.NET.Input.Glfw" Version="2.20.0" />
+    <PackageReference Include="Silk.NET.OpenAL" Version="2.20.0" />
+    <PackageReference Include="Silk.NET.OpenGL" Version="2.20.0" />
   </ItemGroup>
 
   <ItemGroup>
