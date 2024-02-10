@@ -2,6 +2,7 @@ using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools.Engine;
 
+// TODO: Remove.
 public sealed class Texture : IDisposable
 {
 	private readonly GL _gl;

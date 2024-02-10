@@ -1,9 +1,10 @@
+using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Intersections;
 using DevilDaggersInfo.Tools.Engine.Maths;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.User.Settings;
 using ImGuiNET;
-using Silk.NET.Input;
+using Silk.NET.GLFW;
 using Silk.NET.Maths;
 using System.Numerics;
 
@@ -134,31 +135,25 @@ public class Camera
 		_axisAlignedSpeed.Z = Math.Clamp(_axisAlignedSpeed.Z, -1, 1);
 	}
 
-	private void OnMouseDown(IMouse mouse, MouseButton mouseButton)
+	private void OnMouseDown(MouseButton mouseButton)
 	{
-		if (Root.Mouse == null || mouseButton != _lookButton)
+		if (mouseButton != _lookButton)
 			return;
 
-		_lockedMousePosition = FloorToVector2Int32(Root.Mouse.Position);
+		_lockedMousePosition = FloorToVector2Int32(Input.GlfwInput.CursorPosition);
 		Root.Mouse.Cursor.CursorMode = CursorMode.Hidden;
 	}
 
-	private void OnMouseUp(IMouse mouse, MouseButton mouseButton)
+	private void OnMouseUp(MouseButton mouseButton)
 	{
-		if (Root.Mouse == null)
-			return;
-
 		_lockedMousePosition = null;
 		Root.Mouse.Cursor.CursorMode = CursorMode.Normal;
 	}
 
 	private void HandleMouse()
 	{
-		if (Root.Mouse == null)
-			return;
-
-		Vector2D<int> mousePosition = FloorToVector2Int32(Root.Mouse.Position);
-		if (!Root.Mouse.IsButtonPressed(_lookButton) || !_lockedMousePosition.HasValue || mousePosition == _lockedMousePosition)
+		Vector2D<int> mousePosition = FloorToVector2Int32(Input.GlfwInput.CursorPosition);
+		if (!Input.GlfwInput.IsMouseButtonPressed(_lookButton) || !_lockedMousePosition.HasValue || mousePosition == _lockedMousePosition)
 			return;
 
 		float lookSpeed = UserSettings.Model.LookSpeed;
@@ -217,7 +212,7 @@ public class Camera
 		float aspectRatio = _windowWidth / (float)_windowHeight;
 
 		// Remap so (0, 0) is the center of the window and the edges are at -0.5 and +0.5.
-		Vector2 mousePosition = Root.Mouse == null ? default : Root.Mouse.Position - FramebufferOffset;
+		Vector2 mousePosition = Input.GlfwInput.CursorPosition - FramebufferOffset;
 		Vector2 relative = -new Vector2(mousePosition.X / _windowWidth - 0.5f, mousePosition.Y / _windowHeight - 0.5f);
 
 		// Angle in radians from the view axis to the top plane of the view pyramid.
@@ -238,5 +233,7 @@ public class Camera
 	}
 
 	private static Vector2D<int> FloorToVector2Int32(Vector2 vector)
-		=> new((int)MathF.Floor(vector.X), (int)MathF.Floor(vector.Y));
+	{
+		return new((int)MathF.Floor(vector.X), (int)MathF.Floor(vector.Y));
+	}
 }

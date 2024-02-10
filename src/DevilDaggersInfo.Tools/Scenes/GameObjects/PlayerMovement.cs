@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Content;
 using Silk.NET.OpenGL;
 using System.Numerics;
@@ -25,9 +26,9 @@ public class PlayerMovement
 	{
 		Root.InternalResources.MeshShader.SetUniform("model", Matrix4x4.CreateScale(4) * Matrix4x4.CreateFromQuaternion(Rotation) * Matrix4x4.CreateTranslation(Position));
 
-		Root.Gl.BindVertexArray(_vao);
+		Graphics.Gl.BindVertexArray(_vao);
 		fixed (uint* i = &_mesh.Indices[0])
-			Root.Gl.DrawElements(PrimitiveType.Triangles, (uint)_mesh.Indices.Length, DrawElementsType.UnsignedInt, i);
-		Root.Gl.BindVertexArray(0);
+			Graphics.Gl.DrawElements(PrimitiveType.Triangles, (uint)_mesh.Indices.Length, DrawElementsType.UnsignedInt, i);
+		Graphics.Gl.BindVertexArray(0);
 	}
 }

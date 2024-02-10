@@ -5,7 +5,7 @@ using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Spawnset.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
-using Silk.NET.Input;
+using Silk.NET.GLFW;
 
 namespace DevilDaggersInfo.Tools.Utils;
 
@@ -85,6 +85,6 @@ public static class EnumUtils
 	public static readonly IReadOnlyList<ShootType> ShootTypes = Enum.GetValues<ShootType>();
 	public static readonly IReadOnlyDictionary<ShootType, string> ShootTypeNames = ShootTypes.ToDictionary(st => st, st => st.ToString());
 
-	public static readonly IReadOnlyList<Key> Keys = Enum.GetValues<Key>();
-	public static readonly IReadOnlyDictionary<Key, string> KeyNames = Keys.Distinct().ToDictionary(k => k, k => k.ToString());
+	public static readonly IReadOnlyList<Keys> Keys = Enum.GetValues<Keys>();
+	public static readonly IReadOnlyDictionary<Keys, string> KeyNames = Keys.Distinct().ToDictionary(k => k, k => k.ToString());
 }

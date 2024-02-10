@@ -5,4 +5,4 @@ AppDomain.CurrentDomain.UnhandledException += (_, args) => Root.Log.Fatal(args.E
 Application app = new();
 
 app.Run();
-app.Destroy();
+// app.Destroy();

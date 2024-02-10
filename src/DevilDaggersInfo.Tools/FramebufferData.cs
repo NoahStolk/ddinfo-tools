@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Scenes;
 using Silk.NET.OpenGL;
 
@@ -20,59 +21,59 @@ public unsafe class FramebufferData
 
 		// Delete previous data.
 		if (Framebuffer != 0)
-			Root.Gl.DeleteFramebuffer(Framebuffer);
+			Graphics.Gl.DeleteFramebuffer(Framebuffer);
 
 		if (TextureHandle != 0)
-			Root.Gl.DeleteTexture(TextureHandle);
+			Graphics.Gl.DeleteTexture(TextureHandle);
 
 		// Create new data.
-		Framebuffer = Root.Gl.GenFramebuffer();
-		Root.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, Framebuffer);
+		Framebuffer = Graphics.Gl.GenFramebuffer();
+		Graphics.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, Framebuffer);
 
-		TextureHandle = Root.Gl.GenTexture();
-		Root.Gl.BindTexture(TextureTarget.Texture2D, TextureHandle);
-		Root.Gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgb, (uint)Width, (uint)Height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, null);
-		Root.Gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)GLEnum.Linear);
-		Root.Gl.TexParameterI(TextureTarget.Texture2D, GLEnum.TextureMagFilter, (int)GLEnum.Linear);
-		Root.Gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, TextureHandle, 0);
+		TextureHandle = Graphics.Gl.GenTexture();
+		Graphics.Gl.BindTexture(TextureTarget.Texture2D, TextureHandle);
+		Graphics.Gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgb, (uint)Width, (uint)Height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, null);
+		Graphics.Gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)GLEnum.Linear);
+		Graphics.Gl.TexParameterI(TextureTarget.Texture2D, GLEnum.TextureMagFilter, (int)GLEnum.Linear);
+		Graphics.Gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, TextureHandle, 0);
 
-		uint rbo = Root.Gl.GenRenderbuffer();
-		Root.Gl.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rbo);
+		uint rbo = Graphics.Gl.GenRenderbuffer();
+		Graphics.Gl.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rbo);
 
-		Root.Gl.RenderbufferStorage(RenderbufferTarget.Renderbuffer, InternalFormat.DepthComponent24, (uint)Width, (uint)Height);
-		Root.Gl.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rbo);
+		Graphics.Gl.RenderbufferStorage(RenderbufferTarget.Renderbuffer, InternalFormat.DepthComponent24, (uint)Width, (uint)Height);
+		Graphics.Gl.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rbo);
 
-		if (Root.Gl.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != GLEnum.FramebufferComplete)
+		if (Graphics.Gl.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != GLEnum.FramebufferComplete)
 			Root.Log.Warning("Framebuffer is not complete.");
 
-		Root.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-		Root.Gl.DeleteRenderbuffer(rbo);
+		Graphics.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+		Graphics.Gl.DeleteRenderbuffer(rbo);
 	}
 
 	public void RenderArena(bool activateMouse, bool activateKeyboard, float delta, ArenaScene arenaScene)
 	{
 		arenaScene.Update(activateMouse, activateKeyboard, delta);
 
-		Root.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, Framebuffer);
+		Graphics.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, Framebuffer);
 
 		int framebufferWidth = Width;
 		int framebufferHeight = Height;
 
 		// Keep track of the original viewport so we can restore it later.
 		Span<int> originalViewport = stackalloc int[4];
-		Root.Gl.GetInteger(GLEnum.Viewport, originalViewport);
-		Root.Gl.Viewport(0, 0, (uint)framebufferWidth, (uint)framebufferHeight);
+		Graphics.Gl.GetInteger(GLEnum.Viewport, originalViewport);
+		Graphics.Gl.Viewport(0, 0, (uint)framebufferWidth, (uint)framebufferHeight);
 
-		Root.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+		Graphics.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-		Root.Gl.Enable(EnableCap.DepthTest);
-		Root.Gl.Enable(EnableCap.Blend);
-		Root.Gl.Enable(EnableCap.CullFace);
-		Root.Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+		Graphics.Gl.Enable(EnableCap.DepthTest);
+		Graphics.Gl.Enable(EnableCap.Blend);
+		Graphics.Gl.Enable(EnableCap.CullFace);
+		Graphics.Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
 		arenaScene.Render(activateMouse, framebufferWidth, framebufferHeight);
 
-		Root.Gl.Viewport(originalViewport[0], originalViewport[1], (uint)originalViewport[2], (uint)originalViewport[3]);
-		Root.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+		Graphics.Gl.Viewport(originalViewport[0], originalViewport[1], (uint)originalViewport[2], (uint)originalViewport[3]);
+		Graphics.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 	}
 }

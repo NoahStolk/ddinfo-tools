@@ -1,9 +1,9 @@
 using DevilDaggersInfo.Core.Common;
+using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
-using Silk.NET.Input;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
@@ -64,29 +64,20 @@ public static class DebugLayout
 			ImGui.Separator();
 			if (ImGui.CollapsingHeader("Silk.NET keys"))
 			{
-				IKeyboard? keyboard = Root.Keyboard;
-
-				if (keyboard == null)
-				{
-					ImGui.TextColored(Color.Red, "Keyboard unavailable");
-				}
-				else
-				{
-					if (ImGui.BeginTable("SilkKeys", 8))
-					{
-						for (int i = 0; i < keyboard.SupportedKeys.Count; i++)
-						{
-							bool isDown = keyboard.IsKeyPressed(keyboard.SupportedKeys[i]);
-							if (i == 0)
-								ImGui.TableNextRow();
-
-							ImGui.TableNextColumn();
-							ImGui.TextColored(isDown ? Color.White : Color.Gray(0.4f), EnumUtils.KeyNames[keyboard.SupportedKeys[i]]);
-						}
-
-						ImGui.EndTable();
-					}
-				}
+				// if (ImGui.BeginTable("SilkKeys", 8))
+				// {
+				// 	for (int i = 0; i < Input.GlfwInput.SupportedKeys.Count; i++)
+				// 	{
+				// 		bool isDown = keyboard.IsKeyPressed(keyboard.SupportedKeys[i]);
+				// 		if (i == 0)
+				// 			ImGui.TableNextRow();
+				//
+				// 		ImGui.TableNextColumn();
+				// 		ImGui.TextColored(isDown ? Color.White : Color.Gray(0.4f), EnumUtils.KeyNames[keyboard.SupportedKeys[i]]);
+				// 	}
+				//
+				// 	ImGui.EndTable();
+				// }
 			}
 
 #if DEBUG

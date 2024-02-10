@@ -4,11 +4,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <ItemGroup Label="External dependencies">
-    <PackageReference Include="ImGui.NET" Version="1.90.1.1" />
-    <PackageReference Include="Silk.NET.Input.Glfw" Version="2.20.0" />
+  <ItemGroup Label="Dependencies">
+    <PackageReference Include="NoahStolk.ImGuiGlfw" Version="0.4.0" />
     <PackageReference Include="Silk.NET.OpenAL" Version="2.20.0" />
-    <PackageReference Include="Silk.NET.OpenGL" Version="2.20.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Engine;
 using Silk.NET.OpenGL;
 using System.Numerics;
 
@@ -23,16 +24,16 @@ public class Skull4
 
 		Root.GameResources.Skull4Texture.Bind();
 
-		Root.Gl.BindVertexArray(_vaoMain);
+		Graphics.Gl.BindVertexArray(_vaoMain);
 		fixed (uint* i = &ContentManager.Content.Skull4Mesh.Indices[0])
-			Root.Gl.DrawElements(PrimitiveType.Triangles, (uint)ContentManager.Content.Skull4Mesh.Indices.Length, DrawElementsType.UnsignedInt, i);
+			Graphics.Gl.DrawElements(PrimitiveType.Triangles, (uint)ContentManager.Content.Skull4Mesh.Indices.Length, DrawElementsType.UnsignedInt, i);
 
 		Root.GameResources.Skull4JawTexture.Bind();
 
-		Root.Gl.BindVertexArray(_vaoJaw);
+		Graphics.Gl.BindVertexArray(_vaoJaw);
 		fixed (uint* i = &ContentManager.Content.Skull4JawMesh.Indices[0])
-			Root.Gl.DrawElements(PrimitiveType.Triangles, (uint)ContentManager.Content.Skull4JawMesh.Indices.Length, DrawElementsType.UnsignedInt, i);
+			Graphics.Gl.DrawElements(PrimitiveType.Triangles, (uint)ContentManager.Content.Skull4JawMesh.Indices.Length, DrawElementsType.UnsignedInt, i);
 
-		Root.Gl.BindVertexArray(0);
+		Graphics.Gl.BindVertexArray(0);
 	}
 }

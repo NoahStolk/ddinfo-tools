@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Tools.AppWindows;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
-using Silk.NET.Windowing;
 
 namespace DevilDaggersInfo.Tools;
 
@@ -24,11 +23,6 @@ public class Application
 
 	public void Run()
 	{
-		MainAppWindow.WindowInstance.Run();
-	}
-
-	public void Destroy()
-	{
-		MainAppWindow.WindowInstance.Dispose();
+		MainAppWindow.Render();
 	}
 }
