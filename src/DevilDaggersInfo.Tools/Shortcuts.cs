@@ -10,8 +10,7 @@ namespace DevilDaggersInfo.Tools;
 
 public static class Shortcuts
 {
-	// TODO: Call from GLFW callback.
-	public static void OnKeyPressed(GlfwInput glfwInput, Keys key)
+	public static void Handle(GlfwInput glfwInput)
 	{
 		if (PopupManager.IsAnyOpen)
 			return;
@@ -19,7 +18,7 @@ public static class Shortcuts
 		bool ctrl = glfwInput.IsKeyPressed(Keys.ControlLeft) || glfwInput.IsKeyPressed(Keys.ControlRight);
 		bool shift = glfwInput.IsKeyPressed(Keys.ShiftLeft) || glfwInput.IsKeyPressed(Keys.ShiftRight);
 
-		if (key == Keys.Escape)
+		if (glfwInput.IsKeyPressed(Keys.Escape))
 		{
 			switch (UiRenderer.Layout)
 			{
@@ -33,95 +32,83 @@ public static class Shortcuts
 
 		switch (UiRenderer.Layout)
 		{
-			case LayoutType.SpawnsetEditor: HandleSpawnsetEditorShortcuts(key, ctrl, shift); break;
-			case LayoutType.AssetEditor: HandleAssetEditorShortcuts(key, ctrl, shift); break;
-			case LayoutType.ReplayEditor: HandleReplayEditorShortcuts(key, ctrl, shift); break;
+			case LayoutType.SpawnsetEditor: HandleSpawnsetEditorShortcuts(glfwInput, ctrl, shift); break;
+			case LayoutType.AssetEditor: HandleAssetEditorShortcuts(glfwInput, ctrl, shift); break;
+			case LayoutType.ReplayEditor: HandleReplayEditorShortcuts(glfwInput, ctrl, shift); break;
 		}
 	}
 
-	private static void HandleSpawnsetEditorShortcuts(Keys key, bool ctrl, bool shift)
+	private static void HandleSpawnsetEditorShortcuts(GlfwInput glfwInput, bool ctrl, bool shift)
 	{
 		if (ctrl)
 		{
 			if (!shift)
 			{
-				Action? action = key switch
-				{
-					Keys.N => SpawnsetEditorMenu.NewSpawnset,
-					Keys.O => SpawnsetEditorMenu.OpenSpawnset,
-					Keys.S => SpawnsetEditorMenu.SaveSpawnset,
-					Keys.R => SpawnsetEditorMenu.ReplaceCurrentSpawnset,
-					Keys.D => SpawnsetEditorMenu.DeleteCurrentSpawnset,
-					_ => null,
-				};
-				action?.Invoke();
+				if (glfwInput.IsKeyPressed(Keys.N))
+					SpawnsetEditorMenu.NewSpawnset();
+				else if (glfwInput.IsKeyPressed(Keys.O))
+					SpawnsetEditorMenu.OpenSpawnset();
+				else if (glfwInput.IsKeyPressed(Keys.S))
+					SpawnsetEditorMenu.SaveSpawnset();
+				else if (glfwInput.IsKeyPressed(Keys.R))
+					SpawnsetEditorMenu.ReplaceCurrentSpawnset();
+				else if (glfwInput.IsKeyPressed(Keys.D))
+					SpawnsetEditorMenu.DeleteCurrentSpawnset();
 			}
 			else
 			{
-				Action? action = key switch
-				{
-					Keys.O => SpawnsetEditorMenu.OpenCurrentSpawnset,
-					Keys.S => SpawnsetEditorMenu.SaveSpawnsetAs,
-					Keys.D => SpawnsetEditorMenu.OpenDefaultSpawnset,
-					_ => null,
-				};
-				action?.Invoke();
+				if (glfwInput.IsKeyPressed(Keys.O))
+					SpawnsetEditorMenu.OpenCurrentSpawnset();
+				else if (glfwInput.IsKeyPressed(Keys.S))
+					SpawnsetEditorMenu.SaveSpawnsetAs();
+				else if (glfwInput.IsKeyPressed(Keys.D))
+					SpawnsetEditorMenu.OpenDefaultSpawnset();
 			}
 		}
 	}
 
-	private static void HandleAssetEditorShortcuts(Keys key, bool ctrl, bool shift)
+	private static void HandleAssetEditorShortcuts(GlfwInput glfwInput, bool ctrl, bool shift)
 	{
 		if (ctrl)
 		{
 			if (!shift)
 			{
-				Action? action = key switch
-				{
-					Keys.N => AssetEditorMenu.NewMod,
-					Keys.O => AssetEditorMenu.OpenMod,
-					Keys.S => AssetEditorMenu.SaveMod,
-					_ => null,
-				};
-				action?.Invoke();
+				if (glfwInput.IsKeyPressed(Keys.N))
+					AssetEditorMenu.NewMod();
+				else if (glfwInput.IsKeyPressed(Keys.O))
+					AssetEditorMenu.OpenMod();
+				else if (glfwInput.IsKeyPressed(Keys.S))
+					AssetEditorMenu.SaveMod();
 			}
 			else
 			{
-				Action? action = key switch
-				{
-					Keys.S => AssetEditorMenu.SaveModAs,
-					_ => null,
-				};
-				action?.Invoke();
+				if (glfwInput.IsKeyPressed(Keys.S))
+					AssetEditorMenu.SaveModAs();
 			}
 		}
 	}
 
-	private static void HandleReplayEditorShortcuts(Keys key, bool ctrl, bool shift)
+	private static void HandleReplayEditorShortcuts(GlfwInput glfwInput, bool ctrl, bool shift)
 	{
 		if (ctrl)
 		{
 			if (!shift)
 			{
-				Action? action = key switch
-				{
-					Keys.N => ReplayEditorMenu.NewReplay,
-					Keys.O => ReplayEditorMenu.OpenReplay,
-					Keys.S => ReplayEditorMenu.SaveReplay,
-					Keys.I => ReplayEditorMenu.InjectReplay,
-					Keys.G => ReplayEditorMenu.OpenReplayFromGameMemory,
-					_ => null,
-				};
-				action?.Invoke();
+				if (glfwInput.IsKeyPressed(Keys.N))
+					ReplayEditorMenu.NewReplay();
+				else if (glfwInput.IsKeyPressed(Keys.O))
+					ReplayEditorMenu.OpenReplay();
+				else if (glfwInput.IsKeyPressed(Keys.S))
+					ReplayEditorMenu.SaveReplay();
+				else if (glfwInput.IsKeyPressed(Keys.I))
+					ReplayEditorMenu.InjectReplay();
+				else if (glfwInput.IsKeyPressed(Keys.G))
+					ReplayEditorMenu.OpenReplayFromGameMemory();
 			}
 			else
 			{
-				Action? action = key switch
-				{
-					Keys.O => ReplayEditorMenu.OpenLeaderboardReplay,
-					_ => null,
-				};
-				action?.Invoke();
+				if (glfwInput.IsKeyPressed(Keys.O))
+					ReplayEditorMenu.OpenLeaderboardReplay();
 			}
 		}
 	}
