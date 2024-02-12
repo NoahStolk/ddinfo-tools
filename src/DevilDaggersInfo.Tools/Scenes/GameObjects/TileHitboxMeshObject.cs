@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Content;
+using DevilDaggersInfo.Tools.Extensions;
 using Silk.NET.OpenGL;
 using System.Numerics;
 
@@ -53,7 +54,7 @@ public class TileHitboxMeshObject
 
 	public unsafe void Render()
 	{
-		Root.InternalResources.MeshShader.SetUniform("model", _model);
+		Graphics.Gl.UniformMatrix4x4(Root.InternalResources.MeshShader.GetUniformLocation("model"), _model);
 
 		Graphics.Gl.BindVertexArray(_vao);
 		fixed (uint* i = &_mesh.Indices[0])

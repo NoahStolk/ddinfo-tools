@@ -21,26 +21,38 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 	public static Color Orange { get; } = new(byte.MaxValue, byte.MaxValue / 2, byte.MinValue, byte.MaxValue);
 
 	public static implicit operator Vector3(Color color)
-		=> new(color.R / (float)byte.MaxValue, color.G / (float)byte.MaxValue, color.B / (float)byte.MaxValue);
+	{
+		return new(color.R / (float)byte.MaxValue, color.G / (float)byte.MaxValue, color.B / (float)byte.MaxValue);
+	}
 
 	public static implicit operator Vector4(Color color)
-		=> new(color.R / (float)byte.MaxValue, color.G / (float)byte.MaxValue, color.B / (float)byte.MaxValue, color.A / (float)byte.MaxValue);
+	{
+		return new(color.R / (float)byte.MaxValue, color.G / (float)byte.MaxValue, color.B / (float)byte.MaxValue, color.A / (float)byte.MaxValue);
+	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Color operator +(Color left, Color right)
-		=> new((byte)(left.R + right.R), (byte)(left.G + right.G), (byte)(left.B + right.B), (byte)(left.A + right.A));
+	{
+		return new((byte)(left.R + right.R), (byte)(left.G + right.G), (byte)(left.B + right.B), (byte)(left.A + right.A));
+	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Color operator -(Color left, Color right)
-		=> new((byte)(left.R - right.R), (byte)(left.G - right.G), (byte)(left.B - right.B), (byte)(left.A - right.A));
+	{
+		return new((byte)(left.R - right.R), (byte)(left.G - right.G), (byte)(left.B - right.B), (byte)(left.A - right.A));
+	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Color operator *(Color left, Color right)
-		=> new((byte)(left.R * right.R), (byte)(left.G * right.G), (byte)(left.B * right.B), (byte)(left.A * right.A));
+	{
+		return new((byte)(left.R * right.R), (byte)(left.G * right.G), (byte)(left.B * right.B), (byte)(left.A * right.A));
+	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Color operator /(Color left, Color right)
-		=> new((byte)(left.R / right.R), (byte)(left.G / right.G), (byte)(left.B / right.B), (byte)(left.A / right.A));
+	{
+		return new((byte)(left.R / right.R), (byte)(left.G / right.G), (byte)(left.B / right.B), (byte)(left.A / right.A));
+	}
 
 	public Color ReadableColorForBrightness()
 	{
@@ -113,7 +125,9 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 	}
 
 	public static Color Invert(Color color)
-		=> new((byte)(byte.MaxValue - color.R), (byte)(byte.MaxValue - color.G), (byte)(byte.MaxValue - color.B), color.A);
+	{
+		return new((byte)(byte.MaxValue - color.R), (byte)(byte.MaxValue - color.G), (byte)(byte.MaxValue - color.B), color.A);
+	}
 
 	public static Color Gray(float value)
 	{

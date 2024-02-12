@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Content;
+using DevilDaggersInfo.Tools.Extensions;
 using Silk.NET.OpenGL;
 using System.Numerics;
 
@@ -24,7 +25,7 @@ public class PlayerMovement
 
 	public unsafe void Render()
 	{
-		Root.InternalResources.MeshShader.SetUniform("model", Matrix4x4.CreateScale(4) * Matrix4x4.CreateFromQuaternion(Rotation) * Matrix4x4.CreateTranslation(Position));
+		Graphics.Gl.UniformMatrix4x4(Root.InternalResources.MeshShader.GetUniformLocation("model"), Matrix4x4.CreateScale(4) * Matrix4x4.CreateFromQuaternion(Rotation) * Matrix4x4.CreateTranslation(Position));
 
 		Graphics.Gl.BindVertexArray(_vao);
 		fixed (uint* i = &_mesh.Indices[0])

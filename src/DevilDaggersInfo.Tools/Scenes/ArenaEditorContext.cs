@@ -104,12 +104,12 @@ public sealed class ArenaEditorContext
 				bool highlight = highlightColor != default;
 
 				if (highlight)
-					shader.SetUniform("highlightColor", highlightColor);
+					Graphics.Gl.Uniform3(shader.GetUniformLocation("highlightColor"), highlightColor);
 
 				tile.RenderTop();
 
 				if (highlight)
-					shader.SetUniform("highlightColor", Vector3.Zero);
+					Graphics.Gl.Uniform3(shader.GetUniformLocation("highlightColor"), Vector3.Zero);
 			}
 		}
 
@@ -124,12 +124,12 @@ public sealed class ArenaEditorContext
 				bool highlight = highlightColor != default;
 
 				if (highlight)
-					shader.SetUniform("highlightColor", highlightColor);
+					Graphics.Gl.Uniform3(shader.GetUniformLocation("highlightColor"), highlightColor);
 
 				tile.RenderPillar();
 
 				if (highlight)
-					shader.SetUniform("highlightColor", Vector3.Zero);
+					Graphics.Gl.Uniform3(shader.GetUniformLocation("highlightColor"), Vector3.Zero);
 			}
 		}
 

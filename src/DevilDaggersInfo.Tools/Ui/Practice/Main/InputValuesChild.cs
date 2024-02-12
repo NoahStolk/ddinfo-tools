@@ -17,7 +17,7 @@ public static class InputValuesChild
 			ImGui.SeparatorText("Inputs");
 
 			ImGui.Spacing();
-			ImGuiImage.Image(Root.InternalResources.IconHandTexture.Handle, new(16), PracticeLogic.State.HandLevel.GetColor());
+			ImGuiImage.Image(Root.InternalResources.IconHandTexture.Id, new(16), PracticeLogic.State.HandLevel.GetColor());
 			ImGui.SameLine();
 			foreach (HandLevel level in EnumUtils.HandLevels)
 			{
@@ -30,12 +30,12 @@ public static class InputValuesChild
 
 			(Texture gemOrHomingTexture, Color tintColor) = PracticeLogic.State.HandLevel is HandLevel.Level3 or HandLevel.Level4 ? (Root.GameResources.IconMaskHomingTexture, Color.White) : (Root.GameResources.IconMaskGemTexture, Color.Red);
 			ImGui.Spacing();
-			ImGuiImage.Image(gemOrHomingTexture.Handle, new(16), tintColor);
+			ImGuiImage.Image(gemOrHomingTexture.Id, new(16), tintColor);
 			ImGui.SameLine();
 			ImGui.InputInt("Added gems", ref PracticeLogic.State.AdditionalGems, 1);
 
 			ImGui.Spacing();
-			ImGuiImage.Image(Root.GameResources.IconMaskStopwatchTexture.Handle, new(16));
+			ImGuiImage.Image(Root.GameResources.IconMaskStopwatchTexture.Id, new(16));
 			ImGui.SameLine();
 			ImGui.InputFloat("Timer start", ref PracticeLogic.State.TimerStart, 1, 5, "%.4f");
 

@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Engine;
+using DevilDaggersInfo.Tools.Extensions;
 using Silk.NET.OpenGL;
 using System.Numerics;
 
@@ -52,7 +53,7 @@ public class RaceDagger
 	{
 		Root.GameResources.DaggerSilverTexture.Bind();
 
-		Root.InternalResources.MeshShader.SetUniform("model", Matrix4x4.CreateScale(8) * Matrix4x4.CreateFromQuaternion(_meshRotation) * Matrix4x4.CreateTranslation(_meshPosition));
+		Graphics.Gl.UniformMatrix4x4(Root.InternalResources.MeshShader.GetUniformLocation("model"), Matrix4x4.CreateScale(8) * Matrix4x4.CreateFromQuaternion(_meshRotation) * Matrix4x4.CreateTranslation(_meshPosition));
 
 		Graphics.Gl.BindVertexArray(_vao);
 		fixed (uint* i = &ContentManager.Content.DaggerMesh.Indices[0])

@@ -1,4 +1,3 @@
-using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Scenes.GameObjects;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 using DevilDaggersInfo.Tools.Ui.Main;
@@ -42,7 +41,7 @@ public static class ConfigLayout
 			return;
 
 		// Initialize game resources.
-		Root.GameResources = GameResources.Create(Graphics.Gl);
+		Root.GameResources = GameResources.Create();
 
 		// Initialize 3D rendering.
 		Player.InitializeRendering();

@@ -106,7 +106,7 @@ public static class LeaderboardListViewChild
 				for (int j = 0; j < clOverview.Criteria.Count; j++)
 				{
 					GetCustomLeaderboardCriteria criteria = clOverview.Criteria[j];
-					ImGuiImage.Image(criteria.Type.GetTexture().Handle, new(16), criteria.Type.GetColor());
+					ImGuiImage.Image(criteria.Type.GetTexture().Id, new(16), criteria.Type.GetColor());
 					if (ImGui.IsItemHovered())
 					{
 						// TODO: May need to improve performance here by caching the text, or perhaps return the text from the API.

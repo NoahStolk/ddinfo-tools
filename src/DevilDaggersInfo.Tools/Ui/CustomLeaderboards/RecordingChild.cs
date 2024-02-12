@@ -165,7 +165,7 @@ public static class RecordingChild
 			ImGui.Spacing();
 
 			// TODO: Use spans here.
-			ImGuiImage.Image(Root.InternalResources.IconEyeTexture.Handle, iconSize, Color.Orange);
+			ImGuiImage.Image(Root.InternalResources.IconEyeTexture.Id, iconSize, Color.Orange);
 			RenderValue("Player", GetPlayerText(b), Color.White, _playerIntensity);
 			RenderValue("Time", Inline.Span(b.Time, StringFormats.TimeFormat), Color.White, _timeIntensity);
 			RenderValue("Hand", GetUpgrade(b).Name, GetUpgrade(b).Color.ToEngineColor(), _handIntensity);
@@ -175,25 +175,25 @@ public static class RecordingChild
 			RenderValue("Death", b.IsPlayerAlive ? "-" : GetDeath(b)?.Name ?? "?", GetDeath(b)?.Color.ToEngineColor() ?? Color.White, _deathIntensity);
 
 			ImGui.Spacing();
-			ImGuiImage.Image(Root.GameResources.IconMaskGemTexture.Handle, iconSize, Color.Red);
+			ImGuiImage.Image(Root.GameResources.IconMaskGemTexture.Id, iconSize, Color.Red);
 			RenderValue("Gems collected", Inline.Span(b.GemsCollected), Color.Red, _gemsCollectedIntensity);
 			RenderValue("Gems despawned", Inline.Span(b.GemsDespawned), Color.Gray(0.6f), _gemsDespawnedIntensity);
 			RenderValue("Gems eaten", Inline.Span(b.GemsEaten), Color.Green, _gemsEatenIntensity);
 			RenderValue("Gems total", Inline.Span(b.GemsTotal), Color.Red, _gemsTotalIntensity);
 
 			ImGui.Spacing();
-			ImGuiImage.Image(Root.GameResources.IconMaskHomingTexture.Handle, iconSize);
+			ImGuiImage.Image(Root.GameResources.IconMaskHomingTexture.Id, iconSize);
 			RenderValue("Homing stored", Inline.Span(b.HomingStored), Color.Purple, _homingStoredIntensity);
 			RenderValue("Homing eaten", Inline.Span(b.HomingEaten), Color.Red, _homingEatenIntensity);
 
 			ImGui.Spacing();
-			ImGuiImage.Image(Root.GameResources.IconMaskCrosshairTexture.Handle, iconSize, Color.Green);
+			ImGuiImage.Image(Root.GameResources.IconMaskCrosshairTexture.Id, iconSize, Color.Green);
 			RenderValue("Daggers fired", Inline.Span(b.DaggersFired), Color.Yellow, _daggersFiredIntensity);
 			RenderValue("Daggers hit", Inline.Span(b.DaggersHit), Color.Red, _daggersHitIntensity);
 			RenderValue("Accuracy", Inline.Span(GetAccuracy(b), "0.00%"), Color.Orange, _accuracyIntensity);
 
 			ImGui.Spacing();
-			ImGuiImage.Image(Root.GameResources.IconMaskSkullTexture.Handle, iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
+			ImGuiImage.Image(Root.GameResources.IconMaskSkullTexture.Id, iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
 			RenderValue("Enemies killed", Inline.Span(b.EnemiesKilled), Color.Red, _enemiesKilledIntensity);
 			RenderValue("Enemies alive", Inline.Span(b.EnemiesAlive), Color.Yellow, _enemiesAliveIntensity);
 

@@ -30,16 +30,16 @@ public static class ReplayEntitiesChild
 			const int maxIds = 1000;
 
 			Vector2 iconSize = new(16);
-			if (ImGuiImage.ImageButton("Start", Root.InternalResources.ArrowStartTexture.Handle, iconSize))
+			if (ImGuiImage.ImageButton("Start", Root.InternalResources.ArrowStartTexture.Id, iconSize))
 				_startId = 0;
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Back", Root.InternalResources.ArrowLeftTexture.Handle, iconSize))
+			if (ImGuiImage.ImageButton("Back", Root.InternalResources.ArrowLeftTexture.Id, iconSize))
 				_startId = Math.Max(0, _startId - maxIds);
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Forward", Root.InternalResources.ArrowRightTexture.Handle, iconSize))
+			if (ImGuiImage.ImageButton("Forward", Root.InternalResources.ArrowRightTexture.Id, iconSize))
 				_startId = Math.Min(eventsData.SpawnEventCount - maxIds, _startId + maxIds);
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Handle, iconSize))
+			if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Id, iconSize))
 				_startId = eventsData.SpawnEventCount - maxIds;
 
 			_startId = Math.Max(0, Math.Min(_startId, eventsData.SpawnEventCount - maxIds));

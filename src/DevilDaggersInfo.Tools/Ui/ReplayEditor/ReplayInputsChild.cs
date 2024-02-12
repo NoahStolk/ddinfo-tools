@@ -25,16 +25,16 @@ public static class ReplayInputsChild
 			ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
 
 			Vector2 iconSize = new(16);
-			if (ImGuiImage.ImageButton("Start", Root.InternalResources.ArrowStartTexture.Handle, iconSize))
+			if (ImGuiImage.ImageButton("Start", Root.InternalResources.ArrowStartTexture.Id, iconSize))
 				_startTick = 0;
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Back", Root.InternalResources.ArrowLeftTexture.Handle, iconSize))
+			if (ImGuiImage.ImageButton("Back", Root.InternalResources.ArrowLeftTexture.Id, iconSize))
 				_startTick = Math.Max(0, _startTick - maxTicks);
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Forward", Root.InternalResources.ArrowRightTexture.Handle, iconSize))
+			if (ImGuiImage.ImageButton("Forward", Root.InternalResources.ArrowRightTexture.Id, iconSize))
 				_startTick = Math.Min(eventsData.TickCount - maxTicks, _startTick + maxTicks);
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Handle, iconSize))
+			if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Id, iconSize))
 				_startTick = eventsData.TickCount - maxTicks;
 
 			_startTick = Math.Max(0, Math.Min(_startTick, eventsData.TickCount - maxTicks));

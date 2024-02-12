@@ -25,7 +25,7 @@ public class Application
 	{
 		_imGuiController = imGuiController;
 
-		Root.InternalResources = InternalResources.Create(Graphics.Gl);
+		Root.InternalResources = InternalResources.Create();
 
 		ConfigLayout.ValidateInstallation();
 
