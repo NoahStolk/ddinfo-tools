@@ -29,12 +29,6 @@ public class Camera
 
 	public Camera(bool isMenuCamera)
 	{
-		if (Root.Mouse != null)
-		{
-			Root.Mouse.MouseDown += OnMouseDown;
-			Root.Mouse.MouseUp += OnMouseUp;
-		}
-
 		_isMenuCamera = isMenuCamera;
 	}
 
@@ -49,7 +43,7 @@ public class Camera
 	{
 		if (_isMenuCamera)
 		{
-			float time = (float)Root.Window.Time * 0.7f;
+			float time = Root.Application.FrameTime * 0.7f;
 			Position = new(MathF.Sin(time) * 5, 6, MathF.Cos(time) * 5);
 			_rotationState = Quaternion.CreateFromRotationMatrix(SetRotationFromDirectionalVector(new Vector3(0, 4, 0) - Position));
 			return;
@@ -135,23 +129,20 @@ public class Camera
 		_axisAlignedSpeed.Z = Math.Clamp(_axisAlignedSpeed.Z, -1, 1);
 	}
 
-	private void OnMouseDown(MouseButton mouseButton)
+	private unsafe void HandleMouse()
 	{
-		if (mouseButton != _lookButton)
-			return;
+		if (Input.GlfwInput.IsMouseButtonReleased(_lookButton))
+		{
+			_lockedMousePosition = null;
+			Graphics.Glfw.SetInputMode(Graphics.Window, CursorStateAttribute.Cursor, CursorModeValue.CursorNormal);
+		}
 
-		_lockedMousePosition = FloorToVector2Int32(Input.GlfwInput.CursorPosition);
-		Root.Mouse.Cursor.CursorMode = CursorMode.Hidden;
-	}
+		if (Input.GlfwInput.IsMouseButtonPressed(_lookButton))
+		{
+			_lockedMousePosition = FloorToVector2Int32(Input.GlfwInput.CursorPosition);
+			Graphics.Glfw.SetInputMode(Graphics.Window, CursorStateAttribute.Cursor, CursorModeValue.CursorHidden);
+		}
 
-	private void OnMouseUp(MouseButton mouseButton)
-	{
-		_lockedMousePosition = null;
-		Root.Mouse.Cursor.CursorMode = CursorMode.Normal;
-	}
-
-	private void HandleMouse()
-	{
 		Vector2D<int> mousePosition = FloorToVector2Int32(Input.GlfwInput.CursorPosition);
 		if (!Input.GlfwInput.IsMouseButtonPressed(_lookButton) || !_lockedMousePosition.HasValue || mousePosition == _lockedMousePosition)
 			return;
@@ -165,7 +156,7 @@ public class Camera
 		_pitch = Math.Clamp(_pitch, MathUtils.ToRadians(-89.9f), MathUtils.ToRadians(89.9f));
 		_rotationState = Quaternion.CreateFromYawPitchRoll(_yaw, -_pitch, 0);
 
-		Root.Mouse.Position = new(_lockedMousePosition.Value.X, _lockedMousePosition.Value.Y);
+		Graphics.Glfw.SetCursorPos(Graphics.Window, _lockedMousePosition.Value.X, _lockedMousePosition.Value.Y);
 	}
 
 	public void PreRender(int windowWidth, int windowHeight)

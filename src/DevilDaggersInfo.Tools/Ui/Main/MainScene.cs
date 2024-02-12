@@ -23,8 +23,8 @@ public static class MainScene
 
 		Graphics.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
-		int framebufferWidth = Root.Window.Size.X;
-		int framebufferHeight = Root.Window.Size.Y;
+		int framebufferWidth = Graphics.CurrentWindowState.Width;
+		int framebufferHeight = Graphics.CurrentWindowState.Height;
 
 		// Keep track of the original viewport so we can restore it later.
 		Span<int> originalViewport = stackalloc int[4];

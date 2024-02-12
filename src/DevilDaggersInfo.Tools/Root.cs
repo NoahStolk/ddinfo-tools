@@ -6,7 +6,6 @@ using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using Serilog;
 using Serilog.Core;
-using Silk.NET.OpenGL;
 #if WINDOWS
 using DevilDaggersInfo.Tools.NativeInterface.Services.Windows;
 #elif LINUX
