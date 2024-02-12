@@ -97,7 +97,7 @@ public static class Graphics
 
 		SetWindowSize(CurrentWindowState.Width, CurrentWindowState.Height);
 
-		_glfw.SwapInterval(0); // Turns VSync off.
+		_glfw.SwapInterval(1); // Turn VSync on by default. TODO: Use setting.
 
 		_windowIsCreated = true;
 	}
