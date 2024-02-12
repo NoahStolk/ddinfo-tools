@@ -6,6 +6,7 @@ using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiGlfw;
 using ImGuiNET;
+using System.Diagnostics;
 
 AppDomain.CurrentDomain.UnhandledException += (_, args) => Root.Log.Fatal(args.ExceptionObject.ToString());
 
@@ -49,6 +50,7 @@ static ImGuiController ConfigureImGui()
 	io.Fonts.AddFontDefault();
 
 	string fontPath = Path.Combine(AssemblyUtils.InstallationDirectory, "goethebold.ttf");
+	Debug.Assert(File.Exists(fontPath), $"Font file not found: {fontPath}");
 	Root.FontGoetheBold20 = io.Fonts.AddFontFromFileTTF(fontPath, 20);
 	Root.FontGoetheBold30 = io.Fonts.AddFontFromFileTTF(fontPath, 30);
 	Root.FontGoetheBold60 = io.Fonts.AddFontFromFileTTF(fontPath, 60);
