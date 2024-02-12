@@ -43,7 +43,7 @@ public class Camera
 	{
 		if (_isMenuCamera)
 		{
-			float time = Root.Application.FrameTime * 0.7f;
+			float time = Root.Application.TotalTime * 0.7f;
 			Position = new(MathF.Sin(time) * 5, 6, MathF.Cos(time) * 5);
 			_rotationState = Quaternion.CreateFromRotationMatrix(SetRotationFromDirectionalVector(new Vector3(0, 4, 0) - Position));
 			return;

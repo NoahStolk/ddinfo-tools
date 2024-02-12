@@ -2,6 +2,7 @@ using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Ui.Config;
 using ImGuiGlfw;
 using Silk.NET.GLFW;
+using Silk.NET.OpenGL;
 using System.Runtime.InteropServices;
 
 namespace DevilDaggersInfo.Tools;
@@ -46,6 +47,7 @@ public class Application
 
 	public int Fps { get; private set; }
 	public float FrameTime => (float)_frameTime;
+	public float TotalTime { get; private set; }
 
 	public PerSecondCounter RenderCounter { get; } = new();
 	public float LastRenderDelta { get; set; }
@@ -62,6 +64,7 @@ public class Application
 		}
 
 		_imGuiController.Destroy();
+		Graphics.Gl.Dispose(); // TODO: Ok?
 		Graphics.Glfw.Terminate();
 	}
 
@@ -78,6 +81,8 @@ public class Application
 		_frameTime = mainStartTime - _currentTime;
 		if (_frameTime > _maxMainDelta)
 			_frameTime = _maxMainDelta;
+
+		TotalTime += FrameTime;
 
 		_currentTime = mainStartTime;
 
@@ -100,7 +105,8 @@ public class Application
 
 		// TODO: ImGui.DockSpaceOverViewport(null, ImGuiDockNodeFlags.PassthruCentralNode);
 
-		// Graphics.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+		// TODO: Test.
+		Graphics.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 		UiRenderer.Render(deltaF);
 
@@ -110,9 +116,11 @@ public class Application
 
 		if (Ui.Main.MainWindow.ShouldClose)
 		{
-			_imGuiController.Destroy();
-			Graphics.Gl.Dispose(); // TODO: Ok?
-			Graphics.Glfw.Terminate();
+			// TODO: Test.
+			unsafe
+			{
+				Graphics.Glfw.SetWindowShouldClose(Graphics.Window, true);
+			}
 		}
 	}
 }
