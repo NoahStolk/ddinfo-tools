@@ -42,7 +42,6 @@ app.Run();
 static ImGuiController ConfigureImGui()
 {
 	ImGuiController imGuiController = new(Graphics.Gl, Input.GlfwInput, UserCache.Model.WindowWidth, UserCache.Model.WindowHeight);
-	imGuiController.CreateDefaultFont();
 
 	ImGuiIOPtr io = ImGui.GetIO();
 
@@ -54,6 +53,8 @@ static ImGuiController ConfigureImGui()
 	Root.FontGoetheBold20 = io.Fonts.AddFontFromFileTTF(fontPath, 20);
 	Root.FontGoetheBold30 = io.Fonts.AddFontFromFileTTF(fontPath, 30);
 	Root.FontGoetheBold60 = io.Fonts.AddFontFromFileTTF(fontPath, 60);
+
+	imGuiController.CreateDefaultFont();
 
 	ImGuiStylePtr style = ImGui.GetStyle();
 	style.ScrollbarSize = 16;
