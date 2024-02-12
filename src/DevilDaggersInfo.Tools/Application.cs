@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Ui.Config;
 using ImGuiGlfw;
+using ImGuiNET;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 using System.Runtime.InteropServices;
@@ -103,12 +104,13 @@ public class Application
 
 		_imGuiController.Update(deltaF);
 
-		// TODO: ImGui.DockSpaceOverViewport(null, ImGuiDockNodeFlags.PassthruCentralNode);
+		ImGui.DockSpaceOverViewport(null, ImGuiDockNodeFlags.PassthruCentralNode);
 
 		// TODO: Test.
 		Graphics.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 		UiRenderer.Render(deltaF);
+		Shortcuts.Handle(Input.GlfwInput);
 
 		_imGuiController.Render();
 

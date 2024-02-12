@@ -17,8 +17,6 @@ Graphics.CreateWindow(new($"ddinfo tools {AssemblyUtils.EntryAssemblyVersionStri
 
 Graphics.Gl.ClearColor(0, 0, 0, 1);
 
-// TODO: Configure V-sync.
-
 ImGuiController imGuiController = ConfigureImGui();
 
 Colors.SetColors(Colors.Main);
