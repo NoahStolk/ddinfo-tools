@@ -14,6 +14,7 @@ UserSettings.Load();
 UserCache.Load();
 
 Graphics.CreateWindow(new($"ddinfo tools {AssemblyUtils.EntryAssemblyVersionString}", UserCache.Model.WindowWidth, UserCache.Model.WindowHeight, false));
+Graphics.SetWindowSizeLimits((int)Constants.MinWindowSize.X, (int)Constants.MinWindowSize.Y, -1, -1);
 
 Graphics.Gl.ClearColor(0, 0, 0, 1);
 
