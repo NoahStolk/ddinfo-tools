@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.EditorFileState;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.JsonSerializerContexts;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using DevilDaggersInfo.Tools.Ui.Popups;
@@ -66,7 +67,7 @@ public static class AssetEditorMenu
 		{
 			fileContents = File.ReadAllBytes(filePath);
 		}
-		catch (Exception ex) when (ex is PathTooLongException or DirectoryNotFoundException or IOException or UnauthorizedAccessException or FileNotFoundException or NotSupportedException or SecurityException)
+		catch (Exception ex) when (ex.IsFileIoException())
 		{
 			PopupManager.ShowError($"Could not open file '{filePath}'.", ex);
 			Root.Log.Error(ex, "Could not open file");

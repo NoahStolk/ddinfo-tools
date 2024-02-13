@@ -97,7 +97,8 @@ public static class Graphics
 
 		SetWindowSize(CurrentWindowState.Width, CurrentWindowState.Height);
 
-		_glfw.SwapInterval(1); // Turn VSync on by default. TODO: Use setting.
+		// Turn VSync on. There's really no need to turn it off for this application.
+		_glfw.SwapInterval(1);
 
 		_windowIsCreated = true;
 	}
@@ -129,6 +130,4 @@ public static class Graphics
 
 		throw new InvalidOperationException($"GLFW {errorCode}: {errorBuilder}");
 	}
-
-	public readonly record struct WindowState(string Title, int Width, int Height, bool IsFullScreen);
 }

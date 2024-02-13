@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.JsonSerializerContexts;
 using DevilDaggersInfo.Tools.User.Settings.Model;
 using System.Text.Json;
@@ -48,7 +49,7 @@ public static class UserSettings
 			if (deserializedModel != null)
 				_model = deserializedModel.Sanitize();
 		}
-		catch (Exception ex)
+		catch (Exception ex) when (ex is JsonException || ex.IsFileIoException())
 		{
 			Root.Log.Error(ex, "Failed to load user settings.");
 		}
