@@ -35,7 +35,6 @@ Graphics.OnChangeWindowSize = (w, h) =>
 
 Application app = new(imGuiController);
 app.Run();
-// app.Destroy();
 
 static ImGuiController ConfigureImGui()
 {

@@ -14,6 +14,7 @@ public class Application
 	private const double _mainLoopLength = 1 / 300.0;
 
 	private readonly ImGuiController _imGuiController;
+	private readonly IntPtr _iconPtr;
 
 	private double _currentTime = Graphics.Glfw.GetTime();
 	private double _frameTime;
@@ -32,14 +33,13 @@ public class Application
 		int iconWidth = Root.InternalResources.ApplicationIconTexture.Width;
 		int iconHeight = Root.InternalResources.ApplicationIconTexture.Height;
 
-		// TODO: Free iconPtr when no longer needed.
-		IntPtr iconPtr = Marshal.AllocHGlobal(iconWidth * iconHeight * 4);
-		Marshal.Copy(Root.InternalResources.ApplicationIconTexture.Pixels, 0, iconPtr, iconWidth * iconHeight * 4);
+		_iconPtr = Marshal.AllocHGlobal(iconWidth * iconHeight * 4);
+		Marshal.Copy(Root.InternalResources.ApplicationIconTexture.Pixels, 0, _iconPtr, iconWidth * iconHeight * 4);
 		Image image = new()
 		{
 			Width = iconWidth,
 			Height = iconHeight,
-			Pixels = (byte*)iconPtr,
+			Pixels = (byte*)_iconPtr,
 		};
 		Graphics.Glfw.SetWindowIcon(Graphics.Window, 1, &image);
 
@@ -51,7 +51,7 @@ public class Application
 	public float TotalTime { get; private set; }
 
 	public PerSecondCounter RenderCounter { get; } = new();
-	public float LastRenderDelta { get; set; }
+	public float LastRenderDelta { get; private set; }
 
 	public unsafe void Run()
 	{
@@ -67,6 +67,8 @@ public class Application
 		_imGuiController.Destroy();
 		Graphics.Gl.Dispose(); // TODO: Ok?
 		Graphics.Glfw.Terminate();
+
+		Marshal.FreeHGlobal(_iconPtr);
 	}
 
 	private unsafe void Main()
@@ -106,7 +108,6 @@ public class Application
 
 		ImGui.DockSpaceOverViewport(null, ImGuiDockNodeFlags.PassthruCentralNode);
 
-		// TODO: Test.
 		Graphics.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 		UiRenderer.Render(deltaF);
@@ -118,7 +119,6 @@ public class Application
 
 		if (Ui.Main.MainWindow.ShouldClose)
 		{
-			// TODO: Test.
 			unsafe
 			{
 				Graphics.Glfw.SetWindowShouldClose(Graphics.Window, true);
