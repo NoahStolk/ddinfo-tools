@@ -17,7 +17,7 @@ public static class AboutWindow
 
 		Vector2 windowSize = new(512, 512);
 		ImGui.SetNextWindowSize(windowSize);
-		if (ImGui.Begin("About ddinfo tools", ref show, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize))
+		if (ImGui.Begin("About ddinfo tools", ref show, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDocking))
 		{
 			ImGui.PushTextWrapPos(windowSize.X - 16);
 
