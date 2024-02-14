@@ -14,7 +14,6 @@ public static class DebugLayout
 
 	private static readonly List<string> _debugMessages = [];
 	private static readonly DateTime _startUpTime = DateTime.UtcNow;
-	private static readonly Dictionary<Keys, string> _keyDisplayStringCache = [];
 
 	public static void Add(object? obj)
 	{
@@ -145,14 +144,7 @@ public static class DebugLayout
 				bool isDown = Input.GlfwInput.IsKeyDown(key);
 
 				ImGui.TableNextColumn();
-
-				if (!_keyDisplayStringCache.TryGetValue(key, out string? displayString))
-				{
-					displayString = key.ToString();
-					_keyDisplayStringCache[key] = displayString;
-				}
-
-				ImGui.TextColored(isDown ? Color.White : Color.Gray(0.4f), displayString);
+				ImGui.TextColored(isDown ? Color.White : Color.Gray(0.4f), EnumUtils.KeyNames[key]);
 			}
 
 			ImGui.EndTable();
