@@ -1,18 +1,20 @@
 using DevilDaggersInfo.Core.Common;
+using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using Silk.NET.GLFW;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
 public static class DebugLayout
 {
 	private static long _previousAllocatedBytes;
-	private static bool _showOverlay = true;
 
 	private static readonly List<string> _debugMessages = [];
 	private static readonly DateTime _startUpTime = DateTime.UtcNow;
+	private static readonly Dictionary<Keys, string> _keyDisplayStringCache = [];
 
 	public static void Add(object? obj)
 	{
@@ -26,57 +28,34 @@ public static class DebugLayout
 
 	public static void Render()
 	{
-		if (_showOverlay)
-			RenderOverlay();
-
 		if (ImGui.Begin("Debug"))
 		{
-			ImGui.Checkbox("Show overlay", ref _showOverlay);
-
 			ImGui.TextColored(PopupManager.IsAnyOpen ? Color.White : Color.Gray(0.4f), PopupManager.IsAnyOpen ? "Modal active" : "Modal inactive");
 			ImGui.TextColored(NativeFileDialog.DialogOpen ? Color.White : Color.Gray(0.4f), NativeFileDialog.DialogOpen ? "Native dialog open" : "Native dialog closed");
 			ImGui.TextColored(Root.AesBase32Wrapper == null ? Color.Red : Color.Green, Root.AesBase32Wrapper == null ? "Encryption unavailable" : "Encryption available");
 
-			ImGui.SeparatorText("Modded survival file");
-			if (SurvivalFileWatcher.Exists)
+			if (ImGui.CollapsingHeader("Modded survival file"))
 			{
-				ImGui.Text(EnumUtils.HandLevelNames[SurvivalFileWatcher.HandLevel]);
-				ImGui.Text(Inline.Span(SurvivalFileWatcher.AdditionalGems));
-				ImGui.Text(Inline.Span(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
+				if (SurvivalFileWatcher.Exists)
+				{
+					ImGui.Text(EnumUtils.HandLevelNames[SurvivalFileWatcher.HandLevel]);
+					ImGui.Text(Inline.Span(SurvivalFileWatcher.AdditionalGems));
+					ImGui.Text(Inline.Span(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
+				}
+				else
+				{
+					ImGui.Text("<No modded survival file>");
+				}
 			}
-			else
+
+			if (ImGui.CollapsingHeader("Keyboard input"))
 			{
-				ImGui.Text("<No modded survival file>");
+				RenderKeyboardInput();
 			}
 
-			ImGui.SeparatorText("ImGui key modifiers");
-
-			ImGuiIOPtr io = ImGui.GetIO();
-			ImGui.TextColored(io.KeyCtrl ? Color.White : Color.Gray(0.4f), "CTRL");
-			ImGui.SameLine();
-			ImGui.TextColored(io.KeyShift ? Color.White : Color.Gray(0.4f), "SHIFT");
-			ImGui.SameLine();
-			ImGui.TextColored(io.KeyAlt ? Color.White : Color.Gray(0.4f), "ALT");
-			ImGui.SameLine();
-			ImGui.TextColored(io.KeySuper ? Color.White : Color.Gray(0.4f), "SUPER");
-
-			ImGui.Separator();
-			if (ImGui.CollapsingHeader("Silk.NET keys"))
+			if (ImGui.CollapsingHeader("Metrics"))
 			{
-				// if (ImGui.BeginTable("SilkKeys", 8))
-				// {
-				// 	for (int i = 0; i < Input.GlfwInput.SupportedKeys.Count; i++)
-				// 	{
-				// 		bool isDown = keyboard.IsKeyPressed(keyboard.SupportedKeys[i]);
-				// 		if (i == 0)
-				// 			ImGui.TableNextRow();
-				//
-				// 		ImGui.TableNextColumn();
-				// 		ImGui.TextColored(isDown ? Color.White : Color.Gray(0.4f), EnumUtils.KeyNames[keyboard.SupportedKeys[i]]);
-				// 	}
-				//
-				// 	ImGui.EndTable();
-				// }
+				RenderMetrics();
 			}
 
 #if DEBUG
@@ -140,40 +119,83 @@ public static class DebugLayout
 		ImGui.End(); // End Debug
 	}
 
-	private static void RenderOverlay()
+	private static void RenderKeyboardInput()
 	{
-		ImDrawListPtr drawList = ImGui.GetForegroundDrawList();
-		float y = 0;
-		AddText(ref y, "FPS (smoothed)", Inline.Span(Root.Application.RenderCounter.CountPerSecond));
-		AddText(ref y, "FPS", Inline.Span(1f / Root.Application.LastRenderDelta, "000.000"));
+		ImGuiIOPtr io = ImGui.GetIO();
+		ImGui.TextColored(io.KeyCtrl ? Color.White : Color.Gray(0.4f), "CTRL");
+		ImGui.SameLine();
+		ImGui.TextColored(io.KeyShift ? Color.White : Color.Gray(0.4f), "SHIFT");
+		ImGui.SameLine();
+		ImGui.TextColored(io.KeyAlt ? Color.White : Color.Gray(0.4f), "ALT");
+		ImGui.SameLine();
+		ImGui.TextColored(io.KeySuper ? Color.White : Color.Gray(0.4f), "SUPER");
+
+		ImGui.Separator();
+		if (ImGui.BeginTable("GLFW keys", 8))
+		{
+			for (int i = 0; i < 1024; i++)
+			{
+				if (i == 0)
+					ImGui.TableNextRow();
+
+				Keys key = (Keys)i;
+				if (!Enum.IsDefined(key))
+					continue;
+
+				bool isDown = Input.GlfwInput.IsKeyDown(key);
+
+				ImGui.TableNextColumn();
+
+				if (!_keyDisplayStringCache.TryGetValue(key, out string? displayString))
+				{
+					displayString = key.ToString();
+					_keyDisplayStringCache[key] = displayString;
+				}
+
+				ImGui.TextColored(isDown ? Color.White : Color.Gray(0.4f), displayString);
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void RenderMetrics()
+	{
+		AddText("FPS (smoothed)", Inline.Span(Root.Application.RenderCounter.CountPerSecond));
+		AddText("FPS", Inline.Span(1f / Root.Application.LastRenderDelta, "000.000"));
 
 		long allocatedBytes = GC.GetAllocatedBytesForCurrentThread();
-		AddText(ref y, "Total managed heap alloc in bytes", Inline.Span(allocatedBytes));
+		AddText("Total managed heap alloc in bytes", Inline.Span(allocatedBytes));
 
 		long allocatedBytesDiff = allocatedBytes - _previousAllocatedBytes;
-		uint color = allocatedBytesDiff switch
+		Color color = allocatedBytesDiff switch
 		{
-			> 10_000 => 0xff0000ff,
-			> 1_000 => 0xff0088ff,
-			> 500 => 0xff00ffff,
-			> 0 => 0xff88ffff,
-			_ => 0xff00ff00,
+			> 10_000 => Color.Red,
+			> 1_000 => Color.Orange,
+			> 500 => Color.Yellow,
+			> 0 => new(255, 255, 127, 255),
+			_ => Color.Green,
 		};
-		AddText(ref y, "Heap alloc bytes since last frame", Inline.Span(allocatedBytesDiff), color);
+		AddText("Heap alloc bytes since last frame", Inline.Span(allocatedBytesDiff), color);
 		_previousAllocatedBytes = allocatedBytes;
 
-		AddText(ref y, "Gen 0 GCs", Inline.Span(GC.CollectionCount(0)));
-		AddText(ref y, "Gen 1 GCs", Inline.Span(GC.CollectionCount(1)));
-		AddText(ref y, "Gen 2 GCs", Inline.Span(GC.CollectionCount(2)));
-		AddText(ref y, "Total GC pause duration", Inline.Span(GC.GetTotalPauseDuration()));
-		AddText(ref y, "Total app time", Inline.Span(DateTime.UtcNow - _startUpTime));
-		AddText(ref y, "Devil Daggers window position", Inline.Span(Root.GameWindowService.GetWindowPosition()));
+		AddText("Gen 0 GCs", Inline.Span(GC.CollectionCount(0)));
+		AddText("Gen 1 GCs", Inline.Span(GC.CollectionCount(1)));
+		AddText("Gen 2 GCs", Inline.Span(GC.CollectionCount(2)));
+		AddText("Total GC pause duration", Inline.Span(GC.GetTotalPauseDuration()));
+		AddText("Total app time", Inline.Span(DateTime.UtcNow - _startUpTime));
+		AddText("Devil Daggers window position", Inline.Span(Root.GameWindowService.GetWindowPosition()));
+	}
 
-		void AddText(ref float posY, ReadOnlySpan<char> textLeft, ReadOnlySpan<char> textRight, uint textColor = 0xffffffff)
-		{
-			drawList.AddText(new(0, posY), textColor, textLeft);
-			drawList.AddText(new(256, posY), textColor, textRight);
-			posY += 16;
-		}
+	private static void AddText(ReadOnlySpan<char> textLeft, ReadOnlySpan<char> textRight)
+	{
+		AddText(textLeft, textRight, Color.White);
+	}
+
+	private static void AddText(ReadOnlySpan<char> textLeft, ReadOnlySpan<char> textRight, Color textColor)
+	{
+		ImGui.TextColored(textColor, textLeft);
+		ImGui.SameLine(256);
+		ImGui.TextColored(textColor, textRight);
 	}
 }
