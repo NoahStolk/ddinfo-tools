@@ -82,7 +82,7 @@ public static class UserSettings
 		DebugWindow.Add("Loaded imgui.ini");
 	}
 
-	public static void SaveImGuiIni()
+	public static void SaveImGuiIni(ImGuiIOPtr io)
 	{
 		Directory.CreateDirectory(_fileDirectory);
 
@@ -90,5 +90,7 @@ public static class UserSettings
 		File.WriteAllText(_imguiIniFilePath, iniContents);
 
 		DebugWindow.Add("Saved imgui.ini");
+
+		io.WantSaveIniSettings = false;
 	}
 }
