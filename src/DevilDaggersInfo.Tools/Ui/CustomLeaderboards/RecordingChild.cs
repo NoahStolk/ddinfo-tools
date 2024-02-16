@@ -80,7 +80,7 @@ public static class RecordingChild
 		MainBlock p = Root.GameMemoryService.MainBlockPrevious;
 
 		_statusIntensity = b.Status != p.Status ? 1 : MathF.Max(0, _statusIntensity - delta);
-		_playerIntensity = GetPlayerText(b) != GetPlayerText(p) ? 1 : MathF.Max(0, _playerIntensity - delta);
+		_playerIntensity = !b.ArePlayersEqual(p) ? 1 : MathF.Max(0, _playerIntensity - delta);
 		_timeIntensity = Math.Abs(b.Time - p.Time) > tolerance ? 1 : MathF.Max(0, _timeIntensity - delta);
 		_handIntensity = GetUpgrade(b) != GetUpgrade(p) ? 1 : MathF.Max(0, _handIntensity - delta);
 		_level2Intensity = Math.Abs(b.LevelUpTime2 - p.LevelUpTime2) > tolerance ? 1 : MathF.Max(0, _level2Intensity - delta);
@@ -258,13 +258,16 @@ public static class RecordingChild
 		return b.DaggersFired == 0 ? 0 : b.DaggersHit / (float)b.DaggersFired;
 	}
 
-	private static Upgrade GetUpgrade(MainBlock block) => block.LevelGems switch
+	private static Upgrade GetUpgrade(MainBlock block)
 	{
-		< 10 => UpgradesV3_2.Level1,
-		< 70 => UpgradesV3_2.Level2,
-		70 => UpgradesV3_2.Level3,
-		_ => UpgradesV3_2.Level4,
-	};
+		return block.LevelGems switch
+		{
+			< 10 => UpgradesV3_2.Level1,
+			< 70 => UpgradesV3_2.Level2,
+			70 => UpgradesV3_2.Level3,
+			_ => UpgradesV3_2.Level4,
+		};
+	}
 
 	private static Death? GetDeath(MainBlock block)
 	{
