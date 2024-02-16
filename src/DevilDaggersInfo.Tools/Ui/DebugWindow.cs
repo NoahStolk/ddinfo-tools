@@ -92,7 +92,7 @@ public static class DebugWindow
 			ImGui.Separator();
 
 			if (ImGui.Button("Clear"))
-				_debugMessages.Clear();
+				Clear();
 
 			for (int i = 0; i < _debugMessages.Count; i++)
 				ImGui.Text(_debugMessages[i]);

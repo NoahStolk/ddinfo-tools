@@ -33,7 +33,7 @@ public static class LeaderboardListViewChild
 				int start = LeaderboardListChild.PageIndex * LeaderboardListChild.PageSize + 1;
 				int end = Math.Min((LeaderboardListChild.PageIndex + 1) * LeaderboardListChild.PageSize, totalEntries);
 
-				ImGui.Text($"Page {page} of {totalPages} ({start}-{end} of {totalEntries})");
+				ImGui.Text(Inline.Span($"Page {page} of {totalPages} ({start}-{end} of {totalEntries})"));
 
 				RenderTable();
 			}
@@ -79,22 +79,7 @@ public static class LeaderboardListViewChild
 				ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.CustomLeaderboards.Primary with { A = 96 });
 				bool temp = true;
 				if (ImGui.Selectable(clOverview.SpawnsetName, ref temp, ImGuiSelectableFlags.SpanAllColumns, new(0, 16)))
-				{
-					AsyncHandler.Run(
-						cl =>
-						{
-							if (cl == null)
-							{
-								PopupManager.ShowError("Could not fetch custom leaderboard.");
-								LeaderboardChild.Data = null;
-							}
-							else
-							{
-								LeaderboardChild.Data = new(cl, clOverview.SpawnsetId);
-							}
-						},
-						() => FetchCustomLeaderboardById.HandleAsync(clOverview.Id));
-				}
+					SelectLeaderboard(clOverview);
 
 				ImGui.PopStyleColor(3);
 
@@ -146,6 +131,24 @@ public static class LeaderboardListViewChild
 		}
 
 		ImGui.PopStyleVar();
+	}
+
+	private static void SelectLeaderboard(GetCustomLeaderboardForOverview clOverview)
+	{
+		AsyncHandler.Run(
+			cl =>
+			{
+				if (cl == null)
+				{
+					PopupManager.ShowError("Could not fetch custom leaderboard.");
+					LeaderboardChild.Data = null;
+				}
+				else
+				{
+					LeaderboardChild.Data = new(cl, clOverview.SpawnsetId);
+				}
+			},
+			() => FetchCustomLeaderboardById.HandleAsync(clOverview.Id));
 	}
 
 	private static string GetText(GetCustomLeaderboardCriteria criteria)
