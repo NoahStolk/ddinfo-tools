@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Tools.Engine.Extensions;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
-using ErrorCode = Silk.NET.GLFW.ErrorCode;
 using Monitor = Silk.NET.GLFW.Monitor;
 
 namespace DevilDaggersInfo.Tools.Engine;

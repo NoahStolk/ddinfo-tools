@@ -11,7 +11,6 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
-using DevilDaggersInfo.Web.ApiSpec.Tools.Spawnsets;
 using ImGuiNET;
 using System.Diagnostics;
 using System.Numerics;
@@ -54,19 +53,7 @@ public static class LeaderboardChild
 		ImGui.Text(data.Leaderboard.SpawnsetName);
 
 		if (ImGui.Button("Play", new(80, 20)))
-		{
-			AsyncHandler.Run(InstallSpawnset, () => FetchSpawnsetById.HandleAsync(data.SpawnsetId));
-			void InstallSpawnset(GetSpawnset? spawnset)
-			{
-				if (spawnset == null)
-				{
-					PopupManager.ShowError("Could not fetch spawnset.");
-					return;
-				}
-
-				File.WriteAllBytes(UserSettings.ModsSurvivalPath, spawnset.FileBytes);
-			}
-		}
+			PlaySpawnset(data);
 
 		if (SurvivalFileWatcher.SpawnsetName == data.Leaderboard.SpawnsetName)
 		{
@@ -95,6 +82,22 @@ public static class LeaderboardChild
 			RenderTable(data.Leaderboard.RankSorting);
 
 		ImGui.EndChild(); // End LeaderboardTableChild
+	}
+
+	private static void PlaySpawnset(LeaderboardData data)
+	{
+		AsyncHandler.Run(
+			spawnset =>
+			{
+				if (spawnset == null)
+				{
+					PopupManager.ShowError("Could not fetch spawnset.");
+					return;
+				}
+
+				File.WriteAllBytes(UserSettings.ModsSurvivalPath, spawnset.FileBytes);
+			},
+			() => FetchSpawnsetById.HandleAsync(data.SpawnsetId));
 	}
 
 	private static unsafe void RenderTable(CustomLeaderboardRankSorting rankSorting)

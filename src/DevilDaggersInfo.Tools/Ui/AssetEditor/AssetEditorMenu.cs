@@ -5,7 +5,6 @@ using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
-using System.Security;
 using System.Text.Json;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
