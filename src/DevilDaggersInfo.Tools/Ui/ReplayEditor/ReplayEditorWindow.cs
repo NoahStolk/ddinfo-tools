@@ -33,8 +33,6 @@ public static class ReplayEditorWindow
 		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize);
 		if (ImGui.Begin("Replay Editor", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.MenuBar))
 		{
-			ReplayEditorMenu.Render();
-
 			ReplayFileInfo.Render();
 
 			if (ImGui.BeginTabBar("Replay Editor Tabs"))

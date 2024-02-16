@@ -15,7 +15,6 @@ public static class SpawnsetEditorWindow
 		{
 			bool isWindowFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows);
 
-			SpawnsetEditorMenu.Render();
 			SpawnsChild.Render();
 
 			ImGui.SameLine();

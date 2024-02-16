@@ -14,7 +14,7 @@ public static class AssetEditorMenu
 {
 	public static void Render()
 	{
-		if (ImGui.BeginMenuBar())
+		if (ImGui.BeginMainMenuBar())
 		{
 			if (ImGui.BeginMenu("File"))
 			{
@@ -22,7 +22,7 @@ public static class AssetEditorMenu
 				ImGui.EndMenu();
 			}
 
-			ImGui.EndMenuBar();
+			ImGui.EndMainMenuBar();
 		}
 	}
 
