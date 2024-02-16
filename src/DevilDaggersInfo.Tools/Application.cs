@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Ui.Config;
+using DevilDaggersInfo.Tools.User.Settings;
 using ImGuiGlfw;
 using ImGuiNET;
 using Silk.NET.GLFW;
@@ -65,7 +66,7 @@ public class Application
 		}
 
 		_imGuiController.Destroy();
-		Graphics.Gl.Dispose(); // TODO: Ok?
+		Graphics.Gl.Dispose();
 		Graphics.Glfw.Terminate();
 
 		Marshal.FreeHGlobal(_iconPtr);
@@ -111,7 +112,13 @@ public class Application
 		Graphics.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 		UiRenderer.Render(deltaF);
-		Shortcuts.Handle(Input.GlfwInput);
+
+		ImGuiIOPtr io = ImGui.GetIO();
+
+		Shortcuts.Handle(io, Input.GlfwInput);
+
+		if (io.WantSaveIniSettings)
+			UserSettings.SaveImGuiIni();
 
 		_imGuiController.Render();
 

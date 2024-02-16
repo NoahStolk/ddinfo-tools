@@ -4,19 +4,23 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 using ImGuiGlfw;
+using ImGuiNET;
 using Silk.NET.GLFW;
 
 namespace DevilDaggersInfo.Tools;
 
 public static class Shortcuts
 {
-	public static void Handle(GlfwInput glfwInput)
+	public static void Handle(ImGuiIOPtr io, GlfwInput glfwInput)
 	{
+		if (io.WantTextInput)
+			return;
+
 		if (PopupManager.IsAnyOpen)
 			return;
 
-		bool ctrl = glfwInput.IsKeyPressed(Keys.ControlLeft) || glfwInput.IsKeyPressed(Keys.ControlRight);
-		bool shift = glfwInput.IsKeyPressed(Keys.ShiftLeft) || glfwInput.IsKeyPressed(Keys.ShiftRight);
+		bool ctrl = glfwInput.IsKeyDown(Keys.ControlLeft) || glfwInput.IsKeyDown(Keys.ControlRight);
+		bool shift = glfwInput.IsKeyDown(Keys.ShiftLeft) || glfwInput.IsKeyDown(Keys.ShiftRight);
 
 		if (glfwInput.IsKeyPressed(Keys.Escape))
 		{

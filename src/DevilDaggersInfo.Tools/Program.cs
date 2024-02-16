@@ -43,9 +43,18 @@ static ImGuiController ConfigureImGui()
 
 	ImGuiIOPtr io = ImGui.GetIO();
 
+	// Load imgui.ini.
+	unsafe
+	{
+		io.NativePtr->IniFilename = null;
+	}
+
+	UserSettings.LoadImGuiIni();
+
 	// Add the default font first so it is actually used by default.
 	io.Fonts.AddFontDefault();
 
+	// Load custom fonts.
 	string fontPath = Path.Combine(AssemblyUtils.InstallationDirectory, "goethebold.ttf");
 	Debug.Assert(File.Exists(fontPath), $"Font file not found: {fontPath}");
 	Root.FontGoetheBold20 = io.Fonts.AddFontFromFileTTF(fontPath, 20);
@@ -54,8 +63,10 @@ static ImGuiController ConfigureImGui()
 
 	imGuiController.CreateDefaultFont();
 
+	// Configure style.
 	ImGuiStylePtr style = ImGui.GetStyle();
 	style.ScrollbarSize = 16;
 	style.ScrollbarRounding = 0;
+
 	return imGuiController;
 }

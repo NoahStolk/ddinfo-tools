@@ -1,5 +1,13 @@
 # Changelog
 
+## [unreleased]
+
+### UI
+
+- Enabled window docking.
+- Individual window locations and sizes are now stored in AppData and will be preserved for future updates.
+- Fixed applying shortcuts while entering text in the UI.
+
 ## [0.12.0.0] - 2024-01-21
 
 ### Asset Editor
