@@ -118,7 +118,10 @@ public class Application
 		Shortcuts.Handle(io, Input.GlfwInput);
 
 		if (io.WantSaveIniSettings)
+		{
 			UserSettings.SaveImGuiIni();
+			io.WantSaveIniSettings = false;
+		}
 
 		_imGuiController.Render();
 

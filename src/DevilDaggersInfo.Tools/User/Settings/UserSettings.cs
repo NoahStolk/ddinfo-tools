@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.JsonSerializerContexts;
+using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.User.Settings.Model;
 using ImGuiNET;
 using System.Text.Json;
@@ -77,6 +78,8 @@ public static class UserSettings
 		{
 			Root.Log.Error(ex, "Could not load imgui.ini.");
 		}
+
+		DebugWindow.Add("Loaded imgui.ini");
 	}
 
 	public static void SaveImGuiIni()
@@ -85,5 +88,7 @@ public static class UserSettings
 
 		string iniContents = ImGui.SaveIniSettingsToMemory(out _);
 		File.WriteAllText(_imguiIniFilePath, iniContents);
+
+		DebugWindow.Add("Saved imgui.ini");
 	}
 }

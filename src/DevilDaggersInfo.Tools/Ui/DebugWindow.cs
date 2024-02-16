@@ -138,17 +138,11 @@ public static class DebugWindow
 		ImGui.Separator();
 		if (ImGui.BeginTable("GLFW keys", 8))
 		{
-			for (int i = 0; i < 1024; i++)
+			ImGui.TableNextRow();
+			for (int i = 0; i < EnumUtils.KeyNames.Count; i++)
 			{
-				if (i == 0)
-					ImGui.TableNextRow();
-
-				Keys key = (Keys)i;
-				if (!Enum.IsDefined(key))
-					continue;
-
+				Keys key = EnumUtils.Keys[i];
 				bool isDown = Input.GlfwInput.IsKeyDown(key);
-
 				ImGui.TableNextColumn();
 				ImGui.TextColored(isDown ? Color.White : Color.Gray(0.4f), EnumUtils.KeyNames[key]);
 			}
