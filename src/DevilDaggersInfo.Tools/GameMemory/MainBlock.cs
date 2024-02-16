@@ -1,7 +1,5 @@
 #pragma warning disable IDE1006 // Naming Styles
 
-using System.Text;
-
 namespace DevilDaggersInfo.Tools.GameMemory;
 
 public readonly record struct MainBlock
@@ -104,13 +102,14 @@ public readonly record struct MainBlock
 
 	public MainBlock(byte[] buffer)
 	{
-		using MemoryStream ms = new(buffer);
-		using BinaryReader br = new(ms);
-		Marker = Utf8StringFromBytes(br.ReadBytes(12));
+		Span<byte> span = buffer.AsSpan();
+		SpanReader br = new(span);
+
+		Marker = br.ReadNullTerminatedString(12);
 		FormatVersion = br.ReadInt32();
 
 		PlayerId = br.ReadInt32();
-		PlayerName = Utf8StringFromBytes(br.ReadBytes(32));
+		PlayerName = br.ReadNullTerminatedString(32);
 		Time = br.ReadSingle();
 		GemsCollected = br.ReadInt32();
 		EnemiesKilled = br.ReadInt32();
@@ -166,7 +165,7 @@ public readonly record struct MainBlock
 		IsInGame = br.ReadBoolean();
 
 		ReplayPlayerId = br.ReadInt32();
-		ReplayPlayerName = Utf8StringFromBytes(br.ReadBytes(32));
+		ReplayPlayerName = br.ReadNullTerminatedString(32);
 
 		SurvivalHashMd5 = br.ReadBytes(16);
 
@@ -185,13 +184,13 @@ public readonly record struct MainBlock
 		EnemiesAliveMaxTime = br.ReadSingle();
 		MaxTime = br.ReadSingle();
 
-		br.BaseStream.Seek(4, SeekOrigin.Current);
+		br.Seek(4);
 
 		StatsBase = br.ReadInt64();
 		StatsCount = br.ReadInt32();
 		StatsLoaded = br.ReadBoolean();
 
-		br.BaseStream.Seek(3, SeekOrigin.Current);
+		br.Seek(3);
 
 		StartHandLevel = br.ReadInt32();
 		StartAdditionalGems = br.ReadInt32();
@@ -199,7 +198,7 @@ public readonly record struct MainBlock
 
 		ProhibitedMods = br.ReadBoolean();
 
-		br.BaseStream.Seek(3, SeekOrigin.Current);
+		br.Seek(3);
 
 		ReplayBase = br.ReadInt64();
 		ReplayLength = br.ReadInt32();
@@ -207,11 +206,6 @@ public readonly record struct MainBlock
 		PlayReplayFromMemory = br.ReadBoolean();
 		GameMode = br.ReadByte();
 		TimeAttackOrRaceFinished = br.ReadBoolean();
-	}
-
-	private static string Utf8StringFromBytes(byte[] bytes)
-	{
-		return Encoding.UTF8.GetString(bytes[..Array.IndexOf(bytes, (byte)0)]);
 	}
 
 	public bool ArePlayersEqual(MainBlock other)
