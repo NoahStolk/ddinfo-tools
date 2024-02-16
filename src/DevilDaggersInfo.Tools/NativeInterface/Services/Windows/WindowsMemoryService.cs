@@ -6,13 +6,20 @@ namespace DevilDaggersInfo.Tools.NativeInterface.Services.Windows;
 public class WindowsMemoryService : INativeMemoryService
 {
 	public Process? GetDevilDaggersProcess()
-		=> Array.Find(Process.GetProcessesByName("dd"), p => p.MainWindowTitle == "Devil Daggers");
+	{
+		Process[] ddProcesses = Process.GetProcessesByName("dd");
+		return Array.Find(ddProcesses, p => p.MainWindowTitle == "Devil Daggers");
+	}
 
 	public void ReadMemory(Process process, long address, byte[] bytes, int offset, int size)
-		=> ReadProcessMemory(process.Handle, new(address), bytes, (uint)size, out _);
+	{
+		ReadProcessMemory(process.Handle, new(address), bytes, (uint)size, out _);
+	}
 
 	public void WriteMemory(Process process, long address, byte[] bytes, int offset, int size)
-		=> WriteProcessMemory(process.Handle, new(address), bytes, (uint)size, out _);
+	{
+		WriteProcessMemory(process.Handle, new(address), bytes, (uint)size, out _);
+	}
 
 	// TODO: Use source-generated P/Invoke.
 	[DllImport("kernel32.dll")]
