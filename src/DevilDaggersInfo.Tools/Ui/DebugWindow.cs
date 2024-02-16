@@ -2,13 +2,14 @@ using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.Popups;
+using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using Silk.NET.GLFW;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-public static class DebugLayout
+public static class DebugWindow
 {
 	private static long _previousAllocatedBytes;
 
@@ -55,6 +56,11 @@ public static class DebugLayout
 			if (ImGui.CollapsingHeader("Metrics"))
 			{
 				RenderMetrics();
+			}
+
+			if (ImGui.CollapsingHeader("User cache"))
+			{
+				RenderUserCache();
 			}
 
 #if DEBUG
@@ -177,6 +183,16 @@ public static class DebugLayout
 		AddText("Total GC pause duration", Inline.Span(GC.GetTotalPauseDuration()));
 		AddText("Total app time", Inline.Span(DateTime.UtcNow - _startUpTime));
 		AddText("Devil Daggers window position", Inline.Span(Root.GameWindowService.GetWindowPosition()));
+	}
+
+	private static void RenderUserCache()
+	{
+		AddText("Player id", Inline.Span(UserCache.Model.PlayerId));
+
+		ImGui.SeparatorText("Window");
+		AddText("Maximized", UserCache.Model.WindowIsMaximized ? "True" : "False");
+		AddText("Width", Inline.Span(UserCache.Model.WindowWidth));
+		AddText("Height", Inline.Span(UserCache.Model.WindowHeight));
 	}
 
 	private static void AddText(ReadOnlySpan<char> textLeft, ReadOnlySpan<char> textRight)

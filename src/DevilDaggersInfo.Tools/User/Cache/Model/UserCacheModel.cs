@@ -5,12 +5,14 @@ public record UserCacheModel
 	public int PlayerId { get; init; }
 	public int WindowWidth { get; init; }
 	public int WindowHeight { get; init; }
+	public bool WindowIsMaximized { get; init; }
 
 	public static UserCacheModel Default { get; } = new()
 	{
 		PlayerId = 0,
 		WindowWidth = MinWindowWidth,
 		WindowHeight = MinWindowHeight,
+		WindowIsMaximized = false,
 	};
 
 	public static int MinWindowWidth => 1366;

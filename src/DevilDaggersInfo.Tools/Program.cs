@@ -6,6 +6,7 @@ using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiGlfw;
 using ImGuiNET;
+using Silk.NET.GLFW;
 using System.Diagnostics;
 
 AppDomain.CurrentDomain.UnhandledException += (_, args) => Root.Log.Fatal(args.ExceptionObject.ToString());
@@ -13,7 +14,7 @@ AppDomain.CurrentDomain.UnhandledException += (_, args) => Root.Log.Fatal(args.E
 UserSettings.Load();
 UserCache.Load();
 
-Graphics.CreateWindow(new($"ddinfo tools {AssemblyUtils.EntryAssemblyVersionString}", UserCache.Model.WindowWidth, UserCache.Model.WindowHeight, false));
+Graphics.CreateWindow($"ddinfo tools {AssemblyUtils.EntryAssemblyVersionString}", UserCache.Model.WindowWidth, UserCache.Model.WindowHeight, UserCache.Model.WindowIsMaximized);
 Graphics.SetWindowSizeLimits((int)Constants.MinWindowSize.X, (int)Constants.MinWindowSize.Y, -1, -1);
 
 Graphics.Gl.ClearColor(0, 0, 0, 1);
@@ -24,6 +25,12 @@ Colors.SetColors(Colors.Main);
 
 Graphics.OnChangeWindowSize = (w, h) =>
 {
+	bool isMaximized;
+	unsafe
+	{
+		isMaximized = Graphics.Glfw.GetWindowAttrib(Graphics.Window, WindowAttributeGetter.Maximized);
+	}
+
 	Graphics.Gl.Viewport(0, 0, (uint)w, (uint)h);
 	imGuiController.WindowResized(w, h);
 
@@ -31,24 +38,21 @@ Graphics.OnChangeWindowSize = (w, h) =>
 	{
 		WindowWidth = w,
 		WindowHeight = h,
+		WindowIsMaximized = isMaximized,
 	};
 };
 
 Application app = new(imGuiController);
 app.Run();
 
-static ImGuiController ConfigureImGui()
+static unsafe ImGuiController ConfigureImGui()
 {
 	ImGuiController imGuiController = new(Graphics.Gl, Input.GlfwInput, UserCache.Model.WindowWidth, UserCache.Model.WindowHeight);
 
 	ImGuiIOPtr io = ImGui.GetIO();
 
 	// Load imgui.ini.
-	unsafe
-	{
-		io.NativePtr->IniFilename = null;
-	}
-
+	io.NativePtr->IniFilename = null;
 	UserSettings.LoadImGuiIni();
 
 	// Add the default font first so it is actually used by default.

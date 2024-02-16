@@ -103,7 +103,7 @@ public static class UiRenderer
 		}
 
 		if (UserSettings.Model.ShowDebug)
-			DebugLayout.Render();
+			DebugWindow.Render();
 
 		AboutWindow.Render(ref _showAbout);
 		UpdateWindow.Render(ref _showUpdate);

@@ -5,8 +5,10 @@
 ### UI
 
 - Enabled window docking.
-- Individual window locations and sizes are now stored in AppData and will be preserved for future updates.
-- Fixed applying shortcuts while entering text in the UI.
+- Individual window locations, sizes, and docking settings are now stored in AppData and will be preserved for future updates.
+- Fixed some shortcuts bugs while entering text in text fields.
+- Fixed shortcuts like CTRL+A, CTRL+C, CTRL+V, and CTRL+X not working in text fields.
+- Whether the window is maximized is now cached properly.
 
 ## [0.12.0.0] - 2024-01-21
 
