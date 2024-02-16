@@ -15,7 +15,7 @@ public static class Colors
 	private const byte _alphaFrameBackgroundActive = 171;
 	private const byte _alphaSeparatorHovered = 199;
 
-	public static Vector4 TitleColor => Vector4.Lerp(new(1, 0.2f, 0.05f, 1), new(1, 0.5f, 0.2f, 1), MathF.Sin((float)Root.Window.Time));
+	public static Vector4 TitleColor => Vector4.Lerp(new(1, 0.2f, 0.05f, 1), new(1, 0.5f, 0.2f, 1), MathF.Sin(Root.Application.TotalTime));
 
 	public static ColorConfiguration Main { get; } = new()
 	{

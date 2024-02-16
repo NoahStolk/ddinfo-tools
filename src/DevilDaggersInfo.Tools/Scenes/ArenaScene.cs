@@ -1,9 +1,10 @@
 // ReSharper disable ForCanBeConvertedToForeach
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.Engine;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Scenes.GameObjects;
 using Silk.NET.OpenGL;
-using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes;
 
@@ -106,26 +107,32 @@ public sealed class ArenaScene
 		Camera.PreRender(windowWidth, windowHeight);
 
 		Shader shader = Root.InternalResources.MeshShader;
-		shader.Use();
-		shader.SetUniform("view", Camera.ViewMatrix);
-		shader.SetUniform("projection", Camera.Projection);
-		shader.SetUniform("textureDiffuse", 0);
-		shader.SetUniform("textureLut", 1);
+		Graphics.Gl.UseProgram(shader.Id);
+		Graphics.Gl.UniformMatrix4x4(shader.GetUniformLocation("view"), Camera.ViewMatrix);
+		Graphics.Gl.UniformMatrix4x4(shader.GetUniformLocation("projection"), Camera.Projection);
+		Graphics.Gl.Uniform1(shader.GetUniformLocation("textureDiffuse"), 0);
+		Graphics.Gl.Uniform1(shader.GetUniformLocation("textureLut"), 1);
 
-		Span<Vector3> lightPositions = stackalloc Vector3[_lights.Count];
-		Span<Vector3> lightColors = stackalloc Vector3[_lights.Count];
+		Span<float> lightPositions = stackalloc float[_lights.Count * 3];
+		Span<float> lightColors = stackalloc float[_lights.Count * 3];
 		Span<float> lightRadii = stackalloc float[_lights.Count];
 		for (int i = 0; i < _lights.Count; i++)
 		{
-			lightPositions[i] = _lights[i].Position;
-			lightColors[i] = _lights[i].Color;
-			lightRadii[i] = _lights[i].Radius;
+			LightObject lightObject = _lights[i];
+
+			lightPositions[i * 3] = lightObject.Position.X;
+			lightPositions[i * 3 + 1] = lightObject.Position.Y;
+			lightPositions[i * 3 + 2] = lightObject.Position.Z;
+			lightColors[i * 3] = lightObject.Color.X;
+			lightColors[i * 3 + 1] = lightObject.Color.Y;
+			lightColors[i * 3 + 2] = lightObject.Color.Z;
+			lightRadii[i] = lightObject.Radius;
 		}
 
-		shader.SetUniform("lightCount", lightPositions.Length);
-		shader.SetUniform("lightPosition", lightPositions);
-		shader.SetUniform("lightColor", lightColors);
-		shader.SetUniform("lightRadius", lightRadii);
+		Graphics.Gl.Uniform1(shader.GetUniformLocation("lightCount"), lightPositions.Length);
+		Graphics.Gl.Uniform3(shader.GetUniformLocation("lightPosition"), lightPositions);
+		Graphics.Gl.Uniform3(shader.GetUniformLocation("lightColor"), lightColors);
+		Graphics.Gl.Uniform1(shader.GetUniformLocation("lightRadius"), lightRadii);
 
 		Root.GameResources.PostLut.Bind(TextureUnit.Texture1);
 

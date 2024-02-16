@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Scenes;
 using Silk.NET.OpenGL;
 
@@ -20,26 +21,26 @@ public static class MainScene
 	{
 		_mainMenuScene?.Update(false, false, delta);
 
-		Root.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+		Graphics.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
-		int framebufferWidth = Root.Window.Size.X;
-		int framebufferHeight = Root.Window.Size.Y;
+		int framebufferWidth = Graphics.WindowWidth;
+		int framebufferHeight = Graphics.WindowHeight;
 
 		// Keep track of the original viewport so we can restore it later.
 		Span<int> originalViewport = stackalloc int[4];
-		Root.Gl.GetInteger(GLEnum.Viewport, originalViewport);
-		Root.Gl.Viewport(0, 0, (uint)framebufferWidth, (uint)framebufferHeight);
+		Graphics.Gl.GetInteger(GLEnum.Viewport, originalViewport);
+		Graphics.Gl.Viewport(0, 0, (uint)framebufferWidth, (uint)framebufferHeight);
 
-		Root.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+		Graphics.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-		Root.Gl.Enable(EnableCap.DepthTest);
-		Root.Gl.Enable(EnableCap.Blend);
-		Root.Gl.Enable(EnableCap.CullFace);
-		Root.Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+		Graphics.Gl.Enable(EnableCap.DepthTest);
+		Graphics.Gl.Enable(EnableCap.Blend);
+		Graphics.Gl.Enable(EnableCap.CullFace);
+		Graphics.Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
 		_mainMenuScene?.Render(false, framebufferWidth, framebufferHeight);
 
-		Root.Gl.Viewport(originalViewport[0], originalViewport[1], (uint)originalViewport[2], (uint)originalViewport[3]);
-		Root.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+		Graphics.Gl.Viewport(originalViewport[0], originalViewport[1], (uint)originalViewport[2], (uint)originalViewport[3]);
+		Graphics.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 	}
 }

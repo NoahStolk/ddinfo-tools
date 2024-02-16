@@ -72,16 +72,19 @@ public static class UiRenderer
 				MainScene.Render(delta);
 				break;
 			case LayoutType.SpawnsetEditor:
+				SpawnsetEditorMenu.Render();
 				SpawnsetEditorWindow.Render();
 				SpawnsetEditor3DWindow.Render(delta);
 				break;
 			case LayoutType.AssetEditor:
+				AssetEditorMenu.Render();
 				AssetEditorWindow.Render();
 				CompileModWindow.Render();
 				ExtractModWindow.Render();
 				break;
 			case LayoutType.ReplayEditor:
 				ReplayEditorWindow.Update(delta);
+				ReplayEditorMenu.Render();
 				ReplayEditorWindow.Render();
 				ReplayEditor3DWindow.Render(delta);
 				LeaderboardReplayBrowser.Render();
@@ -103,7 +106,7 @@ public static class UiRenderer
 		}
 
 		if (UserSettings.Model.ShowDebug)
-			DebugLayout.Render();
+			DebugWindow.Render();
 
 		AboutWindow.Render(ref _showAbout);
 		UpdateWindow.Render(ref _showUpdate);

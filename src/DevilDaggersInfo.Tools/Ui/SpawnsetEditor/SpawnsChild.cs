@@ -110,7 +110,7 @@ public static class SpawnsChild
 		{
 			ImGuiIOPtr io = ImGui.GetIO();
 
-			bool isFocused = true; // TODO: Get this from ImGui somehow.
+			bool isFocused = true; // TODO: Refactor this.
 			if (isFocused)
 			{
 				if (io.KeyCtrl)

@@ -6,9 +6,6 @@ using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using Serilog;
 using Serilog.Core;
-using Silk.NET.Input;
-using Silk.NET.OpenGL;
-using Silk.NET.Windowing;
 #if WINDOWS
 using DevilDaggersInfo.Tools.NativeInterface.Services.Windows;
 #elif LINUX
@@ -23,8 +20,6 @@ public static class Root
 
 	private static InternalResources? _internalResources;
 	private static GameResources? _gameResources;
-	private static GL? _gl;
-	private static IWindow? _window;
 	private static Application? _application;
 	private static ImFontPtr _fontGoetheBold20;
 	private static ImFontPtr _fontGoetheBold30;
@@ -46,18 +41,6 @@ public static class Root
 	{
 		get => _gameResources ?? throw _notInitializedException;
 		set => _gameResources = value;
-	}
-
-	public static GL Gl
-	{
-		get => _gl ?? throw _notInitializedException;
-		set => _gl = value;
-	}
-
-	public static IWindow Window
-	{
-		get => _window ?? throw _notInitializedException;
-		set => _window = value;
 	}
 
 	public static Application Application
@@ -84,8 +67,6 @@ public static class Root
 		set => _fontGoetheBold60 = value;
 	}
 
-	public static IMouse? Mouse { get; set; }
-	public static IKeyboard? Keyboard { get; set; }
 	public static Logger Log { get; } = new LoggerConfiguration()
 		.WriteTo.File($"ddinfo-{AssemblyUtils.EntryAssemblyVersionString}.log", rollingInterval: RollingInterval.Infinite)
 		.CreateLogger();

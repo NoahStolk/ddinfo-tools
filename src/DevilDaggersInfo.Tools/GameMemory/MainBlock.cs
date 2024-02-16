@@ -210,5 +210,12 @@ public readonly record struct MainBlock
 	}
 
 	private static string Utf8StringFromBytes(byte[] bytes)
-		=> Encoding.UTF8.GetString(bytes[..Array.IndexOf(bytes, (byte)0)]);
+	{
+		return Encoding.UTF8.GetString(bytes[..Array.IndexOf(bytes, (byte)0)]);
+	}
+
+	public bool ArePlayersEqual(MainBlock other)
+	{
+		return IsReplay == other.IsReplay && (IsReplay ? ReplayPlayerId == other.ReplayPlayerId : PlayerId == other.PlayerId);
+	}
 }

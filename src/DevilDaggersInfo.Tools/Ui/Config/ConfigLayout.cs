@@ -41,7 +41,7 @@ public static class ConfigLayout
 			return;
 
 		// Initialize game resources.
-		Root.GameResources = GameResources.Create(Root.Gl);
+		Root.GameResources = GameResources.Create();
 
 		// Initialize 3D rendering.
 		Player.InitializeRendering();
@@ -82,7 +82,7 @@ public static class ConfigLayout
 		Vector2 center = ImGui.GetMainViewport().GetCenter();
 		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new(0.5f, 0.5f));
 		ImGui.SetNextWindowSize(new(768, 512));
-		const ImGuiWindowFlags flags = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoNavFocus;
+		const ImGuiWindowFlags flags = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoNavFocus | ImGuiWindowFlags.NoDocking;
 		if (ImGui.Begin("Configuration", flags))
 		{
 			ImGui.SeparatorText("Installation Directory");

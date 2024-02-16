@@ -31,7 +31,7 @@ public static class LeaderboardListChild
 	public static LeaderboardListSorting Sorting { get; set; }
 	public static bool SortAscending { get; set; }
 
-	public static int TotalEntries => _customLeaderboards.Count(Predicate);
+	public static int TotalEntries => GetCount();
 	public static int TotalPages => (int)Math.Ceiling(TotalEntries / (float)PageSize);
 	private static int MaxPageIndex => Math.Max(0, TotalPages - 1);
 
@@ -41,23 +41,23 @@ public static class LeaderboardListChild
 
 		if (ImGui.BeginChild("LeaderboardList"))
 		{
-			if (ImGuiImage.ImageButton("Reload", Root.InternalResources.ReloadTexture.Handle, iconSize))
+			if (ImGuiImage.ImageButton("Reload", Root.InternalResources.ReloadTexture.Id, iconSize))
 				LoadAll();
 
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Begin", Root.InternalResources.ArrowStartTexture.Handle, iconSize))
+			if (ImGuiImage.ImageButton("Begin", Root.InternalResources.ArrowStartTexture.Id, iconSize))
 				SetPageIndex(0);
 
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Previous", Root.InternalResources.ArrowLeftTexture.Handle, iconSize))
+			if (ImGuiImage.ImageButton("Previous", Root.InternalResources.ArrowLeftTexture.Id, iconSize))
 				SetPageIndex(PageIndex - 1);
 
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Next", Root.InternalResources.ArrowRightTexture.Handle, iconSize))
+			if (ImGuiImage.ImageButton("Next", Root.InternalResources.ArrowRightTexture.Id, iconSize))
 				SetPageIndex(PageIndex + 1);
 
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Handle, iconSize))
+			if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Id, iconSize))
 				SetPageIndex(TotalPages - 1);
 
 			ImGui.SameLine();
@@ -195,7 +195,7 @@ public static class LeaderboardListChild
 		ClampPageIndex();
 
 		PagedCustomLeaderboards = sorted
-			.Where(Predicate)
+			.Where(ApplyOverviewFilter)
 			.Skip(PageIndex * PageSize)
 			.Take(PageSize)
 			.ToList();
@@ -214,7 +214,19 @@ public static class LeaderboardListChild
 		}
 	}
 
-	private static bool Predicate(GetCustomLeaderboardForOverview cl)
+	private static int GetCount()
+	{
+		int count = 0;
+		for (int i = 0; i < _customLeaderboards.Count; i++)
+		{
+			if (ApplyOverviewFilter(_customLeaderboards[i]))
+				count++;
+		}
+
+		return count;
+	}
+
+	private static bool ApplyOverviewFilter(GetCustomLeaderboardForOverview cl)
 	{
 		return
 			cl.RankSorting == RankSorting &&

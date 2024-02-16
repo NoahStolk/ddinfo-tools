@@ -1,6 +1,6 @@
 using DevilDaggersInfo.Tools.Engine.Content;
+using DevilDaggersInfo.Tools.Engine.Loaders;
 using DevilDaggersInfo.Tools.Utils;
-using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools;
 
@@ -33,7 +33,7 @@ public record InternalResources(
 	Texture TileHitboxTexture,
 	ModelContent TileHitboxModel)
 {
-	public static InternalResources Create(GL gl)
+	public static InternalResources Create()
 	{
 #if DEBUG
 		const string? ddInfoToolsContentRootDirectory = @"..\..\..\Content";
@@ -77,7 +77,8 @@ public record InternalResources(
 			if (shaderContent == null)
 				throw new InvalidOperationException($"Could not find shader '{name}'.");
 
-			return new(gl, shaderContent.VertexCode, shaderContent.FragmentCode);
+			uint id = ShaderLoader.Load(shaderContent.VertexCode, shaderContent.FragmentCode);
+			return new(id);
 		}
 
 		static TextureContent GetTextureContent(DecompiledContentFile content, string name)
@@ -92,7 +93,8 @@ public record InternalResources(
 		Texture GetTexture(DecompiledContentFile content, string name)
 		{
 			TextureContent textureContent = GetTextureContent(content, name);
-			return new(gl, textureContent.Pixels, (uint)textureContent.Width, (uint)textureContent.Height);
+			uint id = TextureLoader.Load(textureContent);
+			return new(id);
 		}
 
 		static ModelContent GetModelContent(DecompiledContentFile content, string name)

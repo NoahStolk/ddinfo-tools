@@ -1,5 +1,16 @@
 # Changelog
 
+## [unreleased]
+
+### UI Improvements & Fixes
+
+- Enabled window docking.
+- Individual window locations, sizes, and docking settings are now stored in AppData and will be preserved for future updates.
+- Whether the window is maximized is now cached properly.
+- Moved editor menu bars to the top of the window.
+- Fixed some shortcuts bugs while entering text in text fields.
+- Fixed shortcuts like CTRL+A, CTRL+C, CTRL+V, and CTRL+X not working in text fields.
+
 ## [0.12.0.0] - 2024-01-21
 
 ### Asset Editor

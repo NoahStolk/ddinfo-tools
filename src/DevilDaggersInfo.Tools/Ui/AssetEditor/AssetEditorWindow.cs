@@ -10,7 +10,6 @@ public static class AssetEditorWindow
 		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize);
 		if (ImGui.Begin(Inline.Span($"Asset Editor - {FileStates.Mod.FileName ?? FileStates.UntitledName}{(FileStates.Mod.IsModified && FileStates.Mod.FileName != null ? "*" : string.Empty)}###asset_editor"), ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.MenuBar))
 		{
-			AssetEditorMenu.Render();
 			AssetPathsChild.Render();
 		}
 

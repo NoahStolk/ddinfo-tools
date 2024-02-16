@@ -11,7 +11,7 @@ public static class ReplayEditorMenu
 {
 	public static void Render()
 	{
-		if (ImGui.BeginMenuBar())
+		if (ImGui.BeginMainMenuBar())
 		{
 			if (ImGui.BeginMenu("File"))
 			{
@@ -19,7 +19,7 @@ public static class ReplayEditorMenu
 				ImGui.EndMenu();
 			}
 
-			ImGui.EndMenuBar();
+			ImGui.EndMainMenuBar();
 		}
 	}
 

@@ -81,12 +81,12 @@ public static class ArenaEditorControls
 	{
 		return arenaTool switch
 		{
-			ArenaTool.Pencil => Root.InternalResources.PencilTexture.Handle,
-			ArenaTool.Line => Root.InternalResources.LineTexture.Handle,
-			ArenaTool.Rectangle => Root.InternalResources.RectangleTexture.Handle,
-			ArenaTool.Ellipse => Root.InternalResources.EllipseTexture.Handle,
-			ArenaTool.Bucket => Root.InternalResources.BucketTexture.Handle,
-			ArenaTool.Dagger => Root.InternalResources.DaggerTexture.Handle,
+			ArenaTool.Pencil => Root.InternalResources.PencilTexture.Id,
+			ArenaTool.Line => Root.InternalResources.LineTexture.Id,
+			ArenaTool.Rectangle => Root.InternalResources.RectangleTexture.Id,
+			ArenaTool.Ellipse => Root.InternalResources.EllipseTexture.Id,
+			ArenaTool.Bucket => Root.InternalResources.BucketTexture.Id,
+			ArenaTool.Dagger => Root.InternalResources.DaggerTexture.Id,
 			_ => throw new UnreachableException($"Unknown arena tool {arenaTool}."),
 		};
 	}

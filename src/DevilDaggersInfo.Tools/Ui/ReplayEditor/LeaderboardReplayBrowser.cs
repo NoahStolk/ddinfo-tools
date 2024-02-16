@@ -24,7 +24,7 @@ public static class LeaderboardReplayBrowser
 			return;
 
 		ImGui.SetNextWindowSize(new(256, 128));
-		if (ImGui.Begin("Leaderboard Replay Browser", ref _showWindow, ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse))
+		if (ImGui.Begin("Leaderboard Replay Browser", ref _showWindow, ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoDocking))
 		{
 			ImGui.InputInt("Player ID", ref _selectedPlayerId, 1, 1, ImGuiInputTextFlags.CharsDecimal);
 

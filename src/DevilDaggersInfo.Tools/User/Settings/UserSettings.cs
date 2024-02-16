@@ -1,5 +1,8 @@
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.JsonSerializerContexts;
+using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.User.Settings.Model;
+using ImGuiNET;
 using System.Text.Json;
 
 namespace DevilDaggersInfo.Tools.User.Settings;
@@ -8,6 +11,7 @@ public static class UserSettings
 {
 	private static readonly string _fileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ddinfo-tools");
 	private static readonly string _filePath = Path.Combine(_fileDirectory, "settings");
+	private static readonly string _imguiIniFilePath = Path.Combine(_fileDirectory, "imgui.ini");
 
 	private static UserSettingsModel _model = UserSettingsModel.Default;
 
@@ -48,7 +52,7 @@ public static class UserSettings
 			if (deserializedModel != null)
 				_model = deserializedModel.Sanitize();
 		}
-		catch (Exception ex)
+		catch (Exception ex) when (ex is JsonException || ex.IsFileIoException())
 		{
 			Root.Log.Error(ex, "Failed to load user settings.");
 		}
@@ -58,5 +62,35 @@ public static class UserSettings
 	{
 		Directory.CreateDirectory(_fileDirectory);
 		File.WriteAllText(_filePath, JsonSerializer.Serialize(_model, UserJsonModelsContext.Default.UserSettingsModel));
+	}
+
+	public static void LoadImGuiIni()
+	{
+		if (!File.Exists(_filePath))
+			return;
+
+		try
+		{
+			string iniContents = File.ReadAllText(_imguiIniFilePath);
+			ImGui.LoadIniSettingsFromMemory(iniContents);
+		}
+		catch (Exception ex) when (ex.IsFileIoException())
+		{
+			Root.Log.Error(ex, "Could not load imgui.ini.");
+		}
+
+		DebugWindow.Add("Loaded imgui.ini");
+	}
+
+	public static void SaveImGuiIni(ImGuiIOPtr io)
+	{
+		Directory.CreateDirectory(_fileDirectory);
+
+		string iniContents = ImGui.SaveIniSettingsToMemory(out _);
+		File.WriteAllText(_imguiIniFilePath, iniContents);
+
+		DebugWindow.Add("Saved imgui.ini");
+
+		io.WantSaveIniSettings = false;
 	}
 }

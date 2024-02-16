@@ -1,4 +1,6 @@
+using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Content;
+using DevilDaggersInfo.Tools.Extensions;
 using Silk.NET.OpenGL;
 using System.Numerics;
 
@@ -24,11 +26,11 @@ public class TileMeshObject
 	public unsafe void Render()
 	{
 		Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(new(_positionX, PositionY, _positionZ));
-		Root.InternalResources.MeshShader.SetUniform("model", translationMatrix);
+		Graphics.Gl.UniformMatrix4x4(Root.InternalResources.MeshShader.GetUniformLocation("model"), translationMatrix);
 
-		Root.Gl.BindVertexArray(_vao);
+		Graphics.Gl.BindVertexArray(_vao);
 		fixed (uint* i = &_mesh.Indices[0])
-			Root.Gl.DrawElements(PrimitiveType.Triangles, (uint)_mesh.Indices.Length, DrawElementsType.UnsignedInt, i);
-		Root.Gl.BindVertexArray(0);
+			Graphics.Gl.DrawElements(PrimitiveType.Triangles, (uint)_mesh.Indices.Length, DrawElementsType.UnsignedInt, i);
+		Graphics.Gl.BindVertexArray(0);
 	}
 }

@@ -1,10 +1,11 @@
 // ReSharper disable ForCanBeConvertedToForeach
 using DevilDaggersInfo.Tools.EditorFileState;
+using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Intersections;
 using DevilDaggersInfo.Tools.Scenes.GameObjects;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using ImGuiNET;
-using Silk.NET.Input;
+using Silk.NET.GLFW;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes;
@@ -24,10 +25,10 @@ public sealed class ArenaEditorContext
 
 	public void Update(bool isActive, int currentTick)
 	{
-		if (!isActive || currentTick > 0 || Root.Mouse == null)
+		if (!isActive || currentTick > 0)
 			return;
 
-		bool ctrl = Root.Keyboard != null && (Root.Keyboard.IsKeyPressed(Key.ControlLeft) || Root.Keyboard.IsKeyPressed(Key.ControlRight));
+		bool ctrl = Input.GlfwInput.IsKeyDown(Keys.ControlLeft) || Input.GlfwInput.IsKeyDown(Keys.ControlRight);
 		if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
 		{
 			if (_closestHitTile != null)
@@ -55,8 +56,7 @@ public sealed class ArenaEditorContext
 			_selectedTiles.Add(_closestHitTile);
 		}
 
-		ScrollWheel scrollWheel = Root.Mouse.ScrollWheels.Count > 0 ? Root.Mouse.ScrollWheels[0] : default;
-		float scroll = scrollWheel.Y;
+		float scroll = Input.GlfwInput.MouseWheelY;
 		if (scroll == 0 || _selectedTiles.Count == 0)
 			return;
 
@@ -104,12 +104,12 @@ public sealed class ArenaEditorContext
 				bool highlight = highlightColor != default;
 
 				if (highlight)
-					shader.SetUniform("highlightColor", highlightColor);
+					Graphics.Gl.Uniform3(shader.GetUniformLocation("highlightColor"), highlightColor);
 
 				tile.RenderTop();
 
 				if (highlight)
-					shader.SetUniform("highlightColor", Vector3.Zero);
+					Graphics.Gl.Uniform3(shader.GetUniformLocation("highlightColor"), Vector3.Zero);
 			}
 		}
 
@@ -124,12 +124,12 @@ public sealed class ArenaEditorContext
 				bool highlight = highlightColor != default;
 
 				if (highlight)
-					shader.SetUniform("highlightColor", highlightColor);
+					Graphics.Gl.Uniform3(shader.GetUniformLocation("highlightColor"), highlightColor);
 
 				tile.RenderPillar();
 
 				if (highlight)
-					shader.SetUniform("highlightColor", Vector3.Zero);
+					Graphics.Gl.Uniform3(shader.GetUniformLocation("highlightColor"), Vector3.Zero);
 			}
 		}
 

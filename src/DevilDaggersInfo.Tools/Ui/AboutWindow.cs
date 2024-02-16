@@ -17,7 +17,7 @@ public static class AboutWindow
 
 		Vector2 windowSize = new(512, 512);
 		ImGui.SetNextWindowSize(windowSize);
-		if (ImGui.Begin("About ddinfo tools", ref show, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize))
+		if (ImGui.Begin("About ddinfo tools", ref show, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDocking))
 		{
 			ImGui.PushTextWrapPos(windowSize.X - 16);
 
@@ -88,7 +88,7 @@ public static class AboutWindow
 					Process.Start(new ProcessStartInfo("https://github.com/NoahStolk/ddinfo-tools") { UseShellExecute = true });
 
 				ImGui.SetCursorPos(new(8));
-				ImGuiImage.Image(Root.InternalResources.GitHubTexture.Handle, new(24));
+				ImGuiImage.Image(Root.InternalResources.GitHubTexture.Id, new(24));
 				ImGui.SameLine();
 
 				ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 3);
