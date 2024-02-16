@@ -144,7 +144,7 @@ public class Camera
 		}
 
 		Vector2D<int> mousePosition = FloorToVector2Int32(Input.GlfwInput.CursorPosition);
-		if (!Input.GlfwInput.IsMouseButtonPressed(_lookButton) || !_lockedMousePosition.HasValue || mousePosition == _lockedMousePosition)
+		if (!Input.GlfwInput.IsMouseButtonDown(_lookButton) || !_lockedMousePosition.HasValue || mousePosition == _lockedMousePosition)
 			return;
 
 		float lookSpeed = UserSettings.Model.LookSpeed;
