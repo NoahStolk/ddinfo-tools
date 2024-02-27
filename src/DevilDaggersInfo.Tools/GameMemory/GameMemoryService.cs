@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Tools.NativeInterface.Services;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace DevilDaggersInfo.Tools.GameMemory;
 
@@ -118,6 +119,25 @@ public class GameMemoryService
 
 		byte[] bytes = Read(address + offsets[^1], sizeof(int));
 		return BitConverter.ToInt32(bytes);
+	}
+
+	public T ReadExperimental<T>(long initialAddress, int size, Span<int> offsets)
+		where T : unmanaged
+	{
+		byte[]? buffer = ReadBufferExperimental(initialAddress, size, offsets);
+		return buffer == null ? default : MemoryMarshal.Read<T>(buffer);
+	}
+
+	public byte[]? ReadBufferExperimental(long initialAddress, int size, Span<int> offsets)
+	{
+		if (_process == null)
+			return null;
+
+		long address = ReadPointer(ProcessBaseAddress + initialAddress);
+		for (int i = 0; i < offsets.Length - 1; i++)
+			address = ReadPointer(address + offsets[i]);
+
+		return Read(address + offsets[^1], size);
 	}
 
 	private long ReadPointer(long memoryAddress)
