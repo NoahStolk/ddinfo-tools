@@ -6,6 +6,9 @@ namespace DevilDaggersInfo.Tools.GameMemory;
 
 public readonly record struct MainBlock
 {
+	// TODO: ImmutableArray.
+	public readonly byte[] Buffer;
+
 	public readonly string Marker = string.Empty;
 	public readonly int FormatVersion;
 
@@ -68,6 +71,7 @@ public readonly record struct MainBlock
 	public readonly int ReplayPlayerId;
 	public readonly string ReplayPlayerName = string.Empty;
 
+	// TODO: ImmutableArray.
 	public readonly byte[] SurvivalHashMd5 = Array.Empty<byte>();
 
 	public readonly float LevelUpTime2;
@@ -104,6 +108,8 @@ public readonly record struct MainBlock
 
 	public MainBlock(byte[] buffer)
 	{
+		Buffer = buffer;
+
 		using MemoryStream ms = new(buffer);
 		using BinaryReader br = new(ms);
 		Marker = Utf8StringFromBytes(br.ReadBytes(12));
