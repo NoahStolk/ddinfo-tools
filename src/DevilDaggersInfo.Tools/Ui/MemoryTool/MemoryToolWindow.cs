@@ -31,6 +31,11 @@ public static class MemoryToolWindow
 			{
 				RenderBuffer();
 				RenderMainBlockTable();
+
+				ImGui.SeparatorText("EXPERIMENTAL");
+
+				RenderExperimentalInt("Thorn HP (1)", 0x00251350, [0x0, 0x198, 0x38, 0x28, 0xC]);
+				RenderExperimentalInt("Thorn HP (2)", 0x002513B0, [0x0, 0x28, 0xC]);
 			}
 			else
 			{
@@ -39,6 +44,12 @@ public static class MemoryToolWindow
 		}
 
 		ImGui.End();
+	}
+
+	private static void RenderExperimentalInt(ReadOnlySpan<char> name, long address, int[] offsets)
+	{
+		int? value = Root.GameMemoryService.ReadIntExperimental(address, offsets);
+		ImGui.Text(Inline.Span(value.HasValue ? $"{name}: {value}" : "NULL"));
 	}
 
 	private static void RenderMainBlockTable()
@@ -132,7 +143,7 @@ public static class MemoryToolWindow
 			Column("Enemies alive max", Inline.Span(_mainBlock.EnemiesAliveMax));
 			Column("Enemies alive max time", Inline.Span(_mainBlock.EnemiesAliveMaxTime));
 			Column("Max time", Inline.Span(_mainBlock.MaxTime));
-			Column("Stats base", Inline.Span(_mainBlock.StatsBase));
+			Column("Stats base", Inline.Span($"0x{_mainBlock.StatsBase:X}"));
 			Column("Stats count", Inline.Span(_mainBlock.StatsCount));
 			Column("Stats loaded", _mainBlock.StatsLoaded ? "True" : "False");
 
