@@ -106,4 +106,32 @@ public class GameMemoryService
 		_nativeMemoryService.WriteMemory(_process, _memoryBlockAddress + 312, BitConverter.GetBytes(replay.Length), 0, sizeof(int));
 		_nativeMemoryService.WriteMemory(_process, _memoryBlockAddress + 316, [1], 0, 1);
 	}
+
+	public int? ReadIntExperimental(long initialAddress, Span<int> offsets)
+	{
+		if (_process == null)
+			return null;
+
+		long address = ReadPointer(ProcessBaseAddress + initialAddress);
+		for (int i = 0; i < offsets.Length - 1; i++)
+			address = ReadPointer(address + offsets[i]);
+
+		byte[] bytes = Read(address + offsets[^1], sizeof(int));
+		return BitConverter.ToInt32(bytes);
+	}
+
+	private long ReadPointer(long memoryAddress)
+	{
+		return BitConverter.ToInt64(Read(memoryAddress, sizeof(long)));
+	}
+
+	private byte[] Read(long memoryAddress, int size)
+	{
+		if (_process == null)
+			return [];
+
+		byte[] buffer = new byte[size];
+		_nativeMemoryService.ReadMemory(_process, memoryAddress, buffer, 0, size);
+		return buffer;
+	}
 }
