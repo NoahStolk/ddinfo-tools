@@ -1,4 +1,6 @@
+using DevilDaggersInfo.Core.Common.Extensions;
 using DevilDaggersInfo.Tools.GameMemory;
+using DevilDaggersInfo.Tools.GameMemory.Enemies;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.MemoryTool;
@@ -34,8 +36,22 @@ public static class MemoryToolWindow
 
 				ImGui.SeparatorText("EXPERIMENTAL");
 
-				RenderExperimentalInt("Thorn HP (1)", 0x00251350, [0x0, 0x198, 0x38, 0x28, 0xC]);
-				RenderExperimentalInt("Thorn HP (2)", 0x002513B0, [0x0, 0x28, 0xC]);
+				// Alternative address: 0x00251350, [0x0, 0x198, 0x38, 0x28, 0xC]
+				const int thornStructSize = 2288;
+				int thornOffset = 0;
+				for (int i = 0; i < Root.GameMemoryService.MainBlock.ThornAliveCount; i++)
+				{
+					Thorn thorn;
+					do
+					{
+						thorn = Root.GameMemoryService.ReadExperimental<Thorn>(0x002513B0, 64, [0x0, 0x28, 0xC + thornOffset]);
+						thornOffset += thornStructSize;
+					}
+					while (thorn.Hp == 0); // Dead Thorns aren't cleared up from game memory immediately, so skip them until they get cleared up.
+
+					RenderThorn(thorn);
+					//RenderExperimentalBuffer("Thorn Struct Test", 0x002513B0, 128, [0x0, 0x28, 0xC]);
+				}
 			}
 			else
 			{
@@ -46,10 +62,48 @@ public static class MemoryToolWindow
 		ImGui.End();
 	}
 
-	private static void RenderExperimentalInt(ReadOnlySpan<char> name, long address, int[] offsets)
+	private static void RenderThorn(Thorn thorn)
 	{
-		int? value = Root.GameMemoryService.ReadIntExperimental(address, offsets);
-		ImGui.Text(Inline.Span(value.HasValue ? $"{name}: {value}" : "NULL"));
+		ImGui.TextWrapped($"Thorn: {thorn}");
+	}
+
+	private static void RenderExperimentalBuffer(ReadOnlySpan<char> name, long address, int size, int[] offsets)
+	{
+		byte[]? buffer = Root.GameMemoryService.ReadBufferExperimental(address, size, offsets);
+		if (buffer == null)
+		{
+			ImGui.Text("NULL");
+		}
+		else
+		{
+			string hexString = InsertStrings(buffer.ByteArrayToHexString(), 8, " ");
+			ImGui.TextWrapped($"{name} ({buffer.Length}):\n{hexString}");
+		}
+	}
+
+	private static string InsertStrings(string s, int insertEvery, string insert)
+	{
+		char[] ins = s.ToCharArray();
+		char[] inserts = insert.ToCharArray();
+		int insertLength = inserts.Length;
+		int length = s.Length + s.Length / insertEvery * insert.Length;
+		if (ins.Length % insertEvery == 0)
+			length -= insert.Length;
+
+		char[] outs = new char[length];
+		long di = 0;
+		long si = 0;
+		while (si < s.Length - insertEvery)
+		{
+			Array.Copy(ins, si, outs, di, insertEvery);
+			si += insertEvery;
+			di += insertEvery;
+			Array.Copy(inserts, 0, outs, di, insertLength);
+			di += insertLength;
+		}
+
+		Array.Copy(ins, si, outs, di, ins.Length - si);
+		return new(outs);
 	}
 
 	private static void RenderMainBlockTable()
