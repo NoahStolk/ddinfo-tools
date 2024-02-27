@@ -6,12 +6,11 @@ namespace DevilDaggersInfo.Tools.GameMemory;
 
 public class GameMemoryService
 {
+	public const int MainBufferSize = 319;
 	public const int StatsBufferSize = 112;
 
-	private const int _mainBufferSize = 319;
-
 	private readonly byte[] _pointerBuffer = new byte[sizeof(long)];
-	private readonly byte[] _mainBuffer = new byte[_mainBufferSize];
+	private readonly byte[] _mainBuffer = new byte[MainBufferSize];
 	private readonly byte[] _replayIdentifierBuffer = new byte[LocalReplayBinaryHeader.IdentifierLength];
 
 	private long _memoryBlockAddress;
@@ -29,8 +28,14 @@ public class GameMemoryService
 
 	public bool IsInitialized { get; private set; }
 
+	public long DdstatsMarkerOffset { get; private set; }
+
+	public long ProcessBaseAddress => _process?.MainModule == null ? 0 : _process.MainModule.BaseAddress.ToInt64();
+
 	public void Initialize(long ddstatsMarkerOffset)
 	{
+		DdstatsMarkerOffset = ddstatsMarkerOffset;
+
 		_process = _nativeMemoryService.GetDevilDaggersProcess();
 		if (_process?.MainModule == null)
 		{
@@ -39,7 +44,7 @@ public class GameMemoryService
 		else
 		{
 			_pointerBuffer.AsSpan().Clear();
-			_nativeMemoryService.ReadMemory(_process, _process.MainModule.BaseAddress.ToInt64() + ddstatsMarkerOffset, _pointerBuffer, 0, sizeof(long));
+			_nativeMemoryService.ReadMemory(_process, ProcessBaseAddress + ddstatsMarkerOffset, _pointerBuffer, 0, sizeof(long));
 			_memoryBlockAddress = BitConverter.ToInt64(_pointerBuffer);
 			IsInitialized = true;
 		}
@@ -50,7 +55,7 @@ public class GameMemoryService
 		if (_process == null)
 			return;
 
-		_nativeMemoryService.ReadMemory(_process, _memoryBlockAddress, _mainBuffer, 0, _mainBufferSize);
+		_nativeMemoryService.ReadMemory(_process, _memoryBlockAddress, _mainBuffer, 0, MainBufferSize);
 
 		MainBlockPrevious = MainBlock;
 		MainBlock = new(_mainBuffer);

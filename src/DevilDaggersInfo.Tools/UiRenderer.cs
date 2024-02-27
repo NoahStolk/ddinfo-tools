@@ -4,6 +4,7 @@ using DevilDaggersInfo.Tools.Ui.Config;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 using DevilDaggersInfo.Tools.Ui.Main;
+using DevilDaggersInfo.Tools.Ui.MemoryTool;
 using DevilDaggersInfo.Tools.Ui.ModManager;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 using DevilDaggersInfo.Tools.Ui.Popups;
@@ -111,6 +112,9 @@ public static class UiRenderer
 				ModInstallationWindow.Render();
 				break;
 		}
+
+		MemoryToolWindow.Update(delta);
+		MemoryToolWindow.Render();
 
 		if (UserSettings.Model.ShowDebug)
 			DebugWindow.Render();
