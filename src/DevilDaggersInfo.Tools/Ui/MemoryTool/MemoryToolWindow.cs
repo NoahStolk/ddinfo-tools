@@ -36,21 +36,32 @@ public static class MemoryToolWindow
 
 				ImGui.SeparatorText("EXPERIMENTAL");
 
-				// Alternative address: 0x00251350, [0x0, 0x198, 0x38, 0x28, 0xC]
+				// Alternative address: 0x00251350, [0x0, 0x198, 0x38, 0x28, 0x0]
 				const int thornStructSize = 2288;
 				int thornOffset = 0;
 				for (int i = 0; i < Root.GameMemoryService.MainBlock.ThornAliveCount; i++)
 				{
 					Thorn thorn;
-					do
+					//do
 					{
-						thorn = Root.GameMemoryService.ReadExperimental<Thorn>(0x002513B0, 64, [0x0, 0x28, 0xC + thornOffset]);
+						thorn = Root.GameMemoryService.ReadExperimental<Thorn>(0x002513B0, thornStructSize, [0x0, 0x28, thornOffset]);
 						thornOffset += thornStructSize;
 					}
-					while (thorn.Hp == 0); // Dead Thorns aren't cleared up from game memory immediately, so skip them until they get cleared up.
+					//while (thorn.Hp == 0); // Dead Thorns aren't cleared up from game memory immediately, so skip them until they get cleared up.
 
 					RenderThorn(thorn);
-					//RenderExperimentalBuffer("Thorn Struct Test", 0x002513B0, 128, [0x0, 0x28, 0xC]);
+					RenderExperimentalBuffer("Thorn Struct Test", 0x002513B0, 128, [0x0, 0x28, thornOffset]);
+				}
+
+				const int spider2StructSize = 100; // TODO: Find the correct size.
+				int spider2Offset = 0;
+				for (int i = 0; i < Root.GameMemoryService.MainBlock.Spider2AliveCount; i++)
+				{
+					Spider2 spider2 = Root.GameMemoryService.ReadExperimental<Spider2>(0x00251830, spider2StructSize, [0x0, 0x28, 0xE4 + spider2Offset]);
+					spider2Offset += spider2StructSize;
+
+					RenderSpider2(spider2);
+					RenderExperimentalBuffer("Spider2 Struct Test", 0x00251830, 128, [0x0, 0x28, 0xE4 + spider2Offset]);
 				}
 			}
 			else
@@ -64,7 +75,30 @@ public static class MemoryToolWindow
 
 	private static void RenderThorn(Thorn thorn)
 	{
-		ImGui.TextWrapped($"Thorn: {thorn}");
+		ImGui.SeparatorText("Thorn");
+		ImGui.Text(Inline.Span($"State: {thorn.State}"));
+		ImGui.Text(Inline.Span($"IsAlive: {(thorn.IsAlive == 1 ? "True" : "False")}"));
+		ImGui.Text(Inline.Span($"StateTimer: {thorn.StateTimer:0.00}"));
+		ImGui.Text(Inline.Span($"HP: {thorn.Hp}"));
+		ImGui.Text(Inline.Span($"Position: {Inline.Span(thorn.Position, "0.00")}"));
+		ImGui.Text(Inline.Span($"Rotation: {thorn.Rotation:0.00}"));
+		ImGui.Text(Inline.Span($"Unknown1: {thorn.Unknown1:0.00}"));
+		ImGui.Text(Inline.Span($"Unknown2: {thorn.Unknown2:0.00}"));
+		ImGui.Text(Inline.Span($"Unknown3: {thorn.Unknown3:0.00}"));
+		ImGui.Text(Inline.Span($"Unknown4: {thorn.Unknown4:0.00}"));
+		ImGui.Text(Inline.Span($"Unknown5: {thorn.Unknown5:0.00}"));
+		ImGui.Text(Inline.Span($"Unknown6: {thorn.Unknown6:0.00}"));
+		ImGui.Text(Inline.Span($"Unknown7: {thorn.Unknown7:0.00}"));
+		ImGui.Text(Inline.Span($"Unknown8: {thorn.Unknown8:0.00}"));
+		ImGui.Text(Inline.Span($"Unknown9: {thorn.Unknown9:0.00}"));
+		ImGui.Text(Inline.Span($"Unknown10: {thorn.Unknown10:0.00}"));
+		ImGui.Text(Inline.Span($"Unknown11: {thorn.Unknown11:0.00}"));
+	}
+
+	private static void RenderSpider2(Spider2 spider2)
+	{
+		ImGui.SeparatorText("Spider2");
+		ImGui.Text(Inline.Span($"HP: {spider2.Hp}"));
 	}
 
 	private static void RenderExperimentalBuffer(ReadOnlySpan<char> name, long address, int size, int[] offsets)
