@@ -118,19 +118,12 @@ public class GameMemoryService
 		_nativeMemoryService.WriteMemory(_process, FollowPointerChain(initialAddress, offsets), buffer, 0, buffer.Length);
 	}
 
-	public unsafe T ReadExperimental<T>(long initialAddress, Span<int> offsets)
-		where T : unmanaged
-	{
-		byte[] buffer = ReadBufferExperimental(initialAddress, sizeof(T), offsets);
-		return MemoryMarshal.Read<T>(buffer);
-	}
-
-	public byte[] ReadBufferExperimental(long initialAddress, int size, Span<int> offsets)
+	public byte[] ReadExperimental(long initialAddress, int size, Span<int> offsets)
 	{
 		return Read(FollowPointerChain(initialAddress, offsets), size);
 	}
 
-	public long FollowPointerChain(long initialAddress, Span<int> offsets)
+	private long FollowPointerChain(long initialAddress, Span<int> offsets)
 	{
 		long address = ReadPointer(ProcessBaseAddress + initialAddress);
 		for (int i = 0; i < offsets.Length - 1; i++)
