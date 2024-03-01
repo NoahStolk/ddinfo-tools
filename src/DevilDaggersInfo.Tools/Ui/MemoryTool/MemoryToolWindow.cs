@@ -39,32 +39,29 @@ public static class MemoryToolWindow
 				ImGui.SeparatorText("EXPERIMENTAL");
 
 				// Alternative address: 0x00251350, [0x0, 0x198, 0x38, 0x28, 0x0]
-				const int thornStructSize = 2288;
 				int thornOffset = 0;
 				for (int i = 0; i < Root.GameMemoryService.MainBlock.ThornAliveCount; i++)
 				{
 					//do
 					{
-						RenderExperimentalBuffer<Thorn>(Inline.Span($"Thorn {i}"), 0x002513B0, 128, [0x0, 0x28, thornOffset]);
-						thornOffset += thornStructSize;
+						RenderExperimentalBuffer<Thorn>(Inline.Span($"Thorn {i}"), 0x002513B0, StructSizes.Thorn, [0x0, 0x28, thornOffset]);
+						thornOffset += StructSizes.Thorn;
 					}
 					//while (thorn.Hp == 0); // Dead Thorns aren't cleared up from game memory immediately, so skip them until they get cleared up.
 				}
 
-				const int spiderStructSize = 632;
 				int spiderOffset = 0;
 				for (int i = 0; i < Root.GameMemoryService.MainBlock.Spider1AliveCount + Root.GameMemoryService.MainBlock.Spider2AliveCount; i++)
 				{
-					RenderExperimentalBuffer<Spider>(Inline.Span($"Spider {i}"), 0x00251830, spiderStructSize, [0x0, 0x28, 0xE4 + spiderOffset]);
-					spiderOffset += spiderStructSize;
+					RenderExperimentalBuffer<Spider>(Inline.Span($"Spider {i}"), 0x00251830, StructSizes.Spider, [0x0, 0x28, spiderOffset]);
+					spiderOffset += StructSizes.Spider;
 				}
 
-				const int leviathanStructSize = 0x1C0; // TODO: Find the correct size.
 				int leviathanOffset = 0;
 				for (int i = 0; i < Root.GameMemoryService.MainBlock.LeviathanAliveCount + Root.GameMemoryService.MainBlock.OrbAliveCount; i++)
 				{
-					RenderExperimentalBuffer<Leviathan>("Leviathan", 0x00251590, leviathanStructSize, [0x0, 0x28, 0x84 + leviathanOffset]);
-					leviathanOffset += leviathanStructSize;
+					RenderExperimentalBuffer<Leviathan>("Leviathan", 0x00251590, StructSizes.Leviathan, [0x0, 0x28, leviathanOffset]);
+					leviathanOffset += StructSizes.Leviathan;
 				}
 
 				if (ImGui.Button("Kill Levi"))

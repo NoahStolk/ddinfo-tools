@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace DevilDaggersInfo.Tools.GameMemory.Enemies;
 
 #pragma warning disable SA1134
-[StructLayout(LayoutKind.Explicit, Size = 76)]
+[StructLayout(LayoutKind.Explicit, Size = StructSizes.Thorn)]
 public record struct Thorn
 {
 	[FieldOffset(00)] public ThornState State;
