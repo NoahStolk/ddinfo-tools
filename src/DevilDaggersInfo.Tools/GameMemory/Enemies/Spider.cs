@@ -1,6 +1,8 @@
 namespace DevilDaggersInfo.Tools.GameMemory.Enemies;
 
-public record struct Spider2
+public record struct Spider
 {
 	public int Hp;
+
+	// TODO: SpiderType int.
 }

@@ -53,15 +53,21 @@ public static class MemoryToolWindow
 					RenderExperimentalBuffer("Thorn Struct Test", 0x002513B0, 128, [0x0, 0x28, thornOffset]);
 				}
 
-				const int spider2StructSize = 100; // TODO: Find the correct size.
-				int spider2Offset = 0;
-				for (int i = 0; i < Root.GameMemoryService.MainBlock.Spider2AliveCount; i++)
+				const int spiderStructSize = 100; // TODO: Find the correct size.
+				int spiderOffset = 0;
+				for (int i = 0; i < Root.GameMemoryService.MainBlock.Spider1AliveCount + Root.GameMemoryService.MainBlock.Spider2AliveCount; i++)
 				{
-					Spider2 spider2 = Root.GameMemoryService.ReadExperimental<Spider2>(0x00251830, spider2StructSize, [0x0, 0x28, 0xE4 + spider2Offset]);
-					spider2Offset += spider2StructSize;
+					Spider spider = Root.GameMemoryService.ReadExperimental<Spider>(0x00251830, spiderStructSize, [0x0, 0x28, 0xE4 + spiderOffset]);
+					spiderOffset += spiderStructSize;
 
-					RenderSpider2(spider2);
-					RenderExperimentalBuffer("Spider2 Struct Test", 0x00251830, 128, [0x0, 0x28, 0xE4 + spider2Offset]);
+					RenderSpider(spider);
+					RenderExperimentalBuffer("Spider Struct Test", 0x00251830, 128, [0x0, 0x28, 0xE4 + spiderOffset]);
+				}
+
+				for (int i = 0; i < 6; i++)
+				{
+					int leviHp = Root.GameMemoryService.ReadExperimental<int>(0x00251590, 4, [0x0, 0x28, 0x84 + i * 56]);
+					ImGui.Text(Inline.Span($"Levi Node {i} HP: {leviHp}"));
 				}
 			}
 			else
@@ -95,10 +101,10 @@ public static class MemoryToolWindow
 		ImGui.Text(Inline.Span($"Unknown11: {thorn.Unknown11:0.00}"));
 	}
 
-	private static void RenderSpider2(Spider2 spider2)
+	private static void RenderSpider(Spider spider)
 	{
-		ImGui.SeparatorText("Spider2");
-		ImGui.Text(Inline.Span($"HP: {spider2.Hp}"));
+		ImGui.SeparatorText("Spider");
+		ImGui.Text(Inline.Span($"HP: {spider.Hp}"));
 	}
 
 	private static void RenderExperimentalBuffer(ReadOnlySpan<char> name, long address, int size, int[] offsets)
