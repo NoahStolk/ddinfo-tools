@@ -108,36 +108,35 @@ public class GameMemoryService
 		_nativeMemoryService.WriteMemory(_process, _memoryBlockAddress + 316, [1], 0, 1);
 	}
 
-	public int? ReadIntExperimental(long initialAddress, Span<int> offsets)
-	{
-		if (_process == null)
-			return null;
-
-		long address = ReadPointer(ProcessBaseAddress + initialAddress);
-		for (int i = 0; i < offsets.Length - 1; i++)
-			address = ReadPointer(address + offsets[i]);
-
-		byte[] bytes = Read(address + offsets[^1], sizeof(int));
-		return BitConverter.ToInt32(bytes);
-	}
-
-	public T ReadExperimental<T>(long initialAddress, int size, Span<int> offsets)
+	public void WriteExperimental<T>(long initialAddress, Span<int> offsets, T value)
 		where T : unmanaged
 	{
-		byte[]? buffer = ReadBufferExperimental(initialAddress, size, offsets);
-		return buffer == null ? default : MemoryMarshal.Read<T>(buffer);
+		if (_process == null)
+			return;
+
+		byte[] buffer = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref value, 1)).ToArray();
+		_nativeMemoryService.WriteMemory(_process, FollowPointerChain(initialAddress, offsets), buffer, 0, buffer.Length);
 	}
 
-	public byte[]? ReadBufferExperimental(long initialAddress, int size, Span<int> offsets)
+	public unsafe T ReadExperimental<T>(long initialAddress, Span<int> offsets)
+		where T : unmanaged
 	{
-		if (_process == null)
-			return null;
+		byte[] buffer = ReadBufferExperimental(initialAddress, sizeof(T), offsets);
+		return MemoryMarshal.Read<T>(buffer);
+	}
 
+	public byte[] ReadBufferExperimental(long initialAddress, int size, Span<int> offsets)
+	{
+		return Read(FollowPointerChain(initialAddress, offsets), size);
+	}
+
+	public long FollowPointerChain(long initialAddress, Span<int> offsets)
+	{
 		long address = ReadPointer(ProcessBaseAddress + initialAddress);
 		for (int i = 0; i < offsets.Length - 1; i++)
 			address = ReadPointer(address + offsets[i]);
 
-		return Read(address + offsets[^1], size);
+		return address + offsets[^1];
 	}
 
 	private long ReadPointer(long memoryAddress)

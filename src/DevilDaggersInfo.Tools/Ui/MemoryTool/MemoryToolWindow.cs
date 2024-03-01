@@ -44,7 +44,7 @@ public static class MemoryToolWindow
 					Thorn thorn;
 					//do
 					{
-						thorn = Root.GameMemoryService.ReadExperimental<Thorn>(0x002513B0, thornStructSize, [0x0, 0x28, thornOffset]);
+						thorn = Root.GameMemoryService.ReadExperimental<Thorn>(0x002513B0, [0x0, 0x28, thornOffset]);
 						thornOffset += thornStructSize;
 					}
 					//while (thorn.Hp == 0); // Dead Thorns aren't cleared up from game memory immediately, so skip them until they get cleared up.
@@ -57,7 +57,7 @@ public static class MemoryToolWindow
 				int spiderOffset = 0;
 				for (int i = 0; i < Root.GameMemoryService.MainBlock.Spider1AliveCount + Root.GameMemoryService.MainBlock.Spider2AliveCount; i++)
 				{
-					Spider spider = Root.GameMemoryService.ReadExperimental<Spider>(0x00251830, spiderStructSize, [0x0, 0x28, 0xE4 + spiderOffset]);
+					Spider spider = Root.GameMemoryService.ReadExperimental<Spider>(0x00251830, [0x0, 0x28, 0xE4 + spiderOffset]);
 					spiderOffset += spiderStructSize;
 
 					RenderSpider(spider);
@@ -66,9 +66,21 @@ public static class MemoryToolWindow
 
 				for (int i = 0; i < 6; i++)
 				{
-					int leviHp = Root.GameMemoryService.ReadExperimental<int>(0x00251590, 4, [0x0, 0x28, 0x84 + i * 56]);
-					ImGui.Text(Inline.Span($"Levi Node {i} HP: {leviHp}"));
+					int leviNodeHp = Root.GameMemoryService.ReadExperimental<int>(0x00251590, [0x0, 0x28, 0x84 + i * 56]);
+					ImGui.Text(Inline.Span($"Levi Node {i} HP: {leviNodeHp}"));
 				}
+
+				int orbHp = Root.GameMemoryService.ReadExperimental<int>(0x00251590, [0x0, 0x28, 0x84 + 6 * 56 + 8]);
+				ImGui.Text(Inline.Span($"Orb HP: {orbHp}"));
+
+				if (ImGui.Button("Kill Levi"))
+				{
+					for (int i = 0; i < 6; i++)
+						Root.GameMemoryService.WriteExperimental(0x00251590, [0x0, 0x28, 0x84 + i * 56], 0);
+				}
+
+				if (ImGui.Button("Kill Orb"))
+					Root.GameMemoryService.WriteExperimental(0x00251590, [0x0, 0x28, 0x84 + 6 * 56 + 8], 0);
 			}
 			else
 			{
