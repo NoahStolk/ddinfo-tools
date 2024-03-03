@@ -98,11 +98,11 @@ csharp_style_var_for_built_in_types                                      = false
 csharp_style_var_when_type_is_apparent                                   = false : warning
 
 # Expression-bodied members
-csharp_style_expression_bodied_accessors                                 = true : silent
-csharp_style_expression_bodied_constructors                              = false : silent
+csharp_style_expression_bodied_accessors                                 = true : warning
+csharp_style_expression_bodied_constructors                              = false : warning
 csharp_style_expression_bodied_indexers                                  = true : silent
-csharp_style_expression_bodied_methods                                   = false : silent
-csharp_style_expression_bodied_operators                                 = false : silent
+csharp_style_expression_bodied_methods                                   = false : warning
+csharp_style_expression_bodied_operators                                 = false : warning
 csharp_style_expression_bodied_properties                                = true : silent
 
 # Pattern matching preferences
