@@ -99,8 +99,4 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageVersion Update="DevilDaggersInfo.Core" Version="0.11.0" />
-  </ItemGroup>
-
 </Project>
