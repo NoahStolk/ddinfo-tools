@@ -9,7 +9,6 @@
 		<InvariantGlobalization>true</InvariantGlobalization>
 		<WarningsAsErrors>nullable</WarningsAsErrors>
 		<LangVersion>12.0</LangVersion>
-		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 		<RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
 	</PropertyGroup>
 
