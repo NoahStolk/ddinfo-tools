@@ -64,6 +64,13 @@ public static class MemoryToolWindow
 					leviathanOffset += StructSizes.Leviathan;
 				}
 
+				int squidOffset = 0;
+				for (int i = 0; i < Root.GameMemoryService.MainBlock.Squid1AliveCount; i++)
+				{
+					RenderExperimentalBuffer<Squid>("Squid", 0x00251890, StructSizes.Squid, [0x0, 0x18, 0x94 + squidOffset]);
+					squidOffset += StructSizes.Squid;
+				}
+
 				if (ImGui.Button("Kill Levi"))
 				{
 					for (int i = 0; i < 6; i++)
