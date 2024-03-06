@@ -67,7 +67,7 @@ public static class MemoryToolWindow
 				int squidOffset = 0;
 				for (int i = 0; i < Root.GameMemoryService.MainBlock.Squid1AliveCount + Root.GameMemoryService.MainBlock.Squid2AliveCount + Root.GameMemoryService.MainBlock.Squid3AliveCount; i++)
 				{
-					RenderExperimentalBuffer<Squid>("Squid", 0x00251890, StructSizes.Squid, [0x0, 0x18, 0x94 + squidOffset]);
+					RenderExperimentalBuffer<Squid>("Squid", 0x00251890, StructSizes.Squid, [0x0, 0x18, squidOffset]);
 					squidOffset += StructSizes.Squid;
 				}
 
@@ -84,9 +84,9 @@ public static class MemoryToolWindow
 				{
 					for (int i = 0; i < Root.GameMemoryService.MainBlock.Squid1AliveCount + Root.GameMemoryService.MainBlock.Squid2AliveCount + Root.GameMemoryService.MainBlock.Squid3AliveCount; i++)
 					{
-						Root.GameMemoryService.WriteExperimental(0x00251890, [0x0, 0x18, 0x94 + i * StructSizes.Squid + 0], 0);
-						Root.GameMemoryService.WriteExperimental(0x00251890, [0x0, 0x18, 0x94 + i * StructSizes.Squid + 4], 0);
-						Root.GameMemoryService.WriteExperimental(0x00251890, [0x0, 0x18, 0x94 + i * StructSizes.Squid + 8], 0);
+						Root.GameMemoryService.WriteExperimental(0x00251890, [0x0, 0x18, i * StructSizes.Squid + 0], 0);
+						Root.GameMemoryService.WriteExperimental(0x00251890, [0x0, 0x18, i * StructSizes.Squid + 4], 0);
+						Root.GameMemoryService.WriteExperimental(0x00251890, [0x0, 0x18, i * StructSizes.Squid + 8], 0);
 					}
 				}
 			}
