@@ -21,7 +21,7 @@
 
 ### Asset Editor
 
-- Fixed not showing errors when compilation fails.
+- Fixed not showing errors when mod compilation or extraction fails.
 
 ## [0.12.0.0] - 2024-01-21
 

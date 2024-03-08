@@ -1,5 +1,8 @@
+using DevilDaggersInfo.Core.Mod.Exceptions;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using ImGuiNET;
+using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
@@ -84,21 +87,63 @@ public static class ExtractModWindow
 		_lastStartTime = DateTime.UtcNow;
 
 		// TODO: Show progress bar.
-		Task.Run(async () => ExtractionCompletedCallback(await ExtractLogic.ExtractAsync(_inputFilePath, _outputDirectory)));
+		Task.Run(async () => ExtractionCompletedCallback(await TryExtractAsync(_inputFilePath, _outputDirectory)));
 	}
 
-	private static void ExtractionCompletedCallback(List<string> errors)
+	private static async Task<ExtractionResult> TryExtractAsync(string inputFilePath, string outputDirectory)
 	{
+		try
+		{
+			List<string> errors = await ExtractLogic.ExtractAsync(inputFilePath, outputDirectory);
+			return ExtractionResult.Succeeded(errors);
+		}
+		catch (InvalidModBinaryException ex)
+		{
+			return ExtractionResult.Failed("Invalid mod compilation.", ex);
+		}
+		catch (Exception ex) when (ex.IsFileIoException())
+		{
+			return ExtractionResult.Failed("An IO error occurred.", ex);
+		}
+		catch (Exception ex)
+		{
+			return ExtractionResult.Failed("An unexpected error occurred.", ex);
+		}
+	}
+
+	private static void ExtractionCompletedCallback(ExtractionResult extractionResult)
+	{
+		if (!extractionResult.Success)
+		{
+			Debug.Assert(extractionResult.Error != null, "extractionResult.Error != null");
+			Debug.Assert(extractionResult.Exception != null, "extractionResult.Exception != null");
+			PopupManager.ShowError($"Extraction failed: {extractionResult.Error}", extractionResult.Exception.Message);
+		}
+
 		_isExtracting = false;
 		_lastEndTime = DateTime.UtcNow;
 
-		if (errors.Count > 0)
+		if (extractionResult.Errors.Count > 0)
 		{
 			PopupManager.ShowError($"""
-	            Extraction completed with {errors.Count} error(s):
+	            Extraction completed with {extractionResult.Errors.Count} error(s):
 
-	            {string.Join("\n\n", errors)}
+	            {string.Join("\n\n", extractionResult.Errors)}
 	            """);
+		}
+	}
+
+	// TODO: Use discriminated unions when finally added to C# (if ever).
+	private sealed record ExtractionResult(bool Success, string? Error, Exception? Exception, List<string> Errors)
+	{
+		public static ExtractionResult Failed(string error, Exception exception)
+		{
+			return new(false, error, exception, []);
+		}
+
+		public static ExtractionResult Succeeded(List<string> errors)
+		{
+			return new(true, null, null, errors);
 		}
 	}
 }
