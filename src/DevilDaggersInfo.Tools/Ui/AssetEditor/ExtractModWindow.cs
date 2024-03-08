@@ -1,8 +1,5 @@
-using DevilDaggersInfo.Core.Asset;
-using DevilDaggersInfo.Core.Mod;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using ImGuiNET;
-using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
@@ -11,7 +8,6 @@ public static class ExtractModWindow
 	private static string? _inputFilePath;
 	private static string? _outputDirectory;
 	private static bool _isExtracting;
-	private static readonly List<string> _errors = [];
 	private static DateTime? _lastStartTime;
 	private static DateTime? _lastEndTime;
 
@@ -50,10 +46,7 @@ public static class ExtractModWindow
 			ImGui.SeparatorText("Extract");
 			ImGui.BeginDisabled(_isExtracting);
 			if (ImGui.Button("Extract"))
-			{
-				// TODO: Show progress bar.
-				Task.Run(async () => await ExtractAsync());
-			}
+				Extract();
 
 			ImGui.EndDisabled();
 
@@ -73,7 +66,7 @@ public static class ExtractModWindow
 		ImGui.End();
 	}
 
-	private static async Task ExtractAsync()
+	private static void Extract()
 	{
 		if (!Directory.Exists(_outputDirectory))
 		{
@@ -89,48 +82,23 @@ public static class ExtractModWindow
 
 		_isExtracting = true;
 		_lastStartTime = DateTime.UtcNow;
-		await using FileStream fileStream = File.OpenRead(_inputFilePath);
-		ModBinary modBinary = new(fileStream, ModBinaryReadFilter.AllAssets);
-		foreach (ModBinaryTocEntry tocEntry in modBinary.Toc.Entries)
-		{
-			string subFolder = tocEntry.AssetType switch
-			{
-				AssetType.Audio => "Audio",
-				AssetType.Mesh => "Meshes",
-				AssetType.ObjectBinding => "Object Bindings",
-				AssetType.Shader => "Shaders",
-				AssetType.Texture => "Textures",
-				_ => throw new UnreachableException($"Asset type '{tocEntry.AssetType}' not supported."),
-			};
 
-			AssetExtractionResult result = modBinary.ExtractAsset(tocEntry.Name, tocEntry.AssetType);
-			foreach ((string fileName, byte[] buffer) in result.ExtractedAssetFiles)
-			{
-				try
-				{
-					string directory = Path.Combine(_outputDirectory, subFolder);
-					if (!Directory.Exists(directory))
-						Directory.CreateDirectory(directory);
-					await File.WriteAllBytesAsync(Path.Combine(directory, fileName), buffer);
-				}
-				catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or PathTooLongException)
-				{
-					_errors.Add($"Could not write file '{fileName}' to output directory.\n\n{ex.Message}");
-				}
-			}
-		}
+		// TODO: Show progress bar.
+		Task.Run(async () => ExtractionCompletedCallback(await ExtractLogic.ExtractAsync(_inputFilePath, _outputDirectory)));
+	}
 
+	private static void ExtractionCompletedCallback(List<string> errors)
+	{
 		_isExtracting = false;
 		_lastEndTime = DateTime.UtcNow;
 
-		if (_errors.Count > 0)
+		if (errors.Count > 0)
 		{
 			PopupManager.ShowError($"""
-				Extraction completed with {_errors.Count} error(s):
+	            Extraction completed with {errors.Count} error(s):
 
-				{string.Join("\n\n", _errors)}
-				""");
-			_errors.Clear();
+	            {string.Join("\n\n", errors)}
+	            """);
 		}
 	}
 }
