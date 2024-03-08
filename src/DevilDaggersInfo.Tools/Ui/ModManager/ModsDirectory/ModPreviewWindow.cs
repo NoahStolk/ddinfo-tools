@@ -98,7 +98,22 @@ public static class ModPreviewWindow
 				RenderFileInfoTable(_binaryType.Value);
 
 				if (ImGui.Button("Toggle prohibited"))
-					ModsDirectoryLogic.ToggleProhibitedAssets(_selectedFileName);
+				{
+					ModsDirectoryLogic.ToggleAssets(_selectedFileName, toc =>
+					{
+						bool anyProhibited = toc.Entries.Any(c => AssetContainer.IsProhibited(c.AssetType, c.Name));
+						return anyProhibited ? ModBinaryToc.DisableProhibitedAssets(toc) : ModBinaryToc.EnableAllAssets(toc);
+					});
+				}
+
+				if (ImGui.Button("Toggle all"))
+				{
+					ModsDirectoryLogic.ToggleAssets(_selectedFileName, toc =>
+					{
+						bool anyDisabled = toc.Entries.Any(c => c.Name.Any(char.IsUpper)); // TODO: Add ModBinaryTocEntry.IsProhibited property to DevilDaggersInfo.Core.Mod.
+						return anyDisabled ? ModBinaryToc.EnableAllAssets(toc) : ModBinaryToc.DisableAllAssets(toc);
+					});
+				}
 
 				RenderTocEntriesTable();
 			}

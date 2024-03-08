@@ -17,6 +17,7 @@
 
 ### Mod Manager
 
+- Added button to toggle all assets.
 - Fixed not updating mod preview when selected mod is renamed, toggled, or deleted.
 
 ### Asset Editor

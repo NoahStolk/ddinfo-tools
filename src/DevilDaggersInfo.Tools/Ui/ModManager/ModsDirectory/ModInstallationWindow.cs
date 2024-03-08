@@ -184,7 +184,7 @@ public static class ModInstallationWindow
 							ImGui.TextColored(new(1, 0.2f, 0.4f, 1), Inline.Span($"Overridden by {effectiveAsset.OverriddenByModFileName}"));
 						else if (AssetContainer.IsProhibited(effectiveAsset.TocEntry.AssetType, effectiveAsset.TocEntry.Name))
 							ImGui.TextColored(Color.Orange, "Prohibited");
-						else if (effectiveAsset.TocEntry.Name.Any(char.IsUpper)) // TODO: Check if name exists in AssetContainer instead.
+						else if (IsDisabled(effectiveAsset.TocEntry.Name))
 							ImGui.TextColored(Color.Gray(0.4f), "Disabled");
 						else
 							ImGui.TextColored(Color.Green, "OK");
@@ -198,6 +198,18 @@ public static class ModInstallationWindow
 
 			ImGui.EndTable();
 		}
+	}
+
+	// TODO: Check if name exists in AssetContainer instead? Not sure, as that wouldn't allow for custom assets. Might be better to not allow custom assets with uppercase letters.
+	private static bool IsDisabled(string assetName)
+	{
+		for (int i = 0; i < assetName.Length; i++)
+		{
+			if (char.IsUpper(assetName[i]))
+				return true;
+		}
+
+		return false;
 	}
 
 	private static void Title(ReadOnlySpan<char> label)

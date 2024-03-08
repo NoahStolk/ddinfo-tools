@@ -198,7 +198,7 @@ public static class ModsDirectoryLogic
 		ModPreviewWindow.UpdateIfSelected(originalFileName, newFileName);
 	}
 
-	public static void ToggleProhibitedAssets(string fileName)
+	public static void ToggleAssets(string fileName, Func<ModBinaryToc, ModBinaryToc> toggleFunction)
 	{
 		if (IsLoading)
 			return;
@@ -209,18 +209,9 @@ public static class ModsDirectoryLogic
 			using FileStream fs = new(path, FileMode.Open, FileAccess.ReadWrite);
 			using BinaryReader reader = new(fs);
 			ModBinaryToc modBinaryToc = ModBinaryToc.FromReader(reader);
+			ModBinaryToc toggledToc = toggleFunction(modBinaryToc);
 
-			bool anyProhibited = modBinaryToc.Entries.Any(c => AssetContainer.IsProhibited(c.AssetType, c.Name));
-			ModBinaryToc toggledToc = anyProhibited ? ModBinaryToc.DisableProhibitedAssets(modBinaryToc) : ModBinaryToc.EnableAllAssets(modBinaryToc);
-
-			fs.Seek(12, SeekOrigin.Begin); // Skip file header
-			foreach (ModBinaryTocEntry tocEntry in toggledToc.Entries)
-			{
-				fs.Seek(sizeof(ushort), SeekOrigin.Current); // Skip asset type
-				fs.Write(Encoding.UTF8.GetBytes(tocEntry.Name));
-				fs.Seek(sizeof(byte), SeekOrigin.Current); // Skip null terminator
-				fs.Seek(sizeof(int) * 3, SeekOrigin.Current); // Skip offset, size, and unknown
-			}
+			OverwriteToc(fs, toggledToc);
 		}
 		catch (Exception ex) when (ex.IsFileIoException())
 		{
@@ -242,5 +233,18 @@ public static class ModsDirectoryLogic
 
 		ModPreviewWindow.LoadTocEntries();
 		ModInstallationWindow.LoadEffectiveAssets();
+	}
+
+	// TODO: This should be added to DevilDaggersInfo.Core.Mod.
+	private static void OverwriteToc(FileStream fs, ModBinaryToc toggledToc)
+	{
+		fs.Seek(12, SeekOrigin.Begin); // Skip file header
+		foreach (ModBinaryTocEntry tocEntry in toggledToc.Entries)
+		{
+			fs.Seek(sizeof(ushort), SeekOrigin.Current); // Skip asset type
+			fs.Write(Encoding.UTF8.GetBytes(tocEntry.Name));
+			fs.Seek(sizeof(byte), SeekOrigin.Current); // Skip null terminator
+			fs.Seek(sizeof(int) * 3, SeekOrigin.Current); // Skip offset, size, and unknown
+		}
 	}
 }
