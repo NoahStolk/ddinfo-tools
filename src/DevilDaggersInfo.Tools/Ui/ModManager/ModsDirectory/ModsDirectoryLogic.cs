@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Core.Asset;
 using DevilDaggersInfo.Core.Mod;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Settings;
@@ -43,7 +44,7 @@ public static class ModsDirectoryLogic
 					_modFiles.Add(ModFile.FromPath(file));
 				}
 			}
-			catch (Exception ex)
+			catch (Exception ex) when (ex.IsFileIoException())
 			{
 				PopupManager.ShowError("Error loading files in the mods directory.", ex);
 				Root.Log.Error(ex, "Error loading files in the mods directory.");
@@ -99,7 +100,7 @@ public static class ModsDirectoryLogic
 		{
 			File.Move(originalPath, newPath);
 		}
-		catch (Exception ex)
+		catch (Exception ex) when (ex.IsFileIoException())
 		{
 			Root.Log.Error(ex, $"Error renaming file '{_originalFileName}' to '{NewFileName}'.");
 			return $"Error renaming file '{_originalFileName}' to '{NewFileName}'.\n\n" + ex.Message;
@@ -138,7 +139,7 @@ public static class ModsDirectoryLogic
 		{
 			File.Delete(path);
 		}
-		catch (Exception ex)
+		catch (Exception ex) when (ex.IsFileIoException())
 		{
 			Root.Log.Error(ex, $"Error deleting file '{fileName}'.");
 			PopupManager.ShowError($"Error deleting file '{fileName}'.", ex);
@@ -171,7 +172,7 @@ public static class ModsDirectoryLogic
 		{
 			File.Move(originalPath, newPath);
 		}
-		catch (Exception ex)
+		catch (Exception ex) when (ex.IsFileIoException())
 		{
 			Root.Log.Error(ex, $"Error toggling file '{originalFileName}'.");
 			PopupManager.ShowError($"Error toggling file '{originalFileName}'.", ex);
@@ -221,7 +222,7 @@ public static class ModsDirectoryLogic
 				fs.Seek(sizeof(int) * 3, SeekOrigin.Current); // Skip offset, size, and unknown
 			}
 		}
-		catch (Exception ex)
+		catch (Exception ex) when (ex.IsFileIoException())
 		{
 			Root.Log.Error(ex, $"Error toggling prohibited assets for file '{fileName}'.");
 			PopupManager.ShowError($"Error toggling prohibited assets for file '{fileName}'.", ex);

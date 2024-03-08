@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Core.Asset;
 using DevilDaggersInfo.Core.Mod;
 using DevilDaggersInfo.Core.Mod.Exceptions;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Popups;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
@@ -33,7 +34,7 @@ public sealed record ModFile(string FileName, ModFileType FileType, ModBinaryTyp
 		{
 			return new(fileName, ModFileType.Other, null, null, null, fileSize);
 		}
-		catch (Exception ex)
+		catch (Exception ex) when (ex.IsFileIoException())
 		{
 			PopupManager.ShowError($"Error loading file '{filePath}'.", ex);
 			Root.Log.Error(ex, $"Error loading file '{filePath}'.");
