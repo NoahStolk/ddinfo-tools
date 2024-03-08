@@ -53,9 +53,6 @@ public static class ModInstallationWindow
 		{
 			foreach (ModBinaryTocEntry tocEntry in mod.Toc.Entries)
 			{
-				if (tocEntry.IsLoudness())
-					continue;
-
 				List<EffectiveAsset> existingAssets = effectiveAssets.Where(c => c.TocEntry.AssetType == tocEntry.AssetType && c.TocEntry.Name == tocEntry.Name).ToList();
 				foreach (EffectiveAsset existingAsset in existingAssets)
 					existingAsset.OverriddenByModFileName = mod.FileName;
@@ -74,8 +71,8 @@ public static class ModInstallationWindow
 
 		_effectiveAssets = _effectiveAssets.OrderByDescending(kvp => kvp.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
-		_activeAssets = _effectiveAssets.Sum(kvp => kvp.Value.Count(c => c.OverriddenByModFileName == null));
-		_activeProhibitedAssets = _effectiveAssets.Sum(kvp => kvp.Value.Count(c => c.OverriddenByModFileName == null && AssetContainer.IsProhibited(c.TocEntry.AssetType, c.TocEntry.Name)));
+		_activeAssets = _effectiveAssets.Sum(kvp => kvp.Value.Count(c => c.OverriddenByModFileName == null && c.TocEntry.IsEnabled));
+		_activeProhibitedAssets = _effectiveAssets.Sum(kvp => kvp.Value.Count(c => c.OverriddenByModFileName == null && c.TocEntry.IsEnabled && AssetContainer.IsProhibited(c.TocEntry.AssetType, c.TocEntry.Name)));
 	}
 
 	public static void Render()
@@ -171,13 +168,14 @@ public static class ModInstallationWindow
 
 						EffectiveAsset effectiveAsset = kvp.Value[i];
 						bool isOverridden = effectiveAsset.OverriddenByModFileName != null;
+						bool isDisabled = isOverridden || !effectiveAsset.TocEntry.IsEnabled;
 						Vector4 disabledColor = Color.Gray(0.4f);
 
 						ImGui.TableNextColumn();
-						ImGui.TextColored(isOverridden ? disabledColor : Color.White, effectiveAsset.TocEntry.Name);
+						ImGui.TextColored(isDisabled ? disabledColor : Color.White, effectiveAsset.TocEntry.Name);
 
 						ImGui.TableNextColumn();
-						ImGui.TextColored(isOverridden ? disabledColor : effectiveAsset.TocEntry.AssetType.GetColor(), EnumUtils.AssetTypeNames[effectiveAsset.TocEntry.AssetType]);
+						ImGui.TextColored(isDisabled ? disabledColor : effectiveAsset.TocEntry.AssetType.GetColor(), EnumUtils.AssetTypeNames[effectiveAsset.TocEntry.AssetType]);
 
 						ImGui.TableNextColumn();
 						if (isOverridden)

@@ -20,6 +20,7 @@
 - Added button to toggle all assets.
 - Added button to toggle individual assets.
 - Fixed not updating mod preview when selected mod is renamed, toggled, or deleted.
+- Fixed not taking disabled assets into account when counting active assets.
 
 ### Asset Editor
 
