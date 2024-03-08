@@ -14,6 +14,7 @@ public static class MemoryToolWindow
 {
 	private static readonly char[] _survivalHashMd5HexString = new char[16 * 2];
 	private static float _recordingTimer;
+	private static float _scanInterval = 0.25f;
 	private static MainBlock _mainBlock;
 
 	private static readonly List<Thorn> _thorns = [];
@@ -26,7 +27,7 @@ public static class MemoryToolWindow
 	public static void Update(float delta)
 	{
 		_recordingTimer += delta;
-		if (_recordingTimer < 0.5f)
+		if (_recordingTimer < _scanInterval)
 			return;
 
 		_recordingTimer = 0;
@@ -35,74 +36,47 @@ public static class MemoryToolWindow
 
 		_mainBlock = Root.GameMemoryService.MainBlock;
 
-		_thorns.Clear();
-		_spiders.Clear();
-		_leviathans.Clear();
-		_squids.Clear();
-		_pedes.Clear();
-		_boids.Clear();
+		int thornListLength = _mainBlock.ThornAliveCount;
+		int spiderListLength = _mainBlock.Spider1AliveCount + _mainBlock.Spider2AliveCount;
+		int leviathanListLength = _mainBlock.LeviathanAliveCount + _mainBlock.OrbAliveCount;
+		int squidListLength = _mainBlock.Squid1AliveCount + _mainBlock.Squid2AliveCount + _mainBlock.Squid3AliveCount;
+		int pedeListLength = _mainBlock.CentipedeAliveCount + _mainBlock.GigapedeAliveCount + _mainBlock.GhostpedeAliveCount;
+		int boidListLength = _mainBlock.Skull1AliveCount + _mainBlock.Skull2AliveCount + _mainBlock.Skull3AliveCount + _mainBlock.Skull4AliveCount + _mainBlock.SpiderlingAliveCount;
 
-		// Alternative address: 0x00251350, [0x0, 0x198, 0x38, 0x28, 0x0]
-		int thornOffset = 0;
-		for (int i = 0; i < _mainBlock.ThornAliveCount; i++)
+		ReadEnemyList(_thorns, thornListLength, 0x002513B0, StructSizes.Thorn, [0x0, 0x28, 0]);
+		ReadEnemyList(_spiders, spiderListLength, 0x00251830, StructSizes.Spider, [0x0, 0x28, 0]);
+		ReadEnemyList(_leviathans, leviathanListLength, 0x00251590, StructSizes.Leviathan, [0x0, 0x28, 0]);
+		ReadEnemyList(_squids, squidListLength, 0x00251890, StructSizes.Squid, [0x0, 0x18, 0]);
+		ReadEnemyList(_pedes, pedeListLength, 0x00251470, StructSizes.Pede, [0x0, 0x28, 0]);
+		ReadEnemyList(_boids, boidListLength, 0x00251410, StructSizes.Boid, [0x0, 0x20, 0]);
+	}
+
+	private static void ReadEnemyList<T>(List<T> list, int count, long address, int size, Span<int> offsets)
+		where T : unmanaged
+	{
+		list.Clear();
+		for (int i = 0; i < count; i++)
 		{
-			_thorns.Add(Read<Thorn>(0x002513B0, StructSizes.Thorn, [0x0, 0x28, thornOffset]));
-			thornOffset += StructSizes.Thorn;
-
-			// TODO: Maybe:
-			// do
-			// {
-			// }
-			// while (thorn.Hp == 0); // Dead Thorns aren't cleared up from game memory immediately, so skip them until they get cleared up.
-		}
-
-		int spiderOffset = 0;
-		for (int i = 0; i < _mainBlock.Spider1AliveCount + _mainBlock.Spider2AliveCount; i++)
-		{
-			_spiders.Add(Read<Spider>(0x00251830, StructSizes.Spider, [0x0, 0x28, spiderOffset]));
-			spiderOffset += StructSizes.Spider;
-		}
-
-		int leviathanOffset = 0;
-		for (int i = 0; i < _mainBlock.LeviathanAliveCount + _mainBlock.OrbAliveCount; i++)
-		{
-			_leviathans.Add(Read<Leviathan>(0x00251590, StructSizes.Leviathan, [0x0, 0x28, leviathanOffset]));
-			leviathanOffset += StructSizes.Leviathan;
-		}
-
-		int squidOffset = 0;
-		for (int i = 0; i < _mainBlock.Squid1AliveCount + _mainBlock.Squid2AliveCount + _mainBlock.Squid3AliveCount; i++)
-		{
-			_squids.Add(Read<Squid>(0x00251890, StructSizes.Squid, [0x0, 0x18, squidOffset]));
-			squidOffset += StructSizes.Squid;
-		}
-
-		int pedeOffset = 0;
-		for (int i = 0; i < _mainBlock.CentipedeAliveCount + _mainBlock.GigapedeAliveCount + _mainBlock.GhostpedeAliveCount; i++)
-		{
-			_pedes.Add(Read<Pede>(0x00251470, StructSizes.Pede, [0x0, 0x28, pedeOffset]));
-			pedeOffset += StructSizes.Pede;
-		}
-
-		int boidOffset = 0;
-		int boidCount = _mainBlock.Skull1AliveCount + _mainBlock.Skull2AliveCount + _mainBlock.Skull3AliveCount + _mainBlock.Skull4AliveCount + _mainBlock.SpiderlingAliveCount;
-		for (int i = 0; i < boidCount; i++)
-		{
-			_boids.Add(Read<Boid>(0x00251410, StructSizes.Boid, [0x0, 0x20, boidOffset]));
-			boidOffset += StructSizes.Boid;
+			list.Add(Read<T>(address, size, offsets));
+			offsets[^1] += size;
 		}
 	}
 
 	public static void Render()
 	{
-		if (ImGui.Begin("Memory Tool"))
+		if (ImGui.Begin("Main Block"))
 		{
+			RenderMainBlockTable();
+		}
+
+		ImGui.End();
+
+		if (ImGui.Begin("Experimental Memory"))
+		{
+			ImGui.SliderFloat("Scan interval", ref _scanInterval, 0.01f, 1f, "%.2f");
+
 			if (Root.GameMemoryService.IsInitialized)
 			{
-				RenderMainBlockTable();
-
-				ImGui.SeparatorText("EXPERIMENTAL");
-
 				RenderThornsTable();
 				RenderSpidersTable();
 				RenderLeviathansTable();
@@ -361,7 +335,7 @@ public static class MemoryToolWindow
 		}
 	}
 
-	private static T Read<T>(long address, int size, int[] offsets)
+	private static T Read<T>(long address, int size, Span<int> offsets)
 		where T : unmanaged
 	{
 		byte[] buffer = Root.GameMemoryService.ReadExperimental(address, size, offsets);
@@ -370,113 +344,110 @@ public static class MemoryToolWindow
 
 	private static void RenderMainBlockTable()
 	{
-		if (ImGui.CollapsingHeader("Main block"))
+		if (ImGui.BeginTable("MainBlockTable", 2, ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable))
 		{
-			if (ImGui.BeginTable("MainBlockTable", 2, ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable))
-			{
-				ImGui.TableSetupColumn("Name");
-				ImGui.TableSetupColumn("Value");
-				ImGui.TableHeadersRow();
+			ImGui.TableSetupColumn("Name");
+			ImGui.TableSetupColumn("Value");
+			ImGui.TableHeadersRow();
 
-				for (int i = 0; i < 16; i++)
-					_mainBlock.SurvivalHashMd5[i].TryFormat(_survivalHashMd5HexString.AsSpan()[(i * 2)..], out _, "X2");
+			for (int i = 0; i < 16; i++)
+				_mainBlock.SurvivalHashMd5[i].TryFormat(_survivalHashMd5HexString.AsSpan()[(i * 2)..], out _, "X2");
 
-				Column("Process base address", Inline.Span($"0x{Root.GameMemoryService.ProcessBaseAddress:X}"));
-				Column("Marker offset", Inline.Span($"0x{Root.GameMemoryService.DdstatsMarkerOffset:X}"));
+			Column("Process base address", Inline.Span($"0x{Root.GameMemoryService.ProcessBaseAddress:X}"));
+			Column("Marker offset", Inline.Span($"0x{Root.GameMemoryService.DdstatsMarkerOffset:X}"));
 
-				Column("Marker", _mainBlock.Marker);
-				Column("Format version", Inline.Span(_mainBlock.FormatVersion));
-				Column("Player ID", Inline.Span(_mainBlock.PlayerId));
-				Column("Player name", _mainBlock.PlayerName);
-				Column("Time", Inline.Span(_mainBlock.Time));
-				Column("Gems collected", Inline.Span(_mainBlock.GemsCollected));
-				Column("Enemies killed", Inline.Span(_mainBlock.EnemiesKilled));
-				Column("Daggers fired", Inline.Span(_mainBlock.DaggersFired));
-				Column("Daggers hit", Inline.Span(_mainBlock.DaggersHit));
-				Column("Enemies alive", Inline.Span(_mainBlock.EnemiesAlive));
-				Column("Level gems", Inline.Span(_mainBlock.LevelGems));
-				Column("Homing stored", Inline.Span(_mainBlock.HomingStored));
-				Column("Gems despawned", Inline.Span(_mainBlock.GemsDespawned));
-				Column("Gems eaten", Inline.Span(_mainBlock.GemsEaten));
-				Column("Gems total", Inline.Span(_mainBlock.GemsTotal));
-				Column("Homing eaten", Inline.Span(_mainBlock.HomingEaten));
+			Column("Marker", _mainBlock.Marker);
+			Column("Format version", Inline.Span(_mainBlock.FormatVersion));
+			Column("Player ID", Inline.Span(_mainBlock.PlayerId));
+			Column("Player name", _mainBlock.PlayerName);
+			Column("Time", Inline.Span(_mainBlock.Time));
+			Column("Gems collected", Inline.Span(_mainBlock.GemsCollected));
+			Column("Enemies killed", Inline.Span(_mainBlock.EnemiesKilled));
+			Column("Daggers fired", Inline.Span(_mainBlock.DaggersFired));
+			Column("Daggers hit", Inline.Span(_mainBlock.DaggersHit));
+			Column("Enemies alive", Inline.Span(_mainBlock.EnemiesAlive));
+			Column("Level gems", Inline.Span(_mainBlock.LevelGems));
+			Column("Homing stored", Inline.Span(_mainBlock.HomingStored));
+			Column("Gems despawned", Inline.Span(_mainBlock.GemsDespawned));
+			Column("Gems eaten", Inline.Span(_mainBlock.GemsEaten));
+			Column("Gems total", Inline.Span(_mainBlock.GemsTotal));
+			Column("Homing eaten", Inline.Span(_mainBlock.HomingEaten));
 
-				Column("Skull 1 alive count", Inline.Span(_mainBlock.Skull1AliveCount));
-				Column("Skull 2 alive count", Inline.Span(_mainBlock.Skull2AliveCount));
-				Column("Skull 3 alive count", Inline.Span(_mainBlock.Skull3AliveCount));
-				Column("Spiderling alive count", Inline.Span(_mainBlock.SpiderlingAliveCount));
-				Column("Skull 4 alive count", Inline.Span(_mainBlock.Skull4AliveCount));
-				Column("Squid 1 alive count", Inline.Span(_mainBlock.Squid1AliveCount));
-				Column("Squid 2 alive count", Inline.Span(_mainBlock.Squid2AliveCount));
-				Column("Squid 3 alive count", Inline.Span(_mainBlock.Squid3AliveCount));
-				Column("Centipede alive count", Inline.Span(_mainBlock.CentipedeAliveCount));
-				Column("Gigapede alive count", Inline.Span(_mainBlock.GigapedeAliveCount));
-				Column("Spider 1 alive count", Inline.Span(_mainBlock.Spider1AliveCount));
-				Column("Spider 2 alive count", Inline.Span(_mainBlock.Spider2AliveCount));
-				Column("Leviathan alive count", Inline.Span(_mainBlock.LeviathanAliveCount));
-				Column("Orb alive count", Inline.Span(_mainBlock.OrbAliveCount));
-				Column("Thorn alive count", Inline.Span(_mainBlock.ThornAliveCount));
-				Column("Ghostpede alive count", Inline.Span(_mainBlock.GhostpedeAliveCount));
-				Column("Spider egg alive count", Inline.Span(_mainBlock.SpiderEggAliveCount));
+			Column("Skull 1 alive count", Inline.Span(_mainBlock.Skull1AliveCount));
+			Column("Skull 2 alive count", Inline.Span(_mainBlock.Skull2AliveCount));
+			Column("Skull 3 alive count", Inline.Span(_mainBlock.Skull3AliveCount));
+			Column("Spiderling alive count", Inline.Span(_mainBlock.SpiderlingAliveCount));
+			Column("Skull 4 alive count", Inline.Span(_mainBlock.Skull4AliveCount));
+			Column("Squid 1 alive count", Inline.Span(_mainBlock.Squid1AliveCount));
+			Column("Squid 2 alive count", Inline.Span(_mainBlock.Squid2AliveCount));
+			Column("Squid 3 alive count", Inline.Span(_mainBlock.Squid3AliveCount));
+			Column("Centipede alive count", Inline.Span(_mainBlock.CentipedeAliveCount));
+			Column("Gigapede alive count", Inline.Span(_mainBlock.GigapedeAliveCount));
+			Column("Spider 1 alive count", Inline.Span(_mainBlock.Spider1AliveCount));
+			Column("Spider 2 alive count", Inline.Span(_mainBlock.Spider2AliveCount));
+			Column("Leviathan alive count", Inline.Span(_mainBlock.LeviathanAliveCount));
+			Column("Orb alive count", Inline.Span(_mainBlock.OrbAliveCount));
+			Column("Thorn alive count", Inline.Span(_mainBlock.ThornAliveCount));
+			Column("Ghostpede alive count", Inline.Span(_mainBlock.GhostpedeAliveCount));
+			Column("Spider egg alive count", Inline.Span(_mainBlock.SpiderEggAliveCount));
 
-				Column("Skull 1 kill count", Inline.Span(_mainBlock.Skull1KillCount));
-				Column("Skull 2 kill count", Inline.Span(_mainBlock.Skull2KillCount));
-				Column("Skull 3 kill count", Inline.Span(_mainBlock.Skull3KillCount));
-				Column("Spiderling kill count", Inline.Span(_mainBlock.SpiderlingKillCount));
-				Column("Skull 4 kill count", Inline.Span(_mainBlock.Skull4KillCount));
-				Column("Squid 1 kill count", Inline.Span(_mainBlock.Squid1KillCount));
-				Column("Squid 2 kill count", Inline.Span(_mainBlock.Squid2KillCount));
-				Column("Squid 3 kill count", Inline.Span(_mainBlock.Squid3KillCount));
-				Column("Centipede kill count", Inline.Span(_mainBlock.CentipedeKillCount));
-				Column("Gigapede kill count", Inline.Span(_mainBlock.GigapedeKillCount));
-				Column("Spider 1 kill count", Inline.Span(_mainBlock.Spider1KillCount));
-				Column("Spider 2 kill count", Inline.Span(_mainBlock.Spider2KillCount));
-				Column("Leviathan kill count", Inline.Span(_mainBlock.LeviathanKillCount));
-				Column("Orb kill count", Inline.Span(_mainBlock.OrbKillCount));
-				Column("Thorn kill count", Inline.Span(_mainBlock.ThornKillCount));
-				Column("Ghostpede kill count", Inline.Span(_mainBlock.GhostpedeKillCount));
-				Column("Spider egg kill count", Inline.Span(_mainBlock.SpiderEggKillCount));
+			Column("Skull 1 kill count", Inline.Span(_mainBlock.Skull1KillCount));
+			Column("Skull 2 kill count", Inline.Span(_mainBlock.Skull2KillCount));
+			Column("Skull 3 kill count", Inline.Span(_mainBlock.Skull3KillCount));
+			Column("Spiderling kill count", Inline.Span(_mainBlock.SpiderlingKillCount));
+			Column("Skull 4 kill count", Inline.Span(_mainBlock.Skull4KillCount));
+			Column("Squid 1 kill count", Inline.Span(_mainBlock.Squid1KillCount));
+			Column("Squid 2 kill count", Inline.Span(_mainBlock.Squid2KillCount));
+			Column("Squid 3 kill count", Inline.Span(_mainBlock.Squid3KillCount));
+			Column("Centipede kill count", Inline.Span(_mainBlock.CentipedeKillCount));
+			Column("Gigapede kill count", Inline.Span(_mainBlock.GigapedeKillCount));
+			Column("Spider 1 kill count", Inline.Span(_mainBlock.Spider1KillCount));
+			Column("Spider 2 kill count", Inline.Span(_mainBlock.Spider2KillCount));
+			Column("Leviathan kill count", Inline.Span(_mainBlock.LeviathanKillCount));
+			Column("Orb kill count", Inline.Span(_mainBlock.OrbKillCount));
+			Column("Thorn kill count", Inline.Span(_mainBlock.ThornKillCount));
+			Column("Ghostpede kill count", Inline.Span(_mainBlock.GhostpedeKillCount));
+			Column("Spider egg kill count", Inline.Span(_mainBlock.SpiderEggKillCount));
 
-				Column("Is player alive", _mainBlock.IsPlayerAlive ? "True" : "False");
-				Column("Is replay", _mainBlock.IsReplay ? "True" : "False");
-				Column("Death type", Inline.Span(_mainBlock.DeathType));
-				Column("Is in game", _mainBlock.IsInGame ? "True" : "False");
+			Column("Is player alive", _mainBlock.IsPlayerAlive ? "True" : "False");
+			Column("Is replay", _mainBlock.IsReplay ? "True" : "False");
+			Column("Death type", Inline.Span(_mainBlock.DeathType));
+			Column("Is in game", _mainBlock.IsInGame ? "True" : "False");
 
-				Column("Replay player ID", Inline.Span(_mainBlock.ReplayPlayerId));
-				Column("Replay player name", _mainBlock.ReplayPlayerName);
+			Column("Replay player ID", Inline.Span(_mainBlock.ReplayPlayerId));
+			Column("Replay player name", _mainBlock.ReplayPlayerName);
 
-				Column("Survival hash MD5", _survivalHashMd5HexString);
+			Column("Survival hash MD5", _survivalHashMd5HexString);
 
-				Column("Level up time 2", Inline.Span(_mainBlock.LevelUpTime2));
-				Column("Level up time 3", Inline.Span(_mainBlock.LevelUpTime3));
-				Column("Level up time 4", Inline.Span(_mainBlock.LevelUpTime4));
+			Column("Level up time 2", Inline.Span(_mainBlock.LevelUpTime2));
+			Column("Level up time 3", Inline.Span(_mainBlock.LevelUpTime3));
+			Column("Level up time 4", Inline.Span(_mainBlock.LevelUpTime4));
 
-				Column("Leviathan down time", Inline.Span(_mainBlock.LeviathanDownTime));
-				Column("Orb down time", Inline.Span(_mainBlock.OrbDownTime));
+			Column("Leviathan down time", Inline.Span(_mainBlock.LeviathanDownTime));
+			Column("Orb down time", Inline.Span(_mainBlock.OrbDownTime));
 
-				Column("Status", Inline.Span(_mainBlock.Status));
+			Column("Status", Inline.Span(_mainBlock.Status));
 
-				Column("Homing max", Inline.Span(_mainBlock.HomingMax));
-				Column("Homing max time", Inline.Span(_mainBlock.HomingMaxTime));
-				Column("Enemies alive max", Inline.Span(_mainBlock.EnemiesAliveMax));
-				Column("Enemies alive max time", Inline.Span(_mainBlock.EnemiesAliveMaxTime));
-				Column("Max time", Inline.Span(_mainBlock.MaxTime));
-				Column("Stats base", Inline.Span($"0x{_mainBlock.StatsBase:X}"));
-				Column("Stats count", Inline.Span(_mainBlock.StatsCount));
-				Column("Stats loaded", _mainBlock.StatsLoaded ? "True" : "False");
+			Column("Homing max", Inline.Span(_mainBlock.HomingMax));
+			Column("Homing max time", Inline.Span(_mainBlock.HomingMaxTime));
+			Column("Enemies alive max", Inline.Span(_mainBlock.EnemiesAliveMax));
+			Column("Enemies alive max time", Inline.Span(_mainBlock.EnemiesAliveMaxTime));
+			Column("Max time", Inline.Span(_mainBlock.MaxTime));
+			Column("Stats base", Inline.Span($"0x{_mainBlock.StatsBase:X}"));
+			Column("Stats count", Inline.Span(_mainBlock.StatsCount));
+			Column("Stats loaded", _mainBlock.StatsLoaded ? "True" : "False");
 
-				Column("Start hand level", Inline.Span(_mainBlock.StartHandLevel));
-				Column("Start additional gems", Inline.Span(_mainBlock.StartAdditionalGems));
-				Column("Start timer", Inline.Span(_mainBlock.StartTimer));
-				Column("Prohibited mods", _mainBlock.ProhibitedMods ? "True" : "False");
-				Column("Replay base", Inline.Span($"0x{_mainBlock.ReplayBase:X}"));
-				Column("Replay length", Inline.Span(_mainBlock.ReplayLength));
-				Column("Play replay from memory", _mainBlock.PlayReplayFromMemory ? "True" : "False");
-				Column("Game mode", Inline.Span(_mainBlock.GameMode));
-				Column("Time attack or race finished", _mainBlock.TimeAttackOrRaceFinished ? "True" : "False");
+			Column("Start hand level", Inline.Span(_mainBlock.StartHandLevel));
+			Column("Start additional gems", Inline.Span(_mainBlock.StartAdditionalGems));
+			Column("Start timer", Inline.Span(_mainBlock.StartTimer));
+			Column("Prohibited mods", _mainBlock.ProhibitedMods ? "True" : "False");
+			Column("Replay base", Inline.Span($"0x{_mainBlock.ReplayBase:X}"));
+			Column("Replay length", Inline.Span(_mainBlock.ReplayLength));
+			Column("Play replay from memory", _mainBlock.PlayReplayFromMemory ? "True" : "False");
+			Column("Game mode", Inline.Span(_mainBlock.GameMode));
+			Column("Time attack or race finished", _mainBlock.TimeAttackOrRaceFinished ? "True" : "False");
 
-				ImGui.EndTable();
-			}
+			ImGui.EndTable();
 		}
 	}
 
