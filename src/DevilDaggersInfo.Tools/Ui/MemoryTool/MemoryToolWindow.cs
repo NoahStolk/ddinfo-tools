@@ -3,7 +3,7 @@ using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.GameMemory.Enemies;
 using ImGuiNET;
-using System.Reflection;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -88,7 +88,7 @@ public static class MemoryToolWindow
 		int boidCount = _mainBlock.Skull1AliveCount + _mainBlock.Skull2AliveCount + _mainBlock.Skull3AliveCount + _mainBlock.Skull4AliveCount + _mainBlock.SpiderlingAliveCount;
 		for (int i = 0; i < boidCount; i++)
 		{
-			_boids.Add(Read<Boid>(0x00251410, StructSizes.Boid, [0x0, 0x20, 0x2 + boidOffset]));
+			_boids.Add(Read<Boid>(0x00251410, StructSizes.Boid, [0x0, 0x20, boidOffset]));
 			boidOffset += StructSizes.Boid;
 		}
 	}
@@ -298,17 +298,63 @@ public static class MemoryToolWindow
 
 		ImGui.SeparatorText("Boids");
 
-		if (ImGui.BeginTable("Boids", 1, ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable))
+		if (ImGui.BeginTable("Boids", 9, ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable))
 		{
-			ImGui.TableSetupColumn("HP");
+			ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 64);
+			ImGui.TableSetupColumn("HP", ImGuiTableColumnFlags.WidthFixed, 64);
+			ImGui.TableSetupColumn("Spawner Id", ImGuiTableColumnFlags.WidthFixed, 64);
+			ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 192);
+			ImGui.TableSetupColumn("Velocity", ImGuiTableColumnFlags.WidthStretch);
+			ImGui.TableSetupColumn("Speed", ImGuiTableColumnFlags.WidthFixed, 64);
+			ImGui.TableSetupColumn("Rotation", ImGuiTableColumnFlags.WidthStretch);
+			ImGui.TableSetupColumn("Unknown Vec3", ImGuiTableColumnFlags.WidthStretch);
+			ImGui.TableSetupColumn("Timer", ImGuiTableColumnFlags.WidthFixed, 64);
 			ImGui.TableHeadersRow();
 
 			for (int i = 0; i < _boids.Count; i++)
 			{
+				const string floatFormat = "+00.00;-00.00;+00.00";
+
 				Boid boid = _boids[i];
 
 				ImGui.TableNextRow();
+				NextColumnText(Inline.Span(boid.Type));
 				NextColumnText(Inline.Span(boid.Hp));
+				NextColumnText(Inline.Span(boid.SpawnerId));
+				NextColumnText(Inline.Span(boid.Position, floatFormat));
+				NextColumnText(Inline.Span(boid.Velocity, floatFormat));
+				NextColumnText(Inline.Span(boid.Speed, floatFormat));
+				NextColumnText(Inline.Span(boid.Rotation, floatFormat));
+
+				// Get span of floats
+				Span<float> spanOfFloats = MemoryMarshal.CreateSpan(ref Unsafe.As<Matrix4x4, float>(ref boid.Floats), 16);
+				StringBuilder sb = new();
+				for (int j = 0; j < 16; j++)
+					sb.Append($"{spanOfFloats[j].ToString(floatFormat)} ");
+				NextColumnText(sb.ToString());
+
+				NextColumnText(Inline.Span(boid.Timer, floatFormat));
+
+				if (ImGui.CollapsingHeader(Inline.Span($"Show buffer##{i}")))
+				{
+					byte[] bytes = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref boid, 1)).ToArray();
+					for (int j = 0; j < bytes.Length; j += 4)
+					{
+						Span<byte> span = bytes[j..(j + 4)].AsSpan();
+						ImGui.TextWrapped(span.ToArray().ByteArrayToHexString());
+						if (ImGui.IsItemHovered())
+						{
+							ImGui.SetTooltip($"""
+							                  Offset:  0x{j:X} ({j})
+							                  Integer: {BitConverter.ToInt32(bytes, j)}
+							                  Float:   {BitConverter.ToSingle(bytes, j)}
+							                  """);
+						}
+
+						if (j == 0 || j % 64 != 0)
+							ImGui.SameLine();
+					}
+				}
 			}
 
 			ImGui.EndTable();
@@ -320,49 +366,6 @@ public static class MemoryToolWindow
 	{
 		byte[] buffer = Root.GameMemoryService.ReadExperimental(address, size, offsets);
 		return MemoryMarshal.Read<T>(buffer);
-	}
-
-	private static void RenderExperimentalBuffer<T>(ReadOnlySpan<char> name, long address, int size, int[] offsets)
-		where T : unmanaged
-	{
-		T value = Read<T>(address, size, offsets);
-		FieldInfo[] fields = value.GetType().GetFields();
-		foreach (FieldInfo field in fields)
-		{
-			string fieldValue = field.GetValue(value)?.ToString() ?? "null";
-			ImGui.Text($"{field.Name}: {fieldValue}");
-		}
-
-		if (ImGui.CollapsingHeader(Inline.Span($"Show buffer##{name}")))
-		{
-			byte[] bytes = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref value, 1)).ToArray();
-			ImGui.TextWrapped(InsertStrings(bytes.ByteArrayToHexString(), 8, " "));
-		}
-
-		static string InsertStrings(string s, int insertEvery, string insert)
-		{
-			char[] ins = s.ToCharArray();
-			char[] inserts = insert.ToCharArray();
-			int insertLength = inserts.Length;
-			int length = s.Length + s.Length / insertEvery * insert.Length;
-			if (ins.Length % insertEvery == 0)
-				length -= insert.Length;
-
-			char[] outs = new char[length];
-			long di = 0;
-			long si = 0;
-			while (si < s.Length - insertEvery)
-			{
-				Array.Copy(ins, si, outs, di, insertEvery);
-				si += insertEvery;
-				di += insertEvery;
-				Array.Copy(inserts, 0, outs, di, insertLength);
-				di += insertLength;
-			}
-
-			Array.Copy(ins, si, outs, di, ins.Length - si);
-			return new(outs);
-		}
 	}
 
 	private static void RenderMainBlockTable()
