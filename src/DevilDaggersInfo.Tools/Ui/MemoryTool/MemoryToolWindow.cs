@@ -33,7 +33,6 @@ public static class MemoryToolWindow
 		{
 			if (Root.GameMemoryService.IsInitialized)
 			{
-				RenderBuffer();
 				RenderMainBlockTable();
 
 				ImGui.SeparatorText("EXPERIMENTAL");
@@ -60,14 +59,14 @@ public static class MemoryToolWindow
 				int leviathanOffset = 0;
 				for (int i = 0; i < Root.GameMemoryService.MainBlock.LeviathanAliveCount + Root.GameMemoryService.MainBlock.OrbAliveCount; i++)
 				{
-					RenderExperimentalBuffer<Leviathan>("Leviathan", 0x00251590, StructSizes.Leviathan, [0x0, 0x28, leviathanOffset]);
+					RenderExperimentalBuffer<Leviathan>(Inline.Span($"Leviathan {i}"), 0x00251590, StructSizes.Leviathan, [0x0, 0x28, leviathanOffset]);
 					leviathanOffset += StructSizes.Leviathan;
 				}
 
 				int squidOffset = 0;
 				for (int i = 0; i < Root.GameMemoryService.MainBlock.Squid1AliveCount + Root.GameMemoryService.MainBlock.Squid2AliveCount + Root.GameMemoryService.MainBlock.Squid3AliveCount; i++)
 				{
-					RenderExperimentalBuffer<Squid>("Squid", 0x00251890, StructSizes.Squid, [0x0, 0x18, squidOffset]);
+					RenderExperimentalBuffer<Squid>(Inline.Span($"Squid {i}"), 0x00251890, StructSizes.Squid, [0x0, 0x18, squidOffset]);
 					squidOffset += StructSizes.Squid;
 				}
 
@@ -102,18 +101,18 @@ public static class MemoryToolWindow
 	private static void RenderExperimentalBuffer<T>(ReadOnlySpan<char> name, long address, int size, int[] offsets)
 		where T : unmanaged
 	{
-		if (ImGui.CollapsingHeader(name))
+		byte[] buffer = Root.GameMemoryService.ReadExperimental(address, size, offsets);
+
+		T value = MemoryMarshal.Read<T>(buffer);
+		FieldInfo[] fields = value.GetType().GetFields();
+		foreach (FieldInfo field in fields)
 		{
-			byte[] buffer = Root.GameMemoryService.ReadExperimental(address, size, offsets);
+			string fieldValue = field.GetValue(value)?.ToString() ?? "null";
+			ImGui.Text($"{field.Name}: {fieldValue}");
+		}
 
-			T value = MemoryMarshal.Read<T>(buffer);
-			FieldInfo[] fields = value.GetType().GetFields();
-			foreach (FieldInfo field in fields)
-			{
-				string fieldValue = field.GetValue(value)?.ToString() ?? "null";
-				ImGui.Text($"{field.Name}: {fieldValue}");
-			}
-
+		if (ImGui.CollapsingHeader(Inline.Span($"Show buffer##{name}")))
+		{
 			ImGui.TextWrapped(InsertStrings(buffer.ByteArrayToHexString(), 8, " "));
 		}
 	}
@@ -262,13 +261,5 @@ public static class MemoryToolWindow
 
 		ImGui.TableNextColumn();
 		ImGui.Text(right);
-	}
-
-	private static void RenderBuffer()
-	{
-		for (int i = 0; i < _mainBlock.Buffer.Length; i++)
-			_mainBlock.Buffer[i].TryFormat(_mainBufferHexString.AsSpan()[(i * 2)..], out _, "X2");
-
-		ImGui.TextWrapped(_mainBufferHexString);
 	}
 }

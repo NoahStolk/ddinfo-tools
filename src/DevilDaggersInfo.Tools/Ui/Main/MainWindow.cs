@@ -60,6 +60,7 @@ public static class MainWindow
 				ToolButton(GetColor(Colors.CustomLeaderboards.Primary), "Custom Leaderboards", GoToCustomLeaderboards, ref _hoveredButtonAction, RenderCustomLeaderboardsPreview);
 				ToolButton(GetColor(Colors.Practice.Primary), "Practice", GoToPractice, ref _hoveredButtonAction, RenderPracticePreview);
 				ToolButton(GetColor(Colors.ModManager.Primary), "Mod Manager", GoToModManager, ref _hoveredButtonAction, RenderModManagerPreview);
+				ToolButton(GetColor(Colors.MemoryTool.Primary), "Memory Tool", GoToMemoryTool, ref _hoveredButtonAction, RenderMemoryToolPreview);
 
 				static Color GetColor(Color primary)
 				{
@@ -98,6 +99,11 @@ public static class MainWindow
 				{
 					UiRenderer.Layout = LayoutType.ModManager;
 					ModsDirectoryLogic.LoadModsDirectory();
+				}
+
+				static void GoToMemoryTool()
+				{
+					UiRenderer.Layout = LayoutType.MemoryTool;
 				}
 			}
 
@@ -288,6 +294,14 @@ public static class MainWindow
 			Enable/disable prohibited assets for each mod.
 
 			View all effective game assets and their source mod, including whether they're being overridden by another mod.
+			""");
+	}
+
+	private static void RenderMemoryToolPreview()
+	{
+		ImGuiExt.Title("Memory Tool");
+		ImGui.Text("""
+			WORK IN PROGRESS
 			""");
 	}
 }

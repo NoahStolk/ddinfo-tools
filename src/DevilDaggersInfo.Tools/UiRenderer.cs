@@ -40,6 +40,7 @@ public static class UiRenderer
 				LayoutType.CustomLeaderboards => Colors.CustomLeaderboards,
 				LayoutType.Practice => Colors.Practice,
 				LayoutType.ModManager => Colors.ModManager,
+				LayoutType.MemoryTool => Colors.MemoryTool,
 				_ => throw new ArgumentOutOfRangeException(nameof(value), value, null),
 			});
 		}
@@ -111,10 +112,11 @@ public static class UiRenderer
 				ModPreviewWindow.Render();
 				ModInstallationWindow.Render();
 				break;
+			case LayoutType.MemoryTool:
+				MemoryToolWindow.Update(delta);
+				MemoryToolWindow.Render();
+				break;
 		}
-
-		MemoryToolWindow.Update(delta);
-		MemoryToolWindow.Render();
 
 		if (UserSettings.Model.ShowDebug)
 			DebugWindow.Render();
