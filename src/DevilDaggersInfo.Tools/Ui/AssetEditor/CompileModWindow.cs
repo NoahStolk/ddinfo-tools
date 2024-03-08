@@ -1,8 +1,6 @@
-using DevilDaggersInfo.Core.Mod.Builders;
 using DevilDaggersInfo.Core.Mod.Exceptions;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Extensions;
-using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Settings;
 using ImGuiNET;
@@ -51,46 +49,7 @@ public static class CompileModWindow
 
 				ImGui.BeginDisabled(_isCompiling);
 				if (ImGui.Button("Compile"))
-				{
-					if (!Directory.Exists(_outputDirectory))
-					{
-						PopupManager.ShowError("Output directory does not exist.");
-						return;
-					}
-
-					if (_outputFileName.Length == 0)
-					{
-						PopupManager.ShowError("File name cannot be empty.");
-						return;
-					}
-
-					if (_outputFileName.Any(c => Path.GetInvalidFileNameChars().Contains(c)))
-					{
-						PopupManager.ShowError("File name contains invalid characters.");
-						return;
-					}
-
-					if (File.Exists(Path.Combine(_outputDirectory, $"audio{_outputFileName}")))
-					{
-						PopupManager.ShowError($"File 'audio{_outputFileName}' already exists in the output directory.");
-						return;
-					}
-
-					if (File.Exists(Path.Combine(_outputDirectory, $"dd{_outputFileName}")))
-					{
-						PopupManager.ShowError($"File 'dd{_outputFileName}' already exists in the output directory.");
-						return;
-					}
-
-					_isCompiling = true;
-					_lastStartTime = DateTime.UtcNow;
-
-					// TODO: Show progress bar.
-					Task.Run(async () => await CompileLogic.CompileAsync(_outputDirectory, _outputFileName, CreateAudio, CreateDd));
-
-					_isCompiling = false;
-					_lastEndTime = DateTime.UtcNow;
-				}
+					Compile();
 
 				ImGui.EndDisabled();
 
@@ -113,5 +72,96 @@ public static class CompileModWindow
 		}
 
 		ImGui.End();
+	}
+
+	private static void Compile()
+	{
+		if (!Directory.Exists(_outputDirectory))
+		{
+			PopupManager.ShowError("Output directory does not exist.");
+			return;
+		}
+
+		if (_outputFileName.Length == 0)
+		{
+			PopupManager.ShowError("File name cannot be empty.");
+			return;
+		}
+
+		if (_outputFileName.Any(c => Path.GetInvalidFileNameChars().Contains(c)))
+		{
+			PopupManager.ShowError("File name contains invalid characters.");
+			return;
+		}
+
+		if (File.Exists(Path.Combine(_outputDirectory, $"audio{_outputFileName}")))
+		{
+			PopupManager.ShowError($"File 'audio{_outputFileName}' already exists in the output directory.");
+			return;
+		}
+
+		if (File.Exists(Path.Combine(_outputDirectory, $"dd{_outputFileName}")))
+		{
+			PopupManager.ShowError($"File 'dd{_outputFileName}' already exists in the output directory.");
+			return;
+		}
+
+		_isCompiling = true;
+		_lastStartTime = DateTime.UtcNow;
+
+		// TODO: Show progress bar.
+		Task.Run(async () => CompilationCompletedCallback(await TryCompileAsync()));
+	}
+
+	private static async Task<CompilationResult> TryCompileAsync()
+	{
+		try
+		{
+			await CompileLogic.CompileAsync(_outputDirectory, _outputFileName, CreateAudio, CreateDd);
+			return CompilationResult.Succeeded();
+		}
+		catch (InvalidObjException ex)
+		{
+			return CompilationResult.Failed("Invalid OBJ file.", ex);
+		}
+		catch (InvalidModCompilationException ex)
+		{
+			return CompilationResult.Failed("Invalid mod compilation.", ex);
+		}
+		catch (Exception ex) when (ex.IsFileIoException())
+		{
+			return CompilationResult.Failed("An IO error occurred.", ex);
+		}
+		catch (Exception ex)
+		{
+			return CompilationResult.Failed("An unexpected error occurred.", ex);
+		}
+	}
+
+	private static void CompilationCompletedCallback(CompilationResult compilationResult)
+	{
+		if (!compilationResult.Success)
+		{
+			Debug.Assert(compilationResult.Error != null, "compilationResult.Error != null");
+			Debug.Assert(compilationResult.Exception != null, "compilationResult.Exception != null");
+			PopupManager.ShowError($"Compilation failed: {compilationResult.Error}", compilationResult.Exception.Message);
+		}
+
+		_isCompiling = false;
+		_lastEndTime = DateTime.UtcNow;
+	}
+
+	// TODO: Use discriminated unions when finally added to C# (if ever).
+	private sealed record CompilationResult(bool Success, string? Error, Exception? Exception)
+	{
+		public static CompilationResult Failed(string error, Exception exception)
+		{
+			return new(false, error, exception);
+		}
+
+		public static CompilationResult Succeeded()
+		{
+			return new(true, null, null);
+		}
 	}
 }

@@ -19,6 +19,10 @@
 
 - Fixed not updating mod preview when selected mod is renamed, toggled, or deleted.
 
+### Asset Editor
+
+- Fixed not showing errors when compilation fails.
+
 ## [0.12.0.0] - 2024-01-21
 
 ### Asset Editor

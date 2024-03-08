@@ -1,9 +1,6 @@
 using DevilDaggersInfo.Core.Mod.Builders;
-using DevilDaggersInfo.Core.Mod.Exceptions;
 using DevilDaggersInfo.Tools.EditorFileState;
-using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
-using DevilDaggersInfo.Tools.Ui.Popups;
 using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
@@ -18,55 +15,15 @@ public static class CompileLogic
 		AssetPaths mod = FileStates.Mod.Object;
 
 		if (createAudio)
-			await CompileAudioAsync(mod, outputDirectory, outputFileName);
-
-		if (createDd)
-			await CompileDdAsync(mod, outputDirectory, outputFileName);
-	}
-
-	private static async Task CompileAudioAsync(AssetPaths mod, string outputDirectory, string outputFileName)
-	{
-		byte[]? audioBinary;
-		try
 		{
-			audioBinary = await BuildAudioBinaryAsync(mod.Audio);
-		}
-		catch (Exception ex) when (ex is InvalidModCompilationException or IOException)
-		{
-			PopupManager.ShowError("Could not compile audio binary.", ex);
-			return;
-		}
-
-		try
-		{
+			byte[] audioBinary = await BuildAudioBinaryAsync(mod.Audio);
 			await File.WriteAllBytesAsync(Path.Combine(outputDirectory, $"audio{outputFileName}"), audioBinary);
 		}
-		catch (Exception ex) when (ex.IsFileIoException())
-		{
-			PopupManager.ShowError("Could not write audio binary to output directory.", ex);
-		}
-	}
 
-	private static async Task CompileDdAsync(AssetPaths mod, string outputDirectory, string outputFileName)
-	{
-		byte[]? ddBinary;
-		try
+		if (createDd)
 		{
-			ddBinary = await BuildDdBinaryAsync(mod.Meshes.Cast<IAssetPath>().Concat(mod.ObjectBindings).Concat(mod.Shaders).Concat(mod.Textures).ToList());
-		}
-		catch (Exception ex) when (ex is InvalidModCompilationException or IOException)
-		{
-			PopupManager.ShowError("Could not compile dd binary.", ex);
-			return;
-		}
-
-		try
-		{
+			byte[] ddBinary = await BuildDdBinaryAsync(mod.Meshes.Cast<IAssetPath>().Concat(mod.ObjectBindings).Concat(mod.Shaders).Concat(mod.Textures).ToList());
 			await File.WriteAllBytesAsync(Path.Combine(outputDirectory, $"dd{outputFileName}"), ddBinary);
-		}
-		catch (Exception ex) when (ex.IsFileIoException())
-		{
-			PopupManager.ShowError("Could not write dd binary to output directory.", ex);
 		}
 	}
 
