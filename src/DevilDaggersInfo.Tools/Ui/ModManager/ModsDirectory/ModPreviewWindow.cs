@@ -54,7 +54,7 @@ public static class ModPreviewWindow
 		{
 			ClearState();
 		}
-		catch (Exception ex)
+		catch (Exception ex) when (ex.IsFileIoException())
 		{
 			Root.Log.Error(ex, $"Error loading mod binary '{_selectedFileName}'.");
 			PopupManager.ShowError($"Error loading mod binary '{_selectedFileName}'.", ex);
@@ -110,12 +110,12 @@ public static class ModPreviewWindow
 				{
 					ModsDirectoryLogic.ToggleAssets(_selectedFileName, toc =>
 					{
-						bool anyDisabled = toc.Entries.Any(c => c.Name.Any(char.IsUpper)); // TODO: Add ModBinaryTocEntry.IsProhibited property to DevilDaggersInfo.Core.Mod.
+						bool anyDisabled = toc.Entries.Any(c => !c.IsEnabled);
 						return anyDisabled ? ModBinaryToc.EnableAllAssets(toc) : ModBinaryToc.DisableAllAssets(toc);
 					});
 				}
 
-				RenderTocEntriesTable();
+				RenderTocEntriesTable(_selectedFileName);
 			}
 		}
 
@@ -148,7 +148,7 @@ public static class ModPreviewWindow
 		}
 	}
 
-	private static unsafe void RenderTocEntriesTable()
+	private static unsafe void RenderTocEntriesTable(string selectedFileName)
 	{
 		if (ImGui.BeginTable("ModPreviewTocEntriesTable", 4, ImGuiTableFlags.Resizable | ImGuiTableFlags.Sortable))
 		{
@@ -181,6 +181,16 @@ public static class ModPreviewWindow
 				ModBinaryTocEntry tocEntry = _displayedTocEntries[i];
 
 				ImGui.TableNextColumn();
+				if (ImGui.SmallButton(Inline.Span($"Toggle##{i}")))
+				{
+					ModsDirectoryLogic.ToggleAssets(selectedFileName, toc =>
+					{
+						AssetKey key = new(tocEntry.AssetType, tocEntry.Name);
+						return tocEntry.IsEnabled ? ModBinaryToc.DisableAsset(toc, key) : ModBinaryToc.EnableAsset(toc, key);
+					});
+				}
+
+				ImGui.SameLine();
 				ImGui.Text(tocEntry.Name);
 
 				ImGui.TableNextColumn();
