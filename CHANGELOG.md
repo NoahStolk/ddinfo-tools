@@ -11,6 +11,10 @@
 - Fixed some shortcuts bugs while entering text in text fields.
 - Fixed shortcuts like CTRL+A, CTRL+C, CTRL+V, and CTRL+X not working in text fields.
 
+### Practice
+
+- Renamed "Gigapedes" template to "Triple Gigapedes" for clarity.
+
 ## [0.12.0.0] - 2024-01-21
 
 ### Asset Editor
