@@ -4,7 +4,9 @@ using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.GameMemory.Enemies;
 using ImGuiNET;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace DevilDaggersInfo.Tools.Ui.MemoryTool;
 
@@ -18,6 +20,7 @@ public static class MemoryToolWindow
 	private static readonly List<Spider> _spiders = [];
 	private static readonly List<Leviathan> _leviathans = [];
 	private static readonly List<Squid> _squids = [];
+	private static readonly List<Pede> _pedes = [];
 
 	public static void Update(float delta)
 	{
@@ -35,6 +38,7 @@ public static class MemoryToolWindow
 		_spiders.Clear();
 		_leviathans.Clear();
 		_squids.Clear();
+		_pedes.Clear();
 
 		// Alternative address: 0x00251350, [0x0, 0x198, 0x38, 0x28, 0x0]
 		int thornOffset = 0;
@@ -70,6 +74,13 @@ public static class MemoryToolWindow
 			_squids.Add(Read<Squid>(0x00251890, StructSizes.Squid, [0x0, 0x18, squidOffset]));
 			squidOffset += StructSizes.Squid;
 		}
+
+		int pedeOffset = 0;
+		for (int i = 0; i < Root.GameMemoryService.MainBlock.CentipedeAliveCount + Root.GameMemoryService.MainBlock.GigapedeAliveCount + Root.GameMemoryService.MainBlock.GhostpedeAliveCount; i++)
+		{
+			_pedes.Add(Read<Pede>(0x00251470, StructSizes.Pede, [0x0, 0x28, pedeOffset]));
+			pedeOffset += StructSizes.Pede;
+		}
 	}
 
 	public static void Render()
@@ -86,6 +97,7 @@ public static class MemoryToolWindow
 				RenderSpidersTable();
 				RenderLeviathansTable();
 				RenderSquidsTable();
+				RenderPedeTable();
 
 				if (ImGui.Button("Kill Levi"))
 				{
@@ -233,6 +245,35 @@ public static class MemoryToolWindow
 				NextColumnText(Inline.Span(squid.HpNode1));
 				NextColumnTextOptional(Inline.Span(squid.HpNode2), squid.Type is SquidType.Squid2 or SquidType.Squid3);
 				NextColumnTextOptional(Inline.Span(squid.HpNode3), squid.Type == SquidType.Squid3);
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void RenderPedeTable()
+	{
+		if (_pedes.Count == 0)
+			return;
+
+		ImGui.SeparatorText("Pedes");
+
+		if (ImGui.BeginTable("Pedes", 1, ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable))
+		{
+			ImGui.TableSetupColumn("Segment HP");
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < _pedes.Count; i++)
+			{
+				Pede pede = _pedes[i];
+
+				ImGui.TableNextRow();
+
+				Span<PedeSegment> spanOf50 = MemoryMarshal.CreateSpan(ref Unsafe.As<PedeSegments, PedeSegment>(ref pede.Segments), 50);
+				StringBuilder sb = new();
+				for (int j = 0; j < 50; j++)
+					sb.Append($"{spanOf50[j].Hp} ");
+				NextColumnText(sb.ToString());
 			}
 
 			ImGui.EndTable();
