@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Common.Extensions;
+using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.GameMemory.Enemies;
 using ImGuiNET;
@@ -9,10 +10,14 @@ namespace DevilDaggersInfo.Tools.Ui.MemoryTool;
 
 public static class MemoryToolWindow
 {
-	private static readonly char[] _mainBufferHexString = new char[GameMemoryService.MainBufferSize * 2];
 	private static readonly char[] _survivalHashMd5HexString = new char[16 * 2];
 	private static float _recordingTimer;
 	private static MainBlock _mainBlock;
+
+	private static readonly List<Thorn> _thorns = [];
+	private static readonly List<Spider> _spiders = [];
+	private static readonly List<Leviathan> _leviathans = [];
+	private static readonly List<Squid> _squids = [];
 
 	public static void Update(float delta)
 	{
@@ -25,6 +30,46 @@ public static class MemoryToolWindow
 			return;
 
 		_mainBlock = Root.GameMemoryService.MainBlock;
+
+		_thorns.Clear();
+		_spiders.Clear();
+		_leviathans.Clear();
+		_squids.Clear();
+
+		// Alternative address: 0x00251350, [0x0, 0x198, 0x38, 0x28, 0x0]
+		int thornOffset = 0;
+		for (int i = 0; i < Root.GameMemoryService.MainBlock.ThornAliveCount; i++)
+		{
+			_thorns.Add(Read<Thorn>(0x002513B0, StructSizes.Thorn, [0x0, 0x28, thornOffset]));
+			thornOffset += StructSizes.Thorn;
+
+			// TODO: Maybe:
+			// do
+			// {
+			// }
+			// while (thorn.Hp == 0); // Dead Thorns aren't cleared up from game memory immediately, so skip them until they get cleared up.
+		}
+
+		int spiderOffset = 0;
+		for (int i = 0; i < Root.GameMemoryService.MainBlock.Spider1AliveCount + Root.GameMemoryService.MainBlock.Spider2AliveCount; i++)
+		{
+			_spiders.Add(Read<Spider>(0x00251830, StructSizes.Spider, [0x0, 0x28, spiderOffset]));
+			spiderOffset += StructSizes.Spider;
+		}
+
+		int leviathanOffset = 0;
+		for (int i = 0; i < Root.GameMemoryService.MainBlock.LeviathanAliveCount + Root.GameMemoryService.MainBlock.OrbAliveCount; i++)
+		{
+			_leviathans.Add(Read<Leviathan>(0x00251590, StructSizes.Leviathan, [0x0, 0x28, leviathanOffset]));
+			leviathanOffset += StructSizes.Leviathan;
+		}
+
+		int squidOffset = 0;
+		for (int i = 0; i < Root.GameMemoryService.MainBlock.Squid1AliveCount + Root.GameMemoryService.MainBlock.Squid2AliveCount + Root.GameMemoryService.MainBlock.Squid3AliveCount; i++)
+		{
+			_squids.Add(Read<Squid>(0x00251890, StructSizes.Squid, [0x0, 0x18, squidOffset]));
+			squidOffset += StructSizes.Squid;
+		}
 	}
 
 	public static void Render()
@@ -37,38 +82,10 @@ public static class MemoryToolWindow
 
 				ImGui.SeparatorText("EXPERIMENTAL");
 
-				// Alternative address: 0x00251350, [0x0, 0x198, 0x38, 0x28, 0x0]
-				int thornOffset = 0;
-				for (int i = 0; i < Root.GameMemoryService.MainBlock.ThornAliveCount; i++)
-				{
-					//do
-					{
-						RenderExperimentalBuffer<Thorn>(Inline.Span($"Thorn {i}"), 0x002513B0, StructSizes.Thorn, [0x0, 0x28, thornOffset]);
-						thornOffset += StructSizes.Thorn;
-					}
-					//while (thorn.Hp == 0); // Dead Thorns aren't cleared up from game memory immediately, so skip them until they get cleared up.
-				}
-
-				int spiderOffset = 0;
-				for (int i = 0; i < Root.GameMemoryService.MainBlock.Spider1AliveCount + Root.GameMemoryService.MainBlock.Spider2AliveCount; i++)
-				{
-					RenderExperimentalBuffer<Spider>(Inline.Span($"Spider {i}"), 0x00251830, StructSizes.Spider, [0x0, 0x28, spiderOffset]);
-					spiderOffset += StructSizes.Spider;
-				}
-
-				int leviathanOffset = 0;
-				for (int i = 0; i < Root.GameMemoryService.MainBlock.LeviathanAliveCount + Root.GameMemoryService.MainBlock.OrbAliveCount; i++)
-				{
-					RenderExperimentalBuffer<Leviathan>(Inline.Span($"Leviathan {i}"), 0x00251590, StructSizes.Leviathan, [0x0, 0x28, leviathanOffset]);
-					leviathanOffset += StructSizes.Leviathan;
-				}
-
-				int squidOffset = 0;
-				for (int i = 0; i < Root.GameMemoryService.MainBlock.Squid1AliveCount + Root.GameMemoryService.MainBlock.Squid2AliveCount + Root.GameMemoryService.MainBlock.Squid3AliveCount; i++)
-				{
-					RenderExperimentalBuffer<Squid>(Inline.Span($"Squid {i}"), 0x00251890, StructSizes.Squid, [0x0, 0x18, squidOffset]);
-					squidOffset += StructSizes.Squid;
-				}
+				RenderThornsTable();
+				RenderSpidersTable();
+				RenderLeviathansTable();
+				RenderSquidsTable();
 
 				if (ImGui.Button("Kill Levi"))
 				{
@@ -83,9 +100,9 @@ public static class MemoryToolWindow
 				{
 					for (int i = 0; i < Root.GameMemoryService.MainBlock.Squid1AliveCount + Root.GameMemoryService.MainBlock.Squid2AliveCount + Root.GameMemoryService.MainBlock.Squid3AliveCount; i++)
 					{
-						Root.GameMemoryService.WriteExperimental(0x00251890, [0x0, 0x18, i * StructSizes.Squid + 0], 0);
-						Root.GameMemoryService.WriteExperimental(0x00251890, [0x0, 0x18, i * StructSizes.Squid + 4], 0);
-						Root.GameMemoryService.WriteExperimental(0x00251890, [0x0, 0x18, i * StructSizes.Squid + 8], 0);
+						Root.GameMemoryService.WriteExperimental(0x00251890, [0x0, 0x18, i * StructSizes.Squid + 148], 0);
+						Root.GameMemoryService.WriteExperimental(0x00251890, [0x0, 0x18, i * StructSizes.Squid + 152], 0);
+						Root.GameMemoryService.WriteExperimental(0x00251890, [0x0, 0x18, i * StructSizes.Squid + 156], 0);
 					}
 				}
 			}
@@ -98,12 +115,141 @@ public static class MemoryToolWindow
 		ImGui.End();
 	}
 
-	private static void RenderExperimentalBuffer<T>(ReadOnlySpan<char> name, long address, int size, int[] offsets)
+	private static void RenderThornsTable()
+	{
+		if (_thorns.Count == 0)
+			return;
+
+		ImGui.SeparatorText("Thorns");
+
+		if (ImGui.BeginTable("Thorns", 6, ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable))
+		{
+			ImGui.TableSetupColumn("State");
+			ImGui.TableSetupColumn("IsAlive");
+			ImGui.TableSetupColumn("StateTimer");
+			ImGui.TableSetupColumn("HP");
+			ImGui.TableSetupColumn("Position");
+			ImGui.TableSetupColumn("Rotation");
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < _thorns.Count; i++)
+			{
+				Thorn thorn = _thorns[i];
+
+				ImGui.TableNextRow();
+				NextColumnText(Inline.Span(thorn.State));
+				NextColumnText(Inline.Span(thorn.IsAlive));
+				NextColumnText(Inline.Span(thorn.StateTimer));
+				NextColumnText(Inline.Span(thorn.Hp));
+				NextColumnText(Inline.Span(thorn.Position));
+				NextColumnText(Inline.Span(thorn.Rotation));
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void RenderSpidersTable()
+	{
+		if (_spiders.Count == 0)
+			return;
+
+		ImGui.SeparatorText("Spiders");
+
+		if (ImGui.BeginTable("Spiders", 1, ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable))
+		{
+			ImGui.TableSetupColumn("HP");
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < _spiders.Count; i++)
+			{
+				Spider spider = _spiders[i];
+
+				ImGui.TableNextRow();
+				NextColumnText(Inline.Span(spider.Hp));
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void RenderLeviathansTable()
+	{
+		if (_leviathans.Count == 0)
+			return;
+
+		ImGui.SeparatorText("Leviathans");
+
+		if (ImGui.BeginTable("Leviathans", 7, ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable))
+		{
+			ImGui.TableSetupColumn("HP 1");
+			ImGui.TableSetupColumn("HP 2");
+			ImGui.TableSetupColumn("HP 3");
+			ImGui.TableSetupColumn("HP 4");
+			ImGui.TableSetupColumn("HP 5");
+			ImGui.TableSetupColumn("HP 6");
+			ImGui.TableSetupColumn("HP Orb");
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < _leviathans.Count; i++)
+			{
+				Leviathan leviathan = _leviathans[i];
+
+				ImGui.TableNextRow();
+				NextColumnText(Inline.Span(leviathan.NodeHp1));
+				NextColumnText(Inline.Span(leviathan.NodeHp2));
+				NextColumnText(Inline.Span(leviathan.NodeHp3));
+				NextColumnText(Inline.Span(leviathan.NodeHp4));
+				NextColumnText(Inline.Span(leviathan.NodeHp5));
+				NextColumnText(Inline.Span(leviathan.NodeHp6));
+				NextColumnText(Inline.Span(leviathan.OrbHp));
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void RenderSquidsTable()
+	{
+		if (_squids.Count == 0)
+			return;
+
+		ImGui.SeparatorText("Squids");
+
+		if (ImGui.BeginTable("Squids", 4, ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable))
+		{
+			ImGui.TableSetupColumn("Type");
+			ImGui.TableSetupColumn("HP 1");
+			ImGui.TableSetupColumn("HP 2");
+			ImGui.TableSetupColumn("HP 3");
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < _squids.Count; i++)
+			{
+				Squid squid = _squids[i];
+
+				ImGui.TableNextRow();
+				NextColumnText(Inline.Span(squid.Type));
+				NextColumnText(Inline.Span(squid.HpNode1));
+				NextColumnTextOptional(Inline.Span(squid.HpNode2), squid.Type is SquidType.Squid2 or SquidType.Squid3);
+				NextColumnTextOptional(Inline.Span(squid.HpNode3), squid.Type == SquidType.Squid3);
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static T Read<T>(long address, int size, int[] offsets)
 		where T : unmanaged
 	{
 		byte[] buffer = Root.GameMemoryService.ReadExperimental(address, size, offsets);
+		return MemoryMarshal.Read<T>(buffer);
+	}
 
-		T value = MemoryMarshal.Read<T>(buffer);
+	private static void RenderExperimentalBuffer<T>(ReadOnlySpan<char> name, long address, int size, int[] offsets)
+		where T : unmanaged
+	{
+		T value = Read<T>(address, size, offsets);
 		FieldInfo[] fields = value.GetType().GetFields();
 		foreach (FieldInfo field in fields)
 		{
@@ -113,33 +259,34 @@ public static class MemoryToolWindow
 
 		if (ImGui.CollapsingHeader(Inline.Span($"Show buffer##{name}")))
 		{
-			ImGui.TextWrapped(InsertStrings(buffer.ByteArrayToHexString(), 8, " "));
+			byte[] bytes = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref value, 1)).ToArray();
+			ImGui.TextWrapped(InsertStrings(bytes.ByteArrayToHexString(), 8, " "));
 		}
-	}
 
-	private static string InsertStrings(string s, int insertEvery, string insert)
-	{
-		char[] ins = s.ToCharArray();
-		char[] inserts = insert.ToCharArray();
-		int insertLength = inserts.Length;
-		int length = s.Length + s.Length / insertEvery * insert.Length;
-		if (ins.Length % insertEvery == 0)
-			length -= insert.Length;
-
-		char[] outs = new char[length];
-		long di = 0;
-		long si = 0;
-		while (si < s.Length - insertEvery)
+		static string InsertStrings(string s, int insertEvery, string insert)
 		{
-			Array.Copy(ins, si, outs, di, insertEvery);
-			si += insertEvery;
-			di += insertEvery;
-			Array.Copy(inserts, 0, outs, di, insertLength);
-			di += insertLength;
-		}
+			char[] ins = s.ToCharArray();
+			char[] inserts = insert.ToCharArray();
+			int insertLength = inserts.Length;
+			int length = s.Length + s.Length / insertEvery * insert.Length;
+			if (ins.Length % insertEvery == 0)
+				length -= insert.Length;
 
-		Array.Copy(ins, si, outs, di, ins.Length - si);
-		return new(outs);
+			char[] outs = new char[length];
+			long di = 0;
+			long si = 0;
+			while (si < s.Length - insertEvery)
+			{
+				Array.Copy(ins, si, outs, di, insertEvery);
+				si += insertEvery;
+				di += insertEvery;
+				Array.Copy(inserts, 0, outs, di, insertLength);
+				di += insertLength;
+			}
+
+			Array.Copy(ins, si, outs, di, ins.Length - si);
+			return new(outs);
+		}
 	}
 
 	private static void RenderMainBlockTable()
@@ -256,10 +403,19 @@ public static class MemoryToolWindow
 
 	private static void Column(ReadOnlySpan<char> left, ReadOnlySpan<char> right)
 	{
-		ImGui.TableNextColumn();
-		ImGui.Text(left);
+		NextColumnText(left);
+		NextColumnText(right);
+	}
 
+	private static void NextColumnText(ReadOnlySpan<char> text)
+	{
 		ImGui.TableNextColumn();
-		ImGui.Text(right);
+		ImGui.Text(text);
+	}
+
+	private static void NextColumnTextOptional(ReadOnlySpan<char> text, bool condition)
+	{
+		ImGui.TableNextColumn();
+		ImGui.TextColored(condition ? Color.White : Color.Gray(0.4f), condition ? text : "-");
 	}
 }
