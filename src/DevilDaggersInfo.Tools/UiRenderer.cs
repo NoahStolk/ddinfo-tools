@@ -110,7 +110,7 @@ public static class UiRenderer
 				ModManagerWindow.Render();
 				break;
 			case LayoutType.MemoryTool:
-				MemoryToolWindow.Update(delta);
+				ExperimentalMemory.Update(delta);
 				MemoryToolWindow.Render();
 				break;
 		}
