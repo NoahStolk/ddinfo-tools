@@ -6,6 +6,9 @@ public static class DateTimeUtils
 {
 	public static string FormatTimeAgo(DateTime utcDateTime)
 	{
+		if (utcDateTime.Kind != DateTimeKind.Utc)
+			throw new ArgumentException("DateTime must be in UTC.", nameof(utcDateTime));
+
 		TimeSpan diff = DateTime.UtcNow - utcDateTime;
 		if (diff < TimeSpan.FromSeconds(5))
 			return "just now";

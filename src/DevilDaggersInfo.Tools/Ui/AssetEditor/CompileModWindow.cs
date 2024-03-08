@@ -59,7 +59,7 @@ public static class CompileModWindow
 				}
 				else
 				{
-					if (_lastStartTime != null && _lastEndTime != null)
+					if (_lastStartTime.HasValue && _lastEndTime.HasValue)
 					{
 						ImGui.Text(Inline.Span($"Compiled in {(_lastEndTime.Value - _lastStartTime.Value).TotalSeconds:0.000} seconds ({DateTimeUtils.FormatTimeAgo(_lastEndTime.Value)})."));
 					}
