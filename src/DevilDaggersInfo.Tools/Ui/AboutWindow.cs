@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
-using System.Diagnostics;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
@@ -15,97 +14,80 @@ public static class AboutWindow
 		if (!show)
 			return;
 
-		Vector2 windowSize = new(512, 512);
-		ImGui.SetNextWindowSize(windowSize);
-		if (ImGui.Begin("About ddinfo tools", ref show, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDocking))
+		Vector2 windowSize = new(640, 640);
+		ImGuiUtils.SetNextWindowMinSize(windowSize);
+		if (ImGui.Begin("About ddinfo tools", ref show, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoDocking))
 		{
-			ImGui.PushTextWrapPos(windowSize.X - 16);
+			ImGui.PushStyleVar(ImGuiStyleVar.SeparatorTextPadding, new Vector2(20, 12));
+			ImGui.PushTextWrapPos(ImGui.GetWindowWidth() - 16);
 
 			ImGuiExt.Title("About");
-
 			ImGui.Text("ddinfo tools is a collection of tools for Devil Daggers. The tools are part of the DevilDaggers.info project.");
 
-			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
-			ImGuiExt.Title("Open source", Root.FontGoetheBold20);
+			ImGui.SeparatorText("Alpha notice");
+			ImGui.Text($"""
+				The tools are currently in alpha. If you have any feature requests, or encounter any issues, please report them on Discord or GitHub.
 
-			ImGui.Text("The source code is available on GitHub.");
-
-			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
-
-			RenderGitHubButton();
-
-			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
-			ImGuiExt.Title("Alpha notice", Root.FontGoetheBold20);
-
-			ImGui.Text("""
-				The tools are currently in alpha. I develop and maintain the entire DevilDaggers.info project in my free time, which means I cannot promise a release date any time soon.
-
-				If you have any feature requests, or encounter any issues, please report them on Discord or GitHub.
+				If the app crashes, please send me the ddinfo-{AssemblyUtils.EntryAssemblyVersionString}.log file. This file holds information about the crash. It can be found in the same folder as the executable.
 
 				Thank you for testing!
 				""");
 
-			ImGui.SetCursorPos(new(8, windowSize.Y - 72));
+			ImGui.SeparatorText("Open source");
+			ImGui.Text("The source code is available on GitHub:");
+			RenderLibrary("https://github.com/NoahStolk/ddinfo-tools", "ddinfo-tools", "Main repository for the tools (this app)");
+			RenderLibrary("https://github.com/NoahStolk/ddinfo-core", "ddinfo-core", "Core libraries for DevilDaggers.info projects");
+			RenderLibrary("https://github.com/NoahStolk/ddinfo-web", "ddinfo-web", "DevilDaggers.info website and web server");
+			RenderLibrary("https://github.com/NoahStolk/imgui-glfw-dotnet", "imgui-glfw-dotnet", "ImGui.NET rendering back-end for GLFW");
 
-			ImGui.TextColored(Colors.TitleColor, "© DevilDaggers.info 2017-2024");
+			ImGui.SeparatorText("Third-party libraries");
+			ImGui.Text("The app uses the following third-party libraries:");
 
-			ImGuiExt.Hyperlink("https://devildaggers.com/", "Devil Daggers");
-			ImGui.SameLine();
-			ImGui.Text("is created by");
-			ImGui.SameLine();
-			ImGuiExt.Hyperlink("https://sorath.com/", "Sorath");
-
-			ImGuiExt.Hyperlink("https://devildaggers.info/", "DevilDaggers.info");
-			ImGui.SameLine();
-			ImGui.Text("is created by");
-			ImGui.SameLine();
-			ImGuiExt.Hyperlink("https://noahstolk.com/", "Noah Stolk");
-
-			ImGui.TextColored(Color.Gray(0.6f), _versionInfo);
+			RenderLibrary("https://github.com/ocornut/imgui", "Dear ImGui", "Cross-platform UI framework");
+			RenderLibrary("https://github.com/mlabbe/nativefiledialog", "NativeFileDialog", "Cross-platform file dialogs");
+			RenderLibrary("https://github.com/dotnet/Silk.NET", "Silk.NET", "OpenGL, OpenAL, and GLFW bindings for C#");
+			RenderLibrary("https://github.com/serilog/serilog", "Serilog", "Logging");
+			RenderLibrary("https://github.com/SixLabors/ImageSharp", "ImageSharp", "Image processing");
+			RenderLibrary("https://github.com/ImGuiNET/ImGui.NET", "ImGui.NET", "C# wrapper for Dear ImGui");
+			RenderLibrary("https://github.com/milleniumbug/NativeFileDialogSharp", "NativeFileDialogSharp", "C# wrapper for NativeFileDialog");
+			RenderFooter();
 
 			ImGui.PopTextWrapPos();
+			ImGui.PopStyleVar();
 		}
 
 		ImGui.End(); // End About ddinfo tools
 	}
 
-	private static void RenderGitHubButton()
+	private static void RenderLibrary(ReadOnlySpan<char> url, ReadOnlySpan<char> name, ReadOnlySpan<char> usage)
 	{
-		Vector2 buttonSize = new(168, 40);
+		ImGui.Bullet();
+		ImGuiExt.Hyperlink(url, name);
+		ImGui.SameLine();
+		ImGui.SetCursorPosX(192);
+		ImGui.Text("-");
+		ImGui.SameLine();
+		ImGui.Text(usage);
+	}
 
-		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
-		if (ImGui.BeginChild("GitHub", buttonSize, ImGuiChildFlags.Border))
-		{
-			ImGui.PopStyleVar();
+	private static void RenderFooter()
+	{
+		ImGui.SetCursorPos(new(8, ImGui.GetWindowHeight() - 72));
 
-			bool hover = ImGui.IsWindowHovered();
+		ImGui.TextColored(Colors.TitleColor, "© DevilDaggers.info 2017-2024");
 
-			ImGuiStylePtr style = ImGui.GetStyle();
-			ImGui.PushStyleColor(ImGuiCol.ChildBg, style.Colors[(int)(hover ? ImGuiCol.ButtonHovered : ImGuiCol.Button)]);
-			if (ImGui.BeginChild("GitHubChild", buttonSize, ImGuiChildFlags.None, ImGuiWindowFlags.NoInputs))
-			{
-				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-					Process.Start(new ProcessStartInfo("https://github.com/NoahStolk/ddinfo-tools") { UseShellExecute = true });
+		ImGuiExt.Hyperlink("https://devildaggers.com/", "Devil Daggers");
+		ImGui.SameLine();
+		ImGui.Text("is created by");
+		ImGui.SameLine();
+		ImGuiExt.Hyperlink("https://sorath.com/", "Sorath");
 
-				ImGui.SetCursorPos(new(8));
-				ImGuiImage.Image(Root.InternalResources.GitHubTexture.Id, new(24));
-				ImGui.SameLine();
+		ImGuiExt.Hyperlink("https://devildaggers.info/", "DevilDaggers.info");
+		ImGui.SameLine();
+		ImGui.Text("is created by");
+		ImGui.SameLine();
+		ImGuiExt.Hyperlink("https://noahstolk.com/", "Noah Stolk");
 
-				ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 3);
-				ImGui.PushFont(Root.FontGoetheBold20);
-				ImGui.Text("View on GitHub");
-				ImGui.PopFont();
-			}
-
-			ImGui.EndChild(); // End GitHubChild
-
-			ImGui.PopStyleColor();
-		}
-		else
-		{
-			ImGui.PopStyleVar();
-		}
-
-		ImGui.EndChild(); // End GitHub
+		ImGui.TextColored(Color.Gray(0.6f), _versionInfo);
 	}
 }
