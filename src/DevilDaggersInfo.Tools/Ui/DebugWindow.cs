@@ -21,7 +21,7 @@ public static class DebugWindow
 		_debugMessages.Add(obj?.ToString() ?? "null");
 	}
 
-	public static void Clear()
+	public static void ClearDebugMessages()
 	{
 		_debugMessages.Clear();
 	}
@@ -63,6 +63,15 @@ public static class DebugWindow
 				RenderUserCache();
 			}
 
+			if (ImGui.CollapsingHeader("Debug messages"))
+			{
+				if (ImGui.Button("Clear"))
+					ClearDebugMessages();
+
+				for (int i = 0; i < _debugMessages.Count; i++)
+					ImGui.Text(_debugMessages[i]);
+			}
+
 #if DEBUG
 			ImGui.Separator();
 
@@ -88,14 +97,6 @@ public static class DebugWindow
 			if (ImGui.Button("FATAL CRASH"))
 				throw new InvalidOperationException("Test crash! This should be logged as FATAL.");
 			ImGui.PopStyleColor(2);
-
-			ImGui.Separator();
-
-			if (ImGui.Button("Clear"))
-				Clear();
-
-			for (int i = 0; i < _debugMessages.Count; i++)
-				ImGui.Text(_debugMessages[i]);
 
 			ImGui.Separator();
 
