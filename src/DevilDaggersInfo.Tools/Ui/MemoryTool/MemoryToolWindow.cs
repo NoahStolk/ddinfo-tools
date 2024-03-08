@@ -21,6 +21,7 @@ public static class MemoryToolWindow
 	private static readonly List<Leviathan> _leviathans = [];
 	private static readonly List<Squid> _squids = [];
 	private static readonly List<Pede> _pedes = [];
+	private static readonly List<Boid> _boids = [];
 
 	public static void Update(float delta)
 	{
@@ -39,10 +40,11 @@ public static class MemoryToolWindow
 		_leviathans.Clear();
 		_squids.Clear();
 		_pedes.Clear();
+		_boids.Clear();
 
 		// Alternative address: 0x00251350, [0x0, 0x198, 0x38, 0x28, 0x0]
 		int thornOffset = 0;
-		for (int i = 0; i < Root.GameMemoryService.MainBlock.ThornAliveCount; i++)
+		for (int i = 0; i < _mainBlock.ThornAliveCount; i++)
 		{
 			_thorns.Add(Read<Thorn>(0x002513B0, StructSizes.Thorn, [0x0, 0x28, thornOffset]));
 			thornOffset += StructSizes.Thorn;
@@ -55,31 +57,39 @@ public static class MemoryToolWindow
 		}
 
 		int spiderOffset = 0;
-		for (int i = 0; i < Root.GameMemoryService.MainBlock.Spider1AliveCount + Root.GameMemoryService.MainBlock.Spider2AliveCount; i++)
+		for (int i = 0; i < _mainBlock.Spider1AliveCount + _mainBlock.Spider2AliveCount; i++)
 		{
 			_spiders.Add(Read<Spider>(0x00251830, StructSizes.Spider, [0x0, 0x28, spiderOffset]));
 			spiderOffset += StructSizes.Spider;
 		}
 
 		int leviathanOffset = 0;
-		for (int i = 0; i < Root.GameMemoryService.MainBlock.LeviathanAliveCount + Root.GameMemoryService.MainBlock.OrbAliveCount; i++)
+		for (int i = 0; i < _mainBlock.LeviathanAliveCount + _mainBlock.OrbAliveCount; i++)
 		{
 			_leviathans.Add(Read<Leviathan>(0x00251590, StructSizes.Leviathan, [0x0, 0x28, leviathanOffset]));
 			leviathanOffset += StructSizes.Leviathan;
 		}
 
 		int squidOffset = 0;
-		for (int i = 0; i < Root.GameMemoryService.MainBlock.Squid1AliveCount + Root.GameMemoryService.MainBlock.Squid2AliveCount + Root.GameMemoryService.MainBlock.Squid3AliveCount; i++)
+		for (int i = 0; i < _mainBlock.Squid1AliveCount + _mainBlock.Squid2AliveCount + _mainBlock.Squid3AliveCount; i++)
 		{
 			_squids.Add(Read<Squid>(0x00251890, StructSizes.Squid, [0x0, 0x18, squidOffset]));
 			squidOffset += StructSizes.Squid;
 		}
 
 		int pedeOffset = 0;
-		for (int i = 0; i < Root.GameMemoryService.MainBlock.CentipedeAliveCount + Root.GameMemoryService.MainBlock.GigapedeAliveCount + Root.GameMemoryService.MainBlock.GhostpedeAliveCount; i++)
+		for (int i = 0; i < _mainBlock.CentipedeAliveCount + _mainBlock.GigapedeAliveCount + _mainBlock.GhostpedeAliveCount; i++)
 		{
 			_pedes.Add(Read<Pede>(0x00251470, StructSizes.Pede, [0x0, 0x28, pedeOffset]));
 			pedeOffset += StructSizes.Pede;
+		}
+
+		int boidOffset = 0;
+		int boidCount = _mainBlock.Skull1AliveCount + _mainBlock.Skull2AliveCount + _mainBlock.Skull3AliveCount + _mainBlock.Skull4AliveCount + _mainBlock.SpiderlingAliveCount;
+		for (int i = 0; i < boidCount; i++)
+		{
+			_boids.Add(Read<Boid>(0x00251410, StructSizes.Boid, [0x0, 0x20, 0x2 + boidOffset]));
+			boidOffset += StructSizes.Boid;
 		}
 	}
 
@@ -98,6 +108,7 @@ public static class MemoryToolWindow
 				RenderLeviathansTable();
 				RenderSquidsTable();
 				RenderPedeTable();
+				RenderBoidsTable();
 
 				if (ImGui.Button("Kill Levi"))
 				{
@@ -274,6 +285,30 @@ public static class MemoryToolWindow
 				for (int j = 0; j < 50; j++)
 					sb.Append($"{spanOf50[j].Hp} ");
 				NextColumnText(sb.ToString());
+			}
+
+			ImGui.EndTable();
+		}
+	}
+
+	private static void RenderBoidsTable()
+	{
+		if (_boids.Count == 0)
+			return;
+
+		ImGui.SeparatorText("Boids");
+
+		if (ImGui.BeginTable("Boids", 1, ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable))
+		{
+			ImGui.TableSetupColumn("HP");
+			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < _boids.Count; i++)
+			{
+				Boid boid = _boids[i];
+
+				ImGui.TableNextRow();
+				NextColumnText(Inline.Span(boid.Hp));
 			}
 
 			ImGui.EndTable();
