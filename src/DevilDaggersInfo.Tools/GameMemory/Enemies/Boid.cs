@@ -13,7 +13,7 @@ public record struct Boid
 	[FieldOffset(004)] public int SpawnerId;
 	[FieldOffset(008)] public Vector3 Position;
 	[FieldOffset(020)] public Vector3 Velocity;
-	[FieldOffset(032)] public float Speed;
+	[FieldOffset(032)] public float BaseSpeed;
 	[FieldOffset(036)] public Matrix3x3 Rotation;
 	[FieldOffset(072)] public Matrix4x4 Floats;
 	[FieldOffset(200)] public float Timer;
