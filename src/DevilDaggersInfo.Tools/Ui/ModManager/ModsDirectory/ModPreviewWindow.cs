@@ -62,6 +62,18 @@ public static class ModPreviewWindow
 		}
 	}
 
+	public static void DeleteIfSelected(string fileName)
+	{
+		if (SelectedFileName == fileName)
+			SelectedFileName = null;
+	}
+
+	public static void UpdateIfSelected(string oldFileName, string newFileName)
+	{
+		if (SelectedFileName == oldFileName)
+			SelectedFileName = newFileName;
+	}
+
 	private static void ClearState()
 	{
 		_displayedTocEntries.Clear();

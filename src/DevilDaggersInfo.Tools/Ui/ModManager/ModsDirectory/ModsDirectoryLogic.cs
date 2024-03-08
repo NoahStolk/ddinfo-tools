@@ -122,6 +122,7 @@ public static class ModsDirectoryLogic
 		}
 
 		ModInstallationWindow.LoadEffectiveAssets();
+		ModPreviewWindow.UpdateIfSelected(_originalFileName, NewFileName);
 
 		return null;
 	}
@@ -150,6 +151,7 @@ public static class ModsDirectoryLogic
 			_modFiles.Remove(modFile);
 
 		ModInstallationWindow.LoadEffectiveAssets();
+		ModPreviewWindow.DeleteIfSelected(fileName);
 	}
 
 	public static void ToggleModFile(string originalFileName)
@@ -192,6 +194,7 @@ public static class ModsDirectoryLogic
 		}
 
 		ModInstallationWindow.LoadEffectiveAssets();
+		ModPreviewWindow.UpdateIfSelected(originalFileName, newFileName);
 	}
 
 	public static void ToggleProhibitedAssets(string fileName)

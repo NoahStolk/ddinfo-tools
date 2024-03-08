@@ -15,6 +15,10 @@
 
 - Renamed "Gigapedes" template to "Triple Gigapedes" for clarity.
 
+### Mod Manager
+
+- Fixed not updating mod preview when selected mod is renamed, toggled, or deleted.
+
 ## [0.12.0.0] - 2024-01-21
 
 ### Asset Editor
