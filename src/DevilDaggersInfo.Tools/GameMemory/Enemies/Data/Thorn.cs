@@ -12,7 +12,7 @@ public record struct Thorn
 	[FieldOffset(08)] public float StateTimer;
 	[FieldOffset(12)] public int Hp;
 	[FieldOffset(16)] public Vector3 Position;
-	[FieldOffset(28)] public float Rotation;
+	[FieldOffset(28)] public float Rotation; // TODO: This is not the rotation but probably part of a matrix.
 	[FieldOffset(32)] public float Unknown1;
 	[FieldOffset(36)] public float Unknown2;
 	[FieldOffset(40)] public float Unknown3;
