@@ -1,10 +1,10 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
 
-namespace DevilDaggersInfo.Tools.GameMemory.Enemies;
+namespace DevilDaggersInfo.Tools.GameMemory.Enemies.Data;
 
 #pragma warning disable SA1134
-[StructLayout(LayoutKind.Explicit, Size = StructSizes.Thorn)]
+[StructLayout(LayoutKind.Explicit, Size = MemoryConstants.ThornSize)]
 public record struct Thorn
 {
 	[FieldOffset(00)] public ThornState State;

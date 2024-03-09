@@ -1,4 +1,4 @@
-namespace DevilDaggersInfo.Tools.GameMemory.Enemies;
+namespace DevilDaggersInfo.Tools.GameMemory.Enemies.Data;
 
 #pragma warning disable CA1028, CA1008
 public enum BoidType : short
