@@ -16,7 +16,7 @@ public static class ExperimentalMemory
 
 	private static float _recordingTimer;
 
-	public static float ScanInterval = 0.25f;
+	public static float ScanInterval = 0.1f;
 
 	public static IReadOnlyList<Thorn> Thorns => _thorns;
 	public static IReadOnlyList<Spider> Spiders => _spiders;
@@ -51,11 +51,21 @@ public static class ExperimentalMemory
 		ReadEnemyList(_pedes, pedeListLength, MemoryConstants.Pede);
 		ReadEnemyList(_boids, boidListLength, MemoryConstants.Boid);
 
+		for (int i = 0; i < _thorns.Count; i++)
+		{
+			Thorn thorn = _thorns[i];
+			if (thorn.StateTimer < 1)
+			{
+				WriteValue<Thorn, int>(i, nameof(Thorn.Hp), 10);
+				// WriteValue<Thorn, float>(i, nameof(Thorn.Rotation), Root.GameMemoryService.MainBlock.Time);
+			}
+		}
+
 		for (int i = 0; i < _squids.Count; i++)
 		{
 			Squid squid = _squids[i];
-			if (squid.GushCountDown < -2)
-				WriteValue<Squid, float>(i, nameof(Squid.GushCountDown), -2);
+			if (squid.GushCountDown < -1)
+				WriteValue<Squid, float>(i, nameof(Squid.GushCountDown), -1);
 		}
 
 		for (int i = 0; i < _boids.Count; i++)
