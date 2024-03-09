@@ -2,6 +2,7 @@ using DevilDaggersInfo.Core.Common.Extensions;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.GameMemory.Enemies;
+using DevilDaggersInfo.Tools.GameMemory.Enemies.Data;
 using ImGuiNET;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -36,8 +37,8 @@ public static class MemoryToolWindow
 
 			if (Root.GameMemoryService.IsInitialized)
 			{
-				byte[] buffer = Root.GameMemoryService.ReadExperimental(0x002513B0, 0x28, [0x0, 0x20]);
-				RenderBuffer(buffer);
+				// byte[] buffer = Root.GameMemoryService.ReadExperimental(0x002513B0, 0x28, [0x0, 0x20]);
+				// RenderBuffer(buffer);
 
 				RenderThornsTable();
 				RenderSpidersTable();
@@ -179,15 +180,15 @@ public static class MemoryToolWindow
 
 				ImGui.TableNextRow();
 				NextColumnText(Inline.Span(squid.Type));
-				NextColumnText(Inline.Span(squid.HpNode1));
+				NextColumnText(Inline.Span(squid.NodeHp1));
 				if (squid.Type is SquidType.Squid2 or SquidType.Squid3)
 				{
 					ImGui.SameLine();
-					ImGui.Text(Inline.Span(squid.HpNode2));
+					ImGui.Text(Inline.Span(squid.NodeHp2));
 					if (squid.Type == SquidType.Squid3)
 					{
 						ImGui.SameLine();
-						ImGui.Text(Inline.Span(squid.HpNode3));
+						ImGui.Text(Inline.Span(squid.NodeHp3));
 					}
 				}
 

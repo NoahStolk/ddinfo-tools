@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.GameMemory.Enemies;
+using DevilDaggersInfo.Tools.GameMemory.Enemies.Data;
 using System.Runtime.InteropServices;
 
 namespace DevilDaggersInfo.Tools.Ui.MemoryTool;
@@ -34,6 +35,7 @@ public static class ExperimentalMemory
 		if (!GameMemoryServiceWrapper.Scan() || !Root.GameMemoryService.IsInitialized)
 			return;
 
+		// TODO: Don't get this from the main block. Find the actual list lengths.
 		MainBlock mainBlock = Root.GameMemoryService.MainBlock;
 		int thornListLength = mainBlock.ThornAliveCount;
 		int spiderListLength = mainBlock.Spider1AliveCount + mainBlock.Spider2AliveCount;
@@ -42,22 +44,18 @@ public static class ExperimentalMemory
 		int pedeListLength = mainBlock.CentipedeAliveCount + mainBlock.GigapedeAliveCount + mainBlock.GhostpedeAliveCount;
 		int boidListLength = mainBlock.Skull1AliveCount + mainBlock.Skull2AliveCount + mainBlock.Skull3AliveCount + mainBlock.Skull4AliveCount + mainBlock.SpiderlingAliveCount;
 
-		ReadEnemyList(_thorns, thornListLength, 0x002513B0, StructSizes.Thorn, [0x0, 0x28, 0]);
-		ReadEnemyList(_spiders, spiderListLength, 0x00251830, StructSizes.Spider, [0x0, 0x28, 0]);
-		ReadEnemyList(_leviathans, leviathanListLength, 0x00251590, StructSizes.Leviathan, [0x0, 0x28, 0]);
-		ReadEnemyList(_squids, squidListLength, 0x00251890, StructSizes.Squid, [0x0, 0x18, 0]);
-		ReadEnemyList(_pedes, pedeListLength, 0x00251470, StructSizes.Pede, [0x0, 0x28, 0]);
-		ReadEnemyList(_boids, boidListLength, 0x00251410, StructSizes.Boid, [0x0, 0x20, 0]);
+		ReadEnemyList(_thorns, thornListLength, MemoryConstants.Thorn);
+		ReadEnemyList(_spiders, spiderListLength, MemoryConstants.Spider);
+		ReadEnemyList(_leviathans, leviathanListLength, MemoryConstants.Leviathan);
+		ReadEnemyList(_squids, squidListLength, MemoryConstants.Squid);
+		ReadEnemyList(_pedes, pedeListLength, MemoryConstants.Pede);
+		ReadEnemyList(_boids, boidListLength, MemoryConstants.Boid);
 
 		for (int i = 0; i < _squids.Count; i++)
 		{
 			Squid squid = _squids[i];
 			if (squid.GushCountDown < -2)
-			{
-				squid.GushCountDown = -2;
-				int gushCountDownOffset = (int)Marshal.OffsetOf<Squid>(nameof(Squid.GushCountDown));
-				Root.GameMemoryService.WriteExperimental(0x00251890, [0x0, 0x18, i * StructSizes.Squid + gushCountDownOffset], squid.GushCountDown);
-			}
+				WriteValue<Squid, float>(i, nameof(Squid.GushCountDown), -2);
 		}
 
 		for (int i = 0; i < _boids.Count; i++)
@@ -91,47 +89,69 @@ public static class ExperimentalMemory
 				// };
 
 				// Only write the necessary data back into memory, otherwise we're sending outdated data back into memory.
-				int hpOffset = (int)Marshal.OffsetOf<Boid>(nameof(Boid.Hp));
-				int speedOffset = (int)Marshal.OffsetOf<Boid>(nameof(Boid.BaseSpeed));
-				int typeOffset = (int)Marshal.OffsetOf<Boid>(nameof(Boid.Type));
-				Root.GameMemoryService.WriteExperimental(0x00251410, [0x0, 0x20, 0x00 + hpOffset + i * StructSizes.Boid], boid.Hp);
-				Root.GameMemoryService.WriteExperimental(0x00251410, [0x0, 0x20, 0x00 + speedOffset + i * StructSizes.Boid], boid.BaseSpeed);
-				Root.GameMemoryService.WriteExperimental(0x00251410, [0x0, 0x20, 0x00 + typeOffset + i * StructSizes.Boid], (short)boid.Type);
+				WriteValue<Boid, int>(i, nameof(Boid.Hp), boid.Hp);
+				WriteValue<Boid, float>(i, nameof(Boid.BaseSpeed), boid.BaseSpeed);
+				WriteValue<Boid, short>(i, nameof(Boid.Type), (short)boid.Type);
 			}
 		}
 	}
 
-	private static void ReadEnemyList<TEnemy>(List<TEnemy> list, int count, long address, int size, Span<int> offsets)
+	private static void ReadEnemyList<TEnemy>(List<TEnemy> list, int count, EnemyMemory enemyMemory)
 		where TEnemy : unmanaged
 	{
 		list.Clear();
+
+		Span<int> offsets = stackalloc int[enemyMemory.Offsets.Count];
+		for (int i = 0; i < enemyMemory.Offsets.Count; i++)
+			offsets[i] = enemyMemory.Offsets[i];
+
 		for (int i = 0; i < count; i++)
 		{
-			byte[] buffer = Root.GameMemoryService.ReadExperimental(address, size, offsets);
+			byte[] buffer = Root.GameMemoryService.ReadExperimental(enemyMemory.BaseAddress, enemyMemory.StructSize, offsets);
 			TEnemy enemy = MemoryMarshal.Read<TEnemy>(buffer);
 			list.Add(enemy);
-			offsets[^1] += size;
+			offsets[^1] += enemyMemory.StructSize;
 		}
+	}
+
+	private static void WriteValue<TEnemy, TValue>(int index, string fieldName, TValue value)
+		where TEnemy : unmanaged
+		where TValue : unmanaged
+	{
+		EnemyMemory enemyMemory = MemoryConstants.GetEnemyMemory<TEnemy>();
+		int fieldOffset = (int)Marshal.OffsetOf<TEnemy>(fieldName);
+
+		Span<int> offsets = stackalloc int[enemyMemory.Offsets.Count];
+		for (int i = 0; i < enemyMemory.Offsets.Count; i++)
+			offsets[i] = enemyMemory.Offsets[i];
+
+		offsets[^1] += index * enemyMemory.StructSize + fieldOffset;
+
+		Root.GameMemoryService.WriteExperimental(enemyMemory.BaseAddress, offsets, value);
 	}
 
 	public static void KillLeviathan()
 	{
-		for (int i = 0; i < 6; i++)
-			Root.GameMemoryService.WriteExperimental(0x00251590, [0x0, 0x28, 0x84 + i * 56], 0);
+		WriteValue<Leviathan, int>(0, nameof(Leviathan.NodeHp1), 0);
+		WriteValue<Leviathan, int>(0, nameof(Leviathan.NodeHp2), 0);
+		WriteValue<Leviathan, int>(0, nameof(Leviathan.NodeHp3), 0);
+		WriteValue<Leviathan, int>(0, nameof(Leviathan.NodeHp4), 0);
+		WriteValue<Leviathan, int>(0, nameof(Leviathan.NodeHp5), 0);
+		WriteValue<Leviathan, int>(0, nameof(Leviathan.NodeHp6), 0);
 	}
 
 	public static void KillOrb()
 	{
-		Root.GameMemoryService.WriteExperimental(0x00251590, [0x0, 0x28, 0x84 + 6 * 56 + 8], 0);
+		WriteValue<Leviathan, int>(0, nameof(Leviathan.OrbHp), 0);
 	}
 
 	public static void KillAllSquids()
 	{
-		for (int i = 0; i < Root.GameMemoryService.MainBlock.Squid1AliveCount + Root.GameMemoryService.MainBlock.Squid2AliveCount + Root.GameMemoryService.MainBlock.Squid3AliveCount; i++)
+		for (int i = 0; i < _squids.Count; i++)
 		{
-			Root.GameMemoryService.WriteExperimental(0x00251890, [0x0, 0x18, i * StructSizes.Squid + 148], 0);
-			Root.GameMemoryService.WriteExperimental(0x00251890, [0x0, 0x18, i * StructSizes.Squid + 152], 0);
-			Root.GameMemoryService.WriteExperimental(0x00251890, [0x0, 0x18, i * StructSizes.Squid + 156], 0);
+			WriteValue<Squid, int>(i, nameof(Squid.NodeHp1), 0);
+			WriteValue<Squid, int>(i, nameof(Squid.NodeHp2), 0);
+			WriteValue<Squid, int>(i, nameof(Squid.NodeHp3), 0);
 		}
 	}
 }

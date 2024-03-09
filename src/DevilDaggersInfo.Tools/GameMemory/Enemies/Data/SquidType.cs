@@ -1,4 +1,4 @@
-namespace DevilDaggersInfo.Tools.GameMemory.Enemies;
+namespace DevilDaggersInfo.Tools.GameMemory.Enemies.Data;
 
 public enum SquidType
 {

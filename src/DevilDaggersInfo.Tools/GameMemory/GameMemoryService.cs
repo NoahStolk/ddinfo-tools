@@ -108,7 +108,7 @@ public class GameMemoryService
 		_nativeMemoryService.WriteMemory(_process, _memoryBlockAddress + 316, [1], 0, 1);
 	}
 
-	public void WriteExperimental<T>(long initialAddress, Span<int> offsets, T value)
+	public void WriteExperimental<T>(long initialAddress, ReadOnlySpan<int> offsets, T value)
 		where T : unmanaged
 	{
 		if (_process == null)
@@ -118,12 +118,12 @@ public class GameMemoryService
 		_nativeMemoryService.WriteMemory(_process, FollowPointerChain(initialAddress, offsets), buffer, 0, buffer.Length);
 	}
 
-	public byte[] ReadExperimental(long initialAddress, int size, Span<int> offsets)
+	public byte[] ReadExperimental(long initialAddress, int size, ReadOnlySpan<int> offsets)
 	{
 		return Read(FollowPointerChain(initialAddress, offsets), size);
 	}
 
-	private long FollowPointerChain(long initialAddress, Span<int> offsets)
+	private long FollowPointerChain(long initialAddress, ReadOnlySpan<int> offsets)
 	{
 		long address = ReadPointer(ProcessBaseAddress + initialAddress);
 		for (int i = 0; i < offsets.Length - 1; i++)
@@ -139,11 +139,10 @@ public class GameMemoryService
 
 	private byte[] Read(long memoryAddress, int size)
 	{
-		if (_process == null)
-			return [];
-
+		// TODO: Fix allocations.
 		byte[] buffer = new byte[size];
-		_nativeMemoryService.ReadMemory(_process, memoryAddress, buffer, 0, size);
+		if (_process != null)
+			_nativeMemoryService.ReadMemory(_process, memoryAddress, buffer, 0, size);
 		return buffer;
 	}
 }

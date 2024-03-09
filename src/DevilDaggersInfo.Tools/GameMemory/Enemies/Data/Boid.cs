@@ -2,10 +2,10 @@ using DevilDaggersInfo.Core.Replay.Numerics;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
-namespace DevilDaggersInfo.Tools.GameMemory.Enemies;
+namespace DevilDaggersInfo.Tools.GameMemory.Enemies.Data;
 
 #pragma warning disable SA1134
-[StructLayout(LayoutKind.Explicit, Size = StructSizes.Boid)]
+[StructLayout(LayoutKind.Explicit, Size = MemoryConstants.BoidSize)]
 public record struct Boid
 {
 	[FieldOffset(000)] public BoidType Type;

@@ -1,9 +1,9 @@
 using System.Runtime.InteropServices;
 
-namespace DevilDaggersInfo.Tools.GameMemory.Enemies;
+namespace DevilDaggersInfo.Tools.GameMemory.Enemies.Data;
 
 #pragma warning disable SA1134
-[StructLayout(LayoutKind.Explicit, Size = StructSizes.Leviathan)]
+[StructLayout(LayoutKind.Explicit, Size = MemoryConstants.LeviathanSize)]
 public record struct Leviathan
 {
 	// [FieldOffset(000)] public LeviathanState State; // 0 preparing beckon??, 2 beckoning, 3 idle

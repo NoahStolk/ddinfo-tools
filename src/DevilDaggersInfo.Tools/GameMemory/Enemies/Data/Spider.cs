@@ -1,9 +1,9 @@
 using System.Runtime.InteropServices;
 
-namespace DevilDaggersInfo.Tools.GameMemory.Enemies;
+namespace DevilDaggersInfo.Tools.GameMemory.Enemies.Data;
 
 #pragma warning disable SA1134
-[StructLayout(LayoutKind.Explicit, Size = StructSizes.Spider)]
+[StructLayout(LayoutKind.Explicit, Size = MemoryConstants.SpiderSize)]
 public record struct Spider
 {
 	// [FieldOffset(000)] public int IsHiding;
