@@ -42,11 +42,11 @@ public static class ArenaHeightButtons
 			ImGui.PushStyleColor(ImGuiCol.Button, heightColor);
 			ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Lerp(heightColor, Color.White, 0.75f));
 			ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Lerp(heightColor, Color.White, 0.5f));
-			ImGui.PushStyleColor(ImGuiCol.Border, Math.Abs(ArenaChild.SelectedHeight - height) < 0.001f ? Color.Invert(heightColor) : Color.Lerp(heightColor, Color.Black, 0.2f));
+			ImGui.PushStyleColor(ImGuiCol.Border, Math.Abs(ArenaWindow.SelectedHeight - height) < 0.001f ? Color.Invert(heightColor) : Color.Lerp(heightColor, Color.Black, 0.2f));
 
 			ImGui.SetCursorPos(new(offsetX + borderSize * 2, offsetY + borderSize));
 			if (ImGui.Button(Inline.Span(height), new(width - 1, _arenaButtonSize - 1)))
-				ArenaChild.SelectedHeight = height;
+				ArenaWindow.SelectedHeight = height;
 
 			ImGui.PopStyleColor(5);
 			ImGui.PopStyleVar();

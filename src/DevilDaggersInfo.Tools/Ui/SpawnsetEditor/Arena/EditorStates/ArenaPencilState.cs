@@ -23,9 +23,9 @@ public class ArenaPencilState : IArenaState
 		if (_session != null && ImGui.IsMouseDown(ImGuiMouseButton.Left))
 		{
 			Vector2 pencilEnd = mousePosition.Real;
-			Vector2 start = ArenaEditingUtils.Snap(_session.StartPosition, ArenaChild.TileSize) + ArenaChild.HalfTileSizeAsVector2;
-			Vector2 end = ArenaEditingUtils.Snap(pencilEnd, ArenaChild.TileSize) + ArenaChild.HalfTileSizeAsVector2;
-			ArenaEditingUtils.Stadium stadium = new(start, end, PencilChild.Size / 2 * ArenaChild.TileSize);
+			Vector2 start = ArenaEditingUtils.Snap(_session.StartPosition, ArenaWindow.TileSize) + ArenaWindow.HalfTileSizeAsVector2;
+			Vector2 end = ArenaEditingUtils.Snap(pencilEnd, ArenaWindow.TileSize) + ArenaWindow.HalfTileSizeAsVector2;
+			ArenaEditingUtils.Stadium stadium = new(start, end, PencilChild.Size / 2 * ArenaWindow.TileSize);
 			for (int i = 0; i < SpawnsetBinary.ArenaDimensionMax; i++)
 			{
 				for (int j = 0; j < SpawnsetBinary.ArenaDimensionMax; j++)
@@ -34,9 +34,9 @@ public class ArenaPencilState : IArenaState
 					if (_session.ModifiedCoords.Contains(target)) // Early rejection, even though we're using a HashSet.
 						continue;
 
-					Vector2 visualTileCenter = new Vector2(i, j) * ArenaChild.TileSize + ArenaChild.HalfTileSizeAsVector2;
+					Vector2 visualTileCenter = new Vector2(i, j) * ArenaWindow.TileSize + ArenaWindow.HalfTileSizeAsVector2;
 
-					ArenaEditingUtils.Square square = ArenaEditingUtils.Square.FromCenter(visualTileCenter, ArenaChild.TileSize);
+					ArenaEditingUtils.Square square = ArenaEditingUtils.Square.FromCenter(visualTileCenter, ArenaWindow.TileSize);
 					if (square.IntersectsStadium(stadium))
 						_session.ModifiedCoords.Add(target);
 				}
@@ -68,7 +68,7 @@ public class ArenaPencilState : IArenaState
 		float[,] newArena = FileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
 
 		foreach (Vector2D<int> position in _session.ModifiedCoords)
-			newArena[position.X, position.Y] = ArenaChild.SelectedHeight;
+			newArena[position.X, position.Y] = ArenaWindow.SelectedHeight;
 
 		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, newArena) });
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaPencil);
@@ -97,8 +97,8 @@ public class ArenaPencilState : IArenaState
 			{
 				if (_session.ModifiedCoords.Contains(new(i, j)))
 				{
-					Vector2 topLeft = origin + new Vector2(i, j) * ArenaChild.TileSize;
-					drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaChild.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));
+					Vector2 topLeft = origin + new Vector2(i, j) * ArenaWindow.TileSize;
+					drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));
 				}
 			}
 		}
@@ -106,12 +106,12 @@ public class ArenaPencilState : IArenaState
 
 	private static float GetDisplayRadius()
 	{
-		return PencilChild.Size / 2 * ArenaChild.TileSize;
+		return PencilChild.Size / 2 * ArenaWindow.TileSize;
 	}
 
 	private static Vector2 GetSnappedPosition(Vector2 position)
 	{
-		return ArenaEditingUtils.Snap(position, ArenaChild.TileSize) + ArenaChild.HalfTileSizeAsVector2;
+		return ArenaEditingUtils.Snap(position, ArenaWindow.TileSize) + ArenaWindow.HalfTileSizeAsVector2;
 	}
 
 	// Must be a class so we can modify the properties.

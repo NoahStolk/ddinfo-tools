@@ -14,7 +14,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-public static class SpawnsChild
+public static class SpawnsWindow
 {
 	public const int MaxSpawns = 4096;
 
@@ -32,7 +32,7 @@ public static class SpawnsChild
 
 	public static void Render()
 	{
-		if (ImGui.BeginChild("SpawnsChild", new(400 - 8, 768 - 64)))
+		if (ImGui.Begin("SpawnsWindow"))
 		{
 			if (ImGui.BeginChild("SpawnsListChild", new(400 - 8, 768 - 144)))
 				RenderSpawnsTable();
@@ -94,7 +94,7 @@ public static class SpawnsChild
 			ImGui.EndChild(); // End SpawnControlsChild
 		}
 
-		ImGui.EndChild(); // End SpawnsChild
+		ImGui.End(); // End SpawnsWindow
 	}
 
 	private static void RenderSpawnsTable()

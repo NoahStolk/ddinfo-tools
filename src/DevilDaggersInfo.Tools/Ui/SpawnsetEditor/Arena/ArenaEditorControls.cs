@@ -22,7 +22,7 @@ public static class ArenaEditorControls
 				ReadOnlySpan<char> arenaToolText = EnumUtils.ArenaToolNames[arenaTool];
 
 				bool isDagger = arenaTool == ArenaTool.Dagger;
-				bool isCurrent = arenaTool == ArenaChild.ArenaTool;
+				bool isCurrent = arenaTool == ArenaWindow.ArenaTool;
 				ImGui.SetCursorPos(new(offsetX + borderSize * 2, borderSize));
 
 				if (isDagger)
@@ -31,8 +31,8 @@ public static class ArenaEditorControls
 				if (isCurrent)
 					ImGui.PushStyleColor(ImGuiCol.Button, ImGui.GetStyle().Colors[(int)ImGuiCol.ButtonHovered]);
 
-				if (ImGuiImage.ImageButton(arenaToolText, GetTexture(arenaTool), new(size)) && ArenaChild.ArenaTool != arenaTool)
-					ArenaChild.ArenaTool = arenaTool;
+				if (ImGuiImage.ImageButton(arenaToolText, GetTexture(arenaTool), new(size)) && ArenaWindow.ArenaTool != arenaTool)
+					ArenaWindow.ArenaTool = arenaTool;
 
 				if (isCurrent)
 					ImGui.PopStyleColor();
@@ -51,7 +51,7 @@ public static class ArenaEditorControls
 
 		if (ImGui.BeginChild("ArenaToolControls", new(256, 112)))
 		{
-			switch (ArenaChild.ArenaTool)
+			switch (ArenaWindow.ArenaTool)
 			{
 				case ArenaTool.Pencil:
 					PencilChild.Render();

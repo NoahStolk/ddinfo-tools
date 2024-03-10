@@ -65,7 +65,7 @@ public class ArenaBucketState : IArenaState
 		_isFilling = true;
 		float[,] newArena = FileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
 		foreach (Vector2D<int> coord in _targetCoords)
-			newArena[coord.X, coord.Y] = ArenaChild.SelectedHeight;
+			newArena[coord.X, coord.Y] = ArenaWindow.SelectedHeight;
 
 		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, newArena) });
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaBucket);
@@ -110,8 +110,8 @@ public class ArenaBucketState : IArenaState
 			{
 				if (_targetCoords.Contains(new(i, j)))
 				{
-					Vector2 topLeft = origin + new Vector2(i, j) * ArenaChild.TileSize;
-					drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaChild.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));
+					Vector2 topLeft = origin + new Vector2(i, j) * ArenaWindow.TileSize;
+					drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));
 				}
 			}
 		}

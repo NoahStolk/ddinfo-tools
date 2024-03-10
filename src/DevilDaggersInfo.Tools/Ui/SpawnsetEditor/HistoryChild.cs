@@ -82,6 +82,6 @@ public static class HistoryChild
 		FileStates.Spawnset.SetHistoryIndex(index);
 
 		UpdateScroll = true;
-		SpawnsChild.ClearUnusedSelections();
+		SpawnsWindow.ClearUnusedSelections();
 	}
 }

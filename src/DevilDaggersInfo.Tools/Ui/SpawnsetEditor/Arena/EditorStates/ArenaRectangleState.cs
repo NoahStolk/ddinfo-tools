@@ -34,7 +34,7 @@ public class ArenaRectangleState : IArenaState
 		if (!_session.HasValue)
 			return;
 
-		Loop(mousePosition, (i, j) => _session.Value.NewArena[i, j] = ArenaChild.SelectedHeight);
+		Loop(mousePosition, (i, j) => _session.Value.NewArena[i, j] = ArenaWindow.SelectedHeight);
 
 		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, _session.Value.NewArena) });
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaRectangle);
@@ -54,8 +54,8 @@ public class ArenaRectangleState : IArenaState
 		Loop(mousePosition, (i, j) =>
 		{
 			Vector2 origin = ImGui.GetCursorScreenPos();
-			Vector2 min = origin + new Vector2(i, j) * ArenaChild.TileSize;
-			drawList.AddRectFilled(min, min + new Vector2(ArenaChild.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));
+			Vector2 min = origin + new Vector2(i, j) * ArenaWindow.TileSize;
+			drawList.AddRectFilled(min, min + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));
 		});
 	}
 
