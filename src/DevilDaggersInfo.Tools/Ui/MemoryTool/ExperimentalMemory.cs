@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.GameMemory.Enemies;
 using DevilDaggersInfo.Tools.GameMemory.Enemies.Data;
 using System.Runtime.InteropServices;
@@ -34,17 +35,26 @@ public static class ExperimentalMemory
 		if (!GameMemoryServiceWrapper.Scan() || !Root.GameMemoryService.IsInitialized)
 			return;
 
-		ReadEnemyList(_thorns, MemoryConstants.Thorn);
-		ReadEnemyList(_spiders, MemoryConstants.Spider);
-		ReadEnemyList(_leviathans, MemoryConstants.Leviathan);
-		ReadEnemyList(_squids, MemoryConstants.Squid);
-		ReadEnemyList(_pedes, MemoryConstants.Pede);
-		ReadEnemyList(_boids, MemoryConstants.Boid);
+		// TODO: Don't get this from the main block. Find the actual list lengths.
+		MainBlock mainBlock = Root.GameMemoryService.MainBlock;
+		int thornListLength = mainBlock.ThornAliveCount;
+		int spiderListLength = mainBlock.Spider1AliveCount + mainBlock.Spider2AliveCount;
+		int leviathanListLength = mainBlock.LeviathanAliveCount + mainBlock.OrbAliveCount;
+		int squidListLength = mainBlock.Squid1AliveCount + mainBlock.Squid2AliveCount + mainBlock.Squid3AliveCount;
+		int pedeListLength = mainBlock.CentipedeAliveCount + mainBlock.GigapedeAliveCount + mainBlock.GhostpedeAliveCount;
+		int boidListLength = mainBlock.Skull1AliveCount + mainBlock.Skull2AliveCount + mainBlock.Skull3AliveCount + mainBlock.Skull4AliveCount + mainBlock.SpiderlingAliveCount;
+
+		ReadEnemyList(_thorns, thornListLength, MemoryConstants.Thorn);
+		ReadEnemyList(_spiders, spiderListLength, MemoryConstants.Spider);
+		ReadEnemyList(_leviathans, leviathanListLength, MemoryConstants.Leviathan);
+		ReadEnemyList(_squids, squidListLength, MemoryConstants.Squid);
+		ReadEnemyList(_pedes, pedeListLength, MemoryConstants.Pede);
+		ReadEnemyList(_boids, boidListLength, MemoryConstants.Boid);
 
 		for (int i = 0; i < _thorns.Count; i++)
 		{
 			Thorn thorn = _thorns[i];
-			if (thorn.StateTimer < 1)
+			if (thorn.Hp > 10)
 			{
 				WriteValue<Thorn, int>(i, nameof(Thorn.Hp), 10);
 				// WriteValue<Thorn, float>(i, nameof(Thorn.Rotation), Root.GameMemoryService.MainBlock.Time);
@@ -96,8 +106,8 @@ public static class ExperimentalMemory
 		}
 	}
 
-	private static void ReadEnemyList<TEnemy>(List<TEnemy> list, EnemyMemory enemyMemory)
-		where TEnemy : unmanaged, IEnemy
+	private static void ReadEnemyList<TEnemy>(List<TEnemy> list, int count, EnemyMemory enemyMemory)
+		where TEnemy : unmanaged
 	{
 		list.Clear();
 
@@ -105,20 +115,16 @@ public static class ExperimentalMemory
 		for (int i = 0; i < enemyMemory.Offsets.Count; i++)
 			offsets[i] = enemyMemory.Offsets[i];
 
-		const int safetyCount = 60;
-		for (int i = 0; i < safetyCount; i++)
+		for (int i = 0; i < count; i++)
 		{
 			TEnemy enemy = ReadEnemy<TEnemy>(enemyMemory, offsets);
-			if (!enemy.IsValid())
-				break;
-
 			list.Add(enemy);
 			offsets[^1] += enemyMemory.StructSize;
 		}
 	}
 
 	private static TEnemy ReadEnemy<TEnemy>(EnemyMemory enemyMemory, Span<int> offsets)
-		where TEnemy : unmanaged, IEnemy
+		where TEnemy : unmanaged
 	{
 		Span<byte> buffer = stackalloc byte[enemyMemory.StructSize];
 		Root.GameMemoryService.ReadExperimental(enemyMemory.BaseAddress, buffer, offsets);

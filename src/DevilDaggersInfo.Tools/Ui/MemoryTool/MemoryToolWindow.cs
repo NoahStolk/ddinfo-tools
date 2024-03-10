@@ -242,7 +242,7 @@ public static class MemoryToolWindow
 
 		ImGui.SeparatorText("Boids");
 
-		if (ImGui.BeginTable("Boids", 9, ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable))
+		if (ImGui.BeginTable("Boids", 8, ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable))
 		{
 			ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 64);
 			ImGui.TableSetupColumn("HP", ImGuiTableColumnFlags.WidthFixed, 64);
@@ -251,7 +251,6 @@ public static class MemoryToolWindow
 			ImGui.TableSetupColumn("Velocity", ImGuiTableColumnFlags.WidthStretch);
 			ImGui.TableSetupColumn("Base Speed", ImGuiTableColumnFlags.WidthFixed, 64);
 			ImGui.TableSetupColumn("Rotation", ImGuiTableColumnFlags.WidthStretch);
-			ImGui.TableSetupColumn("Unknown Vec3", ImGuiTableColumnFlags.WidthStretch);
 			ImGui.TableSetupColumn("Timer", ImGuiTableColumnFlags.WidthFixed, 64);
 			ImGui.TableHeadersRow();
 
@@ -269,14 +268,6 @@ public static class MemoryToolWindow
 				NextColumnText(Inline.Span(boid.Velocity, floatFormat));
 				NextColumnText(Inline.Span(boid.BaseSpeed, floatFormat));
 				NextColumnText(Inline.Span(boid.Rotation, floatFormat));
-
-				// Get span of floats
-				Span<float> spanOfFloats = MemoryMarshal.CreateSpan(ref Unsafe.As<Matrix4x4, float>(ref boid.Floats), 16);
-				StringBuilder sb = new();
-				for (int j = 0; j < 16; j++)
-					sb.Append($"{spanOfFloats[j].ToString(floatFormat)} ");
-				NextColumnText(sb.ToString());
-
 				NextColumnText(Inline.Span(boid.Timer, floatFormat));
 
 				if (ImGui.CollapsingHeader(Inline.Span($"Show buffer##{i}")))

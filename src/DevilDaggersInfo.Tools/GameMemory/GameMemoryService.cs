@@ -16,6 +16,7 @@ public class GameMemoryService
 
 	private long _memoryBlockAddress;
 	private Process? _process;
+	private ProcessModule? _processModule;
 
 	private readonly INativeMemoryService _nativeMemoryService;
 
@@ -31,7 +32,7 @@ public class GameMemoryService
 
 	public long DdstatsMarkerOffset { get; private set; }
 
-	public long ProcessBaseAddress => _process?.MainModule == null ? 0 : _process.MainModule.BaseAddress.ToInt64();
+	public long ProcessBaseAddress => _processModule == null ? 0 : _processModule.BaseAddress.ToInt64();
 
 	public void Initialize(long ddstatsMarkerOffset)
 	{
@@ -44,6 +45,7 @@ public class GameMemoryService
 		}
 		else
 		{
+			_processModule = _process.MainModule;
 			_pointerBuffer.AsSpan().Clear();
 			_nativeMemoryService.ReadMemory(_process, ProcessBaseAddress + ddstatsMarkerOffset, _pointerBuffer, 0, sizeof(long));
 			_memoryBlockAddress = BitConverter.ToInt64(_pointerBuffer);
