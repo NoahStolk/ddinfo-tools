@@ -9,7 +9,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-public static class SettingsChild
+public static class SettingsWindow
 {
 	private static void InfoTooltipWhenDisabled(bool disabled, string tooltipText)
 	{
@@ -31,7 +31,7 @@ public static class SettingsChild
 
 	public static void Render()
 	{
-		if (ImGui.BeginChild("SettingsChild", new(280, 416)))
+		if (ImGui.Begin("Settings"))
 		{
 			RenderFormat();
 			RenderGameMode();
@@ -42,7 +42,7 @@ public static class SettingsChild
 			ImGui.Unindent();
 		}
 
-		ImGui.EndChild(); // End SettingsChild
+		ImGui.End(); // End Settings
 	}
 
 	private static void RenderFormat()
@@ -122,7 +122,7 @@ public static class SettingsChild
 		ImGui.Spacing();
 		ImGui.Indent(-8);
 		ImGui.Text("Race dagger");
-		InfoTooltipWhenDisabled(FileStates.Spawnset.Object.GameMode != GameMode.Race, "Race dagger values can only be set when the game mode is set to Race.");
+		InfoTooltipWhenDisabled(FileStates.Spawnset.Object.GameMode != GameMode.Race, "Changing the race dagger values doesn't do anything useful if the game mode is not set to Race.\nSet the game mode to Race to enable these inputs.");
 		ImGui.Separator();
 		ImGui.Indent(8);
 
@@ -146,36 +146,28 @@ public static class SettingsChild
 		ImGui.Indent(8);
 
 		float shrinkStart = FileStates.Spawnset.Object.ShrinkStart;
-		ImGui.InputFloat("Shrink start", ref shrinkStart, 1, 5, "%.1f");
-		if (ImGui.IsItemDeactivatedAfterEdit())
-		{
+		if (ImGui.SliderFloat("Shrink start", ref shrinkStart, 0, 150, "%.1f"))
 			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ShrinkStart = shrinkStart });
+		if (ImGui.IsItemDeactivatedAfterEdit())
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.ShrinkStart);
-		}
 
 		float shrinkEnd = FileStates.Spawnset.Object.ShrinkEnd;
-		ImGui.InputFloat("Shrink end", ref shrinkEnd, 1, 5, "%.1f");
-		if (ImGui.IsItemDeactivatedAfterEdit())
-		{
+		if (ImGui.SliderFloat("Shrink end", ref shrinkEnd, 0, 150, "%.1f"))
 			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ShrinkEnd = shrinkEnd });
+		if (ImGui.IsItemDeactivatedAfterEdit())
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.ShrinkEnd);
-		}
 
 		float shrinkRate = FileStates.Spawnset.Object.ShrinkRate;
-		ImGui.InputFloat("Shrink rate", ref shrinkRate, 0.005f, 0.5f, "%.3f");
-		if (ImGui.IsItemDeactivatedAfterEdit())
-		{
+		if (ImGui.SliderFloat("Shrink rate", ref shrinkRate, 0, 10, "%.3f"))
 			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ShrinkRate = shrinkRate });
+		if (ImGui.IsItemDeactivatedAfterEdit())
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.ShrinkRate);
-		}
 
 		float brightness = FileStates.Spawnset.Object.Brightness;
-		ImGui.InputFloat("Brightness", ref brightness, 5, 20, "%.1f");
-		if (ImGui.IsItemDeactivatedAfterEdit())
-		{
+		if (ImGui.SliderFloat("Brightness", ref brightness, 0, 500, "%.1f"))
 			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Brightness = brightness });
+		if (ImGui.IsItemDeactivatedAfterEdit())
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.Brightness);
-		}
 	}
 
 	private static void RenderPractice()

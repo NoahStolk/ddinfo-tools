@@ -34,7 +34,7 @@ public class ArenaLineState : IArenaState
 		if (_session == null)
 			return;
 
-		Loop(mousePosition, (i, j) => _session.Value.NewArena[i, j] = ArenaChild.SelectedHeight);
+		Loop(mousePosition, (i, j) => _session.Value.NewArena[i, j] = ArenaWindow.SelectedHeight);
 
 		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, _session.Value.NewArena) });
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaLine);
@@ -54,8 +54,8 @@ public class ArenaLineState : IArenaState
 		Vector2 origin = ImGui.GetCursorScreenPos();
 		Loop(mousePosition, (i, j) =>
 		{
-			Vector2 topLeft = origin + new Vector2(i, j) * ArenaChild.TileSize;
-			drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaChild.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));
+			Vector2 topLeft = origin + new Vector2(i, j) * ArenaWindow.TileSize;
+			drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));
 		});
 
 		if (_session.HasValue)
@@ -89,9 +89,9 @@ public class ArenaLineState : IArenaState
 		{
 			for (int j = 0; j < SpawnsetBinary.ArenaDimensionMax; j++)
 			{
-				Vector2 visualTileCenter = new Vector2(i, j) * ArenaChild.TileSize + ArenaChild.HalfTileSizeAsVector2;
+				Vector2 visualTileCenter = new Vector2(i, j) * ArenaWindow.TileSize + ArenaWindow.HalfTileSizeAsVector2;
 
-				ArenaEditingUtils.Square square = ArenaEditingUtils.Square.FromCenter(visualTileCenter, ArenaChild.TileSize);
+				ArenaEditingUtils.Square square = ArenaEditingUtils.Square.FromCenter(visualTileCenter, ArenaWindow.TileSize);
 				if (square.IntersectsStadium(stadium))
 					action(i, j);
 			}
@@ -105,12 +105,12 @@ public class ArenaLineState : IArenaState
 
 	private static float GetDisplayRadius()
 	{
-		return LineChild.Thickness / 2 * ArenaChild.TileSize;
+		return LineChild.Thickness / 2 * ArenaWindow.TileSize;
 	}
 
 	private static Vector2 GetSnappedPosition(Vector2 position)
 	{
-		return ArenaEditingUtils.Snap(position, ArenaChild.TileSize) + ArenaChild.HalfTileSizeAsVector2;
+		return ArenaEditingUtils.Snap(position, ArenaWindow.TileSize) + ArenaWindow.HalfTileSizeAsVector2;
 	}
 
 	private struct Session

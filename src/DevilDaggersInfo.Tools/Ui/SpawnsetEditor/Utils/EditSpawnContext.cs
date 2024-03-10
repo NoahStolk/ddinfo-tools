@@ -38,7 +38,7 @@ public static class EditSpawnContext
 			gemState = gemState.Add(noFarmGems);
 			_spawns.Add(new(i++, spawn.EnemyType, spawn.Delay, totalSeconds, noFarmGems, gemState));
 
-			if (_spawns.Count >= SpawnsChild.MaxSpawns)
+			if (_spawns.Count >= SpawnsWindow.MaxSpawns)
 				return;
 		}
 	}

@@ -14,12 +14,12 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-public static class SpawnsChild
+public static class SpawnsWindow
 {
 	public const int MaxSpawns = 4096;
 
 	private static readonly bool[] _selected = new bool[MaxSpawns];
-	private static readonly string[] _enemyNames = Enum.GetValues<EnemyType>().Select(et => et.ToString()).ToArray();
+	private static EnemyType _selectedEnemyType;
 
 	private static int? _scrollToIndex;
 
@@ -27,21 +27,41 @@ public static class SpawnsChild
 	private static float _editDelay;
 	private static bool _delayEdited;
 
-	private static int _addEnemyTypeIndex;
 	private static float _addDelay;
+
+	private static bool _windowIsFocused;
 
 	public static void Render()
 	{
-		if (ImGui.BeginChild("SpawnsChild", new(400 - 8, 768 - 64)))
+		if (ImGui.Begin("Spawns"))
 		{
-			if (ImGui.BeginChild("SpawnsListChild", new(400 - 8, 768 - 144)))
+			_windowIsFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows);
+
+			float? endLoopLength = GetEndLoopLength();
+			bool isEndLoopTooShort = endLoopLength < 0.1f;
+
+			if (endLoopLength.HasValue && isEndLoopTooShort)
+			{
+				ImGui.PushStyleColor(ImGuiCol.ChildBg, new Engine.Maths.Numerics.Color(127, 0, 0, 255));
+				if (ImGui.BeginChild("Warning", new(0, 56)))
+				{
+					ImGui.TextWrapped(Inline.Span($"(!) The end loop is only {endLoopLength.Value} seconds long, which will probably result in severe lag or a crash. If you intend to have no end loop, make sure to add an empty spawn at the end of the spawns list."));
+					ImGui.EndChild();
+				}
+
+				ImGui.PopStyleColor();
+			}
+
+			const float controlsHeight = 128;
+			Vector2 listSize = new(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y - controlsHeight - 4);
+			if (ImGui.BeginChild("SpawnsListChild", listSize))
 				RenderSpawnsTable();
 
 			ImGui.EndChild(); // End SpawnsListChild
 
-			if (ImGui.BeginChild("SpawnControlsChild", new(400 - 8, 72)))
+			if (ImGui.BeginChild("SpawnControlsChild"))
 			{
-				if (ImGui.BeginChild("AddAndInsertButtons", new(72, 72)))
+				if (ImGui.BeginChild("AddAndInsertButtons", new(72, controlsHeight)))
 				{
 					if (ImGui.Button("Add", new(64, 32)))
 					{
@@ -51,8 +71,7 @@ public static class SpawnsChild
 						}
 						else
 						{
-							EnemyType enemyType = _addEnemyTypeIndex is >= 0 and <= 9 ? (EnemyType)_addEnemyTypeIndex : EnemyType.Empty;
-							FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Add(new(enemyType, _addDelay)) });
+							FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Add(new(_selectedEnemyType, _addDelay)) });
 							SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnAdd);
 							_scrollToIndex = FileStates.Spawnset.Object.Spawns.Length - 1;
 						}
@@ -70,8 +89,7 @@ public static class SpawnsChild
 						}
 						else
 						{
-							EnemyType enemyType = _addEnemyTypeIndex is >= 0 and <= 9 ? (EnemyType)_addEnemyTypeIndex : EnemyType.Empty;
-							FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Insert(selectedIndex, new(enemyType, _addDelay)) });
+							FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Insert(selectedIndex, new(_selectedEnemyType, _addDelay)) });
 							SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnInsert);
 							_scrollToIndex = selectedIndex;
 						}
@@ -84,8 +102,23 @@ public static class SpawnsChild
 
 				if (ImGui.BeginChild("AddSpawnControls"))
 				{
-					ImGui.Combo("Enemy", ref _addEnemyTypeIndex, _enemyNames, _enemyNames.Length);
+					EnemyButton(EnemyType.Squid1, false);
+					EnemyButton(EnemyType.Squid2, true);
+					EnemyButton(EnemyType.Squid3, true);
+
+					EnemyButton(EnemyType.Spider1, false);
+					EnemyButton(EnemyType.Spider2, true);
+
+					EnemyButton(EnemyType.Centipede, false);
+					EnemyButton(EnemyType.Gigapede, true);
+					EnemyButton(EnemyType.Ghostpede, true);
+
+					EnemyButton(EnemyType.Thorn, false);
+					EnemyButton(EnemyType.Leviathan, true);
+					EnemyButton(EnemyType.Empty, true);
+
 					ImGui.InputFloat("Delay", ref _addDelay, 1, 2, "%.4f");
+					_addDelay = Math.Max(0, _addDelay);
 				}
 
 				ImGui.EndChild(); // End AddSpawnControls
@@ -94,7 +127,29 @@ public static class SpawnsChild
 			ImGui.EndChild(); // End SpawnControlsChild
 		}
 
-		ImGui.EndChild(); // End SpawnsChild
+		ImGui.End(); // End Spawns
+	}
+
+	private static void EnemyButton(EnemyType enemyType, bool sameLine)
+	{
+		bool isCurrent = _selectedEnemyType == enemyType;
+		Engine.Maths.Numerics.Color enemyColor = enemyType.GetColor(GameVersion.V3_2).ToEngineColor().Darken(isCurrent ? 0 : 0.8f);
+
+		ImGui.PushStyleColor(ImGuiCol.Text, isCurrent ? enemyColor.ReadableColorForBrightness() : Engine.Maths.Numerics.Color.Gray(0.5f));
+		ImGui.PushStyleColor(ImGuiCol.Button, enemyColor);
+		ImGui.PushStyleColor(ImGuiCol.ButtonActive, Engine.Maths.Numerics.Color.Lerp(enemyColor, Engine.Maths.Numerics.Color.White, 0.25f));
+		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Engine.Maths.Numerics.Color.Lerp(enemyColor, Engine.Maths.Numerics.Color.White, 0.125f));
+		ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, isCurrent ? 1 : 0);
+		ImGui.PushStyleColor(ImGuiCol.Border, enemyColor.ReadableColorForBrightness());
+
+		if (sameLine)
+			ImGui.SameLine();
+
+		if (ImGui.Button(Inline.Span(enemyType), new(80, 20)))
+			_selectedEnemyType = enemyType;
+
+		ImGui.PopStyleColor(5);
+		ImGui.PopStyleVar();
 	}
 
 	private static void RenderSpawnsTable()
@@ -106,20 +161,14 @@ public static class SpawnsChild
 		ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.SpawnsetEditor.Primary with { A = 75 });
 		ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.SpawnsetEditor.Primary with { A = 100 });
 
-		if (ImGui.BeginTable("SpawnsTable", columnCount, ImGuiTableFlags.None))
+		if (ImGui.BeginTable("SpawnsTable", columnCount, ImGuiTableFlags.ScrollY))
 		{
 			ImGuiIOPtr io = ImGui.GetIO();
 
-			bool isFocused = true; // TODO: Refactor this.
-			if (isFocused)
+			if (_windowIsFocused)
 			{
-				if (io.KeyCtrl)
-				{
-					if (io.IsKeyDown(ImGuiKey.A))
-						Array.Fill(_selected, true);
-					else if (io.IsKeyDown(ImGuiKey.D))
-						Array.Fill(_selected, false);
-				}
+				if (io.KeyCtrl && io.IsKeyDown(ImGuiKey.A))
+					Array.Fill(_selected, true);
 
 				if (io.IsKeyDown(ImGuiKey.Delete) && Array.Exists(_selected, b => b))
 				{
@@ -130,11 +179,12 @@ public static class SpawnsChild
 			}
 
 			ImGui.TableSetupColumn("#", ImGuiTableColumnFlags.WidthFixed, 24);
-			ImGui.TableSetupColumn("Enemy", ImGuiTableColumnFlags.WidthFixed, 72);
-			ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 72);
-			ImGui.TableSetupColumn("Delay", ImGuiTableColumnFlags.WidthFixed, 72);
-			ImGui.TableSetupColumn("Gems", ImGuiTableColumnFlags.WidthFixed, 48);
-			ImGui.TableSetupColumn("Total", ImGuiTableColumnFlags.WidthFixed, 88);
+			ImGui.TableSetupColumn("Enemy", ImGuiTableColumnFlags.WidthStretch, 72);
+			ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthStretch, 72);
+			ImGui.TableSetupColumn("Delay", ImGuiTableColumnFlags.WidthStretch, 72);
+			ImGui.TableSetupColumn("Gems", ImGuiTableColumnFlags.WidthStretch, 48);
+			ImGui.TableSetupColumn("Total", ImGuiTableColumnFlags.WidthStretch, 88);
+			ImGui.TableSetupScrollFreeze(0, 1);
 			ImGui.TableHeadersRow();
 
 			for (int i = 0; i < columnCount; i++)
@@ -247,6 +297,8 @@ public static class SpawnsChild
 			}
 
 			ImGui.InputFloat("Delay", ref _editDelay, 1, 5, "%.4f");
+			_editDelay = Math.Max(0, _editDelay);
+
 			if (!saved && Math.Abs(_editDelay - spawn.Delay) > 0.0001f)
 				_delayEdited = true;
 
@@ -278,5 +330,14 @@ public static class SpawnsChild
 	public static void ClearAllSelections()
 	{
 		Array.Clear(_selected);
+	}
+
+	private static float? GetEndLoopLength()
+	{
+		if (FileStates.Spawnset.Object.GameMode != GameMode.Survival)
+			return null;
+
+		(SpawnSectionInfo PreLoopSection, SpawnSectionInfo LoopSection) sections = FileStates.Spawnset.Object.CalculateSections();
+		return sections.LoopSection.Length;
 	}
 }

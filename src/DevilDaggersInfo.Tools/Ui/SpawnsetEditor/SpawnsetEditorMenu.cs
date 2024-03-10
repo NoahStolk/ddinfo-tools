@@ -66,10 +66,10 @@ public static class SpawnsetEditorMenu
 	private static void RenderEditMenu()
 	{
 		if (ImGui.MenuItem("Undo", "Ctrl+Z"))
-			HistoryChild.Undo();
+			HistoryWindow.Undo();
 
 		if (ImGui.MenuItem("Redo", "Ctrl+Y"))
-			HistoryChild.Redo();
+			HistoryWindow.Redo();
 
 		if (ImGui.MenuItem("Hardcode end loop") && FileStates.Spawnset.Object.HasEndLoop())
 		{
@@ -91,7 +91,7 @@ public static class SpawnsetEditorMenu
 			FileStates.Spawnset.Update(SpawnsetBinary.CreateDefault());
 			FileStates.Spawnset.SetFile(null, null);
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.Reset);
-			SpawnsChild.ClearAllSelections();
+			SpawnsWindow.ClearAllSelections();
 		});
 	}
 
@@ -132,7 +132,7 @@ public static class SpawnsetEditorMenu
 		}
 
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.Reset);
-		SpawnsChild.ClearAllSelections();
+		SpawnsWindow.ClearAllSelections();
 	}
 
 	public static void OpenDefaultSpawnset()
@@ -142,7 +142,7 @@ public static class SpawnsetEditorMenu
 			FileStates.Spawnset.Update(ContentManager.Content.DefaultSpawnset.DeepCopy());
 			FileStates.Spawnset.SetFile(null, "V3");
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.Reset);
-			SpawnsChild.ClearAllSelections();
+			SpawnsWindow.ClearAllSelections();
 		});
 	}
 

@@ -31,14 +31,12 @@ public sealed class ArenaEditorContext
 		bool ctrl = Input.GlfwInput.IsKeyDown(Keys.ControlLeft) || Input.GlfwInput.IsKeyDown(Keys.ControlRight);
 		if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
 		{
-			if (_closestHitTile != null)
+			if (_closestHitTile is { Height: > -3 })
 			{
 				if (ctrl)
 				{
-					if (!_selectedTiles.Contains(_closestHitTile))
+					if (!_selectedTiles.Remove(_closestHitTile))
 						_selectedTiles.Add(_closestHitTile);
-					else
-						_selectedTiles.Remove(_closestHitTile);
 				}
 				else
 				{
@@ -51,13 +49,13 @@ public sealed class ArenaEditorContext
 				_selectedTiles.Clear();
 			}
 		}
-		else if (ImGui.IsMouseDown(ImGuiMouseButton.Left) && !ctrl && _closestHitTile != null && !_selectedTiles.Contains(_closestHitTile))
+		else if (ImGui.IsMouseDown(ImGuiMouseButton.Left) && !ctrl && _closestHitTile is { Height: > -3 } && !_selectedTiles.Contains(_closestHitTile))
 		{
 			_selectedTiles.Add(_closestHitTile);
 		}
 
 		float scroll = Input.GlfwInput.MouseWheelY;
-		if (scroll == 0 || _selectedTiles.Count == 0)
+		if (scroll is > -float.Epsilon and < float.Epsilon || _selectedTiles.Count == 0)
 			return;
 
 		float[,] newArena = FileStates.Spawnset.Object.ArenaTiles.GetMutableClone();

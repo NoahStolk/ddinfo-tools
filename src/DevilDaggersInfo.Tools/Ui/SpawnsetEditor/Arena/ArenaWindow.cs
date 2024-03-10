@@ -8,7 +8,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 
-public static class ArenaChild
+public static class ArenaWindow
 {
 	public const int TileSize = 8;
 	private const int _halfTileSize = TileSize / 2;
@@ -30,20 +30,23 @@ public static class ArenaChild
 	public static float SelectedHeight { get; set; }
 	public static ArenaTool ArenaTool { get; set; }
 
-	private static IArenaState GetActiveState() => ArenaTool switch
+	private static IArenaState GetActiveState()
 	{
-		 ArenaTool.Pencil => _pencilState,
-		 ArenaTool.Line => _lineState,
-		 ArenaTool.Rectangle => _rectangleState,
-		 ArenaTool.Ellipse => _ellipseState,
-		 ArenaTool.Bucket => _bucketState,
-		 ArenaTool.Dagger => _daggerState,
-		 _ => throw new UnreachableException(),
-	};
+		return ArenaTool switch
+		{
+			ArenaTool.Pencil => _pencilState,
+			ArenaTool.Line => _lineState,
+			ArenaTool.Rectangle => _rectangleState,
+			ArenaTool.Ellipse => _ellipseState,
+			ArenaTool.Bucket => _bucketState,
+			ArenaTool.Dagger => _daggerState,
+			_ => throw new UnreachableException(),
+		};
+	}
 
-	public static void Render(bool isSpawnsetEditorWindowFocused, bool isSpawnsetEditorWindowFocusedFirstFrame)
+	public static void Render()
 	{
-		if (ImGui.BeginChild("ArenaChild", new(416 - 8, 768 - 64)))
+		if (ImGui.Begin("Topdown Arena Editor"))
 		{
 			if (ImGui.BeginChild("Arena", ArenaSize))
 			{
@@ -51,37 +54,28 @@ public static class ArenaChild
 
 				ArenaMousePosition mousePosition = ArenaMousePosition.Get(io, ImGui.GetCursorScreenPos());
 
-				if (mousePosition.IsValid && isSpawnsetEditorWindowFocused)
+				if (mousePosition.IsValid && io.MouseWheel is < -float.Epsilon or > float.Epsilon)
 				{
-					ImGui.SetTooltip(Inline.Span($"{FileStates.Spawnset.Object.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y]}\n<{mousePosition.Tile.X}, {mousePosition.Tile.Y}>"));
-
-					if (io.MouseWheel != 0)
-					{
-						float[,] newTiles = FileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
-						newTiles[mousePosition.Tile.X, mousePosition.Tile.Y] -= io.MouseWheel;
-						FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, newTiles) });
-						SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaTileHeight);
-					}
+					float[,] newTiles = FileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
+					newTiles[mousePosition.Tile.X, mousePosition.Tile.Y] -= io.MouseWheel;
+					FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, newTiles) });
+					SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaTileHeight);
 				}
 
 				IArenaState activeState = GetActiveState();
 
 				Vector2 pos = ImGui.GetCursorScreenPos();
 				bool isArenaHovered = ImGui.IsMouseHoveringRect(pos, pos + ArenaSize);
+				if (isArenaHovered)
+					ImGui.SetTooltip(Inline.Span($"{FileStates.Spawnset.Object.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y]}\n<{mousePosition.Tile.X}, {mousePosition.Tile.Y}>"));
 
-				if (isSpawnsetEditorWindowFocusedFirstFrame && ImGui.IsMouseDown(ImGuiMouseButton.Left) ||
-					isSpawnsetEditorWindowFocused && isArenaHovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-				{
+				if (isArenaHovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
 					activeState.InitializeSession(mousePosition);
-				}
 
-				if (isSpawnsetEditorWindowFocused)
-				{
-					if (mousePosition.IsValid)
-						activeState.Handle(mousePosition);
-					else
-						activeState.HandleOutOfRange(mousePosition);
-				}
+				if (mousePosition.IsValid)
+					activeState.Handle(mousePosition);
+				else
+					activeState.HandleOutOfRange(mousePosition);
 
 				ArenaCanvas.Render();
 				activeState.Render(mousePosition);
@@ -101,6 +95,6 @@ public static class ArenaChild
 			ArenaHeightButtons.Render();
 		}
 
-		ImGui.EndChild(); // End ArenaChild
+		ImGui.EndChild(); // End ArenaWindow
 	}
 }

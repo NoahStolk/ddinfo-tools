@@ -32,7 +32,7 @@ public class ArenaDaggerState : IArenaState
 			if (!_position.HasValue)
 				return;
 
-			Vector2 tileCoordinate = _position.Value / ArenaChild.TileSize;
+			Vector2 tileCoordinate = _position.Value / ArenaWindow.TileSize;
 			Vector2 daggerPosition = new(FileStates.Spawnset.Object.TileToWorldCoordinate(tileCoordinate.X), FileStates.Spawnset.Object.TileToWorldCoordinate(tileCoordinate.Y));
 
 			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { RaceDaggerPosition = daggerPosition });
@@ -43,7 +43,7 @@ public class ArenaDaggerState : IArenaState
 
 		Vector2 GetSnappedDaggerPosition()
 		{
-			return ArenaEditingUtils.Snap(mousePosition.Real, DaggerChild.Snap * ArenaChild.TileSize);
+			return ArenaEditingUtils.Snap(mousePosition.Real, DaggerChild.Snap * ArenaWindow.TileSize);
 		}
 	}
 
@@ -65,7 +65,7 @@ public class ArenaDaggerState : IArenaState
 
 		ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 		Vector2 origin = ImGui.GetCursorScreenPos();
-		Vector2 center = origin + _position.Value + ArenaChild.HalfTileSizeAsVector2;
+		Vector2 center = origin + _position.Value + ArenaWindow.HalfTileSizeAsVector2;
 		drawList.AddImage(Root.GameResources.IconMaskDaggerTexture.Id, center - new Vector2(8), center + new Vector2(8), Color.HalfTransparentWhite);
 	}
 }

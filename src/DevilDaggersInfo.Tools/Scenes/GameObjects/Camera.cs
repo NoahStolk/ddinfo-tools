@@ -19,7 +19,7 @@ public class Camera
 
 	private Quaternion _rotationState = Quaternion.Identity;
 
-	private Vector3 _axisAlignedSpeed;
+	private Vector3 _speed;
 	private float _yaw;
 	private float _pitch;
 	private Vector2D<int>? _lockedMousePosition;
@@ -57,9 +57,9 @@ public class Camera
 		else
 		{
 			float frictionDt = _friction * delta;
-			_axisAlignedSpeed.X -= _axisAlignedSpeed.X * frictionDt;
-			_axisAlignedSpeed.Y -= _axisAlignedSpeed.Y * frictionDt;
-			_axisAlignedSpeed.Z -= _axisAlignedSpeed.Z * frictionDt;
+			_speed.X -= _speed.X * frictionDt;
+			_speed.Y -= _speed.Y * frictionDt;
+			_speed.Z -= _speed.Z * frictionDt;
 		}
 
 		if (activateMouse)
@@ -67,18 +67,8 @@ public class Camera
 			HandleMouse();
 		}
 
-		const float moveSpeed = 25;
-
-		Matrix4x4 rotMat = Matrix4x4.CreateFromQuaternion(_rotationState);
-		Vector3 transformed = RotateVector(_axisAlignedSpeed, rotMat) + new Vector3(0, _axisAlignedSpeed.Y, 0);
-		Position += transformed * moveSpeed * delta;
-
-		static Vector3 RotateVector(Vector3 vector, Matrix4x4 rotationMatrix)
-		{
-			Vector3 right = new(rotationMatrix.M11, rotationMatrix.M12, rotationMatrix.M13);
-			Vector3 forward = -Vector3.Cross(Vector3.UnitY, right);
-			return right * vector.X + forward * vector.Z;
-		}
+		const float maxSpeed = 50;
+		Position += _speed * maxSpeed * delta;
 	}
 
 	private void HandleKeys(ImGuiIOPtr io, float delta)
@@ -88,8 +78,8 @@ public class Camera
 		const ImGuiKey leftInput = ImGuiKey.A;
 		const ImGuiKey backwardInput = ImGuiKey.S;
 		const ImGuiKey rightInput = ImGuiKey.D;
-		const ImGuiKey upInput = ImGuiKey.Space;
-		const ImGuiKey downInput = ImGuiKey.LeftShift;
+		const ImGuiKey upInput = ImGuiKey.E;
+		const ImGuiKey downInput = ImGuiKey.Q;
 		bool forwardHold = io.IsKeyDown(forwardInput);
 		bool leftHold = io.IsKeyDown(leftInput);
 		bool backwardHold = io.IsKeyDown(backwardInput);
@@ -101,32 +91,30 @@ public class Camera
 		float frictionDt = _friction * delta;
 
 		if (leftHold)
-			_axisAlignedSpeed.X += accelerationDt;
+			_speed += Vector3.Transform(Vector3.UnitX, _rotationState) * accelerationDt;
 		if (rightHold)
-			_axisAlignedSpeed.X -= accelerationDt;
+			_speed -= Vector3.Transform(Vector3.UnitX, _rotationState) * accelerationDt;
 
 		if (upHold)
-			_axisAlignedSpeed.Y += accelerationDt;
+			_speed += Vector3.Transform(Vector3.UnitY, _rotationState) * accelerationDt;
 		if (downHold)
-			_axisAlignedSpeed.Y -= accelerationDt;
+			_speed -= Vector3.Transform(Vector3.UnitY, _rotationState) * accelerationDt;
 
 		if (forwardHold)
-			_axisAlignedSpeed.Z += accelerationDt;
+			_speed += Vector3.Transform(Vector3.UnitZ, _rotationState) * accelerationDt;
 		if (backwardHold)
-			_axisAlignedSpeed.Z -= accelerationDt;
+			_speed -= Vector3.Transform(Vector3.UnitZ, _rotationState) * accelerationDt;
 
-		if (!leftHold && !rightHold)
-			_axisAlignedSpeed.X -= _axisAlignedSpeed.X * frictionDt;
+		if (_speed.LengthSquared() > 0)
+		{
+			_speed.X -= _speed.X * frictionDt;
+			_speed.Y -= _speed.Y * frictionDt;
+			_speed.Z -= _speed.Z * frictionDt;
+		}
 
-		if (!upHold && !downHold)
-			_axisAlignedSpeed.Y -= _axisAlignedSpeed.Y * frictionDt;
-
-		if (!forwardHold && !backwardHold)
-			_axisAlignedSpeed.Z -= _axisAlignedSpeed.Z * frictionDt;
-
-		_axisAlignedSpeed.X = Math.Clamp(_axisAlignedSpeed.X, -1, 1);
-		_axisAlignedSpeed.Y = Math.Clamp(_axisAlignedSpeed.Y, -1, 1);
-		_axisAlignedSpeed.Z = Math.Clamp(_axisAlignedSpeed.Z, -1, 1);
+		_speed.X = Math.Clamp(_speed.X, -1, 1);
+		_speed.Y = Math.Clamp(_speed.Y, -1, 1);
+		_speed.Z = Math.Clamp(_speed.Z, -1, 1);
 	}
 
 	private unsafe void HandleMouse()
