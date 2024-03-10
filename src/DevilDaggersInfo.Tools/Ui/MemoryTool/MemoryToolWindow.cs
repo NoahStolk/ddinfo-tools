@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Core.Common.Extensions;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.GameMemory;
-using DevilDaggersInfo.Tools.GameMemory.Enemies;
 using DevilDaggersInfo.Tools.GameMemory.Enemies.Data;
 using ImGuiNET;
 using System.Numerics;
