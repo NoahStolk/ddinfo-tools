@@ -158,7 +158,7 @@ public static class SettingsWindow
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.ShrinkEnd);
 
 		float shrinkRate = FileStates.Spawnset.Object.ShrinkRate;
-		if (ImGui.SliderFloat("Shrink rate", ref shrinkRate, 0, 50, "%.3f"))
+		if (ImGui.SliderFloat("Shrink rate", ref shrinkRate, 0, 10, "%.3f"))
 			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ShrinkRate = shrinkRate });
 		if (ImGui.IsItemDeactivatedAfterEdit())
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.ShrinkRate);

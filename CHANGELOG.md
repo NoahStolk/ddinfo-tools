@@ -11,9 +11,17 @@
 - Fixed some shortcuts bugs while entering text in text fields.
 - Fixed shortcuts like CTRL+A, CTRL+C, CTRL+V, and CTRL+X not working in text fields.
 
-### Practice
+### Spawnset Editor
 
-- Renamed "Gigapedes" template to "Triple Gigapedes" for clarity.
+- Rewrote UI.
+	- The spawns, settings, history, and topdown arena editor are now separate windows.
+	- Arena shrink and brightness are now sliders instead of inputs.
+	- Enemy combobox has been replaced with multiple buttons.
+- The 3D camera now uses the same controls as the game's free camera.
+- Fixed being able to select void tiles in the 3D arena editor.
+- Fixed being able to add spawns with a negative delay.
+- Fixed CTRL+A selecting all spawns even if the spawns window wasn't focused.
+- Fixed various UI bugs.
 
 ### Mod Manager
 
@@ -22,19 +30,14 @@
 - Fixed not updating mod preview when selected mod is renamed, toggled, or deleted.
 - Fixed not taking disabled assets into account when counting active assets.
 
+### Practice
+
+- Renamed "Gigapedes" template to "Triple Gigapedes" for clarity.
+
 ### Asset Editor
 
+- Fixed app getting stuck when compilation or extraction fails.
 - Fixed not showing errors when mod compilation or extraction fails.
-
-### Spawnset Editor
-
-- Rewrote UI
-  - The spawns, settings, history, and topdown arena editor are now separate windows.
-  - Arena shrink and brightness are now sliders instead of inputs.
-  - Enemy combobox has been replaced with multiple buttons.
-- Fixed various UI bugs.
-- Fixed being able to select void tiles in the 3D arena editor.
-- The 3D camera now uses the same controls as the game's free camera.
 
 ## [0.12.0.0] - 2024-01-21
 

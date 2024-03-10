@@ -29,10 +29,14 @@ public static class SpawnsWindow
 
 	private static float _addDelay;
 
+	private static bool _windowIsFocused;
+
 	public static void Render()
 	{
 		if (ImGui.Begin("Spawns"))
 		{
+			_windowIsFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows);
+
 			float? endLoopLength = GetEndLoopLength();
 			bool isEndLoopTooShort = endLoopLength < 0.1f;
 
@@ -109,6 +113,7 @@ public static class SpawnsWindow
 					EnemyButton(EnemyType.Empty, true);
 
 					ImGui.InputFloat("Delay", ref _addDelay, 1, 2, "%.4f");
+					_addDelay = Math.Max(0, _addDelay);
 				}
 
 				ImGui.EndChild(); // End AddSpawnControls
@@ -127,8 +132,8 @@ public static class SpawnsWindow
 
 		ImGui.PushStyleColor(ImGuiCol.Text, isCurrent ? enemyColor.ReadableColorForBrightness() : Engine.Maths.Numerics.Color.Gray(0.5f));
 		ImGui.PushStyleColor(ImGuiCol.Button, enemyColor);
-		ImGui.PushStyleColor(ImGuiCol.ButtonActive, Engine.Maths.Numerics.Color.Lerp(enemyColor, Engine.Maths.Numerics.Color.White, 0.75f));
-		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Engine.Maths.Numerics.Color.Lerp(enemyColor, Engine.Maths.Numerics.Color.White, 0.5f));
+		ImGui.PushStyleColor(ImGuiCol.ButtonActive, Engine.Maths.Numerics.Color.Lerp(enemyColor, Engine.Maths.Numerics.Color.White, 0.25f));
+		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Engine.Maths.Numerics.Color.Lerp(enemyColor, Engine.Maths.Numerics.Color.White, 0.125f));
 		ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, isCurrent ? 1 : 0);
 		ImGui.PushStyleColor(ImGuiCol.Border, enemyColor.ReadableColorForBrightness());
 
@@ -155,15 +160,12 @@ public static class SpawnsWindow
 		{
 			ImGuiIOPtr io = ImGui.GetIO();
 
-			bool isFocused = true; // TODO: Refactor this.
-			if (isFocused)
+			if (_windowIsFocused)
 			{
 				if (io.KeyCtrl)
 				{
 					if (io.IsKeyDown(ImGuiKey.A))
 						Array.Fill(_selected, true);
-					else if (io.IsKeyDown(ImGuiKey.D))
-						Array.Fill(_selected, false);
 				}
 
 				if (io.IsKeyDown(ImGuiKey.Delete) && Array.Exists(_selected, b => b))
