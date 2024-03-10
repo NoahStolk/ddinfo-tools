@@ -19,7 +19,7 @@ public static class SpawnsWindow
 	public const int MaxSpawns = 4096;
 
 	private static readonly bool[] _selected = new bool[MaxSpawns];
-	private static readonly string[] _enemyNames = Enum.GetValues<EnemyType>().Select(et => et.ToString()).ToArray();
+	private static EnemyType _selectedEnemyType;
 
 	private static int? _scrollToIndex;
 
@@ -27,7 +27,6 @@ public static class SpawnsWindow
 	private static float _editDelay;
 	private static bool _delayEdited;
 
-	private static int _addEnemyTypeIndex;
 	private static float _addDelay;
 
 	public static void Render()
@@ -44,7 +43,8 @@ public static class SpawnsWindow
 				ImGui.PopStyleColor();
 			}
 
-			Vector2 listSize = new(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y - 76);
+			const float controlsHeight = 128;
+			Vector2 listSize = new(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y - controlsHeight - 4);
 			if (ImGui.BeginChild("SpawnsListChild", listSize))
 				RenderSpawnsTable();
 
@@ -52,7 +52,7 @@ public static class SpawnsWindow
 
 			if (ImGui.BeginChild("SpawnControlsChild"))
 			{
-				if (ImGui.BeginChild("AddAndInsertButtons", new(72, 72)))
+				if (ImGui.BeginChild("AddAndInsertButtons", new(72, controlsHeight)))
 				{
 					if (ImGui.Button("Add", new(64, 32)))
 					{
@@ -62,8 +62,7 @@ public static class SpawnsWindow
 						}
 						else
 						{
-							EnemyType enemyType = _addEnemyTypeIndex is >= 0 and <= 9 ? (EnemyType)_addEnemyTypeIndex : EnemyType.Empty;
-							FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Add(new(enemyType, _addDelay)) });
+							FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Add(new(_selectedEnemyType, _addDelay)) });
 							SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnAdd);
 							_scrollToIndex = FileStates.Spawnset.Object.Spawns.Length - 1;
 						}
@@ -81,8 +80,7 @@ public static class SpawnsWindow
 						}
 						else
 						{
-							EnemyType enemyType = _addEnemyTypeIndex is >= 0 and <= 9 ? (EnemyType)_addEnemyTypeIndex : EnemyType.Empty;
-							FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Insert(selectedIndex, new(enemyType, _addDelay)) });
+							FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Insert(selectedIndex, new(_selectedEnemyType, _addDelay)) });
 							SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnInsert);
 							_scrollToIndex = selectedIndex;
 						}
@@ -95,7 +93,21 @@ public static class SpawnsWindow
 
 				if (ImGui.BeginChild("AddSpawnControls"))
 				{
-					ImGui.Combo("Enemy", ref _addEnemyTypeIndex, _enemyNames, _enemyNames.Length);
+					EnemyButton(EnemyType.Squid1, false);
+					EnemyButton(EnemyType.Squid2, true);
+					EnemyButton(EnemyType.Squid3, true);
+
+					EnemyButton(EnemyType.Spider1, false);
+					EnemyButton(EnemyType.Spider2, true);
+
+					EnemyButton(EnemyType.Centipede, false);
+					EnemyButton(EnemyType.Gigapede, true);
+					EnemyButton(EnemyType.Ghostpede, true);
+
+					EnemyButton(EnemyType.Thorn, false);
+					EnemyButton(EnemyType.Leviathan, true);
+					EnemyButton(EnemyType.Empty, true);
+
 					ImGui.InputFloat("Delay", ref _addDelay, 1, 2, "%.4f");
 				}
 
@@ -106,6 +118,28 @@ public static class SpawnsWindow
 		}
 
 		ImGui.End(); // End Spawns
+	}
+
+	private static void EnemyButton(EnemyType enemyType, bool sameLine)
+	{
+		bool isCurrent = _selectedEnemyType == enemyType;
+		Engine.Maths.Numerics.Color enemyColor = enemyType.GetColor(GameVersion.V3_2).ToEngineColor().Darken(isCurrent ? 0 : 0.8f);
+
+		ImGui.PushStyleColor(ImGuiCol.Text, isCurrent ? enemyColor.ReadableColorForBrightness() : Engine.Maths.Numerics.Color.Gray(0.5f));
+		ImGui.PushStyleColor(ImGuiCol.Button, enemyColor);
+		ImGui.PushStyleColor(ImGuiCol.ButtonActive, Engine.Maths.Numerics.Color.Lerp(enemyColor, Engine.Maths.Numerics.Color.White, 0.75f));
+		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Engine.Maths.Numerics.Color.Lerp(enemyColor, Engine.Maths.Numerics.Color.White, 0.5f));
+		ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, isCurrent ? 1 : 0);
+		ImGui.PushStyleColor(ImGuiCol.Border, enemyColor.ReadableColorForBrightness());
+
+		if (sameLine)
+			ImGui.SameLine();
+
+		if (ImGui.Button(Inline.Span(enemyType), new(80, 20)))
+			_selectedEnemyType = enemyType;
+
+		ImGui.PopStyleColor(5);
+		ImGui.PopStyleVar();
 	}
 
 	private static void RenderSpawnsTable()

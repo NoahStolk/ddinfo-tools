@@ -28,7 +28,10 @@
 
 ### Spawnset Editor
 
-- Rewrote UI; the spawns, settings, history, and topdown arena editor are now separate windows.
+- Rewrote UI
+  - The spawns, settings, history, and topdown arena editor are now separate windows.
+  - Arena shrink and brightness are now sliders instead of inputs.
+  - Enemy combobox has been replaced with multiple buttons.
 - Fixed various UI bugs.
 - Fixed being able to select void tiles in the 3D arena editor.
 - The 3D camera now uses the same controls as the game's free camera.
