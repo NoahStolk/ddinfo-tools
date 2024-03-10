@@ -114,13 +114,13 @@ public class GameMemoryService
 		if (_process == null)
 			return;
 
-		byte[] buffer = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref value, 1)).ToArray();
+		Span<byte> buffer = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref value, 1));
 		_nativeMemoryService.WriteMemory(_process, FollowPointerChain(initialAddress, offsets), buffer, 0, buffer.Length);
 	}
 
-	public byte[] ReadExperimental(long initialAddress, int size, ReadOnlySpan<int> offsets)
+	public void ReadExperimental(long initialAddress, Span<byte> buffer, ReadOnlySpan<int> offsets)
 	{
-		return Read(FollowPointerChain(initialAddress, offsets), size);
+		Read(FollowPointerChain(initialAddress, offsets), buffer);
 	}
 
 	private long FollowPointerChain(long initialAddress, ReadOnlySpan<int> offsets)
@@ -134,15 +134,14 @@ public class GameMemoryService
 
 	private long ReadPointer(long memoryAddress)
 	{
-		return BitConverter.ToInt64(Read(memoryAddress, sizeof(long)));
+		Span<byte> buffer = stackalloc byte[sizeof(long)];
+		Read(memoryAddress, buffer);
+		return BitConverter.ToInt64(buffer);
 	}
 
-	private byte[] Read(long memoryAddress, int size)
+	private void Read(long memoryAddress, Span<byte> buffer)
 	{
-		// TODO: Fix allocations.
-		byte[] buffer = new byte[size];
 		if (_process != null)
-			_nativeMemoryService.ReadMemory(_process, memoryAddress, buffer, 0, size);
-		return buffer;
+			_nativeMemoryService.ReadMemory(_process, memoryAddress, buffer, 0, buffer.Length);
 	}
 }
