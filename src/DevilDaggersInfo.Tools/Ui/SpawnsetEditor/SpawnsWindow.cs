@@ -42,8 +42,13 @@ public static class SpawnsWindow
 
 			if (endLoopLength.HasValue && isEndLoopTooShort)
 			{
-				ImGui.PushStyleColor(ImGuiCol.Text, new Engine.Maths.Numerics.Color(255, 47, 47, 255));
-				ImGui.TextWrapped(Inline.Span($"(!) The end loop is only {endLoopLength.Value} seconds long, which will probably result in severe lag or a crash."));
+				ImGui.PushStyleColor(ImGuiCol.ChildBg, new Engine.Maths.Numerics.Color(127, 0, 0, 255));
+				if (ImGui.BeginChild("Warning", new(0, 56)))
+				{
+					ImGui.TextWrapped(Inline.Span($"(!) The end loop is only {endLoopLength.Value} seconds long, which will probably result in severe lag or a crash. If you intend to have no end loop, make sure to add an empty spawn at the end of the spawns list."));
+					ImGui.EndChild();
+				}
+
 				ImGui.PopStyleColor();
 			}
 
