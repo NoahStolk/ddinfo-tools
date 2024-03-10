@@ -6,15 +6,18 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-public static class HistoryChild
+public static class HistoryWindow
 {
 	public static bool UpdateScroll { get; set; }
 
 	public static void Render()
 	{
 		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(8, 1));
-		if (ImGui.BeginChild("HistoryChild", new(244, 512)))
+		if (ImGui.Begin("History"))
 		{
+			ImGui.Text(Inline.Span($"{FileStates.Spawnset.FileName ?? FileStates.UntitledName}{(FileStates.Spawnset.IsModified && FileStates.Spawnset.FileName != null ? "*" : string.Empty)}"));
+			ImGui.Separator();
+
 			for (int i = 0; i < FileStates.Spawnset.History.Count; i++)
 			{
 				HistoryEntry<SpawnsetBinary, SpawnsetEditType> history = FileStates.Spawnset.History[i];
@@ -47,7 +50,7 @@ public static class HistoryChild
 
 		ImGui.PopStyleVar();
 
-		ImGui.EndChild(); // End HistoryChild
+		ImGui.End(); // End History
 
 		ImGuiIOPtr io = ImGui.GetIO();
 		if (io.KeyCtrl)

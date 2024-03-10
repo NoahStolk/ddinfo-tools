@@ -8,6 +8,6 @@ public static class SpawnsetHistoryUtils
 	{
 		FileStates.Spawnset.Save(editType);
 
-		HistoryChild.UpdateScroll = true;
+		HistoryWindow.UpdateScroll = true;
 	}
 }

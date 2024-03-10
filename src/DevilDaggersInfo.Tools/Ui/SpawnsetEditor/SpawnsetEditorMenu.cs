@@ -66,10 +66,10 @@ public static class SpawnsetEditorMenu
 	private static void RenderEditMenu()
 	{
 		if (ImGui.MenuItem("Undo", "Ctrl+Z"))
-			HistoryChild.Undo();
+			HistoryWindow.Undo();
 
 		if (ImGui.MenuItem("Redo", "Ctrl+Y"))
-			HistoryChild.Redo();
+			HistoryWindow.Redo();
 
 		if (ImGui.MenuItem("Hardcode end loop") && FileStates.Spawnset.Object.HasEndLoop())
 		{

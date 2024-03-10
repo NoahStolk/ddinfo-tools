@@ -9,7 +9,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-public static class SettingsChild
+public static class SettingsWindow
 {
 	private static void InfoTooltipWhenDisabled(bool disabled, string tooltipText)
 	{
@@ -31,7 +31,7 @@ public static class SettingsChild
 
 	public static void Render()
 	{
-		if (ImGui.BeginChild("SettingsChild", new(280, 416)))
+		if (ImGui.Begin("Settings"))
 		{
 			RenderFormat();
 			RenderGameMode();
@@ -42,7 +42,7 @@ public static class SettingsChild
 			ImGui.Unindent();
 		}
 
-		ImGui.EndChild(); // End SettingsChild
+		ImGui.End(); // End Settings
 	}
 
 	private static void RenderFormat()

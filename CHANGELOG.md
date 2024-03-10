@@ -26,6 +26,12 @@
 
 - Fixed not showing errors when mod compilation or extraction fails.
 
+### Spawnset Editor
+
+- Rewrote UI; the spawns, settings, history, and topdown arena editor are now separate windows.
+- Fixed various UI bugs.
+- Fixed being able to select void tiles in the 3D arena editor.
+
 ## [0.12.0.0] - 2024-01-21
 
 ### Asset Editor

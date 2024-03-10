@@ -32,14 +32,25 @@ public static class SpawnsWindow
 
 	public static void Render()
 	{
-		if (ImGui.Begin("SpawnsWindow"))
+		if (ImGui.Begin("Spawns"))
 		{
-			if (ImGui.BeginChild("SpawnsListChild", new(400 - 8, 768 - 144)))
+			float? endLoopLength = GetEndLoopLength();
+			bool isEndLoopTooShort = endLoopLength < 0.1f;
+
+			if (endLoopLength.HasValue && isEndLoopTooShort)
+			{
+				ImGui.PushStyleColor(ImGuiCol.Text, new Engine.Maths.Numerics.Color(255, 47, 47, 255));
+				ImGui.TextWrapped(Inline.Span($"(!) The end loop is only {endLoopLength.Value} seconds long, which will probably result in severe lag or a crash."));
+				ImGui.PopStyleColor();
+			}
+
+			Vector2 listSize = new(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y - 76);
+			if (ImGui.BeginChild("SpawnsListChild", listSize))
 				RenderSpawnsTable();
 
 			ImGui.EndChild(); // End SpawnsListChild
 
-			if (ImGui.BeginChild("SpawnControlsChild", new(400 - 8, 72)))
+			if (ImGui.BeginChild("SpawnControlsChild"))
 			{
 				if (ImGui.BeginChild("AddAndInsertButtons", new(72, 72)))
 				{
@@ -94,7 +105,7 @@ public static class SpawnsWindow
 			ImGui.EndChild(); // End SpawnControlsChild
 		}
 
-		ImGui.End(); // End SpawnsWindow
+		ImGui.End(); // End Spawns
 	}
 
 	private static void RenderSpawnsTable()
@@ -130,11 +141,11 @@ public static class SpawnsWindow
 			}
 
 			ImGui.TableSetupColumn("#", ImGuiTableColumnFlags.WidthFixed, 24);
-			ImGui.TableSetupColumn("Enemy", ImGuiTableColumnFlags.WidthFixed, 72);
-			ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 72);
-			ImGui.TableSetupColumn("Delay", ImGuiTableColumnFlags.WidthFixed, 72);
-			ImGui.TableSetupColumn("Gems", ImGuiTableColumnFlags.WidthFixed, 48);
-			ImGui.TableSetupColumn("Total", ImGuiTableColumnFlags.WidthFixed, 88);
+			ImGui.TableSetupColumn("Enemy", ImGuiTableColumnFlags.WidthStretch, 72);
+			ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthStretch, 72);
+			ImGui.TableSetupColumn("Delay", ImGuiTableColumnFlags.WidthStretch, 72);
+			ImGui.TableSetupColumn("Gems", ImGuiTableColumnFlags.WidthStretch, 48);
+			ImGui.TableSetupColumn("Total", ImGuiTableColumnFlags.WidthStretch, 88);
 			ImGui.TableHeadersRow();
 
 			for (int i = 0; i < columnCount; i++)
@@ -278,5 +289,14 @@ public static class SpawnsWindow
 	public static void ClearAllSelections()
 	{
 		Array.Clear(_selected);
+	}
+
+	private static float? GetEndLoopLength()
+	{
+		if (FileStates.Spawnset.Object.GameMode != GameMode.Survival)
+			return null;
+
+		(SpawnSectionInfo PreLoopSection, SpawnSectionInfo LoopSection) sections = FileStates.Spawnset.Object.CalculateSections();
+		return sections.LoopSection.Length;
 	}
 }

@@ -10,6 +10,7 @@ using DevilDaggersInfo.Tools.Ui.Practice.Main;
 using DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
+using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 using DevilDaggersInfo.Tools.User.Settings;
 
 namespace DevilDaggersInfo.Tools;
@@ -73,7 +74,10 @@ public static class UiRenderer
 				break;
 			case LayoutType.SpawnsetEditor:
 				SpawnsetEditorMenu.Render();
-				SpawnsetEditorWindow.Render();
+				SpawnsWindow.Render();
+				SettingsWindow.Render();
+				ArenaWindow.Render();
+				HistoryWindow.Render();
 				SpawnsetEditor3DWindow.Render(delta);
 				break;
 			case LayoutType.AssetEditor:
