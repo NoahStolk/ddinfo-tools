@@ -18,6 +18,8 @@ public static class HistoryWindow
 			ImGui.Text(Inline.Span($"{FileStates.Spawnset.FileName ?? FileStates.UntitledName}{(FileStates.Spawnset.IsModified && FileStates.Spawnset.FileName != null ? "*" : string.Empty)}"));
 			ImGui.Separator();
 
+			float buttonWidth = ImGui.GetContentRegionAvail().X;
+
 			for (int i = 0; i < FileStates.Spawnset.History.Count; i++)
 			{
 				HistoryEntry<SpawnsetBinary, SpawnsetEditType> history = FileStates.Spawnset.History[i];
@@ -39,7 +41,7 @@ public static class HistoryWindow
 				ImGui.PushStyleColor(ImGuiCol.Border, i == FileStates.Spawnset.CurrentHistoryIndex ? Color.White : Color.Black);
 
 				ImGui.PushID(Inline.Span($"HistoryButton{i}"));
-				if (ImGui.Button(history.EditType.GetChange(), new(226, 20)))
+				if (ImGui.Button(history.EditType.GetChange(), new(buttonWidth, 20)))
 					SetHistoryIndex(i);
 
 				ImGui.PopID();
