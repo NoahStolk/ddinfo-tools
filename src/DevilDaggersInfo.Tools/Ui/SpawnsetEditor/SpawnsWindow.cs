@@ -156,7 +156,7 @@ public static class SpawnsWindow
 		ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.SpawnsetEditor.Primary with { A = 75 });
 		ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.SpawnsetEditor.Primary with { A = 100 });
 
-		if (ImGui.BeginTable("SpawnsTable", columnCount, ImGuiTableFlags.None))
+		if (ImGui.BeginTable("SpawnsTable", columnCount, ImGuiTableFlags.ScrollY))
 		{
 			ImGuiIOPtr io = ImGui.GetIO();
 
@@ -179,6 +179,7 @@ public static class SpawnsWindow
 			ImGui.TableSetupColumn("Delay", ImGuiTableColumnFlags.WidthStretch, 72);
 			ImGui.TableSetupColumn("Gems", ImGuiTableColumnFlags.WidthStretch, 48);
 			ImGui.TableSetupColumn("Total", ImGuiTableColumnFlags.WidthStretch, 88);
+			ImGui.TableSetupScrollFreeze(0, 1);
 			ImGui.TableHeadersRow();
 
 			for (int i = 0; i < columnCount; i++)
