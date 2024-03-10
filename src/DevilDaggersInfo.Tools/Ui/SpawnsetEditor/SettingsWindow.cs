@@ -122,7 +122,7 @@ public static class SettingsWindow
 		ImGui.Spacing();
 		ImGui.Indent(-8);
 		ImGui.Text("Race dagger");
-		InfoTooltipWhenDisabled(FileStates.Spawnset.Object.GameMode != GameMode.Race, "Race dagger values can only be set when the game mode is set to Race.");
+		InfoTooltipWhenDisabled(FileStates.Spawnset.Object.GameMode != GameMode.Race, "Changing the race dagger values doesn't do anything useful if the game mode is not set to Race.\nSet the game mode to Race to enable these inputs.");
 		ImGui.Separator();
 		ImGui.Indent(8);
 

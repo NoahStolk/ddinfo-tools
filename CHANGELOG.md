@@ -31,6 +31,7 @@
 - Rewrote UI; the spawns, settings, history, and topdown arena editor are now separate windows.
 - Fixed various UI bugs.
 - Fixed being able to select void tiles in the 3D arena editor.
+- The 3D camera now uses the same controls as the game's free camera.
 
 ## [0.12.0.0] - 2024-01-21
 

@@ -35,10 +35,8 @@ public sealed class ArenaEditorContext
 			{
 				if (ctrl)
 				{
-					if (!_selectedTiles.Contains(_closestHitTile))
+					if (!_selectedTiles.Remove(_closestHitTile))
 						_selectedTiles.Add(_closestHitTile);
-					else
-						_selectedTiles.Remove(_closestHitTile);
 				}
 				else
 				{
