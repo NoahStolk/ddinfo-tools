@@ -5,7 +5,7 @@ namespace DevilDaggersInfo.Tools.GameMemory.Enemies.Data;
 
 #pragma warning disable SA1134
 [StructLayout(LayoutKind.Explicit, Size = MemoryConstants.ThornSize)]
-public record struct Thorn
+public record struct Thorn : IEnemy
 {
 	[FieldOffset(00)] public ThornState State;
 	[FieldOffset(04)] public int IsAlive;
@@ -24,5 +24,13 @@ public record struct Thorn
 	[FieldOffset(64)] public float Unknown9;
 	[FieldOffset(68)] public float Unknown10;
 	[FieldOffset(72)] public float Unknown11;
+
+	public bool IsValid()
+	{
+		bool validState = State is ThornState.Alive or ThornState.Spawning or ThornState.Dead;
+		bool validAlive = IsAlive is 0 or 1;
+		bool validHp = Hp >= 0;
+		return validState && validAlive && validHp;
+	}
 }
 #pragma warning restore SA1134
