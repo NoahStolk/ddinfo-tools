@@ -162,11 +162,8 @@ public static class SpawnsWindow
 
 			if (_windowIsFocused)
 			{
-				if (io.KeyCtrl)
-				{
-					if (io.IsKeyDown(ImGuiKey.A))
-						Array.Fill(_selected, true);
-				}
+				if (io.KeyCtrl && io.IsKeyDown(ImGuiKey.A))
+					Array.Fill(_selected, true);
 
 				if (io.IsKeyDown(ImGuiKey.Delete) && Array.Exists(_selected, b => b))
 				{
@@ -294,6 +291,8 @@ public static class SpawnsWindow
 			}
 
 			ImGui.InputFloat("Delay", ref _editDelay, 1, 5, "%.4f");
+			_editDelay = Math.Max(0, _editDelay);
+
 			if (!saved && Math.Abs(_editDelay - spawn.Delay) > 0.0001f)
 				_delayEdited = true;
 
