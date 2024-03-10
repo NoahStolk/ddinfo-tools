@@ -27,6 +27,9 @@ public static class ExperimentalMemory
 
 	public static void Update(float delta)
 	{
+		if (!SurvivalFileWatcher.Exists)
+			return; // Do not run for default V3 spawnset.
+
 		_recordingTimer += delta;
 		if (_recordingTimer < ScanInterval)
 			return;
@@ -36,6 +39,13 @@ public static class ExperimentalMemory
 			return;
 
 		// TODO: Don't get this from the main block. Find the actual list lengths.
+		// - Use spawnset with 16 thorns.
+		// - Find 16.
+		// - Kill 1 thorn.
+		// - Find 16 until the thorn is removed from memory (should take a couple seconds after death).
+		// - Then find 15.
+		// - Repeat until list length is found.
+		// Could also try with spawning a new thorn every 10 seconds and see if the list length increases.
 		MainBlock mainBlock = Root.GameMemoryService.MainBlock;
 		int thornListLength = mainBlock.ThornAliveCount;
 		int spiderListLength = mainBlock.Spider1AliveCount + mainBlock.Spider2AliveCount;
@@ -51,6 +61,7 @@ public static class ExperimentalMemory
 		ReadEnemyList(_pedes, pedeListLength, MemoryConstants.Pede);
 		ReadEnemyList(_boids, boidListLength, MemoryConstants.Boid);
 
+		// Only write the necessary data back into memory, otherwise we're sending outdated data back into memory.
 		for (int i = 0; i < _thorns.Count; i++)
 		{
 			Thorn thorn = _thorns[i];
@@ -64,8 +75,11 @@ public static class ExperimentalMemory
 		for (int i = 0; i < _squids.Count; i++)
 		{
 			Squid squid = _squids[i];
-			if (squid.GushCountDown < -1)
-				WriteValue<Squid, float>(i, nameof(Squid.GushCountDown), -1);
+			if (squid.GushCountDown < -0.25f)
+				WriteValue<Squid, float>(i, nameof(Squid.GushCountDown), -0.25f);
+
+			if (mainBlock.Time > 4)
+				WriteValue<Squid, int>(i, nameof(Squid.NodeHp1), 0);
 		}
 
 		for (int i = 0; i < _boids.Count; i++)
@@ -73,15 +87,15 @@ public static class ExperimentalMemory
 			Boid boid = _boids[i];
 			if (boid.Timer < 1.0f)
 			{
-				boid.Hp = boid.Type switch
-				{
-					BoidType.Skull1 => 0,
+				// boid.Hp = boid.Type switch
+				// {
+				// 	BoidType.Skull1 => 0,
 					// BoidType.Skull2 => 0,
 					// BoidType.Skull3 => 0,
 					// BoidType.Skull4 => 0,
 					// BoidType.Spiderling => 0,
-					_ => boid.Hp,
-				};
+				// 	_ => boid.Hp,
+				// };
 				//
 				// boid.BaseSpeed = boid.Type switch
 				// {
@@ -98,10 +112,17 @@ public static class ExperimentalMemory
 				// 	_ => boid.Type,
 				// };
 
-				// Only write the necessary data back into memory, otherwise we're sending outdated data back into memory.
-				WriteValue<Boid, int>(i, nameof(Boid.Hp), boid.Hp);
-				WriteValue<Boid, float>(i, nameof(Boid.BaseSpeed), boid.BaseSpeed);
-				WriteValue<Boid, short>(i, nameof(Boid.Type), (short)boid.Type);
+				if (boid.Type == BoidType.Skull1)
+				{
+					WriteValue<Boid, short>(i, nameof(Boid.Hp), 4);
+					WriteValue<Boid, float>(i, nameof(Boid.BaseSpeed), 0);
+				}
+
+				if (boid.Type == BoidType.Skull2)
+				{
+					WriteValue<Boid, short>(i, nameof(Boid.Hp), 100);
+					WriteValue<Boid, float>(i, nameof(Boid.BaseSpeed), 0);
+				}
 			}
 		}
 	}
