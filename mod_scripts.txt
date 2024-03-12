@@ -1,0 +1,66 @@
+Concepts:
+	Global variables (main block)
+	Local variables (depends on script type)
+
+Data:
+	enum ScriptType
+	{
+		Thorn,
+		Spider,
+		Leviathan,
+		Squid,
+		Pede,
+		Boid,
+	}
+
+	class Script
+	{
+		string Name;
+		ScriptType Type;
+		List<Check> Checks;
+	}
+
+	class ScriptCheck
+	{
+		ScriptCondition Condition;
+		List<ScriptAction> Actions;
+	}
+
+	class ScriptCondition
+	{
+		// Parse some text to a Func<bool> or something
+	}
+
+	class ScriptAction
+	{
+		// Parse some text to an Action or something
+	}
+
+Examples:
+	name: Remove Skull Is
+	type: boid
+	checks:
+		condition: local.timer < 1 && local.type == 1
+		actions:
+			local.hp = 0
+
+	name: Squid III gushes every 5 seconds
+	type: squid
+	checks:
+		condition: local.type == 3 && local.gush_countdown < -5
+		actions:
+			local.gush_countdown = -5
+
+	name: All Thorns die when timer reaches 60 seconds
+	type: thorn
+	checks:
+		condition: global.timer > 60
+		actions:
+			local.hp = 0
+
+	name: Thorns only have 20 HP
+	type: thorn
+	checks:
+		condition: local.hp > 20
+		actions:
+			local.hp = 20
