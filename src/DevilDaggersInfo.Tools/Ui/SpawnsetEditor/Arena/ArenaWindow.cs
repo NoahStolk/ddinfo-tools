@@ -63,9 +63,13 @@ public static class ArenaWindow
 				}
 
 				IArenaState activeState = GetActiveState();
+				ArenaCanvas.Render();
+				activeState.Render(mousePosition);
 
-				Vector2 pos = ImGui.GetCursorScreenPos();
-				bool isArenaHovered = ImGui.IsMouseHoveringRect(pos, pos + ArenaSize);
+				// Capture mouse input when the mouse is over the canvas.
+				// This prevents dragging the window while drawing on the arena canvas.
+				ImGui.InvisibleButton("ArenaCanvas", ArenaSize, ImGuiButtonFlags.MouseButtonLeft);
+				bool isArenaHovered = ImGui.IsItemHovered();
 				if (isArenaHovered)
 					ImGui.SetTooltip(Inline.Span($"{FileStates.Spawnset.Object.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y]}\n<{mousePosition.Tile.X}, {mousePosition.Tile.Y}>"));
 
@@ -76,13 +80,6 @@ public static class ArenaWindow
 					activeState.Handle(mousePosition);
 				else
 					activeState.HandleOutOfRange(mousePosition);
-
-				ArenaCanvas.Render();
-				activeState.Render(mousePosition);
-
-				// Capture mouse input when the mouse is over the canvas.
-				// This prevents dragging the window while drawing on the arena canvas.
-				ImGui.InvisibleButton("ArenaCanvas", ArenaSize, ImGuiButtonFlags.MouseButtonLeft);
 			}
 
 			ImGui.EndChild(); // End Arena
