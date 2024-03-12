@@ -82,6 +82,8 @@ public static class UiRenderer
 				ArenaWindow.Render();
 				HistoryWindow.Render();
 				SpawnsetEditor3DWindow.Render(delta);
+				ExperimentalMemory.Update(delta);
+				ScriptingWindow.Render();
 				break;
 			case LayoutType.AssetEditor:
 				AssetEditorMenu.Render();

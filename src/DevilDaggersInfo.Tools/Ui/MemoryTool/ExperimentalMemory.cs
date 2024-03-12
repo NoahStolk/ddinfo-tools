@@ -1,6 +1,9 @@
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.GameMemory.Enemies;
 using DevilDaggersInfo.Tools.GameMemory.Enemies.Data;
+using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
+using Microsoft.CodeAnalysis.Scripting;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace DevilDaggersInfo.Tools.Ui.MemoryTool;
@@ -61,7 +64,11 @@ public static class ExperimentalMemory
 		ReadEnemyList(_pedes, pedeListLength, MemoryConstants.Pede);
 		ReadEnemyList(_boids, boidListLength, MemoryConstants.Boid);
 
+		// TODO: This method shouldn't be present in the window.
+		ScriptingWindow.RunScript();
+
 		// Only write the necessary data back into memory, otherwise we're sending outdated data back into memory.
+		/*
 		for (int i = 0; i < _thorns.Count; i++)
 		{
 			Thorn thorn = _thorns[i];
@@ -125,6 +132,7 @@ public static class ExperimentalMemory
 				}
 			}
 		}
+		*/
 	}
 
 	private static void ReadEnemyList<TEnemy>(List<TEnemy> list, int count, EnemyMemory enemyMemory)
@@ -152,7 +160,9 @@ public static class ExperimentalMemory
 		return MemoryMarshal.Read<TEnemy>(buffer);
 	}
 
-	private static void WriteValue<TEnemy, TValue>(int index, string fieldName, TValue value)
+	// This is called dynamically by scripts.
+	// ReSharper disable once MemberCanBePrivate.Global
+	public static void WriteValue<TEnemy, TValue>(int index, string fieldName, TValue value)
 		where TEnemy : unmanaged
 		where TValue : unmanaged
 	{
