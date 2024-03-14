@@ -4,12 +4,12 @@ namespace DevilDaggersInfo.Tools.NativeInterface.Services.Linux;
 
 public class LinuxMemoryService : INativeMemoryService
 {
-	public void WriteMemory(Process process, long address, byte[] bytes, int offset, int size)
+	public void WriteMemory(Process process, long address, Span<byte> bytes, int offset, int size)
 	{
 		// TODO: Implement.
 	}
 
-	public void ReadMemory(Process process, long address, byte[] bytes, int offset, int size)
+	public void ReadMemory(Process process, long address, Span<byte> bytes, int offset, int size)
 	{
 		// TODO: Implement.
 	}

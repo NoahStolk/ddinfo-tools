@@ -10,4 +10,5 @@ public enum LayoutType
 	CustomLeaderboards,
 	Practice,
 	ModManager,
+	MemoryTool,
 }

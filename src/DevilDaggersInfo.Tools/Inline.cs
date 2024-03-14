@@ -42,6 +42,19 @@ public static class Inline
 		return Buffer.AsSpan(0, charsWritten);
 	}
 
+	public static ReadOnlySpan<char> Span(Vector4 value, ReadOnlySpan<char> format = default, IFormatProvider? provider = default)
+	{
+		int charsWritten = 0;
+		SpanWrite.TryWrite(Buffer, ref charsWritten, value.X, format, provider);
+		SpanWrite.TryWriteString(Buffer, ref charsWritten, ", ");
+		SpanWrite.TryWrite(Buffer, ref charsWritten, value.Y, format, provider);
+		SpanWrite.TryWriteString(Buffer, ref charsWritten, ", ");
+		SpanWrite.TryWrite(Buffer, ref charsWritten, value.Z, format, provider);
+		SpanWrite.TryWriteString(Buffer, ref charsWritten, ", ");
+		SpanWrite.TryWrite(Buffer, ref charsWritten, value.W, format, provider);
+		return Buffer.AsSpan(0, charsWritten);
+	}
+
 	public static ReadOnlySpan<char> Span(string str)
 	{
 		return str.AsSpan();

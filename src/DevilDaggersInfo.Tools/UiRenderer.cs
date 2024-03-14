@@ -4,6 +4,7 @@ using DevilDaggersInfo.Tools.Ui.Config;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 using DevilDaggersInfo.Tools.Ui.Main;
+using DevilDaggersInfo.Tools.Ui.MemoryTool;
 using DevilDaggersInfo.Tools.Ui.ModManager;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.Practice.Main;
@@ -38,6 +39,7 @@ public static class UiRenderer
 				LayoutType.CustomLeaderboards => Colors.CustomLeaderboards,
 				LayoutType.Practice => Colors.Practice,
 				LayoutType.ModManager => Colors.ModManager,
+				LayoutType.MemoryTool => Colors.MemoryTool,
 				_ => throw new ArgumentOutOfRangeException(nameof(value), value, null),
 			});
 		}
@@ -79,6 +81,8 @@ public static class UiRenderer
 				ArenaWindow.Render();
 				HistoryWindow.Render();
 				SpawnsetEditor3DWindow.Render(delta);
+				ExperimentalMemory.Update(delta);
+				ScriptingWindow.Render();
 				break;
 			case LayoutType.AssetEditor:
 				AssetEditorMenu.Render();
@@ -106,6 +110,10 @@ public static class UiRenderer
 				break;
 			case LayoutType.ModManager:
 				ModManagerWindow.Render();
+				break;
+			case LayoutType.MemoryTool:
+				ExperimentalMemory.Update(delta);
+				MemoryToolWindow.Render();
 				break;
 		}
 

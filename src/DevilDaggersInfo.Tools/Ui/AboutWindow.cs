@@ -50,6 +50,7 @@ public static class AboutWindow
 			RenderLibrary("https://github.com/SixLabors/ImageSharp", "ImageSharp", "Image processing");
 			RenderLibrary("https://github.com/ImGuiNET/ImGui.NET", "ImGui.NET", "C# wrapper for Dear ImGui");
 			RenderLibrary("https://github.com/milleniumbug/NativeFileDialogSharp", "NativeFileDialogSharp", "C# wrapper for NativeFileDialog");
+			RenderLibrary("https://github.com/microsoft/CsWin32", "CsWin32", "Source-generator for Win32 P/Invoke methods");
 			RenderFooter();
 
 			ImGui.PopTextWrapPos();
