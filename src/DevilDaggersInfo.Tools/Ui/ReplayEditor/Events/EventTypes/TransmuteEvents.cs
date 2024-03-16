@@ -6,12 +6,11 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
 public sealed class TransmuteEvents : IEventTypeRenderer<TransmuteEventData>
 {
-	public static int ColumnCount => 7;
+	public static int ColumnCount => 6;
 	public static int ColumnCountData => 5;
 
 	public static void SetupColumns()
 	{
-		EventTypeRendererUtils.SetupColumnActions();
 		EventTypeRendererUtils.SetupColumnIndex();
 		SetupColumnsData();
 	}
@@ -27,7 +26,6 @@ public sealed class TransmuteEvents : IEventTypeRenderer<TransmuteEventData>
 
 	public static void Render(int eventIndex, int entityId, TransmuteEventData e, ReplayEventsData replayEventsData)
 	{
-		EventTypeRendererUtils.NextColumnActions(eventIndex);
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
 		RenderData(eventIndex, e, replayEventsData);
 	}

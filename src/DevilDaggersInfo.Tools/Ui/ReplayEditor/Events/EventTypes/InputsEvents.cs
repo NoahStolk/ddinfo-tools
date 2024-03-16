@@ -10,12 +10,11 @@ public sealed class InputsEvents : IEventTypeRenderer<InputsEventData>
 	private static readonly string[] _jumpTypeNamesArray = EnumUtils.JumpTypeNames.Values.ToArray();
 	private static readonly string[] _shootTypeNamesArray = EnumUtils.ShootTypeNames.Values.ToArray();
 
-	public static int ColumnCount => 11;
+	public static int ColumnCount => 10;
 	public static int ColumnCountData => 9;
 
 	public static void SetupColumns()
 	{
-		EventTypeRendererUtils.SetupColumnActions();
 		EventTypeRendererUtils.SetupColumnIndex();
 		SetupColumnsData();
 	}
@@ -35,7 +34,6 @@ public sealed class InputsEvents : IEventTypeRenderer<InputsEventData>
 
 	public static void Render(int eventIndex, int entityId, InputsEventData e, ReplayEventsData replayEventsData)
 	{
-		EventTypeRendererUtils.NextColumnActions(eventIndex);
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
 		RenderData(eventIndex, e, replayEventsData);
 	}

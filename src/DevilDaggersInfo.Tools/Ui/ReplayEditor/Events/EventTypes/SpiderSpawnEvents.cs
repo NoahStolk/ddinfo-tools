@@ -9,12 +9,11 @@ public sealed class SpiderSpawnEvents : IEventTypeRenderer<SpiderSpawnEventData>
 {
 	private static readonly string[] _spiderTypeNamesArray = EnumUtils.SpiderTypeNames.Values.ToArray();
 
-	public static int ColumnCount => 6;
+	public static int ColumnCount => 5;
 	public static int ColumnCountData => 3;
 
 	public static void SetupColumns()
 	{
-		EventTypeRendererUtils.SetupColumnActions();
 		EventTypeRendererUtils.SetupColumnIndex();
 		EventTypeRendererUtils.SetupColumnEntityId();
 		SetupColumnsData();
@@ -29,7 +28,6 @@ public sealed class SpiderSpawnEvents : IEventTypeRenderer<SpiderSpawnEventData>
 
 	public static void Render(int eventIndex, int entityId, SpiderSpawnEventData e, ReplayEventsData replayEventsData)
 	{
-		EventTypeRendererUtils.NextColumnActions(eventIndex);
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
 		RenderData(eventIndex, e, replayEventsData);

@@ -4,7 +4,6 @@ using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Numerics;
 using DevilDaggersInfo.Core.Wiki;
-using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Utils;
@@ -38,11 +37,6 @@ public static class EventTypeRendererUtils
 	};
 
 	private static ImGuiTableFlags EventTableFlags => ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX;
-
-	public static void SetupColumnActions()
-	{
-		ImGui.TableSetupColumn("Actions", ImGuiTableColumnFlags.WidthFixed, 64);
-	}
 
 	public static void SetupColumnIndex()
 	{
@@ -98,32 +92,6 @@ public static class EventTypeRendererUtils
 
 			ImGui.EndTable();
 		}
-	}
-
-	public static void NextColumnActions(int index)
-	{
-		ImGui.TableNextColumn();
-
-		ImGui.PushID(Inline.Span($"delete_event_{index}"));
-		ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 159 });
-		ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red);
-		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red with { A = 223 });
-		if (ImGui.SmallButton("DEL"))
-			FileStates.Replay.Object.EventsData.RemoveEvent(index);
-		ImGui.PopStyleColor(3);
-		ImGui.PopID();
-
-		if (ImGui.IsItemHovered())
-			ImGui.SetTooltip(Inline.Span($"Delete event at index {index}"));
-
-		ImGui.SameLine();
-		if (ImGui.SmallButton(Inline.Span($"INS##{index}")))
-			ImGui.OpenPopup(Inline.Span($"Insert event at index {index}"));
-
-		if (ImGui.IsItemHovered())
-			ImGui.SetTooltip(Inline.Span($"Insert event at index {index}"));
-
-		InsertEventPopup.Render(index);
 	}
 
 	public static void NextColumnEventIndex(int index)

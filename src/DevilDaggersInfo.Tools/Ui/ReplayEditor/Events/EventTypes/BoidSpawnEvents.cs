@@ -9,12 +9,11 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEventData>
 {
 	private static readonly string[] _boidTypeNamesArray = EnumUtils.BoidTypeNames.Values.ToArray();
 
-	public static int ColumnCount => 9;
+	public static int ColumnCount => 8;
 	public static int ColumnCountData => 6;
 
 	public static void SetupColumns()
 	{
-		EventTypeRendererUtils.SetupColumnActions();
 		EventTypeRendererUtils.SetupColumnIndex();
 		EventTypeRendererUtils.SetupColumnEntityId();
 		SetupColumnsData();
@@ -32,7 +31,6 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEventData>
 
 	public static void Render(int eventIndex, int entityId, BoidSpawnEventData e, ReplayEventsData replayEventsData)
 	{
-		EventTypeRendererUtils.NextColumnActions(eventIndex);
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
 		RenderData(eventIndex, e, replayEventsData);

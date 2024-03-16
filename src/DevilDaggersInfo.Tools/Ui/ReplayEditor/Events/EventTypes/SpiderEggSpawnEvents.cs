@@ -6,12 +6,11 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
 public sealed class SpiderEggSpawnEvents : IEventTypeRenderer<SpiderEggSpawnEventData>
 {
-	public static int ColumnCount => 6;
+	public static int ColumnCount => 5;
 	public static int ColumnCountData => 3;
 
 	public static void SetupColumns()
 	{
-		EventTypeRendererUtils.SetupColumnActions();
 		EventTypeRendererUtils.SetupColumnIndex();
 		EventTypeRendererUtils.SetupColumnEntityId();
 		SetupColumnsData();
@@ -26,7 +25,6 @@ public sealed class SpiderEggSpawnEvents : IEventTypeRenderer<SpiderEggSpawnEven
 
 	public static void Render(int eventIndex, int entityId, SpiderEggSpawnEventData e, ReplayEventsData replayEventsData)
 	{
-		EventTypeRendererUtils.NextColumnActions(eventIndex);
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
 		RenderData(eventIndex, e, replayEventsData);
