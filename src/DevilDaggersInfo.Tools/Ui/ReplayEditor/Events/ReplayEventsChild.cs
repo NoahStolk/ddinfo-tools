@@ -3,6 +3,7 @@ using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
@@ -38,7 +39,7 @@ public static class ReplayEventsChild
 		}
 	}
 
-	public static void Render(ReplayEventsData eventsData, float startTime)
+	public static void Render(ReplayEventsData eventsData, EditorReplayModel replay, float startTime)
 	{
 		const int maxTicks = 60;
 		const int height = 216;
@@ -141,13 +142,13 @@ public static class ReplayEventsChild
 
 		if (ImGui.BeginChild("ReplayEventsChild", new(0, 0)))
 		{
-			RenderEventsTable(eventsData, startTime, maxTicks);
+			RenderEventsTable(eventsData, replay, startTime, maxTicks);
 		}
 
 		ImGui.EndChild(); // ReplayEventsChild
 	}
 
-	private static void RenderEventsTable(ReplayEventsData eventsData, float startTime, int maxTicks)
+	private static void RenderEventsTable(ReplayEventsData eventsData, EditorReplayModel replay, float startTime, int maxTicks)
 	{
 		if (!ImGui.BeginTable("ReplayEventsTable", 2, ImGuiTableFlags.BordersInnerH))
 			return;
@@ -191,36 +192,36 @@ public static class ReplayEventsChild
 			static void RenderEvents<TEvent, TRenderer>(
 				EventType eventType,
 				IReadOnlyList<(int EventIndex, int EntityId, TEvent Event)> events,
-				ReplayEventsData replayEventsData)
+				EditorReplayModel replay)
 				where TEvent : IEventData
 				where TRenderer : IEventTypeRenderer<TEvent>
 			{
 				if (_eventTypeEnabled[eventType] && events.Count > 0)
-					EventTypeRendererUtils.RenderTable<TEvent, TRenderer>(eventType, events, replayEventsData);
+					EventTypeRendererUtils.RenderTable<TEvent, TRenderer>(eventType, events, replay);
 			}
 
 			// Enemy spawn events
-			RenderEvents<BoidSpawnEventData, BoidSpawnEvents>(EventType.BoidSpawn, _eventCache.BoidSpawnEvents, eventsData);
-			RenderEvents<LeviathanSpawnEventData, LeviathanSpawnEvents>(EventType.LeviathanSpawn, _eventCache.LeviathanSpawnEvents, eventsData);
-			RenderEvents<PedeSpawnEventData, PedeSpawnEvents>(EventType.PedeSpawn, _eventCache.PedeSpawnEvents, eventsData);
-			RenderEvents<SpiderEggSpawnEventData, SpiderEggSpawnEvents>(EventType.SpiderEggSpawn, _eventCache.SpiderEggSpawnEvents, eventsData);
-			RenderEvents<SpiderSpawnEventData, SpiderSpawnEvents>(EventType.SpiderSpawn, _eventCache.SpiderSpawnEvents, eventsData);
-			RenderEvents<SquidSpawnEventData, SquidSpawnEvents>(EventType.SquidSpawn, _eventCache.SquidSpawnEvents, eventsData);
-			RenderEvents<ThornSpawnEventData, ThornSpawnEvents>(EventType.ThornSpawn, _eventCache.ThornSpawnEvents, eventsData);
+			RenderEvents<BoidSpawnEventData, BoidSpawnEvents>(EventType.BoidSpawn, _eventCache.BoidSpawnEvents, replay);
+			RenderEvents<LeviathanSpawnEventData, LeviathanSpawnEvents>(EventType.LeviathanSpawn, _eventCache.LeviathanSpawnEvents, replay);
+			RenderEvents<PedeSpawnEventData, PedeSpawnEvents>(EventType.PedeSpawn, _eventCache.PedeSpawnEvents, replay);
+			RenderEvents<SpiderEggSpawnEventData, SpiderEggSpawnEvents>(EventType.SpiderEggSpawn, _eventCache.SpiderEggSpawnEvents, replay);
+			RenderEvents<SpiderSpawnEventData, SpiderSpawnEvents>(EventType.SpiderSpawn, _eventCache.SpiderSpawnEvents, replay);
+			RenderEvents<SquidSpawnEventData, SquidSpawnEvents>(EventType.SquidSpawn, _eventCache.SquidSpawnEvents, replay);
+			RenderEvents<ThornSpawnEventData, ThornSpawnEvents>(EventType.ThornSpawn, _eventCache.ThornSpawnEvents, replay);
 
 			// Other events
-			RenderEvents<DaggerSpawnEventData, DaggerSpawnEvents>(EventType.DaggerSpawn, _eventCache.DaggerSpawnEvents, eventsData);
-			RenderEvents<EntityOrientationEventData, EntityOrientationEvents>(EventType.EntityOrientation, _eventCache.EntityOrientationEvents, eventsData);
-			RenderEvents<EntityPositionEventData, EntityPositionEvents>(EventType.EntityPosition, _eventCache.EntityPositionEvents, eventsData);
-			RenderEvents<EntityTargetEventData, EntityTargetEvents>(EventType.EntityTarget, _eventCache.EntityTargetEvents, eventsData);
-			RenderEvents<GemEventData, GemEvents>(EventType.Gem, _eventCache.GemEvents, eventsData);
-			RenderEvents<HitEventData, HitEvents>(EventType.Hit, _eventCache.HitEvents, eventsData);
-			RenderEvents<TransmuteEventData, TransmuteEvents>(EventType.Transmute, _eventCache.TransmuteEvents, eventsData);
+			RenderEvents<DaggerSpawnEventData, DaggerSpawnEvents>(EventType.DaggerSpawn, _eventCache.DaggerSpawnEvents, replay);
+			RenderEvents<EntityOrientationEventData, EntityOrientationEvents>(EventType.EntityOrientation, _eventCache.EntityOrientationEvents, replay);
+			RenderEvents<EntityPositionEventData, EntityPositionEvents>(EventType.EntityPosition, _eventCache.EntityPositionEvents, replay);
+			RenderEvents<EntityTargetEventData, EntityTargetEvents>(EventType.EntityTarget, _eventCache.EntityTargetEvents, replay);
+			RenderEvents<GemEventData, GemEvents>(EventType.Gem, _eventCache.GemEvents, replay);
+			RenderEvents<HitEventData, HitEvents>(EventType.Hit, _eventCache.HitEvents, replay);
+			RenderEvents<TransmuteEventData, TransmuteEvents>(EventType.Transmute, _eventCache.TransmuteEvents, replay);
 
 			// Final events
-			RenderEvents<InitialInputsEventData, InitialInputsEvents>(EventType.InitialInputs, _eventCache.InitialInputsEvents, eventsData);
-			RenderEvents<InputsEventData, InputsEvents>(EventType.Inputs, _eventCache.InputsEvents, eventsData);
-			RenderEvents<EndEventData, EndEvents>(EventType.End, _eventCache.EndEvents, eventsData);
+			RenderEvents<InitialInputsEventData, InitialInputsEvents>(EventType.InitialInputs, _eventCache.InitialInputsEvents, replay);
+			RenderEvents<InputsEventData, InputsEvents>(EventType.Inputs, _eventCache.InputsEvents, replay);
+			RenderEvents<EndEventData, EndEvents>(EventType.End, _eventCache.EndEvents, replay);
 		}
 
 		ImGui.EndTable();

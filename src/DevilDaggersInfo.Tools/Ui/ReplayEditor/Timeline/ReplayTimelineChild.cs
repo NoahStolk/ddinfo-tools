@@ -1,10 +1,10 @@
 using DevilDaggersInfo.Core.Common;
-using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
@@ -25,7 +25,7 @@ public static class ReplayTimelineChild
 	private static readonly Color _lineColorDefault = Color.Gray(0.4f);
 	private static readonly Color _lineColorSub = Color.Gray(0.2f);
 
-	private static readonly List<ReplayEvent> _selectedEvents = [];
+	private static readonly List<EditorEvent> _selectedEvents = [];
 	private static readonly EventCache _selectedEventDataCache = new();
 	private static int? _selectedTickIndex;
 
@@ -50,21 +50,21 @@ public static class ReplayTimelineChild
 		_selectedTickIndex = null;
 	}
 
-	public static void Render(ReplayEventsData eventsData, float startTime)
+	public static void Render(EditorReplayModel replay, float startTime)
 	{
 		if (TimelineCache.IsEmpty)
-			TimelineCache.Build(eventsData);
+			TimelineCache.Build(replay);
 
 		const float markerTextHeight = 32;
 		const float scrollBarHeight = 20;
 		if (ImGui.BeginChild("TimelineViewChild", new(0, _shownEventTypes.Count * _markerSize + markerTextHeight + scrollBarHeight)))
 		{
-			RenderTimeline(eventsData, startTime);
+			RenderTimeline(replay, startTime);
 		}
 
 		ImGui.EndChild(); // End TimelineViewChild
 
-		ReplayTimelineActionsChild.Render(eventsData);
+		ReplayTimelineActionsChild.Render();
 
 		ImGui.PushStyleColor(ImGuiCol.ChildBg, Color.Gray(0.08f));
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8));
@@ -77,7 +77,7 @@ public static class ReplayTimelineChild
 				ImGui.PopFont();
 			}
 
-			ReplayTimelineSelectedEventsChild.Render(eventsData, _selectedEvents, _selectedEventDataCache);
+			ReplayTimelineSelectedEventsChild.Render(replay, _selectedEvents, _selectedEventDataCache);
 		}
 
 		ImGui.EndChild(); // End SelectedEventsChild
@@ -86,7 +86,7 @@ public static class ReplayTimelineChild
 		ImGui.PopStyleColor();
 	}
 
-	private static void RenderTimeline(ReplayEventsData eventsData, float startTime)
+	private static void RenderTimeline(EditorReplayModel replayModel, float startTime)
 	{
 		ImGui.PushStyleColor(ImGuiCol.ChildBg, Color.Gray(0.1f));
 		const float legendWidth = 160;
@@ -118,7 +118,7 @@ public static class ReplayTimelineChild
 		{
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 			Vector2 origin = ImGui.GetCursorScreenPos();
-			float lineWidth = eventsData.TickCount * _markerSize;
+			float lineWidth = replayModel.InputsEvents.Count * _markerSize;
 			for (int i = 0; i < _shownEventTypes.Count; i++)
 			{
 				AddHorizontalLine(drawList, origin, i * _markerSize, lineWidth, _lineColorSub);
@@ -130,54 +130,19 @@ public static class ReplayTimelineChild
 			AddHorizontalLine(drawList, origin, _shownEventTypes.Count * _markerSize, lineWidth, _lineColorSub);
 
 			int startTickIndex = (int)Math.Floor(ImGui.GetScrollX() / _markerSize);
-			int endTickIndex = Math.Min((int)Math.Ceiling((ImGui.GetScrollX() + ImGui.GetWindowWidth()) / _markerSize), eventsData.TickCount);
+			int endTickIndex = Math.Min((int)Math.Ceiling((ImGui.GetScrollX() + ImGui.GetWindowWidth()) / _markerSize), replayModel.InputsEvents.Count);
 
 			// Always render these invisible buttons so the scroll bar is always visible.
 			ImGui.SetCursorScreenPos(origin);
 			ImGui.InvisibleButton("InvisibleStartMarker", default);
-			ImGui.SetCursorScreenPos(origin + new Vector2((eventsData.TickCount - 1) * _markerSize, 0));
+			ImGui.SetCursorScreenPos(origin + new Vector2((replayModel.InputsEvents.Count - 1) * _markerSize, 0));
 			ImGui.InvisibleButton("InvisibleEndMarker", default);
 
-			for (int i = Math.Max(startTickIndex, 0); i < Math.Min(endTickIndex, TimelineCache.TickData.Count); i++)
+			for (int i = Math.Max(startTickIndex, 0); i < Math.Min(endTickIndex, replayModel.InputsEvents.Count); i++)
 			{
-				Dictionary<EventType, List<(ReplayEvent Event, int EventIndex)>> tickData = TimelineCache.TickData[i];
-				foreach ((EventType eventType, List<(ReplayEvent Event, int EventIndex)> replayEvents) in tickData)
+				foreach (EventType eventType in _shownEventTypes)
 				{
-					int eventTypeIndex = GetIndex(eventType);
-					Vector2 rectOrigin = origin + new Vector2(i * _markerSize, eventTypeIndex * _markerSize);
-					Vector2 markerSizeVec = new(_markerSize, _markerSize);
-					bool isHovering = ImGui.IsMouseHoveringRect(rectOrigin, rectOrigin + markerSizeVec);
-
-					drawList.AddRectFilled(rectOrigin, rectOrigin + markerSizeVec, ImGui.GetColorU32(EventTypeRendererUtils.GetEventTypeColor(eventType) with { W = isHovering ? 0.7f : 0.4f }));
-
-					float xOffset = replayEvents.Count < 10 ? 9 : 5;
-					drawList.AddText(rectOrigin + new Vector2(xOffset, 5), 0xffffffff, replayEvents.Count > 99 ? Inline.Span("XX") : Inline.Span($"{replayEvents.Count}"));
-
-					if (isHovering)
-					{
-						ImGui.BeginTooltip();
-						ImGui.TextColored(EventTypeRendererUtils.GetEventTypeColor(eventType), EnumUtils.EventTypeFriendlyNames[eventType]);
-						if (ImGui.BeginTable(Inline.Span($"MarkerTooltipTable_{i}_{EnumUtils.EventTypeNames[eventType]}"), 2, ImGuiTableFlags.Borders))
-						{
-							ImGui.TableNextColumn();
-							ImGui.Text("Event count");
-
-							ImGui.TableNextColumn();
-							ImGui.Text(Inline.Span(replayEvents.Count));
-
-							ImGui.TableNextColumn();
-							ImGui.Text("Time");
-
-							ImGui.TableNextColumn();
-							ImGui.Text(Inline.Span(TimeUtils.TickToTime(i, startTime), StringFormats.TimeFormat));
-							ImGui.SameLine();
-							ImGui.Text(Inline.Span($"({i})"));
-
-							ImGui.EndTable();
-						}
-
-						ImGui.EndTooltip();
-					}
+					RenderMarker(startTime, eventType, origin, i, drawList, TimelineCache.EventCountsPerTick[eventType].GetValueOrDefault(i));
 				}
 			}
 
@@ -200,7 +165,7 @@ public static class ReplayTimelineChild
 				}
 			}
 
-			HandleInput(origin);
+			HandleInput(replayModel, origin);
 		}
 
 		ImGui.EndChild(); // End TimelineEditorChild
@@ -216,18 +181,60 @@ public static class ReplayTimelineChild
 		}
 	}
 
-	private static void SelectEvents(List<(ReplayEvent Event, int EventIndex)> replayEvents, int tickIndex)
+	private static void RenderMarker(float startTime, EventType eventType, Vector2 origin, int tickIndex, ImDrawListPtr drawList, int eventCount)
 	{
-		_selectedEvents.Clear();
-		_selectedEvents.AddRange(replayEvents.Select(t => t.Event));
-		_selectedTickIndex = tickIndex;
+		if (eventCount == 0)
+			return;
 
-		_selectedEventDataCache.Clear();
-		foreach ((ReplayEvent replayEvent, int eventIndex) in replayEvents)
-			_selectedEventDataCache.Add(eventIndex, replayEvent);
+		int eventTypeIndex = GetIndex(eventType);
+		Vector2 rectOrigin = origin + new Vector2(tickIndex * _markerSize, eventTypeIndex * _markerSize);
+		Vector2 markerSizeVec = new(_markerSize, _markerSize);
+		bool isHovering = ImGui.IsMouseHoveringRect(rectOrigin, rectOrigin + markerSizeVec);
+
+		drawList.AddRectFilled(rectOrigin, rectOrigin + markerSizeVec, ImGui.GetColorU32(EventTypeRendererUtils.GetEventTypeColor(eventType) with { W = isHovering ? 0.7f : 0.4f }));
+
+		float xOffset = eventCount < 10 ? 9 : 5;
+		drawList.AddText(rectOrigin + new Vector2(xOffset, 5), 0xffffffff, eventCount > 99 ? Inline.Span("XX") : Inline.Span($"{eventCount}"));
+
+		if (isHovering)
+		{
+			ImGui.BeginTooltip();
+			ImGui.TextColored(EventTypeRendererUtils.GetEventTypeColor(eventType), EnumUtils.EventTypeFriendlyNames[eventType]);
+			if (ImGui.BeginTable(Inline.Span($"MarkerTooltipTable_{tickIndex}_{EnumUtils.EventTypeNames[eventType]}"), 2, ImGuiTableFlags.Borders))
+			{
+				ImGui.TableNextColumn();
+				ImGui.Text("Event count");
+
+				ImGui.TableNextColumn();
+				ImGui.Text(Inline.Span(eventCount));
+
+				ImGui.TableNextColumn();
+				ImGui.Text("Time");
+
+				ImGui.TableNextColumn();
+				ImGui.Text(Inline.Span(TimeUtils.TickToTime(tickIndex, startTime), StringFormats.TimeFormat));
+				ImGui.SameLine();
+				ImGui.Text(Inline.Span($"({tickIndex})"));
+
+				ImGui.EndTable();
+			}
+
+			ImGui.EndTooltip();
+		}
 	}
 
-	private static void HandleInput(Vector2 origin)
+	private static void SelectEvents(List<EditorEvent> replayEvents, int tickIndex)
+	{
+		// _selectedEvents.Clear();
+		// _selectedEvents.AddRange(replayEvents);
+		// _selectedTickIndex = tickIndex;
+		//
+		// _selectedEventDataCache.Clear();
+		// foreach (EditorEvent editorEvent in replayEvents)
+		// 	_selectedEventDataCache.Add(eventIndex, editorEvent);
+	}
+
+	private static void HandleInput(EditorReplayModel replay, Vector2 origin)
 	{
 		if (!ImGui.IsWindowHovered())
 			return;
@@ -244,7 +251,7 @@ public static class ReplayTimelineChild
 		if (ImGui.IsKeyPressed(ImGuiKey.Home))
 			ImGui.SetScrollX(0);
 		else if (ImGui.IsKeyPressed(ImGuiKey.End))
-			ImGui.SetScrollX(TimelineCache.TickData.Count * _markerSize);
+			ImGui.SetScrollX(replay.InputsEvents.Count * _markerSize);
 
 		if (io.MouseWheel is < -float.Epsilon or > float.Epsilon)
 			ImGui.SetScrollX(ImGui.GetScrollX() - io.MouseWheel * _markerSize * 2.5f);
@@ -253,15 +260,15 @@ public static class ReplayTimelineChild
 		bool isDoubleClicked = ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left);
 		if (isClicked || isDoubleClicked)
 		{
-			HandleClick(isDoubleClicked, origin);
+			HandleClick(replay, isDoubleClicked, origin);
 		}
 	}
 
-	private static void HandleClick(bool isDoubleClicked, Vector2 origin)
+	private static void HandleClick(EditorReplayModel replay, bool isDoubleClicked, Vector2 origin)
 	{
 		Vector2 mousePos = ImGui.GetMousePos() - origin;
 		int tickIndex = (int)Math.Floor(mousePos.X / _markerSize);
-		if (tickIndex < 0 || tickIndex >= FileStates.Replay.Object.EventsData.EventOffsetsPerTick.Count || tickIndex >= TimelineCache.TickData.Count)
+		if (tickIndex < 0 || tickIndex >= FileStates.Replay.Object.InputsEvents.Count || tickIndex >= replay.InputsEvents.Count)
 			return;
 
 		if (isDoubleClicked)
@@ -271,36 +278,34 @@ public static class ReplayTimelineChild
 				return;
 
 			EventType eventType = _shownEventTypes[eventTypeIndex];
-			IEventData eventData = eventType switch
+			Action action = eventType switch
 			{
-				EventType.BoidSpawn => BoidSpawnEventData.CreateDefault(),
-				EventType.LeviathanSpawn => LeviathanSpawnEventData.CreateDefault(),
-				EventType.PedeSpawn => PedeSpawnEventData.CreateDefault(),
-				EventType.SpiderEggSpawn => SpiderEggSpawnEventData.CreateDefault(),
-				EventType.SpiderSpawn => SpiderSpawnEventData.CreateDefault(),
-				EventType.SquidSpawn => SquidSpawnEventData.CreateDefault(),
-				EventType.ThornSpawn => ThornSpawnEventData.CreateDefault(),
-				EventType.DaggerSpawn => DaggerSpawnEventData.CreateDefault(),
-				EventType.EntityOrientation => EntityOrientationEventData.CreateDefault(),
-				EventType.EntityPosition => EntityPositionEventData.CreateDefault(),
-				EventType.EntityTarget => EntityTargetEventData.CreateDefault(),
-				EventType.Gem => GemEventData.CreateDefault(),
-				EventType.Hit => HitEventData.CreateDefault(),
-				EventType.Transmute => TransmuteEventData.CreateDefault(),
+				EventType.BoidSpawn => () => FileStates.Replay.Object.BoidSpawnEvents.Add(new(tickIndex, BoidSpawnEventData.CreateDefault())),
+				EventType.LeviathanSpawn => () => FileStates.Replay.Object.LeviathanSpawnEvents.Add(new(tickIndex, LeviathanSpawnEventData.CreateDefault())),
+				EventType.PedeSpawn => () => FileStates.Replay.Object.PedeSpawnEvents.Add(new(tickIndex, PedeSpawnEventData.CreateDefault())),
+				EventType.SpiderEggSpawn => () => FileStates.Replay.Object.SpiderEggSpawnEvents.Add(new(tickIndex, SpiderEggSpawnEventData.CreateDefault())),
+				EventType.SpiderSpawn => () => FileStates.Replay.Object.SpiderSpawnEvents.Add(new(tickIndex, SpiderSpawnEventData.CreateDefault())),
+				EventType.SquidSpawn => () => FileStates.Replay.Object.SquidSpawnEvents.Add(new(tickIndex, SquidSpawnEventData.CreateDefault())),
+				EventType.ThornSpawn => () => FileStates.Replay.Object.ThornSpawnEvents.Add(new(tickIndex, ThornSpawnEventData.CreateDefault())),
+				EventType.DaggerSpawn => () => FileStates.Replay.Object.DaggerSpawnEvents.Add(new(tickIndex, DaggerSpawnEventData.CreateDefault())),
+				EventType.EntityOrientation => () => FileStates.Replay.Object.EntityOrientationEvents.Add(new(tickIndex, EntityOrientationEventData.CreateDefault())),
+				EventType.EntityPosition => () => FileStates.Replay.Object.EntityPositionEvents.Add(new(tickIndex, EntityPositionEventData.CreateDefault())),
+				EventType.EntityTarget => () => FileStates.Replay.Object.EntityTargetEvents.Add(new(tickIndex, EntityTargetEventData.CreateDefault())),
+				EventType.Gem => () => FileStates.Replay.Object.GemEvents.Add(new(tickIndex, GemEventData.CreateDefault())),
+				EventType.Hit => () => FileStates.Replay.Object.HitEvents.Add(new(tickIndex, HitEventData.CreateDefault())),
+				EventType.Transmute => () => FileStates.Replay.Object.TransmuteEvents.Add(new(tickIndex, TransmuteEventData.CreateDefault())),
 				EventType.InitialInputs => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
 				EventType.Inputs => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
 				EventType.End => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
 				_ => throw new UnreachableException($"Unknown event type: {eventType}"),
 			};
 
-			int eventIndex = FileStates.Replay.Object.EventsData.EventOffsetsPerTick[tickIndex];
-
-			FileStates.Replay.Object.EventsData.InsertEvent(eventIndex, eventData);
-			TimelineCache.Build(FileStates.Replay.Object.EventsData);
+			action();
+			TimelineCache.Clear();
 		}
 
 		// Select in case of normal click, but select in case of double-click as well.
-		List<(ReplayEvent Event, int EventIndex)> events = TimelineCache.TickData[tickIndex].SelectMany(t => t.Value).ToList();
-		SelectEvents(events, tickIndex);
+		// List<(ReplayEvent Event, int EventIndex)> events = TimelineCache.TickData[tickIndex].SelectMany(t => t.Value).ToList();
+		// SelectEvents(events, tickIndex);
 	}
 }

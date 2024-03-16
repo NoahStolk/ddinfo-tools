@@ -41,25 +41,25 @@ public static class ReplayEditorWindow
 			{
 				if (ImGui.BeginTabItem("Timeline editor (recommended)"))
 				{
-					ReplayTimelineChild.Render(FileStates.Replay.Object.EventsData, FileStates.Replay.Object.Header.StartTime);
+					ReplayTimelineChild.Render(FileStates.Replay.Object, FileStates.Replay.Object.StartTime);
 					ImGui.EndTabItem();
 				}
 
 				if (ImGui.BeginTabItem("Table editor (advanced)"))
 				{
-					ReplayEventsChild.Render(FileStates.Replay.Object.EventsData, FileStates.Replay.Object.Header.StartTime);
+					ReplayEventsChild.Render(FileStates.Replay.Object.EventsData, FileStates.Replay.Object.StartTime);
 					ImGui.EndTabItem();
 				}
 
 				if (ImGui.BeginTabItem("Entities viewer"))
 				{
-					ReplayEntitiesChild.Render(FileStates.Replay.Object.EventsData, FileStates.Replay.Object.Header.StartTime);
+					ReplayEntitiesChild.Render(FileStates.Replay.Object.EventsData, FileStates.Replay.Object.StartTime);
 					ImGui.EndTabItem();
 				}
 
 				if (ImGui.BeginTabItem("Inputs viewer"))
 				{
-					ReplayInputsChild.Render(FileStates.Replay.Object.EventsData, FileStates.Replay.Object.Header.StartTime);
+					ReplayInputsChild.Render(FileStates.Replay.Object.EventsData, FileStates.Replay.Object.StartTime);
 					ImGui.EndTabItem();
 				}
 
