@@ -1,4 +1,4 @@
-using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
@@ -12,9 +12,9 @@ public interface IEventTypeRenderer<in T>
 
 	static abstract void SetupColumnsData();
 
-	static abstract void Render(int eventIndex, int entityId, T e, ReplayEventsData replayEventsData);
+	static abstract void Render(int eventIndex, int entityId, T e, EditorReplayModel replay);
 
-	static abstract void RenderData(int eventIndex, T e, ReplayEventsData replayEventsData);
+	static abstract void RenderData(int eventIndex, T e, EditorReplayModel replay);
 
-	static abstract void RenderEdit(int eventIndex, T e, ReplayEventsData replayEventsData);
+	static abstract void RenderEdit(int uniqueId, T e, EditorReplayModel replay);
 }

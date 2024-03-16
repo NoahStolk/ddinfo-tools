@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Data;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -37,14 +38,14 @@ public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEventData>
 		ImGui.TableSetupColumn("Shot/Rapid", ImGuiTableColumnFlags.WidthFixed, 80);
 	}
 
-	public static void Render(int eventIndex, int entityId, DaggerSpawnEventData e, ReplayEventsData replayEventsData)
+	public static void Render(int eventIndex, int entityId, DaggerSpawnEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
-		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
-		RenderData(eventIndex, e, replayEventsData);
+		EventTypeRendererUtils.NextColumnEntityId(replay, entityId);
+		RenderData(eventIndex, e, replay);
 	}
 
-	public static void RenderData(int eventIndex, DaggerSpawnEventData e, ReplayEventsData replayEventsData)
+	public static void RenderData(int eventIndex, DaggerSpawnEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(DaggerSpawnEventData.DaggerType), ref e.DaggerType, EnumUtils.DaggerTypes, _daggerTypeNamesArray);
 		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(DaggerSpawnEventData.A), ref e.A);
@@ -53,13 +54,13 @@ public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEventData>
 		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(DaggerSpawnEventData.IsShot), ref e.IsShot, "Shot", "Rapid");
 	}
 
-	public static void RenderEdit(int eventIndex, DaggerSpawnEventData e, ReplayEventsData replayEventsData)
+	public static void RenderEdit(int uniqueId, DaggerSpawnEventData e, EditorReplayModel replay)
 	{
 		const float leftColumnWidth = 120;
 		const float rightColumnWidth = 160;
 		const float tableWidth = leftColumnWidth + rightColumnWidth;
 
-		if (ImGui.BeginChild(Inline.Span($"DaggerSpawnEdit{eventIndex}"), default, ImGuiChildFlags.AutoResizeY))
+		if (ImGui.BeginChild(Inline.Span($"DaggerSpawnEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
 		{
 			if (ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new(tableWidth, 0)))
 			{
@@ -71,17 +72,17 @@ public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEventData>
 				ImGui.TableNextColumn();
 				ImGui.Text("Type");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputByteEnum(eventIndex, nameof(DaggerSpawnEventData.DaggerType), ref e.DaggerType, EnumUtils.DaggerTypes, _daggerTypeNamesArray);
+				EventTypeRendererUtils.InputByteEnum(uniqueId, nameof(DaggerSpawnEventData.DaggerType), ref e.DaggerType, EnumUtils.DaggerTypes, _daggerTypeNamesArray);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("?");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt(eventIndex, nameof(DaggerSpawnEventData.A), ref e.A);
+				EventTypeRendererUtils.InputInt(uniqueId, nameof(DaggerSpawnEventData.A), ref e.A);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Shot/Rapid");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.Checkbox(eventIndex, nameof(DaggerSpawnEventData.IsShot), ref e.IsShot, "Shot", "Rapid");
+				EventTypeRendererUtils.Checkbox(uniqueId, nameof(DaggerSpawnEventData.IsShot), ref e.IsShot, "Shot", "Rapid");
 
 				ImGui.EndTable();
 			}
@@ -98,12 +99,12 @@ public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEventData>
 				ImGui.TableNextColumn();
 				ImGui.Text("Position");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt16Vec3(eventIndex, nameof(DaggerSpawnEventData.Position), ref e.Position);
+				EventTypeRendererUtils.InputInt16Vec3(uniqueId, nameof(DaggerSpawnEventData.Position), ref e.Position);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Orientation");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt16Mat3x3Square(eventIndex, nameof(DaggerSpawnEventData.Orientation), ref e.Orientation);
+				EventTypeRendererUtils.InputInt16Mat3x3Square(uniqueId, nameof(DaggerSpawnEventData.Orientation), ref e.Orientation);
 
 				ImGui.EndTable();
 			}

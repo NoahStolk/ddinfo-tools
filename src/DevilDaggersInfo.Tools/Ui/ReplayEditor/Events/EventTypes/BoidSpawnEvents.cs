@@ -1,5 +1,5 @@
-using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Data;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -29,16 +29,16 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEventData>
 		ImGui.TableSetupColumn("Speed", ImGuiTableColumnFlags.WidthFixed, 64);
 	}
 
-	public static void Render(int eventIndex, int entityId, BoidSpawnEventData e, ReplayEventsData replayEventsData)
+	public static void Render(int eventIndex, int entityId, BoidSpawnEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
-		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
-		RenderData(eventIndex, e, replayEventsData);
+		EventTypeRendererUtils.NextColumnEntityId(replay, entityId);
+		RenderData(eventIndex, e, replay);
 	}
 
-	public static void RenderData(int eventIndex, BoidSpawnEventData e, ReplayEventsData replayEventsData)
+	public static void RenderData(int eventIndex, BoidSpawnEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(BoidSpawnEventData.SpawnerEntityId), replayEventsData, ref e.SpawnerEntityId);
+		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(BoidSpawnEventData.SpawnerEntityId), replay, ref e.SpawnerEntityId);
 		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(BoidSpawnEventData.BoidType), ref e.BoidType, EnumUtils.BoidTypes, _boidTypeNamesArray);
 		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(BoidSpawnEventData.Position), ref e.Position);
 		EventTypeRendererUtils.NextColumnInputInt16Mat3x3(eventIndex, nameof(BoidSpawnEventData.Orientation), ref e.Orientation);
@@ -46,13 +46,13 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEventData>
 		EventTypeRendererUtils.NextColumnInputFloat(eventIndex, nameof(BoidSpawnEventData.Speed), ref e.Speed, "%.2f");
 	}
 
-	public static void RenderEdit(int eventIndex, BoidSpawnEventData e, ReplayEventsData replayEventsData)
+	public static void RenderEdit(int uniqueId, BoidSpawnEventData e, EditorReplayModel replay)
 	{
 		const float leftColumnWidth = 120;
 		const float rightColumnWidth = 160;
 		const float tableWidth = leftColumnWidth + rightColumnWidth;
 
-		if (ImGui.BeginChild(Inline.Span($"BoidSpawnEdit{eventIndex}"), default, ImGuiChildFlags.AutoResizeY))
+		if (ImGui.BeginChild(Inline.Span($"BoidSpawnEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
 		{
 			if (ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new(tableWidth, 0)))
 			{
@@ -64,17 +64,17 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEventData>
 				ImGui.TableNextColumn();
 				ImGui.Text("Spawner Entity Id");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.EditableEntityId(eventIndex, nameof(BoidSpawnEventData.SpawnerEntityId), replayEventsData, ref e.SpawnerEntityId);
+				EventTypeRendererUtils.EditableEntityId(uniqueId, nameof(BoidSpawnEventData.SpawnerEntityId), replay, ref e.SpawnerEntityId);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Type");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputByteEnum(eventIndex, nameof(BoidSpawnEventData.BoidType), ref e.BoidType, EnumUtils.BoidTypes, _boidTypeNamesArray);
+				EventTypeRendererUtils.InputByteEnum(uniqueId, nameof(BoidSpawnEventData.BoidType), ref e.BoidType, EnumUtils.BoidTypes, _boidTypeNamesArray);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Position");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt16Vec3(eventIndex, nameof(BoidSpawnEventData.Position), ref e.Position);
+				EventTypeRendererUtils.InputInt16Vec3(uniqueId, nameof(BoidSpawnEventData.Position), ref e.Position);
 
 				ImGui.EndTable();
 			}
@@ -91,17 +91,17 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEventData>
 				ImGui.TableNextColumn();
 				ImGui.Text("Orientation");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt16Mat3x3Square(eventIndex, nameof(BoidSpawnEventData.Orientation), ref e.Orientation);
+				EventTypeRendererUtils.InputInt16Mat3x3Square(uniqueId, nameof(BoidSpawnEventData.Orientation), ref e.Orientation);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Velocity");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputVector3(eventIndex, nameof(BoidSpawnEventData.Velocity), ref e.Velocity, "%.2f");
+				EventTypeRendererUtils.InputVector3(uniqueId, nameof(BoidSpawnEventData.Velocity), ref e.Velocity, "%.2f");
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Speed");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputFloat(eventIndex, nameof(BoidSpawnEventData.Speed), ref e.Speed, "%.2f");
+				EventTypeRendererUtils.InputFloat(uniqueId, nameof(BoidSpawnEventData.Speed), ref e.Speed, "%.2f");
 
 				ImGui.EndTable();
 			}

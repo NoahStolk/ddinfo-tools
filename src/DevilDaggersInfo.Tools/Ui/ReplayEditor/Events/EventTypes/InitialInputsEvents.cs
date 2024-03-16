@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Data;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -33,13 +34,13 @@ public sealed class InitialInputsEvents : IEventTypeRenderer<InitialInputsEventD
 		ImGui.TableSetupColumn("Look Speed", ImGuiTableColumnFlags.WidthFixed, 96);
 	}
 
-	public static void Render(int eventIndex, int entityId, InitialInputsEventData e, ReplayEventsData replayEventsData)
+	public static void Render(int eventIndex, int entityId, InitialInputsEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
-		RenderData(eventIndex, e, replayEventsData);
+		RenderData(eventIndex, e, replay);
 	}
 
-	public static void RenderData(int eventIndex, InitialInputsEventData e, ReplayEventsData replayEventsData)
+	public static void RenderData(int eventIndex, InitialInputsEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(InitialInputsEventData.Left), ref e.Left, "On", "Off");
 		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(InitialInputsEventData.Right), ref e.Right, "On", "Off");
@@ -53,7 +54,7 @@ public sealed class InitialInputsEvents : IEventTypeRenderer<InitialInputsEventD
 		EventTypeRendererUtils.NextColumnInputFloat(eventIndex, nameof(InitialInputsEventData.LookSpeed), ref e.LookSpeed, "%.2f");
 	}
 
-	public static void RenderEdit(int eventIndex, InitialInputsEventData e, ReplayEventsData replayEventsData)
+	public static void RenderEdit(int uniqueId, InitialInputsEventData e, EditorReplayModel replay)
 	{
 	}
 }

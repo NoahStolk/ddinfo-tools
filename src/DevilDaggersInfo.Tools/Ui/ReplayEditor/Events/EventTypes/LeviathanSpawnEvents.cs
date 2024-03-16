@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Data;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
@@ -21,25 +22,25 @@ public sealed class LeviathanSpawnEvents : IEventTypeRenderer<LeviathanSpawnEven
 		ImGui.TableSetupColumn("?", ImGuiTableColumnFlags.WidthFixed, 32);
 	}
 
-	public static void Render(int eventIndex, int entityId, LeviathanSpawnEventData e, ReplayEventsData replayEventsData)
+	public static void Render(int eventIndex, int entityId, LeviathanSpawnEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
-		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
-		RenderData(eventIndex, e, replayEventsData);
+		EventTypeRendererUtils.NextColumnEntityId(replay, entityId);
+		RenderData(eventIndex, e, replay);
 	}
 
-	public static void RenderData(int eventIndex, LeviathanSpawnEventData e, ReplayEventsData replayEventsData)
+	public static void RenderData(int eventIndex, LeviathanSpawnEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(LeviathanSpawnEventData.A), ref e.A);
 	}
 
-	public static void RenderEdit(int eventIndex, LeviathanSpawnEventData e, ReplayEventsData replayEventsData)
+	public static void RenderEdit(int uniqueId, LeviathanSpawnEventData e, EditorReplayModel replay)
 	{
 		const float leftColumnWidth = 120;
 		const float rightColumnWidth = 160;
 		const float tableWidth = leftColumnWidth + rightColumnWidth;
 
-		if (ImGui.BeginChild(Inline.Span($"LeviathanSpawnEdit{eventIndex}"), default, ImGuiChildFlags.AutoResizeY))
+		if (ImGui.BeginChild(Inline.Span($"LeviathanSpawnEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
 		{
 			if (ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new(tableWidth, 0)))
 			{
@@ -51,7 +52,7 @@ public sealed class LeviathanSpawnEvents : IEventTypeRenderer<LeviathanSpawnEven
 				ImGui.TableNextColumn();
 				ImGui.Text("?");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.EditableEntityId(eventIndex, nameof(EntityTargetEventData.EntityId), replayEventsData, ref e.A);
+				EventTypeRendererUtils.EditableEntityId(uniqueId, nameof(EntityTargetEventData.EntityId), replay, ref e.A);
 
 				ImGui.EndTable();
 			}

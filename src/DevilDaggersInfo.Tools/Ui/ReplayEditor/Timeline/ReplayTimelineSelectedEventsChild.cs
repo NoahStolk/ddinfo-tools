@@ -1,8 +1,7 @@
-using DevilDaggersInfo.Core.Replay;
-using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using DevilDaggersInfo.Tools.Utils;
@@ -12,9 +11,9 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 
 public static class ReplayTimelineSelectedEventsChild
 {
-	private static readonly List<ReplayEvent> _checkedEvents = [];
+	private static readonly List<EditorEvent> _checkedEvents = [];
 
-	public static void Render(ReplayEventsData replayEventsData, List<ReplayEvent> selectedEvents, EventCache selectedEventDataCache)
+	public static void Render(EditorReplayModel replay, List<EditorEvent> selectedEvents, EventCache selectedEventDataCache)
 	{
 		if (selectedEvents.Count == 0)
 		{
@@ -25,9 +24,9 @@ public static class ReplayTimelineSelectedEventsChild
 		ImGui.SeparatorText("Inputs");
 
 		if (selectedEventDataCache.InitialInputsEvents.Count == 1)
-			EventTypeRendererUtils.RenderInputsTable<InitialInputsEventData, InitialInputsEvents>("InputsTable", selectedEventDataCache.InitialInputsEvents, replayEventsData);
+			EventTypeRendererUtils.RenderInputsTable<InitialInputsEventData, InitialInputsEvents>("InputsTable", selectedEventDataCache.InitialInputsEvents, replay);
 		else if (selectedEventDataCache.InputsEvents.Count == 1)
-			EventTypeRendererUtils.RenderInputsTable<InputsEventData, InputsEvents>("InputsTable", selectedEventDataCache.InputsEvents, replayEventsData);
+			EventTypeRendererUtils.RenderInputsTable<InputsEventData, InputsEvents>("InputsTable", selectedEventDataCache.InputsEvents, replay);
 		else if (selectedEventDataCache.EndEvents.Count == 1)
 			ImGui.Text("End of replay / inputs");
 		else
@@ -42,7 +41,7 @@ public static class ReplayTimelineSelectedEventsChild
 			int index = 0;
 			for (int i = 0; i < selectedEvents.Count; i++)
 			{
-				ReplayEvent replayEvent = selectedEvents[i];
+				EditorEvent replayEvent = selectedEvents[i];
 				EventType eventType = replayEvent.GetEventType();
 				if (eventType is EventType.InitialInputs or EventType.Inputs or EventType.End)
 					continue;
@@ -71,33 +70,32 @@ public static class ReplayTimelineSelectedEventsChild
 				}
 				else if (ImGui.CollapsingHeader(Inline.Span($"Event data##{i}")))
 				{
-					int eventIndex = replayEventsData.Events.IndexOf(replayEvent);
 					if (replayEvent.Data is BoidSpawnEventData boidSpawn)
-						BoidSpawnEvents.RenderEdit(eventIndex, boidSpawn, replayEventsData);
+						BoidSpawnEvents.RenderEdit(i, boidSpawn, replay);
 					else if (replayEvent.Data is DaggerSpawnEventData daggerSpawn)
-						DaggerSpawnEvents.RenderEdit(eventIndex, daggerSpawn, replayEventsData);
+						DaggerSpawnEvents.RenderEdit(i, daggerSpawn, replay);
 					else if (replayEvent.Data is EntityOrientationEventData entityOrientation)
-						EntityOrientationEvents.RenderEdit(eventIndex, entityOrientation, replayEventsData);
+						EntityOrientationEvents.RenderEdit(i, entityOrientation, replay);
 					else if (replayEvent.Data is EntityPositionEventData entityPosition)
-						EntityPositionEvents.RenderEdit(eventIndex, entityPosition, replayEventsData);
+						EntityPositionEvents.RenderEdit(i, entityPosition, replay);
 					else if (replayEvent.Data is EntityTargetEventData entityTarget)
-						EntityTargetEvents.RenderEdit(eventIndex, entityTarget, replayEventsData);
+						EntityTargetEvents.RenderEdit(i, entityTarget, replay);
 					else if (replayEvent.Data is HitEventData hitEvent)
-						HitEvents.RenderEdit(eventIndex, hitEvent, replayEventsData);
+						HitEvents.RenderEdit(i, hitEvent, replay);
 					else if (replayEvent.Data is LeviathanSpawnEventData leviathanSpawn)
-						LeviathanSpawnEvents.RenderEdit(eventIndex, leviathanSpawn, replayEventsData);
+						LeviathanSpawnEvents.RenderEdit(i, leviathanSpawn, replay);
 					else if (replayEvent.Data is PedeSpawnEventData pedeSpawn)
-						PedeSpawnEvents.RenderEdit(eventIndex, pedeSpawn, replayEventsData);
+						PedeSpawnEvents.RenderEdit(i, pedeSpawn, replay);
 					else if (replayEvent.Data is SpiderEggSpawnEventData spiderEggSpawn)
-						SpiderEggSpawnEvents.RenderEdit(eventIndex, spiderEggSpawn, replayEventsData);
+						SpiderEggSpawnEvents.RenderEdit(i, spiderEggSpawn, replay);
 					else if (replayEvent.Data is SpiderSpawnEventData spiderSpawn)
-						SpiderSpawnEvents.RenderEdit(eventIndex, spiderSpawn, replayEventsData);
+						SpiderSpawnEvents.RenderEdit(i, spiderSpawn, replay);
 					else if (replayEvent.Data is SquidSpawnEventData squidSpawn)
-						SquidSpawnEvents.RenderEdit(eventIndex, squidSpawn, replayEventsData);
+						SquidSpawnEvents.RenderEdit(i, squidSpawn, replay);
 					else if (replayEvent.Data is ThornSpawnEventData thornSpawn)
-						ThornSpawnEvents.RenderEdit(eventIndex, thornSpawn, replayEventsData);
+						ThornSpawnEvents.RenderEdit(i, thornSpawn, replay);
 					else if (replayEvent.Data is TransmuteEventData transmute)
-						TransmuteEvents.RenderEdit(eventIndex, transmute, replayEventsData);
+						TransmuteEvents.RenderEdit(i, transmute, replay);
 				}
 			}
 
@@ -118,11 +116,11 @@ public static class ReplayTimelineSelectedEventsChild
 		ImGui.BeginDisabled(_checkedEvents.Count == 0);
 		if (ImGui.Button("Delete selected events"))
 		{
-			foreach (ReplayEvent replayEvent in _checkedEvents.OrderByDescending(e => replayEventsData.Events.IndexOf(e)))
+			foreach (EditorEvent editorEvent in _checkedEvents)
 			{
-				int eventIndex = replayEventsData.Events.IndexOf(replayEvent);
-				replayEventsData.RemoveEvent(eventIndex);
-				selectedEvents.Remove(replayEvent);
+				// replayEventsData.RemoveEvent(eventIndex);
+				// replay.
+				selectedEvents.Remove(editorEvent);
 			}
 
 			TimelineCache.Clear();
@@ -131,22 +129,22 @@ public static class ReplayTimelineSelectedEventsChild
 
 		if (ImGui.Button("Duplicate selected events"))
 		{
-			DuplicateSelectedEvents(replayEventsData);
+			DuplicateSelectedEvents(replay);
 		}
 
 		ImGui.EndDisabled();
 	}
 
-	private static void DuplicateSelectedEvents(ReplayEventsData replayEventsData)
+	private static void DuplicateSelectedEvents(EditorReplayModel replay)
 	{
 		if (_checkedEvents.Count == 0)
 			return;
 
-		int indexToInsertAt = _checkedEvents.Max(e => replayEventsData.Events.IndexOf(e));
-		foreach (ReplayEvent replayEvent in _checkedEvents.OrderByDescending(e => replayEventsData.Events.IndexOf(e)))
-		{
-			replayEventsData.InsertEvent(indexToInsertAt, replayEvent.Data.CloneEventData());
-		}
+		// int indexToInsertAt = _checkedEvents.Max(e => replayEventsData.Events.IndexOf(e));
+		// foreach (EditorEvent replayEvent in _checkedEvents.OrderByDescending(e => replayEventsData.Events.IndexOf(e)))
+		// {
+		// 	replayEventsData.InsertEvent(indexToInsertAt, replayEvent.Data.CloneEventData());
+		// }
 
 		// TODO: Reselect the current tick events.
 		TimelineCache.Clear();

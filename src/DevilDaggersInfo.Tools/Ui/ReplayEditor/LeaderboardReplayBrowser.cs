@@ -1,8 +1,8 @@
 using DevilDaggersInfo.Core.Replay;
-using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.Popups;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
@@ -70,21 +70,7 @@ public static class LeaderboardReplayBrowser
 			return;
 		}
 
-		LocalReplayBinaryHeader header = new(
-			version: 1,
-			timestampSinceGameRelease: 0,
-			time: 0,
-			startTime: 0,
-			daggersFired: 0,
-			deathType: 0,
-			gems: 0,
-			daggersHit: 0,
-			kills: 0,
-			playerId: response.PlayerId,
-			username: leaderboardReplay.Header.Username,
-			unknown: new byte[10],
-			spawnsetBuffer: SpawnsetBinary.CreateDefault().ToBytes());
-		FileStates.Replay.Update(new(header, leaderboardReplay.EventsData));
+		FileStates.Replay.Update(EditorReplayModel.CreateFromLeaderboardReplay(response.PlayerId, leaderboardReplay.Header.Username, leaderboardReplay.EventsData));
 
 		_isDownloading = false;
 		_showWindow = false;

@@ -1,4 +1,3 @@
-using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Extensions;
@@ -6,6 +5,7 @@ using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -30,29 +30,29 @@ public sealed class HitEvents : IEventTypeRenderer<HitEventData>
 		ImGui.TableSetupColumn("Explanation", ImGuiTableColumnFlags.WidthStretch);
 	}
 
-	public static void Render(int eventIndex, int entityId, HitEventData e, ReplayEventsData replayEventsData)
+	public static void Render(int eventIndex, int entityId, HitEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
-		RenderData(eventIndex, e, replayEventsData);
+		RenderData(eventIndex, e, replay);
 	}
 
-	public static void RenderData(int eventIndex, HitEventData e, ReplayEventsData replayEventsData)
+	public static void RenderData(int eventIndex, HitEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(HitEventData.EntityIdA), replayEventsData, ref e.EntityIdA);
-		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(HitEventData.EntityIdB), replayEventsData, ref e.EntityIdB);
+		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(HitEventData.EntityIdA), replay, ref e.EntityIdA);
+		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(HitEventData.EntityIdB), replay, ref e.EntityIdB);
 		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(HitEventData.UserData), ref e.UserData);
 
 		ImGui.TableNextColumn();
-		ExplainHitEvent(e, replayEventsData);
+		ExplainHitEvent(e, replay);
 	}
 
-	public static void RenderEdit(int eventIndex, HitEventData e, ReplayEventsData replayEventsData)
+	public static void RenderEdit(int uniqueId, HitEventData e, EditorReplayModel replay)
 	{
 		const float leftColumnWidth = 120;
 		const float rightColumnWidth = 160;
 		const float tableWidth = leftColumnWidth + rightColumnWidth;
 
-		if (ImGui.BeginChild(Inline.Span($"HitEdit{eventIndex}"), default, ImGuiChildFlags.AutoResizeY))
+		if (ImGui.BeginChild(Inline.Span($"HitEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
 		{
 			if (ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new(tableWidth, 0)))
 			{
@@ -64,17 +64,17 @@ public sealed class HitEvents : IEventTypeRenderer<HitEventData>
 				ImGui.TableNextColumn();
 				ImGui.Text("Entity Id A");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.EditableEntityId(eventIndex, nameof(HitEventData.EntityIdA), replayEventsData, ref e.EntityIdA);
+				EventTypeRendererUtils.EditableEntityId(uniqueId, nameof(HitEventData.EntityIdA), replay, ref e.EntityIdA);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Entity Id B");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.EditableEntityId(eventIndex, nameof(HitEventData.EntityIdB), replayEventsData, ref e.EntityIdB);
+				EventTypeRendererUtils.EditableEntityId(uniqueId, nameof(HitEventData.EntityIdB), replay, ref e.EntityIdB);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("User Data");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt(eventIndex, nameof(HitEventData.UserData), ref e.UserData);
+				EventTypeRendererUtils.InputInt(uniqueId, nameof(HitEventData.UserData), ref e.UserData);
 
 				ImGui.EndTable();
 			}
@@ -82,13 +82,13 @@ public sealed class HitEvents : IEventTypeRenderer<HitEventData>
 			ImGui.SameLine();
 
 			ImGui.Text("Explanation");
-			ExplainHitEvent(e, replayEventsData);
+			ExplainHitEvent(e, replay);
 		}
 
 		ImGui.EndChild();
 	}
 
-	private static void ExplainHitEvent(HitEventData e, ReplayEventsData replayEventsData)
+	private static void ExplainHitEvent(HitEventData e, EditorReplayModel replay)
 	{
 		if (e.EntityIdA == 0)
 		{
@@ -101,14 +101,14 @@ public sealed class HitEvents : IEventTypeRenderer<HitEventData>
 			return;
 		}
 
-		EntityType? entityTypeA = replayEventsData.GetEntityTypeIncludingNegated(e.EntityIdA);
+		EntityType? entityTypeA = replay.GetEntityTypeIncludingNegated(e.EntityIdA);
 		if (!entityTypeA.HasValue)
 		{
 			ImGui.TextColored(Color.Red, "Entity Id A out of bounds");
 			return;
 		}
 
-		EntityType? entityTypeB = replayEventsData.GetEntityTypeIncludingNegated(e.EntityIdB);
+		EntityType? entityTypeB = replay.GetEntityTypeIncludingNegated(e.EntityIdB);
 		if (!entityTypeB.HasValue)
 		{
 			ImGui.TextColored(Color.Red, "Entity Id B out of bounds");

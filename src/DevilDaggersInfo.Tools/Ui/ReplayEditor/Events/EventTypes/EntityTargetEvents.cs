@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Data;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
@@ -21,25 +22,25 @@ public sealed class EntityTargetEvents : IEventTypeRenderer<EntityTargetEventDat
 		ImGui.TableSetupColumn("Target Position", ImGuiTableColumnFlags.WidthFixed, 128);
 	}
 
-	public static void Render(int eventIndex, int entityId, EntityTargetEventData e, ReplayEventsData replayEventsData)
+	public static void Render(int eventIndex, int entityId, EntityTargetEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
-		RenderData(eventIndex, e, replayEventsData);
+		RenderData(eventIndex, e, replay);
 	}
 
-	public static void RenderData(int eventIndex, EntityTargetEventData e, ReplayEventsData replayEventsData)
+	public static void RenderData(int eventIndex, EntityTargetEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(EntityTargetEventData.EntityId), replayEventsData, ref e.EntityId);
+		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(EntityTargetEventData.EntityId), replay, ref e.EntityId);
 		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(EntityTargetEventData.TargetPosition), ref e.TargetPosition);
 	}
 
-	public static void RenderEdit(int eventIndex, EntityTargetEventData e, ReplayEventsData replayEventsData)
+	public static void RenderEdit(int uniqueId, EntityTargetEventData e, EditorReplayModel replay)
 	{
 		const float leftColumnWidth = 120;
 		const float rightColumnWidth = 160;
 		const float tableWidth = leftColumnWidth + rightColumnWidth;
 
-		if (ImGui.BeginChild(Inline.Span($"EntityTargetEdit{eventIndex}"), default, ImGuiChildFlags.AutoResizeY))
+		if (ImGui.BeginChild(Inline.Span($"EntityTargetEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
 		{
 			if (ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new(tableWidth, 0)))
 			{
@@ -51,12 +52,12 @@ public sealed class EntityTargetEvents : IEventTypeRenderer<EntityTargetEventDat
 				ImGui.TableNextColumn();
 				ImGui.Text("Entity Id");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.EditableEntityId(eventIndex, nameof(EntityTargetEventData.EntityId), replayEventsData, ref e.EntityId);
+				EventTypeRendererUtils.EditableEntityId(uniqueId, nameof(EntityTargetEventData.EntityId), replay, ref e.EntityId);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Target Position");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt16Vec3(eventIndex, nameof(EntityTargetEventData.TargetPosition), ref e.TargetPosition);
+				EventTypeRendererUtils.InputInt16Vec3(uniqueId, nameof(EntityTargetEventData.TargetPosition), ref e.TargetPosition);
 
 				ImGui.EndTable();
 			}

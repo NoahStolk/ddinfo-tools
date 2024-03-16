@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Data;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -32,13 +33,13 @@ public sealed class InputsEvents : IEventTypeRenderer<InputsEventData>
 		ImGui.TableSetupColumn("Mouse Y", ImGuiTableColumnFlags.WidthFixed, 64);
 	}
 
-	public static void Render(int eventIndex, int entityId, InputsEventData e, ReplayEventsData replayEventsData)
+	public static void Render(int eventIndex, int entityId, InputsEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
-		RenderData(eventIndex, e, replayEventsData);
+		RenderData(eventIndex, e, replay);
 	}
 
-	public static void RenderData(int eventIndex, InputsEventData e, ReplayEventsData replayEventsData)
+	public static void RenderData(int eventIndex, InputsEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(InputsEventData.Left), ref e.Left, "On", "Off");
 		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(InputsEventData.Right), ref e.Right, "On", "Off");
@@ -51,7 +52,7 @@ public sealed class InputsEvents : IEventTypeRenderer<InputsEventData>
 		EventTypeRendererUtils.NextColumnInputShort(eventIndex, nameof(InputsEventData.MouseY), ref e.MouseY);
 	}
 
-	public static void RenderEdit(int eventIndex, InputsEventData e, ReplayEventsData replayEventsData)
+	public static void RenderEdit(int uniqueId, InputsEventData e, EditorReplayModel replay)
 	{
 	}
 }

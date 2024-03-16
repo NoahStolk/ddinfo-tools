@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Data;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -26,27 +27,27 @@ public sealed class SpiderSpawnEvents : IEventTypeRenderer<SpiderSpawnEventData>
 		ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 192);
 	}
 
-	public static void Render(int eventIndex, int entityId, SpiderSpawnEventData e, ReplayEventsData replayEventsData)
+	public static void Render(int eventIndex, int entityId, SpiderSpawnEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
-		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
-		RenderData(eventIndex, e, replayEventsData);
+		EventTypeRendererUtils.NextColumnEntityId(replay, entityId);
+		RenderData(eventIndex, e, replay);
 	}
 
-	public static void RenderData(int eventIndex, SpiderSpawnEventData e, ReplayEventsData replayEventsData)
+	public static void RenderData(int eventIndex, SpiderSpawnEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(SpiderSpawnEventData.SpiderType), ref e.SpiderType, EnumUtils.SpiderTypes, _spiderTypeNamesArray);
 		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(SpiderSpawnEventData.A), ref e.A);
 		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(SpiderSpawnEventData.Position), ref e.Position, "%.2f");
 	}
 
-	public static void RenderEdit(int eventIndex, SpiderSpawnEventData e, ReplayEventsData replayEventsData)
+	public static void RenderEdit(int uniqueId, SpiderSpawnEventData e, EditorReplayModel replay)
 	{
 		const float leftColumnWidth = 120;
 		const float rightColumnWidth = 160;
 		const float tableWidth = leftColumnWidth + rightColumnWidth;
 
-		if (ImGui.BeginChild(Inline.Span($"SpiderSpawnEdit{eventIndex}"), default, ImGuiChildFlags.AutoResizeY))
+		if (ImGui.BeginChild(Inline.Span($"SpiderSpawnEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
 		{
 			if (ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new(tableWidth, 0)))
 			{
@@ -58,17 +59,17 @@ public sealed class SpiderSpawnEvents : IEventTypeRenderer<SpiderSpawnEventData>
 				ImGui.TableNextColumn();
 				ImGui.Text("Type");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputByteEnum(eventIndex, nameof(SpiderSpawnEventData.SpiderType), ref e.SpiderType, EnumUtils.SpiderTypes, _spiderTypeNamesArray);
+				EventTypeRendererUtils.InputByteEnum(uniqueId, nameof(SpiderSpawnEventData.SpiderType), ref e.SpiderType, EnumUtils.SpiderTypes, _spiderTypeNamesArray);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Position");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputVector3(eventIndex, nameof(SpiderSpawnEventData.Position), ref e.Position, "%.2f");
+				EventTypeRendererUtils.InputVector3(uniqueId, nameof(SpiderSpawnEventData.Position), ref e.Position, "%.2f");
 
 				ImGui.TableNextColumn();
 				ImGui.Text("?");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt(eventIndex, nameof(SpiderSpawnEventData.A), ref e.A);
+				EventTypeRendererUtils.InputInt(uniqueId, nameof(SpiderSpawnEventData.A), ref e.A);
 
 				ImGui.EndTable();
 			}
