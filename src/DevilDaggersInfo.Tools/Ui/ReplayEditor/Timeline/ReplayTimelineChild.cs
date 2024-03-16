@@ -192,9 +192,7 @@ public static class ReplayTimelineChild
 
 				if (showTimeText)
 				{
-#pragma warning disable S2583 // False positive
 					Color textColor = i % 60 == 0 ? Color.Yellow : ImGuiUtils.GetColorU32(ImGuiCol.Text);
-#pragma warning restore S2583 // False positive
 					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, _shownEventTypes.Count * _markerSize + 5));
 					ImGui.TextColored(textColor, Inline.Span(TimeUtils.TickToTime(i, startTime), StringFormats.TimeFormat));
 					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, _shownEventTypes.Count * _markerSize + 21));
@@ -248,7 +246,7 @@ public static class ReplayTimelineChild
 		else if (ImGui.IsKeyPressed(ImGuiKey.End))
 			ImGui.SetScrollX(TimelineCache.TickData.Count * _markerSize);
 
-		if (io.MouseWheel != 0)
+		if (io.MouseWheel is < -float.Epsilon or > float.Epsilon)
 			ImGui.SetScrollX(ImGui.GetScrollX() - io.MouseWheel * _markerSize * 2.5f);
 
 		bool isClicked = ImGui.IsMouseClicked(ImGuiMouseButton.Left);

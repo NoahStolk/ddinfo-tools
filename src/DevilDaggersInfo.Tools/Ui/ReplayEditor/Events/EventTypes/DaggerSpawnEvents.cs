@@ -18,12 +18,11 @@ public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEventData>
 		"Lvl4 Splash",
 	];
 
-	public static int ColumnCount => 8;
+	public static int ColumnCount => 7;
 	public static int ColumnCountData => 5;
 
 	public static void SetupColumns()
 	{
-		EventTypeRendererUtils.SetupColumnActions();
 		EventTypeRendererUtils.SetupColumnIndex();
 		EventTypeRendererUtils.SetupColumnEntityId();
 		SetupColumnsData();
@@ -40,7 +39,6 @@ public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEventData>
 
 	public static void Render(int eventIndex, int entityId, DaggerSpawnEventData e, ReplayEventsData replayEventsData)
 	{
-		EventTypeRendererUtils.NextColumnActions(eventIndex);
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
 		RenderData(eventIndex, e, replayEventsData);

@@ -9,12 +9,11 @@ public sealed class SquidSpawnEvents : IEventTypeRenderer<SquidSpawnEventData>
 {
 	private static readonly string[] _squidTypeNamesArray = EnumUtils.SquidTypeNames.Values.ToArray();
 
-	public static int ColumnCount => 8;
+	public static int ColumnCount => 7;
 	public static int ColumnCountData => 5;
 
 	public static void SetupColumns()
 	{
-		EventTypeRendererUtils.SetupColumnActions();
 		EventTypeRendererUtils.SetupColumnIndex();
 		EventTypeRendererUtils.SetupColumnEntityId();
 		SetupColumnsData();
@@ -31,7 +30,6 @@ public sealed class SquidSpawnEvents : IEventTypeRenderer<SquidSpawnEventData>
 
 	public static void Render(int eventIndex, int entityId, SquidSpawnEventData e, ReplayEventsData replayEventsData)
 	{
-		EventTypeRendererUtils.NextColumnActions(eventIndex);
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
 		RenderData(eventIndex, e, replayEventsData);

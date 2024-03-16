@@ -9,12 +9,11 @@ public sealed class PedeSpawnEvents : IEventTypeRenderer<PedeSpawnEventData>
 {
 	private static readonly string[] _pedeTypeNamesArray = EnumUtils.PedeTypeNames.Values.ToArray();
 
-	public static int ColumnCount => 8;
+	public static int ColumnCount => 7;
 	public static int ColumnCountData => 5;
 
 	public static void SetupColumns()
 	{
-		EventTypeRendererUtils.SetupColumnActions();
 		EventTypeRendererUtils.SetupColumnIndex();
 		EventTypeRendererUtils.SetupColumnEntityId();
 		SetupColumnsData();
@@ -31,7 +30,6 @@ public sealed class PedeSpawnEvents : IEventTypeRenderer<PedeSpawnEventData>
 
 	public static void Render(int eventIndex, int entityId, PedeSpawnEventData e, ReplayEventsData replayEventsData)
 	{
-		EventTypeRendererUtils.NextColumnActions(eventIndex);
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replayEventsData, entityId);
 		RenderData(eventIndex, e, replayEventsData);
