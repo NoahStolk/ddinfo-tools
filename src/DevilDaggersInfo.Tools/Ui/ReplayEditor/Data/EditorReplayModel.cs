@@ -152,7 +152,7 @@ public record EditorReplayModel
 		}
 	}
 
-	public ReplayEventsData CompileEventsData()
+	private ReplayEventsData CompileEventsData()
 	{
 		ReplayEventsData replayEventsData = new();
 

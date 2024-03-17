@@ -15,6 +15,4 @@ public interface IEventTypeRenderer<in T>
 	static abstract void Render(int eventIndex, int entityId, T e, EditorReplayModel replay);
 
 	static abstract void RenderData(int eventIndex, T e, EditorReplayModel replay);
-
-	static abstract void RenderEdit(int uniqueId, T e, EditorReplayModel replay);
 }
