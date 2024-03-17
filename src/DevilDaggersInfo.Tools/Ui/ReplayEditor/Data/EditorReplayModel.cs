@@ -1,14 +1,12 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Data;
-using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Spawnset;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 
 public record EditorReplayModel
 {
-	private readonly List<EntityType> _entityIds = [];
+	private ReplayEventsData? _replayEventsDataCache;
 
 	private EditorReplayModel(int version, long timestampSinceGameRelease, float time, float startTime, int daggersFired, int deathType, int gems, int daggersHit, int kills, int playerId, string username, SpawnsetBinary spawnset)
 	{
@@ -40,6 +38,8 @@ public record EditorReplayModel
 	public string Username { get; set; }
 	public SpawnsetBinary Spawnset { get; set; }
 
+	// TODO: Invalidate cache when any of the below properties are changed or values are added/removed/moved from lists.
+
 	// Embedded inputs data.
 	public float LookSpeed { get; set; }
 	public List<InputsEventData> InputsEvents { get; } = [];
@@ -61,7 +61,8 @@ public record EditorReplayModel
 	public List<EditorEvent> TransmuteEvents { get; } = [];
 
 	public int TickCount => InputsEvents.Count;
-	public int EntityCount => _entityIds.Count;
+
+	public ReplayEventsData Cache => _replayEventsDataCache ??= CompileEventsData();
 
 	public static EditorReplayModel CreateDefault()
 	{
@@ -113,11 +114,6 @@ public record EditorReplayModel
 		int currentTick = 0;
 		foreach (IEventData eventData in replayEventsData.Events.Select(e => e.Data))
 		{
-			if (eventData is ISpawnEventData spawnEventData)
-			{
-				_entityIds.Add(spawnEventData.EntityType);
-			}
-
 			switch (eventData)
 			{
 				case InputsEventData inputsEventData:
@@ -196,37 +192,6 @@ public record EditorReplayModel
 		replayEventsData.AddEvent(new EndEventData());
 
 		return replayEventsData;
-	}
-
-	/// <summary>
-	/// Returns the entity type of the entity with the specified entity ID, or <see langword="null" /> if a valid entity type could not be resolved.
-	/// </summary>
-	public EntityType? GetEntityType(int entityId)
-	{
-		if (entityId == 0)
-			return EntityType.Zero;
-
-		if (entityId < 0 || entityId > _entityIds.Count)
-			return null;
-
-		return _entityIds[entityId - 1];
-	}
-
-	/// <summary>
-	/// Returns the entity type of the entity with the specified entity ID, or <see langword="null" /> if a valid entity type could not be resolved.
-	/// This includes negated entity IDs that are used in <see cref="HitEventData"/> when a dead pede segment is hit.
-	/// </summary>
-	public EntityType? GetEntityTypeIncludingNegated(int entityId)
-	{
-		int absoluteEntityId = Math.Abs(entityId);
-		if (absoluteEntityId > _entityIds.Count)
-			return null;
-
-		EntityType? entityType = GetEntityType(absoluteEntityId);
-		if (entityId < 0 && entityType is not EntityType.Centipede and not EntityType.Gigapede and not EntityType.Ghostpede)
-			return null;
-
-		return entityType;
 	}
 
 	public byte[] ToBytes()
