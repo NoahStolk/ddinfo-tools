@@ -10,17 +10,11 @@ public sealed class SquidSpawnEvents : IEventTypeRenderer<SquidSpawnEventData>
 	private static readonly string[] _squidTypeNamesArray = EnumUtils.SquidTypeNames.Values.ToArray();
 
 	public static int ColumnCount => 7;
-	public static int ColumnCountData => 5;
 
 	public static void SetupColumns()
 	{
 		EventTypeRendererUtils.SetupColumnIndex();
 		EventTypeRendererUtils.SetupColumnEntityId();
-		SetupColumnsData();
-	}
-
-	public static void SetupColumnsData()
-	{
 		ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 80);
 		ImGui.TableSetupColumn("?", ImGuiTableColumnFlags.WidthFixed, 32);
 		ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 192);
@@ -32,11 +26,6 @@ public sealed class SquidSpawnEvents : IEventTypeRenderer<SquidSpawnEventData>
 	{
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replay, entityId);
-		RenderData(eventIndex, e, replay);
-	}
-
-	public static void RenderData(int eventIndex, SquidSpawnEventData e, EditorReplayModel replay)
-	{
 		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(SquidSpawnEventData.SquidType), ref e.SquidType, EnumUtils.SquidTypes, _squidTypeNamesArray);
 		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(SquidSpawnEventData.A), ref e.A);
 		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(SquidSpawnEventData.Position), ref e.Position, "%.2f");

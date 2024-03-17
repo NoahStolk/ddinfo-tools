@@ -10,17 +10,11 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEventData>
 	private static readonly string[] _boidTypeNamesArray = EnumUtils.BoidTypeNames.Values.ToArray();
 
 	public static int ColumnCount => 8;
-	public static int ColumnCountData => 6;
 
 	public static void SetupColumns()
 	{
 		EventTypeRendererUtils.SetupColumnIndex();
 		EventTypeRendererUtils.SetupColumnEntityId();
-		SetupColumnsData();
-	}
-
-	public static void SetupColumnsData()
-	{
 		ImGui.TableSetupColumn("Spawner Entity Id", ImGuiTableColumnFlags.WidthFixed, 160);
 		ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 96);
 		ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 96);
@@ -33,11 +27,6 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEventData>
 	{
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replay, entityId);
-		RenderData(eventIndex, e, replay);
-	}
-
-	public static void RenderData(int eventIndex, BoidSpawnEventData e, EditorReplayModel replay)
-	{
 		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(BoidSpawnEventData.SpawnerEntityId), replay, ref e.SpawnerEntityId);
 		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(BoidSpawnEventData.BoidType), ref e.BoidType, EnumUtils.BoidTypes, _boidTypeNamesArray);
 		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(BoidSpawnEventData.Position), ref e.Position);

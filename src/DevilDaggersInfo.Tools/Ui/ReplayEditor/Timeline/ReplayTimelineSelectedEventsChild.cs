@@ -26,9 +26,17 @@ public static class ReplayTimelineSelectedEventsChild
 
 		ImGui.SeparatorText("Inputs");
 
-		if (ImGui.BeginTable("InputsTable", InputsEvents.ColumnCountData, ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX))
+		if (ImGui.BeginTable("InputsTable", 9, ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX))
 		{
-			InputsEvents.SetupColumnsData();
+			ImGui.TableSetupColumn("Left", ImGuiTableColumnFlags.WidthFixed, 64);
+			ImGui.TableSetupColumn("Right", ImGuiTableColumnFlags.WidthFixed, 64);
+			ImGui.TableSetupColumn("Forward", ImGuiTableColumnFlags.WidthFixed, 64);
+			ImGui.TableSetupColumn("Backward", ImGuiTableColumnFlags.WidthFixed, 64);
+			ImGui.TableSetupColumn("Jump", ImGuiTableColumnFlags.WidthFixed, 96);
+			ImGui.TableSetupColumn("Shoot", ImGuiTableColumnFlags.WidthFixed, 96);
+			ImGui.TableSetupColumn("Shoot Homing", ImGuiTableColumnFlags.WidthFixed, 96);
+			ImGui.TableSetupColumn("Mouse X", ImGuiTableColumnFlags.WidthFixed, 64);
+			ImGui.TableSetupColumn("Mouse Y", ImGuiTableColumnFlags.WidthFixed, 64);
 			ImGui.TableHeadersRow();
 
 			ImGui.TableNextRow();
