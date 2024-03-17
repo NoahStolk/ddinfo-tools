@@ -7,16 +7,10 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 public sealed class HitEvents : IEventTypeRenderer<HitEventData>
 {
 	public static int ColumnCount => 5;
-	public static int ColumnCountData => 4;
 
 	public static void SetupColumns()
 	{
 		EventTypeRendererUtils.SetupColumnIndex();
-		SetupColumnsData();
-	}
-
-	public static void SetupColumnsData()
-	{
 		ImGui.TableSetupColumn("Entity Id A", ImGuiTableColumnFlags.WidthFixed, 160);
 		ImGui.TableSetupColumn("Entity Id B", ImGuiTableColumnFlags.WidthFixed, 160);
 		ImGui.TableSetupColumn("User Data", ImGuiTableColumnFlags.WidthFixed, 128);
@@ -26,11 +20,6 @@ public sealed class HitEvents : IEventTypeRenderer<HitEventData>
 	public static void Render(int eventIndex, int entityId, HitEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
-		RenderData(eventIndex, e, replay);
-	}
-
-	public static void RenderData(int eventIndex, HitEventData e, EditorReplayModel replay)
-	{
 		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(HitEventData.EntityIdA), replay, ref e.EntityIdA);
 		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(HitEventData.EntityIdB), replay, ref e.EntityIdB);
 		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(HitEventData.UserData), ref e.UserData);

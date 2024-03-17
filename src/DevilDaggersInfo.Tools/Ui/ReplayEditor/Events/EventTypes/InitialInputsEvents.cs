@@ -11,16 +11,10 @@ public sealed class InitialInputsEvents : IEventTypeRenderer<InitialInputsEventD
 	private static readonly string[] _shootTypeNamesArray = EnumUtils.ShootTypeNames.Values.ToArray();
 
 	public static int ColumnCount => 11;
-	public static int ColumnCountData => 10;
 
 	public static void SetupColumns()
 	{
 		EventTypeRendererUtils.SetupColumnIndex();
-		SetupColumnsData();
-	}
-
-	public static void SetupColumnsData()
-	{
 		ImGui.TableSetupColumn("Left", ImGuiTableColumnFlags.WidthFixed, 64);
 		ImGui.TableSetupColumn("Right", ImGuiTableColumnFlags.WidthFixed, 64);
 		ImGui.TableSetupColumn("Forward", ImGuiTableColumnFlags.WidthFixed, 64);
@@ -36,11 +30,6 @@ public sealed class InitialInputsEvents : IEventTypeRenderer<InitialInputsEventD
 	public static void Render(int eventIndex, int entityId, InitialInputsEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
-		RenderData(eventIndex, e, replay);
-	}
-
-	public static void RenderData(int eventIndex, InitialInputsEventData e, EditorReplayModel replay)
-	{
 		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(InitialInputsEventData.Left), ref e.Left, "On", "Off");
 		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(InitialInputsEventData.Right), ref e.Right, "On", "Off");
 		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(InitialInputsEventData.Forward), ref e.Forward, "On", "Off");
