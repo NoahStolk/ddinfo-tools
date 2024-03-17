@@ -41,7 +41,7 @@ public static class TimelineCache
 
 		IsEmpty = false;
 
-		void AddCounts(List<EditorEvent> events, EventType eventType)
+		void AddCounts(IReadOnlyList<EditorEvent> events, EventType eventType)
 		{
 			for (int i = 0; i < events.Count; i++)
 			{

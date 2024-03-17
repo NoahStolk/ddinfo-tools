@@ -11,6 +11,21 @@ public record EditorReplayModel
 {
 	private ReplayEventsData? _replayEventsDataCache;
 
+	private readonly List<EditorEvent> _boidSpawnEvents = [];
+	private readonly List<EditorEvent> _daggerSpawnEvents = [];
+	private readonly List<EditorEvent> _entityOrientationEvents = [];
+	private readonly List<EditorEvent> _entityPositionEvents = [];
+	private readonly List<EditorEvent> _entityTargetEvents = [];
+	private readonly List<EditorEvent> _gemEvents = [];
+	private readonly List<EditorEvent> _hitEvents = [];
+	private readonly List<EditorEvent> _leviathanSpawnEvents = [];
+	private readonly List<EditorEvent> _pedeSpawnEvents = [];
+	private readonly List<EditorEvent> _spiderEggSpawnEvents = [];
+	private readonly List<EditorEvent> _spiderSpawnEvents = [];
+	private readonly List<EditorEvent> _squidSpawnEvents = [];
+	private readonly List<EditorEvent> _thornSpawnEvents = [];
+	private readonly List<EditorEvent> _transmuteEvents = [];
+
 	private EditorReplayModel(int version, long timestampSinceGameRelease, float time, float startTime, int daggersFired, int deathType, int gems, int daggersHit, int kills, int playerId, string username, SpawnsetBinary spawnset)
 	{
 		Version = version;
@@ -45,27 +60,34 @@ public record EditorReplayModel
 
 	// Embedded inputs data.
 	public float LookSpeed { get; set; }
+
+	// TODO: Use IReadOnlyList<> instead of List<>.
 	public List<InputsEventData> InputsEvents { get; } = [];
 
 	// All other events.
-	public List<EditorEvent> BoidSpawnEvents { get; } = [];
-	public List<EditorEvent> DaggerSpawnEvents { get; } = [];
-	public List<EditorEvent> EntityOrientationEvents { get; } = [];
-	public List<EditorEvent> EntityPositionEvents { get; } = [];
-	public List<EditorEvent> EntityTargetEvents { get; } = [];
-	public List<EditorEvent> GemEvents { get; } = [];
-	public List<EditorEvent> HitEvents { get; } = [];
-	public List<EditorEvent> LeviathanSpawnEvents { get; } = [];
-	public List<EditorEvent> PedeSpawnEvents { get; } = [];
-	public List<EditorEvent> SpiderEggSpawnEvents { get; } = [];
-	public List<EditorEvent> SpiderSpawnEvents { get; } = [];
-	public List<EditorEvent> SquidSpawnEvents { get; } = [];
-	public List<EditorEvent> ThornSpawnEvents { get; } = [];
-	public List<EditorEvent> TransmuteEvents { get; } = [];
+	public IReadOnlyList<EditorEvent> BoidSpawnEvents => _boidSpawnEvents;
+	public IReadOnlyList<EditorEvent> DaggerSpawnEvents => _daggerSpawnEvents;
+	public IReadOnlyList<EditorEvent> EntityOrientationEvents => _entityOrientationEvents;
+	public IReadOnlyList<EditorEvent> EntityPositionEvents => _entityPositionEvents;
+	public IReadOnlyList<EditorEvent> EntityTargetEvents => _entityTargetEvents;
+	public IReadOnlyList<EditorEvent> GemEvents => _gemEvents;
+	public IReadOnlyList<EditorEvent> HitEvents => _hitEvents;
+	public IReadOnlyList<EditorEvent> LeviathanSpawnEvents => _leviathanSpawnEvents;
+	public IReadOnlyList<EditorEvent> PedeSpawnEvents => _pedeSpawnEvents;
+	public IReadOnlyList<EditorEvent> SpiderEggSpawnEvents => _spiderEggSpawnEvents;
+	public IReadOnlyList<EditorEvent> SpiderSpawnEvents => _spiderSpawnEvents;
+	public IReadOnlyList<EditorEvent> SquidSpawnEvents => _squidSpawnEvents;
+	public IReadOnlyList<EditorEvent> ThornSpawnEvents => _thornSpawnEvents;
+	public IReadOnlyList<EditorEvent> TransmuteEvents => _transmuteEvents;
 
 	public int TickCount => InputsEvents.Count;
 
 	public ReplayEventsData Cache => _replayEventsDataCache ??= CompileEventsData();
+
+	private void InvalidateCache()
+	{
+		_replayEventsDataCache = null;
+	}
 
 	public static EditorReplayModel CreateDefault()
 	{
@@ -138,22 +160,42 @@ public record EditorReplayModel
 					LookSpeed = initialInputsEventData.LookSpeed;
 					currentTick++;
 					break;
-				case BoidSpawnEventData boidSpawnEventData: BoidSpawnEvents.Add(new(currentTick, entityId++, boidSpawnEventData)); break;
-				case DaggerSpawnEventData daggerSpawnEventData: DaggerSpawnEvents.Add(new(currentTick, entityId++, daggerSpawnEventData)); break;
-				case EntityOrientationEventData entityOrientationEventData: EntityOrientationEvents.Add(new(currentTick, null, entityOrientationEventData)); break;
-				case EntityPositionEventData entityPositionEventData: EntityPositionEvents.Add(new(currentTick, null, entityPositionEventData)); break;
-				case EntityTargetEventData entityTargetEventData: EntityTargetEvents.Add(new(currentTick, null, entityTargetEventData)); break;
-				case GemEventData gemEventData: GemEvents.Add(new(currentTick, null, gemEventData)); break;
-				case HitEventData hitEventData: HitEvents.Add(new(currentTick, null, hitEventData)); break;
-				case LeviathanSpawnEventData leviathanSpawnEventData: LeviathanSpawnEvents.Add(new(currentTick, entityId++, leviathanSpawnEventData)); break;
-				case PedeSpawnEventData pedeSpawnEventData: PedeSpawnEvents.Add(new(currentTick, entityId++, pedeSpawnEventData)); break;
-				case SpiderEggSpawnEventData spiderEggSpawnEventData: SpiderEggSpawnEvents.Add(new(currentTick, entityId++, spiderEggSpawnEventData)); break;
-				case SpiderSpawnEventData spiderSpawnEventData: SpiderSpawnEvents.Add(new(currentTick, entityId++, spiderSpawnEventData)); break;
-				case SquidSpawnEventData squidSpawnEventData: SquidSpawnEvents.Add(new(currentTick, entityId++, squidSpawnEventData)); break;
-				case ThornSpawnEventData thornSpawnEventData: ThornSpawnEvents.Add(new(currentTick, entityId++, thornSpawnEventData)); break;
-				case TransmuteEventData transmuteEventData: TransmuteEvents.Add(new(currentTick, null, transmuteEventData)); break;
+				case BoidSpawnEventData boidSpawnEventData: _boidSpawnEvents.Add(new(currentTick, entityId++, boidSpawnEventData)); break;
+				case DaggerSpawnEventData daggerSpawnEventData: _daggerSpawnEvents.Add(new(currentTick, entityId++, daggerSpawnEventData)); break;
+				case EntityOrientationEventData entityOrientationEventData: _entityOrientationEvents.Add(new(currentTick, null, entityOrientationEventData)); break;
+				case EntityPositionEventData entityPositionEventData: _entityPositionEvents.Add(new(currentTick, null, entityPositionEventData)); break;
+				case EntityTargetEventData entityTargetEventData: _entityTargetEvents.Add(new(currentTick, null, entityTargetEventData)); break;
+				case GemEventData gemEventData: _gemEvents.Add(new(currentTick, null, gemEventData)); break;
+				case HitEventData hitEventData: _hitEvents.Add(new(currentTick, null, hitEventData)); break;
+				case LeviathanSpawnEventData leviathanSpawnEventData: _leviathanSpawnEvents.Add(new(currentTick, entityId++, leviathanSpawnEventData)); break;
+				case PedeSpawnEventData pedeSpawnEventData: _pedeSpawnEvents.Add(new(currentTick, entityId++, pedeSpawnEventData)); break;
+				case SpiderEggSpawnEventData spiderEggSpawnEventData: _spiderEggSpawnEvents.Add(new(currentTick, entityId++, spiderEggSpawnEventData)); break;
+				case SpiderSpawnEventData spiderSpawnEventData: _spiderSpawnEvents.Add(new(currentTick, entityId++, spiderSpawnEventData)); break;
+				case SquidSpawnEventData squidSpawnEventData: _squidSpawnEvents.Add(new(currentTick, entityId++, squidSpawnEventData)); break;
+				case ThornSpawnEventData thornSpawnEventData: _thornSpawnEvents.Add(new(currentTick, entityId++, thornSpawnEventData)); break;
+				case TransmuteEventData transmuteEventData: _transmuteEvents.Add(new(currentTick, null, transmuteEventData)); break;
 			}
 		}
+	}
+
+	private List<EditorEvent> GetEventsAtTick(int tickIndex)
+	{
+		return BoidSpawnEvents
+			.Concat(DaggerSpawnEvents)
+			.Concat(EntityOrientationEvents)
+			.Concat(EntityPositionEvents)
+			.Concat(EntityTargetEvents)
+			.Concat(GemEvents)
+			.Concat(HitEvents)
+			.Concat(LeviathanSpawnEvents)
+			.Concat(PedeSpawnEvents)
+			.Concat(SpiderEggSpawnEvents)
+			.Concat(SpiderSpawnEvents)
+			.Concat(SquidSpawnEvents)
+			.Concat(ThornSpawnEvents)
+			.Concat(TransmuteEvents)
+			.Where(e => e.TickIndex == tickIndex)
+			.ToList();
 	}
 
 	private ReplayEventsData CompileEventsData()
@@ -165,24 +207,7 @@ public record EditorReplayModel
 		for (int i = 0; i < InputsEvents.Count; i++)
 		{
 			eventsThisTick.Clear();
-
-			eventsThisTick.AddRange(BoidSpawnEvents
-				.Concat(DaggerSpawnEvents)
-				.Concat(EntityOrientationEvents)
-				.Concat(EntityPositionEvents)
-				.Concat(EntityTargetEvents)
-				.Concat(GemEvents)
-				.Concat(HitEvents)
-				.Concat(LeviathanSpawnEvents)
-				.Concat(PedeSpawnEvents)
-				.Concat(SpiderEggSpawnEvents)
-				.Concat(SpiderSpawnEvents)
-				.Concat(SquidSpawnEvents)
-				.Concat(ThornSpawnEvents)
-				.Concat(TransmuteEvents)
-				.Where(e => e.TickIndex == i)
-				.ToList());
-
+			eventsThisTick.AddRange(GetEventsAtTick(i));
 			eventsThisTick.Sort((a, b) => (a.EntityId ?? -1).CompareTo(b.EntityId ?? -1));
 			foreach (EditorEvent editorEvent in eventsThisTick)
 				replayEventsData.AddEvent(editorEvent.Data);
@@ -200,7 +225,7 @@ public record EditorReplayModel
 
 	public void AddEmptyEvent(int tickIndex, EventType eventType)
 	{
-		int entityId = 0;
+		int entityId = 1;
 
 		for (int i = tickIndex; i >= 0; i--)
 		{
@@ -208,7 +233,7 @@ public record EditorReplayModel
 			// If there are none, continue.
 			// If we find one, use that entityId + 1.
 			// If we find multiple, use the highest entityId + 1.
-			int? highestEntityId = HighestEntityIdInList(BoidSpawnEvents.Concat(DaggerSpawnEvents).Concat(LeviathanSpawnEvents).Concat(PedeSpawnEvents).Concat(SpiderEggSpawnEvents).Concat(SpiderSpawnEvents).Concat(SquidSpawnEvents).Concat(ThornSpawnEvents).ToList());
+			int? highestEntityId = HighestEntityIdInList(GetEventsAtTick(i));
 			if (highestEntityId.HasValue)
 			{
 				entityId = highestEntityId.Value + 1;
@@ -234,22 +259,23 @@ public record EditorReplayModel
 			}
 		}
 
+		// TODO: Shift entity ids of events with higher entity ids than the added event.
 		Action action = eventType switch
 		{
-			EventType.BoidSpawn => () => BoidSpawnEvents.Add(new(tickIndex, entityId, BoidSpawnEventData.CreateDefault())),
-			EventType.LeviathanSpawn => () => LeviathanSpawnEvents.Add(new(tickIndex, entityId, LeviathanSpawnEventData.CreateDefault())),
-			EventType.PedeSpawn => () => PedeSpawnEvents.Add(new(tickIndex, entityId, PedeSpawnEventData.CreateDefault())),
-			EventType.SpiderEggSpawn => () => SpiderEggSpawnEvents.Add(new(tickIndex, entityId, SpiderEggSpawnEventData.CreateDefault())),
-			EventType.SpiderSpawn => () => SpiderSpawnEvents.Add(new(tickIndex, entityId, SpiderSpawnEventData.CreateDefault())),
-			EventType.SquidSpawn => () => SquidSpawnEvents.Add(new(tickIndex, entityId, SquidSpawnEventData.CreateDefault())),
-			EventType.ThornSpawn => () => ThornSpawnEvents.Add(new(tickIndex, entityId, ThornSpawnEventData.CreateDefault())),
-			EventType.DaggerSpawn => () => DaggerSpawnEvents.Add(new(tickIndex, entityId, DaggerSpawnEventData.CreateDefault())),
-			EventType.EntityOrientation => () => EntityOrientationEvents.Add(new(tickIndex, null, EntityOrientationEventData.CreateDefault())),
-			EventType.EntityPosition => () => EntityPositionEvents.Add(new(tickIndex, null, EntityPositionEventData.CreateDefault())),
-			EventType.EntityTarget => () => EntityTargetEvents.Add(new(tickIndex, null, EntityTargetEventData.CreateDefault())),
-			EventType.Gem => () => GemEvents.Add(new(tickIndex, null, GemEventData.CreateDefault())),
-			EventType.Hit => () => HitEvents.Add(new(tickIndex, null, HitEventData.CreateDefault())),
-			EventType.Transmute => () => TransmuteEvents.Add(new(tickIndex, null, TransmuteEventData.CreateDefault())),
+			EventType.BoidSpawn => () => _boidSpawnEvents.Add(new(tickIndex, entityId, BoidSpawnEventData.CreateDefault())),
+			EventType.LeviathanSpawn => () => _leviathanSpawnEvents.Add(new(tickIndex, entityId, LeviathanSpawnEventData.CreateDefault())),
+			EventType.PedeSpawn => () => _pedeSpawnEvents.Add(new(tickIndex, entityId, PedeSpawnEventData.CreateDefault())),
+			EventType.SpiderEggSpawn => () => _spiderEggSpawnEvents.Add(new(tickIndex, entityId, SpiderEggSpawnEventData.CreateDefault())),
+			EventType.SpiderSpawn => () => _spiderSpawnEvents.Add(new(tickIndex, entityId, SpiderSpawnEventData.CreateDefault())),
+			EventType.SquidSpawn => () => _squidSpawnEvents.Add(new(tickIndex, entityId, SquidSpawnEventData.CreateDefault())),
+			EventType.ThornSpawn => () => _thornSpawnEvents.Add(new(tickIndex, entityId, ThornSpawnEventData.CreateDefault())),
+			EventType.DaggerSpawn => () => _daggerSpawnEvents.Add(new(tickIndex, entityId, DaggerSpawnEventData.CreateDefault())),
+			EventType.EntityOrientation => () => _entityOrientationEvents.Add(new(tickIndex, null, EntityOrientationEventData.CreateDefault())),
+			EventType.EntityPosition => () => _entityPositionEvents.Add(new(tickIndex, null, EntityPositionEventData.CreateDefault())),
+			EventType.EntityTarget => () => _entityTargetEvents.Add(new(tickIndex, null, EntityTargetEventData.CreateDefault())),
+			EventType.Gem => () => _gemEvents.Add(new(tickIndex, null, GemEventData.CreateDefault())),
+			EventType.Hit => () => _hitEvents.Add(new(tickIndex, null, HitEventData.CreateDefault())),
+			EventType.Transmute => () => _transmuteEvents.Add(new(tickIndex, null, TransmuteEventData.CreateDefault())),
 			EventType.InitialInputs => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
 			EventType.Inputs => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
 			EventType.End => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
@@ -257,6 +283,32 @@ public record EditorReplayModel
 		};
 
 		action();
+
+		InvalidateCache();
+	}
+
+	public void RemoveEvent(EditorEvent editorEvent)
+	{
+		// TODO: Shift entity ids of events with higher entity ids than the removed event.
+		switch (editorEvent.Data)
+		{
+			case BoidSpawnEventData: _boidSpawnEvents.Remove(editorEvent); return;
+			case DaggerSpawnEventData: _daggerSpawnEvents.Remove(editorEvent); return;
+			case EntityOrientationEventData: _entityOrientationEvents.Remove(editorEvent); return;
+			case EntityPositionEventData: _entityPositionEvents.Remove(editorEvent); return;
+			case EntityTargetEventData: _entityTargetEvents.Remove(editorEvent); return;
+			case GemEventData: _gemEvents.Remove(editorEvent); return;
+			case HitEventData: _hitEvents.Remove(editorEvent); return;
+			case LeviathanSpawnEventData: _leviathanSpawnEvents.Remove(editorEvent); return;
+			case PedeSpawnEventData: _pedeSpawnEvents.Remove(editorEvent); return;
+			case SpiderEggSpawnEventData: _spiderEggSpawnEvents.Remove(editorEvent); return;
+			case SpiderSpawnEventData: _spiderSpawnEvents.Remove(editorEvent); return;
+			case SquidSpawnEventData: _squidSpawnEvents.Remove(editorEvent); return;
+			case ThornSpawnEventData: _thornSpawnEvents.Remove(editorEvent); return;
+			case TransmuteEventData: _transmuteEvents.Remove(editorEvent); return;
+		}
+
+		InvalidateCache();
 	}
 
 	public ReplayBinary<LocalReplayBinaryHeader> ToLocalReplay()
@@ -281,7 +333,6 @@ public record EditorReplayModel
 
 	public byte[] ToHash()
 	{
-		// TODO: Make something faster.
 		using MemoryStream ms = new();
 		using BinaryWriter bw = new(ms);
 
@@ -290,20 +341,20 @@ public record EditorReplayModel
 		for (int i = 0; i < InputsEvents.Count; i++)
 			InputsEvents[i].Write(bw);
 
-		WriteList(bw, BoidSpawnEvents);
-		WriteList(bw, DaggerSpawnEvents);
-		WriteList(bw, EntityOrientationEvents);
-		WriteList(bw, EntityPositionEvents);
-		WriteList(bw, EntityTargetEvents);
-		WriteList(bw, GemEvents);
-		WriteList(bw, HitEvents);
-		WriteList(bw, LeviathanSpawnEvents);
-		WriteList(bw, PedeSpawnEvents);
-		WriteList(bw, SpiderEggSpawnEvents);
-		WriteList(bw, SpiderSpawnEvents);
-		WriteList(bw, SquidSpawnEvents);
-		WriteList(bw, ThornSpawnEvents);
-		WriteList(bw, TransmuteEvents);
+		WriteList(bw, _boidSpawnEvents);
+		WriteList(bw, _daggerSpawnEvents);
+		WriteList(bw, _entityOrientationEvents);
+		WriteList(bw, _entityPositionEvents);
+		WriteList(bw, _entityTargetEvents);
+		WriteList(bw, _gemEvents);
+		WriteList(bw, _hitEvents);
+		WriteList(bw, _leviathanSpawnEvents);
+		WriteList(bw, _pedeSpawnEvents);
+		WriteList(bw, _spiderEggSpawnEvents);
+		WriteList(bw, _spiderSpawnEvents);
+		WriteList(bw, _squidSpawnEvents);
+		WriteList(bw, _thornSpawnEvents);
+		WriteList(bw, _transmuteEvents);
 
 		return MD5.HashData(ms.ToArray());
 

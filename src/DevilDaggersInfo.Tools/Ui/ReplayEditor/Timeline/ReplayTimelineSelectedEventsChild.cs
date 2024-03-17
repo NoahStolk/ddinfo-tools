@@ -152,25 +152,7 @@ public static class ReplayTimelineSelectedEventsChild
 		{
 			foreach (EditorEvent editorEvent in _checkedEvents)
 			{
-				Remove(replay.BoidSpawnEvents);
-				Remove(replay.DaggerSpawnEvents);
-				Remove(replay.EntityOrientationEvents);
-				Remove(replay.EntityPositionEvents);
-				Remove(replay.EntityTargetEvents);
-				Remove(replay.GemEvents);
-				Remove(replay.HitEvents);
-				Remove(replay.LeviathanSpawnEvents);
-				Remove(replay.PedeSpawnEvents);
-				Remove(replay.SpiderEggSpawnEvents);
-				Remove(replay.SpiderSpawnEvents);
-				Remove(replay.SquidSpawnEvents);
-				Remove(replay.ThornSpawnEvents);
-				Remove(replay.TransmuteEvents);
-
-				void Remove(List<EditorEvent> list)
-				{
-					list.Remove(editorEvent);
-				}
+				replay.RemoveEvent(editorEvent);
 
 				selectedEvents.Remove(editorEvent);
 			}
