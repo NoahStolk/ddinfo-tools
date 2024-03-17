@@ -18,12 +18,6 @@ public static class ReplayTimelineSelectedEventsChild
 
 	public static void Render(EditorReplayModel replay, List<EditorEvent> selectedEvents, int selectedTick)
 	{
-		if (selectedEvents.Count == 0)
-		{
-			ImGui.Text("No events selected");
-			return;
-		}
-
 		ImGui.SeparatorText("Inputs");
 
 		if (ImGui.BeginTable("InputsTable", 9, ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX))
@@ -53,6 +47,12 @@ public static class ReplayTimelineSelectedEventsChild
 			EventTypeRendererUtils.NextColumnInputShort(selectedTick, nameof(InputsEventData.MouseY), ref e.MouseY);
 
 			ImGui.EndTable();
+		}
+
+		if (selectedEvents.Count == 0)
+		{
+			ImGui.Text("No events selected");
+			return;
 		}
 
 		ImGui.SeparatorText("Events");
