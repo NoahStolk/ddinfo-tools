@@ -24,7 +24,6 @@ public static class ReplayTimelineChild
 	private static readonly Color _lineColorSub = Color.Gray(0.2f);
 
 	private static readonly List<EditorEvent> _selectedEvents = [];
-	private static readonly EventCache _selectedEventDataCache = new();
 	private static int? _selectedTickIndex;
 
 	private static int GetIndex(EventType eventType)
@@ -44,7 +43,6 @@ public static class ReplayTimelineChild
 	{
 		TimelineCache.Clear();
 		_selectedEvents.Clear();
-		_selectedEventDataCache.Clear();
 		_selectedTickIndex = null;
 	}
 
@@ -221,15 +219,28 @@ public static class ReplayTimelineChild
 		}
 	}
 
-	private static void SelectEvents(int tickIndex)
+	private static void SelectEvents(EditorReplayModel replay, int tickIndex)
 	{
-		// _selectedEvents.Clear();
-		// _selectedEvents.AddRange(replayEvents);
-		// _selectedTickIndex = tickIndex;
-		//
-		// _selectedEventDataCache.Clear();
-		// foreach (EditorEvent editorEvent in replayEvents)
-		// 	_selectedEventDataCache.Add(eventIndex, editorEvent);
+		List<EditorEvent> replayEvents = replay.BoidSpawnEvents
+			.Concat(replay.LeviathanSpawnEvents)
+			.Concat(replay.PedeSpawnEvents)
+			.Concat(replay.SpiderEggSpawnEvents)
+			.Concat(replay.SpiderSpawnEvents)
+			.Concat(replay.SquidSpawnEvents)
+			.Concat(replay.ThornSpawnEvents)
+			.Concat(replay.DaggerSpawnEvents)
+			.Concat(replay.EntityOrientationEvents)
+			.Concat(replay.EntityPositionEvents)
+			.Concat(replay.EntityTargetEvents)
+			.Concat(replay.GemEvents)
+			.Concat(replay.HitEvents)
+			.Concat(replay.TransmuteEvents)
+			.Where(e => e.TickIndex == tickIndex)
+			.ToList();
+
+		_selectedEvents.Clear();
+		_selectedEvents.AddRange(replayEvents);
+		_selectedTickIndex = tickIndex;
 	}
 
 	private static void HandleInput(EditorReplayModel replay, Vector2 origin)
@@ -303,6 +314,6 @@ public static class ReplayTimelineChild
 		}
 
 		// Select in case of normal click, but select in case of double-click as well.
-		SelectEvents(tickIndex);
+		SelectEvents(replay, tickIndex);
 	}
 }
