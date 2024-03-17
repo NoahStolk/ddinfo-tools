@@ -1,8 +1,7 @@
-using DevilDaggersInfo.Core.Replay;
-using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using ImGuiNET;
 using System.Numerics;
@@ -14,7 +13,7 @@ public static class ReplayInputsChild
 	private static int _startTick;
 	private static int _endTick;
 
-	public static void Render(ReplayEventsData eventsData, float startTime)
+	public static void Render(EditorReplayModel replay)
 	{
 		const int maxTicks = 60;
 		const int height = 64;
@@ -32,16 +31,16 @@ public static class ReplayInputsChild
 				_startTick = Math.Max(0, _startTick - maxTicks);
 			ImGui.SameLine();
 			if (ImGuiImage.ImageButton("Forward", Root.InternalResources.ArrowRightTexture.Id, iconSize))
-				_startTick = Math.Min(eventsData.TickCount - maxTicks, _startTick + maxTicks);
+				_startTick = Math.Min(replay.TickCount - maxTicks, _startTick + maxTicks);
 			ImGui.SameLine();
 			if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Id, iconSize))
-				_startTick = eventsData.TickCount - maxTicks;
+				_startTick = replay.TickCount - maxTicks;
 
-			_startTick = Math.Max(0, Math.Min(_startTick, eventsData.TickCount - maxTicks));
-			_endTick = Math.Min(_startTick + maxTicks - 1, eventsData.TickCount);
+			_startTick = Math.Max(0, Math.Min(_startTick, replay.TickCount - maxTicks));
+			_endTick = Math.Min(_startTick + maxTicks - 1, replay.TickCount);
 
 			ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
-			ImGui.Text(Inline.Span($"Showing {_startTick} - {_endTick} of {eventsData.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, startTime):0.0000} - {TimeUtils.TickToTime(_endTick, startTime):0.0000}"));
+			ImGui.Text(Inline.Span($"Showing {_startTick} - {_endTick} of {replay.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, replay.StartTime):0.0000} - {TimeUtils.TickToTime(_endTick, replay.StartTime):0.0000}"));
 		}
 
 		ImGui.EndChild(); // TickNavigation
@@ -55,8 +54,10 @@ public static class ReplayInputsChild
 			ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.None, 384);
 			ImGui.TableHeadersRow();
 
+			ImGui.TextColored(Color.White, Inline.Span($"Look Speed: {replay.LookSpeed}"));
+
 			int i = 0;
-			foreach (ReplayEvent e in eventsData.Events)
+			foreach (InputsEventData inputs in replay.InputsEvents)
 			{
 				if (i < _startTick)
 				{
@@ -64,20 +65,13 @@ public static class ReplayInputsChild
 					continue;
 				}
 
-				if (e.Data is not InputsEventData and not InitialInputsEventData)
-					continue;
-
 				ImGui.TableNextRow();
 
 				ImGui.TableNextColumn();
-				ImGui.Text(Inline.Span($"{TimeUtils.TickToTime(i, startTime):0.0000} ({i})"));
+				ImGui.Text(Inline.Span($"{TimeUtils.TickToTime(i, replay.StartTime):0.0000} ({i})"));
 
 				ImGui.TableNextColumn();
-
-				if (e.Data is InputsEventData ie)
-					RenderInputsEvent(ie.Left, ie.Right, ie.Forward, ie.Backward, ie.Jump, ie.Shoot, ie.ShootHoming, ie.MouseX, ie.MouseY, null);
-				else if (e.Data is InitialInputsEventData iie)
-					RenderInputsEvent(iie.Left, iie.Right, iie.Forward, iie.Backward, iie.Jump, iie.Shoot, iie.ShootHoming, iie.MouseX, iie.MouseY, iie.LookSpeed);
+				RenderInputsEvent(inputs.Left, inputs.Right, inputs.Forward, inputs.Backward, inputs.Jump, inputs.Shoot, inputs.ShootHoming, inputs.MouseX, inputs.MouseY);
 
 				i++;
 				if (i > _endTick)
@@ -99,12 +93,8 @@ public static class ReplayInputsChild
 		ShootType shoot,
 		ShootType shootHoming,
 		short mouseX,
-		short mouseY,
-		float? lookSpeed)
+		short mouseY)
 	{
-		if (lookSpeed.HasValue)
-			ImGui.TextColored(Color.White, Inline.Span($"Look Speed: {lookSpeed.Value}"));
-
 		ImGui.TextColored(forward ? Color.Red : Color.White, "W");
 		ImGui.SameLine();
 		ImGui.TextColored(left ? Color.Red : Color.White, "A");

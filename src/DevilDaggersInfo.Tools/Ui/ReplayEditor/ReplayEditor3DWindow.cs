@@ -19,7 +19,7 @@ public static class ReplayEditor3DWindow
 
 	public static void InitializeScene()
 	{
-		_arenaScene = new(static () => FileStates.Replay.Object.Header.Spawnset, false, false);
+		_arenaScene = new(static () => FileStates.Replay.Object.Spawnset, false, false);
 	}
 
 	public static void Reset()
@@ -29,7 +29,7 @@ public static class ReplayEditor3DWindow
 
 	public static void Update(float delta)
 	{
-		if (_time < FileStates.Replay.Object.Header.Time)
+		if (_time < FileStates.Replay.Object.Time)
 			_time += delta;
 
 		ArenaScene.CurrentTick = TimeUtils.TimeToTick(_time, 0);
@@ -44,7 +44,7 @@ public static class ReplayEditor3DWindow
 				ImGui.SetWindowFocus();
 
 			ImGui.Text(StringResources.ReplaySimulator3D);
-			ImGui.SliderFloat("Time", ref _time, 0, FileStates.Replay.Object.Header.Time, "%.4f", ImGuiSliderFlags.NoInput);
+			ImGui.SliderFloat("Time", ref _time, 0, FileStates.Replay.Object.Time, "%.4f", ImGuiSliderFlags.NoInput);
 
 			PlayerInputSnapshot snapshot = default;
 			if (ArenaScene.CurrentTick < ArenaScene.ReplaySimulation?.InputSnapshots.Count)
