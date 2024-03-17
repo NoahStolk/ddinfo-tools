@@ -37,14 +37,14 @@ public static class ReplayEntitiesChild
 				_startId = Math.Max(0, _startId - maxIds);
 			ImGui.SameLine();
 			if (ImGuiImage.ImageButton("Forward", Root.InternalResources.ArrowRightTexture.Id, iconSize))
-				_startId = Math.Min(replay.TickCount - maxIds, _startId + maxIds);
+				_startId = Math.Min(replay.Cache.TickCount - maxIds, _startId + maxIds);
 			ImGui.SameLine();
 			if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Id, iconSize))
-				_startId = replay.EntityCount - maxIds;
+				_startId = replay.Cache.SpawnEventCount - maxIds;
 
-			_startId = Math.Max(0, Math.Min(_startId, replay.EntityCount - maxIds));
+			_startId = Math.Max(0, Math.Min(_startId, replay.Cache.SpawnEventCount - maxIds));
 
-			ImGui.Text(Inline.Span($"Showing {_startId} - {_startId + maxIds - 1} of {replay.EntityCount}"));
+			ImGui.Text(Inline.Span($"Showing {_startId} - {_startId + maxIds - 1} of {replay.Cache.SpawnEventCount}"));
 
 			ImGui.Checkbox("Show enemies", ref _showEnemies);
 			ImGui.SameLine();
@@ -58,9 +58,9 @@ public static class ReplayEntitiesChild
 					ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.None, 128);
 					ImGui.TableHeadersRow();
 
-					for (int i = _startId; i < Math.Min(_startId + maxIds, replay.EntityCount); i++)
+					for (int i = _startId; i < Math.Min(_startId + maxIds, replay.Cache.SpawnEventCount); i++)
 					{
-						EntityType? entityType = replay.GetEntityType(i);
+						EntityType? entityType = replay.Cache.GetEntityType(i);
 						if (!entityType.HasValue)
 							continue;
 
@@ -74,7 +74,7 @@ public static class ReplayEntitiesChild
 
 						ImGui.TableNextColumn();
 						if (ImGui.Selectable(Inline.Span(i), false, ImGuiSelectableFlags.SpanAllColumns))
-							_enemyHitLog = null;//EnemyHitLogBuilder.Build(replay.Events, i);
+							_enemyHitLog = EnemyHitLogBuilder.Build(replay.Cache.Events, i);
 
 						ImGui.TableNextColumn();
 						ImGui.TextColored(entityType.GetColor(), EnumUtils.EntityTypeShortNames[entityType.Value]);

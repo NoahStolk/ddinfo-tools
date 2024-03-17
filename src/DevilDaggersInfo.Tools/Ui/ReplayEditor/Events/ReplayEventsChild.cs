@@ -1,4 +1,3 @@
-using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
@@ -17,8 +16,6 @@ public static class ReplayEventsChild
 	private static readonly EventCache _eventCache = new();
 
 	private static readonly Dictionary<EventType, bool> _eventTypeEnabled = Enum.GetValues<EventType>().ToDictionary(et => et, _ => true);
-
-	private static ReplayEventsData? _compiledEventsData;
 
 	private static int _startTick;
 	private static float _targetTime;
@@ -43,13 +40,6 @@ public static class ReplayEventsChild
 
 	public static void Render(EditorReplayModel replay)
 	{
-		// TODO: Invalidate this when it becomes outdated.
-		if (_compiledEventsData == null)
-		{
-			_compiledEventsData = replay.CompileEventsData();
-			Reset();
-		}
-
 		const int maxTicks = 60;
 		const int height = 216;
 		const int filteringHeight = 160;
@@ -70,10 +60,10 @@ public static class ReplayEventsChild
 					_startTick = Math.Max(0, _startTick - maxTicks);
 				ImGui.SameLine();
 				if (ImGuiImage.ImageButton("Forward", Root.InternalResources.ArrowRightTexture.Id, iconSize))
-					_startTick = Math.Min(_compiledEventsData.TickCount - maxTicks, _startTick + maxTicks);
+					_startTick = Math.Min(replay.Cache.TickCount - maxTicks, _startTick + maxTicks);
 				ImGui.SameLine();
 				if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Id, iconSize))
-					_startTick = _compiledEventsData.TickCount - maxTicks;
+					_startTick = replay.Cache.TickCount - maxTicks;
 
 				ImGui.SameLine();
 				ImGui.Text("Go to:");
@@ -86,11 +76,11 @@ public static class ReplayEventsChild
 
 				ImGui.PopItemWidth();
 
-				_startTick = Math.Max(0, Math.Min(_startTick, _compiledEventsData.TickCount - maxTicks));
-				int endTick = Math.Min(_startTick + maxTicks - 1, _compiledEventsData.TickCount);
+				_startTick = Math.Max(0, Math.Min(_startTick, replay.Cache.TickCount - maxTicks));
+				int endTick = Math.Min(_startTick + maxTicks - 1, replay.Cache.TickCount);
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
-				ImGui.Text(Inline.Span($"Showing {_startTick} - {endTick} of {_compiledEventsData.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, replay.StartTime):0.0000} - {TimeUtils.TickToTime(endTick, replay.StartTime):0.0000}"));
+				ImGui.Text(Inline.Span($"Showing {_startTick} - {endTick} of {replay.Cache.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, replay.StartTime):0.0000} - {TimeUtils.TickToTime(endTick, replay.StartTime):0.0000}"));
 			}
 
 			ImGui.EndChild(); // TickNavigation
@@ -151,13 +141,13 @@ public static class ReplayEventsChild
 
 		if (ImGui.BeginChild("ReplayEventsChild", new(0, 0)))
 		{
-			RenderEventsTable(_compiledEventsData, replay, maxTicks);
+			RenderEventsTable(replay, maxTicks);
 		}
 
 		ImGui.EndChild(); // ReplayEventsChild
 	}
 
-	private static void RenderEventsTable(ReplayEventsData eventsData, EditorReplayModel replay, int maxTicks)
+	private static void RenderEventsTable(EditorReplayModel replay, int maxTicks)
 	{
 		if (!ImGui.BeginTable("ReplayEventsTable", 2, ImGuiTableFlags.BordersInnerH))
 			return;
@@ -166,16 +156,16 @@ public static class ReplayEventsChild
 		ImGui.TableSetupColumn("Events", ImGuiTableColumnFlags.None, 384);
 		ImGui.TableHeadersRow();
 
-		for (int i = _startTick; i < Math.Min(_startTick + maxTicks, eventsData.TickCount); i++)
+		for (int i = _startTick; i < Math.Min(_startTick + maxTicks, replay.Cache.TickCount); i++)
 		{
-			int offset = eventsData.EventOffsetsPerTick[i];
-			int count = eventsData.EventOffsetsPerTick[i + 1] - offset;
+			int offset = replay.Cache.EventOffsetsPerTick[i];
+			int count = replay.Cache.EventOffsetsPerTick[i + 1] - offset;
 
 			_eventCache.Clear();
 			bool showTick = !_onlyShowTicksWithEnabledEvents;
 			for (int j = offset; j < offset + count; j++)
 			{
-				ReplayEvent replayEvent = eventsData.Events[j];
+				ReplayEvent replayEvent = replay.Cache.Events[j];
 				_eventCache.Add(j, replayEvent);
 				if (!showTick)
 				{

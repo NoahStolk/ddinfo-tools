@@ -260,7 +260,7 @@ public static class EventTypeRendererUtils
 
 	public static void NextColumnEntityId(EditorReplayModel replay, int entityId)
 	{
-		EntityType? entityType = replay.GetEntityTypeIncludingNegated(entityId);
+		EntityType? entityType = replay.Cache.GetEntityTypeIncludingNegated(entityId);
 
 		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
 
@@ -297,7 +297,7 @@ public static class EventTypeRendererUtils
 
 		ImGui.Text(" (");
 		ImGui.SameLine();
-		EntityType? entityType = replay.GetEntityTypeIncludingNegated(entityId);
+		EntityType? entityType = replay.Cache.GetEntityTypeIncludingNegated(entityId);
 		ImGui.TextColored(entityType.GetColor(), entityType.HasValue ? EnumUtils.EntityTypeShortNames[entityType.Value] : "???");
 		ImGui.SameLine();
 		ImGui.Text(")");
