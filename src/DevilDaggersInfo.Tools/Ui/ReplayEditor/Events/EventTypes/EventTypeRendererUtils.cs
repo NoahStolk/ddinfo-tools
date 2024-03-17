@@ -48,6 +48,7 @@ public static class EventTypeRendererUtils
 		ImGui.TableSetupColumn("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160);
 	}
 
+	// Used in old editor.
 	public static void RenderTable<TEvent, TRenderer>(EventType eventType, IReadOnlyList<(int EventIndex, int EntityId, TEvent Event)> events, EditorReplayModel replay)
 		where TEvent : IEventData
 		where TRenderer : IEventTypeRenderer<TEvent>
@@ -66,28 +67,6 @@ public static class EventTypeRendererUtils
 
 				(int eventIndex, int entityId, TEvent e) = events[i];
 				TRenderer.Render(eventIndex, entityId, e, replay);
-			}
-
-			ImGui.EndTable();
-		}
-	}
-
-	public static void RenderInputsTable<TEvent, TRenderer>(ReadOnlySpan<char> tableId, IReadOnlyList<(int EventIndex, int EntityId, TEvent Event)> events, EditorReplayModel replay)
-		where TEvent : IEventData
-		where TRenderer : IEventTypeRenderer<TEvent>
-	{
-		if (ImGui.BeginTable(tableId, TRenderer.ColumnCountData, EventTableFlags))
-		{
-			TRenderer.SetupColumnsData();
-
-			ImGui.TableHeadersRow();
-
-			for (int i = 0; i < events.Count; i++)
-			{
-				ImGui.TableNextRow();
-
-				(int eventIndex, int _, TEvent e) = events[i];
-				TRenderer.RenderData(eventIndex, e, replay);
 			}
 
 			ImGui.EndTable();

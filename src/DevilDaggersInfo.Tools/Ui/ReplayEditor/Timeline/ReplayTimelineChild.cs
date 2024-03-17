@@ -73,9 +73,9 @@ public static class ReplayTimelineChild
 				ImGui.PushFont(Root.FontGoetheBold20);
 				ImGui.Text(Inline.Span($"Tick {_selectedTickIndex.Value} selected"));
 				ImGui.PopFont();
-			}
 
-			ReplayTimelineSelectedEventsChild.Render(replay, _selectedEvents, _selectedEventDataCache);
+				ReplayTimelineSelectedEventsChild.Render(replay, _selectedEvents, _selectedTickIndex.Value);
+			}
 		}
 
 		ImGui.EndChild(); // End SelectedEventsChild
@@ -221,7 +221,7 @@ public static class ReplayTimelineChild
 		}
 	}
 
-	private static void SelectEvents(List<EditorEvent> replayEvents, int tickIndex)
+	private static void SelectEvents(int tickIndex)
 	{
 		// _selectedEvents.Clear();
 		// _selectedEvents.AddRange(replayEvents);
@@ -303,7 +303,6 @@ public static class ReplayTimelineChild
 		}
 
 		// Select in case of normal click, but select in case of double-click as well.
-		// List<(ReplayEvent Event, int EventIndex)> events = TimelineCache.TickData[tickIndex].SelectMany(t => t.Value).ToList();
-		// SelectEvents(events, tickIndex);
+		SelectEvents(tickIndex);
 	}
 }
