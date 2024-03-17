@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Core.Common;
-using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
@@ -7,7 +6,6 @@ using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
-using System.Diagnostics;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
@@ -286,29 +284,9 @@ public static class ReplayTimelineChild
 				return;
 
 			EventType eventType = _shownEventTypes[eventTypeIndex];
-			Action action = eventType switch
-			{
-				EventType.BoidSpawn => () => replay.BoidSpawnEvents.Add(new(tickIndex, BoidSpawnEventData.CreateDefault())),
-				EventType.LeviathanSpawn => () => replay.LeviathanSpawnEvents.Add(new(tickIndex, LeviathanSpawnEventData.CreateDefault())),
-				EventType.PedeSpawn => () => replay.PedeSpawnEvents.Add(new(tickIndex, PedeSpawnEventData.CreateDefault())),
-				EventType.SpiderEggSpawn => () => replay.SpiderEggSpawnEvents.Add(new(tickIndex, SpiderEggSpawnEventData.CreateDefault())),
-				EventType.SpiderSpawn => () => replay.SpiderSpawnEvents.Add(new(tickIndex, SpiderSpawnEventData.CreateDefault())),
-				EventType.SquidSpawn => () => replay.SquidSpawnEvents.Add(new(tickIndex, SquidSpawnEventData.CreateDefault())),
-				EventType.ThornSpawn => () => replay.ThornSpawnEvents.Add(new(tickIndex, ThornSpawnEventData.CreateDefault())),
-				EventType.DaggerSpawn => () => replay.DaggerSpawnEvents.Add(new(tickIndex, DaggerSpawnEventData.CreateDefault())),
-				EventType.EntityOrientation => () => replay.EntityOrientationEvents.Add(new(tickIndex, EntityOrientationEventData.CreateDefault())),
-				EventType.EntityPosition => () => replay.EntityPositionEvents.Add(new(tickIndex, EntityPositionEventData.CreateDefault())),
-				EventType.EntityTarget => () => replay.EntityTargetEvents.Add(new(tickIndex, EntityTargetEventData.CreateDefault())),
-				EventType.Gem => () => replay.GemEvents.Add(new(tickIndex, GemEventData.CreateDefault())),
-				EventType.Hit => () => replay.HitEvents.Add(new(tickIndex, HitEventData.CreateDefault())),
-				EventType.Transmute => () => replay.TransmuteEvents.Add(new(tickIndex, TransmuteEventData.CreateDefault())),
-				EventType.InitialInputs => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
-				EventType.Inputs => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
-				EventType.End => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
-				_ => throw new UnreachableException($"Unknown event type: {eventType}"),
-			};
 
-			action();
+			replay.AddEmptyEvent(tickIndex, eventType);
+
 			TimelineCache.Clear();
 		}
 

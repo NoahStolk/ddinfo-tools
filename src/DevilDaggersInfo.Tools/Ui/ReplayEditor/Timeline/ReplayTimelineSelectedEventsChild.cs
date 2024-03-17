@@ -101,6 +101,9 @@ public static class ReplayTimelineSelectedEventsChild
 				}
 				else if (ImGui.CollapsingHeader(Inline.Span($"Event data##{i}")))
 				{
+					if (replayEvent.EntityId.HasValue)
+						ImGui.Text(Inline.Span($"Entity Id: {replayEvent.EntityId.Value}"));
+
 					if (replayEvent.Data is BoidSpawnEventData boidSpawn)
 						BoidSpawn.RenderEdit(i, boidSpawn, replay);
 					else if (replayEvent.Data is DaggerSpawnEventData daggerSpawn)
