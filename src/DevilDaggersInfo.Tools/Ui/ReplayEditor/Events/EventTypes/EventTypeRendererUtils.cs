@@ -1,13 +1,11 @@
 // ReSharper disable InconsistentNaming
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
-using DevilDaggersInfo.Core.Replay.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
@@ -46,7 +44,6 @@ public static class EventTypeRendererUtils
 		ImGui.TableSetupColumn("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160);
 	}
 
-	// Used in old editor.
 	public static void RenderTable<TEvent, TRenderer>(EventType eventType, IReadOnlyList<(int EventIndex, int EntityId, TEvent Event)> events, EditorReplayModel replay)
 		where TEvent : IEventData
 		where TRenderer : IEventTypeRenderer<TEvent>
@@ -71,167 +68,29 @@ public static class EventTypeRendererUtils
 		}
 	}
 
-	public static void NextColumnEventIndex(int index)
-	{
-		ImGui.TableNextColumn();
-		ImGui.Text(Inline.Span(index));
-	}
-
-	[Obsolete]
-	public static void NextColumnInputByteEnum<TEnum>(int uniqueId, ReadOnlySpan<char> fieldName, ref TEnum value, IReadOnlyList<TEnum> values, string[] names)
+	public static void NextColumnEnum<TEnum>(TEnum value)
 		where TEnum : Enum
 	{
 		ImGui.TableNextColumn();
-
-		InputByteEnum(uniqueId, fieldName, ref value, values, names);
+		ImGui.Text(Inline.Span(value));
 	}
 
-	[Obsolete]
-	public static void InputByteEnum<TEnum>(int uniqueId, ReadOnlySpan<char> fieldName, ref TEnum value, IReadOnlyList<TEnum> values, string[] names)
-		where TEnum : Enum
-	{
-		ImGui.PushItemWidth(-1);
-		int intValue = (byte)(object)value;
-
-		int index = 0;
-		for (int i = 0; i < values.Count; i++)
-		{
-			if ((byte)(object)values[i] == intValue)
-			{
-				index = i;
-				break;
-			}
-		}
-
-		if (ImGui.Combo(EditLabel(fieldName, uniqueId), ref index, names, values.Count))
-			value = values[index];
-
-		ImGui.PopItemWidth();
-	}
-
-	[Obsolete]
-	public static void NextColumnInputInt(int uniqueId, ReadOnlySpan<char> fieldName, ref int value)
+	public static void NextColumn<T>(T value, ReadOnlySpan<char> format = default)
+		where T : ISpanFormattable
 	{
 		ImGui.TableNextColumn();
-
-		InputInt(uniqueId, fieldName, ref value);
+		ImGui.Text(Inline.Span(value, format));
 	}
 
-	[Obsolete]
-	public static void InputInt(int uniqueId, ReadOnlySpan<char> fieldName, ref int value)
-	{
-		ImGui.PushItemWidth(-1);
-		ImGui.InputInt(EditLabel(fieldName, uniqueId), ref value, 0, 0);
-		ImGui.PopItemWidth();
-	}
-
-	[Obsolete]
-	public static void NextColumnInputShort(int uniqueId, ReadOnlySpan<char> fieldName, ref short value)
+	public static void NextColumnVector3(Vector3 value, ReadOnlySpan<char> format = default)
 	{
 		ImGui.TableNextColumn();
-
-		InputShort(uniqueId, fieldName, ref value);
+		ImGui.Text(Inline.Span(value, format));
 	}
 
-	[Obsolete]
-	private static unsafe void InputShort(int uniqueId, ReadOnlySpan<char> fieldName, ref short value)
-	{
-		ImGui.PushItemWidth(-1);
-		ImGui.InputScalar(EditLabel(fieldName, uniqueId), ImGuiDataType.S16, (IntPtr)Unsafe.AsPointer(ref value), 0, 0);
-		ImGui.PopItemWidth();
-	}
-
-	[Obsolete]
-	public static void NextColumnInputFloat(int uniqueId, ReadOnlySpan<char> fieldName, ref float value, ReadOnlySpan<char> format = default)
+	public static void NextColumnBool(bool value, ReadOnlySpan<char> trueText, ReadOnlySpan<char> falseText)
 	{
 		ImGui.TableNextColumn();
-
-		InputFloat(uniqueId, fieldName, ref value, format);
-	}
-
-	[Obsolete]
-	public static void InputFloat(int uniqueId, ReadOnlySpan<char> fieldName, ref float value, ReadOnlySpan<char> format = default)
-	{
-		ImGui.PushItemWidth(-1);
-		ImGui.InputFloat(EditLabel(fieldName, uniqueId), ref value, 0, 0, format);
-		ImGui.PopItemWidth();
-	}
-
-	[Obsolete]
-	public static void NextColumnInputVector3(int uniqueId, ReadOnlySpan<char> fieldName, ref Vector3 value, ReadOnlySpan<char> format = default)
-	{
-		ImGui.TableNextColumn();
-
-		InputVector3(uniqueId, fieldName, ref value, format);
-	}
-
-	[Obsolete]
-	public static void InputVector3(int uniqueId, ReadOnlySpan<char> fieldName, ref Vector3 value, ReadOnlySpan<char> format = default)
-	{
-		ImGui.PushItemWidth(-1);
-		ImGui.InputFloat3(EditLabel(fieldName, uniqueId), ref value, format);
-		ImGui.PopItemWidth();
-	}
-
-	[Obsolete]
-	public static void NextColumnInputInt16Vec3(int uniqueId, ReadOnlySpan<char> fieldName, ref Int16Vec3 value)
-	{
-		ImGui.TableNextColumn();
-		InputInt16Vec3(uniqueId, fieldName, ref value);
-	}
-
-	[Obsolete]
-	public static unsafe void InputInt16Vec3(int uniqueId, ReadOnlySpan<char> fieldName, ref Int16Vec3 value)
-	{
-		ImGui.PushItemWidth(-1);
-		ImGui.InputScalarN(EditLabel(fieldName, uniqueId), ImGuiDataType.S16, (IntPtr)Unsafe.AsPointer(ref value), 3);
-		ImGui.PopItemWidth();
-	}
-
-	[Obsolete]
-	public static void NextColumnInputMatrix3x3(int uniqueId, ReadOnlySpan<char> fieldName, ref Matrix3x3 value, ReadOnlySpan<char> format = default)
-	{
-		ImGui.TableNextColumn();
-
-		InputMatrix3x3(uniqueId, fieldName, ref value, format);
-	}
-
-	[Obsolete]
-	private static unsafe void InputMatrix3x3(int uniqueId, ReadOnlySpan<char> fieldName, ref Matrix3x3 value, ReadOnlySpan<char> format = default)
-	{
-		ImGui.PushItemWidth(-1);
-		ImGui.InputScalarN(EditLabel(fieldName, uniqueId), ImGuiDataType.Float, (IntPtr)Unsafe.AsPointer(ref value), 9, 0, 0, format);
-		ImGui.PopItemWidth();
-	}
-
-	[Obsolete]
-	public static void NextColumnInputInt16Mat3x3(int uniqueId, ReadOnlySpan<char> fieldName, ref Int16Mat3x3 value)
-	{
-		ImGui.TableNextColumn();
-
-		InputInt16Mat3x3(uniqueId, fieldName, ref value);
-	}
-
-	[Obsolete]
-	private static unsafe void InputInt16Mat3x3(int uniqueId, ReadOnlySpan<char> fieldName, ref Int16Mat3x3 value)
-	{
-		ImGui.PushItemWidth(-1);
-		ImGui.InputScalarN(EditLabel(fieldName, uniqueId), ImGuiDataType.S16, (IntPtr)Unsafe.AsPointer(ref value), 9);
-		ImGui.PopItemWidth();
-	}
-
-	[Obsolete]
-	public static void NextColumnCheckbox(int uniqueId, ReadOnlySpan<char> fieldName, ref bool value, ReadOnlySpan<char> trueText, ReadOnlySpan<char> falseText)
-	{
-		ImGui.TableNextColumn();
-		Checkbox(uniqueId, fieldName, ref value, trueText, falseText);
-	}
-
-	[Obsolete]
-	public static void Checkbox(int uniqueId, ReadOnlySpan<char> fieldName, ref bool value, ReadOnlySpan<char> trueText, ReadOnlySpan<char> falseText)
-	{
-		ImGui.Checkbox(EditLabel(fieldName, uniqueId), ref value);
-		ImGui.SameLine();
 		ImGui.Text(value ? trueText : falseText);
 	}
 
@@ -255,10 +114,5 @@ public static class EventTypeRendererUtils
 		ImGui.Text(")");
 
 		ImGui.PopStyleVar();
-	}
-
-	private static ReadOnlySpan<char> EditLabel(ReadOnlySpan<char> label, int uniqueId)
-	{
-		return Inline.Span($"##{label}{uniqueId}");
 	}
 }

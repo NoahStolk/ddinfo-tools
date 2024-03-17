@@ -40,7 +40,7 @@ public static class UtilsRendering
 		ImGui.PopItemWidth();
 	}
 
-	private static unsafe void InputShort(int uniqueId, ReadOnlySpan<char> fieldName, ref short value)
+	public static unsafe void InputShort(int uniqueId, ReadOnlySpan<char> fieldName, ref short value)
 	{
 		ImGui.PushItemWidth(-1);
 		ImGui.InputScalar(EditLabel(fieldName, uniqueId), ImGuiDataType.S16, (IntPtr)Unsafe.AsPointer(ref value), 0, 0);

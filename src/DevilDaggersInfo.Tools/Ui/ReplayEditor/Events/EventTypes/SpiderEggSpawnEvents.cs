@@ -19,10 +19,10 @@ public sealed class SpiderEggSpawnEvents : IEventTypeRenderer<SpiderEggSpawnEven
 
 	public static void Render(int eventIndex, int entityId, SpiderEggSpawnEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumn(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replay, entityId);
 		EventTypeRendererUtils.NextColumnEntityId(replay, e.SpawnerEntityId);
-		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(SpiderEggSpawnEventData.Position), ref e.Position, "%.2f");
-		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(SpiderEggSpawnEventData.TargetPosition), ref e.TargetPosition, "%.2f");
+		EventTypeRendererUtils.NextColumnVector3(e.Position, "0.00");
+		EventTypeRendererUtils.NextColumnVector3(e.TargetPosition, "0.00");
 	}
 }

@@ -1,23 +1,11 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
 public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEventData>
 {
-	private static readonly string[] _daggerTypeNamesArray =
-	[
-		"Lvl1",
-		"Lvl2",
-		"Lvl3",
-		"Lvl3 Homing",
-		"Lvl4",
-		"Lvl4 Homing",
-		"Lvl4 Splash",
-	];
-
 	public static int ColumnCount => 7;
 
 	public static void SetupColumns()
@@ -33,12 +21,12 @@ public sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEventData>
 
 	public static void Render(int eventIndex, int entityId, DaggerSpawnEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumn(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replay, entityId);
-		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(DaggerSpawnEventData.DaggerType), ref e.DaggerType, EnumUtils.DaggerTypes, _daggerTypeNamesArray);
-		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(DaggerSpawnEventData.A), ref e.A);
-		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(DaggerSpawnEventData.Position), ref e.Position);
-		EventTypeRendererUtils.NextColumnInputInt16Mat3x3(eventIndex, nameof(DaggerSpawnEventData.Orientation), ref e.Orientation);
-		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(DaggerSpawnEventData.IsShot), ref e.IsShot, "Shot", "Rapid");
+		EventTypeRendererUtils.NextColumnEnum(e.DaggerType);
+		EventTypeRendererUtils.NextColumn(e.A);
+		EventTypeRendererUtils.NextColumn(e.Position);
+		EventTypeRendererUtils.NextColumn(e.Orientation);
+		EventTypeRendererUtils.NextColumnBool(e.IsShot, "Shot", "Rapid");
 	}
 }

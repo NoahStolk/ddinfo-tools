@@ -19,10 +19,10 @@ public sealed class ThornSpawnEvents : IEventTypeRenderer<ThornSpawnEventData>
 
 	public static void Render(int eventIndex, int entityId, ThornSpawnEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumn(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replay, entityId);
-		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(ThornSpawnEventData.A), ref e.A);
-		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(ThornSpawnEventData.Position), ref e.Position, "%.2f");
-		EventTypeRendererUtils.NextColumnInputFloat(eventIndex, nameof(ThornSpawnEventData.RotationInRadians), ref e.RotationInRadians, "%.2f");
+		EventTypeRendererUtils.NextColumn(e.A);
+		EventTypeRendererUtils.NextColumnVector3(e.Position, "0.00");
+		EventTypeRendererUtils.NextColumn(e.RotationInRadians, "0.00");
 	}
 }

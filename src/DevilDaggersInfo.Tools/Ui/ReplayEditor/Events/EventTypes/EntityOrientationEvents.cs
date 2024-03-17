@@ -17,8 +17,8 @@ public sealed class EntityOrientationEvents : IEventTypeRenderer<EntityOrientati
 
 	public static void Render(int eventIndex, int entityId, EntityOrientationEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumn(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replay, e.EntityId);
-		EventTypeRendererUtils.NextColumnInputInt16Mat3x3(eventIndex, nameof(EntityOrientationEventData.Orientation), ref e.Orientation);
+		EventTypeRendererUtils.NextColumn(e.Orientation);
 	}
 }

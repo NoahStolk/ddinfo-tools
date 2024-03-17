@@ -19,10 +19,10 @@ public sealed class HitEvents : IEventTypeRenderer<HitEventData>
 
 	public static void Render(int eventIndex, int entityId, HitEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumn(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replay, e.EntityIdA);
 		EventTypeRendererUtils.NextColumnEntityId(replay, e.EntityIdB);
-		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(HitEventData.UserData), ref e.UserData);
+		EventTypeRendererUtils.NextColumn(e.UserData);
 
 		ImGui.TableNextColumn();
 		HitEventExplanation.Render(e, replay);
