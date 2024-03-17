@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Core.Spawnset;
+using System.Security.Cryptography;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 
@@ -194,12 +195,31 @@ public record EditorReplayModel
 		return replayEventsData;
 	}
 
-	public byte[] ToBytes()
+	public ReplayBinary<LocalReplayBinaryHeader> ToLocalReplay()
 	{
+		LocalReplayBinaryHeader header = new(
+			Version,
+			TimestampSinceGameRelease,
+			Time,
+			StartTime,
+			DaggersFired,
+			DeathType,
+			Gems,
+			DaggersHit,
+			Kills,
+			PlayerId,
+			Username,
+			new byte[10],
+			Spawnset.ToBytes());
+
+		return new(header, Cache);
+	}
+
+	public byte[] ToHash()
+	{
+		// TODO: Make something faster.
 		using MemoryStream ms = new();
 		using BinaryWriter bw = new(ms);
-
-		bw.Write("DDINFO__REPLAY__TIMELINE"u8);
 
 		bw.Write(LookSpeed);
 		bw.Write(InputsEvents.Count);
@@ -221,7 +241,7 @@ public record EditorReplayModel
 		WriteList(bw, ThornSpawnEvents);
 		WriteList(bw, TransmuteEvents);
 
-		return ms.ToArray();
+		return MD5.HashData(ms.ToArray());
 
 		static void WriteList(BinaryWriter bw, List<EditorEvent> events)
 		{

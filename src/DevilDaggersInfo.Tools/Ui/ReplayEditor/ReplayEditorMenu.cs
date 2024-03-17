@@ -151,7 +151,7 @@ public static class ReplayEditorMenu
 			return;
 		}
 
-		Root.GameMemoryService.WriteReplayToMemory(FileStates.Replay.Object.ToBytes());
+		Root.GameMemoryService.WriteReplayToMemory(FileStates.Replay.Object.ToLocalReplay().Compile());
 	}
 
 	public static void Close()
