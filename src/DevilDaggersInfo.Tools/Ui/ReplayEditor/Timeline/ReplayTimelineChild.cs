@@ -1,7 +1,5 @@
 using DevilDaggersInfo.Core.Common;
-using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Data;
-using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
@@ -50,7 +48,7 @@ public static class ReplayTimelineChild
 		_selectedTickIndex = null;
 	}
 
-	public static void Render(EditorReplayModel replay, float startTime)
+	public static void Render(EditorReplayModel replay)
 	{
 		if (TimelineCache.IsEmpty)
 			TimelineCache.Build(replay);
@@ -59,7 +57,7 @@ public static class ReplayTimelineChild
 		const float scrollBarHeight = 20;
 		if (ImGui.BeginChild("TimelineViewChild", new(0, _shownEventTypes.Count * _markerSize + markerTextHeight + scrollBarHeight)))
 		{
-			RenderTimeline(replay, startTime);
+			RenderTimeline(replay);
 		}
 
 		ImGui.EndChild(); // End TimelineViewChild
@@ -86,7 +84,7 @@ public static class ReplayTimelineChild
 		ImGui.PopStyleColor();
 	}
 
-	private static void RenderTimeline(EditorReplayModel replayModel, float startTime)
+	private static void RenderTimeline(EditorReplayModel replay)
 	{
 		ImGui.PushStyleColor(ImGuiCol.ChildBg, Color.Gray(0.1f));
 		const float legendWidth = 160;
@@ -118,7 +116,7 @@ public static class ReplayTimelineChild
 		{
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 			Vector2 origin = ImGui.GetCursorScreenPos();
-			float lineWidth = replayModel.InputsEvents.Count * _markerSize;
+			float lineWidth = replay.TickCount * _markerSize;
 			for (int i = 0; i < _shownEventTypes.Count; i++)
 			{
 				AddHorizontalLine(drawList, origin, i * _markerSize, lineWidth, _lineColorSub);
@@ -130,19 +128,19 @@ public static class ReplayTimelineChild
 			AddHorizontalLine(drawList, origin, _shownEventTypes.Count * _markerSize, lineWidth, _lineColorSub);
 
 			int startTickIndex = (int)Math.Floor(ImGui.GetScrollX() / _markerSize);
-			int endTickIndex = Math.Min((int)Math.Ceiling((ImGui.GetScrollX() + ImGui.GetWindowWidth()) / _markerSize), replayModel.InputsEvents.Count);
+			int endTickIndex = Math.Min((int)Math.Ceiling((ImGui.GetScrollX() + ImGui.GetWindowWidth()) / _markerSize), replay.TickCount);
 
 			// Always render these invisible buttons so the scroll bar is always visible.
 			ImGui.SetCursorScreenPos(origin);
 			ImGui.InvisibleButton("InvisibleStartMarker", default);
-			ImGui.SetCursorScreenPos(origin + new Vector2((replayModel.InputsEvents.Count - 1) * _markerSize, 0));
+			ImGui.SetCursorScreenPos(origin + new Vector2((replay.TickCount - 1) * _markerSize, 0));
 			ImGui.InvisibleButton("InvisibleEndMarker", default);
 
-			for (int i = Math.Max(startTickIndex, 0); i < Math.Min(endTickIndex, replayModel.InputsEvents.Count); i++)
+			for (int i = Math.Max(startTickIndex, 0); i < Math.Min(endTickIndex, replay.TickCount); i++)
 			{
 				foreach (EventType eventType in _shownEventTypes)
 				{
-					RenderMarker(startTime, eventType, origin, i, drawList, TimelineCache.EventCountsPerTick[eventType].GetValueOrDefault(i));
+					RenderMarker(replay.StartTime, eventType, origin, i, drawList, TimelineCache.EventCountsPerTick[eventType].GetValueOrDefault(i));
 				}
 			}
 
@@ -159,13 +157,13 @@ public static class ReplayTimelineChild
 				{
 					Color textColor = i % 60 == 0 ? Color.Yellow : ImGuiUtils.GetColorU32(ImGuiCol.Text);
 					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, _shownEventTypes.Count * _markerSize + 5));
-					ImGui.TextColored(textColor, Inline.Span(TimeUtils.TickToTime(i, startTime), StringFormats.TimeFormat));
+					ImGui.TextColored(textColor, Inline.Span(TimeUtils.TickToTime(i, replay.StartTime), StringFormats.TimeFormat));
 					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, _shownEventTypes.Count * _markerSize + 21));
 					ImGui.TextColored(textColor, Inline.Span(i));
 				}
 			}
 
-			HandleInput(replayModel, origin);
+			HandleInput(replay, origin);
 		}
 
 		ImGui.EndChild(); // End TimelineEditorChild
@@ -251,7 +249,7 @@ public static class ReplayTimelineChild
 		if (ImGui.IsKeyPressed(ImGuiKey.Home))
 			ImGui.SetScrollX(0);
 		else if (ImGui.IsKeyPressed(ImGuiKey.End))
-			ImGui.SetScrollX(replay.InputsEvents.Count * _markerSize);
+			ImGui.SetScrollX(replay.TickCount * _markerSize);
 
 		if (io.MouseWheel is < -float.Epsilon or > float.Epsilon)
 			ImGui.SetScrollX(ImGui.GetScrollX() - io.MouseWheel * _markerSize * 2.5f);
@@ -268,7 +266,7 @@ public static class ReplayTimelineChild
 	{
 		Vector2 mousePos = ImGui.GetMousePos() - origin;
 		int tickIndex = (int)Math.Floor(mousePos.X / _markerSize);
-		if (tickIndex < 0 || tickIndex >= FileStates.Replay.Object.InputsEvents.Count || tickIndex >= replay.InputsEvents.Count)
+		if (tickIndex < 0 || tickIndex >= replay.TickCount)
 			return;
 
 		if (isDoubleClicked)
@@ -280,20 +278,20 @@ public static class ReplayTimelineChild
 			EventType eventType = _shownEventTypes[eventTypeIndex];
 			Action action = eventType switch
 			{
-				EventType.BoidSpawn => () => FileStates.Replay.Object.BoidSpawnEvents.Add(new(tickIndex, BoidSpawnEventData.CreateDefault())),
-				EventType.LeviathanSpawn => () => FileStates.Replay.Object.LeviathanSpawnEvents.Add(new(tickIndex, LeviathanSpawnEventData.CreateDefault())),
-				EventType.PedeSpawn => () => FileStates.Replay.Object.PedeSpawnEvents.Add(new(tickIndex, PedeSpawnEventData.CreateDefault())),
-				EventType.SpiderEggSpawn => () => FileStates.Replay.Object.SpiderEggSpawnEvents.Add(new(tickIndex, SpiderEggSpawnEventData.CreateDefault())),
-				EventType.SpiderSpawn => () => FileStates.Replay.Object.SpiderSpawnEvents.Add(new(tickIndex, SpiderSpawnEventData.CreateDefault())),
-				EventType.SquidSpawn => () => FileStates.Replay.Object.SquidSpawnEvents.Add(new(tickIndex, SquidSpawnEventData.CreateDefault())),
-				EventType.ThornSpawn => () => FileStates.Replay.Object.ThornSpawnEvents.Add(new(tickIndex, ThornSpawnEventData.CreateDefault())),
-				EventType.DaggerSpawn => () => FileStates.Replay.Object.DaggerSpawnEvents.Add(new(tickIndex, DaggerSpawnEventData.CreateDefault())),
-				EventType.EntityOrientation => () => FileStates.Replay.Object.EntityOrientationEvents.Add(new(tickIndex, EntityOrientationEventData.CreateDefault())),
-				EventType.EntityPosition => () => FileStates.Replay.Object.EntityPositionEvents.Add(new(tickIndex, EntityPositionEventData.CreateDefault())),
-				EventType.EntityTarget => () => FileStates.Replay.Object.EntityTargetEvents.Add(new(tickIndex, EntityTargetEventData.CreateDefault())),
-				EventType.Gem => () => FileStates.Replay.Object.GemEvents.Add(new(tickIndex, GemEventData.CreateDefault())),
-				EventType.Hit => () => FileStates.Replay.Object.HitEvents.Add(new(tickIndex, HitEventData.CreateDefault())),
-				EventType.Transmute => () => FileStates.Replay.Object.TransmuteEvents.Add(new(tickIndex, TransmuteEventData.CreateDefault())),
+				EventType.BoidSpawn => () => replay.BoidSpawnEvents.Add(new(tickIndex, BoidSpawnEventData.CreateDefault())),
+				EventType.LeviathanSpawn => () => replay.LeviathanSpawnEvents.Add(new(tickIndex, LeviathanSpawnEventData.CreateDefault())),
+				EventType.PedeSpawn => () => replay.PedeSpawnEvents.Add(new(tickIndex, PedeSpawnEventData.CreateDefault())),
+				EventType.SpiderEggSpawn => () => replay.SpiderEggSpawnEvents.Add(new(tickIndex, SpiderEggSpawnEventData.CreateDefault())),
+				EventType.SpiderSpawn => () => replay.SpiderSpawnEvents.Add(new(tickIndex, SpiderSpawnEventData.CreateDefault())),
+				EventType.SquidSpawn => () => replay.SquidSpawnEvents.Add(new(tickIndex, SquidSpawnEventData.CreateDefault())),
+				EventType.ThornSpawn => () => replay.ThornSpawnEvents.Add(new(tickIndex, ThornSpawnEventData.CreateDefault())),
+				EventType.DaggerSpawn => () => replay.DaggerSpawnEvents.Add(new(tickIndex, DaggerSpawnEventData.CreateDefault())),
+				EventType.EntityOrientation => () => replay.EntityOrientationEvents.Add(new(tickIndex, EntityOrientationEventData.CreateDefault())),
+				EventType.EntityPosition => () => replay.EntityPositionEvents.Add(new(tickIndex, EntityPositionEventData.CreateDefault())),
+				EventType.EntityTarget => () => replay.EntityTargetEvents.Add(new(tickIndex, EntityTargetEventData.CreateDefault())),
+				EventType.Gem => () => replay.GemEvents.Add(new(tickIndex, GemEventData.CreateDefault())),
+				EventType.Hit => () => replay.HitEvents.Add(new(tickIndex, HitEventData.CreateDefault())),
+				EventType.Transmute => () => replay.TransmuteEvents.Add(new(tickIndex, TransmuteEventData.CreateDefault())),
 				EventType.InitialInputs => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
 				EventType.Inputs => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
 				EventType.End => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),

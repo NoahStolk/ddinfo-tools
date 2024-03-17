@@ -1,8 +1,8 @@
 using DevilDaggersInfo.Core.Replay;
-using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 
@@ -60,6 +60,9 @@ public record EditorReplayModel
 	public List<EditorEvent> ThornSpawnEvents { get; } = [];
 	public List<EditorEvent> TransmuteEvents { get; } = [];
 
+	public int TickCount => InputsEvents.Count;
+	public int EntityCount => _entityIds.Count;
+
 	public static EditorReplayModel CreateDefault()
 	{
 		return new(
@@ -108,14 +111,14 @@ public record EditorReplayModel
 	private void AddReplayEventsData(ReplayEventsData replayEventsData)
 	{
 		int currentTick = 0;
-		foreach (ReplayEvent replayEvent in replayEventsData.Events)
+		foreach (IEventData eventData in replayEventsData.Events.Select(e => e.Data))
 		{
-			if (replayEvent.Data is ISpawnEventData spawnEventData)
+			if (eventData is ISpawnEventData spawnEventData)
 			{
 				_entityIds.Add(spawnEventData.EntityType);
 			}
 
-			switch (replayEvent.Data)
+			switch (eventData)
 			{
 				case InputsEventData inputsEventData:
 					InputsEvents.Add(inputsEventData);
@@ -151,6 +154,48 @@ public record EditorReplayModel
 				case TransmuteEventData transmuteEventData: TransmuteEvents.Add(new(currentTick, transmuteEventData)); break;
 			}
 		}
+	}
+
+	public ReplayEventsData CompileEventsData()
+	{
+		ReplayEventsData replayEventsData = new();
+
+		for (int i = 0; i < InputsEvents.Count; i++)
+		{
+			AddEvents(BoidSpawnEvents);
+			AddEvents(DaggerSpawnEvents);
+			AddEvents(EntityOrientationEvents);
+			AddEvents(EntityPositionEvents);
+			AddEvents(EntityTargetEvents);
+			AddEvents(GemEvents);
+			AddEvents(HitEvents);
+			AddEvents(LeviathanSpawnEvents);
+			AddEvents(PedeSpawnEvents);
+			AddEvents(SpiderEggSpawnEvents);
+			AddEvents(SpiderSpawnEvents);
+			AddEvents(SquidSpawnEvents);
+			AddEvents(ThornSpawnEvents);
+			AddEvents(TransmuteEvents);
+
+			if (i == 0)
+				replayEventsData.AddEvent(new InitialInputsEventData(InputsEvents[i].Left, InputsEvents[i].Right, InputsEvents[i].Forward, InputsEvents[i].Backward, InputsEvents[i].Jump, InputsEvents[i].Shoot, InputsEvents[i].ShootHoming, InputsEvents[i].MouseX, InputsEvents[i].MouseY, LookSpeed));
+			else
+				replayEventsData.AddEvent(InputsEvents[i]);
+
+			void AddEvents(List<EditorEvent> events)
+			{
+				for (int j = 0; j < events.Count; j++)
+				{
+					EditorEvent editorEvent = events[j];
+					if (editorEvent.TickIndex == i)
+						replayEventsData.AddEvent(editorEvent.Data);
+				}
+			}
+		}
+
+		replayEventsData.AddEvent(new EndEventData());
+
+		return replayEventsData;
 	}
 
 	/// <summary>
