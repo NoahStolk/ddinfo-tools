@@ -14,6 +14,6 @@ public sealed class GemEvents : IEventTypeRenderer<GemEventData>
 
 	public static void Render(int eventIndex, int entityId, GemEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumn(eventIndex);
 	}
 }

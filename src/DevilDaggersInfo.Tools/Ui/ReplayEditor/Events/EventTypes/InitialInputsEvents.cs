@@ -1,15 +1,11 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
 public sealed class InitialInputsEvents : IEventTypeRenderer<InitialInputsEventData>
 {
-	private static readonly string[] _jumpTypeNamesArray = EnumUtils.JumpTypeNames.Values.ToArray();
-	private static readonly string[] _shootTypeNamesArray = EnumUtils.ShootTypeNames.Values.ToArray();
-
 	public static int ColumnCount => 11;
 
 	public static void SetupColumns()
@@ -29,16 +25,16 @@ public sealed class InitialInputsEvents : IEventTypeRenderer<InitialInputsEventD
 
 	public static void Render(int eventIndex, int entityId, InitialInputsEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
-		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(InitialInputsEventData.Left), ref e.Left, "On", "Off");
-		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(InitialInputsEventData.Right), ref e.Right, "On", "Off");
-		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(InitialInputsEventData.Forward), ref e.Forward, "On", "Off");
-		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(InitialInputsEventData.Backward), ref e.Backward, "On", "Off");
-		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(InitialInputsEventData.Jump), ref e.Jump, EnumUtils.JumpTypes, _jumpTypeNamesArray);
-		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(InitialInputsEventData.Shoot), ref e.Shoot, EnumUtils.ShootTypes, _shootTypeNamesArray);
-		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(InitialInputsEventData.ShootHoming), ref e.ShootHoming, EnumUtils.ShootTypes, _shootTypeNamesArray);
-		EventTypeRendererUtils.NextColumnInputShort(eventIndex, nameof(InitialInputsEventData.MouseX), ref e.MouseX);
-		EventTypeRendererUtils.NextColumnInputShort(eventIndex, nameof(InitialInputsEventData.MouseY), ref e.MouseY);
-		EventTypeRendererUtils.NextColumnInputFloat(eventIndex, nameof(InitialInputsEventData.LookSpeed), ref e.LookSpeed, "%.2f");
+		EventTypeRendererUtils.NextColumn(eventIndex);
+		EventTypeRendererUtils.NextColumnBool(e.Left, "On", "Off");
+		EventTypeRendererUtils.NextColumnBool(e.Right, "On", "Off");
+		EventTypeRendererUtils.NextColumnBool(e.Forward, "On", "Off");
+		EventTypeRendererUtils.NextColumnBool(e.Backward, "On", "Off");
+		EventTypeRendererUtils.NextColumn(e.Jump);
+		EventTypeRendererUtils.NextColumn(e.Shoot);
+		EventTypeRendererUtils.NextColumn(e.ShootHoming);
+		EventTypeRendererUtils.NextColumn(e.MouseX);
+		EventTypeRendererUtils.NextColumn(e.MouseY);
+		EventTypeRendererUtils.NextColumn(e.LookSpeed, "0.00");
 	}
 }

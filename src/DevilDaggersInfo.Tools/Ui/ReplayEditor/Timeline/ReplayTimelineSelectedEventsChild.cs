@@ -2,7 +2,6 @@ using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
@@ -36,15 +35,24 @@ public static class ReplayTimelineSelectedEventsChild
 			ImGui.TableNextRow();
 
 			InputsEventData e = replay.InputsEvents[selectedTick];
-			EventTypeRendererUtils.NextColumnCheckbox(selectedTick, nameof(InputsEventData.Left), ref e.Left, "On", "Off");
-			EventTypeRendererUtils.NextColumnCheckbox(selectedTick, nameof(InputsEventData.Right), ref e.Right, "On", "Off");
-			EventTypeRendererUtils.NextColumnCheckbox(selectedTick, nameof(InputsEventData.Forward), ref e.Forward, "On", "Off");
-			EventTypeRendererUtils.NextColumnCheckbox(selectedTick, nameof(InputsEventData.Backward), ref e.Backward, "On", "Off");
-			EventTypeRendererUtils.NextColumnInputByteEnum(selectedTick, nameof(InputsEventData.Jump), ref e.Jump, EnumUtils.JumpTypes, _jumpTypeNamesArray);
-			EventTypeRendererUtils.NextColumnInputByteEnum(selectedTick, nameof(InputsEventData.Shoot), ref e.Shoot, EnumUtils.ShootTypes, _shootTypeNamesArray);
-			EventTypeRendererUtils.NextColumnInputByteEnum(selectedTick, nameof(InputsEventData.ShootHoming), ref e.ShootHoming, EnumUtils.ShootTypes, _shootTypeNamesArray);
-			EventTypeRendererUtils.NextColumnInputShort(selectedTick, nameof(InputsEventData.MouseX), ref e.MouseX);
-			EventTypeRendererUtils.NextColumnInputShort(selectedTick, nameof(InputsEventData.MouseY), ref e.MouseY);
+			ImGui.TableNextColumn();
+			UtilsRendering.Checkbox(selectedTick, nameof(InputsEventData.Left), ref e.Left, "On", "Off");
+			ImGui.TableNextColumn();
+			UtilsRendering.Checkbox(selectedTick, nameof(InputsEventData.Right), ref e.Right, "On", "Off");
+			ImGui.TableNextColumn();
+			UtilsRendering.Checkbox(selectedTick, nameof(InputsEventData.Forward), ref e.Forward, "On", "Off");
+			ImGui.TableNextColumn();
+			UtilsRendering.Checkbox(selectedTick, nameof(InputsEventData.Backward), ref e.Backward, "On", "Off");
+			ImGui.TableNextColumn();
+			UtilsRendering.InputByteEnum(selectedTick, nameof(InputsEventData.Jump), ref e.Jump, EnumUtils.JumpTypes, _jumpTypeNamesArray);
+			ImGui.TableNextColumn();
+			UtilsRendering.InputByteEnum(selectedTick, nameof(InputsEventData.Shoot), ref e.Shoot, EnumUtils.ShootTypes, _shootTypeNamesArray);
+			ImGui.TableNextColumn();
+			UtilsRendering.InputByteEnum(selectedTick, nameof(InputsEventData.ShootHoming), ref e.ShootHoming, EnumUtils.ShootTypes, _shootTypeNamesArray);
+			ImGui.TableNextColumn();
+			UtilsRendering.InputShort(selectedTick, nameof(InputsEventData.MouseX), ref e.MouseX);
+			ImGui.TableNextColumn();
+			UtilsRendering.InputShort(selectedTick, nameof(InputsEventData.MouseY), ref e.MouseY);
 
 			ImGui.EndTable();
 		}

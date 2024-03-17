@@ -17,8 +17,8 @@ public sealed class EntityPositionEvents : IEventTypeRenderer<EntityPositionEven
 
 	public static void Render(int eventIndex, int entityId, EntityPositionEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumn(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replay, e.EntityId);
-		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(EntityPositionEventData.Position), ref e.Position);
+		EventTypeRendererUtils.NextColumn(e.Position);
 	}
 }

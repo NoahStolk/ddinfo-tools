@@ -1,14 +1,11 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
 public sealed class SpiderSpawnEvents : IEventTypeRenderer<SpiderSpawnEventData>
 {
-	private static readonly string[] _spiderTypeNamesArray = EnumUtils.SpiderTypeNames.Values.ToArray();
-
 	public static int ColumnCount => 5;
 
 	public static void SetupColumns()
@@ -22,10 +19,10 @@ public sealed class SpiderSpawnEvents : IEventTypeRenderer<SpiderSpawnEventData>
 
 	public static void Render(int eventIndex, int entityId, SpiderSpawnEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
+		EventTypeRendererUtils.NextColumn(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replay, entityId);
-		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(SpiderSpawnEventData.SpiderType), ref e.SpiderType, EnumUtils.SpiderTypes, _spiderTypeNamesArray);
-		EventTypeRendererUtils.NextColumnInputInt(eventIndex, nameof(SpiderSpawnEventData.A), ref e.A);
-		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(SpiderSpawnEventData.Position), ref e.Position, "%.2f");
+		EventTypeRendererUtils.NextColumnEnum(e.SpiderType);
+		EventTypeRendererUtils.NextColumn(e.A);
+		EventTypeRendererUtils.NextColumnVector3(e.Position, "0.00");
 	}
 }
