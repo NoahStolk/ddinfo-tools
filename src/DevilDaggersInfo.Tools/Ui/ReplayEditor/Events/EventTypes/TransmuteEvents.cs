@@ -21,7 +21,7 @@ public sealed class TransmuteEvents : IEventTypeRenderer<TransmuteEventData>
 	public static void Render(int eventIndex, int entityId, TransmuteEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
-		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(TransmuteEventData.EntityId), replay, ref e.EntityId);
+		EventTypeRendererUtils.NextColumnEntityId(replay, e.EntityId);
 		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(TransmuteEventData.A), ref e.A);
 		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(TransmuteEventData.B), ref e.B);
 		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(TransmuteEventData.C), ref e.C);

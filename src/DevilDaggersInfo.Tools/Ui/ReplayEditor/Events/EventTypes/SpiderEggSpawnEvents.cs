@@ -21,7 +21,7 @@ public sealed class SpiderEggSpawnEvents : IEventTypeRenderer<SpiderEggSpawnEven
 	{
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replay, entityId);
-		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(SpiderEggSpawnEventData.SpawnerEntityId), replay, ref e.SpawnerEntityId);
+		EventTypeRendererUtils.NextColumnEntityId(replay, e.SpawnerEntityId);
 		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(SpiderEggSpawnEventData.Position), ref e.Position, "%.2f");
 		EventTypeRendererUtils.NextColumnInputVector3(eventIndex, nameof(SpiderEggSpawnEventData.TargetPosition), ref e.TargetPosition, "%.2f");
 	}

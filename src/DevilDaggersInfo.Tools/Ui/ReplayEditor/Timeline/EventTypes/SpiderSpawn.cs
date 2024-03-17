@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -28,17 +27,17 @@ public static class SpiderSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("Type");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputByteEnum(uniqueId, nameof(SpiderSpawnEventData.SpiderType), ref e.SpiderType, EnumUtils.SpiderTypes, _spiderTypeNamesArray);
+				UtilsRendering.InputByteEnum(uniqueId, nameof(SpiderSpawnEventData.SpiderType), ref e.SpiderType, EnumUtils.SpiderTypes, _spiderTypeNamesArray);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Position");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputVector3(uniqueId, nameof(SpiderSpawnEventData.Position), ref e.Position, "%.2f");
+				UtilsRendering.InputVector3(uniqueId, nameof(SpiderSpawnEventData.Position), ref e.Position, "%.2f");
 
 				ImGui.TableNextColumn();
 				ImGui.Text("?");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt(uniqueId, nameof(SpiderSpawnEventData.A), ref e.A);
+				UtilsRendering.InputInt(uniqueId, nameof(SpiderSpawnEventData.A), ref e.A);
 
 				ImGui.EndTable();
 			}

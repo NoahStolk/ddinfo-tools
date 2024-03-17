@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
@@ -25,12 +24,12 @@ public static class EntityPosition
 				ImGui.TableNextColumn();
 				ImGui.Text("Entity Id");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.EditableEntityId(uniqueId, nameof(EntityPositionEventData.EntityId), replay, ref e.EntityId);
+				UtilsRendering.EditableEntityId(uniqueId, nameof(EntityPositionEventData.EntityId), replay, ref e.EntityId);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Position");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt16Vec3(uniqueId, nameof(EntityPositionEventData.Position), ref e.Position);
+				UtilsRendering.InputInt16Vec3(uniqueId, nameof(EntityPositionEventData.Position), ref e.Position);
 
 				ImGui.EndTable();
 			}

@@ -4,7 +4,6 @@ using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
@@ -96,7 +95,7 @@ public static class ReplayTimelineChild
 				string name = EnumUtils.EventTypeFriendlyNames[eventType];
 
 				ImGui.SetCursorScreenPos(origin + new Vector2(5, i * _markerSize + 5));
-				ImGui.TextColored(EventTypeRendererUtils.GetEventTypeColor(eventType), name);
+				ImGui.TextColored(eventType.GetColor(), name);
 
 				AddHorizontalLine(drawList, origin, i * _markerSize, legendWidth, _lineColorDefault);
 			}
@@ -119,7 +118,7 @@ public static class ReplayTimelineChild
 			{
 				AddHorizontalLine(drawList, origin, i * _markerSize, lineWidth, _lineColorSub);
 
-				Vector4 backgroundColor = EventTypeRendererUtils.GetEventTypeColor(_shownEventTypes[i]) with { W = 0.1f };
+				Vector4 backgroundColor = _shownEventTypes[i].GetColor() with { W = 0.1f };
 				drawList.AddRectFilled(origin + new Vector2(0, i * _markerSize), origin + new Vector2(lineWidth, (i + 1) * _markerSize), ImGui.GetColorU32(backgroundColor));
 			}
 
@@ -187,7 +186,7 @@ public static class ReplayTimelineChild
 		Vector2 markerSizeVec = new(_markerSize, _markerSize);
 		bool isHovering = ImGui.IsMouseHoveringRect(rectOrigin, rectOrigin + markerSizeVec);
 
-		drawList.AddRectFilled(rectOrigin, rectOrigin + markerSizeVec, ImGui.GetColorU32(EventTypeRendererUtils.GetEventTypeColor(eventType) with { W = isHovering ? 0.7f : 0.4f }));
+		drawList.AddRectFilled(rectOrigin, rectOrigin + markerSizeVec, ImGui.GetColorU32(eventType.GetColor() with { W = isHovering ? 0.7f : 0.4f }));
 
 		float xOffset = eventCount < 10 ? 9 : 5;
 		drawList.AddText(rectOrigin + new Vector2(xOffset, 5), 0xffffffff, eventCount > 99 ? Inline.Span("XX") : Inline.Span($"{eventCount}"));
@@ -195,7 +194,7 @@ public static class ReplayTimelineChild
 		if (isHovering)
 		{
 			ImGui.BeginTooltip();
-			ImGui.TextColored(EventTypeRendererUtils.GetEventTypeColor(eventType), EnumUtils.EventTypeFriendlyNames[eventType]);
+			ImGui.TextColored(eventType.GetColor(), EnumUtils.EventTypeFriendlyNames[eventType]);
 			if (ImGui.BeginTable(Inline.Span($"MarkerTooltipTable_{tickIndex}_{EnumUtils.EventTypeNames[eventType]}"), 2, ImGuiTableFlags.Borders))
 			{
 				ImGui.TableNextColumn();

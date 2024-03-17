@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -28,17 +27,17 @@ public static class BoidSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("Spawner Entity Id");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.EditableEntityId(uniqueId, nameof(BoidSpawnEventData.SpawnerEntityId), replay, ref e.SpawnerEntityId);
+				UtilsRendering.EditableEntityId(uniqueId, nameof(BoidSpawnEventData.SpawnerEntityId), replay, ref e.SpawnerEntityId);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Type");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputByteEnum(uniqueId, nameof(BoidSpawnEventData.BoidType), ref e.BoidType, EnumUtils.BoidTypes, _boidTypeNamesArray);
+				UtilsRendering.InputByteEnum(uniqueId, nameof(BoidSpawnEventData.BoidType), ref e.BoidType, EnumUtils.BoidTypes, _boidTypeNamesArray);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Position");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt16Vec3(uniqueId, nameof(BoidSpawnEventData.Position), ref e.Position);
+				UtilsRendering.InputInt16Vec3(uniqueId, nameof(BoidSpawnEventData.Position), ref e.Position);
 
 				ImGui.EndTable();
 			}
@@ -55,17 +54,17 @@ public static class BoidSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("Orientation");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt16Mat3x3Square(uniqueId, nameof(BoidSpawnEventData.Orientation), ref e.Orientation);
+				UtilsRendering.InputInt16Mat3x3Square(uniqueId, nameof(BoidSpawnEventData.Orientation), ref e.Orientation);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Velocity");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputVector3(uniqueId, nameof(BoidSpawnEventData.Velocity), ref e.Velocity, "%.2f");
+				UtilsRendering.InputVector3(uniqueId, nameof(BoidSpawnEventData.Velocity), ref e.Velocity, "%.2f");
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Speed");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputFloat(uniqueId, nameof(BoidSpawnEventData.Speed), ref e.Speed, "%.2f");
+				UtilsRendering.InputFloat(uniqueId, nameof(BoidSpawnEventData.Speed), ref e.Speed, "%.2f");
 
 				ImGui.EndTable();
 			}
