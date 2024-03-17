@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-
 namespace DevilDaggersInfo.Tools.EditorFileState;
 
 public class FileState<TObject, TEditType>
@@ -9,7 +7,8 @@ public class FileState<TObject, TEditType>
 	private const int _maxHistoryEntries = 100;
 
 	private readonly TEditType _defaultEditType;
-	private readonly Func<TObject, byte[]> _toBytes;
+	private readonly Func<TObject, byte[]> _toHash;
+	private readonly Func<TObject, byte[]> _save;
 	private readonly Func<TObject, TObject> _deepCopy;
 	private readonly Func<TEditType, TEditType, bool> _editTypeEquals;
 	private readonly Action<Action> _savePromptAction;
@@ -21,23 +20,25 @@ public class FileState<TObject, TEditType>
 	public FileState(
 		TObject obj,
 		TEditType defaultEditType,
-		Func<TObject, byte[]> toBytes,
+		Func<TObject, byte[]> toHash,
+		Func<TObject, byte[]> save,
 		Func<TObject, TObject> deepCopy,
 		Func<TEditType, TEditType, bool> editTypeEquals,
 		Action<Action> savePromptAction)
 	{
 		_obj = obj;
-		_toBytes = toBytes;
+		_toHash = toHash;
+		_save = save;
 		_deepCopy = deepCopy;
 		_defaultEditType = defaultEditType;
 		_editTypeEquals = editTypeEquals;
 		_savePromptAction = savePromptAction;
 
-		byte[] fileBytes = _toBytes(obj);
-		_memoryMd5Hash = MD5.HashData(fileBytes);
-		_fileMd5Hash = MD5.HashData(fileBytes);
+		byte[] hash = _toHash(obj);
+		_memoryMd5Hash = hash;
+		_fileMd5Hash = hash;
 
-		History = new List<HistoryEntry<TObject, TEditType>> { new(obj, MD5.HashData(fileBytes), defaultEditType) };
+		History = new List<HistoryEntry<TObject, TEditType>> { new(obj, hash, defaultEditType) };
 	}
 
 	public TObject Object
@@ -47,8 +48,7 @@ public class FileState<TObject, TEditType>
 		{
 			_obj = value;
 
-			byte[] fileBytes = _toBytes(_obj);
-			_memoryMd5Hash = MD5.HashData(fileBytes);
+			_memoryMd5Hash = _toHash(_obj);
 			IsModified = !_fileMd5Hash.SequenceEqual(_memoryMd5Hash);
 		}
 	}
@@ -77,7 +77,7 @@ public class FileState<TObject, TEditType>
 
 	public void SaveFile(string path)
 	{
-		File.WriteAllBytes(path, _toBytes(_obj));
+		File.WriteAllBytes(path, _save(_obj));
 		SetFile(path, Path.GetFileName(path));
 	}
 
@@ -104,7 +104,7 @@ public class FileState<TObject, TEditType>
 	public void Save(TEditType editType)
 	{
 		TObject copy = _deepCopy(Object);
-		byte[] hash = MD5.HashData(_toBytes(copy));
+		byte[] hash = _toHash(copy);
 
 		if (_editTypeEquals(editType, _defaultEditType))
 		{
