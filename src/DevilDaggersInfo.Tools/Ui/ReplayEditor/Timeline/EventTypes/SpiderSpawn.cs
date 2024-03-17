@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -9,7 +8,7 @@ public static class SpiderSpawn
 {
 	private static readonly string[] _spiderTypeNamesArray = EnumUtils.SpiderTypeNames.Values.ToArray();
 
-	public static void RenderEdit(int uniqueId, SpiderSpawnEventData e, EditorReplayModel replay)
+	public static void RenderEdit(int uniqueId, SpiderSpawnEventData e)
 	{
 		const float leftColumnWidth = 120;
 		const float rightColumnWidth = 160;

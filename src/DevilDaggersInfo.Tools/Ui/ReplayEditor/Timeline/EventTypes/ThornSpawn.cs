@@ -1,12 +1,11 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 
 public static class ThornSpawn
 {
-	public static void RenderEdit(int uniqueId, ThornSpawnEventData e, EditorReplayModel replay)
+	public static void RenderEdit(int uniqueId, ThornSpawnEventData e)
 	{
 		const float leftColumnWidth = 120;
 		const float rightColumnWidth = 160;

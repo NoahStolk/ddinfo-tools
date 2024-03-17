@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -18,7 +17,7 @@ public static class DaggerSpawn
 		"Lvl4 Splash",
 	];
 
-	public static void RenderEdit(int uniqueId, DaggerSpawnEventData e, EditorReplayModel replay)
+	public static void RenderEdit(int uniqueId, DaggerSpawnEventData e)
 	{
 		const float leftColumnWidth = 120;
 		const float rightColumnWidth = 160;
