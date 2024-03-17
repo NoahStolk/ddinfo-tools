@@ -4,6 +4,7 @@ using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -71,31 +72,31 @@ public static class ReplayTimelineSelectedEventsChild
 				else if (ImGui.CollapsingHeader(Inline.Span($"Event data##{i}")))
 				{
 					if (replayEvent.Data is BoidSpawnEventData boidSpawn)
-						BoidSpawnEvents.RenderEdit(i, boidSpawn, replay);
+						BoidSpawn.RenderEdit(i, boidSpawn, replay);
 					else if (replayEvent.Data is DaggerSpawnEventData daggerSpawn)
-						DaggerSpawnEvents.RenderEdit(i, daggerSpawn, replay);
+						DaggerSpawn.RenderEdit(i, daggerSpawn, replay);
 					else if (replayEvent.Data is EntityOrientationEventData entityOrientation)
-						EntityOrientationEvents.RenderEdit(i, entityOrientation, replay);
+						EntityOrientation.RenderEdit(i, entityOrientation, replay);
 					else if (replayEvent.Data is EntityPositionEventData entityPosition)
-						EntityPositionEvents.RenderEdit(i, entityPosition, replay);
+						EntityPosition.RenderEdit(i, entityPosition, replay);
 					else if (replayEvent.Data is EntityTargetEventData entityTarget)
-						EntityTargetEvents.RenderEdit(i, entityTarget, replay);
+						EntityTarget.RenderEdit(i, entityTarget, replay);
 					else if (replayEvent.Data is HitEventData hitEvent)
-						HitEvents.RenderEdit(i, hitEvent, replay);
+						Hit.RenderEdit(i, hitEvent, replay);
 					else if (replayEvent.Data is LeviathanSpawnEventData leviathanSpawn)
-						LeviathanSpawnEvents.RenderEdit(i, leviathanSpawn, replay);
+						LeviathanSpawn.RenderEdit(i, leviathanSpawn, replay);
 					else if (replayEvent.Data is PedeSpawnEventData pedeSpawn)
-						PedeSpawnEvents.RenderEdit(i, pedeSpawn, replay);
+						PedeSpawn.RenderEdit(i, pedeSpawn, replay);
 					else if (replayEvent.Data is SpiderEggSpawnEventData spiderEggSpawn)
-						SpiderEggSpawnEvents.RenderEdit(i, spiderEggSpawn, replay);
+						SpiderEggSpawn.RenderEdit(i, spiderEggSpawn, replay);
 					else if (replayEvent.Data is SpiderSpawnEventData spiderSpawn)
-						SpiderSpawnEvents.RenderEdit(i, spiderSpawn, replay);
+						SpiderSpawn.RenderEdit(i, spiderSpawn, replay);
 					else if (replayEvent.Data is SquidSpawnEventData squidSpawn)
-						SquidSpawnEvents.RenderEdit(i, squidSpawn, replay);
+						SquidSpawn.RenderEdit(i, squidSpawn, replay);
 					else if (replayEvent.Data is ThornSpawnEventData thornSpawn)
-						ThornSpawnEvents.RenderEdit(i, thornSpawn, replay);
+						ThornSpawn.RenderEdit(i, thornSpawn, replay);
 					else if (replayEvent.Data is TransmuteEventData transmute)
-						TransmuteEvents.RenderEdit(i, transmute, replay);
+						Transmute.RenderEdit(i, transmute, replay);
 				}
 			}
 
