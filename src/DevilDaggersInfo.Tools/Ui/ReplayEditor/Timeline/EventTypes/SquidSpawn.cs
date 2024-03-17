@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -9,7 +8,7 @@ public static class SquidSpawn
 {
 	private static readonly string[] _squidTypeNamesArray = EnumUtils.SquidTypeNames.Values.ToArray();
 
-	public static void RenderEdit(int uniqueId, SquidSpawnEventData e, EditorReplayModel replay)
+	public static void RenderEdit(int uniqueId, SquidSpawnEventData e)
 	{
 		const float leftColumnWidth = 120;
 		const float rightColumnWidth = 160;

@@ -107,7 +107,7 @@ public static class ReplayTimelineSelectedEventsChild
 					if (replayEvent.Data is BoidSpawnEventData boidSpawn)
 						BoidSpawn.RenderEdit(i, boidSpawn, replay);
 					else if (replayEvent.Data is DaggerSpawnEventData daggerSpawn)
-						DaggerSpawn.RenderEdit(i, daggerSpawn, replay);
+						DaggerSpawn.RenderEdit(i, daggerSpawn);
 					else if (replayEvent.Data is EntityOrientationEventData entityOrientation)
 						EntityOrientation.RenderEdit(i, entityOrientation, replay);
 					else if (replayEvent.Data is EntityPositionEventData entityPosition)
@@ -119,15 +119,15 @@ public static class ReplayTimelineSelectedEventsChild
 					else if (replayEvent.Data is LeviathanSpawnEventData leviathanSpawn)
 						LeviathanSpawn.RenderEdit(i, leviathanSpawn, replay);
 					else if (replayEvent.Data is PedeSpawnEventData pedeSpawn)
-						PedeSpawn.RenderEdit(i, pedeSpawn, replay);
+						PedeSpawn.RenderEdit(i, pedeSpawn);
 					else if (replayEvent.Data is SpiderEggSpawnEventData spiderEggSpawn)
 						SpiderEggSpawn.RenderEdit(i, spiderEggSpawn, replay);
 					else if (replayEvent.Data is SpiderSpawnEventData spiderSpawn)
-						SpiderSpawn.RenderEdit(i, spiderSpawn, replay);
+						SpiderSpawn.RenderEdit(i, spiderSpawn);
 					else if (replayEvent.Data is SquidSpawnEventData squidSpawn)
-						SquidSpawn.RenderEdit(i, squidSpawn, replay);
+						SquidSpawn.RenderEdit(i, squidSpawn);
 					else if (replayEvent.Data is ThornSpawnEventData thornSpawn)
-						ThornSpawn.RenderEdit(i, thornSpawn, replay);
+						ThornSpawn.RenderEdit(i, thornSpawn);
 					else if (replayEvent.Data is TransmuteEventData transmute)
 						Transmute.RenderEdit(i, transmute, replay);
 				}
