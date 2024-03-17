@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
@@ -25,17 +24,17 @@ public static class Hit
 				ImGui.TableNextColumn();
 				ImGui.Text("Entity Id A");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.EditableEntityId(uniqueId, nameof(HitEventData.EntityIdA), replay, ref e.EntityIdA);
+				UtilsRendering.EditableEntityId(uniqueId, nameof(HitEventData.EntityIdA), replay, ref e.EntityIdA);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Entity Id B");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.EditableEntityId(uniqueId, nameof(HitEventData.EntityIdB), replay, ref e.EntityIdB);
+				UtilsRendering.EditableEntityId(uniqueId, nameof(HitEventData.EntityIdB), replay, ref e.EntityIdB);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("User Data");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt(uniqueId, nameof(HitEventData.UserData), ref e.UserData);
+				UtilsRendering.InputInt(uniqueId, nameof(HitEventData.UserData), ref e.UserData);
 
 				ImGui.EndTable();
 			}

@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
@@ -25,7 +24,7 @@ public static class LeviathanSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("?");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.EditableEntityId(uniqueId, nameof(EntityTargetEventData.EntityId), replay, ref e.A);
+				UtilsRendering.EditableEntityId(uniqueId, nameof(EntityTargetEventData.EntityId), replay, ref e.A);
 
 				ImGui.EndTable();
 			}

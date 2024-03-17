@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
@@ -25,12 +24,12 @@ public static class EntityOrientation
 				ImGui.TableNextColumn();
 				ImGui.Text("Entity Id");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.EditableEntityId(uniqueId, nameof(EntityOrientationEventData.EntityId), replay, ref e.EntityId);
+				UtilsRendering.EditableEntityId(uniqueId, nameof(EntityOrientationEventData.EntityId), replay, ref e.EntityId);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Orientation");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt16Mat3x3Square(uniqueId, nameof(EntityOrientationEventData.Orientation), ref e.Orientation);
+				UtilsRendering.InputInt16Mat3x3Square(uniqueId, nameof(EntityOrientationEventData.Orientation), ref e.Orientation);
 
 				ImGui.EndTable();
 			}

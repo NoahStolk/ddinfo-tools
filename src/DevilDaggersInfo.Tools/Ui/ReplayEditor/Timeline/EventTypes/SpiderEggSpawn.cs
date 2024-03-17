@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
@@ -25,17 +24,17 @@ public static class SpiderEggSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("Spawner Entity Id");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.EditableEntityId(uniqueId, nameof(SpiderEggSpawnEventData.SpawnerEntityId), replay, ref e.SpawnerEntityId);
+				UtilsRendering.EditableEntityId(uniqueId, nameof(SpiderEggSpawnEventData.SpawnerEntityId), replay, ref e.SpawnerEntityId);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Position");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputVector3(uniqueId, nameof(SpiderEggSpawnEventData.Position), ref e.Position, "%.2f");
+				UtilsRendering.InputVector3(uniqueId, nameof(SpiderEggSpawnEventData.Position), ref e.Position, "%.2f");
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Target Position");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputVector3(uniqueId, nameof(SpiderEggSpawnEventData.TargetPosition), ref e.TargetPosition, "%.2f");
+				UtilsRendering.InputVector3(uniqueId, nameof(SpiderEggSpawnEventData.TargetPosition), ref e.TargetPosition, "%.2f");
 
 				ImGui.EndTable();
 			}

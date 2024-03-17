@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -37,17 +36,17 @@ public static class DaggerSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("Type");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputByteEnum(uniqueId, nameof(DaggerSpawnEventData.DaggerType), ref e.DaggerType, EnumUtils.DaggerTypes, _daggerTypeNamesArray);
+				UtilsRendering.InputByteEnum(uniqueId, nameof(DaggerSpawnEventData.DaggerType), ref e.DaggerType, EnumUtils.DaggerTypes, _daggerTypeNamesArray);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("?");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt(uniqueId, nameof(DaggerSpawnEventData.A), ref e.A);
+				UtilsRendering.InputInt(uniqueId, nameof(DaggerSpawnEventData.A), ref e.A);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Shot/Rapid");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.Checkbox(uniqueId, nameof(DaggerSpawnEventData.IsShot), ref e.IsShot, "Shot", "Rapid");
+				UtilsRendering.Checkbox(uniqueId, nameof(DaggerSpawnEventData.IsShot), ref e.IsShot, "Shot", "Rapid");
 
 				ImGui.EndTable();
 			}
@@ -64,12 +63,12 @@ public static class DaggerSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("Position");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt16Vec3(uniqueId, nameof(DaggerSpawnEventData.Position), ref e.Position);
+				UtilsRendering.InputInt16Vec3(uniqueId, nameof(DaggerSpawnEventData.Position), ref e.Position);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Orientation");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt16Mat3x3Square(uniqueId, nameof(DaggerSpawnEventData.Orientation), ref e.Orientation);
+				UtilsRendering.InputInt16Mat3x3Square(uniqueId, nameof(DaggerSpawnEventData.Orientation), ref e.Orientation);
 
 				ImGui.EndTable();
 			}

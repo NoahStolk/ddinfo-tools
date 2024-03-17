@@ -75,7 +75,7 @@ public static class ReplayTimelineSelectedEventsChild
 				ImGui.TableNextColumn();
 
 				bool temp = _checkedEvents.Contains(replayEvent);
-				ImGui.PushStyleColor(ImGuiCol.Text, EventTypeRendererUtils.GetEventTypeColor(eventType));
+				ImGui.PushStyleColor(ImGuiCol.Text, eventType.GetColor());
 				if (ImGui.Checkbox(Inline.Span($"{EnumUtils.EventTypeFriendlyNames[eventType]}##EventCheckbox{i}"), ref temp))
 				{
 					if (temp)

@@ -27,7 +27,7 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEventData>
 	{
 		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replay, entityId);
-		EventTypeRendererUtils.NextColumnEditableEntityId(eventIndex, nameof(BoidSpawnEventData.SpawnerEntityId), replay, ref e.SpawnerEntityId);
+		EventTypeRendererUtils.NextColumnEntityId(replay, e.SpawnerEntityId);
 		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(BoidSpawnEventData.BoidType), ref e.BoidType, EnumUtils.BoidTypes, _boidTypeNamesArray);
 		EventTypeRendererUtils.NextColumnInputInt16Vec3(eventIndex, nameof(BoidSpawnEventData.Position), ref e.Position);
 		EventTypeRendererUtils.NextColumnInputInt16Mat3x3(eventIndex, nameof(BoidSpawnEventData.Orientation), ref e.Orientation);

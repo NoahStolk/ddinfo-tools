@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
@@ -25,17 +24,17 @@ public static class ThornSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("Position");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputVector3(uniqueId, nameof(ThornSpawnEventData.Position), ref e.Position, "%.2f");
+				UtilsRendering.InputVector3(uniqueId, nameof(ThornSpawnEventData.Position), ref e.Position, "%.2f");
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Rotation");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputFloat(uniqueId, nameof(ThornSpawnEventData.RotationInRadians), ref e.RotationInRadians, "%.2f");
+				UtilsRendering.InputFloat(uniqueId, nameof(ThornSpawnEventData.RotationInRadians), ref e.RotationInRadians, "%.2f");
 
 				ImGui.TableNextColumn();
 				ImGui.Text("?");
 				ImGui.TableNextColumn();
-				EventTypeRendererUtils.InputInt(uniqueId, nameof(ThornSpawnEventData.A), ref e.A);
+				UtilsRendering.InputInt(uniqueId, nameof(ThornSpawnEventData.A), ref e.A);
 
 				ImGui.EndTable();
 			}
