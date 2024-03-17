@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
@@ -12,9 +11,12 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 
 public static class ReplayTimelineSelectedEventsChild
 {
+	private static readonly string[] _jumpTypeNamesArray = EnumUtils.JumpTypeNames.Values.ToArray();
+	private static readonly string[] _shootTypeNamesArray = EnumUtils.ShootTypeNames.Values.ToArray();
+
 	private static readonly List<EditorEvent> _checkedEvents = [];
 
-	public static void Render(EditorReplayModel replay, List<EditorEvent> selectedEvents, EventCache selectedEventDataCache)
+	public static void Render(EditorReplayModel replay, List<EditorEvent> selectedEvents, int selectedTick)
 	{
 		if (selectedEvents.Count == 0)
 		{
@@ -24,14 +26,26 @@ public static class ReplayTimelineSelectedEventsChild
 
 		ImGui.SeparatorText("Inputs");
 
-		if (selectedEventDataCache.InitialInputsEvents.Count == 1)
-			EventTypeRendererUtils.RenderInputsTable<InitialInputsEventData, InitialInputsEvents>("InputsTable", selectedEventDataCache.InitialInputsEvents, replay);
-		else if (selectedEventDataCache.InputsEvents.Count == 1)
-			EventTypeRendererUtils.RenderInputsTable<InputsEventData, InputsEvents>("InputsTable", selectedEventDataCache.InputsEvents, replay);
-		else if (selectedEventDataCache.EndEvents.Count == 1)
-			ImGui.Text("End of replay / inputs");
-		else
-			ImGui.TextColored(Color.Red, "Invalid replay data");
+		if (ImGui.BeginTable("InputsTable", InputsEvents.ColumnCountData, ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX))
+		{
+			InputsEvents.SetupColumnsData();
+			ImGui.TableHeadersRow();
+
+			ImGui.TableNextRow();
+
+			InputsEventData e = replay.InputsEvents[selectedTick];
+			EventTypeRendererUtils.NextColumnCheckbox(selectedTick, nameof(InputsEventData.Left), ref e.Left, "On", "Off");
+			EventTypeRendererUtils.NextColumnCheckbox(selectedTick, nameof(InputsEventData.Right), ref e.Right, "On", "Off");
+			EventTypeRendererUtils.NextColumnCheckbox(selectedTick, nameof(InputsEventData.Forward), ref e.Forward, "On", "Off");
+			EventTypeRendererUtils.NextColumnCheckbox(selectedTick, nameof(InputsEventData.Backward), ref e.Backward, "On", "Off");
+			EventTypeRendererUtils.NextColumnInputByteEnum(selectedTick, nameof(InputsEventData.Jump), ref e.Jump, EnumUtils.JumpTypes, _jumpTypeNamesArray);
+			EventTypeRendererUtils.NextColumnInputByteEnum(selectedTick, nameof(InputsEventData.Shoot), ref e.Shoot, EnumUtils.ShootTypes, _shootTypeNamesArray);
+			EventTypeRendererUtils.NextColumnInputByteEnum(selectedTick, nameof(InputsEventData.ShootHoming), ref e.ShootHoming, EnumUtils.ShootTypes, _shootTypeNamesArray);
+			EventTypeRendererUtils.NextColumnInputShort(selectedTick, nameof(InputsEventData.MouseX), ref e.MouseX);
+			EventTypeRendererUtils.NextColumnInputShort(selectedTick, nameof(InputsEventData.MouseY), ref e.MouseY);
+
+			ImGui.EndTable();
+		}
 
 		ImGui.SeparatorText("Events");
 
@@ -119,8 +133,26 @@ public static class ReplayTimelineSelectedEventsChild
 		{
 			foreach (EditorEvent editorEvent in _checkedEvents)
 			{
-				// replayEventsData.RemoveEvent(eventIndex);
-				// replay.
+				Remove(replay.BoidSpawnEvents);
+				Remove(replay.DaggerSpawnEvents);
+				Remove(replay.EntityOrientationEvents);
+				Remove(replay.EntityPositionEvents);
+				Remove(replay.EntityTargetEvents);
+				Remove(replay.GemEvents);
+				Remove(replay.HitEvents);
+				Remove(replay.LeviathanSpawnEvents);
+				Remove(replay.PedeSpawnEvents);
+				Remove(replay.SpiderEggSpawnEvents);
+				Remove(replay.SpiderSpawnEvents);
+				Remove(replay.SquidSpawnEvents);
+				Remove(replay.ThornSpawnEvents);
+				Remove(replay.TransmuteEvents);
+
+				void Remove(List<EditorEvent> list)
+				{
+					list.Remove(editorEvent);
+				}
+
 				selectedEvents.Remove(editorEvent);
 			}
 
