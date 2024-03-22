@@ -42,6 +42,13 @@ Graphics.OnChangeWindowSize = (w, h) =>
 	};
 };
 
+unsafe
+{
+	// Always invoke this in case of incorrect cache.
+	Graphics.Glfw.GetWindowSize(Graphics.Window, out int width, out int height);
+	Graphics.OnChangeWindowSize.Invoke(width, height);
+}
+
 Application app = new(imGuiController);
 app.Run();
 
