@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
@@ -184,11 +185,11 @@ public static class ReplayTimelineSelectedEventsChild
 		if (_checkedEvents.Count == 0)
 			return;
 
-		// int indexToInsertAt = _checkedEvents.Max(e => replayEventsData.Events.IndexOf(e));
-		// foreach (EditorEvent replayEvent in _checkedEvents.OrderByDescending(e => replayEventsData.Events.IndexOf(e)))
-		// {
-		// 	replayEventsData.InsertEvent(indexToInsertAt, replayEvent.Data.CloneEventData());
-		// }
+		foreach (EditorEvent replayEvent in _checkedEvents)
+		{
+			EditorEvent newEvent = new(replayEvent.TickIndex, replayEvent.EntityId, replayEvent.Data.CloneEventData());
+			// TODO: Add the new event to the replay.
+		}
 
 		// TODO: Reselect the current tick events.
 		TimelineCache.Clear();
