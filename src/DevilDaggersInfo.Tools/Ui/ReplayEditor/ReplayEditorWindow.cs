@@ -38,13 +38,13 @@ public static class ReplayEditorWindow
 
 			if (ImGui.BeginTabBar("Replay Editor Tabs"))
 			{
-				if (ImGui.BeginTabItem("Timeline editor (recommended)"))
+				if (ImGui.BeginTabItem("Events editor"))
 				{
 					ReplayTimelineChild.Render(FileStates.Replay.Object);
 					ImGui.EndTabItem();
 				}
 
-				if (ImGui.BeginTabItem("Table editor (advanced)"))
+				if (ImGui.BeginTabItem("Events viewer"))
 				{
 					ReplayEventsChild.Render(FileStates.Replay.Object);
 					ImGui.EndTabItem();

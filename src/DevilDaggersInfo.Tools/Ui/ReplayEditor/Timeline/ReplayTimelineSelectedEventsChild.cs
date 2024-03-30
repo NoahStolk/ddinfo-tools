@@ -65,6 +65,48 @@ public static class ReplayTimelineSelectedEventsChild
 
 		ImGui.SeparatorText("Events");
 
+		if (ImGui.Button("Select all"))
+		{
+			_checkedEvents.Clear();
+			_checkedEvents.AddRange(selectedEvents);
+		}
+
+		if (ImGui.Button("Deselect all"))
+		{
+			_checkedEvents.Clear();
+		}
+
+		ImGui.BeginDisabled(_checkedEvents.Count == 0);
+		if (ImGui.Button("Delete selected events"))
+		{
+			foreach (EditorEvent editorEvent in _checkedEvents)
+			{
+				replay.RemoveEvent(editorEvent);
+
+				selectedEvents.Remove(editorEvent);
+			}
+
+			TimelineCache.Clear();
+			_checkedEvents.Clear();
+		}
+
+		if (ImGui.Button("Duplicate selected events"))
+		{
+			DuplicateSelectedEvents(replay);
+		}
+
+		ImGui.EndDisabled();
+
+		if (ImGui.BeginChild("EventsTableWrapper"))
+		{
+			RenderEventsTable(replay, selectedEvents);
+		}
+
+		ImGui.EndChild();
+	}
+
+	private static void RenderEventsTable(EditorReplayModel replay, List<EditorEvent> selectedEvents)
+	{
 		if (ImGui.BeginTable("EventsTable", 2, ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX))
 		{
 			ImGui.TableSetupColumn("EventsTableColumnEventType", ImGuiTableColumnFlags.WidthFixed, 160);
@@ -135,38 +177,6 @@ public static class ReplayTimelineSelectedEventsChild
 
 			ImGui.EndTable();
 		}
-
-		if (ImGui.Button("Select all"))
-		{
-			_checkedEvents.Clear();
-			_checkedEvents.AddRange(selectedEvents);
-		}
-
-		if (ImGui.Button("Deselect all"))
-		{
-			_checkedEvents.Clear();
-		}
-
-		ImGui.BeginDisabled(_checkedEvents.Count == 0);
-		if (ImGui.Button("Delete selected events"))
-		{
-			foreach (EditorEvent editorEvent in _checkedEvents)
-			{
-				replay.RemoveEvent(editorEvent);
-
-				selectedEvents.Remove(editorEvent);
-			}
-
-			TimelineCache.Clear();
-			_checkedEvents.Clear();
-		}
-
-		if (ImGui.Button("Duplicate selected events"))
-		{
-			DuplicateSelectedEvents(replay);
-		}
-
-		ImGui.EndDisabled();
 	}
 
 	private static void DuplicateSelectedEvents(EditorReplayModel replay)
