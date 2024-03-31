@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Common;
+using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
@@ -6,6 +7,7 @@ using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
@@ -284,8 +286,28 @@ public static class ReplayTimelineChild
 				return;
 
 			EventType eventType = _shownEventTypes[eventTypeIndex];
-
-			replay.AddEmptyEvent(tickIndex, eventType);
+			IEventData newEventData = eventType switch
+			{
+				EventType.BoidSpawn => BoidSpawnEventData.CreateDefault(),
+				EventType.LeviathanSpawn => LeviathanSpawnEventData.CreateDefault(),
+				EventType.PedeSpawn => PedeSpawnEventData.CreateDefault(),
+				EventType.SpiderEggSpawn => SpiderEggSpawnEventData.CreateDefault(),
+				EventType.SpiderSpawn => SpiderSpawnEventData.CreateDefault(),
+				EventType.SquidSpawn => SquidSpawnEventData.CreateDefault(),
+				EventType.ThornSpawn => ThornSpawnEventData.CreateDefault(),
+				EventType.DaggerSpawn => DaggerSpawnEventData.CreateDefault(),
+				EventType.EntityOrientation => EntityOrientationEventData.CreateDefault(),
+				EventType.EntityPosition => EntityPositionEventData.CreateDefault(),
+				EventType.EntityTarget => EntityTargetEventData.CreateDefault(),
+				EventType.Gem => GemEventData.CreateDefault(),
+				EventType.Hit => HitEventData.CreateDefault(),
+				EventType.Transmute => TransmuteEventData.CreateDefault(),
+				EventType.InitialInputs => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
+				EventType.Inputs => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
+				EventType.End => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
+				_ => throw new UnreachableException($"Unknown event data type: {eventType}"),
+			};
+			replay.AddEvent(tickIndex, newEventData);
 
 			TimelineCache.Clear();
 		}

@@ -272,33 +272,35 @@ public record EditorReplayModel
 		_replayEventsDataCache = null;
 	}
 
-	public void AddEmptyEvent(int tickIndex, EventType eventType)
+	public void AddEvent<T>(int tickIndex, T eventData)
+		where T : IEventData
 	{
-		int nextEntityId = GetNextEntityId(tickIndex, eventType);
-
-		Action action = eventType switch
+		EventType eventType = eventData switch
 		{
-			EventType.BoidSpawn => () => _boidSpawnEvents.Add(new(tickIndex, nextEntityId, BoidSpawnEventData.CreateDefault())),
-			EventType.LeviathanSpawn => () => _leviathanSpawnEvents.Add(new(tickIndex, nextEntityId, LeviathanSpawnEventData.CreateDefault())),
-			EventType.PedeSpawn => () => _pedeSpawnEvents.Add(new(tickIndex, nextEntityId, PedeSpawnEventData.CreateDefault())),
-			EventType.SpiderEggSpawn => () => _spiderEggSpawnEvents.Add(new(tickIndex, nextEntityId, SpiderEggSpawnEventData.CreateDefault())),
-			EventType.SpiderSpawn => () => _spiderSpawnEvents.Add(new(tickIndex, nextEntityId, SpiderSpawnEventData.CreateDefault())),
-			EventType.SquidSpawn => () => _squidSpawnEvents.Add(new(tickIndex, nextEntityId, SquidSpawnEventData.CreateDefault())),
-			EventType.ThornSpawn => () => _thornSpawnEvents.Add(new(tickIndex, nextEntityId, ThornSpawnEventData.CreateDefault())),
-			EventType.DaggerSpawn => () => _daggerSpawnEvents.Add(new(tickIndex, nextEntityId, DaggerSpawnEventData.CreateDefault())),
-			EventType.EntityOrientation => () => _entityOrientationEvents.Add(new(tickIndex, null, EntityOrientationEventData.CreateDefault())),
-			EventType.EntityPosition => () => _entityPositionEvents.Add(new(tickIndex, null, EntityPositionEventData.CreateDefault())),
-			EventType.EntityTarget => () => _entityTargetEvents.Add(new(tickIndex, null, EntityTargetEventData.CreateDefault())),
-			EventType.Gem => () => _gemEvents.Add(new(tickIndex, null, GemEventData.CreateDefault())),
-			EventType.Hit => () => _hitEvents.Add(new(tickIndex, null, HitEventData.CreateDefault())),
-			EventType.Transmute => () => _transmuteEvents.Add(new(tickIndex, null, TransmuteEventData.CreateDefault())),
-			EventType.InitialInputs => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
-			EventType.Inputs => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
-			EventType.End => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
-			_ => throw new UnreachableException($"Unknown event type: {eventType}"),
+			BoidSpawnEventData => EventType.BoidSpawn,
+			LeviathanSpawnEventData => EventType.LeviathanSpawn,
+			PedeSpawnEventData => EventType.PedeSpawn,
+			SpiderEggSpawnEventData => EventType.SpiderEggSpawn,
+			SpiderSpawnEventData => EventType.SpiderSpawn,
+			SquidSpawnEventData => EventType.SquidSpawn,
+			ThornSpawnEventData => EventType.ThornSpawn,
+			DaggerSpawnEventData => EventType.DaggerSpawn,
+			EntityOrientationEventData => EventType.EntityOrientation,
+			EntityPositionEventData => EventType.EntityPosition,
+			EntityTargetEventData => EventType.EntityTarget,
+			GemEventData => EventType.Gem,
+			HitEventData => EventType.Hit,
+			TransmuteEventData => EventType.Transmute,
+			InitialInputsEventData => throw new UnreachableException($"Event type not supported by timeline editor: {eventData.GetType()}"),
+			InputsEventData => throw new UnreachableException($"Event type not supported by timeline editor: {eventData.GetType()}"),
+			EndEventData => throw new UnreachableException($"Event type not supported by timeline editor: {eventData.GetType()}"),
+			_ => throw new UnreachableException($"Unknown event data type: {eventData.GetType()}"),
 		};
 
-		action();
+		int nextEntityId = GetNextEntityId(tickIndex, eventType);
+
+		List<EditorEvent> listOfEvents = GetEventsOfType(eventType);
+		listOfEvents.Add(new(tickIndex, nextEntityId, eventData));
 
 		// TODO: Shift entity ids of events with higher entity ids than the added event.
 
@@ -309,25 +311,47 @@ public record EditorReplayModel
 	{
 		switch (editorEvent.Data)
 		{
-			case BoidSpawnEventData: _boidSpawnEvents.Remove(editorEvent); return;
-			case DaggerSpawnEventData: _daggerSpawnEvents.Remove(editorEvent); return;
-			case EntityOrientationEventData: _entityOrientationEvents.Remove(editorEvent); return;
-			case EntityPositionEventData: _entityPositionEvents.Remove(editorEvent); return;
-			case EntityTargetEventData: _entityTargetEvents.Remove(editorEvent); return;
-			case GemEventData: _gemEvents.Remove(editorEvent); return;
-			case HitEventData: _hitEvents.Remove(editorEvent); return;
-			case LeviathanSpawnEventData: _leviathanSpawnEvents.Remove(editorEvent); return;
-			case PedeSpawnEventData: _pedeSpawnEvents.Remove(editorEvent); return;
-			case SpiderEggSpawnEventData: _spiderEggSpawnEvents.Remove(editorEvent); return;
-			case SpiderSpawnEventData: _spiderSpawnEvents.Remove(editorEvent); return;
-			case SquidSpawnEventData: _squidSpawnEvents.Remove(editorEvent); return;
-			case ThornSpawnEventData: _thornSpawnEvents.Remove(editorEvent); return;
-			case TransmuteEventData: _transmuteEvents.Remove(editorEvent); return;
+			case BoidSpawnEventData: _boidSpawnEvents.Remove(editorEvent); break;
+			case DaggerSpawnEventData: _daggerSpawnEvents.Remove(editorEvent); break;
+			case EntityOrientationEventData: _entityOrientationEvents.Remove(editorEvent); break;
+			case EntityPositionEventData: _entityPositionEvents.Remove(editorEvent); break;
+			case EntityTargetEventData: _entityTargetEvents.Remove(editorEvent); break;
+			case GemEventData: _gemEvents.Remove(editorEvent); break;
+			case HitEventData: _hitEvents.Remove(editorEvent); break;
+			case LeviathanSpawnEventData: _leviathanSpawnEvents.Remove(editorEvent); break;
+			case PedeSpawnEventData: _pedeSpawnEvents.Remove(editorEvent); break;
+			case SpiderEggSpawnEventData: _spiderEggSpawnEvents.Remove(editorEvent); break;
+			case SpiderSpawnEventData: _spiderSpawnEvents.Remove(editorEvent); break;
+			case SquidSpawnEventData: _squidSpawnEvents.Remove(editorEvent); break;
+			case ThornSpawnEventData: _thornSpawnEvents.Remove(editorEvent); break;
+			case TransmuteEventData: _transmuteEvents.Remove(editorEvent); break;
 		}
 
 		// TODO: Shift entity ids of events with higher entity ids than the removed event.
 
 		InvalidateCache();
+	}
+
+	private List<EditorEvent> GetEventsOfType(EventType eventType)
+	{
+		return eventType switch
+		{
+			EventType.BoidSpawn => _boidSpawnEvents,
+			EventType.LeviathanSpawn => _leviathanSpawnEvents,
+			EventType.PedeSpawn => _pedeSpawnEvents,
+			EventType.SpiderEggSpawn => _spiderEggSpawnEvents,
+			EventType.SpiderSpawn => _spiderSpawnEvents,
+			EventType.SquidSpawn => _squidSpawnEvents,
+			EventType.ThornSpawn => _thornSpawnEvents,
+			EventType.DaggerSpawn => _daggerSpawnEvents,
+			EventType.EntityOrientation => _entityOrientationEvents,
+			EventType.EntityPosition => _entityPositionEvents,
+			EventType.EntityTarget => _entityTargetEvents,
+			EventType.Gem => _gemEvents,
+			EventType.Hit => _hitEvents,
+			EventType.Transmute => _transmuteEvents,
+			_ => throw new UnreachableException($"Event type not supported by timeline editor: {eventType}"),
+		};
 	}
 
 	private List<EditorEvent> GetEventsAtTick(int tickIndex)
