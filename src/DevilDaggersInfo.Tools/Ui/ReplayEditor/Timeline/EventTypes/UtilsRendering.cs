@@ -106,7 +106,7 @@ public static class UtilsRendering
 
 		ImGui.Text(" (");
 		ImGui.SameLine();
-		EntityType? entityType = replay.Cache.GetEntityTypeIncludingNegated(entityId);
+		EntityType? entityType = replay.GetEntityTypeIncludingNegated(entityId);
 		ImGui.TextColored(entityType.GetColor(), entityType.HasValue ? EnumUtils.EntityTypeShortNames[entityType.Value] : "???");
 		ImGui.SameLine();
 		ImGui.Text(")");

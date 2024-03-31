@@ -17,6 +17,7 @@ public static class ReplayEventsChild
 
 	private static readonly Dictionary<EventType, bool> _eventTypeEnabled = Enum.GetValues<EventType>().ToDictionary(et => et, _ => true);
 
+	// TODO: Rewrite this; show list of events instead of ticks.
 	private static int _startTick;
 	private static float _targetTime;
 
@@ -60,10 +61,10 @@ public static class ReplayEventsChild
 					_startTick = Math.Max(0, _startTick - maxTicks);
 				ImGui.SameLine();
 				if (ImGuiImage.ImageButton("Forward", Root.InternalResources.ArrowRightTexture.Id, iconSize))
-					_startTick = Math.Min(replay.Cache.TickCount - maxTicks, _startTick + maxTicks);
+					_startTick = Math.Min(replay.TickCount - maxTicks, _startTick + maxTicks);
 				ImGui.SameLine();
 				if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Id, iconSize))
-					_startTick = replay.Cache.TickCount - maxTicks;
+					_startTick = replay.TickCount - maxTicks;
 
 				ImGui.SameLine();
 				ImGui.Text("Go to:");
@@ -76,11 +77,12 @@ public static class ReplayEventsChild
 
 				ImGui.PopItemWidth();
 
-				_startTick = Math.Max(0, Math.Min(_startTick, replay.Cache.TickCount - maxTicks));
-				int endTick = Math.Min(_startTick + maxTicks - 1, replay.Cache.TickCount);
+				// TODO: Rewrite this; show list of events instead of ticks.
+				_startTick = Math.Max(0, Math.Min(_startTick, replay.TickCount - maxTicks));
+				int endTick = Math.Min(_startTick + maxTicks - 1, replay.TickCount);
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
-				ImGui.Text(Inline.Span($"Showing {_startTick} - {endTick} of {replay.Cache.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, replay.StartTime):0.0000} - {TimeUtils.TickToTime(endTick, replay.StartTime):0.0000}"));
+				ImGui.Text(Inline.Span($"Showing {_startTick} - {endTick} of {replay.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, replay.StartTime):0.0000} - {TimeUtils.TickToTime(endTick, replay.StartTime):0.0000}"));
 			}
 
 			ImGui.EndChild(); // TickNavigation
@@ -156,27 +158,19 @@ public static class ReplayEventsChild
 		ImGui.TableSetupColumn("Events", ImGuiTableColumnFlags.None, 384);
 		ImGui.TableHeadersRow();
 
-		for (int i = _startTick; i < Math.Min(_startTick + maxTicks, replay.Cache.TickCount); i++)
+		// TODO: Rewrite this; show list of events instead of ticks.
+		for (int i = _startTick; i < Math.Min(_startTick + maxTicks, replay.TickCount); i++)
 		{
-			int offset = replay.Cache.EventOffsetsPerTick[i];
-			int count = replay.Cache.EventOffsetsPerTick[i + 1] - offset;
-
 			_eventCache.Clear();
 			bool showTick = !_onlyShowTicksWithEnabledEvents;
-			for (int j = offset; j < offset + count; j++)
-			{
-				ReplayEvent replayEvent = replay.Cache.Events[j];
-				_eventCache.Add(j, replayEvent);
-				if (!showTick)
-				{
-					EventType eventType = replayEvent.GetEventType();
-					if (_eventTypeEnabled[eventType])
-						showTick = true;
-				}
-			}
-
+			ReplayEvent replayEvent = replay.Cache.Events[i];
+			_eventCache.Add(i, replayEvent);
 			if (!showTick)
-				continue;
+			{
+				EventType eventType = replayEvent.GetEventType();
+				if (_eventTypeEnabled[eventType])
+					showTick = true;
+			}
 
 			ImGui.TableNextRow();
 

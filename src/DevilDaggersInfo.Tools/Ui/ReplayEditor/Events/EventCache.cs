@@ -66,38 +66,38 @@ public sealed class EventCache
 		_transmuteEvents.Clear();
 	}
 
-	public void Add(int index, ReplayEvent e)
+	public void Add(int index, ReplayEvent replayEvent)
 	{
 		Count++;
 
-		if (e is EntitySpawnReplayEvent spawnEvent)
+		if (replayEvent is EntitySpawnReplayEvent spawnEvent)
 		{
-			switch (e.Data)
+			switch (replayEvent.Data)
 			{
-				case BoidSpawnEventData bse: _boidSpawnEvents.Add((index, spawnEvent.EntityId, bse)); break;
-				case DaggerSpawnEventData dse: _daggerSpawnEvents.Add((index, spawnEvent.EntityId, dse)); break;
-				case LeviathanSpawnEventData lse: _leviathanSpawnEvents.Add((index, spawnEvent.EntityId, lse)); break;
-				case PedeSpawnEventData pse: _pedeSpawnEvents.Add((index, spawnEvent.EntityId, pse)); break;
-				case SpiderEggSpawnEventData sese: _spiderEggSpawnEvents.Add((index, spawnEvent.EntityId, sese)); break;
-				case SpiderSpawnEventData sse: _spiderSpawnEvents.Add((index, spawnEvent.EntityId, sse)); break;
-				case SquidSpawnEventData sse: _squidSpawnEvents.Add((index, spawnEvent.EntityId, sse)); break;
-				case ThornSpawnEventData tse: _thornSpawnEvents.Add((index, spawnEvent.EntityId, tse)); break;
+				case BoidSpawnEventData bs: _boidSpawnEvents.Add((index, spawnEvent.EntityId, bs)); break;
+				case DaggerSpawnEventData ds: _daggerSpawnEvents.Add((index, spawnEvent.EntityId, ds)); break;
+				case LeviathanSpawnEventData ls: _leviathanSpawnEvents.Add((index, spawnEvent.EntityId, ls)); break;
+				case PedeSpawnEventData ps: _pedeSpawnEvents.Add((index, spawnEvent.EntityId, ps)); break;
+				case SpiderEggSpawnEventData ses: _spiderEggSpawnEvents.Add((index, spawnEvent.EntityId, ses)); break;
+				case SpiderSpawnEventData ss: _spiderSpawnEvents.Add((index, spawnEvent.EntityId, ss)); break;
+				case SquidSpawnEventData ss: _squidSpawnEvents.Add((index, spawnEvent.EntityId, ss)); break;
+				case ThornSpawnEventData ts: _thornSpawnEvents.Add((index, spawnEvent.EntityId, ts)); break;
 				default: throw new UnreachableException();
 			}
 		}
 		else
 		{
-			switch (e.Data)
+			switch (replayEvent.Data)
 			{
-				case EndEventData ee: _endEvents.Add((index, -1, ee)); break;
-				case EntityOrientationEventData eoe: _entityOrientationEvents.Add((index, -1, eoe)); break;
-				case EntityPositionEventData epe: _entityPositionEvents.Add((index, -1, epe)); break;
-				case EntityTargetEventData ete: _entityTargetEvents.Add((index, -1, ete)); break;
-				case GemEventData ge: _gemEvents.Add((index, -1, ge)); break;
-				case HitEventData he: _hitEvents.Add((index, -1, he)); break;
-				case InitialInputsEventData iie: _initialInputsEvents.Add((index, -1, iie)); break;
-				case InputsEventData ie: _inputsEvents.Add((index, -1, ie)); break;
-				case TransmuteEventData te: _transmuteEvents.Add((index, -1, te)); break;
+				case EndEventData e: _endEvents.Add((index, -1, e)); break;
+				case EntityOrientationEventData eo: _entityOrientationEvents.Add((index, -1, eo)); break;
+				case EntityPositionEventData ep: _entityPositionEvents.Add((index, -1, ep)); break;
+				case EntityTargetEventData et: _entityTargetEvents.Add((index, -1, et)); break;
+				case GemEventData g: _gemEvents.Add((index, -1, g)); break;
+				case HitEventData h: _hitEvents.Add((index, -1, h)); break;
+				case InitialInputsEventData ii: _initialInputsEvents.Add((index, -1, ii)); break;
+				case InputsEventData i: _inputsEvents.Add((index, -1, i)); break;
+				case TransmuteEventData t: _transmuteEvents.Add((index, -1, t)); break;
 				default: throw new UnreachableException();
 			}
 		}

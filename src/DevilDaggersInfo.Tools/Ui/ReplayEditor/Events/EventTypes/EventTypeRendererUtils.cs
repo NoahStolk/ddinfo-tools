@@ -96,7 +96,7 @@ public static class EventTypeRendererUtils
 
 	public static void NextColumnEntityId(EditorReplayModel replay, int entityId)
 	{
-		EntityType? entityType = replay.Cache.GetEntityTypeIncludingNegated(entityId);
+		EntityType? entityType = replay.GetEntityTypeIncludingNegated(entityId);
 
 		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
 

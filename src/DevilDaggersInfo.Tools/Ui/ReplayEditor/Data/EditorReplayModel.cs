@@ -1,5 +1,7 @@
 using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Data;
+using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 using System.Diagnostics;
@@ -9,7 +11,7 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 
 public record EditorReplayModel
 {
-	private ReplayEventsData? _replayEventsDataCache;
+	private EditorReplayModelCache? _cache;
 
 	private readonly List<EditorEvent> _boidSpawnEvents = [];
 	private readonly List<EditorEvent> _daggerSpawnEvents = [];
@@ -82,7 +84,7 @@ public record EditorReplayModel
 
 	public int TickCount => InputsEvents.Count;
 
-	public ReplayEventsData Cache => _replayEventsDataCache ??= CompileEventsData();
+	public EditorReplayModelCache Cache => _cache ??= CompileEventsData();
 
 	#region Factory methods
 
@@ -103,12 +105,12 @@ public record EditorReplayModel
 			spawnset: SpawnsetBinary.CreateDefault());
 	}
 
-	public static EditorReplayModel CreateFromLeaderboardReplay(int playerId, string username, ReplayEventsData replayEventsData)
+	public static EditorReplayModel CreateFromLeaderboardReplay(int playerId, string username, IReadOnlyList<ReplayEvent> replayEvents)
 	{
 		EditorReplayModel replay = CreateDefault();
 		replay.PlayerId = playerId;
 		replay.Username = username;
-		replay.AddReplayEventsData(replayEventsData);
+		replay.AddReplayEventsData(replayEvents);
 		return replay;
 	}
 
@@ -127,15 +129,15 @@ public record EditorReplayModel
 			playerId: localReplay.Header.PlayerId,
 			username: localReplay.Header.Username,
 			spawnset: localReplay.Header.Spawnset);
-		replay.AddReplayEventsData(localReplay.EventsData);
+		replay.AddReplayEventsData(localReplay.Events);
 		return replay;
 	}
 
-	private void AddReplayEventsData(ReplayEventsData replayEventsData)
+	private void AddReplayEventsData(IReadOnlyList<ReplayEvent> replayEvents)
 	{
 		int currentTick = 0;
 		int entityId = 1;
-		foreach (IEventData eventData in replayEventsData.Events.Select(e => e.Data))
+		foreach (IEventData eventData in replayEvents.Select(e => e.Data))
 		{
 			switch (eventData)
 			{
@@ -196,7 +198,7 @@ public record EditorReplayModel
 			new byte[10],
 			Spawnset.ToBytes());
 
-		return new(header, Cache);
+		return new(header, Cache.Events);
 	}
 
 	public byte[] ToHash()
@@ -238,9 +240,10 @@ public record EditorReplayModel
 
 	#region Cache building
 
-	private ReplayEventsData CompileEventsData()
+	private EditorReplayModelCache CompileEventsData()
 	{
-		ReplayEventsData replayEventsData = new();
+		List<ReplayEvent> replayEvents = [];
+		List<EntitySpawnReplayEvent> entitySpawnReplayEvents = [];
 
 		List<EditorEvent> eventsThisTick = [];
 
@@ -250,17 +253,30 @@ public record EditorReplayModel
 			eventsThisTick.AddRange(GetEventsAtTick(i));
 			eventsThisTick.Sort((a, b) => (a.EntityId ?? -1).CompareTo(b.EntityId ?? -1));
 			foreach (EditorEvent editorEvent in eventsThisTick)
-				replayEventsData.AddEvent(editorEvent.Data);
+			{
+				if (editorEvent.Data is ISpawnEventData spawnEventData)
+				{
+					int entityId = editorEvent.EntityId ?? throw new InvalidOperationException("EntityId cannot be null for spawn events.");
+					EntitySpawnReplayEvent spawnEvent = new(entityId, spawnEventData);
+
+					replayEvents.Add(spawnEvent);
+					entitySpawnReplayEvents.Add(spawnEvent);
+				}
+				else
+				{
+					replayEvents.Add(new(editorEvent.Data));
+				}
+			}
 
 			if (i == 0)
-				replayEventsData.AddEvent(new InitialInputsEventData(InputsEvents[i].Left, InputsEvents[i].Right, InputsEvents[i].Forward, InputsEvents[i].Backward, InputsEvents[i].Jump, InputsEvents[i].Shoot, InputsEvents[i].ShootHoming, InputsEvents[i].MouseX, InputsEvents[i].MouseY, LookSpeed));
+				replayEvents.Add(new(new InitialInputsEventData(InputsEvents[i].Left, InputsEvents[i].Right, InputsEvents[i].Forward, InputsEvents[i].Backward, InputsEvents[i].Jump, InputsEvents[i].Shoot, InputsEvents[i].ShootHoming, InputsEvents[i].MouseX, InputsEvents[i].MouseY, LookSpeed)));
 			else
-				replayEventsData.AddEvent(InputsEvents[i]);
+				replayEvents.Add(new(InputsEvents[i]));
 		}
 
-		replayEventsData.AddEvent(new EndEventData());
+		replayEvents.Add(new(new EndEventData()));
 
-		return replayEventsData;
+		return new(replayEvents, entitySpawnReplayEvents);
 	}
 
 	#endregion Cache building
@@ -269,7 +285,7 @@ public record EditorReplayModel
 
 	private void InvalidateCache()
 	{
-		_replayEventsDataCache = null;
+		_cache = null;
 	}
 
 	public void AddEvent<T>(int tickIndex, T eventData)
@@ -417,4 +433,39 @@ public record EditorReplayModel
 	}
 
 	#endregion Event building
+
+	#region Entity id
+
+	/// <summary>
+	/// Returns the entity type of the entity with the specified entity ID, or <see langword="null" /> if a valid entity type could not be resolved.
+	/// </summary>
+	public EntityType? GetEntityType(int entityId)
+	{
+		if (entityId == 0)
+			return EntityType.Zero;
+
+		if (entityId < 0 || entityId > Cache.EntitySpawnReplayEvents.Count)
+			return null;
+
+		return Cache.EntitySpawnReplayEvents[entityId - 1].Data.EntityType;
+	}
+
+	/// <summary>
+	/// Returns the entity type of the entity with the specified entity ID, or <see langword="null" /> if a valid entity type could not be resolved.
+	/// This includes negated entity IDs that are used in <see cref="HitEventData"/> when a dead pede segment is hit.
+	/// </summary>
+	public EntityType? GetEntityTypeIncludingNegated(int entityId)
+	{
+		int absoluteEntityId = Math.Abs(entityId);
+		if (absoluteEntityId > Cache.EntitySpawnReplayEvents.Count)
+			return null;
+
+		EntityType? entityType = GetEntityType(absoluteEntityId);
+		if (entityId < 0 && entityType is not EntityType.Centipede and not EntityType.Gigapede and not EntityType.Ghostpede)
+			return null;
+
+		return entityType;
+	}
+
+	#endregion Entity id
 }

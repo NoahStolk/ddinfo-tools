@@ -70,7 +70,7 @@ public static class LeaderboardReplayBrowser
 			return;
 		}
 
-		FileStates.Replay.Update(EditorReplayModel.CreateFromLeaderboardReplay(response.PlayerId, leaderboardReplay.Header.Username, leaderboardReplay.EventsData));
+		FileStates.Replay.Update(EditorReplayModel.CreateFromLeaderboardReplay(response.PlayerId, leaderboardReplay.Header.Username, leaderboardReplay.Events));
 
 		_isDownloading = false;
 		_showWindow = false;

@@ -26,14 +26,14 @@ public static class HitEventExplanation
 			return;
 		}
 
-		EntityType? entityTypeA = replay.Cache.GetEntityTypeIncludingNegated(e.EntityIdA);
+		EntityType? entityTypeA = replay.GetEntityTypeIncludingNegated(e.EntityIdA);
 		if (!entityTypeA.HasValue)
 		{
 			ImGui.TextColored(Color.Red, "Entity Id A out of bounds");
 			return;
 		}
 
-		EntityType? entityTypeB = replay.Cache.GetEntityTypeIncludingNegated(e.EntityIdB);
+		EntityType? entityTypeB = replay.GetEntityTypeIncludingNegated(e.EntityIdB);
 		if (!entityTypeB.HasValue)
 		{
 			ImGui.TextColored(Color.Red, "Entity Id B out of bounds");
