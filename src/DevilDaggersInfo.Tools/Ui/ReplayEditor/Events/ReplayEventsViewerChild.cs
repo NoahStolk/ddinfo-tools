@@ -180,15 +180,14 @@ public static class ReplayEventsViewerChild
 				case SpiderSpawnEventData spiderSpawn: EventTypeRendererUtils.RenderTable<SpiderSpawnEventData, SpiderSpawnEvents>(eventType, spiderSpawn, replay); break;
 				case SquidSpawnEventData squidSpawn: EventTypeRendererUtils.RenderTable<SquidSpawnEventData, SquidSpawnEvents>(eventType, squidSpawn, replay); break;
 				case ThornSpawnEventData thornSpawn: EventTypeRendererUtils.RenderTable<ThornSpawnEventData, ThornSpawnEvents>(eventType, thornSpawn, replay); break;
-				case EndEventData end: EventTypeRendererUtils.RenderTable<EndEventData, EndEvents>(eventType, end, replay); break;
 				case EntityOrientationEventData entityOrientation: EventTypeRendererUtils.RenderTable<EntityOrientationEventData, EntityOrientationEvents>(eventType, entityOrientation, replay); break;
 				case EntityPositionEventData entityPosition: EventTypeRendererUtils.RenderTable<EntityPositionEventData, EntityPositionEvents>(eventType, entityPosition, replay); break;
 				case EntityTargetEventData entityTarget: EventTypeRendererUtils.RenderTable<EntityTargetEventData, EntityTargetEvents>(eventType, entityTarget, replay); break;
-				case GemEventData gem: EventTypeRendererUtils.RenderTable<GemEventData, GemEvents>(eventType, gem, replay); break;
 				case HitEventData hit: EventTypeRendererUtils.RenderTable<HitEventData, HitEvents>(eventType, hit, replay); break;
 				case InitialInputsEventData initialInputs: EventTypeRendererUtils.RenderTable<InitialInputsEventData, InitialInputsEvents>(eventType, initialInputs, replay); break;
 				case InputsEventData inputs: EventTypeRendererUtils.RenderTable<InputsEventData, InputsEvents>(eventType, inputs, replay); break;
 				case TransmuteEventData transmute: EventTypeRendererUtils.RenderTable<TransmuteEventData, TransmuteEvents>(eventType, transmute, replay); break;
+				case EndEventData or GemEventData: ImGui.Text("No data"); break;
 				default: throw new UnreachableException($"Unknown event type '{replayEvent.Data.GetType().Name}'.");
 			}
 		}
