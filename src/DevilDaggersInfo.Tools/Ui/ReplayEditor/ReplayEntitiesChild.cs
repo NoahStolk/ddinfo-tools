@@ -37,7 +37,7 @@ public static class ReplayEntitiesChild
 				_startId = Math.Max(0, _startId - maxIds);
 			ImGui.SameLine();
 			if (ImGuiImage.ImageButton("Forward", Root.InternalResources.ArrowRightTexture.Id, iconSize))
-				_startId = Math.Min(replay.TickCount - maxIds, _startId + maxIds);
+				_startId = Math.Min(replay.Cache.EntitySpawnReplayEvents.Count - maxIds, _startId + maxIds);
 			ImGui.SameLine();
 			if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Id, iconSize))
 				_startId = replay.Cache.EntitySpawnReplayEvents.Count - maxIds;
