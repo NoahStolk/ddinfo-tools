@@ -84,7 +84,7 @@ public record EditorReplayModel
 
 	public int TickCount => InputsEvents.Count;
 
-	public EditorReplayModelCache Cache => _cache ??= CompileEventsData();
+	public EditorReplayModelCache Cache => _cache ??= RebuildCache();
 
 	#region Factory methods
 
@@ -241,10 +241,10 @@ public record EditorReplayModel
 	#region Cache building
 
 	// TODO: Optimize this.
-	private EditorReplayModelCache CompileEventsData()
+	private EditorReplayModelCache RebuildCache()
 	{
 		List<ReplayEvent> replayEvents = [];
-		List<EntitySpawnReplayEvent> entitySpawnReplayEvents = [];
+		List<EntityType> entityTypes = [];
 
 		List<EditorEvent> eventsThisTick = [];
 
@@ -259,9 +259,9 @@ public record EditorReplayModel
 				{
 					int entityId = editorEvent.EntityId ?? throw new InvalidOperationException("EntityId cannot be null for spawn events.");
 					EntitySpawnReplayEvent spawnEvent = new(entityId, spawnEventData);
-
 					replayEvents.Add(spawnEvent);
-					entitySpawnReplayEvents.Add(spawnEvent);
+
+					entityTypes.Add(spawnEventData.EntityType);
 				}
 				else
 				{
@@ -277,7 +277,7 @@ public record EditorReplayModel
 
 		replayEvents.Add(new(new EndEventData()));
 
-		return new(replayEvents, entitySpawnReplayEvents);
+		return new(replayEvents, entityTypes);
 	}
 
 	#endregion Cache building
@@ -445,10 +445,10 @@ public record EditorReplayModel
 		if (entityId == 0)
 			return EntityType.Zero;
 
-		if (entityId < 0 || entityId > Cache.EntitySpawnReplayEvents.Count)
+		if (entityId < 0 || entityId > Cache.Entities.Count)
 			return null;
 
-		return Cache.EntitySpawnReplayEvents[entityId - 1].Data.EntityType;
+		return Cache.Entities[entityId - 1];
 	}
 
 	/// <summary>
@@ -458,7 +458,7 @@ public record EditorReplayModel
 	public EntityType? GetEntityTypeIncludingNegated(int entityId)
 	{
 		int absoluteEntityId = Math.Abs(entityId);
-		if (absoluteEntityId > Cache.EntitySpawnReplayEvents.Count)
+		if (absoluteEntityId > Cache.Entities.Count)
 			return null;
 
 		EntityType? entityType = GetEntityType(absoluteEntityId);

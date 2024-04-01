@@ -1,15 +1,16 @@
 using DevilDaggersInfo.Core.Replay.Events;
+using DevilDaggersInfo.Core.Replay.Events.Enums;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 
 public sealed record EditorReplayModelCache
 {
-	public EditorReplayModelCache(IReadOnlyList<ReplayEvent> replayEvents, IReadOnlyList<EntitySpawnReplayEvent> entitySpawnReplayEvents)
+	public EditorReplayModelCache(IReadOnlyList<ReplayEvent> replayEvents, IReadOnlyList<EntityType> entities)
 	{
 		Events = replayEvents;
-		EntitySpawnReplayEvents = entitySpawnReplayEvents;
+		Entities = entities;
 	}
 
 	public IReadOnlyList<ReplayEvent> Events { get; }
-	public IReadOnlyList<EntitySpawnReplayEvent> EntitySpawnReplayEvents { get; }
+	public IReadOnlyList<EntityType> Entities { get; }
 }
