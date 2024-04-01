@@ -7,26 +7,21 @@ using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 
 public static class ReplayEventsChild
 {
-	private static readonly EventCache _eventCache = new();
-
 	private static readonly Dictionary<EventType, bool> _eventTypeEnabled = Enum.GetValues<EventType>().ToDictionary(et => et, _ => true);
 
-	// TODO: Rewrite this; show list of events instead of ticks.
-	private static int _startTick;
+	private static int _startIndex;
 	private static float _targetTime;
-
-	private static bool _showEvents = true;
-	private static bool _onlyShowTicksWithEnabledEvents;
 
 	public static void Reset()
 	{
-		_startTick = 0;
+		_startIndex = 0;
 		_targetTime = 0;
 	}
 
@@ -41,7 +36,7 @@ public static class ReplayEventsChild
 
 	public static void Render(EditorReplayModel replay)
 	{
-		const int maxTicks = 60;
+		const int maxEvents = 60;
 		const int height = 216;
 		const int filteringHeight = 160;
 
@@ -55,16 +50,16 @@ public static class ReplayEventsChild
 
 				Vector2 iconSize = new(16);
 				if (ImGuiImage.ImageButton("Start", Root.InternalResources.ArrowStartTexture.Id, iconSize))
-					_startTick = 0;
+					_startIndex = 0;
 				ImGui.SameLine();
 				if (ImGuiImage.ImageButton("Back", Root.InternalResources.ArrowLeftTexture.Id, iconSize))
-					_startTick = Math.Max(0, _startTick - maxTicks);
+					_startIndex = Math.Max(0, _startIndex - maxEvents);
 				ImGui.SameLine();
 				if (ImGuiImage.ImageButton("Forward", Root.InternalResources.ArrowRightTexture.Id, iconSize))
-					_startTick = Math.Min(replay.TickCount - maxTicks, _startTick + maxTicks);
+					_startIndex = Math.Min(replay.Cache.Events.Count - maxEvents, _startIndex + maxEvents);
 				ImGui.SameLine();
 				if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Id, iconSize))
-					_startTick = replay.TickCount - maxTicks;
+					_startIndex = replay.Cache.Events.Count - maxEvents;
 
 				ImGui.SameLine();
 				ImGui.Text("Go to:");
@@ -73,16 +68,15 @@ public static class ReplayEventsChild
 
 				// TODO: EnterReturnsTrue only works when the value is not the same?
 				if (ImGui.InputFloat("##target_time", ref _targetTime, 1, 1, "%.4f", ImGuiInputTextFlags.CharsDecimal | ImGuiInputTextFlags.EnterReturnsTrue | ImGuiInputTextFlags.AlwaysOverwrite))
-					_startTick = TimeUtils.TimeToTick(_targetTime, replay.StartTime);
+					_startIndex = TimeUtils.TimeToTick(_targetTime, replay.StartTime);
 
 				ImGui.PopItemWidth();
 
-				// TODO: Rewrite this; show list of events instead of ticks.
-				_startTick = Math.Max(0, Math.Min(_startTick, replay.TickCount - maxTicks));
-				int endTick = Math.Min(_startTick + maxTicks - 1, replay.TickCount);
+				_startIndex = Math.Max(0, Math.Min(_startIndex, replay.Cache.Events.Count - maxEvents));
+				int endIndex = Math.Min(_startIndex + maxEvents - 1, replay.Cache.Events.Count);
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
-				ImGui.Text(Inline.Span($"Showing {_startTick} - {endTick} of {replay.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, replay.StartTime):0.0000} - {TimeUtils.TickToTime(endTick, replay.StartTime):0.0000}"));
+				ImGui.Text(Inline.Span($"Showing {_startIndex} - {endIndex} of {replay.Cache.Events.Count} events"));
 			}
 
 			ImGui.EndChild(); // TickNavigation
@@ -91,14 +85,6 @@ public static class ReplayEventsChild
 
 			if (ImGui.BeginChild("EventTypeFiltering", new(0, height)))
 			{
-				ImGui.Checkbox("Show events", ref _showEvents);
-				ImGui.SameLine();
-				ImGui.Checkbox("Only show ticks with enabled events", ref _onlyShowTicksWithEnabledEvents);
-
-				ImGui.Separator();
-
-				ImGui.BeginDisabled(!_showEvents);
-
 				const int checkboxesPerRow = 7;
 				int rows = (int)Math.Ceiling((float)EnumUtils.EventTypes.Count / checkboxesPerRow);
 				for (int i = 0; i < rows; i++)
@@ -121,8 +107,6 @@ public static class ReplayEventsChild
 						ImGui.SameLine();
 				}
 
-				ImGui.EndDisabled();
-
 				ImGui.Separator();
 
 				if (ImGui.Button("Enable all"))
@@ -143,7 +127,7 @@ public static class ReplayEventsChild
 
 		if (ImGui.BeginChild("ReplayEventsChild", new(0, 0)))
 		{
-			RenderEventsTable(replay, maxTicks);
+			RenderEventsTable(replay, maxEvents);
 		}
 
 		ImGui.EndChild(); // ReplayEventsChild
@@ -151,70 +135,61 @@ public static class ReplayEventsChild
 
 	private static void RenderEventsTable(EditorReplayModel replay, int maxTicks)
 	{
-		if (!ImGui.BeginTable("ReplayEventsTable", 2, ImGuiTableFlags.BordersInnerH))
+		if (!ImGui.BeginTable("ReplayEventsTable", 3, ImGuiTableFlags.BordersInnerH))
 			return;
 
-		ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 128);
-		ImGui.TableSetupColumn("Events", ImGuiTableColumnFlags.None, 384);
+		ImGui.TableSetupColumn("Index", ImGuiTableColumnFlags.WidthFixed, 128);
+		ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 192);
+		ImGui.TableSetupColumn("Data", ImGuiTableColumnFlags.None, 384);
 		ImGui.TableHeadersRow();
 
-		// TODO: Rewrite this; show list of events instead of ticks.
-		for (int i = _startTick; i < Math.Min(_startTick + maxTicks, replay.TickCount); i++)
+		for (int i = _startIndex; i < Math.Min(_startIndex + maxTicks, replay.Cache.Events.Count); i++)
 		{
-			_eventCache.Clear();
-			bool showTick = !_onlyShowTicksWithEnabledEvents;
 			ReplayEvent replayEvent = replay.Cache.Events[i];
-			_eventCache.Add(i, replayEvent);
-			if (!showTick)
-			{
-				EventType eventType = replayEvent.GetEventType();
-				if (_eventTypeEnabled[eventType])
-					showTick = true;
-			}
+			EventType eventType = replayEvent.GetEventType();
+			if (!_eventTypeEnabled[eventType])
+				continue;
 
 			ImGui.TableNextRow();
 
 			ImGui.TableNextColumn();
-			ImGui.Text(Inline.Span($"{TimeUtils.TickToTime(i, replay.StartTime):0.0000} ({i})"));
+			ImGui.Text(Inline.Span(i));
 
 			ImGui.TableNextColumn();
+			ImGui.TextColored(eventType.GetColor(), EnumUtils.EventTypeFriendlyNames[eventType]);
 
-			if (!_showEvents)
-				continue;
-
-			static void RenderEvents<TEvent, TRenderer>(
-				EventType eventType,
-				IReadOnlyList<(int EventIndex, int EntityId, TEvent Event)> events,
-				EditorReplayModel replay)
-				where TEvent : IEventData
-				where TRenderer : IEventTypeRenderer<TEvent>
+			ImGui.TableNextColumn();
+			if (replayEvent is EntitySpawnReplayEvent spawnReplayEvent)
 			{
-				if (_eventTypeEnabled[eventType] && events.Count > 0)
-					EventTypeRendererUtils.RenderTable<TEvent, TRenderer>(eventType, events, replay);
+				switch (replayEvent.Data)
+				{
+					case BoidSpawnEventData boidSpawn: EventTypeRendererUtils.RenderTable<BoidSpawnEventData, BoidSpawnEvents>(eventType, i, spawnReplayEvent.EntityId, boidSpawn, replay); break;
+					case DaggerSpawnEventData daggerSpawn: EventTypeRendererUtils.RenderTable<DaggerSpawnEventData, DaggerSpawnEvents>(eventType, i, spawnReplayEvent.EntityId, daggerSpawn, replay); break;
+					case LeviathanSpawnEventData leviathanSpawn: EventTypeRendererUtils.RenderTable<LeviathanSpawnEventData, LeviathanSpawnEvents>(eventType, i, spawnReplayEvent.EntityId, leviathanSpawn, replay); break;
+					case PedeSpawnEventData pedeSpawn: EventTypeRendererUtils.RenderTable<PedeSpawnEventData, PedeSpawnEvents>(eventType, i, spawnReplayEvent.EntityId, pedeSpawn, replay); break;
+					case SpiderEggSpawnEventData spiderEggSpawn: EventTypeRendererUtils.RenderTable<SpiderEggSpawnEventData, SpiderEggSpawnEvents>(eventType, i, spawnReplayEvent.EntityId, spiderEggSpawn, replay); break;
+					case SpiderSpawnEventData spiderSpawn: EventTypeRendererUtils.RenderTable<SpiderSpawnEventData, SpiderSpawnEvents>(eventType, i, spawnReplayEvent.EntityId, spiderSpawn, replay); break;
+					case SquidSpawnEventData squidSpawn: EventTypeRendererUtils.RenderTable<SquidSpawnEventData, SquidSpawnEvents>(eventType, i, spawnReplayEvent.EntityId, squidSpawn, replay); break;
+					case ThornSpawnEventData thornSpawn: EventTypeRendererUtils.RenderTable<ThornSpawnEventData, ThornSpawnEvents>(eventType, i, spawnReplayEvent.EntityId, thornSpawn, replay); break;
+					default: throw new UnreachableException($"Unknown entity spawn event type '{replayEvent.Data.GetType().Name}'.");
+				}
 			}
-
-			// Enemy spawn events
-			RenderEvents<BoidSpawnEventData, BoidSpawnEvents>(EventType.BoidSpawn, _eventCache.BoidSpawnEvents, replay);
-			RenderEvents<LeviathanSpawnEventData, LeviathanSpawnEvents>(EventType.LeviathanSpawn, _eventCache.LeviathanSpawnEvents, replay);
-			RenderEvents<PedeSpawnEventData, PedeSpawnEvents>(EventType.PedeSpawn, _eventCache.PedeSpawnEvents, replay);
-			RenderEvents<SpiderEggSpawnEventData, SpiderEggSpawnEvents>(EventType.SpiderEggSpawn, _eventCache.SpiderEggSpawnEvents, replay);
-			RenderEvents<SpiderSpawnEventData, SpiderSpawnEvents>(EventType.SpiderSpawn, _eventCache.SpiderSpawnEvents, replay);
-			RenderEvents<SquidSpawnEventData, SquidSpawnEvents>(EventType.SquidSpawn, _eventCache.SquidSpawnEvents, replay);
-			RenderEvents<ThornSpawnEventData, ThornSpawnEvents>(EventType.ThornSpawn, _eventCache.ThornSpawnEvents, replay);
-
-			// Other events
-			RenderEvents<DaggerSpawnEventData, DaggerSpawnEvents>(EventType.DaggerSpawn, _eventCache.DaggerSpawnEvents, replay);
-			RenderEvents<EntityOrientationEventData, EntityOrientationEvents>(EventType.EntityOrientation, _eventCache.EntityOrientationEvents, replay);
-			RenderEvents<EntityPositionEventData, EntityPositionEvents>(EventType.EntityPosition, _eventCache.EntityPositionEvents, replay);
-			RenderEvents<EntityTargetEventData, EntityTargetEvents>(EventType.EntityTarget, _eventCache.EntityTargetEvents, replay);
-			RenderEvents<GemEventData, GemEvents>(EventType.Gem, _eventCache.GemEvents, replay);
-			RenderEvents<HitEventData, HitEvents>(EventType.Hit, _eventCache.HitEvents, replay);
-			RenderEvents<TransmuteEventData, TransmuteEvents>(EventType.Transmute, _eventCache.TransmuteEvents, replay);
-
-			// Final events
-			RenderEvents<InitialInputsEventData, InitialInputsEvents>(EventType.InitialInputs, _eventCache.InitialInputsEvents, replay);
-			RenderEvents<InputsEventData, InputsEvents>(EventType.Inputs, _eventCache.InputsEvents, replay);
-			RenderEvents<EndEventData, EndEvents>(EventType.End, _eventCache.EndEvents, replay);
+			else
+			{
+				switch (replayEvent.Data)
+				{
+					case EndEventData end: EventTypeRendererUtils.RenderTable<EndEventData, EndEvents>(eventType, i, -1, end, replay); break;
+					case EntityOrientationEventData entityOrientation: EventTypeRendererUtils.RenderTable<EntityOrientationEventData, EntityOrientationEvents>(eventType, i, -1, entityOrientation, replay); break;
+					case EntityPositionEventData entityPosition: EventTypeRendererUtils.RenderTable<EntityPositionEventData, EntityPositionEvents>(eventType, i, -1, entityPosition, replay); break;
+					case EntityTargetEventData entityTarget: EventTypeRendererUtils.RenderTable<EntityTargetEventData, EntityTargetEvents>(eventType, i, -1, entityTarget, replay); break;
+					case GemEventData gem: EventTypeRendererUtils.RenderTable<GemEventData, GemEvents>(eventType, i, -1, gem, replay); break;
+					case HitEventData hit: EventTypeRendererUtils.RenderTable<HitEventData, HitEvents>(eventType, i, -1, hit, replay); break;
+					case InitialInputsEventData initialInputs: EventTypeRendererUtils.RenderTable<InitialInputsEventData, InitialInputsEvents>(eventType, i, -1, initialInputs, replay); break;
+					case InputsEventData inputs: EventTypeRendererUtils.RenderTable<InputsEventData, InputsEvents>(eventType, i, -1, inputs, replay); break;
+					case TransmuteEventData transmute: EventTypeRendererUtils.RenderTable<TransmuteEventData, TransmuteEvents>(eventType, i, -1, transmute, replay); break;
+					default: throw new UnreachableException($"Unknown event type '{replayEvent.Data.GetType().Name}'.");
+				}
+			}
 		}
 
 		ImGui.EndTable();
