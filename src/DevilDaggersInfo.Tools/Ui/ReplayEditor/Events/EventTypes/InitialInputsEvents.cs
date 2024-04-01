@@ -6,11 +6,10 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
 public sealed class InitialInputsEvents : IEventTypeRenderer<InitialInputsEventData>
 {
-	public static int ColumnCount => 11;
+	public static int ColumnCount => 10;
 
 	public static void SetupColumns()
 	{
-		EventTypeRendererUtils.SetupColumnIndex();
 		ImGui.TableSetupColumn("Left", ImGuiTableColumnFlags.WidthFixed, 64);
 		ImGui.TableSetupColumn("Right", ImGuiTableColumnFlags.WidthFixed, 64);
 		ImGui.TableSetupColumn("Forward", ImGuiTableColumnFlags.WidthFixed, 64);
@@ -23,9 +22,8 @@ public sealed class InitialInputsEvents : IEventTypeRenderer<InitialInputsEventD
 		ImGui.TableSetupColumn("Look Speed", ImGuiTableColumnFlags.WidthFixed, 96);
 	}
 
-	public static void Render(int eventIndex, int entityId, InitialInputsEventData e, EditorReplayModel replay)
+	public static void Render(int entityId, InitialInputsEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumn(eventIndex);
 		EventTypeRendererUtils.NextColumnBool(e.Left, "On", "Off");
 		EventTypeRendererUtils.NextColumnBool(e.Right, "On", "Off");
 		EventTypeRendererUtils.NextColumnBool(e.Forward, "On", "Off");

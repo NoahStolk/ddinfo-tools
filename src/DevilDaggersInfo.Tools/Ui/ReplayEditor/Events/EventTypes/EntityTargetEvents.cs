@@ -6,18 +6,16 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
 public sealed class EntityTargetEvents : IEventTypeRenderer<EntityTargetEventData>
 {
-	public static int ColumnCount => 3;
+	public static int ColumnCount => 2;
 
 	public static void SetupColumns()
 	{
-		EventTypeRendererUtils.SetupColumnIndex();
 		EventTypeRendererUtils.SetupColumnEntityId();
 		ImGui.TableSetupColumn("Target Position", ImGuiTableColumnFlags.WidthFixed, 128);
 	}
 
-	public static void Render(int eventIndex, int entityId, EntityTargetEventData e, EditorReplayModel replay)
+	public static void Render(int entityId, EntityTargetEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumn(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replay, e.EntityId);
 		EventTypeRendererUtils.NextColumn(e.TargetPosition);
 	}

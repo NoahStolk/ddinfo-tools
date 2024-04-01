@@ -12,7 +12,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 
-public static class ReplayEventsChild
+public static class ReplayEventsViewerChild
 {
 	private static readonly Dictionary<EventType, bool> _eventTypeEnabled = Enum.GetValues<EventType>().ToDictionary(et => et, _ => true);
 
@@ -163,14 +163,14 @@ public static class ReplayEventsChild
 			{
 				switch (replayEvent.Data)
 				{
-					case BoidSpawnEventData boidSpawn: EventTypeRendererUtils.RenderTable<BoidSpawnEventData, BoidSpawnEvents>(eventType, i, spawnReplayEvent.EntityId, boidSpawn, replay); break;
-					case DaggerSpawnEventData daggerSpawn: EventTypeRendererUtils.RenderTable<DaggerSpawnEventData, DaggerSpawnEvents>(eventType, i, spawnReplayEvent.EntityId, daggerSpawn, replay); break;
-					case LeviathanSpawnEventData leviathanSpawn: EventTypeRendererUtils.RenderTable<LeviathanSpawnEventData, LeviathanSpawnEvents>(eventType, i, spawnReplayEvent.EntityId, leviathanSpawn, replay); break;
-					case PedeSpawnEventData pedeSpawn: EventTypeRendererUtils.RenderTable<PedeSpawnEventData, PedeSpawnEvents>(eventType, i, spawnReplayEvent.EntityId, pedeSpawn, replay); break;
-					case SpiderEggSpawnEventData spiderEggSpawn: EventTypeRendererUtils.RenderTable<SpiderEggSpawnEventData, SpiderEggSpawnEvents>(eventType, i, spawnReplayEvent.EntityId, spiderEggSpawn, replay); break;
-					case SpiderSpawnEventData spiderSpawn: EventTypeRendererUtils.RenderTable<SpiderSpawnEventData, SpiderSpawnEvents>(eventType, i, spawnReplayEvent.EntityId, spiderSpawn, replay); break;
-					case SquidSpawnEventData squidSpawn: EventTypeRendererUtils.RenderTable<SquidSpawnEventData, SquidSpawnEvents>(eventType, i, spawnReplayEvent.EntityId, squidSpawn, replay); break;
-					case ThornSpawnEventData thornSpawn: EventTypeRendererUtils.RenderTable<ThornSpawnEventData, ThornSpawnEvents>(eventType, i, spawnReplayEvent.EntityId, thornSpawn, replay); break;
+					case BoidSpawnEventData boidSpawn: EventTypeRendererUtils.RenderTable<BoidSpawnEventData, BoidSpawnEvents>(eventType, spawnReplayEvent.EntityId, boidSpawn, replay); break;
+					case DaggerSpawnEventData daggerSpawn: EventTypeRendererUtils.RenderTable<DaggerSpawnEventData, DaggerSpawnEvents>(eventType, spawnReplayEvent.EntityId, daggerSpawn, replay); break;
+					case LeviathanSpawnEventData leviathanSpawn: EventTypeRendererUtils.RenderTable<LeviathanSpawnEventData, LeviathanSpawnEvents>(eventType, spawnReplayEvent.EntityId, leviathanSpawn, replay); break;
+					case PedeSpawnEventData pedeSpawn: EventTypeRendererUtils.RenderTable<PedeSpawnEventData, PedeSpawnEvents>(eventType, spawnReplayEvent.EntityId, pedeSpawn, replay); break;
+					case SpiderEggSpawnEventData spiderEggSpawn: EventTypeRendererUtils.RenderTable<SpiderEggSpawnEventData, SpiderEggSpawnEvents>(eventType, spawnReplayEvent.EntityId, spiderEggSpawn, replay); break;
+					case SpiderSpawnEventData spiderSpawn: EventTypeRendererUtils.RenderTable<SpiderSpawnEventData, SpiderSpawnEvents>(eventType, spawnReplayEvent.EntityId, spiderSpawn, replay); break;
+					case SquidSpawnEventData squidSpawn: EventTypeRendererUtils.RenderTable<SquidSpawnEventData, SquidSpawnEvents>(eventType, spawnReplayEvent.EntityId, squidSpawn, replay); break;
+					case ThornSpawnEventData thornSpawn: EventTypeRendererUtils.RenderTable<ThornSpawnEventData, ThornSpawnEvents>(eventType, spawnReplayEvent.EntityId, thornSpawn, replay); break;
 					default: throw new UnreachableException($"Unknown entity spawn event type '{replayEvent.Data.GetType().Name}'.");
 				}
 			}
@@ -178,15 +178,15 @@ public static class ReplayEventsChild
 			{
 				switch (replayEvent.Data)
 				{
-					case EndEventData end: EventTypeRendererUtils.RenderTable<EndEventData, EndEvents>(eventType, i, -1, end, replay); break;
-					case EntityOrientationEventData entityOrientation: EventTypeRendererUtils.RenderTable<EntityOrientationEventData, EntityOrientationEvents>(eventType, i, -1, entityOrientation, replay); break;
-					case EntityPositionEventData entityPosition: EventTypeRendererUtils.RenderTable<EntityPositionEventData, EntityPositionEvents>(eventType, i, -1, entityPosition, replay); break;
-					case EntityTargetEventData entityTarget: EventTypeRendererUtils.RenderTable<EntityTargetEventData, EntityTargetEvents>(eventType, i, -1, entityTarget, replay); break;
-					case GemEventData gem: EventTypeRendererUtils.RenderTable<GemEventData, GemEvents>(eventType, i, -1, gem, replay); break;
-					case HitEventData hit: EventTypeRendererUtils.RenderTable<HitEventData, HitEvents>(eventType, i, -1, hit, replay); break;
-					case InitialInputsEventData initialInputs: EventTypeRendererUtils.RenderTable<InitialInputsEventData, InitialInputsEvents>(eventType, i, -1, initialInputs, replay); break;
-					case InputsEventData inputs: EventTypeRendererUtils.RenderTable<InputsEventData, InputsEvents>(eventType, i, -1, inputs, replay); break;
-					case TransmuteEventData transmute: EventTypeRendererUtils.RenderTable<TransmuteEventData, TransmuteEvents>(eventType, i, -1, transmute, replay); break;
+					case EndEventData end: EventTypeRendererUtils.RenderTable<EndEventData, EndEvents>(eventType, -1, end, replay); break;
+					case EntityOrientationEventData entityOrientation: EventTypeRendererUtils.RenderTable<EntityOrientationEventData, EntityOrientationEvents>(eventType, -1, entityOrientation, replay); break;
+					case EntityPositionEventData entityPosition: EventTypeRendererUtils.RenderTable<EntityPositionEventData, EntityPositionEvents>(eventType, -1, entityPosition, replay); break;
+					case EntityTargetEventData entityTarget: EventTypeRendererUtils.RenderTable<EntityTargetEventData, EntityTargetEvents>(eventType, -1, entityTarget, replay); break;
+					case GemEventData gem: EventTypeRendererUtils.RenderTable<GemEventData, GemEvents>(eventType, -1, gem, replay); break;
+					case HitEventData hit: EventTypeRendererUtils.RenderTable<HitEventData, HitEvents>(eventType, -1, hit, replay); break;
+					case InitialInputsEventData initialInputs: EventTypeRendererUtils.RenderTable<InitialInputsEventData, InitialInputsEvents>(eventType, -1, initialInputs, replay); break;
+					case InputsEventData inputs: EventTypeRendererUtils.RenderTable<InputsEventData, InputsEvents>(eventType, -1, inputs, replay); break;
+					case TransmuteEventData transmute: EventTypeRendererUtils.RenderTable<TransmuteEventData, TransmuteEvents>(eventType, -1, transmute, replay); break;
 					default: throw new UnreachableException($"Unknown event type '{replayEvent.Data.GetType().Name}'.");
 				}
 			}

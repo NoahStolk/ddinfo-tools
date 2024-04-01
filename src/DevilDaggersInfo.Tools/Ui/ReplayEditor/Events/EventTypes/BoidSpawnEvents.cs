@@ -6,11 +6,10 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
 public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEventData>
 {
-	public static int ColumnCount => 8;
+	public static int ColumnCount => 7;
 
 	public static void SetupColumns()
 	{
-		EventTypeRendererUtils.SetupColumnIndex();
 		EventTypeRendererUtils.SetupColumnEntityId();
 		ImGui.TableSetupColumn("Spawner Entity Id", ImGuiTableColumnFlags.WidthFixed, 160);
 		ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 80);
@@ -20,9 +19,8 @@ public sealed class BoidSpawnEvents : IEventTypeRenderer<BoidSpawnEventData>
 		ImGui.TableSetupColumn("Speed", ImGuiTableColumnFlags.WidthFixed, 64);
 	}
 
-	public static void Render(int eventIndex, int entityId, BoidSpawnEventData e, EditorReplayModel replay)
+	public static void Render(int entityId, BoidSpawnEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumn(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replay, entityId);
 		EventTypeRendererUtils.NextColumnEntityId(replay, e.SpawnerEntityId);
 		EventTypeRendererUtils.NextColumnEnum(e.BoidType);

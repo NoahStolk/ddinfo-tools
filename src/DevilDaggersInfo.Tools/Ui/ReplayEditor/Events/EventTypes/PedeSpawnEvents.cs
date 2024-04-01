@@ -6,11 +6,10 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
 public sealed class PedeSpawnEvents : IEventTypeRenderer<PedeSpawnEventData>
 {
-	public static int ColumnCount => 7;
+	public static int ColumnCount => 6;
 
 	public static void SetupColumns()
 	{
-		EventTypeRendererUtils.SetupColumnIndex();
 		EventTypeRendererUtils.SetupColumnEntityId();
 		ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 96);
 		ImGui.TableSetupColumn("?", ImGuiTableColumnFlags.WidthFixed, 32);
@@ -19,9 +18,8 @@ public sealed class PedeSpawnEvents : IEventTypeRenderer<PedeSpawnEventData>
 		ImGui.TableSetupColumn("Orientation", ImGuiTableColumnFlags.None, 128);
 	}
 
-	public static void Render(int eventIndex, int entityId, PedeSpawnEventData e, EditorReplayModel replay)
+	public static void Render(int entityId, PedeSpawnEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumn(eventIndex);
 		EventTypeRendererUtils.NextColumnEntityId(replay, entityId);
 		EventTypeRendererUtils.NextColumnEnum(e.PedeType);
 		EventTypeRendererUtils.NextColumn(e.A);

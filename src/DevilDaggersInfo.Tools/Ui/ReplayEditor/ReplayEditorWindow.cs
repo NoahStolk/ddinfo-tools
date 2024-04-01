@@ -12,7 +12,7 @@ public static class ReplayEditorWindow
 	public static void Reset()
 	{
 		ReplayEditor3DWindow.Reset();
-		ReplayEventsChild.Reset();
+		ReplayEventsViewerChild.Reset();
 		ReplayEntitiesChild.Reset();
 		ReplayTimelineChild.Reset();
 	}
@@ -46,7 +46,7 @@ public static class ReplayEditorWindow
 
 				if (ImGui.BeginTabItem("Events viewer"))
 				{
-					ReplayEventsChild.Render(FileStates.Replay.Object);
+					ReplayEventsViewerChild.Render(FileStates.Replay.Object);
 					ImGui.EndTabItem();
 				}
 

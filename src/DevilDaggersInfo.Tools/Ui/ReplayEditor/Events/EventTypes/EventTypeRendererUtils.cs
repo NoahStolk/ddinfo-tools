@@ -34,17 +34,12 @@ public static class EventTypeRendererUtils
 
 	private static ImGuiTableFlags EventTableFlags => ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX;
 
-	public static void SetupColumnIndex()
-	{
-		ImGui.TableSetupColumn("Index", ImGuiTableColumnFlags.WidthFixed, 64);
-	}
-
 	public static void SetupColumnEntityId()
 	{
 		ImGui.TableSetupColumn("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160);
 	}
 
-	public static void RenderTable<TEvent, TRenderer>(EventType eventType, int eventIndex, int entityId, TEvent @event, EditorReplayModel replay)
+	public static void RenderTable<TEvent, TRenderer>(EventType eventType, int entityId, TEvent @event, EditorReplayModel replay)
 		where TEvent : IEventData
 		where TRenderer : IEventTypeRenderer<TEvent>
 	{
@@ -55,7 +50,7 @@ public static class EventTypeRendererUtils
 			ImGui.TableHeadersRow();
 
 			ImGui.TableNextRow();
-			TRenderer.Render(eventIndex, entityId, @event, replay);
+			TRenderer.Render(entityId, @event, replay);
 
 			ImGui.EndTable();
 		}
