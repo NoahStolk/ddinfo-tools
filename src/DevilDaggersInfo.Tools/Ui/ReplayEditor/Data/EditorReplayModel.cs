@@ -245,28 +245,46 @@ public record EditorReplayModel
 		List<ReplayEvent> replayEvents = [];
 		List<EntityType> entityTypes = [];
 
-		List<EditorEvent> eventsThisTick = [];
+		List<EditorEvent> allEvents = _boidSpawnEvents
+			.Concat(_daggerSpawnEvents)
+			.Concat(_entityOrientationEvents)
+			.Concat(_entityPositionEvents)
+			.Concat(_entityTargetEvents)
+			.Concat(_gemEvents)
+			.Concat(_hitEvents)
+			.Concat(_leviathanSpawnEvents)
+			.Concat(_pedeSpawnEvents)
+			.Concat(_spiderEggSpawnEvents)
+			.Concat(_spiderSpawnEvents)
+			.Concat(_squidSpawnEvents)
+			.Concat(_thornSpawnEvents)
+			.Concat(_transmuteEvents)
+			.OrderBy(ee => ee.TickIndex)
+			.ThenBy(ee => ee.EntityId)
+			.ToList();
 
-		for (int i = 0; i < InputsEvents.Count; i++)
+		int currentTickIndex = 0;
+		foreach (EditorEvent editorEvent in allEvents)
 		{
-			eventsThisTick.Clear();
-
-			// TODO: Optimize this.
-			eventsThisTick.AddRange(GetEventsAtTick(i));
-
-			eventsThisTick.Sort((a, b) => (a.EntityId ?? -1).CompareTo(b.EntityId ?? -1));
-			foreach (EditorEvent editorEvent in eventsThisTick)
+			// Check if we need to end the current tick with an inputs event.
+			while (currentTickIndex < editorEvent.TickIndex)
 			{
-				if (editorEvent.Data is ISpawnEventData spawnEventData)
-					entityTypes.Add(spawnEventData.EntityType);
+				if (currentTickIndex >= InputsEvents.Count)
+					throw new InvalidOperationException("Current tick index is higher than the amount of inputs events.");
 
-				replayEvents.Add(new(editorEvent.Data));
+				InputsEventData inputsEvent = InputsEvents[currentTickIndex];
+				if (currentTickIndex == 0)
+					replayEvents.Add(new(new InitialInputsEventData(inputsEvent.Left, inputsEvent.Right, inputsEvent.Forward, inputsEvent.Backward, inputsEvent.Jump, inputsEvent.Shoot, inputsEvent.ShootHoming, inputsEvent.MouseX, inputsEvent.MouseY, LookSpeed)));
+				else
+					replayEvents.Add(new(inputsEvent));
+
+				currentTickIndex++;
 			}
 
-			if (i == 0)
-				replayEvents.Add(new(new InitialInputsEventData(InputsEvents[i].Left, InputsEvents[i].Right, InputsEvents[i].Forward, InputsEvents[i].Backward, InputsEvents[i].Jump, InputsEvents[i].Shoot, InputsEvents[i].ShootHoming, InputsEvents[i].MouseX, InputsEvents[i].MouseY, LookSpeed)));
-			else
-				replayEvents.Add(new(InputsEvents[i]));
+			if (editorEvent.Data is ISpawnEventData spawnEventData)
+				entityTypes.Add(spawnEventData.EntityType);
+
+			replayEvents.Add(new(editorEvent.Data));
 		}
 
 		replayEvents.Add(new(new EndEventData()));
