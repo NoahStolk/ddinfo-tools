@@ -4,7 +4,6 @@ using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using System.Diagnostics;
@@ -17,12 +16,12 @@ public static class ReplayEventsViewerChild
 	private static readonly Dictionary<EventType, bool> _eventTypeEnabled = Enum.GetValues<EventType>().ToDictionary(et => et, _ => true);
 
 	private static int _startIndex;
-	private static float _targetTime;
+	private static int _targetIndex;
 
 	public static void Reset()
 	{
 		_startIndex = 0;
-		_targetTime = 0;
+		_targetIndex = 0;
 	}
 
 	private static void ToggleAll(bool enabled)
@@ -62,13 +61,15 @@ public static class ReplayEventsViewerChild
 					_startIndex = replay.Cache.Events.Count - maxEvents;
 
 				ImGui.SameLine();
-				ImGui.Text("Go to:");
+				ImGui.Text("Go to index:");
 				ImGui.SameLine();
 				ImGui.PushItemWidth(120);
 
-				// TODO: EnterReturnsTrue only works when the value is not the same?
-				if (ImGui.InputFloat("##target_time", ref _targetTime, 1, 1, "%.4f", ImGuiInputTextFlags.CharsDecimal | ImGuiInputTextFlags.EnterReturnsTrue | ImGuiInputTextFlags.AlwaysOverwrite))
-					_startIndex = TimeUtils.TimeToTick(_targetTime, replay.StartTime);
+				if (ImGui.InputInt("##target_index", ref _targetIndex))
+					_startIndex = _targetIndex;
+
+				if (ImGui.IsItemFocused() && ImGui.IsKeyPressed(ImGuiKey.Enter))
+					_startIndex = _targetIndex;
 
 				ImGui.PopItemWidth();
 
