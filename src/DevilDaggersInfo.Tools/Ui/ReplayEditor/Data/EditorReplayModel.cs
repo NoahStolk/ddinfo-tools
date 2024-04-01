@@ -391,6 +391,7 @@ public record EditorReplayModel
 		};
 	}
 
+	// TODO: Remove; this approach is too slow.
 	private List<EditorEvent> GetEventsAtTick(int tickIndex)
 	{
 		return BoidSpawnEvents
@@ -424,6 +425,7 @@ public record EditorReplayModel
 			// If there are none, continue the loop until the first tick.
 			// If we find one, use that entityId + 1.
 			// If we find multiple, use the highest entityId + 1.
+			// TODO: This is very slow and should be optimized.
 			int? highestEntityId = HighestEntityIdInList(GetEventsAtTick(i));
 			if (highestEntityId.HasValue)
 			{
