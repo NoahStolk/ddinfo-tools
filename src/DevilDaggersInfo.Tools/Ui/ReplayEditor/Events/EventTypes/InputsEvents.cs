@@ -21,7 +21,7 @@ public sealed class InputsEvents : IEventTypeRenderer<InputsEventData>
 		ImGui.TableSetupColumn("Mouse Y", ImGuiTableColumnFlags.WidthFixed, 64);
 	}
 
-	public static void Render(int entityId, InputsEventData e, EditorReplayModel replay)
+	public static void Render(InputsEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnBool(e.Left, "On", "Off");
 		EventTypeRendererUtils.NextColumnBool(e.Right, "On", "Off");

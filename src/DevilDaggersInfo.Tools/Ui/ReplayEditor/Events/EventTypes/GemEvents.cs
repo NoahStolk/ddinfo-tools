@@ -11,7 +11,7 @@ public sealed class GemEvents : IEventTypeRenderer<GemEventData>
 	{
 	}
 
-	public static void Render(int entityId, GemEventData e, EditorReplayModel replay)
+	public static void Render(GemEventData e, EditorReplayModel replay)
 	{
 	}
 }

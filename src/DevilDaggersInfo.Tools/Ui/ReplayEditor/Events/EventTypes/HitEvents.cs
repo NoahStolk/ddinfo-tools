@@ -16,7 +16,7 @@ public sealed class HitEvents : IEventTypeRenderer<HitEventData>
 		ImGui.TableSetupColumn("Explanation", ImGuiTableColumnFlags.WidthStretch);
 	}
 
-	public static void Render(int entityId, HitEventData e, EditorReplayModel replay)
+	public static void Render(HitEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnEntityId(replay, e.EntityIdA);
 		EventTypeRendererUtils.NextColumnEntityId(replay, e.EntityIdB);

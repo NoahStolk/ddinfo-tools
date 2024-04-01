@@ -22,7 +22,7 @@ public sealed class InitialInputsEvents : IEventTypeRenderer<InitialInputsEventD
 		ImGui.TableSetupColumn("Look Speed", ImGuiTableColumnFlags.WidthFixed, 96);
 	}
 
-	public static void Render(int entityId, InitialInputsEventData e, EditorReplayModel replay)
+	public static void Render(InitialInputsEventData e, EditorReplayModel replay)
 	{
 		EventTypeRendererUtils.NextColumnBool(e.Left, "On", "Off");
 		EventTypeRendererUtils.NextColumnBool(e.Right, "On", "Off");

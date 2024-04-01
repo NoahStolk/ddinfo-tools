@@ -34,12 +34,7 @@ public static class EventTypeRendererUtils
 
 	private static ImGuiTableFlags EventTableFlags => ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX;
 
-	public static void SetupColumnEntityId()
-	{
-		ImGui.TableSetupColumn("Entity Id", ImGuiTableColumnFlags.WidthFixed, 160);
-	}
-
-	public static void RenderTable<TEvent, TRenderer>(EventType eventType, int entityId, TEvent @event, EditorReplayModel replay)
+	public static void RenderTable<TEvent, TRenderer>(EventType eventType, TEvent @event, EditorReplayModel replay)
 		where TEvent : IEventData
 		where TRenderer : IEventTypeRenderer<TEvent>
 	{
@@ -50,7 +45,7 @@ public static class EventTypeRendererUtils
 			ImGui.TableHeadersRow();
 
 			ImGui.TableNextRow();
-			TRenderer.Render(entityId, @event, replay);
+			TRenderer.Render(@event, replay);
 
 			ImGui.EndTable();
 		}
@@ -89,12 +84,9 @@ public static class EventTypeRendererUtils
 		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
 
 		ImGui.TableNextColumn();
-		ReadOnlySpan<char> label = Inline.Span(entityId);
-		float labelWidth = ImGui.CalcTextSize(label).X;
-		ImGui.Text(label);
+		ImGui.Text(Inline.Span(entityId));
 		ImGui.SameLine();
 
-		ImGui.SetCursorPosX(ImGui.GetCursorPosX() + (50 - labelWidth));
 		ImGui.Text(" (");
 		ImGui.SameLine();
 		ImGui.TextColored(entityType.GetColor(), entityType.HasValue ? EnumUtils.EntityTypeShortNames[entityType.Value] : "???");

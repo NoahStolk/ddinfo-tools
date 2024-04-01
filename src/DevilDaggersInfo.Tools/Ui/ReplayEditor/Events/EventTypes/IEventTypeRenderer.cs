@@ -8,5 +8,5 @@ public interface IEventTypeRenderer<in T>
 
 	static abstract void SetupColumns();
 
-	static abstract void Render(int entityId, T e, EditorReplayModel replay);
+	static abstract void Render(T e, EditorReplayModel replay);
 }

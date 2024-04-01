@@ -11,7 +11,7 @@ public sealed class EndEvents : IEventTypeRenderer<EndEventData>
 	{
 	}
 
-	public static void Render(int entityId, EndEventData e, EditorReplayModel replay)
+	public static void Render(EndEventData e, EditorReplayModel replay)
 	{
 	}
 }
