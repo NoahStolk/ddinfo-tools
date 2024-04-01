@@ -157,10 +157,9 @@ public static class ReplayEventsViewerChild
 			ImGui.TableNextColumn();
 			ImGui.Text(Inline.Span(i));
 
-			// TODO: Remove this check and get the entity id from the EditorReplayModelCache.
-			if (replayEvent is EntitySpawnReplayEvent spawnReplayEvent)
+			if (replayEvent.Data is ISpawnEventData)
 			{
-				EventTypeRendererUtils.NextColumnEntityId(replay, spawnReplayEvent.EntityId);
+				EventTypeRendererUtils.NextColumnEntityId(replay, replay.Cache.EntityIdByEventIndex.TryGetValue(i, out int entityId) ? entityId : -1);
 			}
 			else
 			{

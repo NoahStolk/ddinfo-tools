@@ -240,7 +240,6 @@ public record EditorReplayModel
 
 	#region Cache building
 
-	// TODO: Optimize this.
 	private EditorReplayModelCache RebuildCache()
 	{
 		List<ReplayEvent> replayEvents = [];
@@ -251,22 +250,17 @@ public record EditorReplayModel
 		for (int i = 0; i < InputsEvents.Count; i++)
 		{
 			eventsThisTick.Clear();
+
+			// TODO: Optimize this.
 			eventsThisTick.AddRange(GetEventsAtTick(i));
+
 			eventsThisTick.Sort((a, b) => (a.EntityId ?? -1).CompareTo(b.EntityId ?? -1));
 			foreach (EditorEvent editorEvent in eventsThisTick)
 			{
 				if (editorEvent.Data is ISpawnEventData spawnEventData)
-				{
-					int entityId = editorEvent.EntityId ?? throw new InvalidOperationException("EntityId cannot be null for spawn events.");
-					EntitySpawnReplayEvent spawnEvent = new(entityId, spawnEventData);
-					replayEvents.Add(spawnEvent);
-
 					entityTypes.Add(spawnEventData.EntityType);
-				}
-				else
-				{
-					replayEvents.Add(new(editorEvent.Data));
-				}
+
+				replayEvents.Add(new(editorEvent.Data));
 			}
 
 			if (i == 0)
@@ -277,7 +271,15 @@ public record EditorReplayModel
 
 		replayEvents.Add(new(new EndEventData()));
 
-		return new(replayEvents, entityTypes);
+		int currentEntityId = 1;
+		Dictionary<int, int> entityIdByEventIndex = new();
+		for (int i = 0; i < replayEvents.Count; i++)
+		{
+			if (replayEvents[i].Data is ISpawnEventData)
+				entityIdByEventIndex.Add(i, currentEntityId++);
+		}
+
+		return new(replayEvents, entityTypes, entityIdByEventIndex);
 	}
 
 	#endregion Cache building
