@@ -187,11 +187,10 @@ public static class ReplayTimelineSelectedEventsChild
 
 		foreach (EditorEvent replayEvent in _checkedEvents)
 		{
-			EditorEvent newEvent = new(replayEvent.TickIndex, replayEvent.EntityId, replayEvent.Data.CloneEventData());
-			// TODO: Add the new event to the replay.
+			replay.AddEvent(replayEvent.TickIndex, replayEvent.Data.CloneEventData());
 		}
 
-		// TODO: Reselect the current tick events.
+		ReplayTimelineChild.SelectEvents(replay, _checkedEvents[0].TickIndex);
 		TimelineCache.Clear();
 		_checkedEvents.Clear();
 	}

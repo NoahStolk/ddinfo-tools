@@ -218,7 +218,7 @@ public static class ReplayTimelineChild
 		}
 	}
 
-	private static void SelectEvents(EditorReplayModel replay, int tickIndex)
+	public static void SelectEvents(EditorReplayModel replay, int tickIndex)
 	{
 		List<EditorEvent> replayEvents = replay.BoidSpawnEvents
 			.Concat(replay.LeviathanSpawnEvents)
