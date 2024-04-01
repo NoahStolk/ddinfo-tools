@@ -137,7 +137,7 @@ public static class ReplayTimelineChild
 			{
 				foreach (EventType eventType in _shownEventTypes)
 				{
-					RenderMarker(replay.StartTime, eventType, origin, i, drawList, TimelineCache.EventCountsPerTick[eventType].GetValueOrDefault(i));
+					RenderMarker(replay.StartTime, eventType, origin, i, drawList, TimelineCache.GetEventCountAtTick(i, eventType));
 				}
 			}
 

@@ -240,6 +240,7 @@ public record EditorReplayModel
 
 	#region Cache building
 
+	// TODO: Optimize this.
 	private EditorReplayModelCache CompileEventsData()
 	{
 		List<ReplayEvent> replayEvents = [];
