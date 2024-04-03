@@ -1,6 +1,6 @@
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
@@ -12,8 +12,9 @@ public static class ReplayEditorWindow
 	public static void Reset()
 	{
 		ReplayEditor3DWindow.Reset();
-		ReplayEventsChild.Reset();
+		ReplayEventsViewerChild.Reset();
 		ReplayEntitiesChild.Reset();
+		ReplayTimelineChild.Reset();
 	}
 
 	public static void Update(float delta)
@@ -28,7 +29,7 @@ public static class ReplayEditorWindow
 		GameMemoryServiceWrapper.Scan();
 	}
 
-	public static unsafe void Render()
+	public static void Render()
 	{
 		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize);
 		if (ImGui.Begin("Replay Editor", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.MenuBar))
@@ -37,50 +38,29 @@ public static class ReplayEditorWindow
 
 			if (ImGui.BeginTabBar("Replay Editor Tabs"))
 			{
-				if (ImGui.BeginTabItem("Events"))
+				if (ImGui.BeginTabItem("Events editor"))
 				{
-					ReplayEventsChild.Render(FileStates.Replay.Object.EventsData, FileStates.Replay.Object.Header.StartTime);
+					ReplayTimelineChild.Render(FileStates.Replay.Object);
 					ImGui.EndTabItem();
 				}
 
-				if (ImGui.BeginTabItem("Entities"))
+				if (ImGui.BeginTabItem("Events viewer"))
 				{
-					ReplayEntitiesChild.Render(FileStates.Replay.Object.EventsData, FileStates.Replay.Object.Header.StartTime);
+					ReplayEventsViewerChild.Render(FileStates.Replay.Object);
 					ImGui.EndTabItem();
 				}
 
-				if (ImGui.BeginTabItem("Inputs"))
+				if (ImGui.BeginTabItem("Entities viewer"))
 				{
-					ReplayInputsChild.Render(FileStates.Replay.Object.EventsData, FileStates.Replay.Object.Header.StartTime);
+					ReplayEntitiesChild.Render(FileStates.Replay.Object);
 					ImGui.EndTabItem();
 				}
 
-#if DEBUG
-				if (ImGui.BeginTabItem("Debug"))
+				if (ImGui.BeginTabItem("Inputs viewer"))
 				{
-					if (ImGui.BeginChild("ReplayDebugChild", new(0, 0)))
-					{
-						ImGui.Text("Event counts per tick:");
-
-						ImGuiListClipperPtr clipper = new(ImGuiNative.ImGuiListClipper_ImGuiListClipper());
-						clipper.Begin(FileStates.Replay.Object.EventsData.EventOffsetsPerTick.Count);
-						while (clipper.Step())
-						{
-							for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
-							{
-								int offset = FileStates.Replay.Object.EventsData.EventOffsetsPerTick[i];
-								ImGui.Text(Inline.Span($"{i} ({TimeUtils.TickToTime(i, 0):0.0000}): {offset}"));
-							}
-						}
-
-						clipper.End();
-					}
-
-					ImGui.EndChild(); // ReplayDebugChild
-
+					ReplayInputsChild.Render(FileStates.Replay.Object);
 					ImGui.EndTabItem();
 				}
-#endif
 
 				ImGui.EndTabBar();
 			}

@@ -2,6 +2,7 @@ using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Tools.EditorFileState;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using ImGuiNET;
 using System.Numerics;
 
@@ -11,32 +12,22 @@ public static class ReplayFileInfo
 {
 	public static void Render()
 	{
-		LocalReplayBinaryHeader header = FileStates.Replay.Object.Header;
+		EditorReplayModel model = FileStates.Replay.Object;
 
 #if DEBUG
-		RenderData("Version", Inline.Span(header.Version));
-		RenderData("Timestamp", Inline.Span(header.TimestampSinceGameRelease));
-		RenderSpawnsetMd5(header);
+		RenderData("Version", Inline.Span(model.Version));
+		RenderData("Timestamp", Inline.Span(model.TimestampSinceGameRelease));
 #endif
-		RenderData("Player", Inline.Span(header.PlayerId == 0 ? "N/A" : $"{header.Username} ({header.PlayerId})"));
-		RenderData("Time", Inline.Span(header.Time, StringFormats.TimeFormat));
-		RenderData("Start Time", Inline.Span(header.StartTime, StringFormats.TimeFormat));
-		RenderData("Kills", Inline.Span(header.Kills));
-		RenderData("Gems", Inline.Span(header.Gems));
+		RenderData("Player", Inline.Span(model.PlayerId == 0 ? "N/A" : $"{model.Username} ({model.PlayerId})"));
+		RenderData("Time", Inline.Span(model.Time, StringFormats.TimeFormat));
+		RenderData("Start Time", Inline.Span(model.StartTime, StringFormats.TimeFormat));
+		RenderData("Kills", Inline.Span(model.Kills));
+		RenderData("Gems", Inline.Span(model.Gems));
 
-		RenderData("Accuracy", Inline.Span($"{header.Accuracy:0.00%} ({header.DaggersHit}/{header.DaggersFired})"));
-		RenderData("Death Type", Deaths.GetDeathByType(GameConstants.CurrentVersion, (byte)header.DeathType)?.Name ?? "?");
-		RenderData("UTC Date", Inline.Span(LocalReplayBinaryHeader.GetDateTimeOffsetFromTimestampSinceGameRelease(header.TimestampSinceGameRelease), "yyyy-MM-dd HH:mm:ss"));
-	}
-
-	// Separate method so hot reload doesn't complain about stackalloc.
-	private static void RenderSpawnsetMd5(LocalReplayBinaryHeader header)
-	{
-		Span<char> md5 = stackalloc char[header.SpawnsetMd5.Length * 2];
-		for (int i = 0; i < header.SpawnsetMd5.Length; i++)
-			header.SpawnsetMd5[i].TryFormat(md5[(i * 2)..], out _, "X2");
-
-		RenderData("Spawnset MD5", md5);
+		float accuracy = model.DaggersFired == 0 ? 0 : model.DaggersHit / (float)model.DaggersFired;
+		RenderData("Accuracy", Inline.Span($"{accuracy:0.00%} ({model.DaggersHit}/{model.DaggersFired})"));
+		RenderData("Death Type", Deaths.GetDeathByType(GameConstants.CurrentVersion, (byte)model.DeathType)?.Name ?? "?");
+		RenderData("UTC Date", Inline.Span(LocalReplayBinaryHeader.GetDateTimeOffsetFromTimestampSinceGameRelease(model.TimestampSinceGameRelease), "yyyy-MM-dd HH:mm:ss"));
 	}
 
 	private static void RenderData(ReadOnlySpan<char> left, ReadOnlySpan<char> right)

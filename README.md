@@ -32,17 +32,7 @@ The new tools are currently in development. The new app is a complete rewrite of
 ### Replay editor
 
 ![Replay editor](images/replay-editor.png)
-
-### Planned features
-
-These features are planned or in development:
-
-- Renewed asset editor for mods
-- Replay enemy tracking
-
-These features are planned but may not be possible to implement:
-
-- Replay movement and the ability to compare speedrun/race replays using a ghost system in 3D
+![Replay editor events viewer](images/replay-editor-events-viewer.png)
 
 ## Other repositories
 

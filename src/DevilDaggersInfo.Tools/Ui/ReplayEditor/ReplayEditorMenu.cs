@@ -2,6 +2,7 @@ using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.Popups;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 
@@ -53,7 +54,7 @@ public static class ReplayEditorMenu
 
 	public static void NewReplay()
 	{
-		FileStates.Replay.Update(ReplayBinary<LocalReplayBinaryHeader>.CreateDefault());
+		FileStates.Replay.Update(EditorReplayModel.CreateDefault());
 		FileStates.Replay.SetFile(null, null);
 		ReplayEditorWindow.Reset();
 	}
@@ -82,7 +83,7 @@ public static class ReplayEditorMenu
 
 		if (ReplayBinary<LocalReplayBinaryHeader>.TryParse(fileContents, out ReplayBinary<LocalReplayBinaryHeader>? replayBinary))
 		{
-			FileStates.Replay.Update(replayBinary);
+			FileStates.Replay.Update(EditorReplayModel.CreateFromLocalReplay(replayBinary));
 			FileStates.Replay.SetFile(filePath, Path.GetFileName(filePath));
 		}
 		else
@@ -93,7 +94,7 @@ public static class ReplayEditorMenu
 
 		ReplayEditorWindow.Reset();
 
-		ReplaySimulation replaySimulation = ReplaySimulationBuilder.Build(FileStates.Replay.Object);
+		ReplaySimulation replaySimulation = ReplaySimulationBuilder.Build(replayBinary);
 		ReplayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
 	}
 
@@ -113,7 +114,7 @@ public static class ReplayEditorMenu
 		byte[] replayBytes = Root.GameMemoryService.ReadReplayFromMemory();
 		if (ReplayBinary<LocalReplayBinaryHeader>.TryParse(replayBytes, out ReplayBinary<LocalReplayBinaryHeader>? replayBinary))
 		{
-			FileStates.Replay.Update(replayBinary);
+			FileStates.Replay.Update(EditorReplayModel.CreateFromLocalReplay(replayBinary));
 			FileStates.Replay.SetFile(null, "(untitled from game memory)");
 		}
 		else
@@ -124,7 +125,7 @@ public static class ReplayEditorMenu
 
 		ReplayEditorWindow.Reset();
 
-		ReplaySimulation replaySimulation = ReplaySimulationBuilder.Build(FileStates.Replay.Object);
+		ReplaySimulation replaySimulation = ReplaySimulationBuilder.Build(replayBinary);
 		ReplayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
 	}
 
@@ -150,7 +151,7 @@ public static class ReplayEditorMenu
 			return;
 		}
 
-		Root.GameMemoryService.WriteReplayToMemory(FileStates.Replay.Object.Compile());
+		Root.GameMemoryService.WriteReplayToMemory(FileStates.Replay.Object.ToLocalReplay().Compile());
 	}
 
 	public static void Close()

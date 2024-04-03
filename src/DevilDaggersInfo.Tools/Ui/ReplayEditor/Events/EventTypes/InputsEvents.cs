@@ -1,26 +1,14 @@
-using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Data;
-using DevilDaggersInfo.Tools.Utils;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
 public sealed class InputsEvents : IEventTypeRenderer<InputsEventData>
 {
-	private static readonly string[] _jumpTypeNamesArray = EnumUtils.JumpTypeNames.Values.ToArray();
-	private static readonly string[] _shootTypeNamesArray = EnumUtils.ShootTypeNames.Values.ToArray();
-
-	public static int ColumnCount => 11;
-	public static int ColumnCountData => 9;
+	public static int ColumnCount => 9;
 
 	public static void SetupColumns()
-	{
-		EventTypeRendererUtils.SetupColumnActions();
-		EventTypeRendererUtils.SetupColumnIndex();
-		SetupColumnsData();
-	}
-
-	public static void SetupColumnsData()
 	{
 		ImGui.TableSetupColumn("Left", ImGuiTableColumnFlags.WidthFixed, 64);
 		ImGui.TableSetupColumn("Right", ImGuiTableColumnFlags.WidthFixed, 64);
@@ -33,23 +21,16 @@ public sealed class InputsEvents : IEventTypeRenderer<InputsEventData>
 		ImGui.TableSetupColumn("Mouse Y", ImGuiTableColumnFlags.WidthFixed, 64);
 	}
 
-	public static void Render(int eventIndex, int entityId, InputsEventData e, ReplayEventsData replayEventsData)
+	public static void Render(InputsEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumnActions(eventIndex);
-		EventTypeRendererUtils.NextColumnEventIndex(eventIndex);
-		RenderData(eventIndex, e, replayEventsData);
-	}
-
-	public static void RenderData(int eventIndex, InputsEventData e, ReplayEventsData replayEventsData)
-	{
-		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(InputsEventData.Left), ref e.Left, "On", "Off");
-		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(InputsEventData.Right), ref e.Right, "On", "Off");
-		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(InputsEventData.Forward), ref e.Forward, "On", "Off");
-		EventTypeRendererUtils.NextColumnCheckbox(eventIndex, nameof(InputsEventData.Backward), ref e.Backward, "On", "Off");
-		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(InputsEventData.Jump), ref e.Jump, EnumUtils.JumpTypes, _jumpTypeNamesArray);
-		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(InputsEventData.Shoot), ref e.Shoot, EnumUtils.ShootTypes, _shootTypeNamesArray);
-		EventTypeRendererUtils.NextColumnInputByteEnum(eventIndex, nameof(InputsEventData.ShootHoming), ref e.ShootHoming, EnumUtils.ShootTypes, _shootTypeNamesArray);
-		EventTypeRendererUtils.NextColumnInputShort(eventIndex, nameof(InputsEventData.MouseX), ref e.MouseX);
-		EventTypeRendererUtils.NextColumnInputShort(eventIndex, nameof(InputsEventData.MouseY), ref e.MouseY);
+		EventTypeRendererUtils.NextColumnBool(e.Left, "On", "Off");
+		EventTypeRendererUtils.NextColumnBool(e.Right, "On", "Off");
+		EventTypeRendererUtils.NextColumnBool(e.Forward, "On", "Off");
+		EventTypeRendererUtils.NextColumnBool(e.Backward, "On", "Off");
+		EventTypeRendererUtils.NextColumn(e.Jump);
+		EventTypeRendererUtils.NextColumn(e.Shoot);
+		EventTypeRendererUtils.NextColumn(e.ShootHoming);
+		EventTypeRendererUtils.NextColumn(e.MouseX);
+		EventTypeRendererUtils.NextColumn(e.MouseY);
 	}
 }
