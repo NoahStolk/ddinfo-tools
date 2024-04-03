@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.13.1.0] - 2024-04-03
+
+### Asset Editor
+
+- Texture coordinates and normals are now stored explicitly in extracted .obj files for compatibility with some 3D modeling software (e.g. Blender).
+
 ## [0.13.0.0] - 2024-04-03
 
 ### UI Improvements & Fixes
