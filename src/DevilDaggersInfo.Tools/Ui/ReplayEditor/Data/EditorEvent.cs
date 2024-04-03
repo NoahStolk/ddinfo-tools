@@ -12,6 +12,6 @@ public record EditorEvent
 	}
 
 	public int TickIndex { get; }
-	public int? EntityId { get; }
+	public int? EntityId { get; set; }
 	public IEventData Data { get; }
 }

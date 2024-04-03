@@ -339,7 +339,8 @@ public record EditorReplayModel
 		List<EditorEvent> listOfEvents = GetEventsOfType(eventType);
 		listOfEvents.Add(new(tickIndex, nextEntityId, eventData));
 
-		// TODO: Shift entity ids of events with higher entity ids than the added event.
+		// Shift entity ids of events with higher entity ids than the added event.
+		ShiftEntityIds(nextEntityId, 1);
 
 		InvalidateCache();
 	}
@@ -364,9 +365,70 @@ public record EditorReplayModel
 			case TransmuteEventData: _transmuteEvents.Remove(editorEvent); break;
 		}
 
-		// TODO: Shift entity ids of events with higher entity ids than the removed event.
+		// Shift entity ids of events with higher entity ids than the removed event.
+		if (editorEvent.EntityId.HasValue)
+			ShiftEntityIds(editorEvent.EntityId.Value, -1);
 
 		InvalidateCache();
+	}
+
+	private void ShiftEntityIds(int aboveEntityId, int increment)
+	{
+		List<EditorEvent> events = GetAllEvents();
+		foreach (EditorEvent e in events)
+		{
+			if (e.EntityId >= aboveEntityId)
+				e.EntityId++;
+
+			switch (e.Data)
+			{
+				case BoidSpawnEventData boidSpawnEventData when boidSpawnEventData.SpawnerEntityId >= aboveEntityId:
+					boidSpawnEventData.SpawnerEntityId += increment;
+					break;
+				case SpiderEggSpawnEventData spiderEggSpawnEventData when spiderEggSpawnEventData.SpawnerEntityId >= aboveEntityId:
+					spiderEggSpawnEventData.SpawnerEntityId += increment;
+					break;
+				case EntityOrientationEventData entityOrientationEventData when entityOrientationEventData.EntityId >= aboveEntityId:
+					entityOrientationEventData.EntityId += increment;
+					break;
+				case EntityPositionEventData entityPositionEventData when entityPositionEventData.EntityId >= aboveEntityId:
+					entityPositionEventData.EntityId += increment;
+					break;
+				case EntityTargetEventData entityTargetEventData when entityTargetEventData.EntityId >= aboveEntityId:
+					entityTargetEventData.EntityId += increment;
+					break;
+				case TransmuteEventData transmuteEventData when transmuteEventData.EntityId >= aboveEntityId:
+					transmuteEventData.EntityId += increment;
+					break;
+				case HitEventData hitEventData:
+				{
+					if (hitEventData.EntityIdA >= aboveEntityId)
+						hitEventData.EntityIdA += increment;
+					if (hitEventData.EntityIdB >= aboveEntityId)
+						hitEventData.EntityIdB += increment;
+					break;
+				}
+			}
+		}
+
+		List<EditorEvent> GetAllEvents()
+		{
+			return BoidSpawnEvents
+				.Concat(DaggerSpawnEvents)
+				.Concat(EntityOrientationEvents)
+				.Concat(EntityPositionEvents)
+				.Concat(EntityTargetEvents)
+				.Concat(GemEvents)
+				.Concat(HitEvents)
+				.Concat(LeviathanSpawnEvents)
+				.Concat(PedeSpawnEvents)
+				.Concat(SpiderEggSpawnEvents)
+				.Concat(SpiderSpawnEvents)
+				.Concat(SquidSpawnEvents)
+				.Concat(ThornSpawnEvents)
+				.Concat(TransmuteEvents)
+				.ToList();
+		}
 	}
 
 	private List<EditorEvent> GetEventsOfType(EventType eventType)
