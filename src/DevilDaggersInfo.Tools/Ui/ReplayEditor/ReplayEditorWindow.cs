@@ -56,15 +56,15 @@ public static class ReplayEditorWindow
 					ImGui.EndTabItem();
 				}
 
-				if (ImGui.BeginTabItem("Shotgun Speed"))
+				if (ImGui.BeginTabItem("Inputs viewer"))
 				{
-					ReplayShotgunSpeedChild.Render(FileStates.Replay.Object.EventsData);
+					ReplayInputsChild.Render(FileStates.Replay.Object);
 					ImGui.EndTabItem();
 				}
 
-				if (ImGui.BeginTabItem("Debug"))
+				if (ImGui.BeginTabItem("Shotgun speed"))
 				{
-					ReplayInputsChild.Render(FileStates.Replay.Object);
+					ReplayShotgunSpeedChild.Render(FileStates.Replay.Object.EventsData);
 					ImGui.EndTabItem();
 				}
 
