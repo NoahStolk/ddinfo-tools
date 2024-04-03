@@ -334,13 +334,14 @@ public record EditorReplayModel
 			_ => throw new UnreachableException($"Unknown event data type: {eventData.GetType()}"),
 		};
 
-		int nextEntityId = GetNextEntityId(tickIndex, eventType);
+		int? nextEntityId = GetNextEntityId(tickIndex, eventType);
+
+		// Shift entity ids of events with higher entity ids than the added event.
+		if (nextEntityId.HasValue)
+			ShiftEntityIds(nextEntityId.Value, 1);
 
 		List<EditorEvent> listOfEvents = GetEventsOfType(eventType);
 		listOfEvents.Add(new(tickIndex, nextEntityId, eventData));
-
-		// Shift entity ids of events with higher entity ids than the added event.
-		ShiftEntityIds(nextEntityId, 1);
 
 		InvalidateCache();
 	}
@@ -378,7 +379,7 @@ public record EditorReplayModel
 		foreach (EditorEvent e in events)
 		{
 			if (e.EntityId >= aboveEntityId)
-				e.EntityId++;
+				e.EntityId += increment;
 
 			switch (e.Data)
 			{
@@ -474,11 +475,11 @@ public record EditorReplayModel
 			.ToList();
 	}
 
-	private int GetNextEntityId(int tickIndex, EventType eventType)
+	private int? GetNextEntityId(int tickIndex, EventType eventType)
 	{
 		// In case of enemy and dagger spawns, we need to determine the entity id of the new event.
 		if (eventType is not (EventType.BoidSpawn or EventType.LeviathanSpawn or EventType.PedeSpawn or EventType.SpiderEggSpawn or EventType.SpiderSpawn or EventType.SquidSpawn or EventType.ThornSpawn or EventType.DaggerSpawn))
-			return 0;
+			return null;
 
 		int entityId = 1;
 		for (int i = tickIndex; i >= 0; i--)

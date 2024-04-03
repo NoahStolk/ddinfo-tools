@@ -44,7 +44,7 @@ public static class ReplayEntitiesChild
 
 			_startId = Math.Max(0, Math.Min(_startId, replay.Cache.Entities.Count - maxIds));
 
-			ImGui.Text(Inline.Span($"Showing {_startId} - {_startId + maxIds - 1} of {replay.Cache.Entities.Count}"));
+			ImGui.Text(Inline.Span($"Showing {_startId} - {_startId + maxIds - 1} of {replay.Cache.Entities.Count + 1}"));
 
 			ImGui.Checkbox("Show enemies", ref _showEnemies);
 			ImGui.SameLine();
@@ -58,7 +58,7 @@ public static class ReplayEntitiesChild
 					ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.None, 128);
 					ImGui.TableHeadersRow();
 
-					for (int i = _startId; i < Math.Min(_startId + maxIds, replay.Cache.Entities.Count); i++)
+					for (int i = _startId; i < Math.Min(_startId + maxIds, replay.Cache.Entities.Count + 1); i++)
 					{
 						EntityType? entityType = replay.GetEntityType(i);
 						if (!entityType.HasValue)
