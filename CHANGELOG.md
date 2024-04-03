@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.13.0.0] - 2024-04-03
 
 ### UI Improvements & Fixes
 
@@ -29,6 +29,12 @@
 - Added button to toggle individual assets.
 - Fixed not updating mod preview when selected mod is renamed, toggled, or deleted.
 - Fixed not taking disabled assets into account when counting active assets.
+
+### Replay Editor
+
+- Completely rewrote the editor UI. The original UI has been split into two sections:
+  - There is now a new editor which shows all the events in a timeline, making it easier to understand and edit the replay.
+  - The original UI has been changed into a read-only events viewer that can be used to inspect the replay in more detail.
 
 ### Practice
 
