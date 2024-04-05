@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.13.2.0] - 2024-04-05
+
+### Asset Editor
+
+- Fixed bug in mesh parser on Windows, causing meshes to not end up in compiled mod files.
+
 ## [0.13.1.0] - 2024-04-03
 
 ### Asset Editor
