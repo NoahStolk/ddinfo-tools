@@ -21,9 +21,9 @@ The new tools are currently in development. The new app is a complete rewrite of
 ![Spawnset editor](images/spawnset-editor-2.png)
 ![Spawnset editor](images/spawnset-editor-3.png)
 
-### Asset Editor
+### Asset editor
 
-![Asset Editor](images/asset-editor.png)
+![Asset editor](images/asset-editor.png)
 
 ### Mod manager
 
