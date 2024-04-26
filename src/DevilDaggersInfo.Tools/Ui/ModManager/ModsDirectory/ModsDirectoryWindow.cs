@@ -20,48 +20,54 @@ public static class ModsDirectoryWindow
 
 	public static void Render()
 	{
-		ImGui.Text(Inline.Span($"""
-			These are all files in mods directory. In order to make managing mods easier, the program displays which files will be loaded by the game.
-
-			Folders are not displayed as they are always ignored by the game.
-
-			Note: When enabling or disabling mods, the game must be restarted for the changes to take effect.
-
-			Current mods directory: {UserSettings.ModsDirectory}
-			"""));
-
-		if (ImGui.Button("Reload"))
-			ModsDirectoryLogic.LoadModsDirectory();
-
-		ImGui.Separator();
-
-		CheckboxColored("Enabled mods", GetColor(ModFileType.EnabledMod), ref _showEnabledMods, "To enable a mod, it must start with 'audio' or 'dd' for the game to load it.");
-		CheckboxColored("Disabled mods", GetColor(ModFileType.DisabledMod), ref _showDisabledMods, "In order to easily disable a mod, the program renames the mod file to start with an underscore, so these files not loaded by the game.");
-		CheckboxColored("Mods with invalid prefix", GetColor(ModFileType.ModWithInvalidPrefix), ref _showModsWithInvalidPrefix, "These are valid mod files with an invalid file name, meaning they are not loaded by the game.");
-		CheckboxColored("Other files", GetColor(ModFileType.Other), ref _showOtherFiles, "These are files that are not valid mod files. Spawnsets are not considered mods by the Mod Manager.");
-		CheckboxColored("Error loading file", GetColor(ModFileType.Error), ref _showErrors, "These are files that could not be loaded by the program. This could be because the program does not have the required permissions to read the file.");
-
-		if (ImGui.BeginChild("table_child"))
+		ImGuiUtils.SetNextWindowMinSize(1280, 768);
+		if (ImGui.Begin("Mod Manager", ImGuiWindowFlags.NoCollapse))
 		{
-			if (ModsDirectoryLogic.IsLoading)
-				ImGui.Text("Loading...");
-			else
-				RenderTable();
+			ImGui.Text(Inline.Span($"""
+				These are all files in mods directory. In order to make managing mods easier, the program displays which files will be loaded by the game.
+
+				Folders are not displayed as they are always ignored by the game.
+
+				Note: When enabling or disabling mods, the game must be restarted for the changes to take effect.
+
+				Current mods directory: {UserSettings.ModsDirectory}
+				"""));
+
+			if (ImGui.Button("Reload"))
+				ModsDirectoryLogic.LoadModsDirectory();
+
+			ImGui.Separator();
+
+			CheckboxColored("Enabled mods", GetColor(ModFileType.EnabledMod), ref _showEnabledMods, "To enable a mod, it must start with 'audio' or 'dd' for the game to load it.");
+			CheckboxColored("Disabled mods", GetColor(ModFileType.DisabledMod), ref _showDisabledMods, "In order to easily disable a mod, the program renames the mod file to start with an underscore, so these files not loaded by the game.");
+			CheckboxColored("Mods with invalid prefix", GetColor(ModFileType.ModWithInvalidPrefix), ref _showModsWithInvalidPrefix, "These are valid mod files with an invalid file name, meaning they are not loaded by the game.");
+			CheckboxColored("Other files", GetColor(ModFileType.Other), ref _showOtherFiles, "These are files that are not valid mod files. Spawnsets are not considered mods by the Mod Manager.");
+			CheckboxColored("Error loading file", GetColor(ModFileType.Error), ref _showErrors, "These are files that could not be loaded by the program. This could be because the program does not have the required permissions to read the file.");
+
+			if (ImGui.BeginChild("table_child"))
+			{
+				if (ModsDirectoryLogic.IsLoading)
+					ImGui.Text("Loading...");
+				else
+					RenderTable();
+			}
+
+			ImGui.EndChild(); // End table_child
+
+			static void CheckboxColored(ReadOnlySpan<char> label, Vector4 color, ref bool value, ReadOnlySpan<char> tooltip)
+			{
+				ImGui.PushStyleColor(ImGuiCol.Text, color);
+				ImGui.Checkbox(label, ref value);
+				ImGui.PopStyleColor();
+
+				ImGui.SameLine();
+				ImGui.Text("(?)");
+				if (ImGui.IsItemHovered())
+					ImGui.SetTooltip(tooltip);
+			}
 		}
 
-		ImGui.EndChild(); // End table_child
-
-		static void CheckboxColored(ReadOnlySpan<char> label, Vector4 color, ref bool value, ReadOnlySpan<char> tooltip)
-		{
-			ImGui.PushStyleColor(ImGuiCol.Text, color);
-			ImGui.Checkbox(label, ref value);
-			ImGui.PopStyleColor();
-
-			ImGui.SameLine();
-			ImGui.Text("(?)");
-			if (ImGui.IsItemHovered())
-				ImGui.SetTooltip(tooltip);
-		}
+		ImGui.End(); // End Mod Manager
 	}
 
 	private static unsafe void RenderTable()

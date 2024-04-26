@@ -5,6 +5,7 @@ using DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.Ui.ModManager;
+using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.Practice.Main;
 using DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
@@ -105,7 +106,9 @@ public static class UiRenderer
 				RunAnalysisWindow.Render();
 				break;
 			case LayoutType.ModManager:
-				ModManagerWindow.Render();
+				ModsDirectoryWindow.Render();
+				ModPreviewWindow.Render();
+				ModInstallationWindow.Render();
 				break;
 		}
 

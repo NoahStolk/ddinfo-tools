@@ -1,5 +1,11 @@
 # Changelog
 
+## [unreleased]
+
+### Mod Manager
+
+- Fixed UI getting stuck when merging certain windows with the Mod Manager window.
+
 ## [0.13.2.0] - 2024-04-05
 
 ### Asset Editor

@@ -3,12 +3,13 @@ using DevilDaggersInfo.Core.Mod;
 using DevilDaggersInfo.Core.Mod.Exceptions;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
+using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using System.Numerics;
 
-namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
+namespace DevilDaggersInfo.Tools.Ui.ModManager;
 
 public static class ModInstallationWindow
 {
