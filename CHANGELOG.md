@@ -1,5 +1,11 @@
 # Changelog
 
+## [unreleased]
+
+### Miscellaneous
+
+- Decreased executable file size by trimming more unused IL code.
+
 ## [0.13.3.0] - 2024-04-26
 
 ### Mod Manager

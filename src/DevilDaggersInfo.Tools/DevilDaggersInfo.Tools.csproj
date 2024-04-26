@@ -9,12 +9,6 @@
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
     <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
-
-    <!--TODO: Remove; we don't use Silk.NET Input/Windowing anymore.-->
-    <!--This is required because the Silk.NET "Input" and "Windowing" libraries are not trim-compatible (this is planned for Silk.NET 3.0).-->
-    <!--If we do not set TrimMode to partial, Silk.NET will throw a System.PlatformNotSupportedException when the assemblies are trimmed.-->
-    <!--Partial trimming only adds around 2 MB to the executable size, which isn't too bad considering no trimming wastes around 25 MB.-->
-    <TrimMode>partial</TrimMode>
   </PropertyGroup>
 
   <Choose>
