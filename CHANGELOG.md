@@ -1,10 +1,14 @@
 # Changelog
 
-## [unreleased]
+## [0.13.3.0] - 2024-04-26
 
 ### Mod Manager
 
 - Fixed UI getting stuck when merging certain windows with the Mod Manager window.
+
+### Spawnset Editor
+
+- Fixed Spawns window not having a minimum size.
 
 ## [0.13.2.0] - 2024-04-05
 

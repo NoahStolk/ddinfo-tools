@@ -33,6 +33,7 @@ public static class SpawnsWindow
 
 	public static void Render()
 	{
+		ImGuiUtils.SetNextWindowMinSize(360, 400);
 		if (ImGui.Begin("Spawns"))
 		{
 			_windowIsFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows);
