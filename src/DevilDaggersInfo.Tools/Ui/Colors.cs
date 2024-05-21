@@ -73,6 +73,14 @@ public static class Colors
 		Quaternary = new(102, 102, 26, 255),
 	};
 
+	public static ColorConfiguration MemoryTool { get; } = new()
+	{
+		Primary = new(66, 150, 150, 255),
+		Secondary = new(61, 133, 133, 255),
+		Tertiary = new(41, 74, 74, 255),
+		Quaternary = new(26, 102, 102, 255),
+	};
+
 	public static void SetColors(ColorConfiguration colorConfiguration)
 	{
 		ImGuiStylePtr style = ImGui.GetStyle();
