@@ -1,0 +1,50 @@
+using DevilDaggersInfo.Tools;
+using DevilDaggersInfo.Tools.GameMemory.Enemies.Data;
+using DevilDaggersInfo.Tools.Ui.MemoryTool;
+
+for (int i = 0; i < ExperimentalMemory.Boids.Count; i++)
+{
+	Boid boid = ExperimentalMemory.Boids[i];
+
+	if (boid.Type == BoidType.Skull1)
+	{
+		if (boid.Timer < 1.0f)
+			ExperimentalMemory.WriteValue<Boid, short>(i, nameof(Boid.Hp), 0);
+
+		ExperimentalMemory.WriteValue<Boid, float>(i, nameof(Boid.BaseSpeed), 32);
+	}
+
+	if (boid.Type == BoidType.Skull3)
+	{
+		ExperimentalMemory.WriteValue<Boid, short>(i, nameof(Boid.Hp), 0);
+		ExperimentalMemory.WriteValue<Boid, float>(i, nameof(Boid.BaseSpeed), 10);
+	}
+}
+
+for (int i = 0; i < ExperimentalMemory.Squids.Count; i++)
+{
+	Squid squid = ExperimentalMemory.Squids[i];
+//	if (squid.GushCountDown < -0.25f)
+//		ExperimentalMemory.WriteValue<Squid, float>(i, nameof(Squid.GushCountDown), -0.25f);
+
+	ExperimentalMemory.WriteValue<Squid, int>(i, nameof(Squid.NodeHp1), 1);
+	ExperimentalMemory.WriteValue<Squid, int>(i, nameof(Squid.NodeHp2), 1);
+	ExperimentalMemory.WriteValue<Squid, int>(i, nameof(Squid.NodeHp3), 1);
+}
+
+for (int i = 0; i < ExperimentalMemory.Thorns.Count; i++)
+{
+	Thorn thorn = ExperimentalMemory.Thorns[i];
+	ExperimentalMemory.WriteValue<Thorn, int>(i, nameof(Thorn.Hp), 0);
+}
+
+for (int i = 0; i < ExperimentalMemory.Leviathans.Count; i++)
+{
+	Leviathan leviathan = ExperimentalMemory.Leviathans[i];
+	ExperimentalMemory.WriteValue<Leviathan, int>(i, nameof(Leviathan.NodeHp1), 1);
+	ExperimentalMemory.WriteValue<Leviathan, int>(i, nameof(Leviathan.NodeHp2), 1);
+	ExperimentalMemory.WriteValue<Leviathan, int>(i, nameof(Leviathan.NodeHp3), 1);
+	ExperimentalMemory.WriteValue<Leviathan, int>(i, nameof(Leviathan.NodeHp4), 1);
+	ExperimentalMemory.WriteValue<Leviathan, int>(i, nameof(Leviathan.NodeHp5), 1);
+	ExperimentalMemory.WriteValue<Leviathan, int>(i, nameof(Leviathan.NodeHp6), 1);
+}
