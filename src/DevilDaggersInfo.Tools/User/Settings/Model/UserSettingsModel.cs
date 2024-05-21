@@ -32,9 +32,14 @@ public record UserSettingsModel
 	{
 		return this with
 		{
+			// ReSharper disable once NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
+			DevilDaggersInstallationDirectory = DevilDaggersInstallationDirectory ?? string.Empty,
 			LookSpeed = Math.Clamp(LookSpeed, LookSpeedMin, LookSpeedMax),
 			FieldOfView = Math.Clamp(FieldOfView, FieldOfViewMin, FieldOfViewMax),
-			PracticeTemplates = PracticeTemplates
+
+			// ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+			// May be null for outdated settings files. We cannot make this required for deserialization either, since it would invalidate all old settings.
+			PracticeTemplates = PracticeTemplates == null ? [] : PracticeTemplates
 				.Select(pt => pt with
 				{
 					HandLevel = Enum.IsDefined(pt.HandLevel) ? pt.HandLevel : HandLevel.Level1,

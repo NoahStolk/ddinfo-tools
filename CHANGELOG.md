@@ -1,9 +1,14 @@
 # Changelog
 
-## [unreleased]
+## [0.13.4.0] - 2024-05-21
+
+### Fixes
+
+- Fixed corrupt settings crashing the app.
 
 ### Miscellaneous
 
+- Updated Silk.NET dependencies from 2.20.0 to 2.21.0.
 - Decreased executable file size by trimming more unused IL code.
 
 ## [0.13.3.0] - 2024-04-26
