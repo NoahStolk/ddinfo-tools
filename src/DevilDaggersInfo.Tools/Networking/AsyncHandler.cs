@@ -17,6 +17,8 @@ public static class AsyncHandler
 	public static ApiHttpClient Client { get; } = new(new HttpClient { BaseAddress = new Uri("https://devildaggers.info") });
 #endif
 
+	public static bool AutoFailAllCallsForTesting { get; set; }
+
 	public static void Run<TResult>(Action<ApiResult<TResult>> callback, Func<Task<TResult>> call)
 		where TResult : class
 	{
@@ -24,6 +26,9 @@ public static class AsyncHandler
 
 		async Task<ApiResult<TResult>> TryCall()
 		{
+			if (AutoFailAllCallsForTesting)
+				return ApiResult<TResult>.Error(new ApiError(null, "Auto-failing all calls for testing purposes..."));
+
 			try
 			{
 				TResult data = await call();

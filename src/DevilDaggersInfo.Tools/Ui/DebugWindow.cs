@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.Utils;
@@ -78,6 +79,12 @@ public static class DebugWindow
 			}
 
 #if DEBUG
+			ImGui.Separator();
+
+			bool failAll = AsyncHandler.AutoFailAllCallsForTesting;
+			if (ImGui.Checkbox("Auto-fail all API calls", ref failAll))
+				AsyncHandler.AutoFailAllCallsForTesting = failAll;
+
 			ImGui.Separator();
 
 			if (ImGui.Button("Show demo window"))

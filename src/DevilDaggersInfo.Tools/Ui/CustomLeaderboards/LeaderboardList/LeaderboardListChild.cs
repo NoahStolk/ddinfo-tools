@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
+using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using ImGuiNET;
@@ -141,7 +142,11 @@ public static class LeaderboardListChild
 							return $"{gameModeString}: {rankSortingString}";
 						}
 					},
-					onError: apiError => Root.Log.Error(apiError.Exception, "Failed to fetch allowed categories."));
+					onError: apiError =>
+					{
+						PopupManager.ShowError("Failed to fetch allowed categories.", apiError);
+						Root.Log.Error(apiError.Exception, "Failed to fetch allowed categories.");
+					});
 			},
 			FetchAllowedCategories.HandleAsync);
 
@@ -161,6 +166,7 @@ public static class LeaderboardListChild
 					onError: apiError =>
 					{
 						PageIndex = 0;
+						PopupManager.ShowError("Failed to fetch custom leaderboards.", apiError);
 						Root.Log.Error(apiError.Exception, "Failed to fetch custom leaderboards.");
 					});
 
