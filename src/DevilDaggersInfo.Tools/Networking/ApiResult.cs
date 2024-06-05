@@ -16,12 +16,12 @@ public record ApiResult<TResult>
 
 	public static ApiResult<TResult> Ok(TResult result)
 	{
-		return new ApiResult<TResult>(result, default, true);
+		return new ApiResult<TResult>(result, null, true);
 	}
 
 	public static ApiResult<TResult> Error(ApiError error)
 	{
-		return new ApiResult<TResult>(default, error, false);
+		return new ApiResult<TResult>(null, error, false);
 	}
 
 	public void Match(Action<TResult> onSuccess, Action<ApiError> onError)
@@ -33,10 +33,12 @@ public record ApiResult<TResult>
 
 			onSuccess(_value);
 		}
+		else
+		{
+			if (_error == null)
+				throw new InvalidOperationException("Bad internal ApiResult: Error is null but success is false.");
 
-		if (_error == null)
-			throw new InvalidOperationException("Bad internal ApiResult: Error is null but success is false.");
-
-		onError(_error);
+			onError(_error);
+		}
 	}
 }

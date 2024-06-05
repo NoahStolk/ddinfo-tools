@@ -4,7 +4,7 @@ public abstract class Popup
 {
 	protected Popup(string id)
 	{
-		Id = $"{id}_{Guid.NewGuid()}";
+		Id = $"{id}##{Guid.NewGuid()}";
 	}
 
 	public string Id { get; }
