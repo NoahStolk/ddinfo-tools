@@ -1,5 +1,11 @@
 # Changelog
 
+## [unreleased]
+
+### Changed
+
+- Updated ImGui.NET dependency from 1.90.1.1 to 1.90.6.1. 
+
 ## [0.13.4.0] - 2024-05-21
 
 ### Fixes
