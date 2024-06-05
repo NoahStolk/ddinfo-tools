@@ -84,7 +84,7 @@ public static class PopupManager
 				RenderModal(popup);
 				isAnyOpen = true;
 
-				// TODO: Might need to break here if we want to prevent rendering multiple popups at once.
+				// TODO: Might need to break here if we want to prevent rendering multiple popups at once (but this should never happen).
 			}
 		}
 

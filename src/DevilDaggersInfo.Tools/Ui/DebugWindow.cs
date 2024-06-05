@@ -98,7 +98,7 @@ public static class DebugWindow
 			if (ImGui.Button("3 error windows"))
 			{
 				for (int i = 0; i < 3; i++)
-					PopupManager.ShowError("Test error!", "Test stack trace.");
+					PopupManager.ShowError($"Test error {i + 1}!", "Test stack trace.");
 			}
 
 			if (ImGui.Button("Message window"))
