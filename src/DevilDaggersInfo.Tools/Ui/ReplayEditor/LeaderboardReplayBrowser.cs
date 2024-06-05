@@ -84,7 +84,7 @@ public static class LeaderboardReplayBrowser
 	{
 		using FormUrlEncodedContent content = new(new List<KeyValuePair<string, string>> { new("replay", id.ToString()) });
 		using HttpClient httpClient = new();
-		using HttpResponseMessage response = await httpClient.PostAsync("http://dd.hasmodai.com/backend16/get_replay.php", content);
+		using HttpResponseMessage response = await httpClient.PostAsync("http://dd.hasmodai.com/dd3/get_replay.php", content);
 		if (response.IsSuccessStatusCode)
 			return new Response(await response.Content.ReadAsByteArrayAsync(), id);
 

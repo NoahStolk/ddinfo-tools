@@ -9,6 +9,8 @@
 - Fixed bug where certain popups would not be uniquely identified.
 - Fixed bug where popups would get lost when multiple are opened at the same time.
 - Fixed rare issue where the app would not attempt to upload a custom leaderboard run.
+- Fixed small UI bugs.
+- Fixed using outdated URL that no longer works when downloading replays from the official leaderboard servers.
 
 ### Miscellaneous
 
