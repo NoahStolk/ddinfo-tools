@@ -2,9 +2,15 @@
 
 ## [unreleased]
 
-### Changed
+### Fixed
 
-- Updated ImGui.NET dependency from 1.90.1.1 to 1.90.6.1. 
+- Fixed multiple popups freezing the app in certain conditions.
+- Fixed issues with the app that occurred when the DevilDaggers.info host is down.
+- Fixed rare issue where the app would not attempt to upload a custom leaderboard run.
+
+### Miscellaneous
+
+- Updated ImGui.NET dependency from 1.90.1.1 to 1.90.6.1.
 
 ## [0.13.4.0] - 2024-05-21
 
