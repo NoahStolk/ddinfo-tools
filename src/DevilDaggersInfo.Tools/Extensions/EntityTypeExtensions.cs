@@ -8,7 +8,7 @@ public static class EntityTypeExtensions
 {
 	public static Color GetColor(this EntityType? entityType)
 	{
-		return !entityType.HasValue ? new(191, 0, 255, 255) : GetColor(entityType.Value);
+		return !entityType.HasValue ? new Color(191, 0, 255, 255) : GetColor(entityType.Value);
 	}
 
 	public static Color GetColor(this EntityType entityType)
@@ -17,11 +17,11 @@ public static class EntityTypeExtensions
 		{
 			EntityType.Level1Dagger => UpgradesV3_2.Level1.Color,
 			EntityType.Level2Dagger => UpgradesV3_2.Level2.Color,
-			EntityType.Level3Dagger => new(0xFF, 0xDD, 0x00),
+			EntityType.Level3Dagger => new Core.Wiki.Structs.Color(0xFF, 0xDD, 0x00),
 			EntityType.Level3HomingDagger => UpgradesV3_2.Level3.Color,
-			EntityType.Level4Dagger => new(0xBB, 0x00, 0x66),
+			EntityType.Level4Dagger => new Core.Wiki.Structs.Color(0xBB, 0x00, 0x66),
 			EntityType.Level4HomingDagger => UpgradesV3_2.Level4.Color,
-			EntityType.Level4HomingSplash => new(0xFF, 0x77, 0xFF),
+			EntityType.Level4HomingSplash => new Core.Wiki.Structs.Color(0xFF, 0x77, 0xFF),
 			EntityType.Squid1 => EnemiesV3_2.Squid1.Color,
 			EntityType.Squid2 => EnemiesV3_2.Squid2.Color,
 			EntityType.Squid3 => EnemiesV3_2.Squid3.Color,
@@ -38,7 +38,7 @@ public static class EntityTypeExtensions
 			EntityType.SpiderEgg => EnemiesV3_2.SpiderEgg1.Color,
 			EntityType.Leviathan => EnemiesV3_2.Leviathan.Color,
 			EntityType.Thorn => EnemiesV3_2.Thorn.Color,
-			_ => new(191, 0, 255),
+			_ => new Core.Wiki.Structs.Color(191, 0, 255),
 		}).ToEngineColor();
 	}
 }

@@ -23,6 +23,6 @@ internal sealed record SoundBinary(short Channels, int SampleRate, short BitsPer
 		short bitsPerSample = br.ReadInt16();
 		int size = br.ReadInt32();
 		byte[] data = br.ReadBytes(size);
-		return new(channels, sampleRate, bitsPerSample, data);
+		return new SoundBinary(channels, sampleRate, bitsPerSample, data);
 	}
 }

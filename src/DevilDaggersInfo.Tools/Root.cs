@@ -103,7 +103,7 @@ public static class Root
 		if (string.IsNullOrWhiteSpace(iv) || string.IsNullOrWhiteSpace(pass) || string.IsNullOrWhiteSpace(salt))
 			return null;
 
-		return new(iv, pass, salt);
+		return new AesBase32Wrapper(iv, pass, salt);
 
 		static string? GetValue(string[] iniLines, string key)
 		{

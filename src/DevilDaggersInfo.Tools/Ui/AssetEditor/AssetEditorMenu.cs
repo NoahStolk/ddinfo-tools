@@ -47,7 +47,7 @@ public static class AssetEditorMenu
 
 	public static void NewMod()
 	{
-		FileStates.Mod.Update(new());
+		FileStates.Mod.Update(new AssetPaths());
 		FileStates.Mod.SetFile(null, null);
 	}
 

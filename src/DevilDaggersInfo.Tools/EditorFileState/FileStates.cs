@@ -29,7 +29,7 @@ public static class FileStates
 		savePromptAction: _ => throw new NotImplementedException());
 
 	public static FileState<AssetPaths, AssetEditType> Mod { get; } = new(
-		obj: new(),
+		obj: new AssetPaths(),
 		defaultEditType: AssetEditType.Reset,
 		toHash: m => MD5.HashData(m.ToJsonBytes()),
 		save: m => m.ToJsonBytes(),

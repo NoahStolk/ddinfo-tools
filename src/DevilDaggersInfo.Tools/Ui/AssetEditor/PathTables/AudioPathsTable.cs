@@ -54,7 +54,7 @@ public sealed class AudioPathsTable : IPathTable<AudioPathsTable>
 	{
 		if (path == null)
 		{
-			path = new(assetInfo.AssetName, null, null);
+			path = new AudioAssetPath(assetInfo.AssetName, null, null);
 			FileStates.Mod.Object.Audio.Add(path);
 		}
 
@@ -65,7 +65,7 @@ public sealed class AudioPathsTable : IPathTable<AudioPathsTable>
 	{
 		if (path == null)
 		{
-			path = new(assetInfo.AssetName, null, null);
+			path = new AudioAssetPath(assetInfo.AssetName, null, null);
 			FileStates.Mod.Object.Audio.Add(path);
 		}
 

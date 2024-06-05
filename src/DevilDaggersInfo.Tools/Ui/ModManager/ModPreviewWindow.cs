@@ -8,6 +8,7 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager;
 
@@ -125,7 +126,7 @@ public static class ModPreviewWindow
 
 	private static void RenderFileInfoTable(ModBinaryType modBinaryType)
 	{
-		if (ImGui.BeginTable("File info", 2, ImGuiTableFlags.Borders, new(512, 0)))
+		if (ImGui.BeginTable("File info", 2, ImGuiTableFlags.Borders, new Vector2(512, 0)))
 		{
 			ImGui.TableSetupColumn("##left", ImGuiTableColumnFlags.WidthStretch);
 			ImGui.TableSetupColumn("##right", ImGuiTableColumnFlags.WidthFixed, 256);

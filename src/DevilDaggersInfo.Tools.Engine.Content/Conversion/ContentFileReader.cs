@@ -30,7 +30,7 @@ internal static class ContentFileReader
 			string name = br.ReadString();
 			uint length = br.ReadUInt32();
 
-			tocEntries[i] = new(contentType, name, length);
+			tocEntries[i] = new TocEntry(contentType, name, length);
 		}
 
 		Dictionary<string, ModelContent> models = new();
@@ -69,7 +69,7 @@ internal static class ContentFileReader
 				meshes.Add(mesh.Mesh, texture ?? blankTexture);
 			}
 
-			models[modelContext.Key] = new(meshes);
+			models[modelContext.Key] = new ModelContent(meshes);
 		}
 
 		foreach (KeyValuePair<string, ShaderSourceCollection> shaderSource in shaderSourceCollections)
@@ -79,16 +79,16 @@ internal static class ContentFileReader
 			if (shaderSource.Value.FragmentCode == null)
 				throw new InvalidOperationException($"Fragment shader source for '{shaderSource.Key}' not found.");
 
-			shaders[shaderSource.Key] = new(shaderSource.Value.VertexCode, shaderSource.Value.GeometryCode, shaderSource.Value.FragmentCode);
+			shaders[shaderSource.Key] = new ShaderContent(shaderSource.Value.VertexCode, shaderSource.Value.GeometryCode, shaderSource.Value.FragmentCode);
 		}
 
-		return new(models, shaders, sounds, textures);
+		return new DecompiledContentFile(models, shaders, sounds, textures);
 	}
 
 	private static ModelContext GetModel(BinaryReader br)
 	{
 		ModelBinary modelBinary = ModelBinary.FromStream(br);
-		return new(modelBinary.Meshes.Select(m => (m.MaterialName, GetMesh(modelBinary, m))).ToList());
+		return new ModelContext(modelBinary.Meshes.Select(m => (m.MaterialName, GetMesh(modelBinary, m))).ToList());
 
 		static MeshContent GetMesh(ModelBinary modelBinary, MeshData meshData)
 		{
@@ -98,14 +98,14 @@ internal static class ContentFileReader
 			{
 				ushort t = meshData.Faces[j].Texture;
 
-				outVertices[j] = new(
+				outVertices[j] = new Vertex(
 				modelBinary.Positions[meshData.Faces[j].Position - 1],
 				modelBinary.Textures.Count > t - 1 && t > 0 ? modelBinary.Textures[t - 1] : default, // TODO: Separate face type?
 				modelBinary.Normals[meshData.Faces[j].Normal - 1]);
 				outFaces[j] = (ushort)j;
 			}
 
-			return new(outVertices, outFaces);
+			return new MeshContent(outVertices, outFaces);
 		}
 	}
 
@@ -113,7 +113,7 @@ internal static class ContentFileReader
 	{
 		if (!shaderSources.TryGetValue(shaderName, out ShaderSourceCollection? value))
 		{
-			value = new();
+			value = new ShaderSourceCollection();
 			shaderSources.Add(shaderName, value);
 		}
 
@@ -138,13 +138,13 @@ internal static class ContentFileReader
 	private static SoundContent GetSound(BinaryReader br)
 	{
 		SoundBinary soundBinary = SoundBinary.FromStream(br);
-		return new(soundBinary.Channels, soundBinary.SampleRate, soundBinary.BitsPerSample, soundBinary.Data.Length, soundBinary.Data);
+		return new SoundContent(soundBinary.Channels, soundBinary.SampleRate, soundBinary.BitsPerSample, soundBinary.Data.Length, soundBinary.Data);
 	}
 
 	private static TextureContent GetTexture(BinaryReader br)
 	{
 		TextureBinary textureBinary = TextureBinary.FromStream(br);
-		return new(textureBinary.Width, textureBinary.Height, textureBinary.ColorData);
+		return new TextureContent(textureBinary.Width, textureBinary.Height, textureBinary.ColorData);
 	}
 
 	private sealed class ShaderSourceCollection

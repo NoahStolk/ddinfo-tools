@@ -52,40 +52,40 @@ public static class ContentManager
 			throw new InvalidGameInstallationException("There must not be a directory named 'survival' in the 'mods' directory. You must delete the directory, or mods will not work.");
 
 		ModBinaryReadFilter ddReadFilter = ModBinaryReadFilter.Assets(
-			new(AssetType.Texture, "iconmaskcrosshair"),
-			new(AssetType.Texture, "iconmaskdagger"),
-			new(AssetType.Texture, "iconmaskgem"),
-			new(AssetType.Texture, "iconmaskhoming"),
-			new(AssetType.Texture, "iconmaskskull"),
-			new(AssetType.Texture, "iconmaskstopwatch"),
-			new(AssetType.Mesh, "dagger"),
-			new(AssetType.Texture, "daggersilver"),
-			new(AssetType.Mesh, "boid4"),
-			new(AssetType.Texture, "boid4"),
-			new(AssetType.Mesh, "boid4jaw"),
-			new(AssetType.Texture, "boid4jaw"),
-			new(AssetType.Mesh, "tile"),
-			new(AssetType.Texture, "tile"),
-			new(AssetType.Mesh, "pillar"),
-			new(AssetType.Texture, "pillar"),
-			new(AssetType.Texture, "post_lut"),
-			new(AssetType.Mesh, "hand4"),
-			new(AssetType.Texture, "hand6"));
+			new AssetKey(AssetType.Texture, "iconmaskcrosshair"),
+			new AssetKey(AssetType.Texture, "iconmaskdagger"),
+			new AssetKey(AssetType.Texture, "iconmaskgem"),
+			new AssetKey(AssetType.Texture, "iconmaskhoming"),
+			new AssetKey(AssetType.Texture, "iconmaskskull"),
+			new AssetKey(AssetType.Texture, "iconmaskstopwatch"),
+			new AssetKey(AssetType.Mesh, "dagger"),
+			new AssetKey(AssetType.Texture, "daggersilver"),
+			new AssetKey(AssetType.Mesh, "boid4"),
+			new AssetKey(AssetType.Texture, "boid4"),
+			new AssetKey(AssetType.Mesh, "boid4jaw"),
+			new AssetKey(AssetType.Texture, "boid4jaw"),
+			new AssetKey(AssetType.Mesh, "tile"),
+			new AssetKey(AssetType.Texture, "tile"),
+			new AssetKey(AssetType.Mesh, "pillar"),
+			new AssetKey(AssetType.Texture, "pillar"),
+			new AssetKey(AssetType.Texture, "post_lut"),
+			new AssetKey(AssetType.Mesh, "hand4"),
+			new AssetKey(AssetType.Texture, "hand6"));
 
 		ModBinaryReadFilter audioReadFilter = ModBinaryReadFilter.Assets(
-			new(AssetType.Audio, "jump1"),
-			new(AssetType.Audio, "jump2"),
-			new(AssetType.Audio, "jump3"));
+			new AssetKey(AssetType.Audio, "jump1"),
+			new AssetKey(AssetType.Audio, "jump2"),
+			new AssetKey(AssetType.Audio, "jump3"));
 
 		ModBinary ddBinary;
 		using (FileStream fs = new(UserSettings.ResDdPath, FileMode.Open, FileAccess.Read))
-			ddBinary = new(fs, ddReadFilter);
+			ddBinary = new ModBinary(fs, ddReadFilter);
 
 		ModBinary audioBinary;
 		using (FileStream fs = new(UserSettings.ResAudioPath, FileMode.Open, FileAccess.Read))
-			audioBinary = new(fs, audioReadFilter);
+			audioBinary = new ModBinary(fs, audioReadFilter);
 
-		Content = new(
+		Content = new ContentContainer(
 			DefaultSpawnset: defaultSpawnset,
 			IconMaskCrosshairTexture: GetTexture(ddBinary, "iconmaskcrosshair", true),
 			IconMaskDaggerTexture: GetTexture(ddBinary, "iconmaskdagger", true),
@@ -113,7 +113,7 @@ public static class ContentManager
 
 	private static MeshContent GetMesh(ModBinary ddBinary, string meshName)
 	{
-		if (!ddBinary.AssetMap.TryGetValue(new(AssetType.Mesh, meshName), out AssetData? meshData))
+		if (!ddBinary.AssetMap.TryGetValue(new AssetKey(AssetType.Mesh, meshName), out AssetData? meshData))
 			throw new InvalidGameInstallationException($"Required mesh '{meshName}' from 'res/dd' was not found.");
 
 		return ToEngineMesh(meshName, meshData.Buffer);
@@ -121,7 +121,7 @@ public static class ContentManager
 
 	private static TextureContent GetTexture(ModBinary ddBinary, string textureName, bool flipVertically = false)
 	{
-		if (!ddBinary.AssetMap.TryGetValue(new(AssetType.Texture, textureName), out AssetData? textureData))
+		if (!ddBinary.AssetMap.TryGetValue(new AssetKey(AssetType.Texture, textureName), out AssetData? textureData))
 			throw new InvalidGameInstallationException($"Required texture '{textureName}' from 'res/dd' was not found.");
 
 		return ToEngineTexture(textureName, textureData.Buffer, flipVertically);
@@ -129,13 +129,13 @@ public static class ContentManager
 
 	private static SoundContent GetSound(ModBinary audioBinary, string soundName)
 	{
-		if (!audioBinary.AssetMap.TryGetValue(new(AssetType.Audio, soundName), out AssetData? audioData))
+		if (!audioBinary.AssetMap.TryGetValue(new AssetKey(AssetType.Audio, soundName), out AssetData? audioData))
 			throw new InvalidGameInstallationException($"Required audio '{soundName}' from 'res/audio' was not found.");
 
 		try
 		{
 			SoundData waveData = WaveParser.Parse(audioData.Buffer);
-			return new(waveData.Channels, waveData.SampleRate, waveData.BitsPerSample, waveData.Data.Length, waveData.Data);
+			return new SoundContent(waveData.Channels, waveData.SampleRate, waveData.BitsPerSample, waveData.Data.Length, waveData.Data);
 		}
 		catch (WaveParseException ex)
 		{
@@ -175,10 +175,10 @@ public static class ContentManager
 		for (int i = 0; i < ddVertices.Length; i++)
 		{
 			DevilDaggersInfo.Core.Mod.Structs.Vertex ddVertex = ddVertices[i];
-			engineVertices[i] = new(ddVertex.Position, ddVertex.TexCoord, ddVertex.Normal);
+			engineVertices[i] = new Vertex(ddVertex.Position, ddVertex.TexCoord, ddVertex.Normal);
 		}
 
-		return new(engineVertices, indices);
+		return new MeshContent(engineVertices, indices);
 	}
 
 	private static TextureContent ToEngineTexture(string textureName, byte[] ddTextureBuffer, bool flipVertically)
@@ -242,6 +242,6 @@ public static class ContentManager
 			}
 		}
 
-		return new(width, height, pixelData);
+		return new TextureContent(width, height, pixelData);
 	}
 }

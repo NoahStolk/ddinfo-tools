@@ -15,7 +15,7 @@ public static class AsyncHandler
 
 	public static ApiHttpClient Client { get; } = new(new(_clientHandler) { BaseAddress = new("https://localhost:5001/") });
 #else
-	public static ApiHttpClient Client { get; } = new(new() { BaseAddress = new("https://devildaggers.info") });
+	public static ApiHttpClient Client { get; } = new(new HttpClient { BaseAddress = new Uri("https://devildaggers.info") });
 #endif
 
 	public static void Run<TResult>(Action<TResult?> callback, Func<Task<TResult>> call)

@@ -15,7 +15,7 @@ public class ArenaPencilState : IArenaState
 
 	public void InitializeSession(ArenaMousePosition mousePosition)
 	{
-		_session ??= new(mousePosition.Real);
+		_session ??= new Session(mousePosition.Real);
 	}
 
 	public void Handle(ArenaMousePosition mousePosition)
@@ -42,7 +42,7 @@ public class ArenaPencilState : IArenaState
 				}
 			}
 
-			_session.ModifiedCoords.Add(new(mousePosition.Tile.X, mousePosition.Tile.Y));
+			_session.ModifiedCoords.Add(new Vector2D<int>(mousePosition.Tile.X, mousePosition.Tile.Y));
 			_session.StartPosition = mousePosition.Real;
 		}
 		else if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
@@ -70,7 +70,7 @@ public class ArenaPencilState : IArenaState
 		foreach (Vector2D<int> position in _session.ModifiedCoords)
 			newArena[position.X, position.Y] = ArenaWindow.SelectedHeight;
 
-		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, newArena) });
+		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(FileStates.Spawnset.Object.ArenaDimension, newArena) });
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaPencil);
 
 		Reset();
@@ -95,7 +95,7 @@ public class ArenaPencilState : IArenaState
 		{
 			for (int j = 0; j < SpawnsetBinary.ArenaDimensionMax; j++)
 			{
-				if (_session.ModifiedCoords.Contains(new(i, j)))
+				if (_session.ModifiedCoords.Contains(new Vector2D<int>(i, j)))
 				{
 					Vector2 topLeft = origin + new Vector2(i, j) * ArenaWindow.TileSize;
 					drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));

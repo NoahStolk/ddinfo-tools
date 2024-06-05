@@ -23,7 +23,7 @@ public class ArenaBucketState : IArenaState
 
 		float targetHeight = FileStates.Spawnset.Object.ArenaTiles[x, y];
 
-		_targetCoords.Add(new(x, y));
+		_targetCoords.Add(new Vector2D<int>(x, y));
 
 		int leftX = x - 1;
 		int rightX = x + 1;
@@ -41,7 +41,7 @@ public class ArenaBucketState : IArenaState
 
 		void FillIfApplicable(int newX, int newY)
 		{
-			if (_targetCoords.Contains(new(newX, newY)))
+			if (_targetCoords.Contains(new Vector2D<int>(newX, newY)))
 				return;
 
 			float tileHeight = FileStates.Spawnset.Object.ArenaTiles[newX, newY];
@@ -67,7 +67,7 @@ public class ArenaBucketState : IArenaState
 		foreach (Vector2D<int> coord in _targetCoords)
 			newArena[coord.X, coord.Y] = ArenaWindow.SelectedHeight;
 
-		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, newArena) });
+		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(FileStates.Spawnset.Object.ArenaDimension, newArena) });
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaBucket);
 	}
 
@@ -108,7 +108,7 @@ public class ArenaBucketState : IArenaState
 		{
 			for (int j = 0; j < SpawnsetBinary.ArenaDimensionMax; j++)
 			{
-				if (_targetCoords.Contains(new(i, j)))
+				if (_targetCoords.Contains(new Vector2D<int>(i, j)))
 				{
 					Vector2 topLeft = origin + new Vector2(i, j) * ArenaWindow.TileSize;
 					drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));

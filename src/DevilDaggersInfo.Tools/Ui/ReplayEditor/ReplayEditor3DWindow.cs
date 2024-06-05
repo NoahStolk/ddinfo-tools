@@ -19,7 +19,7 @@ public static class ReplayEditor3DWindow
 
 	public static void InitializeScene()
 	{
-		_arenaScene = new(static () => FileStates.Replay.Object.Spawnset, false, false);
+		_arenaScene = new ArenaScene(static () => FileStates.Replay.Object.Spawnset, false, false);
 	}
 
 	public static void Reset()

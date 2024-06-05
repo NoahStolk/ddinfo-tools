@@ -32,7 +32,7 @@ public class PracticeStatsData
 			int homingEaten = br.ReadInt32();
 			br.BaseStream.Seek(sizeof(ushort) * 17 * 2, SeekOrigin.Current); // Skip 17 ushort stats (two for each enemy).
 
-			_statistics.Add(new()
+			_statistics.Add(new StatisticEntry
 			{
 				GemsCollected = gemsCollected,
 				HomingStored = homingStored,

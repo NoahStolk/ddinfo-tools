@@ -24,9 +24,9 @@ public static class ObjParser
 
 			switch (values[0])
 			{
-				case "v": positions.Add(new(ParseVertexFloat(values[1]), ParseVertexFloat(values[2]), ParseVertexFloat(values[3]))); break;
-				case "vt": textures.Add(new(ParseVertexFloat(values[1]), ParseVertexFloat(values[2]))); break;
-				case "vn": normals.Add(new(ParseVertexFloat(values[1]), ParseVertexFloat(values[2]), ParseVertexFloat(values[3]))); break;
+				case "v": positions.Add(new Vector3(ParseVertexFloat(values[1]), ParseVertexFloat(values[2]), ParseVertexFloat(values[3]))); break;
+				case "vt": textures.Add(new Vector2(ParseVertexFloat(values[1]), ParseVertexFloat(values[2]))); break;
+				case "vn": normals.Add(new Vector3(ParseVertexFloat(values[1]), ParseVertexFloat(values[2]), ParseVertexFloat(values[3]))); break;
 				case "usemtl": useMaterial = values[1].Trim(); break;
 				case "f":
 					if (values.Length < 4) // Invalid face.
@@ -37,7 +37,7 @@ public static class ObjParser
 					for (int j = 0; j < rawIndices.Length; j++)
 					{
 						string[] indexEntries = rawIndices[j].Split('/');
-						faces.Add(new(ushort.Parse(indexEntries[0]), ushort.TryParse(indexEntries[1], out ushort texture) ? texture : (ushort)0, ushort.Parse(indexEntries[2])));
+						faces.Add(new Face(ushort.Parse(indexEntries[0]), ushort.TryParse(indexEntries[1], out ushort texture) ? texture : (ushort)0, ushort.Parse(indexEntries[2])));
 
 						if (j >= 3)
 						{
@@ -58,7 +58,7 @@ public static class ObjParser
 			}
 		}
 
-		return new(positions, textures, normals, meshes.Select(kvp => new MeshData(kvp.Key, kvp.Value)).ToList());
+		return new ModelData(positions, textures, normals, meshes.Select(kvp => new MeshData(kvp.Key, kvp.Value)).ToList());
 	}
 
 	private static float ParseVertexFloat(string value) => (float)double.Parse(value, NumberStyles.Float);

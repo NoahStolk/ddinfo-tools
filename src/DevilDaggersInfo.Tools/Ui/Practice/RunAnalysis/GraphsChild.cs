@@ -144,7 +144,7 @@ public static class GraphsChild
 				AddTooltipText("Gems Collected", Inline.Span(gemsCollected), Color.Red);
 				AddTooltipText("Gems Despawned", Inline.Span(gemsDespawned), Color.Gray(0.5f));
 				AddTooltipText("Gems Eaten", Inline.Span(gemsEaten), Color.Green);
-				AddTooltipText("Gems Total", Inline.Span(gemsTotal), new(127, 0, 0, 255));
+				AddTooltipText("Gems Total", Inline.Span(gemsTotal), new Color(127, 0, 0, 255));
 
 				ImGui.EndTooltip();
 			}
@@ -184,7 +184,7 @@ public static class GraphsChild
 		void RenderGraphBackground(ImDrawListPtr drawListPtr, out Vector2 pos, out Vector2 size)
 		{
 			pos = ImGui.GetCursorScreenPos();
-			size = new(ImGui.GetWindowWidth(), graphHeight);
+			size = new Vector2(ImGui.GetWindowWidth(), graphHeight);
 			drawListPtr.AddRectFilled(pos, pos + size, 0xff080808);
 		}
 
@@ -211,7 +211,7 @@ public static class GraphsChild
 			{
 				float normalizedX = i / (float)(data.Count - 1);
 				float normalizedY = data[i] / (float)maxDataEntry;
-				pointsArray[i] = new(cursorScreenPos.X + normalizedX * graphSize.X, cursorScreenPos.Y + graphHeight - normalizedY * graphSize.Y);
+				pointsArray[i] = new Vector2(cursorScreenPos.X + normalizedX * graphSize.X, cursorScreenPos.Y + graphHeight - normalizedY * graphSize.Y);
 			}
 
 			fixed (Vector2* p = pointsArray)
@@ -232,7 +232,7 @@ public static class GraphsChild
 				float normalizedX = (time - timerStart) / (timerEnd - timerStart);
 				float posX = pos.X + normalizedX * ImGui.GetWindowWidth();
 
-				drawListPtr.AddLine(new(posX, pos.Y), new(posX, pos.Y + size.Y), 0xff404040);
+				drawListPtr.AddLine(new Vector2(posX, pos.Y), new Vector2(posX, pos.Y + size.Y), 0xff404040);
 			}
 		}
 	}

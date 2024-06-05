@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis.Data;
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
 
@@ -10,7 +11,7 @@ public static class SplitsChild
 	{
 		IReadOnlyList<SplitDataEntry> data = RunAnalysisWindow.StatsData.SplitsData.HomingSplitData;
 
-		if (ImGui.BeginChild("Splits", new(192, 256)))
+		if (ImGui.BeginChild("Splits", new Vector2(192, 256)))
 		{
 			ImGuiExt.Title("Splits", Root.FontGoetheBold20);
 

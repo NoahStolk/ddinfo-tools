@@ -71,7 +71,7 @@ public static class WaveParser
 
 			int sampleCount = dataSize / (bitsPerSample / 8) / channels;
 			double lengthInSeconds = sampleCount / (double)sampleRate;
-			return new(channels, sampleRate, byteRate, blockAlign, bitsPerSample, data, sampleCount, lengthInSeconds);
+			return new SoundData(channels, sampleRate, byteRate, blockAlign, bitsPerSample, data, sampleCount, lengthInSeconds);
 		}
 
 		throw new WaveParseException($"Could not find {FormatBytes(DataHeader)} header.");

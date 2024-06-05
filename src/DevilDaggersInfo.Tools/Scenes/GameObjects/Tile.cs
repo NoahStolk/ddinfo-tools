@@ -22,9 +22,9 @@ public class Tile
 		ArenaY = arenaY;
 		_camera = camera;
 
-		_top = new(_vaoTile, ContentManager.Content.TileMesh, positionX, positionZ);
-		_pillar = new(_vaoPillar, ContentManager.Content.PillarMesh, positionX, positionZ);
-		_tileHitbox = new(_vaoHitbox, Root.InternalResources.TileHitboxModel.MainMesh, positionX, positionZ);
+		_top = new TileMeshObject(_vaoTile, ContentManager.Content.TileMesh, positionX, positionZ);
+		_pillar = new TileMeshObject(_vaoPillar, ContentManager.Content.PillarMesh, positionX, positionZ);
+		_tileHitbox = new TileHitboxMeshObject(_vaoHitbox, Root.InternalResources.TileHitboxModel.MainMesh, positionX, positionZ);
 	}
 
 	public float PositionX { get; }
@@ -43,7 +43,7 @@ public class Tile
 		_vaoHitbox = MeshShaderUtils.CreateVao(Root.InternalResources.TileHitboxModel.MainMesh);
 	}
 
-	public float SquaredDistanceToCamera() => Vector2.DistanceSquared(new(PositionX, PositionZ), new(_camera.Position.X, _camera.Position.Z));
+	public float SquaredDistanceToCamera() => Vector2.DistanceSquared(new Vector2(PositionX, PositionZ), new Vector2(_camera.Position.X, _camera.Position.Z));
 
 	public void SetDisplayHeight(float height)
 	{

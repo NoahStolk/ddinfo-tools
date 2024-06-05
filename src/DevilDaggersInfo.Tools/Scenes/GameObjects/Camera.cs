@@ -44,7 +44,7 @@ public class Camera
 		if (_isMenuCamera)
 		{
 			float time = Root.Application.TotalTime * 0.7f;
-			Position = new(MathF.Sin(time) * 5, 6, MathF.Cos(time) * 5);
+			Position = new Vector3(MathF.Sin(time) * 5, 6, MathF.Cos(time) * 5);
 			_rotationState = Quaternion.CreateFromRotationMatrix(SetRotationFromDirectionalVector(new Vector3(0, 4, 0) - Position));
 			return;
 		}
@@ -208,11 +208,11 @@ public class Camera
 		Vector3 direction = Vector3.Transform(worldUnits, _rotationState);
 
 		// Output a ray from camera position, along this direction.
-		return new(Position, direction);
+		return new Ray(Position, direction);
 	}
 
 	private static Vector2D<int> FloorToVector2Int32(Vector2 vector)
 	{
-		return new((int)MathF.Floor(vector.X), (int)MathF.Floor(vector.Y));
+		return new Vector2D<int>((int)MathF.Floor(vector.X), (int)MathF.Floor(vector.Y));
 	}
 }

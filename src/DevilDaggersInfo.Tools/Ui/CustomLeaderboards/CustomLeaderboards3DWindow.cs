@@ -21,7 +21,7 @@ public static class CustomLeaderboards3DWindow
 
 	public static void InitializeScene()
 	{
-		_arenaScene = new(static () => _spawnset, false, false);
+		_arenaScene = new ArenaScene(static () => _spawnset, false, false);
 	}
 
 	public static void LoadReplay(ReplayBinary<LocalReplayBinaryHeader> replayBinary)

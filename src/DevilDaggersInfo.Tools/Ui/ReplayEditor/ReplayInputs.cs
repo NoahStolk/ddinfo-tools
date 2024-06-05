@@ -35,7 +35,7 @@ public static class ReplayInputs
 		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 2, inputSize), inputRect, snapshot.Right, "D");
 		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize, 0), inputRect, snapshot.Forward, "W");
 		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize, inputSize), inputRect, snapshot.Backward, "S");
-		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 3, inputSize), new(64, 32), snapshot.Jump is JumpType.StartedPress or JumpType.Hold, "Space");
+		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 3, inputSize), new Vector2(64, 32), snapshot.Jump is JumpType.StartedPress or JumpType.Hold, "Space");
 		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 3, 0), inputRect, snapshot.Shoot == ShootType.Hold, "LMB");
 		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 4, 0), inputRect, snapshot.ShootHoming == ShootType.Hold, "RMB");
 	}
@@ -51,6 +51,6 @@ public static class ReplayInputs
 
 	private static Vector2 Clamp(Vector2 vector, float min, float max)
 	{
-		return new(Math.Clamp(vector.X, min, max), Math.Clamp(vector.Y, min, max));
+		return new Vector2(Math.Clamp(vector.X, min, max), Math.Clamp(vector.Y, min, max));
 	}
 }

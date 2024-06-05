@@ -56,7 +56,7 @@ public static class ContentFileWriter
 		TBinary binary = TContentConverter.Construct(path);
 		byte[] bytes = binary.ToBytes();
 		dataWriter.Write(bytes);
-		toc.Add(new(binary.ContentType, Path.GetFileNameWithoutExtension(path), (uint)bytes.Length));
+		toc.Add(new TocEntry(binary.ContentType, Path.GetFileNameWithoutExtension(path), (uint)bytes.Length));
 	}
 
 	/// <summary>

@@ -15,7 +15,7 @@ public readonly record struct ArenaMousePosition(Vector2 Real, Vector2D<int> Til
 		Vector2D<int> tile = new((int)Math.Floor(real.X / ArenaWindow.TileSize), (int)Math.Floor(real.Y / ArenaWindow.TileSize));
 		bool isValid = tile is { X: >= 0, Y: >= 0 } && tile.X < FileStates.Spawnset.Object.ArenaDimension && tile.Y < FileStates.Spawnset.Object.ArenaDimension;
 
-		return new()
+		return new ArenaMousePosition
 		{
 			Real = real,
 			Tile = tile,

@@ -14,7 +14,7 @@ public class ArenaLineState : IArenaState
 
 	public void InitializeSession(ArenaMousePosition mousePosition)
 	{
-		_session ??= new(mousePosition.Real, FileStates.Spawnset.Object.ArenaTiles.GetMutableClone());
+		_session ??= new Session(mousePosition.Real, FileStates.Spawnset.Object.ArenaTiles.GetMutableClone());
 	}
 
 	public void Handle(ArenaMousePosition mousePosition)
@@ -36,7 +36,7 @@ public class ArenaLineState : IArenaState
 
 		Loop(mousePosition, (i, j) => _session.Value.NewArena[i, j] = ArenaWindow.SelectedHeight);
 
-		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, _session.Value.NewArena) });
+		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(FileStates.Spawnset.Object.ArenaDimension, _session.Value.NewArena) });
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaLine);
 
 		Reset();
@@ -100,7 +100,7 @@ public class ArenaLineState : IArenaState
 
 	private static ArenaEditingUtils.Stadium GetStadium(Vector2 lineStart, ArenaMousePosition mousePosition)
 	{
-		return new(GetSnappedPosition(lineStart), GetSnappedPosition(mousePosition.Real), GetDisplayRadius());
+		return new ArenaEditingUtils.Stadium(GetSnappedPosition(lineStart), GetSnappedPosition(mousePosition.Real), GetDisplayRadius());
 	}
 
 	private static float GetDisplayRadius()

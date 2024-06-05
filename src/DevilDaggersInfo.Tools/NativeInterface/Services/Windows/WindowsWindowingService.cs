@@ -9,7 +9,7 @@ public class WindowsWindowingService : INativeWindowingService
 	{
 		int window = FindWindow(null, "Devil Daggers");
 		GetWindowRect(window, out Rect rect);
-		return new(rect.Left, rect.Top);
+		return new Vector2(rect.Left, rect.Top);
 	}
 
 	[DllImport("user32.dll")]

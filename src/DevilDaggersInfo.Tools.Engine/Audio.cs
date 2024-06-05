@@ -40,10 +40,10 @@ public static class Audio
 			fixed (float* v = &values[0])
 				Al.GetListenerProperty(ListenerFloatArray.Orientation, v);
 
-			return new()
+			return new Orientation
 			{
-				At = new() { X = values[0], Y = values[1], Z = values[2] },
-				Up = new() { X = values[3], Y = values[4], Z = values[5] },
+				At = new Vector3 { X = values[0], Y = values[1], Z = values[2] },
+				Up = new Vector3 { X = values[3], Y = values[4], Z = values[5] },
 			};
 		}
 		set
@@ -67,10 +67,10 @@ public static class Audio
 
 		_al.GetError();
 
-		ListenerOrientation = new()
+		ListenerOrientation = new Orientation
 		{
-			At = new() { X = 0.0f, Y = 0.0f, Z = 1.0f },
-			Up = new() { X = 0.0f, Y = 1.0f, Z = 0.0f },
+			At = new Vector3 { X = 0.0f, Y = 0.0f, Z = 1.0f },
+			Up = new Vector3 { X = 0.0f, Y = 1.0f, Z = 0.0f },
 		};
 	}
 

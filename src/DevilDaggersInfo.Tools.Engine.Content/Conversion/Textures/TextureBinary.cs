@@ -115,7 +115,7 @@ internal sealed record TextureBinary(ushort Width, ushort Height, byte[] ColorDa
 			_ => throw new NotSupportedException($"{nameof(TextureContentType)} '{textureContentType}' is not supported."),
 		};
 
-		return new(width, height, colorData);
+		return new TextureBinary(width, height, colorData);
 	}
 
 	private static byte[] ConstructTextureW1(BinaryReader br, ushort width, ushort height)

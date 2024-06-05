@@ -4,6 +4,7 @@ using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
@@ -23,7 +24,7 @@ public static class LeaderboardReplayBrowser
 		if (!_showWindow)
 			return;
 
-		ImGui.SetNextWindowSize(new(256, 128));
+		ImGui.SetNextWindowSize(new Vector2(256, 128));
 		if (ImGui.Begin("Leaderboard Replay Browser", ref _showWindow, ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoDocking))
 		{
 			ImGui.InputInt("Player ID", ref _selectedPlayerId, 1, 1, ImGuiInputTextFlags.CharsDecimal);
@@ -57,7 +58,7 @@ public static class LeaderboardReplayBrowser
 
 		try
 		{
-			leaderboardReplay = new(response.Data);
+			leaderboardReplay = new ReplayBinary<LeaderboardReplayBinaryHeader>(response.Data);
 		}
 		catch (Exception ex)
 		{
@@ -82,7 +83,7 @@ public static class LeaderboardReplayBrowser
 		using HttpClient httpClient = new();
 		using HttpResponseMessage response = await httpClient.PostAsync("http://dd.hasmodai.com/backend16/get_replay.php", content);
 		if (response.IsSuccessStatusCode)
-			return new(await response.Content.ReadAsByteArrayAsync(), id);
+			return new Response(await response.Content.ReadAsByteArrayAsync(), id);
 
 		Root.Log.Warning($"The leaderboard servers returned an unsuccessful response (HTTP {(int)response.StatusCode} {response.StatusCode}).");
 		return null;

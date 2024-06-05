@@ -19,6 +19,6 @@ internal sealed record ShaderBinary(ShaderContentType ShaderContentType, byte[] 
 		ShaderContentType shaderContentType = (ShaderContentType)br.ReadByte();
 		ushort codeLength = br.ReadUInt16();
 		byte[] code = br.ReadBytes(codeLength);
-		return new(shaderContentType, code);
+		return new ShaderBinary(shaderContentType, code);
 	}
 }

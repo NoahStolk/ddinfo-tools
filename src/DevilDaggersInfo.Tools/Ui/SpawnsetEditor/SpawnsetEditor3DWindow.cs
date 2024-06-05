@@ -16,7 +16,7 @@ public static class SpawnsetEditor3DWindow
 
 	public static void InitializeScene()
 	{
-		_arenaScene = new(static () => FileStates.Spawnset.Object, false, true);
+		_arenaScene = new ArenaScene(static () => FileStates.Spawnset.Object, false, true);
 	}
 
 	public static void Render(float delta)
@@ -50,7 +50,7 @@ public static class SpawnsetEditor3DWindow
 			}
 
 			// Prevent the window from being dragged when clicking on the 3D editor.
-			ImGui.InvisibleButton("invisible", new(_framebufferData.Width, _framebufferData.Height));
+			ImGui.InvisibleButton("invisible", new Vector2(_framebufferData.Width, _framebufferData.Height));
 		}
 
 		ImGui.End(); // End 3D Arena Editor

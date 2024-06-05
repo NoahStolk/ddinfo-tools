@@ -22,36 +22,36 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 
 	public static implicit operator Vector3(Color color)
 	{
-		return new(color.R / (float)byte.MaxValue, color.G / (float)byte.MaxValue, color.B / (float)byte.MaxValue);
+		return new Vector3(color.R / (float)byte.MaxValue, color.G / (float)byte.MaxValue, color.B / (float)byte.MaxValue);
 	}
 
 	public static implicit operator Vector4(Color color)
 	{
-		return new(color.R / (float)byte.MaxValue, color.G / (float)byte.MaxValue, color.B / (float)byte.MaxValue, color.A / (float)byte.MaxValue);
+		return new Vector4(color.R / (float)byte.MaxValue, color.G / (float)byte.MaxValue, color.B / (float)byte.MaxValue, color.A / (float)byte.MaxValue);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Color operator +(Color left, Color right)
 	{
-		return new((byte)(left.R + right.R), (byte)(left.G + right.G), (byte)(left.B + right.B), (byte)(left.A + right.A));
+		return new Color((byte)(left.R + right.R), (byte)(left.G + right.G), (byte)(left.B + right.B), (byte)(left.A + right.A));
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Color operator -(Color left, Color right)
 	{
-		return new((byte)(left.R - right.R), (byte)(left.G - right.G), (byte)(left.B - right.B), (byte)(left.A - right.A));
+		return new Color((byte)(left.R - right.R), (byte)(left.G - right.G), (byte)(left.B - right.B), (byte)(left.A - right.A));
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Color operator *(Color left, Color right)
 	{
-		return new((byte)(left.R * right.R), (byte)(left.G * right.G), (byte)(left.B * right.B), (byte)(left.A * right.A));
+		return new Color((byte)(left.R * right.R), (byte)(left.G * right.G), (byte)(left.B * right.B), (byte)(left.A * right.A));
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Color operator /(Color left, Color right)
 	{
-		return new((byte)(left.R / right.R), (byte)(left.G / right.G), (byte)(left.B / right.B), (byte)(left.A / right.A));
+		return new Color((byte)(left.R / right.R), (byte)(left.G / right.G), (byte)(left.B / right.B), (byte)(left.A / right.A));
 	}
 
 	public Color ReadableColorForBrightness()
@@ -70,7 +70,7 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 		byte g = (byte)Math.Min(byte.MaxValue, G + component);
 		byte b = (byte)Math.Min(byte.MaxValue, B + component);
 		byte a = (byte)Math.Min(byte.MaxValue, A + component);
-		return new(r, g, b, a);
+		return new Color(r, g, b, a);
 	}
 
 	public Color Desaturate(float f)
@@ -84,12 +84,12 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 		float newG = g + f * (l - g);
 		float newB = b + f * (l - b);
 
-		return new((byte)(newR * byte.MaxValue), (byte)(newG * byte.MaxValue), (byte)(newB * byte.MaxValue), A);
+		return new Color((byte)(newR * byte.MaxValue), (byte)(newG * byte.MaxValue), (byte)(newB * byte.MaxValue), A);
 	}
 
 	public Color Darken(float amount)
 	{
-		return new((byte)(R * (1 - amount)), (byte)(G * (1 - amount)), (byte)(B * (1 - amount)), A);
+		return new Color((byte)(R * (1 - amount)), (byte)(G * (1 - amount)), (byte)(B * (1 - amount)), A);
 	}
 
 	public int GetHue()
@@ -121,12 +121,12 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 		float g = MathUtils.Lerp(value1.G, value2.G, amount);
 		float b = MathUtils.Lerp(value1.B, value2.B, amount);
 		float a = MathUtils.Lerp(value1.A, value2.A, amount);
-		return new((byte)r, (byte)g, (byte)b, (byte)a);
+		return new Color((byte)r, (byte)g, (byte)b, (byte)a);
 	}
 
 	public static Color Invert(Color color)
 	{
-		return new((byte)(byte.MaxValue - color.R), (byte)(byte.MaxValue - color.G), (byte)(byte.MaxValue - color.B), color.A);
+		return new Color((byte)(byte.MaxValue - color.R), (byte)(byte.MaxValue - color.G), (byte)(byte.MaxValue - color.B), color.A);
 	}
 
 	public static Color Gray(float value)
@@ -135,7 +135,7 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 			throw new ArgumentOutOfRangeException(nameof(value));
 
 		byte component = (byte)(value * byte.MaxValue);
-		return new(component, component, component, byte.MaxValue);
+		return new Color(component, component, component, byte.MaxValue);
 	}
 
 	public static Color FromHsv(float hue, float saturation, float value)
@@ -154,22 +154,22 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 
 		return hi switch
 		{
-			0 => new(v, t, p, byte.MaxValue),
-			1 => new(q, v, p, byte.MaxValue),
-			2 => new(p, v, t, byte.MaxValue),
-			3 => new(p, q, v, byte.MaxValue),
-			4 => new(t, p, v, byte.MaxValue),
-			_ => new(v, p, q, byte.MaxValue),
+			0 => new Color(v, t, p, byte.MaxValue),
+			1 => new Color(q, v, p, byte.MaxValue),
+			2 => new Color(p, v, t, byte.MaxValue),
+			3 => new Color(p, q, v, byte.MaxValue),
+			4 => new Color(t, p, v, byte.MaxValue),
+			_ => new Color(v, p, q, byte.MaxValue),
 		};
 	}
 
 	public static Color FromVector3(Vector3 vector)
 	{
-		return new((byte)(vector.X * byte.MaxValue), (byte)(vector.Y * byte.MaxValue), (byte)(vector.Z * byte.MaxValue), byte.MaxValue);
+		return new Color((byte)(vector.X * byte.MaxValue), (byte)(vector.Y * byte.MaxValue), (byte)(vector.Z * byte.MaxValue), byte.MaxValue);
 	}
 
 	public static Color FromVector4(Vector4 vector)
 	{
-		return new((byte)(vector.X * byte.MaxValue), (byte)(vector.Y * byte.MaxValue), (byte)(vector.Z * byte.MaxValue), (byte)(vector.W * byte.MaxValue));
+		return new Color((byte)(vector.X * byte.MaxValue), (byte)(vector.Y * byte.MaxValue), (byte)(vector.Z * byte.MaxValue), (byte)(vector.W * byte.MaxValue));
 	}
 }

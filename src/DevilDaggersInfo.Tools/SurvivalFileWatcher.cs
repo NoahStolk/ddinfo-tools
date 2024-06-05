@@ -26,7 +26,7 @@ public static class SurvivalFileWatcher
 	{
 		UpdateActiveSpawnsetBasedOnHash();
 
-		_survivalFileWatcher = new(UserSettings.ModsDirectory, "survival");
+		_survivalFileWatcher = new FileSystemWatcher(UserSettings.ModsDirectory, "survival");
 		_survivalFileWatcher.NotifyFilter = NotifyFilters.CreationTime
 			| NotifyFilters.DirectoryName
 			| NotifyFilters.FileName

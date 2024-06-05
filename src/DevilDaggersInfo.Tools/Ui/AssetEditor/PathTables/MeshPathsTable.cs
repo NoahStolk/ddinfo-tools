@@ -40,7 +40,7 @@ public sealed class MeshPathsTable : IPathTable<MeshPathsTable>
 	{
 		if (path == null)
 		{
-			path = new(assetInfo.AssetName, null);
+			path = new MeshAssetPath(assetInfo.AssetName, null);
 			FileStates.Mod.Object.Meshes.Add(path);
 		}
 

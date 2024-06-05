@@ -18,7 +18,7 @@ public static class CustomLeaderboardDaggerUtils
 			CustomLeaderboardDagger.Golden => DaggerColors.Golden,
 			CustomLeaderboardDagger.Devil => DaggerColors.Devil,
 			CustomLeaderboardDagger.Leviathan => DaggerColors.Leviathan,
-			null => new(127, 143, 127),
+			null => new Core.Wiki.Structs.Color(127, 143, 127),
 			_ => throw new UnreachableException(),
 		}).ToEngineColor();
 	}

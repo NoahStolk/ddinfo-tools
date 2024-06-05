@@ -1,4 +1,5 @@
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
@@ -6,7 +7,7 @@ public static class StateChild
 {
 	public static void Render()
 	{
-		if (ImGui.BeginTable("StateTable", 2, ImGuiTableFlags.None, new(288, 80)))
+		if (ImGui.BeginTable("StateTable", 2, ImGuiTableFlags.None, new Vector2(288, 80)))
 		{
 			ImGui.TableSetupColumn(null, ImGuiTableColumnFlags.WidthFixed | ImGuiTableColumnFlags.NoHeaderLabel, 112);
 

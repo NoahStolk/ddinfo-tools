@@ -74,7 +74,7 @@ public static class TimelineCache
 
 				if (!_cache.TryGetValue(editorEvent.TickIndex, out TimelineCacheEntry? cacheEntry))
 				{
-					cacheEntry = new();
+					cacheEntry = new TimelineCacheEntry();
 					_cache.Add(editorEvent.TickIndex, cacheEntry);
 				}
 

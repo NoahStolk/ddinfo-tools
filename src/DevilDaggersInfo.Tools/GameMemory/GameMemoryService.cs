@@ -53,7 +53,7 @@ public class GameMemoryService
 		_nativeMemoryService.ReadMemory(_process, _memoryBlockAddress, _mainBuffer, 0, _mainBufferSize);
 
 		MainBlockPrevious = MainBlock;
-		MainBlock = new(_mainBuffer);
+		MainBlock = new MainBlock(_mainBuffer);
 	}
 
 	public byte[] GetStatsBuffer()

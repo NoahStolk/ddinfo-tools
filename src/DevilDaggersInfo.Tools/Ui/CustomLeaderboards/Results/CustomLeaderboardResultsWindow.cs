@@ -3,6 +3,7 @@
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 #endif
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 
@@ -21,7 +22,7 @@ public static class CustomLeaderboardResultsWindow
 
 	public static void Render()
 	{
-		ImGui.SetNextWindowSizeConstraints(new(388, 0), new(388, float.MaxValue));
+		ImGui.SetNextWindowSizeConstraints(new Vector2(388, 0), new Vector2(388, float.MaxValue));
 		ImGuiUtils.SetNextWindowMinSize(0, 320);
 		if (ImGui.Begin("Custom Leaderboard Submissions (this session)"))
 		{

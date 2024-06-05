@@ -33,7 +33,7 @@ public class SplitsData
 			{
 				int? firstHomingStored = RunAnalysisWindow.StatsData.Statistics.Count > 0 ? RunAnalysisWindow.StatsData.Statistics[0].HomingStored : null;
 				addedTimerStart = true;
-				_homingSplitData[homingSplitDataIndex] = new((int)RunAnalysisWindow.StatsData.TimerStart, SplitDataEntryKind.Start, firstHomingStored, firstHomingStored);
+				_homingSplitData[homingSplitDataIndex] = new SplitDataEntry((int)RunAnalysisWindow.StatsData.TimerStart, SplitDataEntryKind.Start, firstHomingStored, firstHomingStored);
 				homingSplitDataIndex++;
 			}
 
@@ -41,7 +41,7 @@ public class SplitsData
 			{
 				int? lastHomingStored = RunAnalysisWindow.StatsData.Statistics.Count > 0 ? RunAnalysisWindow.StatsData.Statistics[^1].HomingStored : null;
 				addedTimerEnd = true;
-				_homingSplitData[homingSplitDataIndex] = new((int)RunAnalysisWindow.StatsData.TimerEnd, SplitDataEntryKind.End, lastHomingStored, homingSplitDataIndex == 0 ? null : _homingSplitData[homingSplitDataIndex - 1].Homing);
+				_homingSplitData[homingSplitDataIndex] = new SplitDataEntry((int)RunAnalysisWindow.StatsData.TimerEnd, SplitDataEntryKind.End, lastHomingStored, homingSplitDataIndex == 0 ? null : _homingSplitData[homingSplitDataIndex - 1].Homing);
 				homingSplitDataIndex++;
 			}
 
@@ -50,7 +50,7 @@ public class SplitsData
 			int? homing = hasValue ? RunAnalysisWindow.StatsData.Statistics[actualIndex].HomingStored : null;
 			int? previousHoming = homingSplitDataIndex > 0 ? _homingSplitData[homingSplitDataIndex - 1].Homing : null;
 
-			_homingSplitData[homingSplitDataIndex] = new(splitEntry.Label, SplitDataEntryKind.Default, homing, previousHoming);
+			_homingSplitData[homingSplitDataIndex] = new SplitDataEntry(splitEntry.Label, SplitDataEntryKind.Default, homing, previousHoming);
 			homingSplitDataIndex++;
 		}
 
@@ -58,7 +58,7 @@ public class SplitsData
 		for (int i = 0; i < homingSplitDataIndex; i++)
 		{
 			if (_homingSplitData[i].DisplayTimer < (int)RunAnalysisWindow.StatsData.TimerStart || _homingSplitData[i].DisplayTimer > (int)RunAnalysisWindow.StatsData.TimerEnd)
-				_homingSplitData[i] = new(_homingSplitData[i].DisplayTimer, _homingSplitData[i].Kind, null, null);
+				_homingSplitData[i] = new SplitDataEntry(_homingSplitData[i].DisplayTimer, _homingSplitData[i].Kind, null, null);
 		}
 	}
 }

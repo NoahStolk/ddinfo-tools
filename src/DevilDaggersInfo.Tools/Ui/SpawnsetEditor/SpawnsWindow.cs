@@ -44,7 +44,7 @@ public static class SpawnsWindow
 			if (endLoopLength.HasValue && isEndLoopTooShort)
 			{
 				ImGui.PushStyleColor(ImGuiCol.ChildBg, new Engine.Maths.Numerics.Color(127, 0, 0, 255));
-				if (ImGui.BeginChild("Warning", new(0, 56)))
+				if (ImGui.BeginChild("Warning", new Vector2(0, 56)))
 				{
 					ImGui.TextWrapped(Inline.Span($"(!) The end loop is only {endLoopLength.Value} seconds long, which will probably result in severe lag or a crash. If you intend to have no end loop, make sure to add an empty spawn at the end of the spawns list."));
 					ImGui.EndChild();
@@ -62,9 +62,9 @@ public static class SpawnsWindow
 
 			if (ImGui.BeginChild("SpawnControlsChild"))
 			{
-				if (ImGui.BeginChild("AddAndInsertButtons", new(72, controlsHeight)))
+				if (ImGui.BeginChild("AddAndInsertButtons", new Vector2(72, controlsHeight)))
 				{
-					if (ImGui.Button("Add", new(64, 32)))
+					if (ImGui.Button("Add", new Vector2(64, 32)))
 					{
 						if (FileStates.Spawnset.Object.Spawns.Length >= MaxSpawns)
 						{
@@ -72,13 +72,13 @@ public static class SpawnsWindow
 						}
 						else
 						{
-							FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Add(new(_selectedEnemyType, _addDelay)) });
+							FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Add(new Spawn(_selectedEnemyType, _addDelay)) });
 							SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnAdd);
 							_scrollToIndex = FileStates.Spawnset.Object.Spawns.Length - 1;
 						}
 					}
 
-					if (ImGui.Button("Insert", new(64, 32)))
+					if (ImGui.Button("Insert", new Vector2(64, 32)))
 					{
 						int selectedIndex = Array.IndexOf(_selected, true);
 						if (selectedIndex == -1)
@@ -90,7 +90,7 @@ public static class SpawnsWindow
 						}
 						else
 						{
-							FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Insert(selectedIndex, new(_selectedEnemyType, _addDelay)) });
+							FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Insert(selectedIndex, new Spawn(_selectedEnemyType, _addDelay)) });
 							SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnInsert);
 							_scrollToIndex = selectedIndex;
 						}
@@ -146,7 +146,7 @@ public static class SpawnsWindow
 		if (sameLine)
 			ImGui.SameLine();
 
-		if (ImGui.Button(Inline.Span(enemyType), new(80, 20)))
+		if (ImGui.Button(Inline.Span(enemyType), new Vector2(80, 20)))
 			_selectedEnemyType = enemyType;
 
 		ImGui.PopStyleColor(5);
@@ -288,7 +288,7 @@ public static class SpawnsWindow
 				ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color + new Vector4(0.3f, 0.3f, 0.3f, 0));
 				ImGui.PushStyleColor(ImGuiCol.ButtonActive, color + new Vector4(0.5f, 0.5f, 0.5f, 0));
 
-				if (ImGui.Button(EnumUtils.EnemyTypeNames[enemyType], new(96, 18)))
+				if (ImGui.Button(EnumUtils.EnemyTypeNames[enemyType], new Vector2(96, 18)))
 				{
 					SaveEditedSpawn(spawn.Index, enemyType, _editDelay);
 					saved = true;
@@ -303,7 +303,7 @@ public static class SpawnsWindow
 			if (!saved && Math.Abs(_editDelay - spawn.Delay) > 0.0001f)
 				_delayEdited = true;
 
-			if (ImGui.Button("Save", new(128, 20)))
+			if (ImGui.Button("Save", new Vector2(128, 20)))
 				SaveEditedSpawn(spawn.Index, spawn.EnemyType, _editDelay);
 
 			ImGui.EndPopup();
@@ -313,7 +313,7 @@ public static class SpawnsWindow
 		{
 			FileStates.Spawnset.Update(FileStates.Spawnset.Object with
 			{
-				Spawns = FileStates.Spawnset.Object.Spawns.SetItem(spawnIndex, new(enemyType, delay)),
+				Spawns = FileStates.Spawnset.Object.Spawns.SetItem(spawnIndex, new Spawn(enemyType, delay)),
 			});
 
 			SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnEdit);

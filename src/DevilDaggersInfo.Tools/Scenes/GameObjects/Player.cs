@@ -15,8 +15,8 @@ public class Player
 	public Player(ReplaySimulation movementTimeline)
 	{
 		_movementTimeline = movementTimeline;
-		_mesh = new(_vao, ContentManager.Content.Hand4Mesh, default, default);
-		Light = new(6, default, new(1, 0.5f, 0));
+		_mesh = new PlayerMovement(_vao, ContentManager.Content.Hand4Mesh, default, default);
+		Light = new LightObject(6, default, new Vector3(1, 0.5f, 0));
 	}
 
 	public LightObject Light { get; }

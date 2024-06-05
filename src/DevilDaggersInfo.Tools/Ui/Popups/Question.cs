@@ -1,4 +1,5 @@
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
@@ -26,7 +27,7 @@ public class Question : Popup
 
 		bool shouldExit = false;
 
-		if (ImGui.Button("Yes", new(120, 0)))
+		if (ImGui.Button("Yes", new Vector2(120, 0)))
 		{
 			_onConfirm();
 			shouldExit = true;
@@ -34,7 +35,7 @@ public class Question : Popup
 
 		ImGui.SameLine();
 
-		if (ImGui.Button("No", new(120, 0)))
+		if (ImGui.Button("No", new Vector2(120, 0)))
 		{
 			_onDeny();
 			shouldExit = true;
@@ -42,7 +43,7 @@ public class Question : Popup
 
 		ImGui.SameLine();
 
-		if (ImGui.Button("Cancel", new(120, 0)))
+		if (ImGui.Button("Cancel", new Vector2(120, 0)))
 			shouldExit = true;
 
 		return shouldExit;

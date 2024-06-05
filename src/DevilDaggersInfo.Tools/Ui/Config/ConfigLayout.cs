@@ -80,8 +80,8 @@ public static class ConfigLayout
 			""";
 
 		Vector2 center = ImGui.GetMainViewport().GetCenter();
-		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new(0.5f, 0.5f));
-		ImGui.SetNextWindowSize(new(768, 512));
+		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new Vector2(0.5f, 0.5f));
+		ImGui.SetNextWindowSize(new Vector2(768, 512));
 		const ImGuiWindowFlags flags = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoNavFocus | ImGuiWindowFlags.NoDocking;
 		if (ImGui.Begin("Configuration", flags))
 		{
@@ -92,11 +92,11 @@ public static class ConfigLayout
 			ImGui.Spacing();
 			ImGui.Spacing();
 
-			if (ImGui.BeginChild("Input", new(0, 296)))
+			if (ImGui.BeginChild("Input", new Vector2(0, 296)))
 			{
-				if (ImGui.BeginChild("InputDirectory", new(0, 64)))
+				if (ImGui.BeginChild("InputDirectory", new Vector2(0, 64)))
 				{
-					if (ImGui.Button("Browse", new(96, 20)))
+					if (ImGui.Button("Browse", new Vector2(96, 20)))
 						NativeFileDialog.SelectDirectory(OpenInstallationDirectoryCallback);
 
 					ImGui.SameLine();
@@ -106,7 +106,7 @@ public static class ConfigLayout
 					ImGui.Spacing();
 
 					if (!string.IsNullOrWhiteSpace(_error))
-						ImGui.TextColored(new(1, 0, 0, 1), _error);
+						ImGui.TextColored(new Vector4(1, 0, 0, 1), _error);
 				}
 
 				ImGui.EndChild(); // End InputDirectory
@@ -142,7 +142,7 @@ public static class ConfigLayout
 			ImGui.EndChild(); // End Input
 
 			ImGui.PushFont(Root.FontGoetheBold30);
-			if (ImGui.Button("Save and continue", new(752, 64)))
+			if (ImGui.Button("Save and continue", new Vector2(752, 64)))
 			{
 				UserSettings.Model = UserSettings.Model with
 				{

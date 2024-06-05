@@ -1,4 +1,5 @@
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
@@ -27,6 +28,6 @@ public class MessageWithHideOption : Popup
 		if (ImGui.Checkbox("Do not show again", ref _doNotShowAgain))
 			_setDoNotShowAgain(_doNotShowAgain);
 
-		return ImGui.Button("OK", new(120, 0)) || ImGuiUtils.IsEnterPressed();
+		return ImGui.Button("OK", new Vector2(120, 0)) || ImGuiUtils.IsEnterPressed();
 	}
 }

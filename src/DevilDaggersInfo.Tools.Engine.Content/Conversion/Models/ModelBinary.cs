@@ -63,11 +63,11 @@ internal sealed record ModelBinary(IReadOnlyList<Vector3> Positions, IReadOnlyLi
 
 			Face[] faces = new Face[br.ReadUInt16()];
 			for (int j = 0; j < faces.Length; j++)
-				faces[j] = new(br.ReadUInt16(), br.ReadUInt16(), br.ReadUInt16());
+				faces[j] = new Face(br.ReadUInt16(), br.ReadUInt16(), br.ReadUInt16());
 
-			meshes[i] = new(useMaterial, faces);
+			meshes[i] = new MeshData(useMaterial, faces);
 		}
 
-		return new(positions, textures, normals, meshes);
+		return new ModelBinary(positions, textures, normals, meshes);
 	}
 }

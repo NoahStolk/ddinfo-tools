@@ -20,8 +20,8 @@ public static class PracticeWindow
 		if (ImGui.Begin("Practice", ImGuiWindowFlags.NoCollapse))
 		{
 			Vector2 windowSize = ImGui.GetWindowSize();
-			TemplateContainerSize = new(MathF.Ceiling(windowSize.X / 3 - 11), windowSize.Y - 260);
-			TemplateListSize = new(TemplateContainerSize.X - 20, TemplateContainerSize.Y - 88);
+			TemplateContainerSize = new Vector2(MathF.Ceiling(windowSize.X / 3 - 11), windowSize.Y - 260);
+			TemplateListSize = new Vector2(TemplateContainerSize.X - 20, TemplateContainerSize.Y - 88);
 			TemplateWidth = TemplateListSize.X - 20;
 
 			ImGui.Text("Use these templates to practice specific sections of the game. Click on a template to install it.");

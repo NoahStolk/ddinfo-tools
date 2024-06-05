@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
@@ -41,7 +42,7 @@ public static class CustomLeaderboardsWindow
 		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize);
 		if (ImGui.Begin("Custom Leaderboards", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollWithMouse))
 		{
-			if (ImGui.BeginChild("LeftRow", new(288, 464)))
+			if (ImGui.BeginChild("LeftRow", new Vector2(288, 464)))
 			{
 				StateChild.Render();
 				RecordingChild.Render();
@@ -51,7 +52,7 @@ public static class CustomLeaderboardsWindow
 
 			ImGui.SameLine();
 
-			if (ImGui.BeginChild("RightRow", new(0, 464)))
+			if (ImGui.BeginChild("RightRow", new Vector2(0, 464)))
 			{
 				LeaderboardListChild.Render();
 				LeaderboardListViewChild.Render();

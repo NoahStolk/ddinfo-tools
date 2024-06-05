@@ -41,7 +41,7 @@ public static class HistoryWindow
 				ImGui.PushStyleColor(ImGuiCol.Border, i == FileStates.Spawnset.CurrentHistoryIndex ? Color.White : Color.Black);
 
 				ImGui.PushID(Inline.Span($"HistoryButton{i}"));
-				if (ImGui.Button(history.EditType.GetChange(), new(buttonWidth, 20)))
+				if (ImGui.Button(history.EditType.GetChange(), new Vector2(buttonWidth, 20)))
 					SetHistoryIndex(i);
 
 				ImGui.PopID();

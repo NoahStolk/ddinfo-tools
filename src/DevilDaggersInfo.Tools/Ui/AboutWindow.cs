@@ -72,7 +72,7 @@ public static class AboutWindow
 
 	private static void RenderFooter()
 	{
-		ImGui.SetCursorPos(new(8, ImGui.GetWindowHeight() - 72));
+		ImGui.SetCursorPos(new Vector2(8, ImGui.GetWindowHeight() - 72));
 
 		ImGui.TextColored(Colors.TitleColor, "© DevilDaggers.info 2017-2024");
 

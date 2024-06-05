@@ -4,6 +4,7 @@ using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
@@ -11,7 +12,7 @@ public static class CurrentSpawnsetChild
 {
 	public static void Render()
 	{
-		if (ImGui.BeginChild("CurrentSpawnset", new(0, 200), ImGuiChildFlags.Border))
+		if (ImGui.BeginChild("CurrentSpawnset", new Vector2(0, 200), ImGuiChildFlags.Border))
 		{
 			ImGui.SeparatorText("Current practice configuration");
 			ImGui.Spacing();
@@ -27,7 +28,7 @@ public static class CurrentSpawnsetChild
 				ImGui.Text("The current practice spawnset is enabled:");
 				ImGui.Spacing();
 
-				if (ImGui.BeginTable("CurrentSpawnsetTable", 2, ImGuiTableFlags.Borders, new(320, 0)))
+				if (ImGui.BeginTable("CurrentSpawnsetTable", 2, ImGuiTableFlags.Borders, new Vector2(320, 0)))
 				{
 					ImGui.TableNextColumn();
 					ImGui.Text("Hand");

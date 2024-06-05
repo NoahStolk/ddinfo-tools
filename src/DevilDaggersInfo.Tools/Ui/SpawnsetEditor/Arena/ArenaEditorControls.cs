@@ -4,6 +4,7 @@ using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 
@@ -11,7 +12,7 @@ public static class ArenaEditorControls
 {
 	public static void Render()
 	{
-		if (ImGui.BeginChild("ArenaEditorControls", new(256, 26)))
+		if (ImGui.BeginChild("ArenaEditorControls", new Vector2(256, 26)))
 		{
 			const int borderSize = 2;
 			const int size = 16;
@@ -23,7 +24,7 @@ public static class ArenaEditorControls
 
 				bool isDagger = arenaTool == ArenaTool.Dagger;
 				bool isCurrent = arenaTool == ArenaWindow.ArenaTool;
-				ImGui.SetCursorPos(new(offsetX + borderSize * 2, borderSize));
+				ImGui.SetCursorPos(new Vector2(offsetX + borderSize * 2, borderSize));
 
 				if (isDagger)
 					ImGui.BeginDisabled(FileStates.Spawnset.Object.GameMode != GameMode.Race);
@@ -31,7 +32,7 @@ public static class ArenaEditorControls
 				if (isCurrent)
 					ImGui.PushStyleColor(ImGuiCol.Button, ImGui.GetStyle().Colors[(int)ImGuiCol.ButtonHovered]);
 
-				if (ImGuiImage.ImageButton(arenaToolText, GetTexture(arenaTool), new(size)) && ArenaWindow.ArenaTool != arenaTool)
+				if (ImGuiImage.ImageButton(arenaToolText, GetTexture(arenaTool), new Vector2(size)) && ArenaWindow.ArenaTool != arenaTool)
 					ArenaWindow.ArenaTool = arenaTool;
 
 				if (isCurrent)
@@ -49,7 +50,7 @@ public static class ArenaEditorControls
 
 		ImGui.EndChild(); // End ArenaEditorControls
 
-		if (ImGui.BeginChild("ArenaToolControls", new(256, 112)))
+		if (ImGui.BeginChild("ArenaToolControls", new Vector2(256, 112)))
 		{
 			switch (ArenaWindow.ArenaTool)
 			{

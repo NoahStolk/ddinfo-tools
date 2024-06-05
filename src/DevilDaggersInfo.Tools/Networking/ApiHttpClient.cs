@@ -22,7 +22,7 @@ public class ApiHttpClient
 	private async Task<HttpResponseMessage> SendRequest(HttpMethod httpMethod, string url, JsonContent? body = null)
 	{
 		using HttpRequestMessage request = new();
-		request.RequestUri = new(url, UriKind.Relative);
+		request.RequestUri = new Uri(url, UriKind.Relative);
 		request.Method = httpMethod;
 		request.Content = body;
 

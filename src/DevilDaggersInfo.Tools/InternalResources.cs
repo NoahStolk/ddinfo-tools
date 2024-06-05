@@ -41,7 +41,7 @@ public record InternalResources(
 #endif
 		DecompiledContentFile ddInfoToolsContent = DecompiledContentFile.Create(ddInfoToolsContentRootDirectory, Path.Combine(AssemblyUtils.InstallationDirectory, "ddinfo-assets"));
 
-		return new(
+		return new InternalResources(
 			MeshShader: GetShader(ddInfoToolsContent, "Mesh"),
 			ApplicationIconTexture: GetTextureContent(ddInfoToolsContent, "ApplicationIcon"),
 			ArrowEndTexture: GetTexture(ddInfoToolsContent, "ArrowEnd"),
@@ -76,7 +76,7 @@ public record InternalResources(
 				throw new InvalidOperationException($"Could not find shader '{name}'.");
 
 			uint id = ShaderLoader.Load(shaderContent.VertexCode, shaderContent.FragmentCode);
-			return new(id);
+			return new Shader(id);
 		}
 
 		static TextureContent GetTextureContent(DecompiledContentFile content, string name)
@@ -92,7 +92,7 @@ public record InternalResources(
 		{
 			TextureContent textureContent = GetTextureContent(content, name);
 			uint id = TextureLoader.Load(textureContent);
-			return new(id);
+			return new Texture(id);
 		}
 
 		static ModelContent GetModelContent(DecompiledContentFile content, string name)

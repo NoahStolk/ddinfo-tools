@@ -48,7 +48,7 @@ public class TileHitboxMeshObject
 	private void SetModel()
 	{
 		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(new Vector3(1, Height, 1));
-		Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(new(_positionX, PositionY, _positionZ));
+		Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(new Vector3(_positionX, PositionY, _positionZ));
 		_model = scaleMatrix * translationMatrix;
 	}
 

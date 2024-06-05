@@ -7,12 +7,12 @@ public static class ArenaEditingUtils
 {
 	public static Vector2 Snap(Vector2 vector, float snap)
 	{
-		return new(MathF.Floor(vector.X / snap) * snap, MathF.Floor(vector.Y / snap) * snap);
+		return new Vector2(MathF.Floor(vector.X / snap) * snap, MathF.Floor(vector.Y / snap) * snap);
 	}
 
 	public static Vector2 Snap(Vector2 vector, Vector2 snap)
 	{
-		return new(MathF.Floor(vector.X / snap.X) * snap.X, MathF.Floor(vector.Y / snap.Y) * snap.Y);
+		return new Vector2(MathF.Floor(vector.X / snap.X) * snap.X, MathF.Floor(vector.Y / snap.Y) * snap.Y);
 	}
 
 	public static Rectangle GetRectangle(Vector2D<int> start, Vector2D<int> end)
@@ -43,7 +43,7 @@ public static class ArenaEditingUtils
 			maxY = start.Y;
 		}
 
-		return new(minX, minY, maxX - minX, maxY - minY);
+		return new Rectangle(minX, minY, maxX - minX, maxY - minY);
 	}
 
 	public readonly record struct Rectangle
@@ -71,7 +71,7 @@ public static class ArenaEditingUtils
 
 			float deltaX = End.X - Start.X;
 			float deltaY = End.Y - Start.Y;
-			Normal = Vector2.Normalize(new(-deltaY, deltaX));
+			Normal = Vector2.Normalize(new Vector2(-deltaY, deltaX));
 		}
 
 		public Vector2 Start { get; }
@@ -89,8 +89,8 @@ public static class ArenaEditingUtils
 
 			float deltaX = end.X - start.X;
 			float deltaY = end.Y - start.Y;
-			Direction = new(deltaX, deltaY);
-			Normal = Vector2.Normalize(new(-deltaY, deltaX));
+			Direction = new Vector2(deltaX, deltaY);
+			Normal = Vector2.Normalize(new Vector2(-deltaY, deltaX));
 			Edge1Point = start + Normal * radius;
 			Edge2Point = start - Normal * radius;
 		}
@@ -114,7 +114,7 @@ public static class ArenaEditingUtils
 		public static Square FromCenter(Vector2 center, float size)
 		{
 			Vector2 halfSize = new(size / 2f);
-			return new(center - halfSize, center + halfSize);
+			return new Square(center - halfSize, center + halfSize);
 		}
 
 		public bool IntersectsLineSegment(LineSegment lineSegment)

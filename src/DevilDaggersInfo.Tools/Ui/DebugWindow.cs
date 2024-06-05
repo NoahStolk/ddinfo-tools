@@ -166,7 +166,7 @@ public static class DebugWindow
 			> 10_000 => Color.Red,
 			> 1_000 => Color.Orange,
 			> 500 => Color.Yellow,
-			> 0 => new(255, 255, 127, 255),
+			> 0 => new Color(255, 255, 127, 255),
 			_ => Color.Green,
 		};
 		AddText("Heap alloc bytes since last frame", Inline.Span(allocatedBytesDiff), color);

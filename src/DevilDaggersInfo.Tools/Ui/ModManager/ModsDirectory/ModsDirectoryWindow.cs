@@ -143,7 +143,7 @@ public static class ModsDirectoryWindow
 					setFocus = true;
 				}
 
-				ImGui.SetNextWindowSize(new(512, 128), ImGuiCond.Appearing);
+				ImGui.SetNextWindowSize(new Vector2(512, 128), ImGuiCond.Appearing);
 				if (ImGui.BeginPopupModal(Inline.Span($"Rename##rename_mod_file_{i}")))
 				{
 					if (setFocus)
@@ -154,7 +154,7 @@ public static class ModsDirectoryWindow
 					if (_renameErrorMessage != null)
 						ImGui.TextColored(Color.Red, _renameErrorMessage);
 
-					if (ImGui.Button("OK", new(128, 0)) || ImGuiUtils.IsEnterPressed())
+					if (ImGui.Button("OK", new Vector2(128, 0)) || ImGuiUtils.IsEnterPressed())
 					{
 						_renameErrorMessage = ModsDirectoryLogic.RenameModFile();
 						if (_renameErrorMessage == null)
@@ -228,12 +228,12 @@ public static class ModsDirectoryWindow
 	{
 		return modFileType switch
 		{
-			ModFileType.Error => new(0.8f, 0.2f, 0.2f, 1),
-			ModFileType.Other => new(0.4f, 0.4f, 0.4f, 1),
-			ModFileType.ModWithInvalidPrefix => new(0.8f, 0.5f, 0.2f, 1),
-			ModFileType.DisabledMod => new(0.8f, 0.8f, 0.8f, 1),
-			ModFileType.EnabledMod => new(0.2f, 0.8f, 0.2f, 1),
-			_ => new(1),
+			ModFileType.Error => new Vector4(0.8f, 0.2f, 0.2f, 1),
+			ModFileType.Other => new Vector4(0.4f, 0.4f, 0.4f, 1),
+			ModFileType.ModWithInvalidPrefix => new Vector4(0.8f, 0.5f, 0.2f, 1),
+			ModFileType.DisabledMod => new Vector4(0.8f, 0.8f, 0.8f, 1),
+			ModFileType.EnabledMod => new Vector4(0.2f, 0.8f, 0.2f, 1),
+			_ => new Vector4(1),
 		};
 	}
 }

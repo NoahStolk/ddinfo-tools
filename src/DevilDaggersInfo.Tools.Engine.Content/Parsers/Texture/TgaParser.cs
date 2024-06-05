@@ -44,7 +44,7 @@ public static class TgaParser
 			_ => throw new TgaParseException($"TGA with pixel depth {pixelDepth} is not supported."),
 		};
 
-		return new(width, height, colorData);
+		return new TextureData(width, height, colorData);
 	}
 
 	private static byte[] ReadRgba(BinaryReader br, ushort width, ushort height, bool rightToLeft, bool topToBottom)

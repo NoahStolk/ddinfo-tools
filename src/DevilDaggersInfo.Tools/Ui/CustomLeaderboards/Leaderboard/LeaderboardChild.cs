@@ -52,7 +52,7 @@ public static class LeaderboardChild
 	{
 		ImGui.Text(data.Leaderboard.SpawnsetName);
 
-		if (ImGui.Button("Play", new(80, 20)))
+		if (ImGui.Button("Play", new Vector2(80, 20)))
 			PlaySpawnset(data);
 
 		if (SurvivalFileWatcher.SpawnsetName == data.Leaderboard.SpawnsetName)
@@ -283,7 +283,7 @@ public static class LeaderboardChild
 			ReplayBinary<LocalReplayBinaryHeader> replayBinary;
 			try
 			{
-				replayBinary = new(getCustomEntryReplayBuffer.Data);
+				replayBinary = new ReplayBinary<LocalReplayBinaryHeader>(getCustomEntryReplayBuffer.Data);
 			}
 			catch (Exception ex)
 			{

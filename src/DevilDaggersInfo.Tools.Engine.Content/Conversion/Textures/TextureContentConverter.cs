@@ -7,6 +7,6 @@ internal sealed class TextureContentConverter : IContentConverter<TextureBinary>
 	public static TextureBinary Construct(string inputPath)
 	{
 		TextureData textureData = TgaParser.Parse(File.ReadAllBytes(inputPath));
-		return new(textureData.Width, textureData.Height, textureData.ColorData);
+		return new TextureBinary(textureData.Width, textureData.Height, textureData.ColorData);
 	}
 }

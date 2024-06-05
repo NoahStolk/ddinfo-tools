@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.EditorFileState;
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 
@@ -10,7 +11,7 @@ public static class ReplayTimelineActionsChild
 
 	public static void Render()
 	{
-		if (ImGui.BeginChild("ActionsChild", new(320, 96)))
+		if (ImGui.BeginChild("ActionsChild", new Vector2(320, 96)))
 		{
 			ImGui.PushItemWidth(128);
 			ImGui.InputInt("Amount of ticks to insert", ref _tickCount);

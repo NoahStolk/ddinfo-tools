@@ -58,7 +58,7 @@ public static class ArenaWindow
 				{
 					float[,] newTiles = FileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
 					newTiles[mousePosition.Tile.X, mousePosition.Tile.Y] -= io.MouseWheel;
-					FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, newTiles) });
+					FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(FileStates.Spawnset.Object.ArenaDimension, newTiles) });
 					SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaTileHeight);
 				}
 

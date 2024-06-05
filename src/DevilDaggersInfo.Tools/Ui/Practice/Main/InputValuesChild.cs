@@ -5,6 +5,7 @@ using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.User.Settings.Model;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
@@ -12,12 +13,12 @@ public static class InputValuesChild
 {
 	public static void Render()
 	{
-		if (ImGui.BeginChild("InputValues", new(380, 200), ImGuiChildFlags.Border))
+		if (ImGui.BeginChild("InputValues", new Vector2(380, 200), ImGuiChildFlags.Border))
 		{
 			ImGui.SeparatorText("Inputs");
 
 			ImGui.Spacing();
-			ImGuiImage.Image(Root.InternalResources.IconHandTexture.Id, new(16), PracticeLogic.State.HandLevel.GetColor());
+			ImGuiImage.Image(Root.InternalResources.IconHandTexture.Id, new Vector2(16), PracticeLogic.State.HandLevel.GetColor());
 			ImGui.SameLine();
 			foreach (HandLevel level in EnumUtils.HandLevels)
 			{
@@ -30,23 +31,23 @@ public static class InputValuesChild
 
 			(Texture gemOrHomingTexture, Color tintColor) = PracticeLogic.State.HandLevel is HandLevel.Level3 or HandLevel.Level4 ? (Root.GameResources.IconMaskHomingTexture, Color.White) : (Root.GameResources.IconMaskGemTexture, Color.Red);
 			ImGui.Spacing();
-			ImGuiImage.Image(gemOrHomingTexture.Id, new(16), tintColor);
+			ImGuiImage.Image(gemOrHomingTexture.Id, new Vector2(16), tintColor);
 			ImGui.SameLine();
 			ImGui.InputInt("Added gems", ref PracticeLogic.State.AdditionalGems, 1);
 
 			ImGui.Spacing();
-			ImGuiImage.Image(Root.GameResources.IconMaskStopwatchTexture.Id, new(16));
+			ImGuiImage.Image(Root.GameResources.IconMaskStopwatchTexture.Id, new Vector2(16));
 			ImGui.SameLine();
 			ImGui.InputFloat("Timer start", ref PracticeLogic.State.TimerStart, 1, 5, "%.4f");
 
 			ImGui.Spacing();
 
 			const float buttonHeight = 30;
-			if (ImGui.Button("Apply inputs", new(0, buttonHeight)))
+			if (ImGui.Button("Apply inputs", new Vector2(0, buttonHeight)))
 				PracticeLogic.GenerateAndApplyPracticeSpawnset();
 
 			ImGui.SameLine();
-			if (ImGui.Button("Save template", new(0, buttonHeight)))
+			if (ImGui.Button("Save template", new Vector2(0, buttonHeight)))
 			{
 				UserSettingsPracticeTemplate newTemplate = new(null, PracticeLogic.State.HandLevel, PracticeLogic.State.AdditionalGems, PracticeLogic.State.TimerStart);
 				if (!UserSettings.Model.PracticeTemplates.Contains(newTemplate))
@@ -65,7 +66,7 @@ public static class InputValuesChild
 
 			ImGui.SameLine();
 			ImGui.BeginDisabled(!SurvivalFileWatcher.Exists);
-			if (ImGui.Button("Return to normal game", new(0, buttonHeight)))
+			if (ImGui.Button("Return to normal game", new Vector2(0, buttonHeight)))
 				PracticeLogic.DeleteModdedSpawnset();
 
 			if (ImGui.IsItemHovered())

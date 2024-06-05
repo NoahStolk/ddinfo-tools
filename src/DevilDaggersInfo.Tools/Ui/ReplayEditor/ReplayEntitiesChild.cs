@@ -25,7 +25,7 @@ public static class ReplayEntitiesChild
 
 	public static void Render(EditorReplayModel replay)
 	{
-		if (ImGui.BeginChild("ReplayEntities", new(320, 0)))
+		if (ImGui.BeginChild("ReplayEntities", new Vector2(320, 0)))
 		{
 			const int maxIds = 1000;
 
@@ -50,7 +50,7 @@ public static class ReplayEntitiesChild
 			ImGui.SameLine();
 			ImGui.Checkbox("Show daggers", ref _showDaggers);
 
-			if (ImGui.BeginChild("ReplayEntitiesChild", new(0, 0)))
+			if (ImGui.BeginChild("ReplayEntitiesChild", new Vector2(0, 0)))
 			{
 				if (ImGui.BeginTable("ReplayEntitiesTable", 2, ImGuiTableFlags.None))
 				{

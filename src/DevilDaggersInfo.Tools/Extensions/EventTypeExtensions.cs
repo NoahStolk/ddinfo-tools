@@ -22,7 +22,7 @@ public static class EventTypeExtensions
 			EventType.SpiderSpawn => EnemiesV3_2.Spider2.Color,
 			EventType.SquidSpawn => EnemiesV3_2.Squid3.Color,
 			EventType.ThornSpawn => EnemiesV3_2.Thorn.Color,
-			EventType.Transmute => new(0.75f, 0, 0, 1),
+			EventType.Transmute => new Vector4(0.75f, 0, 0, 1),
 			_ => Color.White,
 		};
 	}

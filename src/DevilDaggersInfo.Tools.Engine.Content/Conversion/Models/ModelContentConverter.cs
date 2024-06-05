@@ -7,6 +7,6 @@ internal sealed class ModelContentConverter : IContentConverter<ModelBinary>
 	public static ModelBinary Construct(string inputPath)
 	{
 		ModelData modelData = ObjParser.Parse(File.ReadAllBytes(inputPath));
-		return new(modelData.Positions, modelData.Textures, modelData.Normals, modelData.Meshes);
+		return new ModelBinary(modelData.Positions, modelData.Textures, modelData.Normals, modelData.Meshes);
 	}
 }

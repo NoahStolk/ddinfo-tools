@@ -157,7 +157,7 @@ public static class RecordingChild
 	{
 		Vector2 iconSize = new(16);
 
-		if (ImGui.BeginChild("RecordingValues", new(288, 320)))
+		if (ImGui.BeginChild("RecordingValues", new Vector2(288, 320)))
 		{
 			MainBlock b = Root.GameMemoryService.MainBlock;
 			RenderValue("Status", ((GameStatus)b.Status).ToDisplayString(), Color.White, _statusIntensity);

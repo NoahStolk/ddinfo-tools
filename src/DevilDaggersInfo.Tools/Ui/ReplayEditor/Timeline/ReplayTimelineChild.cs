@@ -52,7 +52,7 @@ public static class ReplayTimelineChild
 
 		const float markerTextHeight = 32;
 		const float scrollBarHeight = 20;
-		if (ImGui.BeginChild("TimelineViewChild", new(0, _shownEventTypes.Count * _markerSize + markerTextHeight + scrollBarHeight)))
+		if (ImGui.BeginChild("TimelineViewChild", new Vector2(0, _shownEventTypes.Count * _markerSize + markerTextHeight + scrollBarHeight)))
 		{
 			RenderTimeline(replay);
 		}
@@ -85,7 +85,7 @@ public static class ReplayTimelineChild
 	{
 		ImGui.PushStyleColor(ImGuiCol.ChildBg, Color.Gray(0.1f));
 		const float legendWidth = 160;
-		if (ImGui.BeginChild("LegendChild", new(legendWidth, 0)))
+		if (ImGui.BeginChild("LegendChild", new Vector2(legendWidth, 0)))
 		{
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 			Vector2 origin = ImGui.GetCursorScreenPos();

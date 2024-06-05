@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
+using DevilDaggersInfo.Tools.Ui.Practice.Main.Data;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.User.Settings.Model;
 using DevilDaggersInfo.Tools.Utils;
@@ -83,7 +84,7 @@ public static class CustomTemplatesChild
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 				{
-					PracticeLogic.State = new(customTemplate.HandLevel, customTemplate.AdditionalGems, customTemplate.TimerStart);
+					PracticeLogic.State = new PracticeState(customTemplate.HandLevel, customTemplate.AdditionalGems, customTemplate.TimerStart);
 					PracticeLogic.GenerateAndApplyPracticeSpawnset();
 				}
 
@@ -150,7 +151,7 @@ public static class CustomTemplatesChild
 		ImGui.PushID(Inline.Span($"drag indicator {i}"));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-		ImGuiImage.ImageButton("CustomTemplateReorderImageButton", Root.InternalResources.DragIndicatorTexture.Id, new(32, 48), _customTemplateIndexToReorder == i ? Color.Gray(0.7f) : gray);
+		ImGuiImage.ImageButton("CustomTemplateReorderImageButton", Root.InternalResources.DragIndicatorTexture.Id, new Vector2(32, 48), _customTemplateIndexToReorder == i ? Color.Gray(0.7f) : gray);
 		ImGui.PopStyleVar();
 
 		if (ImGui.IsItemHovered())
@@ -178,7 +179,7 @@ public static class CustomTemplatesChild
 		ImGui.PushID(Inline.Span($"delete button {i}"));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(12));
-		if (ImGuiImage.ImageButton("CustomTemplateDeleteImageButton", Root.InternalResources.BinTexture.Id, new(24)))
+		if (ImGuiImage.ImageButton("CustomTemplateDeleteImageButton", Root.InternalResources.BinTexture.Id, new Vector2(24)))
 		{
 			UserSettings.Model = UserSettings.Model with
 			{
@@ -211,7 +212,7 @@ public static class CustomTemplatesChild
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() - spacingY);
 
 			ImGui.PushStyleColor(ImGuiCol.Button, Color.Green with { A = 111 });
-			ImGui.Button("##drop", new(PracticeWindow.TemplateWidth - 96, dropAreaHeight));
+			ImGui.Button("##drop", new Vector2(PracticeWindow.TemplateWidth - 96, dropAreaHeight));
 			ImGui.PopStyleColor();
 
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() - dropAreaHeight + spacingY - 4);

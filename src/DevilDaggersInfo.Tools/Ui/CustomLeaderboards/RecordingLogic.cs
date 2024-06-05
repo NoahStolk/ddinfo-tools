@@ -345,7 +345,7 @@ public static class RecordingLogic
 			spiderEggKillCount.Add(br.ReadUInt16());
 		}
 
-		return new()
+		return new AddGameData
 		{
 			GemsCollected = gemsCollected,
 			EnemiesKilled = enemiesKilled,

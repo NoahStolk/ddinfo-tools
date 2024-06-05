@@ -4,6 +4,7 @@ using DevilDaggersInfo.Core.Spawnset.View;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
+using DevilDaggersInfo.Tools.Ui.Practice.Main.Data;
 using ImGuiNET;
 using System.Numerics;
 
@@ -76,7 +77,7 @@ public static class EndLoopTemplatesChild
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 				{
-					PracticeLogic.State = new(HandLevel.Level4, 0, timerStart);
+					PracticeLogic.State = new PracticeState(HandLevel.Level4, 0, timerStart);
 					PracticeLogic.GenerateAndApplyPracticeSpawnset();
 				}
 

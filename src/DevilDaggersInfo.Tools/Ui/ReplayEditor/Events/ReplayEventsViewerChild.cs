@@ -40,9 +40,9 @@ public static class ReplayEventsViewerChild
 		const int filteringHeight = 160;
 
 		ImGui.PushStyleColor(ImGuiCol.ChildBg, Color.Gray(0.13f));
-		if (ImGui.BeginChild("NavigationAndFilteringWrapper", new(0, height)))
+		if (ImGui.BeginChild("NavigationAndFilteringWrapper", new Vector2(0, height)))
 		{
-			if (ImGui.BeginChild("TickNavigation", new(448 + 8, height)))
+			if (ImGui.BeginChild("TickNavigation", new Vector2(448 + 8, height)))
 			{
 				const int padding = 4;
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
@@ -84,13 +84,13 @@ public static class ReplayEventsViewerChild
 
 			ImGui.SameLine();
 
-			if (ImGui.BeginChild("EventTypeFiltering", new(0, height)))
+			if (ImGui.BeginChild("EventTypeFiltering", new Vector2(0, height)))
 			{
 				const int checkboxesPerRow = 7;
 				int rows = (int)Math.Ceiling((float)EnumUtils.EventTypes.Count / checkboxesPerRow);
 				for (int i = 0; i < rows; i++)
 				{
-					if (ImGui.BeginChild(Inline.Span($"EventTypeFiltering{i}"), new(256, filteringHeight)))
+					if (ImGui.BeginChild(Inline.Span($"EventTypeFiltering{i}"), new Vector2(256, filteringHeight)))
 					{
 						int start = i * checkboxesPerRow;
 						for (int j = start; j < Math.Min(EnumUtils.EventTypes.Count, start + checkboxesPerRow); j++)
@@ -126,7 +126,7 @@ public static class ReplayEventsViewerChild
 
 		ImGui.PopStyleColor();
 
-		if (ImGui.BeginChild("ReplayEventsChild", new(0, 0)))
+		if (ImGui.BeginChild("ReplayEventsChild", new Vector2(0, 0)))
 		{
 			RenderEventsTable(replay, maxEvents);
 		}

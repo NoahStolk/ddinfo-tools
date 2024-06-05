@@ -138,12 +138,12 @@ public static class ExtractModWindow
 	{
 		public static ExtractionResult Failed(string error, Exception exception)
 		{
-			return new(false, error, exception, []);
+			return new ExtractionResult(false, error, exception, []);
 		}
 
 		public static ExtractionResult Succeeded(List<string> errors)
 		{
-			return new(true, null, null, errors);
+			return new ExtractionResult(true, null, null, errors);
 		}
 	}
 }

@@ -15,7 +15,7 @@ public static class ImGuiUtils
 
 	public static void SetNextWindowMinSize(float minSizeX, float minSizeY)
 	{
-		SetNextWindowMinSize(new(minSizeX, minSizeY));
+		SetNextWindowMinSize(new Vector2(minSizeX, minSizeY));
 	}
 
 	public static void SetNextWindowMinSize(Vector2 minSize)
@@ -30,6 +30,6 @@ public static class ImGuiUtils
 		byte g = (byte)(i >> 08 & 0xFF);
 		byte b = (byte)(i >> 16 & 0xFF);
 		byte a = (byte)(i >> 24 & 0xFF);
-		return new(r, g, b, a);
+		return new Color(r, g, b, a);
 	}
 }

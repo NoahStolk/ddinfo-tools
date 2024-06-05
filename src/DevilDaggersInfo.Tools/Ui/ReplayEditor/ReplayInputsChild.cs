@@ -18,7 +18,7 @@ public static class ReplayInputsChild
 		const int maxTicks = 60;
 		const int height = 64;
 
-		if (ImGui.BeginChild("TickNavigation", new(448 + 8, height)))
+		if (ImGui.BeginChild("TickNavigation", new Vector2(448 + 8, height)))
 		{
 			const int padding = 4;
 			ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
@@ -45,7 +45,7 @@ public static class ReplayInputsChild
 
 		ImGui.EndChild(); // TickNavigation
 
-		if (ImGui.BeginChild("ReplayInputsChild", new(0, 0)))
+		if (ImGui.BeginChild("ReplayInputsChild", new Vector2(0, 0)))
 		{
 			if (!ImGui.BeginTable("ReplayInputsTable", 2, ImGuiTableFlags.BordersInnerH))
 				return;

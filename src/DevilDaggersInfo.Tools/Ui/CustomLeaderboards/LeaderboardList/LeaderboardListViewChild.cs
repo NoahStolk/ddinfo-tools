@@ -78,7 +78,7 @@ public static class LeaderboardListViewChild
 				ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.CustomLeaderboards.Primary with { A = 64 });
 				ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.CustomLeaderboards.Primary with { A = 96 });
 				bool temp = true;
-				if (ImGui.Selectable(clOverview.SpawnsetName, ref temp, ImGuiSelectableFlags.SpanAllColumns, new(0, 16)))
+				if (ImGui.Selectable(clOverview.SpawnsetName, ref temp, ImGuiSelectableFlags.SpanAllColumns, new Vector2(0, 16)))
 					SelectLeaderboard(clOverview);
 
 				ImGui.PopStyleColor(3);
@@ -91,7 +91,7 @@ public static class LeaderboardListViewChild
 				for (int j = 0; j < clOverview.Criteria.Count; j++)
 				{
 					GetCustomLeaderboardCriteria criteria = clOverview.Criteria[j];
-					ImGuiImage.Image(criteria.Type.GetTexture().Id, new(16), criteria.Type.GetColor());
+					ImGuiImage.Image(criteria.Type.GetTexture().Id, new Vector2(16), criteria.Type.GetColor());
 					if (ImGui.IsItemHovered())
 					{
 						// TODO: May need to improve performance here by caching the text, or perhaps return the text from the API.
@@ -145,7 +145,7 @@ public static class LeaderboardListViewChild
 				}
 				else
 				{
-					LeaderboardChild.Data = new(cl, clOverview.SpawnsetId);
+					LeaderboardChild.Data = new LeaderboardChild.LeaderboardData(cl, clOverview.SpawnsetId);
 				}
 			},
 			() => FetchCustomLeaderboardById.HandleAsync(clOverview.Id));

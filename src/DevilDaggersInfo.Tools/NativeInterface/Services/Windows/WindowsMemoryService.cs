@@ -13,12 +13,12 @@ public class WindowsMemoryService : INativeMemoryService
 
 	public void ReadMemory(Process process, long address, byte[] bytes, int offset, int size)
 	{
-		ReadProcessMemory(process.Handle, new(address), bytes, (uint)size, out _);
+		ReadProcessMemory(process.Handle, new IntPtr(address), bytes, (uint)size, out _);
 	}
 
 	public void WriteMemory(Process process, long address, byte[] bytes, int offset, int size)
 	{
-		WriteProcessMemory(process.Handle, new(address), bytes, (uint)size, out _);
+		WriteProcessMemory(process.Handle, new IntPtr(address), bytes, (uint)size, out _);
 	}
 
 	// TODO: Use source-generated P/Invoke.

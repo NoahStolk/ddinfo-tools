@@ -14,6 +14,6 @@ internal sealed class ShaderContentConverter : IContentConverter<ShaderBinary>
 		};
 		byte[] code = File.ReadAllBytes(inputPath);
 
-		return new(shaderContentType, code);
+		return new ShaderBinary(shaderContentType, code);
 	}
 }

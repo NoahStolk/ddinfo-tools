@@ -5,6 +5,7 @@ using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Scenes.GameObjects;
 using Silk.NET.OpenGL;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes;
 
@@ -26,12 +27,12 @@ public sealed class ArenaScene
 	{
 		_getSpawnset = getSpawnset;
 
-		Camera = new(useMenuCamera) { Position = new(0, 5, 0) };
+		Camera = new Camera(useMenuCamera) { Position = new Vector3(0, 5, 0) };
 
 		InitializeArena();
 
 		if (isEditor)
-			_editorContext = new(this);
+			_editorContext = new ArenaEditorContext(this);
 	}
 
 	public Camera Camera { get; }
@@ -48,12 +49,12 @@ public sealed class ArenaScene
 			{
 				float x = (i - halfSize) * 4;
 				float z = (j - halfSize) * 4;
-				Tiles[i, j] = new(x, z, i, j, Camera);
+				Tiles[i, j] = new Tile(x, z, i, j, Camera);
 				_sortedTiles[i * SpawnsetBinary.ArenaDimensionMax + j] = Tiles[i, j];
 			}
 		}
 
-		_lights.Add(new(64, default, new(1, 0.5f, 0)));
+		_lights.Add(new LightObject(64, default, new Vector3(1, 0.5f, 0)));
 	}
 
 	private void FillArena(SpawnsetBinary spawnset)
@@ -67,7 +68,7 @@ public sealed class ArenaScene
 
 	public void AddSkull4()
 	{
-		_skull4 = new();
+		_skull4 = new Skull4();
 	}
 
 	public void SetPlayerMovement(ReplaySimulation replaySimulation)
@@ -77,7 +78,7 @@ public sealed class ArenaScene
 		if (_player != null)
 			_lights.Remove(_player.Light);
 
-		_player = new(ReplaySimulation);
+		_player = new Player(ReplaySimulation);
 		_lights.Add(_player.Light);
 	}
 

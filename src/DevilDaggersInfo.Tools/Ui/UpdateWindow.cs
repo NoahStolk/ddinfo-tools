@@ -14,7 +14,7 @@ public static class UpdateWindow
 
 		Vector2 center = ImGui.GetMainViewport().GetCenter();
 		Vector2 windowSize = new(384, 384);
-		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new(0.5f, 0.5f));
+		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new Vector2(0.5f, 0.5f));
 		ImGui.SetNextWindowSize(windowSize);
 		if (ImGui.Begin("Updates", ref show, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDocking))
 		{

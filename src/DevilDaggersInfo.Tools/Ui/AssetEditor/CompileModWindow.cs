@@ -156,12 +156,12 @@ public static class CompileModWindow
 	{
 		public static CompilationResult Failed(string error, Exception exception)
 		{
-			return new(false, error, exception);
+			return new CompilationResult(false, error, exception);
 		}
 
 		public static CompilationResult Succeeded()
 		{
-			return new(true, null, null);
+			return new CompilationResult(true, null, null);
 		}
 	}
 }

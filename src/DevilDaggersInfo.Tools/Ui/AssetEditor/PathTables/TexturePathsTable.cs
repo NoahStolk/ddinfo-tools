@@ -40,7 +40,7 @@ public sealed class TexturePathsTable : IPathTable<TexturePathsTable>
 	{
 		if (path == null)
 		{
-			path = new(assetInfo.AssetName, null);
+			path = new TextureAssetPath(assetInfo.AssetName, null);
 			FileStates.Mod.Object.Textures.Add(path);
 		}
 

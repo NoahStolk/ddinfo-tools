@@ -36,7 +36,7 @@ public static class ModInstallationWindow
 			{
 				using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read);
 				using BinaryReader reader = new(fs);
-				mods.Add(new(ModBinaryToc.FromReader(reader), fileName));
+				mods.Add(new Mod(ModBinaryToc.FromReader(reader), fileName));
 			}
 			catch (InvalidModBinaryException)
 			{
@@ -58,7 +58,7 @@ public static class ModInstallationWindow
 				foreach (EffectiveAsset existingAsset in existingAssets)
 					existingAsset.OverriddenByModFileName = mod.FileName;
 
-				effectiveAssets.Add(new(tocEntry, mod.FileName, null));
+				effectiveAssets.Add(new EffectiveAsset(tocEntry, mod.FileName, null));
 			}
 		}
 
@@ -89,7 +89,7 @@ public static class ModInstallationWindow
 			{
 				Title("Summary");
 
-				if (ImGui.BeginTable("Mod installation summary", 2, ImGuiTableFlags.Borders, new(256, 0)))
+				if (ImGui.BeginTable("Mod installation summary", 2, ImGuiTableFlags.Borders, new Vector2(256, 0)))
 				{
 					ImGui.TableSetupColumn("##left", ImGuiTableColumnFlags.WidthStretch);
 					ImGui.TableSetupColumn("##right", ImGuiTableColumnFlags.WidthFixed, 48);
@@ -180,7 +180,7 @@ public static class ModInstallationWindow
 
 						ImGui.TableNextColumn();
 						if (isOverridden)
-							ImGui.TextColored(new(1, 0.2f, 0.4f, 1), Inline.Span($"Overridden by {effectiveAsset.OverriddenByModFileName}"));
+							ImGui.TextColored(new Vector4(1, 0.2f, 0.4f, 1), Inline.Span($"Overridden by {effectiveAsset.OverriddenByModFileName}"));
 						else if (AssetContainer.IsProhibited(effectiveAsset.TocEntry.AssetType, effectiveAsset.TocEntry.Name))
 							ImGui.TextColored(Color.Orange, "Prohibited");
 						else if (!effectiveAsset.TocEntry.IsEnabled)

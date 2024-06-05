@@ -25,7 +25,7 @@ public class TileMeshObject
 
 	public unsafe void Render()
 	{
-		Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(new(_positionX, PositionY, _positionZ));
+		Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(new Vector3(_positionX, PositionY, _positionZ));
 		Graphics.Gl.UniformMatrix4x4(Root.InternalResources.MeshShader.GetUniformLocation("model"), translationMatrix);
 
 		Graphics.Gl.BindVertexArray(_vao);

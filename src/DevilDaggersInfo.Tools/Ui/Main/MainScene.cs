@@ -13,7 +13,7 @@ public static class MainScene
 
 	public static void Initialize()
 	{
-		_mainMenuScene = new(static () => _mainMenuSpawnset, true, false);
+		_mainMenuScene = new ArenaScene(static () => _mainMenuSpawnset, true, false);
 		_mainMenuScene.AddSkull4();
 	}
 

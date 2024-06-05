@@ -22,7 +22,7 @@ public static class MainWindow
 		Vector2 mainButtonsSize = new(208, 512);
 		Vector2 previewSize = new(windowSize.X - mainButtonsSize.X - 16, 512);
 
-		ImGui.SetNextWindowPos(center, ImGuiCond.Always, new(0.5f, 0.5f));
+		ImGui.SetNextWindowPos(center, ImGuiCond.Always, new Vector2(0.5f, 0.5f));
 		ImGui.SetNextWindowSize(windowSize);
 
 		if (ImGui.Begin("Main Menu", ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoDocking))
@@ -33,11 +33,11 @@ public static class MainWindow
 			float textWidth = ImGui.CalcTextSize(title).X;
 			ImGui.PopFont();
 
-			ImGui.SetCursorPos(new(textWidth + 16, 39));
+			ImGui.SetCursorPos(new Vector2(textWidth + 16, 39));
 			ImGui.Text(_version);
 			ImGui.Text("Developed by Noah Stolk");
 
-			ImGui.SetCursorPos(new(windowSize.X - 208, 8));
+			ImGui.SetCursorPos(new Vector2(windowSize.X - 208, 8));
 			AppButton(Root.InternalResources.DownloadTexture, "Updates", UiRenderer.ShowUpdate);
 
 			ImGui.SameLine();
@@ -139,7 +139,7 @@ public static class MainWindow
 		ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, 2);
 
 		ImGui.PushFont(Root.FontGoetheBold20);
-		bool clicked = ImGui.Button(text, new(198, 48));
+		bool clicked = ImGui.Button(text, new Vector2(198, 48));
 		ImGui.PopFont();
 
 		ImGui.PopStyleColor(4);

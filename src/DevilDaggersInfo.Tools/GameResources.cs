@@ -19,19 +19,19 @@ public record GameResources(
 {
 	public static GameResources Create()
 	{
-		return new(
-			IconMaskCrosshairTexture: new(TextureLoader.Load(ContentManager.Content.IconMaskCrosshairTexture)),
-			IconMaskDaggerTexture: new(TextureLoader.Load(ContentManager.Content.IconMaskDaggerTexture)),
-			IconMaskGemTexture: new(TextureLoader.Load(ContentManager.Content.IconMaskGemTexture)),
-			IconMaskHomingTexture: new(TextureLoader.Load(ContentManager.Content.IconMaskHomingTexture)),
-			IconMaskSkullTexture: new(TextureLoader.Load(ContentManager.Content.IconMaskSkullTexture)),
-			IconMaskStopwatchTexture: new(TextureLoader.Load(ContentManager.Content.IconMaskStopwatchTexture)),
-			DaggerSilverTexture: new(TextureLoader.Load(ContentManager.Content.DaggerSilverTexture)),
-			Skull4Texture: new(TextureLoader.Load(ContentManager.Content.Skull4Texture)),
-			Skull4JawTexture: new(TextureLoader.Load(ContentManager.Content.Skull4JawTexture)),
-			TileTexture: new(TextureLoader.Load(ContentManager.Content.TileTexture)),
-			PillarTexture: new(TextureLoader.Load(ContentManager.Content.PillarTexture)),
-			PostLut: new(TextureLoader.Load(ContentManager.Content.PostLut)),
-			Hand4Texture: new(TextureLoader.Load(ContentManager.Content.Hand4Texture)));
+		return new GameResources(
+			IconMaskCrosshairTexture: new Texture(TextureLoader.Load(ContentManager.Content.IconMaskCrosshairTexture)),
+			IconMaskDaggerTexture: new Texture(TextureLoader.Load(ContentManager.Content.IconMaskDaggerTexture)),
+			IconMaskGemTexture: new Texture(TextureLoader.Load(ContentManager.Content.IconMaskGemTexture)),
+			IconMaskHomingTexture: new Texture(TextureLoader.Load(ContentManager.Content.IconMaskHomingTexture)),
+			IconMaskSkullTexture: new Texture(TextureLoader.Load(ContentManager.Content.IconMaskSkullTexture)),
+			IconMaskStopwatchTexture: new Texture(TextureLoader.Load(ContentManager.Content.IconMaskStopwatchTexture)),
+			DaggerSilverTexture: new Texture(TextureLoader.Load(ContentManager.Content.DaggerSilverTexture)),
+			Skull4Texture: new Texture(TextureLoader.Load(ContentManager.Content.Skull4Texture)),
+			Skull4JawTexture: new Texture(TextureLoader.Load(ContentManager.Content.Skull4JawTexture)),
+			TileTexture: new Texture(TextureLoader.Load(ContentManager.Content.TileTexture)),
+			PillarTexture: new Texture(TextureLoader.Load(ContentManager.Content.PillarTexture)),
+			PostLut: new Texture(TextureLoader.Load(ContentManager.Content.PostLut)),
+			Hand4Texture: new Texture(TextureLoader.Load(ContentManager.Content.Hand4Texture)));
 	}
 }

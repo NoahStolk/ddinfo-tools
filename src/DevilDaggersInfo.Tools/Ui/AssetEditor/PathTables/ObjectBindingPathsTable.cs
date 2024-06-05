@@ -40,7 +40,7 @@ public sealed class ObjectBindingPathsTable : IPathTable<ObjectBindingPathsTable
 	{
 		if (path == null)
 		{
-			path = new(assetInfo.AssetName, null);
+			path = new ObjectBindingAssetPath(assetInfo.AssetName, null);
 			FileStates.Mod.Object.ObjectBindings.Add(path);
 		}
 

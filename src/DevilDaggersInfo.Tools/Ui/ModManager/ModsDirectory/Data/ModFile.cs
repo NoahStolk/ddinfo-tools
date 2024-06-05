@@ -28,17 +28,17 @@ public sealed record ModFile(string FileName, ModFileType FileType, ModBinaryTyp
 			ModBinaryToc modBinaryToc = ModBinaryToc.FromReader(reader);
 
 			int prohibitedCount = modBinaryToc.Entries.Count(c => AssetContainer.IsProhibited(c.AssetType, c.Name));
-			return new(fileName, GetFileType(fileName), modBinaryToc.Type, modBinaryToc.Entries.Count, prohibitedCount, fileSize);
+			return new ModFile(fileName, GetFileType(fileName), modBinaryToc.Type, modBinaryToc.Entries.Count, prohibitedCount, fileSize);
 		}
 		catch (InvalidModBinaryException)
 		{
-			return new(fileName, ModFileType.Other, null, null, null, fileSize);
+			return new ModFile(fileName, ModFileType.Other, null, null, null, fileSize);
 		}
 		catch (Exception ex) when (ex.IsFileIoException())
 		{
 			PopupManager.ShowError($"Error loading file '{filePath}'.", ex);
 			Root.Log.Error(ex, $"Error loading file '{filePath}'.");
-			return new(fileName, ModFileType.Error, null, null, null, fileSize);
+			return new ModFile(fileName, ModFileType.Error, null, null, null, fileSize);
 		}
 	}
 }

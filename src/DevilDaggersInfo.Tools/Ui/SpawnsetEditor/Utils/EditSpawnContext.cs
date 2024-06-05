@@ -36,7 +36,7 @@ public static class EditSpawnContext
 			totalSeconds += spawn.Delay;
 			int noFarmGems = spawn.EnemyType.GetNoFarmGems();
 			gemState = gemState.Add(noFarmGems);
-			_spawns.Add(new(i++, spawn.EnemyType, spawn.Delay, totalSeconds, noFarmGems, gemState));
+			_spawns.Add(new SpawnUiEntry(i++, spawn.EnemyType, spawn.Delay, totalSeconds, noFarmGems, gemState));
 
 			if (_spawns.Count >= SpawnsWindow.MaxSpawns)
 				return;

@@ -50,7 +50,7 @@ public sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
 	{
 		if (path == null)
 		{
-			path = new(assetInfo.AssetName, null, null);
+			path = new ShaderAssetPath(assetInfo.AssetName, null, null);
 			FileStates.Mod.Object.Shaders.Add(path);
 		}
 
@@ -61,7 +61,7 @@ public sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
 	{
 		if (path == null)
 		{
-			path = new(assetInfo.AssetName, null, null);
+			path = new ShaderAssetPath(assetInfo.AssetName, null, null);
 			FileStates.Mod.Object.Shaders.Add(path);
 		}
 

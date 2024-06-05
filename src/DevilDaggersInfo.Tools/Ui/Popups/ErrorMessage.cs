@@ -1,4 +1,5 @@
 using ImGuiNET;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
@@ -26,6 +27,6 @@ public class ErrorMessage : Popup
 		ImGui.Spacing();
 		ImGui.Separator();
 		ImGui.Spacing();
-		return ImGui.Button("OK", new(120, 0));
+		return ImGui.Button("OK", new Vector2(120, 0));
 	}
 }

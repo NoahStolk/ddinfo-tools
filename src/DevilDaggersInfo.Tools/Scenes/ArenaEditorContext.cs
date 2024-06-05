@@ -1,4 +1,5 @@
 // ReSharper disable ForCanBeConvertedToForeach
+using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Intersections;
@@ -67,7 +68,7 @@ public sealed class ArenaEditorContext
 			newArena[tile.ArenaX, tile.ArenaY] = height;
 		}
 
-		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, newArena) });
+		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(FileStates.Spawnset.Object.ArenaDimension, newArena) });
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaTileHeight);
 	}
 
@@ -136,9 +137,9 @@ public sealed class ArenaEditorContext
 			bool isSelected = _selectedTiles.Contains(tile);
 
 			if (_closestHitTile == tile && renderEditorContext)
-				return isSelected ? new(0.55f, 0.4f, 0.3f) : new(0.3f, 0.3f, 0.3f);
+				return isSelected ? new Vector3(0.55f, 0.4f, 0.3f) : new Vector3(0.3f, 0.3f, 0.3f);
 
-			return isSelected ? new(0.25f, 0.1f, 0) : default;
+			return isSelected ? new Vector3(0.25f, 0.1f, 0) : default;
 		}
 	}
 }

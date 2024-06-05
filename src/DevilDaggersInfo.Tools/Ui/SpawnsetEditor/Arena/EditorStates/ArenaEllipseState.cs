@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
@@ -14,7 +15,7 @@ public class ArenaEllipseState : IArenaState
 
 	public void InitializeSession(ArenaMousePosition mousePosition)
 	{
-		_session ??= new(mousePosition.Real, FileStates.Spawnset.Object.ArenaTiles.GetMutableClone());
+		_session ??= new Session(mousePosition.Real, FileStates.Spawnset.Object.ArenaTiles.GetMutableClone());
 	}
 
 	public void Handle(ArenaMousePosition mousePosition)
@@ -36,7 +37,7 @@ public class ArenaEllipseState : IArenaState
 
 		Loop(mousePosition, (i, j) => _session.Value.NewArena[i, j] = ArenaWindow.SelectedHeight);
 
-		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new(FileStates.Spawnset.Object.ArenaDimension, _session.Value.NewArena) });
+		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(FileStates.Spawnset.Object.ArenaDimension, _session.Value.NewArena) });
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaEllipse);
 
 		Reset();
@@ -152,7 +153,7 @@ public class ArenaEllipseState : IArenaState
 			radius.Y = 0;
 		}
 
-		return new(center, radius);
+		return new ArenaEditingUtils.AlignedEllipse(center, radius);
 	}
 
 	private static Vector2 GetSnappedPosition(Vector2 position)
