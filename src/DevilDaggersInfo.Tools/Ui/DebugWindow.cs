@@ -138,7 +138,7 @@ public static class DebugWindow
 
 	private static void RenderPopupDebugInfo()
 	{
-		ImGui.TextColored(PopupManager.IsAnyOpen ? Color.White : Color.Gray(0.4f), PopupManager.OpenPopups.Count > 0 ? Inline.Span($"{PopupManager.OpenPopups.Count} popup(s) open") : "No popups active");
+		ImGui.TextColored(PopupManager.IsAnyOpen ? Color.White : Color.Gray(0.4f), PopupManager.Popups.Count > 0 ? Inline.Span($"{PopupManager.Popups.Count} popup(s) active") : "No popups active");
 
 		if (ImGui.BeginChild("PopupTableWrapper", new Vector2(0, 512)))
 		{
@@ -152,9 +152,9 @@ public static class DebugWindow
 				ImGui.TableHeadersRow();
 
 				// ReSharper disable once ForCanBeConvertedToForeach
-				for (int i = 0; i < PopupManager.OpenPopups.Count; i++)
+				for (int i = 0; i < PopupManager.Popups.Count; i++)
 				{
-					Popup popup = PopupManager.OpenPopups[i];
+					Popup popup = PopupManager.Popups[i];
 					ImGui.TableNextRow();
 
 					ImGui.TableNextColumn();
