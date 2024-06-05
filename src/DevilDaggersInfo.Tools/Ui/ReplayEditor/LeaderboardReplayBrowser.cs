@@ -45,39 +45,42 @@ public static class LeaderboardReplayBrowser
 		ImGui.End(); // Leaderboard Replay Browser
 	}
 
-	private static void HandleDownloadedReplay(Response? response)
+	private static void HandleDownloadedReplay(ApiResult<Response> responseResult)
 	{
-		if (response == null)
-		{
-			PopupManager.ShowError("The Devil Daggers leaderboard servers did not return a successful response.");
-			_isDownloading = false;
-			return;
-		}
+		responseResult.Match(
+			onSuccess: response =>
+			{
+				ReplayBinary<LeaderboardReplayBinaryHeader>? leaderboardReplay;
 
-		ReplayBinary<LeaderboardReplayBinaryHeader>? leaderboardReplay;
+				try
+				{
+					leaderboardReplay = new ReplayBinary<LeaderboardReplayBinaryHeader>(response.Data);
+				}
+				catch (Exception ex)
+				{
+					// When using an id like -1, this gives us the following data:
+					// DF_RPL0Replay not found.
+					// We could parse this, but it's not worth the effort.
+					Root.Log.Warning(ex, "The replay could not be parsed.");
+					PopupManager.ShowError("The replay could not be parsed.", ex);
+					_isDownloading = false;
+					return;
+				}
 
-		try
-		{
-			leaderboardReplay = new ReplayBinary<LeaderboardReplayBinaryHeader>(response.Data);
-		}
-		catch (Exception ex)
-		{
-			// When using an id like -1, this gives us the following data:
-			// DF_RPL0Replay not found.
-			// We could parse this, but it's not worth the effort.
-			Root.Log.Warning(ex, "The replay could not be parsed.");
-			PopupManager.ShowError("The replay could not be parsed.", ex);
-			_isDownloading = false;
-			return;
-		}
+				FileStates.Replay.Update(EditorReplayModel.CreateFromLeaderboardReplay(response.PlayerId, leaderboardReplay.Header.Username, leaderboardReplay.Events));
 
-		FileStates.Replay.Update(EditorReplayModel.CreateFromLeaderboardReplay(response.PlayerId, leaderboardReplay.Header.Username, leaderboardReplay.Events));
-
-		_isDownloading = false;
-		_showWindow = false;
+				_isDownloading = false;
+				_showWindow = false;
+			},
+			onError: apiError =>
+			{
+				Root.Log.Warning(apiError.Message);
+				PopupManager.ShowError("The Devil Daggers leaderboard servers did not return a successful response.", apiError);
+				_isDownloading = false;
+			});
 	}
 
-	private static async Task<Response?> DownloadReplayAsync(int id)
+	private static async Task<Response> DownloadReplayAsync(int id)
 	{
 		using FormUrlEncodedContent content = new(new List<KeyValuePair<string, string>> { new("replay", id.ToString()) });
 		using HttpClient httpClient = new();
@@ -85,8 +88,7 @@ public static class LeaderboardReplayBrowser
 		if (response.IsSuccessStatusCode)
 			return new Response(await response.Content.ReadAsByteArrayAsync(), id);
 
-		Root.Log.Warning($"The leaderboard servers returned an unsuccessful response (HTTP {(int)response.StatusCode} {response.StatusCode}).");
-		return null;
+		throw new HttpRequestException($"The leaderboard servers returned an unsuccessful response (HTTP {(int)response.StatusCode} {response.StatusCode}).");
 	}
 
 	private sealed record Response(byte[] Data, int PlayerId);

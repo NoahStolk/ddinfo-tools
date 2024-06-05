@@ -18,15 +18,17 @@ public static class AsyncHandler
 	public static ApiHttpClient Client { get; } = new(new HttpClient { BaseAddress = new Uri("https://devildaggers.info") });
 #endif
 
-	public static void Run<TResult>(Action<TResult?> callback, Func<Task<TResult>> call)
+	public static void Run<TResult>(Action<ApiResult<TResult>> callback, Func<Task<TResult>> call)
+		where TResult : class
 	{
 		Task.Run(async () => callback(await TryCall()));
 
-		async Task<TResult?> TryCall()
+		async Task<ApiResult<TResult>> TryCall()
 		{
 			try
 			{
-				return await call();
+				TResult data = await call();
+				return ApiResult<TResult>.Ok(data);
 			}
 			catch (Exception ex)
 			{
@@ -43,9 +45,7 @@ public static class AsyncHandler
 					innerException = innerException.InnerException;
 				}
 
-				PopupManager.ShowError("API call failed.", sb.ToString());
-				Root.Log.Error(ex, "API error: " + sb);
-				return default;
+				return ApiResult<TResult>.Error(new ApiError(ex, sb.ToString()));
 			}
 		}
 	}

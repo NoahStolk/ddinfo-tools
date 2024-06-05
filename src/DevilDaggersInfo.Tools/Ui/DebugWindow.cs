@@ -6,6 +6,7 @@ using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using Silk.NET.GLFW;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
@@ -21,7 +22,7 @@ public static class DebugWindow
 		_debugMessages.Add(obj?.ToString() ?? "null");
 	}
 
-	public static void ClearDebugMessages()
+	private static void ClearDebugMessages()
 	{
 		_debugMessages.Clear();
 	}
@@ -30,7 +31,11 @@ public static class DebugWindow
 	{
 		if (ImGui.Begin("Debug"))
 		{
-			ImGui.TextColored(PopupManager.IsAnyOpen ? Color.White : Color.Gray(0.4f), PopupManager.IsAnyOpen ? "Modal active" : "Modal inactive");
+			if (ImGui.CollapsingHeader("Popup debug info"))
+			{
+				RenderPopupDebugInfo();
+			}
+
 			ImGui.TextColored(NativeFileDialog.DialogOpen ? Color.White : Color.Gray(0.4f), NativeFileDialog.DialogOpen ? "Native dialog open" : "Native dialog closed");
 			ImGui.TextColored(Root.AesBase32Wrapper == null ? Color.Red : Color.Green, Root.AesBase32Wrapper == null ? "Encryption unavailable" : "Encryption available");
 
@@ -123,6 +128,44 @@ public static class DebugWindow
 		}
 
 		ImGui.End(); // End Debug
+	}
+
+	private static void RenderPopupDebugInfo()
+	{
+		ImGui.TextColored(PopupManager.IsAnyOpen ? Color.White : Color.Gray(0.4f), PopupManager.OpenPopups.Count > 0 ? Inline.Span($"{PopupManager.OpenPopups.Count} popup(s) open") : "No popups active");
+
+		if (ImGui.BeginChild("PopupTableWrapper", new Vector2(0, 512)))
+		{
+			if (ImGui.BeginTable("PopupTable", 3, ImGuiTableFlags.ScrollY))
+			{
+				ImGui.TableSetupColumn("Id", ImGuiTableColumnFlags.WidthFixed, 100);
+				ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 100);
+				ImGui.TableSetupColumn("Has opened", ImGuiTableColumnFlags.WidthFixed, 100);
+
+				ImGui.TableSetupScrollFreeze(0, 1);
+				ImGui.TableHeadersRow();
+
+				// ReSharper disable once ForCanBeConvertedToForeach
+				for (int i = 0; i < PopupManager.OpenPopups.Count; i++)
+				{
+					Popup popup = PopupManager.OpenPopups[i];
+					ImGui.TableNextRow();
+
+					ImGui.TableNextColumn();
+					ImGui.Text(popup.Id);
+
+					ImGui.TableNextColumn();
+					ImGui.Text(popup.GetType().Name);
+
+					ImGui.TableNextColumn();
+					ImGui.Text(popup.HasOpened ? "True" : "False");
+				}
+
+				ImGui.EndTable();
+			}
+		}
+
+		ImGui.EndChild();
 	}
 
 	private static void RenderKeyboardInput()

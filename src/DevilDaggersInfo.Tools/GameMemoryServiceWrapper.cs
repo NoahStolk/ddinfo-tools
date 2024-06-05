@@ -7,6 +7,8 @@ namespace DevilDaggersInfo.Tools;
 
 public static class GameMemoryServiceWrapper
 {
+	private static bool _tryDownloadMarker = true;
+
 	public static long? Marker { get; private set; }
 
 	/// <summary>
@@ -17,11 +19,14 @@ public static class GameMemoryServiceWrapper
 	{
 		if (!Marker.HasValue)
 		{
+			if (!_tryDownloadMarker)
+				return false;
+
 			InitializeMarker();
 			return false;
 		}
 
-		// Always initialize the process so we detach properly when the game exits.
+		// Always initialize the process, so we detach properly when the game exits.
 		Root.GameMemoryService.Initialize(Marker.Value);
 		Root.GameMemoryService.Scan();
 
@@ -32,12 +37,16 @@ public static class GameMemoryServiceWrapper
 	{
 		AsyncHandler.Run(SetMarker, () => FetchMarker.HandleAsync(Root.PlatformSpecificValues.AppOperatingSystem));
 
-		void SetMarker(GetMarker? getMarker)
+		void SetMarker(ApiResult<GetMarker> getMarker)
 		{
-			if (getMarker == null)
-				PopupManager.ShowError("Failed to retrieve marker.");
-			else
-				Marker = getMarker.Value;
+			Marker = getMarker.Match<long?>(
+				onSuccess: getMarker => getMarker.Value,
+				onError: apiError =>
+				{
+					Root.Log.Error(apiError.Exception, "API error: " + apiError.Message);
+					PopupManager.ShowQuestion("Failed to retrieve marker", "Could not fetch marker from the DevilDaggersInfo API. The marker is required in order to scan the game's memory. Certain features may not work if this is cancelled. Do you want to retry?", () => _tryDownloadMarker = true, () => _tryDownloadMarker = false);
+					return null;
+				});
 		}
 	}
 }

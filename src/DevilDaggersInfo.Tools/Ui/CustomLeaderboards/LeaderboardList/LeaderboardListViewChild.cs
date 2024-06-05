@@ -136,17 +136,15 @@ public static class LeaderboardListViewChild
 	private static void SelectLeaderboard(GetCustomLeaderboardForOverview clOverview)
 	{
 		AsyncHandler.Run(
-			cl =>
+			getLeaderboardResult =>
 			{
-				if (cl == null)
-				{
-					PopupManager.ShowError("Could not fetch custom leaderboard.");
-					LeaderboardChild.Data = null;
-				}
-				else
-				{
-					LeaderboardChild.Data = new LeaderboardChild.LeaderboardData(cl, clOverview.SpawnsetId);
-				}
+				getLeaderboardResult.Match(
+					onSuccess: getLeaderboard => LeaderboardChild.Data = new LeaderboardChild.LeaderboardData(getLeaderboard, clOverview.SpawnsetId),
+					onError: apiError =>
+					{
+						PopupManager.ShowError("Could not fetch custom leaderboard.", apiError);
+						LeaderboardChild.Data = null;
+					});
 			},
 			() => FetchCustomLeaderboardById.HandleAsync(clOverview.Id));
 	}

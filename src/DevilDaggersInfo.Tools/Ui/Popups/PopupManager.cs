@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 using ImGuiNET;
 using System.Numerics;
@@ -10,6 +11,13 @@ public static class PopupManager
 
 	public static bool IsAnyOpen => _openPopups.Count > 0;
 
+	public static IReadOnlyList<Popup> OpenPopups => _openPopups;
+
+	public static void ShowError(string errorText, ApiError? apiError)
+	{
+		ShowError(errorText, apiError?.Message + Environment.NewLine + apiError?.Exception?.Message);
+	}
+
 	public static void ShowError(string errorText, Exception? exception)
 	{
 		ShowError(errorText, exception?.Message);
@@ -17,7 +25,7 @@ public static class PopupManager
 
 	public static void ShowError(string errorText, string? technicalDetails = null)
 	{
-		_openPopups.Add(new ErrorMessage($"Error##{DateTime.UtcNow.Ticks}", errorText, technicalDetails));
+		_openPopups.Add(new ErrorMessage("Error", errorText, technicalDetails));
 	}
 
 	public static void ShowMessage(string title, string text)
@@ -56,11 +64,14 @@ public static class PopupManager
 		// We remove popups from the list during rendering, so we need to iterate backwards.
 		for (int i = _openPopups.Count - 1; i >= 0; i--)
 		{
+			// if (_openPopups.Exists(p => p.HasOpened))
+			// 	break;
+
 			Popup popup = _openPopups[i];
 			if (!popup.HasOpened)
 			{
 				ImGui.OpenPopup(popup.Id);
-				popup.HasOpened = false;
+				popup.HasOpened = true;
 			}
 
 			RenderModal(popup);
