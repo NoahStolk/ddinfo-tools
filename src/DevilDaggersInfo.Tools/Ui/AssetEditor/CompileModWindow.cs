@@ -94,6 +94,7 @@ public static class CompileModWindow
 			return;
 		}
 
+		// TODO: Ask to overwrite the file if it already exists instead.
 		if (File.Exists(Path.Combine(_outputDirectory, $"audio{_outputFileName}")))
 		{
 			PopupManager.ShowError($"File 'audio{_outputFileName}' already exists in the output directory.");
