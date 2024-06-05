@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
+using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using ImGuiNET;
@@ -13,7 +14,7 @@ public static class LeaderboardListChild
 	public const int PageSize = 20;
 
 	private static readonly List<GetCustomLeaderboardAllowedCategory> _categories = [];
-	private static string[] _categoryNames = Array.Empty<string>();
+	private static string[] _categoryNames = [];
 
 	private static int _categoryIndex;
 	private static bool _featuredOnly;
@@ -98,67 +99,76 @@ public static class LeaderboardListChild
 	public static void LoadAll()
 	{
 		AsyncHandler.Run(
-			acs =>
+			getCategoriesResult =>
 			{
-				if (acs == null)
-					return;
-
-				_categories.Clear();
-				_categories.AddRange(acs);
-				_categoryNames = acs.Select(ToDisplayString).ToArray();
-
-				static string ToDisplayString(GetCustomLeaderboardAllowedCategory allowedCategory)
-				{
-					string gameModeString = allowedCategory.GameMode switch
+				getCategoriesResult.Match(
+					onSuccess: getCategories =>
 					{
-						SpawnsetGameMode.Survival => "Survival",
-						SpawnsetGameMode.TimeAttack => "Time Attack",
-						SpawnsetGameMode.Race => "Race",
-						_ => throw new UnreachableException(),
-					};
+						_categories.Clear();
+						_categories.AddRange(getCategories);
+						_categoryNames = getCategories.Select(ToDisplayString).ToArray();
 
-					string rankSortingString = allowedCategory.RankSorting switch
+						static string ToDisplayString(GetCustomLeaderboardAllowedCategory allowedCategory)
+						{
+							string gameModeString = allowedCategory.GameMode switch
+							{
+								SpawnsetGameMode.Survival => "Survival",
+								SpawnsetGameMode.TimeAttack => "Time Attack",
+								SpawnsetGameMode.Race => "Race",
+								_ => throw new UnreachableException(),
+							};
+
+							string rankSortingString = allowedCategory.RankSorting switch
+							{
+								CustomLeaderboardRankSorting.TimeDesc => "Highest Time",
+								CustomLeaderboardRankSorting.TimeAsc => "Lowest Time",
+								CustomLeaderboardRankSorting.GemsCollectedDesc => "Most Gems",
+								CustomLeaderboardRankSorting.GemsCollectedAsc => "Least Gems",
+								CustomLeaderboardRankSorting.GemsDespawnedDesc => "Most Gems Despawned",
+								CustomLeaderboardRankSorting.GemsDespawnedAsc => "Least Gems Despawned",
+								CustomLeaderboardRankSorting.GemsEatenDesc => "Most Gems Eaten",
+								CustomLeaderboardRankSorting.GemsEatenAsc => "Least Gems Eaten",
+								CustomLeaderboardRankSorting.EnemiesKilledDesc => "Most Kills",
+								CustomLeaderboardRankSorting.EnemiesKilledAsc => "Least Kills",
+								CustomLeaderboardRankSorting.EnemiesAliveDesc => "Most Enemies Alive",
+								CustomLeaderboardRankSorting.EnemiesAliveAsc => "Least Enemies Alive",
+								CustomLeaderboardRankSorting.HomingStoredDesc => "Most Homing",
+								CustomLeaderboardRankSorting.HomingStoredAsc => "Least Homing",
+								CustomLeaderboardRankSorting.HomingEatenDesc => "Most Homing Eaten",
+								CustomLeaderboardRankSorting.HomingEatenAsc	=> "Least Homing Eaten",
+								_ => allowedCategory.RankSorting.ToString(), // Fallback for when more sorting options are added.
+							};
+
+							return $"{gameModeString}: {rankSortingString}";
+						}
+					},
+					onError: apiError =>
 					{
-						CustomLeaderboardRankSorting.TimeDesc => "Highest Time",
-						CustomLeaderboardRankSorting.TimeAsc => "Lowest Time",
-						CustomLeaderboardRankSorting.GemsCollectedDesc => "Most Gems",
-						CustomLeaderboardRankSorting.GemsCollectedAsc => "Least Gems",
-						CustomLeaderboardRankSorting.GemsDespawnedDesc => "Most Gems Despawned",
-						CustomLeaderboardRankSorting.GemsDespawnedAsc => "Least Gems Despawned",
-						CustomLeaderboardRankSorting.GemsEatenDesc => "Most Gems Eaten",
-						CustomLeaderboardRankSorting.GemsEatenAsc => "Least Gems Eaten",
-						CustomLeaderboardRankSorting.EnemiesKilledDesc => "Most Kills",
-						CustomLeaderboardRankSorting.EnemiesKilledAsc => "Least Kills",
-						CustomLeaderboardRankSorting.EnemiesAliveDesc => "Most Enemies Alive",
-						CustomLeaderboardRankSorting.EnemiesAliveAsc => "Least Enemies Alive",
-						CustomLeaderboardRankSorting.HomingStoredDesc => "Most Homing",
-						CustomLeaderboardRankSorting.HomingStoredAsc => "Least Homing",
-						CustomLeaderboardRankSorting.HomingEatenDesc => "Most Homing Eaten",
-						CustomLeaderboardRankSorting.HomingEatenAsc	=> "Least Homing Eaten",
-						_ => allowedCategory.RankSorting.ToString(), // Fallback for when more sorting options are added.
-					};
-
-					return $"{gameModeString}: {rankSortingString}";
-				}
+						PopupManager.ShowError("Failed to fetch allowed categories.", apiError);
+						Root.Log.Error(apiError.Exception, "Failed to fetch allowed categories.");
+					});
 			},
 			FetchAllowedCategories.HandleAsync);
 
 		IsLoading = true;
 		AsyncHandler.Run(
-			cls =>
+			getLeaderboardsResult =>
 			{
 				IsLoading = false;
 				_customLeaderboards.Clear();
 
-				if (cls == null)
-				{
-					PageIndex = 0;
-				}
-				else
-				{
-					_customLeaderboards.AddRange(cls);
-					ClampPageIndex();
-				}
+				getLeaderboardsResult.Match(
+					onSuccess: getLeaderboards =>
+					{
+						_customLeaderboards.AddRange(getLeaderboards);
+						ClampPageIndex();
+					},
+					onError: apiError =>
+					{
+						PageIndex = 0;
+						PopupManager.ShowError("Failed to fetch custom leaderboards.", apiError);
+						Root.Log.Error(apiError.Exception, "Failed to fetch custom leaderboards.");
+					});
 
 				UpdatePagedCustomLeaderboards();
 			},

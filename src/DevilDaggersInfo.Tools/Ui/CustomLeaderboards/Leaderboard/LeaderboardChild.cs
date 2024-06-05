@@ -87,15 +87,11 @@ public static class LeaderboardChild
 	private static void PlaySpawnset(LeaderboardData data)
 	{
 		AsyncHandler.Run(
-			spawnset =>
+			getSpawnsetResult =>
 			{
-				if (spawnset == null)
-				{
-					PopupManager.ShowError("Could not fetch spawnset.");
-					return;
-				}
-
-				File.WriteAllBytes(UserSettings.ModsSurvivalPath, spawnset.FileBytes);
+				getSpawnsetResult.Match(
+					getSpawnset => File.WriteAllBytes(UserSettings.ModsSurvivalPath, getSpawnset.FileBytes),
+					apiError => PopupManager.ShowError("Could not fetch spawnset.", apiError));
 			},
 			() => FetchSpawnsetById.HandleAsync(data.SpawnsetId));
 	}
@@ -256,15 +252,11 @@ public static class LeaderboardChild
 	{
 		AsyncHandler.Run(Inject, () => FetchCustomEntryReplayById.HandleAsync(id));
 
-		void Inject(GetCustomEntryReplayBuffer? getCustomEntryReplayBuffer)
+		void Inject(ApiResult<GetCustomEntryReplayBuffer> getCustomEntryReplayBufferResult)
 		{
-			if (getCustomEntryReplayBuffer == null)
-			{
-				PopupManager.ShowError("Could not fetch replay.");
-				return;
-			}
-
-			Root.GameMemoryService.WriteReplayToMemory(getCustomEntryReplayBuffer.Data);
+			getCustomEntryReplayBufferResult.Match(
+				getCustomEntryReplayBuffer => Root.GameMemoryService.WriteReplayToMemory(getCustomEntryReplayBuffer.Data),
+				apiError => PopupManager.ShowError("Could not fetch replay.", apiError));
 		}
 	}
 
@@ -272,27 +264,26 @@ public static class LeaderboardChild
 	{
 		AsyncHandler.Run(BuildReplayScene, () => FetchCustomEntryReplayById.HandleAsync(id));
 
-		void BuildReplayScene(GetCustomEntryReplayBuffer? getCustomEntryReplayBuffer)
+		void BuildReplayScene(ApiResult<GetCustomEntryReplayBuffer> getCustomEntryReplayBufferResult)
 		{
-			if (getCustomEntryReplayBuffer == null)
-			{
-				PopupManager.ShowError("Could not fetch replay.");
-				return;
-			}
+			getCustomEntryReplayBufferResult.Match(
+				getCustomEntryReplayBuffer =>
+				{
+					ReplayBinary<LocalReplayBinaryHeader> replayBinary;
+					try
+					{
+						replayBinary = new ReplayBinary<LocalReplayBinaryHeader>(getCustomEntryReplayBuffer.Data);
+					}
+					catch (Exception ex)
+					{
+						Root.Log.Error(ex, "Could not parse replay.");
+						PopupManager.ShowError("Could not parse replay.", ex);
+						return;
+					}
 
-			ReplayBinary<LocalReplayBinaryHeader> replayBinary;
-			try
-			{
-				replayBinary = new ReplayBinary<LocalReplayBinaryHeader>(getCustomEntryReplayBuffer.Data);
-			}
-			catch (Exception ex)
-			{
-				Root.Log.Error(ex, "Could not parse replay.");
-				PopupManager.ShowError("Could not parse replay.", ex);
-				return;
-			}
-
-			CustomLeaderboards3DWindow.LoadReplay(replayBinary);
+					CustomLeaderboards3DWindow.LoadReplay(replayBinary);
+				},
+				apiError => PopupManager.ShowError("Could not fetch replay.", apiError));
 		}
 	}
 

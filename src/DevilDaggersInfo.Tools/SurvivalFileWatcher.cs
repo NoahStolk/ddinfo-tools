@@ -1,7 +1,9 @@
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
 using DevilDaggersInfo.Tools.User.Settings;
+using System.Net;
 using System.Security.Cryptography;
 
 namespace DevilDaggersInfo.Tools;
@@ -47,27 +49,39 @@ public static class SurvivalFileWatcher
 			if (!Exists)
 			{
 				SpawnsetName = null;
+				return;
 			}
-			else
-			{
-				try
-				{
-					byte[] fileContents = File.ReadAllBytes(UserSettings.ModsSurvivalPath);
-					byte[] fileHash = MD5.HashData(fileContents);
-					AsyncHandler.Run(s => SpawnsetName = s?.Name, () => FetchSpawnsetByHash.HandleAsync(fileHash));
 
-					if (SpawnsetBinary.TryParse(fileContents, out SpawnsetBinary? spawnsetBinary))
+			byte[] fileContents;
+			byte[] fileHash;
+			try
+			{
+				fileContents = File.ReadAllBytes(UserSettings.ModsSurvivalPath);
+				fileHash = MD5.HashData(fileContents);
+			}
+			catch (Exception ex) when (ex.IsFileIoException())
+			{
+				Root.Log.Warning(ex, "Failed to update active spawnset based on hash.");
+				return;
+			}
+
+			AsyncHandler.Run(
+				getSpawnsetResult => getSpawnsetResult.Match(
+					onSuccess: getSpawnset => SpawnsetName = getSpawnset.Name,
+					onError: apiError =>
 					{
-						HandLevel = spawnsetBinary.HandLevel;
-						AdditionalGems = spawnsetBinary.AdditionalGems;
-						TimerStart = spawnsetBinary.TimerStart;
-						EffectivePlayerSettings = spawnsetBinary.GetEffectivePlayerSettings();
-					}
-				}
-				catch (Exception ex)
-				{
-					Root.Log.Warning(ex, "Failed to update active spawnset based on hash.");
-				}
+						SpawnsetName = null;
+						if (apiError.Exception is not HttpRequestException { StatusCode: HttpStatusCode.NotFound })
+							Root.Log.Warning(apiError.Exception, "Failed to update active spawnset based on hash.");
+					}),
+				() => FetchSpawnsetByHash.HandleAsync(fileHash));
+
+			if (SpawnsetBinary.TryParse(fileContents, out SpawnsetBinary? spawnsetBinary))
+			{
+				HandLevel = spawnsetBinary.HandLevel;
+				AdditionalGems = spawnsetBinary.AdditionalGems;
+				TimerStart = spawnsetBinary.TimerStart;
+				EffectivePlayerSettings = spawnsetBinary.GetEffectivePlayerSettings();
 			}
 		}
 	}

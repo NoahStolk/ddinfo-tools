@@ -121,14 +121,28 @@ public static class RecordingLogic
 
 	private static void UploadRunIfExists(MainBlock runToUpload)
 	{
-		AsyncHandler.Run(leaderboardExists => UploadRun(leaderboardExists, runToUpload), () => CheckIfLeaderboardExists.HandleAsync(runToUpload.SurvivalHashMd5));
+		AsyncHandler.Run(
+			leaderboardExistsResult =>
+			{
+				leaderboardExistsResult.Match(
+					onSuccess: leaderboardExists =>
+					{
+						if (leaderboardExists.Exists)
+							UploadRun(runToUpload);
+						else
+							Root.Log.Information("Skipping upload because leaderboard with hash '{Hash}' does not exist.", runToUpload.SurvivalHashMd5);
+					},
+					onError: apiError =>
+					{
+						Root.Log.Warning(apiError.Exception, "Failed to check if leaderboard exists. Attempting to upload run anyway.");
+						UploadRun(runToUpload);
+					});
+			},
+			() => CheckIfLeaderboardExists.HandleAsync(runToUpload.SurvivalHashMd5));
 	}
 
-	private static void UploadRun(bool leaderboardExists, MainBlock runToUpload)
+	private static void UploadRun(MainBlock runToUpload)
 	{
-		if (!leaderboardExists)
-			return;
-
 		byte[] timeAsBytes = BitConverter.GetBytes(runToUpload.Time);
 		byte[] levelUpTime2AsBytes = BitConverter.GetBytes(runToUpload.LevelUpTime2);
 		byte[] levelUpTime3AsBytes = BitConverter.GetBytes(runToUpload.LevelUpTime3);
@@ -230,19 +244,22 @@ public static class RecordingLogic
 		AsyncHandler.Run(uploadResponse => OnSubmit(uploadResponse, uploadRequest), () => UploadSubmission.HandleAsync(uploadRequest));
 	}
 
-	private static void OnSubmit(GetUploadResponse? response, AddUploadRequest uploadRequest)
+	private static void OnSubmit(ApiResult<GetUploadResponse> getUploadResponseResult, AddUploadRequest uploadRequest)
 	{
-		if (response == null)
-		{
-			PopupManager.ShowError("Failed to upload run.");
-			return;
-		}
+		getUploadResponseResult.Match(
+			onSuccess: getUploadResponse =>
+			{
+				ShowUploadResponse = true;
+				LastSubmission = DateTime.Now;
 
-		ShowUploadResponse = true;
-		LastSubmission = DateTime.Now;
-
-		UploadResult uploadResult = new(response, response.IsAscending, response.SpawnsetName, uploadRequest.DeathType, DateTime.Now);
-		CustomLeaderboardResultsWindow.AddResult(uploadResult);
+				UploadResult uploadResult = new(getUploadResponse, getUploadResponse.IsAscending, getUploadResponse.SpawnsetName, uploadRequest.DeathType, DateTime.Now);
+				CustomLeaderboardResultsWindow.AddResult(uploadResult);
+			},
+			onError: apiError =>
+			{
+				Root.Log.Error(apiError.Exception, "Failed to upload run.");
+				PopupManager.ShowError("Failed to upload run.", apiError);
+			});
 	}
 
 	private static AddGameData GetGameDataForUpload(MainBlock block, byte[] statsBuffer)

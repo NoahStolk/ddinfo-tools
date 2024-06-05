@@ -68,7 +68,7 @@ public readonly record struct MainBlock
 	public readonly int ReplayPlayerId;
 	public readonly string ReplayPlayerName = string.Empty;
 
-	public readonly byte[] SurvivalHashMd5 = Array.Empty<byte>();
+	public readonly byte[] SurvivalHashMd5 = [];
 
 	public readonly float LevelUpTime2;
 	public readonly float LevelUpTime3;

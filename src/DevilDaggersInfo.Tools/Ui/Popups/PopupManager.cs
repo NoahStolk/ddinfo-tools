@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 using ImGuiNET;
 using System.Numerics;
@@ -6,9 +7,28 @@ namespace DevilDaggersInfo.Tools.Ui.Popups;
 
 public static class PopupManager
 {
-	private static readonly List<Popup> _openPopups = [];
+	private static readonly List<Popup> _popups = [];
 
-	public static bool IsAnyOpen => _openPopups.Count > 0;
+	public static bool IsAnyOpen
+	{
+		get
+		{
+			for (int i = 0; i < _popups.Count; i++)
+			{
+				if (_popups[i].HasOpened)
+					return true;
+			}
+
+			return false;
+		}
+	}
+
+	public static IReadOnlyList<Popup> Popups => _popups;
+
+	public static void ShowError(string errorText, ApiError? apiError)
+	{
+		ShowError(errorText, apiError?.Message + Environment.NewLine + apiError?.Exception?.Message);
+	}
 
 	public static void ShowError(string errorText, Exception? exception)
 	{
@@ -17,12 +37,12 @@ public static class PopupManager
 
 	public static void ShowError(string errorText, string? technicalDetails = null)
 	{
-		_openPopups.Add(new ErrorMessage($"Error##{DateTime.UtcNow.Ticks}", errorText, technicalDetails));
+		_popups.Add(new ErrorMessage("Error", errorText, technicalDetails));
 	}
 
 	public static void ShowMessage(string title, string text)
 	{
-		_openPopups.Add(new Message(title, text));
+		_popups.Add(new Message(title, text));
 	}
 
 	public static void ShowMessageWithHideOption(string title, string text, bool doNotShowAgain, Action<bool> setDoNotShowAgain)
@@ -30,7 +50,7 @@ public static class PopupManager
 		if (doNotShowAgain)
 			return;
 
-		_openPopups.Add(new MessageWithHideOption(title, text, setDoNotShowAgain, doNotShowAgain));
+		_popups.Add(new MessageWithHideOption(title, text, setDoNotShowAgain, doNotShowAgain));
 	}
 
 	public static void ShowSaveSpawnsetPrompt(Action action)
@@ -48,22 +68,39 @@ public static class PopupManager
 
 	public static void ShowQuestion(string title, string text, Action onConfirm, Action onDeny)
 	{
-		_openPopups.Add(new Question(title, text, onConfirm, onDeny));
+		_popups.Add(new Question(title, text, onConfirm, onDeny));
 	}
 
 	public static void Render()
 	{
+		// Render all open popups (there should be only one at a time).
 		// We remove popups from the list during rendering, so we need to iterate backwards.
-		for (int i = _openPopups.Count - 1; i >= 0; i--)
+		bool isAnyOpen = false;
+		for (int i = _popups.Count - 1; i >= 0; i--)
 		{
-			Popup popup = _openPopups[i];
-			if (!popup.HasOpened)
+			Popup popup = _popups[i];
+			if (popup.HasOpened)
 			{
-				ImGui.OpenPopup(popup.Id);
-				popup.HasOpened = false;
-			}
+				RenderModal(popup);
+				isAnyOpen = true;
 
-			RenderModal(popup);
+				// TODO: Might need to break here if we want to prevent rendering multiple popups at once (but this should never happen).
+			}
+		}
+
+		if (!isAnyOpen)
+		{
+			// IF there are popups left, and there are currently no popups open, open the remaining popups in order of addition.
+			for (int i = 0; i < _popups.Count; i++)
+			{
+				Popup popup = _popups[i];
+				if (!popup.HasOpened)
+				{
+					ImGui.OpenPopup(popup.Id);
+					popup.HasOpened = true;
+					break;
+				}
+			}
 		}
 	}
 
@@ -78,7 +115,7 @@ public static class PopupManager
 			if (popup.Render())
 			{
 				ImGui.CloseCurrentPopup();
-				_openPopups.Remove(popup);
+				_popups.Remove(popup);
 			}
 
 			ImGui.EndPopup();
