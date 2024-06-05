@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Web.ApiSpec.Tools.Spawnsets;
-using System.Net;
 
 namespace DevilDaggersInfo.Tools.Networking.TaskHandlers;
 

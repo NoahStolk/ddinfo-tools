@@ -84,7 +84,7 @@ public class GameMemoryService
 	public byte[] ReadReplayFromMemory()
 	{
 		if (_process == null)
-			return Array.Empty<byte>();
+			return [];
 
 		byte[] buffer = new byte[MainBlock.ReplayLength];
 		_nativeMemoryService.ReadMemory(_process, MainBlock.ReplayBase, buffer, 0, buffer.Length);

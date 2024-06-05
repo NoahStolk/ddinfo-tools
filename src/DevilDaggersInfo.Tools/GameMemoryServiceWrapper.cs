@@ -35,17 +35,34 @@ public static class GameMemoryServiceWrapper
 
 	private static void InitializeMarker()
 	{
+		// Workaround to prevent multiple popups from appearing during continuous retry.
+		if (PopupManager.IsAnyOpen)
+			return;
+
 		AsyncHandler.Run(SetMarker, () => FetchMarker.HandleAsync(Root.PlatformSpecificValues.AppOperatingSystem));
 
-		void SetMarker(ApiResult<GetMarker> getMarker)
+		void SetMarker(ApiResult<GetMarker> getMarkerResult)
 		{
-			Marker = getMarker.Match<long?>(
-				onSuccess: getMarker => getMarker.Value,
+			getMarkerResult.Match(
+				onSuccess: getMarker => Marker = getMarker.Value,
 				onError: apiError =>
 				{
 					Root.Log.Error(apiError.Exception, "API error: " + apiError.Message);
-					PopupManager.ShowQuestion("Failed to retrieve marker", "Could not fetch marker from the DevilDaggersInfo API. The marker is required in order to scan the game's memory. Certain features may not work if this is cancelled. Do you want to retry?", () => _tryDownloadMarker = true, () => _tryDownloadMarker = false);
-					return null;
+
+					const string message = """
+						Could not fetch marker from the DevilDaggers.info API.
+
+						The marker is required in order to scan the game's memory. This means that:
+						- Custom leaderboards won't work.
+						- Some features in the replay editor won't work.
+						- Practice will still work, but you won't be able to see your stats.
+
+						Do you want to retry?
+
+						If you select "No", you will have to restart the app to try again.
+						""";
+
+					PopupManager.ShowQuestion("Failed to retrieve marker", message, () => _tryDownloadMarker = true, () => _tryDownloadMarker = false);
 				});
 		}
 	}

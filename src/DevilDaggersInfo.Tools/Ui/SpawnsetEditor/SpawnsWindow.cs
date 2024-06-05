@@ -9,7 +9,6 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
-using System.Collections.Immutable;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
@@ -173,7 +172,7 @@ public static class SpawnsWindow
 
 				if (io.IsKeyDown(ImGuiKey.Delete) && Array.Exists(_selected, b => b))
 				{
-					FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Where((_, i) => !_selected[i]).ToImmutableArray() });
+					FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = [..FileStates.Spawnset.Object.Spawns.Where((_, i) => !_selected[i])] });
 					Array.Fill(_selected, false);
 					SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnDelete);
 				}

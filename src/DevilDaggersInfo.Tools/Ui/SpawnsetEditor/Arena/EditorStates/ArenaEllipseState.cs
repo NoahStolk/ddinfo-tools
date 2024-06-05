@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
-using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using ImGuiNET;

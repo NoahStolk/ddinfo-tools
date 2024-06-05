@@ -31,13 +31,13 @@ public static class DebugWindow
 	{
 		if (ImGui.Begin("Debug"))
 		{
+			ImGui.TextColored(NativeFileDialog.DialogOpen ? Color.White : Color.Gray(0.4f), NativeFileDialog.DialogOpen ? "Native dialog open" : "Native dialog closed");
+			ImGui.TextColored(Root.AesBase32Wrapper == null ? Color.Red : Color.Green, Root.AesBase32Wrapper == null ? "Encryption unavailable" : "Encryption available");
+
 			if (ImGui.CollapsingHeader("Popup debug info"))
 			{
 				RenderPopupDebugInfo();
 			}
-
-			ImGui.TextColored(NativeFileDialog.DialogOpen ? Color.White : Color.Gray(0.4f), NativeFileDialog.DialogOpen ? "Native dialog open" : "Native dialog closed");
-			ImGui.TextColored(Root.AesBase32Wrapper == null ? Color.Red : Color.Green, Root.AesBase32Wrapper == null ? "Encryption unavailable" : "Encryption available");
 
 			if (ImGui.CollapsingHeader("Modded survival file"))
 			{

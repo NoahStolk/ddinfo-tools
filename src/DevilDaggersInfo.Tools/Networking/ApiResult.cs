@@ -24,22 +24,6 @@ public record ApiResult<TResult>
 		return new ApiResult<TResult>(default, error, false);
 	}
 
-	public TReturn Match<TReturn>(Func<TResult, TReturn> onSuccess, Func<ApiError, TReturn> onError)
-	{
-		if (_success)
-		{
-			if (_value == null)
-				throw new InvalidOperationException("Bad internal ApiResult: Value is null but success is true.");
-
-			return onSuccess(_value);
-		}
-
-		if (_error == null)
-			throw new InvalidOperationException("Bad internal ApiResult: Error is null but success is false.");
-
-		return onError(_error);
-	}
-
 	public void Match(Action<TResult> onSuccess, Action<ApiError> onError)
 	{
 		if (_success)

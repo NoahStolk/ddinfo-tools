@@ -64,9 +64,6 @@ public static class PopupManager
 		// We remove popups from the list during rendering, so we need to iterate backwards.
 		for (int i = _openPopups.Count - 1; i >= 0; i--)
 		{
-			// if (_openPopups.Exists(p => p.HasOpened))
-			// 	break;
-
 			Popup popup = _openPopups[i];
 			if (!popup.HasOpened)
 			{
