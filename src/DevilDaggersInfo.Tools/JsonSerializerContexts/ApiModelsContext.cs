@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using DevilDaggersInfo.Web.ApiSpec.Tools.ProcessMemory;
 using DevilDaggersInfo.Web.ApiSpec.Tools.Spawnsets;
-using DevilDaggersInfo.Web.ApiSpec.Tools.Updates;
 using System.Text.Json.Serialization;
 
 namespace DevilDaggersInfo.Tools.JsonSerializerContexts;
@@ -13,7 +12,6 @@ namespace DevilDaggersInfo.Tools.JsonSerializerContexts;
 [JsonSerializable(typeof(AddUploadRequest))]
 [JsonSerializable(typeof(GetCustomEntryReplayBuffer))]
 [JsonSerializable(typeof(GetCustomLeaderboard))]
-[JsonSerializable(typeof(GetLatestVersion))]
 [JsonSerializable(typeof(GetMarker))]
 [JsonSerializable(typeof(GetSpawnset))]
 [JsonSerializable(typeof(GetSpawnsetByHash))]
