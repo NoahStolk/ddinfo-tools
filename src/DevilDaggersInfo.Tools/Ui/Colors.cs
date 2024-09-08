@@ -95,5 +95,12 @@ public static class Colors
 		style.Colors[(int)ImGuiCol.Tab] = colorConfiguration.Tertiary;
 		style.Colors[(int)ImGuiCol.TabHovered] = colorConfiguration.Secondary;
 		style.Colors[(int)ImGuiCol.TabSelected] = colorConfiguration.Primary;
+		style.Colors[(int)ImGuiCol.TabSelectedOverline] = colorConfiguration.Secondary;
+		style.Colors[(int)ImGuiCol.TabDimmed] = colorConfiguration.Tertiary;
+		style.Colors[(int)ImGuiCol.TabDimmedSelected] = colorConfiguration.Secondary;
+		style.Colors[(int)ImGuiCol.TabDimmedSelectedOverline] = colorConfiguration.Tertiary;
+		style.Colors[(int)ImGuiCol.ResizeGrip] = colorConfiguration.Tertiary;
+		style.Colors[(int)ImGuiCol.ResizeGripHovered] = colorConfiguration.Secondary;
+		style.Colors[(int)ImGuiCol.ResizeGripActive] = colorConfiguration.Primary;
 	}
 }
