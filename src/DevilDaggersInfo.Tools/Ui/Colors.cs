@@ -94,6 +94,6 @@ public static class Colors
 		style.Colors[(int)ImGuiCol.SeparatorActive] = colorConfiguration.Quaternary;
 		style.Colors[(int)ImGuiCol.Tab] = colorConfiguration.Tertiary;
 		style.Colors[(int)ImGuiCol.TabHovered] = colorConfiguration.Secondary;
-		style.Colors[(int)ImGuiCol.TabActive] = colorConfiguration.Primary;
+		style.Colors[(int)ImGuiCol.TabSelected] = colorConfiguration.Primary;
 	}
 }
