@@ -9,4 +9,6 @@ public enum LeaderboardListSorting
 	Rank,
 	Players,
 	WorldRecord,
+	DateCreated,
+	DateLastPlayed,
 }

@@ -47,7 +47,7 @@ public static class LeaderboardListViewChild
 		const ImGuiTableFlags flags = ImGuiTableFlags.Resizable | ImGuiTableFlags.Reorderable | ImGuiTableFlags.Hideable | ImGuiTableFlags.Sortable | ImGuiTableFlags.SortMulti | ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersV | ImGuiTableFlags.NoBordersInBody;
 
 		ImGui.PushStyleVar(ImGuiStyleVar.CellPadding, new Vector2(4, 1));
-		if (ImGui.BeginTable("LeaderboardListTable", 8, flags))
+		if (ImGui.BeginTable("LeaderboardListTable", 10, flags))
 		{
 			ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.DefaultSort, 0, (int)LeaderboardListSorting.Name);
 			ImGui.TableSetupColumn("Author", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Author);
@@ -57,6 +57,8 @@ public static class LeaderboardListViewChild
 			ImGui.TableSetupColumn("Rank", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Rank);
 			ImGui.TableSetupColumn("Players", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Players);
 			ImGui.TableSetupColumn("World record", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.WorldRecord);
+			ImGui.TableSetupColumn("Date created", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.DateCreated);
+			ImGui.TableSetupColumn("Date last played", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.DateLastPlayed);
 			ImGui.TableHeadersRow();
 
 			ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
@@ -124,6 +126,12 @@ public static class LeaderboardListViewChild
 				ImGui.TableNextColumn();
 
 				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.WorldRecord?.Dagger), clOverview.WorldRecord == null ? "-" : Inline.Span(clOverview.WorldRecord.WorldRecordValue, valueFormat));
+				ImGui.TableNextColumn();
+
+				ImGui.Text(clOverview.DateCreated.ToString(StringFormats.DateTimeFormat));
+				ImGui.TableNextColumn();
+
+				ImGui.Text(clOverview.DateLastPlayed?.ToString(StringFormats.DateTimeFormat) ?? "Never");
 				ImGui.TableNextColumn();
 			}
 

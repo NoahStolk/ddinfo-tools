@@ -198,6 +198,8 @@ public static class LeaderboardListChild
 			LeaderboardListSorting.Rank => SortAscending ? _customLeaderboards.OrderBy(GetRankSortingKey) : _customLeaderboards.OrderByDescending(GetRankSortingKey),
 			LeaderboardListSorting.Players => SortAscending ? _customLeaderboards.OrderBy(cl => cl.PlayerCount) : _customLeaderboards.OrderByDescending(cl => cl.PlayerCount),
 			LeaderboardListSorting.WorldRecord => SortAscending ? _customLeaderboards.OrderBy(cl => cl.WorldRecord?.WorldRecordValue) : _customLeaderboards.OrderByDescending(cl => cl.WorldRecord?.WorldRecordValue),
+			LeaderboardListSorting.DateCreated => SortAscending ? _customLeaderboards.OrderBy(cl => cl.DateCreated) : _customLeaderboards.OrderByDescending(cl => cl.DateCreated),
+			LeaderboardListSorting.DateLastPlayed => SortAscending ? _customLeaderboards.OrderBy(cl => cl.DateLastPlayed) : _customLeaderboards.OrderByDescending(cl => cl.DateLastPlayed),
 			_ => throw new UnreachableException(),
 		};
 
