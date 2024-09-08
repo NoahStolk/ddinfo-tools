@@ -73,6 +73,8 @@ public static class AssetPathsChild
 					}
 				}
 
+				clipper.End();
+
 				ImGui.EndTable();
 			}
 
