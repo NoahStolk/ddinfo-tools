@@ -31,7 +31,7 @@ public static class ArenaHeightButtons
 			}
 		}
 
-		ImGui.EndChild(); // End ArenaHeightButtons
+		ImGui.EndChild();
 
 		static void AddHeightButton(float height, int offsetX, int offsetY, int width = _arenaButtonSize)
 		{

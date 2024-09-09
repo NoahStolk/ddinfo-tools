@@ -68,7 +68,7 @@ public static class LeaderboardListChild
 					UpdatePagedCustomLeaderboards();
 			}
 
-			ImGui.EndChild(); // End ComboCategory
+			ImGui.EndChild();
 
 			ImGui.SameLine();
 			if (ImGui.Checkbox("Featured", ref _featuredOnly))
@@ -82,7 +82,7 @@ public static class LeaderboardListChild
 					UpdatePagedCustomLeaderboards();
 			}
 
-			ImGui.EndChild(); // End InputSpawnset
+			ImGui.EndChild();
 
 			ImGui.SameLine();
 			if (ImGui.BeginChild("InputAuthor", new Vector2(150, 20)))
@@ -91,10 +91,10 @@ public static class LeaderboardListChild
 					UpdatePagedCustomLeaderboards();
 			}
 
-			ImGui.EndChild(); // End InputAuthor
+			ImGui.EndChild();
 		}
 
-		ImGui.EndChild(); // End LeaderboardList
+		ImGui.EndChild();
 	}
 
 	public static void LoadAll()

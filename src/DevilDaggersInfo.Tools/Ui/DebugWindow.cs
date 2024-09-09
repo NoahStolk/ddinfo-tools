@@ -140,7 +140,7 @@ public static class DebugWindow
 #endif
 		}
 
-		ImGui.End(); // End Debug
+		ImGui.End();
 	}
 
 	private static void RenderPopupDebugInfo()

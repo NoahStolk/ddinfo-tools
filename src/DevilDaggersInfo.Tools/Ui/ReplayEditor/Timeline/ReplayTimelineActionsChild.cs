@@ -26,6 +26,6 @@ public static class ReplayTimelineActionsChild
 			}
 		}
 
-		ImGui.EndChild(); // End ActionsChild
+		ImGui.EndChild();
 	}
 }

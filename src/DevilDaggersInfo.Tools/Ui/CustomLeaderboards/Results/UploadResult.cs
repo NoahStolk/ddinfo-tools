@@ -240,6 +240,7 @@ public class UploadResult
 
 			ImGui.TextColored(color, _spawnsetName);
 
+			// TODO: Use ReadOnlySpan<char>.
 			string text = DateTimeUtils.FormatTimeAgo(SubmittedAt);
 			ImGui.SameLine(ImGui.GetWindowWidth() - ImGui.CalcTextSize(text).X - 8);
 			ImGui.Text(text);
@@ -247,7 +248,7 @@ public class UploadResult
 			ImGui.Text(title);
 		}
 
-		ImGui.EndChild(); // End {SubmittedAt.Ticks}{_spawnsetName}
+		ImGui.EndChild();
 		ImGui.PopStyleColor();
 
 		return IsExpanded;

@@ -57,7 +57,7 @@ public static class SpawnsWindow
 			if (ImGui.BeginChild("SpawnsListChild", listSize))
 				RenderSpawnsTable();
 
-			ImGui.EndChild(); // End SpawnsListChild
+			ImGui.EndChild();
 
 			if (ImGui.BeginChild("SpawnControlsChild"))
 			{
@@ -96,7 +96,7 @@ public static class SpawnsWindow
 					}
 				}
 
-				ImGui.EndChild(); // End AddAndInsertButtons
+				ImGui.EndChild();
 
 				ImGui.SameLine();
 
@@ -121,13 +121,13 @@ public static class SpawnsWindow
 					_addDelay = Math.Max(0, _addDelay);
 				}
 
-				ImGui.EndChild(); // End AddSpawnControls
+				ImGui.EndChild();
 			}
 
-			ImGui.EndChild(); // End SpawnControlsChild
+			ImGui.EndChild();
 		}
 
-		ImGui.End(); // End Spawns
+		ImGui.End();
 	}
 
 	private static void EnemyButton(EnemyType enemyType, bool sameLine)

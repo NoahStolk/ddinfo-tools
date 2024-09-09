@@ -53,6 +53,6 @@ public static class SpawnsetEditor3DWindow
 			ImGui.InvisibleButton("invisible", new Vector2(_framebufferData.Width, _framebufferData.Height));
 		}
 
-		ImGui.End(); // End 3D Arena Editor
+		ImGui.End();
 	}
 }

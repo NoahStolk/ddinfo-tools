@@ -34,7 +34,7 @@ public static class AssetPathsChild
 			}
 		}
 
-		ImGui.EndChild(); // End Asset Paths
+		ImGui.EndChild();
 	}
 
 	private static unsafe void RenderAssets<T>(ReadOnlySpan<char> id, uint backgroundColor)

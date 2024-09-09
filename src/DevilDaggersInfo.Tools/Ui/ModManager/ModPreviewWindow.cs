@@ -121,7 +121,7 @@ public static class ModPreviewWindow
 			}
 		}
 
-		ImGui.End(); // End Mod preview
+		ImGui.End();
 	}
 
 	private static void RenderFileInfoTable(ModBinaryType modBinaryType)

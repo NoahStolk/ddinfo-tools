@@ -52,7 +52,7 @@ public static class ModsDirectoryWindow
 					RenderTable();
 			}
 
-			ImGui.EndChild(); // End table_child
+			ImGui.EndChild();
 
 			static void CheckboxColored(ReadOnlySpan<char> label, Vector4 color, ref bool value, ReadOnlySpan<char> tooltip)
 			{
@@ -67,7 +67,7 @@ public static class ModsDirectoryWindow
 			}
 		}
 
-		ImGui.End(); // End Mod Manager
+		ImGui.End();
 	}
 
 	private static unsafe void RenderTable()

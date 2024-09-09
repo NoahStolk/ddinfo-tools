@@ -109,7 +109,7 @@ public static class ConfigLayout
 						ImGui.TextColored(new Vector4(1, 0, 0, 1), _error);
 				}
 
-				ImGui.EndChild(); // End InputDirectory
+				ImGui.EndChild();
 
 				ImGui.SeparatorText("Settings");
 
@@ -139,7 +139,7 @@ public static class ConfigLayout
 					UserSettings.Model = UserSettings.Model with { DoNotShowAgainPracticeSpawnsetDeleted = doNotShowAgainPracticeSpawnsetDeleted };
 			}
 
-			ImGui.EndChild(); // End Input
+			ImGui.EndChild();
 
 			ImGui.PushFont(Root.FontGoetheBold30);
 			if (ImGui.Button("Save and continue", new Vector2(752, 64)))
@@ -155,7 +155,7 @@ public static class ConfigLayout
 			ImGui.PopFont();
 		}
 
-		ImGui.End(); // End Configuration
+		ImGui.End();
 
 		if (ImGui.IsKeyPressed(ImGuiKey.Escape))
 			ValidateInstallation();

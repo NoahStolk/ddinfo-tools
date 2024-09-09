@@ -57,7 +57,7 @@ public static class ReplayTimelineChild
 			RenderTimeline(replay);
 		}
 
-		ImGui.EndChild(); // End TimelineViewChild
+		ImGui.EndChild();
 
 		ReplayTimelineActionsChild.Render();
 
@@ -75,7 +75,7 @@ public static class ReplayTimelineChild
 			}
 		}
 
-		ImGui.EndChild(); // End SelectedEventsChild
+		ImGui.EndChild();
 
 		ImGui.PopStyleVar();
 		ImGui.PopStyleColor();
@@ -105,7 +105,7 @@ public static class ReplayTimelineChild
 
 		ImGui.PopStyleColor();
 
-		ImGui.EndChild(); // End LegendChild
+		ImGui.EndChild();
 
 		ImGui.SameLine();
 
@@ -163,7 +163,7 @@ public static class ReplayTimelineChild
 			HandleInput(replay, origin);
 		}
 
-		ImGui.EndChild(); // End TimelineEditorChild
+		ImGui.EndChild();
 
 		static void AddHorizontalLine(ImDrawListPtr drawList, Vector2 origin, float offsetY, float width, Color color)
 		{

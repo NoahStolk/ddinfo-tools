@@ -40,7 +40,7 @@ public static class LeaderboardListViewChild
 			}
 		}
 
-		ImGui.EndChild(); // End LeaderboardList
+		ImGui.EndChild();
 	}
 
 	private static unsafe void RenderTable()
@@ -129,9 +129,11 @@ public static class LeaderboardListViewChild
 				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.WorldRecord?.Dagger), clOverview.WorldRecord == null ? "-" : Inline.Span(clOverview.WorldRecord.WorldRecordValue, valueFormat));
 				ImGui.TableNextColumn();
 
+				// TODO: Use ReadOnlySpan<char>.
 				ImGui.Text(clOverview.DateCreated.ToString(StringFormats.DateTimeFormat));
 				ImGui.TableNextColumn();
 
+				// TODO: Use ReadOnlySpan<char>.
 				ImGui.Text(DateTimeUtils.FormatTimeAgo(clOverview.DateLastPlayed == null ? null : DateTime.SpecifyKind(clOverview.DateLastPlayed.Value, DateTimeKind.Utc)));
 				ImGui.TableNextColumn();
 			}

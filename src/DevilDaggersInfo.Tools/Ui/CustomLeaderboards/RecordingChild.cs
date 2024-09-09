@@ -236,7 +236,7 @@ public static class RecordingChild
 			RenderValue("Thorns alive", Inline.Span(b.ThornAliveCount), EnemiesV3_2.Thorn.Color.ToEngineColor(), _thornAliveCountIntensity);
 		}
 
-		ImGui.EndChild(); // End RecordingValues
+		ImGui.EndChild();
 	}
 
 	private static void RenderValue(ReadOnlySpan<char> label, ReadOnlySpan<char> value, Color color, float intensity)

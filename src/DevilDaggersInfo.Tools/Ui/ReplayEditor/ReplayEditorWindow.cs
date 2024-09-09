@@ -66,6 +66,6 @@ public static class ReplayEditorWindow
 			}
 		}
 
-		ImGui.End(); // End Replay Editor
+		ImGui.End();
 	}
 }

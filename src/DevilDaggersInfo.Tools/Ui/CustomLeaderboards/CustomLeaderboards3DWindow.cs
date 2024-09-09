@@ -67,6 +67,6 @@ public static class CustomLeaderboards3DWindow
 			ImGui.Text(StringResources.ReplaySimulator3D);
 		}
 
-		ImGui.End(); // End 3D Replay Viewer
+		ImGui.End();
 	}
 }

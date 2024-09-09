@@ -63,6 +63,6 @@ public static class SplitsChild
 			}
 		}
 
-		ImGui.EndChild(); // End Splits
+		ImGui.EndChild();
 	}
 }

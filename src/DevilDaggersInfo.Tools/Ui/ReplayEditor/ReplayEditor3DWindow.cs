@@ -70,6 +70,6 @@ public static class ReplayEditor3DWindow
 			drawList.AddFramebufferImage(_framebufferData, cursorScreenPos, cursorScreenPos + new Vector2(_framebufferData.Width, _framebufferData.Height));
 		}
 
-		ImGui.End(); // End 3D Replay Viewer
+		ImGui.End();
 	}
 }
