@@ -19,5 +19,7 @@ internal sealed class TocEntry
 	public uint Length { get; }
 
 	public override string ToString()
-		=> $"{ContentType}: \"{Name}\" ({Length} bytes)";
+	{
+		return $"{ContentType}: \"{Name}\" ({Length} bytes)";
+	}
 }

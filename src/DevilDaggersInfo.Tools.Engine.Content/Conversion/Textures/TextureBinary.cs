@@ -8,7 +8,9 @@ internal sealed record TextureBinary(ushort Width, ushort Height, byte[] ColorDa
 	public ContentType ContentType => ContentType.Texture;
 
 	private static bool IsOpaqueWhite(byte r, byte g, byte b, byte a)
-		=> r == byte.MaxValue && g == byte.MaxValue && b == byte.MaxValue && a == byte.MaxValue;
+	{
+		return r == byte.MaxValue && g == byte.MaxValue && b == byte.MaxValue && a == byte.MaxValue;
+	}
 
 	private static TextureContentType DetermineTextureContentType(IReadOnlyList<byte> colorData)
 	{

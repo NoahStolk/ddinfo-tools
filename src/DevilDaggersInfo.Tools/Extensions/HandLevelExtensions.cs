@@ -7,12 +7,15 @@ namespace DevilDaggersInfo.Tools.Extensions;
 
 public static class HandLevelExtensions
 {
-	public static Color GetColor(this HandLevel handLevel) => handLevel switch
+	public static Color GetColor(this HandLevel handLevel)
 	{
-		HandLevel.Level1 => UpgradeColors.Level1.ToEngineColor(),
-		HandLevel.Level2 => UpgradeColors.Level2.ToEngineColor(),
-		HandLevel.Level3 => UpgradeColors.Level3.ToEngineColor(),
-		HandLevel.Level4 => UpgradeColors.Level4.ToEngineColor(),
-		_ => throw new UnreachableException(),
-	};
+		return handLevel switch
+		{
+			HandLevel.Level1 => UpgradeColors.Level1.ToEngineColor(),
+			HandLevel.Level2 => UpgradeColors.Level2.ToEngineColor(),
+			HandLevel.Level3 => UpgradeColors.Level3.ToEngineColor(),
+			HandLevel.Level4 => UpgradeColors.Level4.ToEngineColor(),
+			_ => throw new UnreachableException(),
+		};
+	}
 }
