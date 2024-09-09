@@ -41,7 +41,7 @@ public static class PracticeWindow
 			CurrentSpawnsetChild.Render();
 		}
 
-		ImGui.End(); // End Practice
+		ImGui.End();
 	}
 
 	public static void GetGemsOrHomingText(HandLevel handLevel, int additionalGems, Span<char> text, out Color textColor)

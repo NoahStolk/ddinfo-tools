@@ -82,7 +82,7 @@ public static class ArenaWindow
 					activeState.HandleOutOfRange(mousePosition);
 			}
 
-			ImGui.EndChild(); // End Arena
+			ImGui.EndChild();
 
 			ImGui.SliderFloat("Time", ref _currentSecond, 0, FileStates.Spawnset.Object.GetSliderMaxSeconds());
 
@@ -92,6 +92,6 @@ public static class ArenaWindow
 			ArenaHeightButtons.Render();
 		}
 
-		ImGui.EndChild(); // End ArenaWindow
+		ImGui.EndChild();
 	}
 }

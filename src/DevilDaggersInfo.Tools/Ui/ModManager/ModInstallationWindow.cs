@@ -136,7 +136,7 @@ public static class ModInstallationWindow
 			}
 		}
 
-		ImGui.End(); // End Mod preview
+		ImGui.End();
 	}
 
 	private static void RenderEffectiveAssetsTable()

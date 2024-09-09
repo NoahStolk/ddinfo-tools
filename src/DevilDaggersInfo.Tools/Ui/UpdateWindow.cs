@@ -45,7 +45,7 @@ public static class UpdateWindow
 			ImGui.PopTextWrapPos();
 		}
 
-		ImGui.End(); // End Update available
+		ImGui.End();
 	}
 
 	private static string GetZipAssetDisplayName()

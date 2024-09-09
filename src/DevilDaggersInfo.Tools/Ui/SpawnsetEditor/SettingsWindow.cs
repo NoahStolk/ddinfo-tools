@@ -42,7 +42,7 @@ public static class SettingsWindow
 			ImGui.Unindent();
 		}
 
-		ImGui.End(); // End Settings
+		ImGui.End();
 	}
 
 	private static void RenderFormat()

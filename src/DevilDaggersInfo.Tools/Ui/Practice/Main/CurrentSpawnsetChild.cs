@@ -67,6 +67,6 @@ public static class CurrentSpawnsetChild
 			}
 		}
 
-		ImGui.EndChild(); // End CurrentSpawnset
+		ImGui.EndChild();
 	}
 }

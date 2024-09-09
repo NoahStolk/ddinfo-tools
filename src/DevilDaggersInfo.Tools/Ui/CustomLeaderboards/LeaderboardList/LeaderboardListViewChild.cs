@@ -7,6 +7,7 @@ using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
 using DevilDaggersInfo.Tools.Ui.Popups;
+using DevilDaggersInfo.Tools.Utils;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using ImGuiNET;
 using System.Numerics;
@@ -39,7 +40,7 @@ public static class LeaderboardListViewChild
 			}
 		}
 
-		ImGui.EndChild(); // End LeaderboardList
+		ImGui.EndChild();
 	}
 
 	private static unsafe void RenderTable()
@@ -47,7 +48,7 @@ public static class LeaderboardListViewChild
 		const ImGuiTableFlags flags = ImGuiTableFlags.Resizable | ImGuiTableFlags.Reorderable | ImGuiTableFlags.Hideable | ImGuiTableFlags.Sortable | ImGuiTableFlags.SortMulti | ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersV | ImGuiTableFlags.NoBordersInBody;
 
 		ImGui.PushStyleVar(ImGuiStyleVar.CellPadding, new Vector2(4, 1));
-		if (ImGui.BeginTable("LeaderboardListTable", 8, flags))
+		if (ImGui.BeginTable("LeaderboardListTable", 10, flags))
 		{
 			ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.DefaultSort, 0, (int)LeaderboardListSorting.Name);
 			ImGui.TableSetupColumn("Author", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Author);
@@ -57,6 +58,8 @@ public static class LeaderboardListViewChild
 			ImGui.TableSetupColumn("Rank", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Rank);
 			ImGui.TableSetupColumn("Players", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Players);
 			ImGui.TableSetupColumn("World record", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.WorldRecord);
+			ImGui.TableSetupColumn("Date created", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.DateCreated);
+			ImGui.TableSetupColumn("Date last played", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.DateLastPlayed);
 			ImGui.TableHeadersRow();
 
 			ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
@@ -124,6 +127,14 @@ public static class LeaderboardListViewChild
 				ImGui.TableNextColumn();
 
 				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.WorldRecord?.Dagger), clOverview.WorldRecord == null ? "-" : Inline.Span(clOverview.WorldRecord.WorldRecordValue, valueFormat));
+				ImGui.TableNextColumn();
+
+				// TODO: Use ReadOnlySpan<char>.
+				ImGui.Text(clOverview.DateCreated.ToString(StringFormats.DateTimeFormat));
+				ImGui.TableNextColumn();
+
+				// TODO: Use ReadOnlySpan<char>.
+				ImGui.Text(DateTimeUtils.FormatTimeAgo(clOverview.DateLastPlayed == null ? null : DateTime.SpecifyKind(clOverview.DateLastPlayed.Value, DateTimeKind.Utc)));
 				ImGui.TableNextColumn();
 			}
 

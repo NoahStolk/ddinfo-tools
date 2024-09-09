@@ -32,6 +32,6 @@ public static class RunAnalysisWindow
 			GraphsChild.Render();
 		}
 
-		ImGui.End(); // End Run Analysis
+		ImGui.End();
 	}
 }

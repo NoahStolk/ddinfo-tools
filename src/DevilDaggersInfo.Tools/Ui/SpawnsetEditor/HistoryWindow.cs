@@ -52,7 +52,7 @@ public static class HistoryWindow
 
 		ImGui.PopStyleVar();
 
-		ImGui.End(); // End History
+		ImGui.End();
 
 		ImGuiIOPtr io = ImGui.GetIO();
 		if (io.KeyCtrl)

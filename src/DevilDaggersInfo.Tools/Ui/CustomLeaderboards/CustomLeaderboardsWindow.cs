@@ -36,7 +36,7 @@ public static class CustomLeaderboardsWindow
 			}
 		}
 
-		ImGui.End(); // End Timestamps
+		ImGui.End();
 #endif
 
 		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize);
@@ -48,7 +48,7 @@ public static class CustomLeaderboardsWindow
 				RecordingChild.Render();
 			}
 
-			ImGui.EndChild(); // End LeftRow
+			ImGui.EndChild();
 
 			ImGui.SameLine();
 
@@ -58,11 +58,11 @@ public static class CustomLeaderboardsWindow
 				LeaderboardListViewChild.Render();
 			}
 
-			ImGui.EndChild(); // End RightRow
+			ImGui.EndChild();
 
 			LeaderboardChild.Render();
 		}
 
-		ImGui.End(); // End Custom Leaderboards
+		ImGui.End();
 	}
 }

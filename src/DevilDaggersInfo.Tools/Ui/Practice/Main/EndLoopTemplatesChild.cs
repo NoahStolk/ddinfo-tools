@@ -47,7 +47,7 @@ public static class EndLoopTemplatesChild
 				ImGui.PopTextWrapPos();
 			}
 
-			ImGui.EndChild(); // End EndLoopTemplateDescription
+			ImGui.EndChild();
 
 			if (ImGui.BeginChild("EndLoopTemplateList", PracticeWindow.TemplateListSize))
 			{
@@ -55,10 +55,10 @@ public static class EndLoopTemplatesChild
 					RenderEndLoopTemplate(i, _endLoopTimerStarts[i]);
 			}
 
-			ImGui.EndChild(); // End EndLoopTemplateList
+			ImGui.EndChild();
 		}
 
-		ImGui.EndChild(); // End EndLoopTemplates
+		ImGui.EndChild();
 	}
 
 	private static void RenderEndLoopTemplate(int waveIndex, float timerStart)
@@ -88,13 +88,13 @@ public static class EndLoopTemplatesChild
 				ImGui.TextColored(Color.White with { A = textAlpha }, Inline.Span(timerStart, StringFormats.TimeFormat));
 			}
 
-			ImGui.EndChild(); // End WaveChild{waveIndex + 1}
+			ImGui.EndChild();
 
 			ImGui.PopStyleColor();
 		}
 
 		ImGui.PopStyleVar();
 
-		ImGui.EndChild(); // End Wave{waveIndex + 1}
+		ImGui.EndChild();
 	}
 }

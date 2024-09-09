@@ -68,12 +68,13 @@ public static class LeaderboardListChild
 					UpdatePagedCustomLeaderboards();
 			}
 
-			ImGui.EndChild(); // End ComboCategory
+			ImGui.EndChild();
 
 			ImGui.SameLine();
 			if (ImGui.Checkbox("Featured", ref _featuredOnly))
 				UpdatePagedCustomLeaderboards();
 
+			// TODO: Tab doesn't work because of children.
 			ImGui.SameLine();
 			if (ImGui.BeginChild("InputSpawnset", new Vector2(150, 20)))
 			{
@@ -81,7 +82,7 @@ public static class LeaderboardListChild
 					UpdatePagedCustomLeaderboards();
 			}
 
-			ImGui.EndChild(); // End InputSpawnset
+			ImGui.EndChild();
 
 			ImGui.SameLine();
 			if (ImGui.BeginChild("InputAuthor", new Vector2(150, 20)))
@@ -90,10 +91,10 @@ public static class LeaderboardListChild
 					UpdatePagedCustomLeaderboards();
 			}
 
-			ImGui.EndChild(); // End InputAuthor
+			ImGui.EndChild();
 		}
 
-		ImGui.EndChild(); // End LeaderboardList
+		ImGui.EndChild();
 	}
 
 	public static void LoadAll()
@@ -198,10 +199,12 @@ public static class LeaderboardListChild
 			LeaderboardListSorting.Rank => SortAscending ? _customLeaderboards.OrderBy(GetRankSortingKey) : _customLeaderboards.OrderByDescending(GetRankSortingKey),
 			LeaderboardListSorting.Players => SortAscending ? _customLeaderboards.OrderBy(cl => cl.PlayerCount) : _customLeaderboards.OrderByDescending(cl => cl.PlayerCount),
 			LeaderboardListSorting.WorldRecord => SortAscending ? _customLeaderboards.OrderBy(cl => cl.WorldRecord?.WorldRecordValue) : _customLeaderboards.OrderByDescending(cl => cl.WorldRecord?.WorldRecordValue),
+			LeaderboardListSorting.DateCreated => SortAscending ? _customLeaderboards.OrderBy(cl => cl.DateCreated) : _customLeaderboards.OrderByDescending(cl => cl.DateCreated),
+			LeaderboardListSorting.DateLastPlayed => SortAscending ? _customLeaderboards.OrderBy(cl => cl.DateLastPlayed) : _customLeaderboards.OrderByDescending(cl => cl.DateLastPlayed),
 			_ => throw new UnreachableException(),
 		};
 
-		// Clamp the page index before any filtering.
+		// Clamp the page index before doing any filtering.
 		ClampPageIndex();
 
 		PagedCustomLeaderboards = sorted
@@ -241,7 +244,7 @@ public static class LeaderboardListChild
 		return
 			cl.RankSorting == RankSorting &&
 			cl.SpawnsetGameMode == GameMode &&
-			(string.IsNullOrEmpty(_spawnsetFilter) || cl.SpawnsetName.Contains(_spawnsetFilter, StringComparison.OrdinalIgnoreCase)) &&
+			(string.IsNullOrEmpty(_spawnsetFilter) || cl.SpawnsetName.Contains(_spawnsetFilter, StringComparison.OrdinalIgnoreCase)) && // TODO: Trim filters?
 			(string.IsNullOrEmpty(_authorFilter) || cl.SpawnsetAuthorName.Contains(_authorFilter, StringComparison.OrdinalIgnoreCase)) &&
 			(!_featuredOnly || cl.Daggers != null);
 	}

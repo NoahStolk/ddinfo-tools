@@ -13,6 +13,6 @@ public static class AssetEditorWindow
 			AssetPathsChild.Render();
 		}
 
-		ImGui.End(); // End Asset Editor
+		ImGui.End();
 	}
 }

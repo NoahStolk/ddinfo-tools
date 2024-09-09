@@ -27,7 +27,7 @@ public static class CustomTemplatesChild
 				ImGui.PopTextWrapPos();
 			}
 
-			ImGui.EndChild(); // End CustomTemplateDescription
+			ImGui.EndChild();
 
 			if (ImGui.BeginChild("CustomTemplateList", PracticeWindow.TemplateListSize))
 			{
@@ -39,10 +39,10 @@ public static class CustomTemplatesChild
 					_customTemplateIndexToReorder = null;
 			}
 
-			ImGui.EndChild(); // End CustomTemplateList
+			ImGui.EndChild();
 		}
 
-		ImGui.EndChild(); // End CustomTemplates
+		ImGui.EndChild();
 	}
 
 	private static void RenderCustomTemplate(int i, UserSettingsPracticeTemplate customTemplate)
@@ -105,14 +105,14 @@ public static class CustomTemplatesChild
 				ImGui.TextColored(gemColor with { A = textAlpha }, gemsOrHomingText);
 			}
 
-			ImGui.EndChild(); // End {buttonName}Child
+			ImGui.EndChild();
 
 			ImGui.PopStyleColor();
 		}
 
 		ImGui.PopStyleVar();
 
-		ImGui.EndChild(); // End {buttonName}
+		ImGui.EndChild();
 
 		if (ImGui.BeginPopupContextItem(Inline.Span($"{buttonName} rename"), ImGuiPopupFlags.MouseButtonRight))
 		{

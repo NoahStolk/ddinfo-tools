@@ -75,6 +75,6 @@ public static class InputValuesChild
 			ImGui.EndDisabled();
 		}
 
-		ImGui.EndChild(); // End InputValues
+		ImGui.EndChild();
 	}
 }

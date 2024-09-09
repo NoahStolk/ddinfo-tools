@@ -36,7 +36,7 @@ public static class NoFarmTemplatesChild
 				ImGui.PopTextWrapPos();
 			}
 
-			ImGui.EndChild(); // End NoFarmTemplateDescription
+			ImGui.EndChild();
 
 			if (ImGui.BeginChild("NoFarmTemplateList", PracticeWindow.TemplateListSize))
 			{
@@ -47,10 +47,10 @@ public static class NoFarmTemplatesChild
 				}
 			}
 
-			ImGui.EndChild(); // End NoFarmTemplateList
+			ImGui.EndChild();
 		}
 
-		ImGui.EndChild(); // End NoFarmTemplates
+		ImGui.EndChild();
 	}
 
 	private static void RenderNoFarmTemplate(NoFarmTemplate noFarmTemplate)
@@ -92,13 +92,13 @@ public static class NoFarmTemplatesChild
 				ImGui.TextColored(gemColor with { A = textAlpha }, gemsOrHomingText);
 			}
 
-			ImGui.EndChild(); // End {NoFarmTemplate.Name}Child
+			ImGui.EndChild();
 
 			ImGui.PopStyleColor();
 		}
 
 		ImGui.PopStyleVar();
 
-		ImGui.EndChild(); // End {NoFarmTemplate.Name}
+		ImGui.EndChild();
 	}
 }

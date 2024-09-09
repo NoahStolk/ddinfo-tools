@@ -57,7 +57,7 @@ public static class CustomLeaderboardResultsWindow
 			}
 		}
 
-		ImGui.End(); // End Custom Leaderboard Submissions (this session)
+		ImGui.End();
 	}
 
 #if TESTING

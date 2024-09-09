@@ -107,13 +107,14 @@ public static class GraphsChild
 			RenderHomingGraph(drawListPtr, mousePos);
 		}
 
-		ImGui.EndChild(); // End Graphs
+		ImGui.EndChild();
 
 		void RenderGemsGraph(ImDrawListPtr drawListPtr, Vector2 mousePos)
 		{
 			RenderGraphBackground(drawListPtr, out Vector2 pos, out Vector2 size);
 
-			ReadOnlySpan<int> maxValues = stackalloc int[] { _showGemsCollected ? _maxGemsCollected : 0, _showGemsDespawned ? _maxGemsDespawned : 0, _showGemsEaten ? _maxGemsEaten : 0, _showGemsTotal ? _maxGemsTotal : 0 };
+			// TODO: Check if this allocates.
+			ReadOnlySpan<int> maxValues = [_showGemsCollected ? _maxGemsCollected : 0, _showGemsDespawned ? _maxGemsDespawned : 0, _showGemsEaten ? _maxGemsEaten : 0, _showGemsTotal ? _maxGemsTotal : 0];
 			int max = MathUtils.Max(maxValues);
 			RenderGraphScales(drawListPtr, pos, size, max);
 			RenderGraphSplits(drawListPtr, pos, size);

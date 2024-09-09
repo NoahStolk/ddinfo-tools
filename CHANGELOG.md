@@ -2,6 +2,10 @@
 
 ## [unreleased]
 
+### Added
+
+- Added 'date created' and 'date last played' columns to custom leaderboards list.
+
 ### Changed
 
 - Updated ImGui.NET dependency from 1.90.6.1 to 1.91.0.1.

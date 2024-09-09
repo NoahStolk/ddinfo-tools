@@ -101,7 +101,7 @@ public static class MainWindow
 				}
 			}
 
-			ImGui.EndChild(); // End ToolButtons
+			ImGui.EndChild();
 
 			if (_hoveredButtonAction != null)
 			{
@@ -113,11 +113,11 @@ public static class MainWindow
 					ImGui.PopTextWrapPos();
 				}
 
-				ImGui.EndChild(); // End Preview
+				ImGui.EndChild();
 			}
 		}
 
-		ImGui.End(); // End Main Menu
+		ImGui.End();
 	}
 
 	private static void AppButton(Texture icon, ReadOnlySpan<char> tooltip, Action action)

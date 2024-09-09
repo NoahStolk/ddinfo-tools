@@ -45,7 +45,7 @@ public static class LeaderboardChild
 				RenderLeaderboard(Data);
 		}
 
-		ImGui.EndChild(); // End LeaderboardChild
+		ImGui.EndChild();
 	}
 
 	private static void RenderLeaderboard(LeaderboardData data)
@@ -81,7 +81,7 @@ public static class LeaderboardChild
 		if (ImGui.BeginChild("LeaderboardTableChild"))
 			RenderTable(data.Leaderboard.RankSorting);
 
-		ImGui.EndChild(); // End LeaderboardTableChild
+		ImGui.EndChild();
 	}
 
 	private static void PlaySpawnset(LeaderboardData data)

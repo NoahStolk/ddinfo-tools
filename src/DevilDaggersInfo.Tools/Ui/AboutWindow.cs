@@ -56,7 +56,7 @@ public static class AboutWindow
 			ImGui.PopStyleVar();
 		}
 
-		ImGui.End(); // End About ddinfo tools
+		ImGui.End();
 	}
 
 	private static void RenderLibrary(ReadOnlySpan<char> url, ReadOnlySpan<char> name, ReadOnlySpan<char> usage)

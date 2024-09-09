@@ -48,7 +48,7 @@ public static class ArenaEditorControls
 			}
 		}
 
-		ImGui.EndChild(); // End ArenaEditorControls
+		ImGui.EndChild();
 
 		if (ImGui.BeginChild("ArenaToolControls", new Vector2(256, 112)))
 		{
@@ -75,7 +75,7 @@ public static class ArenaEditorControls
 			}
 		}
 
-		ImGui.EndChild(); // End ArenaToolControls
+		ImGui.EndChild();
 	}
 
 	private static uint GetTexture(ArenaTool arenaTool)
