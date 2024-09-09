@@ -250,9 +250,9 @@ public static class RecordingLogic
 			onSuccess: getUploadResponse =>
 			{
 				ShowUploadResponse = true;
-				LastSubmission = DateTime.Now;
+				LastSubmission = DateTime.UtcNow;
 
-				UploadResult uploadResult = new(getUploadResponse, getUploadResponse.IsAscending, getUploadResponse.SpawnsetName, uploadRequest.DeathType, DateTime.Now);
+				UploadResult uploadResult = new(getUploadResponse, getUploadResponse.IsAscending, getUploadResponse.SpawnsetName, uploadRequest.DeathType, DateTime.UtcNow);
 				CustomLeaderboardResultsWindow.AddResult(uploadResult);
 			},
 			onError: apiError =>

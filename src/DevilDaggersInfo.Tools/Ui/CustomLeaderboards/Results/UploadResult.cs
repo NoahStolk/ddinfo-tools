@@ -4,6 +4,7 @@ using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
+using DevilDaggersInfo.Tools.Utils;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using ImGuiNET;
 using System.Diagnostics;
@@ -239,9 +240,9 @@ public class UploadResult
 
 			ImGui.TextColored(color, _spawnsetName);
 
-			ReadOnlySpan<char> format = "HH:mm:ss";
-			ImGui.SameLine(ImGui.GetWindowWidth() - ImGui.CalcTextSize(format).X - 8);
-			ImGui.Text(Inline.Span(SubmittedAt, format));
+			string text = DateTimeUtils.FormatTimeAgo(SubmittedAt);
+			ImGui.SameLine(ImGui.GetWindowWidth() - ImGui.CalcTextSize(text).X - 8);
+			ImGui.Text(text);
 
 			ImGui.Text(title);
 		}

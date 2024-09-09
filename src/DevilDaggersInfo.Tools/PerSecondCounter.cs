@@ -10,7 +10,7 @@ public class PerSecondCounter
 
 	public void Increment()
 	{
-		int currentSecond = DateTime.Now.Second;
+		int currentSecond = DateTime.UtcNow.Second;
 		if (currentSecond != _currentSecond)
 		{
 			_currentSecond = currentSecond;

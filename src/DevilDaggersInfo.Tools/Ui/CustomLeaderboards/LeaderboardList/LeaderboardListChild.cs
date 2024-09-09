@@ -74,6 +74,7 @@ public static class LeaderboardListChild
 			if (ImGui.Checkbox("Featured", ref _featuredOnly))
 				UpdatePagedCustomLeaderboards();
 
+			// TODO: Tab doesn't work because of children.
 			ImGui.SameLine();
 			if (ImGui.BeginChild("InputSpawnset", new Vector2(150, 20)))
 			{
@@ -203,7 +204,7 @@ public static class LeaderboardListChild
 			_ => throw new UnreachableException(),
 		};
 
-		// Clamp the page index before any filtering.
+		// Clamp the page index before doing any filtering.
 		ClampPageIndex();
 
 		PagedCustomLeaderboards = sorted
@@ -243,7 +244,7 @@ public static class LeaderboardListChild
 		return
 			cl.RankSorting == RankSorting &&
 			cl.SpawnsetGameMode == GameMode &&
-			(string.IsNullOrEmpty(_spawnsetFilter) || cl.SpawnsetName.Contains(_spawnsetFilter, StringComparison.OrdinalIgnoreCase)) &&
+			(string.IsNullOrEmpty(_spawnsetFilter) || cl.SpawnsetName.Contains(_spawnsetFilter, StringComparison.OrdinalIgnoreCase)) && // TODO: Trim filters?
 			(string.IsNullOrEmpty(_authorFilter) || cl.SpawnsetAuthorName.Contains(_authorFilter, StringComparison.OrdinalIgnoreCase)) &&
 			(!_featuredOnly || cl.Daggers != null);
 	}

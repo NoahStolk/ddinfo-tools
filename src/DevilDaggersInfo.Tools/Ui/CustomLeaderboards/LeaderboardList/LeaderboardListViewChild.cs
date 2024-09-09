@@ -7,6 +7,7 @@ using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
 using DevilDaggersInfo.Tools.Ui.Popups;
+using DevilDaggersInfo.Tools.Utils;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using ImGuiNET;
 using System.Numerics;
@@ -131,7 +132,7 @@ public static class LeaderboardListViewChild
 				ImGui.Text(clOverview.DateCreated.ToString(StringFormats.DateTimeFormat));
 				ImGui.TableNextColumn();
 
-				ImGui.Text(clOverview.DateLastPlayed?.ToString(StringFormats.DateTimeFormat) ?? "Never");
+				ImGui.Text(DateTimeUtils.FormatTimeAgo(clOverview.DateLastPlayed == null ? null : DateTime.SpecifyKind(clOverview.DateLastPlayed.Value, DateTimeKind.Utc)));
 				ImGui.TableNextColumn();
 			}
 
