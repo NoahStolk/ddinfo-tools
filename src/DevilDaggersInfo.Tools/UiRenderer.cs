@@ -16,62 +16,55 @@ using DevilDaggersInfo.Tools.User.Settings;
 
 namespace DevilDaggersInfo.Tools;
 
-public static class UiRenderer
+public sealed class UiRenderer
 {
-	private static LayoutType _layout;
+	private readonly UiLayoutManager _uiLayoutManager;
+	private readonly ConfigLayout _configLayout;
+	private readonly MainScene _mainScene;
+	private readonly MainWindow _mainWindow;
+	private readonly DebugWindow _debugWindow;
 
-	private static bool _showDemoWindow;
-	private static bool _showAbout;
-	private static bool _showUpdate;
+	private bool _showDemoWindow;
+	private bool _showAbout;
+	private bool _showUpdate;
 
-	public static LayoutType Layout
+	public UiRenderer(UiLayoutManager uiLayoutManager, ConfigLayout configLayout, MainScene mainScene, MainWindow mainWindow, DebugWindow debugWindow)
 	{
-		get => _layout;
-		set
-		{
-			_layout = value;
-			Colors.SetColors(value switch
-			{
-				LayoutType.Config or LayoutType.Main => Colors.Main,
-				LayoutType.SpawnsetEditor => Colors.SpawnsetEditor,
-				LayoutType.AssetEditor => Colors.AssetEditor,
-				LayoutType.ReplayEditor => Colors.ReplayEditor,
-				LayoutType.CustomLeaderboards => Colors.CustomLeaderboards,
-				LayoutType.Practice => Colors.Practice,
-				LayoutType.ModManager => Colors.ModManager,
-				_ => throw new ArgumentOutOfRangeException(nameof(value), value, null),
-			});
-		}
+		_uiLayoutManager = uiLayoutManager;
+		_configLayout = configLayout;
+		_mainScene = mainScene;
+		_mainWindow = mainWindow;
+		_debugWindow = debugWindow;
 	}
 
-	public static void ShowDemoWindow()
+	public void ShowDemoWindow()
 	{
 		_showDemoWindow = true;
 	}
 
-	public static void ShowAbout()
+	public void ShowAbout()
 	{
 		_showAbout = true;
 	}
 
-	public static void ShowUpdate()
+	public void ShowUpdate()
 	{
 		_showUpdate = true;
 	}
 
-	public static void Render(float delta)
+	public void Render(float delta)
 	{
 		if (_showDemoWindow)
 			ImGuiNET.ImGui.ShowDemoWindow(ref _showDemoWindow);
 
-		switch (Layout)
+		switch (_uiLayoutManager.Layout)
 		{
 			case LayoutType.Config:
-				ConfigLayout.Render();
+				_configLayout.Render();
 				break;
 			case LayoutType.Main:
-				MainWindow.Render();
-				MainScene.Render(delta);
+				_mainWindow.Render();
+				_mainScene.Render(delta);
 				break;
 			case LayoutType.SpawnsetEditor:
 				SpawnsetEditorMenu.Render();
@@ -113,7 +106,7 @@ public static class UiRenderer
 		}
 
 		if (UserSettings.Model.ShowDebug)
-			DebugWindow.Render();
+			_debugWindow.Render();
 
 		AboutWindow.Render(ref _showAbout);
 		UpdateWindow.Render(ref _showUpdate);

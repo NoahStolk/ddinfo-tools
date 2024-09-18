@@ -4,8 +4,11 @@ namespace DevilDaggersInfo.Tools.Engine;
 
 public class Texture
 {
-	public Texture(uint id)
+	private readonly GL _gl;
+
+	public Texture(GL gl, uint id)
 	{
+		_gl = gl;
 		Id = id;
 	}
 
@@ -13,7 +16,7 @@ public class Texture
 
 	public void Bind(TextureUnit textureUnit = TextureUnit.Texture0)
 	{
-		Graphics.Gl.ActiveTexture(textureUnit);
-		Graphics.Gl.BindTexture(TextureTarget.Texture2D, Id);
+		_gl.ActiveTexture(textureUnit);
+		_gl.BindTexture(TextureTarget.Texture2D, Id);
 	}
 }
