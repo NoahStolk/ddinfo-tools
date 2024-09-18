@@ -48,5 +48,4 @@ public static class Hit
 
 		ImGui.EndChild();
 	}
-
 }
