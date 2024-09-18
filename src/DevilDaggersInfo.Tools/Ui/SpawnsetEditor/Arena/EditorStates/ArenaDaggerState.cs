@@ -4,14 +4,22 @@ using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using ImGuiNET;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorStates;
 
-public class ArenaDaggerState : IArenaState
+public sealed class ArenaDaggerState : IArenaState
 {
+	private readonly ResourceManager _resourceManager;
+
 	private Vector2? _position;
 	private bool _dragging;
+
+	public ArenaDaggerState(ResourceManager resourceManager)
+	{
+		_resourceManager = resourceManager;
+	}
 
 	public void InitializeSession(ArenaMousePosition mousePosition)
 	{
@@ -60,12 +68,14 @@ public class ArenaDaggerState : IArenaState
 
 	public void Render(ArenaMousePosition mousePosition)
 	{
+		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen in this UI.");
+
 		if (!_position.HasValue)
 			return;
 
 		ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 		Vector2 origin = ImGui.GetCursorScreenPos();
 		Vector2 center = origin + _position.Value + ArenaWindow.HalfTileSizeAsVector2;
-		drawList.AddImage(Root.GameResources.IconMaskDaggerTexture.Id, center - new Vector2(8), center + new Vector2(8), Color.HalfTransparentWhite);
+		drawList.AddImage(_resourceManager.GameResources.IconMaskDaggerTexture.Id, center - new Vector2(8), center + new Vector2(8), Color.HalfTransparentWhite);
 	}
 }

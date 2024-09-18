@@ -30,6 +30,11 @@ public sealed class UiRenderer
 	private readonly ReplayEditorMenu _replayEditorMenu;
 	private readonly SpawnsetEditorMenu _spawnsetEditorMenu;
 
+	private readonly ArenaWindow _arenaWindow;
+	private readonly SpawnsetEditor3DWindow _spawnsetEditor3DWindow;
+
+	private readonly PracticeWindow _practiceWindow;
+
 	private bool _showDemoWindow;
 	private bool _showAbout;
 	private bool _showUpdate;
@@ -43,7 +48,10 @@ public sealed class UiRenderer
 		AboutWindow aboutWindow,
 		AssetEditorMenu assetEditorMenu,
 		ReplayEditorMenu replayEditorMenu,
-		SpawnsetEditorMenu spawnsetEditorMenu)
+		SpawnsetEditorMenu spawnsetEditorMenu,
+		ArenaWindow arenaWindow,
+		SpawnsetEditor3DWindow spawnsetEditor3DWindow,
+		PracticeWindow practiceWindow)
 	{
 		_uiLayoutManager = uiLayoutManager;
 		_configLayout = configLayout;
@@ -54,6 +62,9 @@ public sealed class UiRenderer
 		_assetEditorMenu = assetEditorMenu;
 		_replayEditorMenu = replayEditorMenu;
 		_spawnsetEditorMenu = spawnsetEditorMenu;
+		_arenaWindow = arenaWindow;
+		_spawnsetEditor3DWindow = spawnsetEditor3DWindow;
+		_practiceWindow = practiceWindow;
 	}
 
 	public void ShowDemoWindow()
@@ -89,9 +100,9 @@ public sealed class UiRenderer
 				_spawnsetEditorMenu.Render();
 				SpawnsWindow.Render();
 				SettingsWindow.Render();
-				ArenaWindow.Render();
+				_arenaWindow.Render();
 				HistoryWindow.Render();
-				SpawnsetEditor3DWindow.Render(delta);
+				_spawnsetEditor3DWindow.Render(delta);
 				break;
 			case LayoutType.AssetEditor:
 				_assetEditorMenu.Render();
@@ -113,7 +124,7 @@ public sealed class UiRenderer
 				CustomLeaderboards3DWindow.Render(delta);
 				break;
 			case LayoutType.Practice:
-				PracticeWindow.Render();
+				_practiceWindow.Render();
 				RunAnalysisWindow.Update(delta);
 				RunAnalysisWindow.Render();
 				break;

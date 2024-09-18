@@ -7,6 +7,7 @@ using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.Ui.Practice.Main;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
+using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
@@ -53,6 +54,10 @@ namespace DevilDaggersInfo.Tools;
 [Register<AboutWindow>(Scope.SingleInstance)]
 [Register<DebugWindow>(Scope.SingleInstance)]
 [Register<MainWindow>(Scope.SingleInstance)]
+
+// Spawnset Editor
+[Register<ArenaWindow>(Scope.SingleInstance)]
+[Register<SpawnsetEditor3DWindow>(Scope.SingleInstance)]
 
 // Practice
 [Register<PracticeWindow>(Scope.SingleInstance)]

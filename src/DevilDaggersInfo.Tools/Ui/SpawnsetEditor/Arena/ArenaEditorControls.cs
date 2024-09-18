@@ -8,9 +8,19 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 
-public static class ArenaEditorControls
+public sealed class ArenaEditorControls
 {
-	public static void Render()
+	private readonly ResourceManager _resourceManager;
+	private readonly ArenaWindow _arenaWindow;
+
+	// TODO: Don't inject other windows.
+	public ArenaEditorControls(ResourceManager resourceManager, ArenaWindow arenaWindow)
+	{
+		_resourceManager = resourceManager;
+		_arenaWindow = arenaWindow;
+	}
+
+	public void Render()
 	{
 		if (ImGui.BeginChild("ArenaEditorControls", new Vector2(256, 26)))
 		{
@@ -23,7 +33,7 @@ public static class ArenaEditorControls
 				ReadOnlySpan<char> arenaToolText = EnumUtils.ArenaToolNames[arenaTool];
 
 				bool isDagger = arenaTool == ArenaTool.Dagger;
-				bool isCurrent = arenaTool == ArenaWindow.ArenaTool;
+				bool isCurrent = arenaTool == _arenaWindow.ArenaTool;
 				ImGui.SetCursorPos(new Vector2(offsetX + borderSize * 2, borderSize));
 
 				if (isDagger)
@@ -32,8 +42,8 @@ public static class ArenaEditorControls
 				if (isCurrent)
 					ImGui.PushStyleColor(ImGuiCol.Button, ImGui.GetStyle().Colors[(int)ImGuiCol.ButtonHovered]);
 
-				if (ImGuiImage.ImageButton(arenaToolText, GetTexture(arenaTool), new Vector2(size)) && ArenaWindow.ArenaTool != arenaTool)
-					ArenaWindow.ArenaTool = arenaTool;
+				if (ImGuiImage.ImageButton(arenaToolText, GetTexture(arenaTool), new Vector2(size)) && _arenaWindow.ArenaTool != arenaTool)
+					_arenaWindow.ArenaTool = arenaTool;
 
 				if (isCurrent)
 					ImGui.PopStyleColor();
@@ -52,7 +62,7 @@ public static class ArenaEditorControls
 
 		if (ImGui.BeginChild("ArenaToolControls", new Vector2(256, 112)))
 		{
-			switch (ArenaWindow.ArenaTool)
+			switch (_arenaWindow.ArenaTool)
 			{
 				case ArenaTool.Pencil:
 					PencilChild.Render();
@@ -78,16 +88,16 @@ public static class ArenaEditorControls
 		ImGui.EndChild();
 	}
 
-	private static uint GetTexture(ArenaTool arenaTool)
+	private uint GetTexture(ArenaTool arenaTool)
 	{
 		return arenaTool switch
 		{
-			ArenaTool.Pencil => Root.InternalResources.PencilTexture.Id,
-			ArenaTool.Line => Root.InternalResources.LineTexture.Id,
-			ArenaTool.Rectangle => Root.InternalResources.RectangleTexture.Id,
-			ArenaTool.Ellipse => Root.InternalResources.EllipseTexture.Id,
-			ArenaTool.Bucket => Root.InternalResources.BucketTexture.Id,
-			ArenaTool.Dagger => Root.InternalResources.DaggerTexture.Id,
+			ArenaTool.Pencil => _resourceManager.InternalResources.PencilTexture.Id,
+			ArenaTool.Line => _resourceManager.InternalResources.LineTexture.Id,
+			ArenaTool.Rectangle => _resourceManager.InternalResources.RectangleTexture.Id,
+			ArenaTool.Ellipse => _resourceManager.InternalResources.EllipseTexture.Id,
+			ArenaTool.Bucket => _resourceManager.InternalResources.BucketTexture.Id,
+			ArenaTool.Dagger => _resourceManager.InternalResources.DaggerTexture.Id,
 			_ => throw new UnreachableException($"Unknown arena tool {arenaTool}."),
 		};
 	}
