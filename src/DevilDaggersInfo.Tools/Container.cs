@@ -24,7 +24,9 @@ namespace DevilDaggersInfo.Tools;
 [Register<ShaderLoader>(Scope.SingleInstance)]
 [Register<TextureLoader>(Scope.SingleInstance)]
 [Register<ResourceManager>(Scope.SingleInstance)]
+[Register<FrameCounter>(Scope.SingleInstance)]
 
+// Interop
 [Register<GameInstallationValidator>(Scope.SingleInstance)]
 
 // 3D

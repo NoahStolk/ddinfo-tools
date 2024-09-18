@@ -15,15 +15,17 @@ namespace DevilDaggersInfo.Tools.Ui;
 public sealed class DebugWindow
 {
 	private readonly GlfwInput _glfwInput;
+	private readonly FrameCounter _frameCounter;
 
 	private readonly List<string> _debugMessages = [];
 	private readonly DateTime _startUpTime = DateTime.UtcNow;
 
 	private long _previousAllocatedBytes;
 
-	public DebugWindow(GlfwInput glfwInput)
+	public DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter)
 	{
 		_glfwInput = glfwInput;
+		_frameCounter = frameCounter;
 	}
 
 	public void Add(object? obj)
@@ -219,8 +221,8 @@ public sealed class DebugWindow
 
 	private void RenderMetrics()
 	{
-		AddText("FPS (smoothed)", Inline.Span(Root.Application.RenderCounter.CountPerSecond));
-		AddText("FPS", Inline.Span(1f / Root.Application.LastRenderDelta, "000.000"));
+		AddText("FPS (smoothed)", Inline.Span(_frameCounter.CountPerSecond));
+		AddText("FPS", Inline.Span(1f / _frameCounter.LastRenderDelta, "000.000"));
 
 		long allocatedBytes = GC.GetAllocatedBytesForCurrentThread();
 		AddText("Total managed heap alloc in bytes", Inline.Span(allocatedBytes));
