@@ -4,6 +4,7 @@ using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.AssetEditor;
 using DevilDaggersInfo.Tools.Ui.Config;
 using DevilDaggersInfo.Tools.Ui.Main;
+using DevilDaggersInfo.Tools.Ui.Practice.Main;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 using DevilDaggersInfo.Tools.User.Cache;
@@ -52,6 +53,9 @@ namespace DevilDaggersInfo.Tools;
 [Register<AboutWindow>(Scope.SingleInstance)]
 [Register<DebugWindow>(Scope.SingleInstance)]
 [Register<MainWindow>(Scope.SingleInstance)]
+
+// Practice
+[Register<PracticeWindow>(Scope.SingleInstance)]
 #pragma warning disable S3881 // "IDisposable" should be implemented correctly. The source generator already implements IDisposable correctly.
 public sealed partial class Container : IContainer<Application>
 #pragma warning restore S3881
