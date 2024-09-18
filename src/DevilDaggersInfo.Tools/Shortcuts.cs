@@ -9,9 +9,16 @@ using Silk.NET.GLFW;
 
 namespace DevilDaggersInfo.Tools;
 
-public static class Shortcuts
+public sealed class Shortcuts
 {
-	public static void Handle(ImGuiIOPtr io, GlfwInput glfwInput)
+	private readonly UiLayoutManager _uiLayoutManager;
+
+	public Shortcuts(UiLayoutManager uiLayoutManager)
+	{
+		_uiLayoutManager = uiLayoutManager;
+	}
+
+	public void Handle(ImGuiIOPtr io, GlfwInput glfwInput)
 	{
 		if (io.WantTextInput)
 			return;
@@ -24,17 +31,17 @@ public static class Shortcuts
 
 		if (glfwInput.IsKeyPressed(Keys.Escape))
 		{
-			switch (UiRenderer.Layout)
+			switch (_uiLayoutManager.Layout)
 			{
 				case LayoutType.SpawnsetEditor: SpawnsetEditorMenu.Close(); break;
 				case LayoutType.AssetEditor: AssetEditorMenu.Close(); break;
 				case LayoutType.ReplayEditor: ReplayEditorMenu.Close(); break;
 				case LayoutType.Config: break;
-				default: UiRenderer.Layout = LayoutType.Main; break;
+				default: _uiLayoutManager.Layout = LayoutType.Main; break;
 			}
 		}
 
-		switch (UiRenderer.Layout)
+		switch (_uiLayoutManager.Layout)
 		{
 			case LayoutType.SpawnsetEditor: HandleSpawnsetEditorShortcuts(glfwInput, ctrl, shift); break;
 			case LayoutType.AssetEditor: HandleAssetEditorShortcuts(glfwInput, ctrl, shift); break;

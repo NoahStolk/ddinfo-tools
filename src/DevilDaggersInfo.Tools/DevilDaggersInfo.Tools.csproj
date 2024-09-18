@@ -73,6 +73,7 @@
   <ItemGroup Label="Internal dependencies">
     <PackageReference Include="DevilDaggersInfo.Core" Version="0.14.1" />
     <PackageReference Include="DevilDaggersInfo.Web.ApiSpec.Tools" Version="1.1.0" />
+    <PackageReference Include="StrongInject" Version="1.4.4" />
     <ProjectReference Include="..\DevilDaggersInfo.Tools.Engine\DevilDaggersInfo.Tools.Engine.csproj" />
   </ItemGroup>
 

@@ -5,30 +5,38 @@ using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.Utils;
+using ImGuiGlfw;
 using ImGuiNET;
 using Silk.NET.GLFW;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-public static class DebugWindow
+public sealed class DebugWindow
 {
-	private static long _previousAllocatedBytes;
+	private readonly GlfwInput _glfwInput;
 
-	private static readonly List<string> _debugMessages = [];
-	private static readonly DateTime _startUpTime = DateTime.UtcNow;
+	private readonly List<string> _debugMessages = [];
+	private readonly DateTime _startUpTime = DateTime.UtcNow;
 
-	public static void Add(object? obj)
+	private long _previousAllocatedBytes;
+
+	public DebugWindow(GlfwInput glfwInput)
+	{
+		_glfwInput = glfwInput;
+	}
+
+	public void Add(object? obj)
 	{
 		_debugMessages.Add(obj?.ToString() ?? "null");
 	}
 
-	private static void ClearDebugMessages()
+	private void ClearDebugMessages()
 	{
 		_debugMessages.Clear();
 	}
 
-	public static void Render()
+	public void Render()
 	{
 		if (ImGui.Begin("Debug"))
 		{
@@ -87,8 +95,9 @@ public static class DebugWindow
 
 			ImGui.Separator();
 
-			if (ImGui.Button("Show demo window"))
-				UiRenderer.ShowDemoWindow();
+			// TODO: Re-enable this when ShowDemoWindow is no longer a method on UiRenderer.
+			// if (ImGui.Button("Show demo window"))
+			// 	UiRenderer.ShowDemoWindow();
 
 			ImGui.Separator();
 
@@ -181,7 +190,7 @@ public static class DebugWindow
 		ImGui.EndChild();
 	}
 
-	private static void RenderKeyboardInput()
+	private void RenderKeyboardInput()
 	{
 		ImGuiIOPtr io = ImGui.GetIO();
 		ImGui.TextColored(io.KeyCtrl ? Color.White : Color.Gray(0.4f), "CTRL");
@@ -199,7 +208,7 @@ public static class DebugWindow
 			for (int i = 0; i < EnumUtils.KeyNames.Count; i++)
 			{
 				Keys key = EnumUtils.Keys[i];
-				bool isDown = Input.GlfwInput.IsKeyDown(key);
+				bool isDown = _glfwInput.IsKeyDown(key);
 				ImGui.TableNextColumn();
 				ImGui.TextColored(isDown ? Color.White : Color.Gray(0.4f), EnumUtils.KeyNames[key]);
 			}
@@ -208,7 +217,7 @@ public static class DebugWindow
 		}
 	}
 
-	private static void RenderMetrics()
+	private void RenderMetrics()
 	{
 		AddText("FPS (smoothed)", Inline.Span(Root.Application.RenderCounter.CountPerSecond));
 		AddText("FPS", Inline.Span(1f / Root.Application.LastRenderDelta, "000.000"));
