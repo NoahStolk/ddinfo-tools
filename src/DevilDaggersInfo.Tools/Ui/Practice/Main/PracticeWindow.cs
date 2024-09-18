@@ -7,35 +7,43 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-public static class PracticeWindow
+public sealed class PracticeWindow
 {
 	public const int TemplateDescriptionHeight = 48;
-	public static Vector2 TemplateContainerSize { get; private set; }
-	public static Vector2 TemplateListSize { get; private set; }
-	public static float TemplateWidth { get; private set; }
 
-	public static void Render()
+	private readonly CustomTemplatesChild _customTemplatesChild;
+	private readonly EndLoopTemplatesChild _endLoopTemplatesChild = new();
+	private readonly NoFarmTemplatesChild _noFarmTemplatesChild = new();
+	private readonly InputValuesChild _inputValuesChild;
+
+	public PracticeWindow(ResourceManager resourceManager)
+	{
+		_customTemplatesChild = new CustomTemplatesChild(resourceManager);
+		_inputValuesChild = new InputValuesChild(resourceManager);
+	}
+
+	public void Render()
 	{
 		ImGuiUtils.SetNextWindowMinSize(1208, 768);
 		if (ImGui.Begin("Practice", ImGuiWindowFlags.NoCollapse))
 		{
 			Vector2 windowSize = ImGui.GetWindowSize();
-			TemplateContainerSize = new Vector2(MathF.Ceiling(windowSize.X / 3 - 11), windowSize.Y - 260);
-			TemplateListSize = new Vector2(TemplateContainerSize.X - 20, TemplateContainerSize.Y - 88);
-			TemplateWidth = TemplateListSize.X - 20;
+			Vector2 templateContainerSize = new(MathF.Ceiling(windowSize.X / 3 - 11), windowSize.Y - 260);
+			Vector2 templateListSize = new(templateContainerSize.X - 20, templateContainerSize.Y - 88);
+			float templateWidth = templateListSize.X - 20;
 
 			ImGui.Text("Use these templates to practice specific sections of the game. Click on a template to install it.");
 			ImGui.Spacing();
 
-			NoFarmTemplatesChild.Render();
+			_noFarmTemplatesChild.Render(templateContainerSize, templateListSize, templateWidth);
 
 			ImGui.SameLine();
-			EndLoopTemplatesChild.Render();
+			_endLoopTemplatesChild.Render(templateContainerSize, templateListSize, templateWidth);
 
 			ImGui.SameLine();
-			CustomTemplatesChild.Render();
+			_customTemplatesChild.Render(templateContainerSize, templateListSize, templateWidth);
 
-			InputValuesChild.Render();
+			_inputValuesChild.Render();
 
 			ImGui.SameLine();
 			CurrentSpawnsetChild.Render();

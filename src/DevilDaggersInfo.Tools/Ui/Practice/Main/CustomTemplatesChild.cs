@@ -10,30 +10,37 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-public static class CustomTemplatesChild
+public sealed class CustomTemplatesChild
 {
-	private static int? _customTemplateIndexToReorder;
+	private int? _customTemplateIndexToReorder;
 
-	public static void Render()
+	private readonly ResourceManager _resourceManager;
+
+	public CustomTemplatesChild(ResourceManager resourceManager)
 	{
-		if (ImGui.BeginChild("CustomTemplates", PracticeWindow.TemplateContainerSize, ImGuiChildFlags.Border))
+		_resourceManager = resourceManager;
+	}
+
+	public void Render(Vector2 templateContainerSize, Vector2 templateListSize, float templateWidth)
+	{
+		if (ImGui.BeginChild("CustomTemplates", templateContainerSize, ImGuiChildFlags.Border))
 		{
 			ImGui.Text("Custom templates");
 
-			if (ImGui.BeginChild("CustomTemplateDescription", PracticeWindow.TemplateListSize with { Y = PracticeWindow.TemplateDescriptionHeight }))
+			if (ImGui.BeginChild("CustomTemplateDescription", templateListSize with { Y = PracticeWindow.TemplateDescriptionHeight }))
 			{
-				ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + PracticeWindow.TemplateWidth);
+				ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + templateWidth);
 				ImGui.Text("You can make your own templates and save them. Your custom templates are saved locally on your computer. Right-click to rename a template.");
 				ImGui.PopTextWrapPos();
 			}
 
 			ImGui.EndChild();
 
-			if (ImGui.BeginChild("CustomTemplateList", PracticeWindow.TemplateListSize))
+			if (ImGui.BeginChild("CustomTemplateList", templateListSize))
 			{
-				RenderDragDropTarget(-1);
+				RenderDragDropTarget(-1, templateWidth);
 				for (int i = 0; i < UserSettings.Model.PracticeTemplates.Count; i++)
-					RenderCustomTemplate(i, UserSettings.Model.PracticeTemplates[i]);
+					RenderCustomTemplate(i, UserSettings.Model.PracticeTemplates[i], templateWidth);
 
 				if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 					_customTemplateIndexToReorder = null;
@@ -45,9 +52,9 @@ public static class CustomTemplatesChild
 		ImGui.EndChild();
 	}
 
-	private static void RenderCustomTemplate(int i, UserSettingsPracticeTemplate customTemplate)
+	private void RenderCustomTemplate(int i, UserSettingsPracticeTemplate customTemplate, float templateWidth)
 	{
-		RenderTemplateButton(customTemplate);
+		RenderTemplateButton(customTemplate, templateWidth);
 
 		ImGui.SameLine();
 
@@ -57,12 +64,12 @@ public static class CustomTemplatesChild
 
 		RenderDeleteButton(i, customTemplate);
 
-		RenderDragDropTarget(i);
+		RenderDragDropTarget(i, templateWidth);
 	}
 
-	private static void RenderTemplateButton(UserSettingsPracticeTemplate customTemplate)
+	private static void RenderTemplateButton(UserSettingsPracticeTemplate customTemplate, float templateWidth)
 	{
-		Vector2 buttonSize = new(PracticeWindow.TemplateWidth - 96, 48);
+		Vector2 buttonSize = new(templateWidth - 96, 48);
 		ReadOnlySpan<char> buttonName = Inline.Span($"{EnumUtils.HandLevelNames[customTemplate.HandLevel]}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart}");
 
 		Color color = Color.White;
@@ -142,7 +149,7 @@ public static class CustomTemplatesChild
 		}
 	}
 
-	private static void RenderDragIndicator(int i, UserSettingsPracticeTemplate customTemplate)
+	private void RenderDragIndicator(int i, UserSettingsPracticeTemplate customTemplate)
 	{
 		Color gray = Color.Gray(0.3f);
 		ImGui.PushStyleColor(ImGuiCol.Button, gray with { A = 159 });
@@ -151,7 +158,7 @@ public static class CustomTemplatesChild
 		ImGui.PushID(Inline.Span($"drag indicator {i}"));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-		ImGuiImage.ImageButton("CustomTemplateReorderImageButton", Root.InternalResources.DragIndicatorTexture.Id, new Vector2(32, 48), _customTemplateIndexToReorder == i ? Color.Gray(0.7f) : gray);
+		ImGuiImage.ImageButton("CustomTemplateReorderImageButton", _resourceManager.InternalResources.DragIndicatorTexture.Id, new Vector2(32, 48), _customTemplateIndexToReorder == i ? Color.Gray(0.7f) : gray);
 		ImGui.PopStyleVar();
 
 		if (ImGui.IsItemHovered())
@@ -171,7 +178,7 @@ public static class CustomTemplatesChild
 		ImGui.PopStyleColor(3);
 	}
 
-	private static void RenderDeleteButton(int i, UserSettingsPracticeTemplate customTemplate)
+	private void RenderDeleteButton(int i, UserSettingsPracticeTemplate customTemplate)
 	{
 		ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 159 });
 		ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red);
@@ -179,7 +186,7 @@ public static class CustomTemplatesChild
 		ImGui.PushID(Inline.Span($"delete button {i}"));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(12));
-		if (ImGuiImage.ImageButton("CustomTemplateDeleteImageButton", Root.InternalResources.BinTexture.Id, new Vector2(24)))
+		if (ImGuiImage.ImageButton("CustomTemplateDeleteImageButton", _resourceManager.InternalResources.BinTexture.Id, new Vector2(24)))
 		{
 			UserSettings.Model = UserSettings.Model with
 			{
@@ -196,7 +203,7 @@ public static class CustomTemplatesChild
 		ImGui.PopStyleColor(3);
 	}
 
-	private static void RenderDragDropTarget(int i)
+	private void RenderDragDropTarget(int i, float templateWidth)
 	{
 		if (!_customTemplateIndexToReorder.HasValue)
 			return;
@@ -212,7 +219,7 @@ public static class CustomTemplatesChild
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() - spacingY);
 
 			ImGui.PushStyleColor(ImGuiCol.Button, Color.Green with { A = 111 });
-			ImGui.Button("##drop", new Vector2(PracticeWindow.TemplateWidth - 96, dropAreaHeight));
+			ImGui.Button("##drop", new Vector2(templateWidth - 96, dropAreaHeight));
 			ImGui.PopStyleColor();
 
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() - dropAreaHeight + spacingY - 4);

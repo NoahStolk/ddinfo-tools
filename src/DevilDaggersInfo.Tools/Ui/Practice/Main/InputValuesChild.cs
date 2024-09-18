@@ -5,20 +5,30 @@ using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.User.Settings.Model;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-public static class InputValuesChild
+public sealed class InputValuesChild
 {
-	public static void Render()
+	private readonly ResourceManager _resourceManager;
+
+	public InputValuesChild(ResourceManager resourceManager)
 	{
+		_resourceManager = resourceManager;
+	}
+
+	public void Render()
+	{
+		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen in this UI.");
+
 		if (ImGui.BeginChild("InputValues", new Vector2(380, 200), ImGuiChildFlags.Border))
 		{
 			ImGui.SeparatorText("Inputs");
 
 			ImGui.Spacing();
-			ImGuiImage.Image(Root.InternalResources.IconHandTexture.Id, new Vector2(16), PracticeLogic.State.HandLevel.GetColor());
+			ImGuiImage.Image(_resourceManager.InternalResources.IconHandTexture.Id, new Vector2(16), PracticeLogic.State.HandLevel.GetColor());
 			ImGui.SameLine();
 			foreach (HandLevel level in EnumUtils.HandLevels)
 			{
@@ -29,14 +39,14 @@ public static class InputValuesChild
 					ImGui.SameLine();
 			}
 
-			(Texture gemOrHomingTexture, Color tintColor) = PracticeLogic.State.HandLevel is HandLevel.Level3 or HandLevel.Level4 ? (Root.GameResources.IconMaskHomingTexture, Color.White) : (Root.GameResources.IconMaskGemTexture, Color.Red);
+			(Texture gemOrHomingTexture, Color tintColor) = PracticeLogic.State.HandLevel is HandLevel.Level3 or HandLevel.Level4 ? (_resourceManager.GameResources.IconMaskHomingTexture, Color.White) : (_resourceManager.GameResources.IconMaskGemTexture, Color.Red);
 			ImGui.Spacing();
 			ImGuiImage.Image(gemOrHomingTexture.Id, new Vector2(16), tintColor);
 			ImGui.SameLine();
 			ImGui.InputInt("Added gems", ref PracticeLogic.State.AdditionalGems, 1);
 
 			ImGui.Spacing();
-			ImGuiImage.Image(Root.GameResources.IconMaskStopwatchTexture.Id, new Vector2(16));
+			ImGuiImage.Image(_resourceManager.GameResources.IconMaskStopwatchTexture.Id, new Vector2(16));
 			ImGui.SameLine();
 			ImGui.InputFloat("Timer start", ref PracticeLogic.State.TimerStart, 1, 5, "%.4f");
 
