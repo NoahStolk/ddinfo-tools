@@ -21,20 +21,39 @@ public sealed class UiRenderer
 	private readonly UiLayoutManager _uiLayoutManager;
 	private readonly ConfigLayout _configLayout;
 	private readonly MainScene _mainScene;
+
 	private readonly MainWindow _mainWindow;
 	private readonly DebugWindow _debugWindow;
+	private readonly AboutWindow _aboutWindow;
+
+	private readonly AssetEditorMenu _assetEditorMenu;
+	private readonly ReplayEditorMenu _replayEditorMenu;
+	private readonly SpawnsetEditorMenu _spawnsetEditorMenu;
 
 	private bool _showDemoWindow;
 	private bool _showAbout;
 	private bool _showUpdate;
 
-	public UiRenderer(UiLayoutManager uiLayoutManager, ConfigLayout configLayout, MainScene mainScene, MainWindow mainWindow, DebugWindow debugWindow)
+	public UiRenderer(
+		UiLayoutManager uiLayoutManager,
+		ConfigLayout configLayout,
+		MainScene mainScene,
+		MainWindow mainWindow,
+		DebugWindow debugWindow,
+		AboutWindow aboutWindow,
+		AssetEditorMenu assetEditorMenu,
+		ReplayEditorMenu replayEditorMenu,
+		SpawnsetEditorMenu spawnsetEditorMenu)
 	{
 		_uiLayoutManager = uiLayoutManager;
 		_configLayout = configLayout;
 		_mainScene = mainScene;
 		_mainWindow = mainWindow;
 		_debugWindow = debugWindow;
+		_aboutWindow = aboutWindow;
+		_assetEditorMenu = assetEditorMenu;
+		_replayEditorMenu = replayEditorMenu;
+		_spawnsetEditorMenu = spawnsetEditorMenu;
 	}
 
 	public void ShowDemoWindow()
@@ -67,7 +86,7 @@ public sealed class UiRenderer
 				_mainScene.Render(delta);
 				break;
 			case LayoutType.SpawnsetEditor:
-				SpawnsetEditorMenu.Render();
+				_spawnsetEditorMenu.Render();
 				SpawnsWindow.Render();
 				SettingsWindow.Render();
 				ArenaWindow.Render();
@@ -75,14 +94,14 @@ public sealed class UiRenderer
 				SpawnsetEditor3DWindow.Render(delta);
 				break;
 			case LayoutType.AssetEditor:
-				AssetEditorMenu.Render();
+				_assetEditorMenu.Render();
 				AssetEditorWindow.Render();
 				CompileModWindow.Render();
 				ExtractModWindow.Render();
 				break;
 			case LayoutType.ReplayEditor:
 				ReplayEditorWindow.Update(delta);
-				ReplayEditorMenu.Render();
+				_replayEditorMenu.Render();
 				ReplayEditorWindow.Render();
 				ReplayEditor3DWindow.Render(delta);
 				LeaderboardReplayBrowser.Render();
@@ -108,7 +127,7 @@ public sealed class UiRenderer
 		if (UserSettings.Model.ShowDebug)
 			_debugWindow.Render();
 
-		AboutWindow.Render(ref _showAbout);
+		_aboutWindow.Render(ref _showAbout);
 		UpdateWindow.Render(ref _showUpdate);
 
 		PopupManager.Render();

@@ -8,9 +8,16 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-public static class ReplayEditorMenu
+public sealed class ReplayEditorMenu
 {
-	public static void Render()
+	private readonly UiLayoutManager _uiLayoutManager;
+
+	public ReplayEditorMenu(UiLayoutManager uiLayoutManager)
+	{
+		_uiLayoutManager = uiLayoutManager;
+	}
+
+	public void Render()
 	{
 		if (ImGui.BeginMainMenuBar())
 		{
@@ -24,7 +31,7 @@ public static class ReplayEditorMenu
 		}
 	}
 
-	private static void RenderFileMenu()
+	private void RenderFileMenu()
 	{
 		if (ImGui.MenuItem("New", "Ctrl+N"))
 			NewReplay();
@@ -154,8 +161,8 @@ public static class ReplayEditorMenu
 		Root.GameMemoryService.WriteReplayToMemory(FileStates.Replay.Object.ToLocalReplay().Compile());
 	}
 
-	public static void Close()
+	public void Close()
 	{
-		UiRenderer.Layout = LayoutType.Main;
+		_uiLayoutManager.Layout = LayoutType.Main;
 	}
 }
