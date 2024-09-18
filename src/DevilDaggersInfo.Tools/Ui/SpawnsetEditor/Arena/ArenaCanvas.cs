@@ -3,14 +3,26 @@ using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using ImGuiNET;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 
-public static class ArenaCanvas
+public sealed class ArenaCanvas
 {
-	public static void Render()
+	private readonly ResourceManager _resourceManager;
+	private readonly ArenaWindow _arenaWindow;
+
+	public ArenaCanvas(ResourceManager resourceManager, ArenaWindow arenaWindow)
 	{
+		_resourceManager = resourceManager;
+		_arenaWindow = arenaWindow;
+	}
+
+	public void Render()
+	{
+		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen in this UI.");
+
 		ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 
 		Vector2 origin = ImGui.GetCursorScreenPos();
@@ -24,7 +36,7 @@ public static class ArenaCanvas
 				int x = i * ArenaWindow.TileSize;
 				int y = j * ArenaWindow.TileSize;
 
-				float actualHeight = FileStates.Spawnset.Object.GetActualTileHeight(i, j, ArenaWindow.CurrentSecond);
+				float actualHeight = FileStates.Spawnset.Object.GetActualTileHeight(i, j, _arenaWindow.CurrentSecond);
 				float height = FileStates.Spawnset.Object.ArenaTiles[i, j];
 				Color colorCurrent = TileUtils.GetColorFromHeight(actualHeight);
 				Color colorValue = TileUtils.GetColorFromHeight(height);
@@ -62,13 +74,13 @@ public static class ArenaCanvas
 
 			const int halfSize = ArenaWindow.TileSize / 2;
 
-			float? actualHeight = FileStates.Spawnset.Object.GetActualRaceDaggerHeight(ArenaWindow.CurrentSecond);
+			float? actualHeight = FileStates.Spawnset.Object.GetActualRaceDaggerHeight(_arenaWindow.CurrentSecond);
 			Color tileColor = actualHeight.HasValue ? TileUtils.GetColorFromHeight(actualHeight.Value) : Color.Black;
 			Color invertedTileColor = Color.Invert(tileColor);
 			Vector3 daggerColor = Vector3.Lerp(invertedTileColor, invertedTileColor.Intensify(96), MathF.Sin((float)ImGui.GetTime()) / 2 + 0.5f);
 
 			Vector2 center = origin + new Vector2(realRaceX * ArenaWindow.TileSize + halfSize, realRaceZ * ArenaWindow.TileSize + halfSize);
-			drawList.AddImage(Root.GameResources.IconMaskDaggerTexture.Id, center - new Vector2(8), center + new Vector2(8), Color.FromVector3(daggerColor));
+			drawList.AddImage(_resourceManager.GameResources.IconMaskDaggerTexture.Id, center - new Vector2(8), center + new Vector2(8), Color.FromVector3(daggerColor));
 		}
 
 		const int tileUnit = 4;
@@ -79,7 +91,7 @@ public static class ArenaCanvas
 			drawList.AddCircle(arenaCenter, shrinkStartRadius, ImGui.GetColorU32(Color.Blue));
 
 		float shrinkEndTime = FileStates.Spawnset.Object.GetShrinkEndTime();
-		float shrinkRadius = shrinkEndTime == 0 ? FileStates.Spawnset.Object.ShrinkStart : Math.Max(FileStates.Spawnset.Object.ShrinkStart - ArenaWindow.CurrentSecond / shrinkEndTime * (FileStates.Spawnset.Object.ShrinkStart - FileStates.Spawnset.Object.ShrinkEnd), FileStates.Spawnset.Object.ShrinkEnd);
+		float shrinkRadius = shrinkEndTime == 0 ? FileStates.Spawnset.Object.ShrinkStart : Math.Max(FileStates.Spawnset.Object.ShrinkStart - _arenaWindow.CurrentSecond / shrinkEndTime * (FileStates.Spawnset.Object.ShrinkStart - FileStates.Spawnset.Object.ShrinkEnd), FileStates.Spawnset.Object.ShrinkEnd);
 		float shrinkCurrentRadius = shrinkRadius / tileUnit * ArenaWindow.TileSize;
 		if (shrinkCurrentRadius is > 0 and < 300)
 			drawList.AddCircle(arenaCenter, shrinkCurrentRadius, ImGui.GetColorU32(Color.Purple));
