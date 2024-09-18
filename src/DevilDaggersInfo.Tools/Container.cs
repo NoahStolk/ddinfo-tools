@@ -1,8 +1,11 @@
 using DevilDaggersInfo.Tools.Engine.Extensions;
 using DevilDaggersInfo.Tools.Engine.Loaders;
 using DevilDaggersInfo.Tools.Ui;
+using DevilDaggersInfo.Tools.Ui.AssetEditor;
 using DevilDaggersInfo.Tools.Ui.Config;
 using DevilDaggersInfo.Tools.Ui.Main;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor;
+using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
@@ -40,7 +43,13 @@ namespace DevilDaggersInfo.Tools;
 // Layouts
 [Register<ConfigLayout>(Scope.SingleInstance)]
 
+// Menus
+[Register<AssetEditorMenu>(Scope.SingleInstance)]
+[Register<ReplayEditorMenu>(Scope.SingleInstance)]
+[Register<SpawnsetEditorMenu>(Scope.SingleInstance)]
+
 // Windows
+[Register<AboutWindow>(Scope.SingleInstance)]
 [Register<DebugWindow>(Scope.SingleInstance)]
 [Register<MainWindow>(Scope.SingleInstance)]
 #pragma warning disable S3881 // "IDisposable" should be implemented correctly. The source generator already implements IDisposable correctly.

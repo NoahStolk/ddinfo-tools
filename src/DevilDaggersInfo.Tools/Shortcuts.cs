@@ -12,10 +12,16 @@ namespace DevilDaggersInfo.Tools;
 public sealed class Shortcuts
 {
 	private readonly UiLayoutManager _uiLayoutManager;
+	private readonly SpawnsetEditorMenu _spawnsetEditorMenu;
+	private readonly AssetEditorMenu _assetEditorMenu;
+	private readonly ReplayEditorMenu _replayEditorMenu;
 
-	public Shortcuts(UiLayoutManager uiLayoutManager)
+	public Shortcuts(UiLayoutManager uiLayoutManager, SpawnsetEditorMenu spawnsetEditorMenu, AssetEditorMenu assetEditorMenu, ReplayEditorMenu replayEditorMenu)
 	{
 		_uiLayoutManager = uiLayoutManager;
+		_spawnsetEditorMenu = spawnsetEditorMenu;
+		_assetEditorMenu = assetEditorMenu;
+		_replayEditorMenu = replayEditorMenu;
 	}
 
 	public void Handle(ImGuiIOPtr io, GlfwInput glfwInput)
@@ -33,9 +39,9 @@ public sealed class Shortcuts
 		{
 			switch (_uiLayoutManager.Layout)
 			{
-				case LayoutType.SpawnsetEditor: SpawnsetEditorMenu.Close(); break;
-				case LayoutType.AssetEditor: AssetEditorMenu.Close(); break;
-				case LayoutType.ReplayEditor: ReplayEditorMenu.Close(); break;
+				case LayoutType.SpawnsetEditor: _spawnsetEditorMenu.Close(); break;
+				case LayoutType.AssetEditor: _assetEditorMenu.Close(); break;
+				case LayoutType.ReplayEditor: _replayEditorMenu.Close(); break;
 				case LayoutType.Config: break;
 				default: _uiLayoutManager.Layout = LayoutType.Main; break;
 			}

@@ -7,9 +7,16 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-public static class SpawnsetEditorMenu
+public sealed class SpawnsetEditorMenu
 {
-	public static void Render()
+	private readonly UiLayoutManager _uiLayoutManager;
+
+	public SpawnsetEditorMenu(UiLayoutManager uiLayoutManager)
+	{
+		_uiLayoutManager = uiLayoutManager;
+	}
+
+	public void Render()
 	{
 		if (ImGui.BeginMainMenuBar())
 		{
@@ -29,7 +36,7 @@ public static class SpawnsetEditorMenu
 		}
 	}
 
-	private static void RenderFileMenu()
+	private void RenderFileMenu()
 	{
 		if (ImGui.MenuItem("New", "Ctrl+N"))
 			NewSpawnset();
@@ -187,8 +194,8 @@ public static class SpawnsetEditorMenu
 		PopupManager.ShowMessage("Successfully deleted current survival file", "The current survival file has been deleted.");
 	}
 
-	public static void Close()
+	public void Close()
 	{
-		FileStates.Spawnset.PromptSave(() => UiRenderer.Layout = LayoutType.Main);
+		FileStates.Spawnset.PromptSave(() => _uiLayoutManager.Layout = LayoutType.Main);
 	}
 }
