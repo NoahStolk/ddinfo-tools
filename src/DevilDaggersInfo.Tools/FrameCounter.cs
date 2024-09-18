@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools;
 
-public class PerSecondCounter
+public sealed class FrameCounter
 {
 	private int _currentSecond;
 
@@ -8,8 +8,15 @@ public class PerSecondCounter
 
 	public int CountPerSecond { get; private set; }
 
-	public void Increment()
+	public float TotalTime { get; private set; }
+
+	public float LastRenderDelta { get; private set; }
+
+	public void Increment(float deltaTime)
 	{
+		LastRenderDelta = deltaTime;
+		TotalTime += deltaTime;
+
 		int currentSecond = DateTime.UtcNow.Second;
 		if (currentSecond != _currentSecond)
 		{

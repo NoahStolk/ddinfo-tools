@@ -11,15 +11,17 @@ public sealed class MainWindow
 {
 	private readonly ResourceManager _resourceManager;
 	private readonly UiLayoutManager _uiLayoutManager;
+	private readonly FrameCounter _frameCounter;
 
 	private readonly string _version = $"{AssemblyUtils.EntryAssemblyVersionString} (ALPHA)";
 
 	private Action? _hoveredButtonAction;
 
-	public MainWindow(ResourceManager resourceManager, UiLayoutManager uiLayoutManager)
+	public MainWindow(ResourceManager resourceManager, UiLayoutManager uiLayoutManager, FrameCounter frameCounter)
 	{
 		_resourceManager = resourceManager;
 		_uiLayoutManager = uiLayoutManager;
+		_frameCounter = frameCounter;
 	}
 
 	public bool ShouldClose { get; private set; }
@@ -38,7 +40,7 @@ public sealed class MainWindow
 		{
 			ImGui.PushFont(Root.FontGoetheBold60);
 			const string title = "ddinfo tools";
-			ImGui.TextColored(Colors.TitleColor, title);
+			ImGui.TextColored(Colors.TitleColor(_frameCounter.TotalTime), title);
 			float textWidth = ImGui.CalcTextSize(title).X;
 			ImGui.PopFont();
 

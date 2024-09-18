@@ -1,4 +1,3 @@
-using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.User.Settings;
 using ImGuiGlfw;
@@ -22,14 +21,12 @@ public sealed unsafe class Application
 	private readonly UiRenderer _uiRenderer;
 	private readonly Shortcuts _shortcuts;
 	private readonly MainWindow _mainWindow;
+	private readonly FrameCounter _frameCounter;
 
 	private readonly IntPtr _iconPtr;
 
 	private double _currentTime;
 	private double _frameTime;
-
-	private int _currentSecond;
-	private int _renders;
 
 	public Application(
 		Glfw glfw,
@@ -41,7 +38,8 @@ public sealed unsafe class Application
 		GameInstallationValidator gameInstallationValidator,
 		UiRenderer uiRenderer,
 		Shortcuts shortcuts,
-		MainWindow mainWindow)
+		MainWindow mainWindow,
+		FrameCounter frameCounter)
 	{
 		_glfw = glfw;
 		_gl = gl;
@@ -51,6 +49,7 @@ public sealed unsafe class Application
 		_uiRenderer = uiRenderer;
 		_shortcuts = shortcuts;
 		_mainWindow = mainWindow;
+		_frameCounter = frameCounter;
 
 		_currentTime = glfw.GetTime();
 
@@ -71,13 +70,6 @@ public sealed unsafe class Application
 
 		Root.Application = this;
 	}
-
-	public int Fps { get; private set; }
-	public float FrameTime => (float)_frameTime;
-	public float TotalTime { get; private set; }
-
-	public PerSecondCounter RenderCounter { get; } = new();
-	public float LastRenderDelta { get; private set; }
 
 	public void Run()
 	{
@@ -100,25 +92,16 @@ public sealed unsafe class Application
 	private void Main()
 	{
 		double mainStartTime = _glfw.GetTime();
-		if (_currentSecond != (int)mainStartTime)
-		{
-			Fps = _renders;
-			_renders = 0;
-			_currentSecond = (int)mainStartTime;
-		}
 
 		_frameTime = mainStartTime - _currentTime;
 		if (_frameTime > _maxMainDelta)
 			_frameTime = _maxMainDelta;
-
-		TotalTime += FrameTime;
 
 		_currentTime = mainStartTime;
 
 		_glfw.PollEvents();
 
 		Render();
-		_renders++;
 
 		_glfw.SwapBuffers(_window);
 	}
@@ -127,8 +110,7 @@ public sealed unsafe class Application
 	{
 		float deltaF = (float)_frameTime;
 
-		RenderCounter.Increment();
-		LastRenderDelta = deltaF;
+		_frameCounter.Increment(deltaF);
 
 		_imGuiController.Update(deltaF);
 
