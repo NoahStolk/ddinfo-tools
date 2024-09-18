@@ -6,7 +6,6 @@
 
   <ItemGroup Label="Dependencies">
     <PackageReference Include="NoahStolk.ImGuiGlfw" Version="0.8.0" />
-    <PackageReference Include="Silk.NET.OpenAL" Version="2.21.0" />
   </ItemGroup>
 
   <ItemGroup>
