@@ -122,7 +122,7 @@ public class Application
 
 		_imGuiController.Render();
 
-		Input.GlfwInput.PostRender();
+		Input.GlfwInput.EndFrame();
 
 		if (Ui.Main.MainWindow.ShouldClose)
 		{
