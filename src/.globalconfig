@@ -220,6 +220,9 @@ csharp_preserve_single_line_statements                                        = 
 # Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
 dotnet_diagnostic.CS4014.severity                                             = error
 
+# Members attributed with RequiresUnreferencedCode may break when trimming.
+dotnet_diagnostic.IL2026.severity                                             = error
+
 # Null-forgiving operator without justification
 dotnet_diagnostic.NX0001.severity                                             = error
 
@@ -246,7 +249,7 @@ dotnet_diagnostic.S1135.severity                                              = 
 # Do not declare static members on generic types.
 dotnet_diagnostic.CA1000.severity                                             = none
 
-# Change 'List<T>' into 'Collection<T>', 'ReadOnlyCollection<T>' or 'KeyedCollection<K,V>'.
+# Do not expose generic lists.
 dotnet_diagnostic.CA1002.severity                                             = none
 
 # Do not declare visible instance fields.
@@ -255,20 +258,11 @@ dotnet_diagnostic.CA1051.severity                                             = 
 # Validate arguments of public methods.
 dotnet_diagnostic.CA1062.severity                                             = none
 
-# Do not raise exceptions in unexpected locations.
-dotnet_diagnostic.CA1065.severity                                             = none
-
 # Normalize strings to uppercase.
 dotnet_diagnostic.CA1308.severity                                             = none
 
-# Identifiers should not match keywords.
-dotnet_diagnostic.CA1716.severity                                             = none
-
-# Do not raise reserved exception types.
-dotnet_diagnostic.CA2201.severity                                             = none
-
-# Non-constant fields should not be visible
-dotnet_diagnostic.CA2211.severity                                             = none
+# Do not directly await a Task.
+dotnet_diagnostic.CA2007.severity                                             = none
 
 # Operator overloads have named alternates.
 dotnet_diagnostic.CA2225.severity                                             = none
@@ -294,9 +288,6 @@ dotnet_diagnostic.S101.severity                                               = 
 # 'System.Exception' should not be thrown by user code.
 dotnet_diagnostic.S112.severity                                               = none
 
-# Make this field 'private' and encapsulate it in a 'public' property.
-dotnet_diagnostic.S1104.severity                                              = none
-
 # Extract the assignment from this expression. (C# 9)
 dotnet_diagnostic.S1121.severity                                              = none
 
@@ -306,17 +297,8 @@ dotnet_diagnostic.S1144.severity                                              = 
 # Make this method private or simplify its parameters to not use multidimensional arrays.
 dotnet_diagnostic.S2368.severity                                              = none
 
-# Replace the control character at position x by its escape sequence y.
-dotnet_diagnostic.S2479.severity                                              = none
-
-# Boolean expressions should not be gratuitous. (Broken analyzer)
-dotnet_diagnostic.S2589.severity                                              = none
-
-# Static fields should not be used in generic types.
+# Static fields should not be used in generic types (C# 11 static abstract members).
 dotnet_diagnostic.S2743.severity                                              = none
-
-# Loops should be simplified with "LINQ" expressions.
-dotnet_diagnostic.S3267.severity                                              = none
 
 # Extract this nested ternary operation into an independent statement.
 dotnet_diagnostic.S3358.severity                                              = none
@@ -326,6 +308,9 @@ dotnet_diagnostic.S3453.severity                                              = 
 
 # Move class into a named namespace. (C# 10)
 dotnet_diagnostic.S3903.severity                                              = none
+
+# Use 'Guid.NewGuid()' or 'Guid.Empty' or add arguments to this GUID instantiation.
+dotnet_diagnostic.S4581.severity                                              = none
 
 # Enable XML documentation output.
 dotnet_diagnostic.SA0001.severity                                             = none
