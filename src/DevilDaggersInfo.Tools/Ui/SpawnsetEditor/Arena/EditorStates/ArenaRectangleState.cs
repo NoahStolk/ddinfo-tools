@@ -9,9 +9,16 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorStates;
 
-public class ArenaRectangleState : IArenaState
+public sealed class ArenaRectangleState : IArenaState
 {
+	private readonly ArenaWindow _arenaWindow;
+
 	private Session? _session;
+
+	public ArenaRectangleState(ArenaWindow arenaWindow)
+	{
+		_arenaWindow = arenaWindow;
+	}
 
 	public void InitializeSession(ArenaMousePosition mousePosition)
 	{
@@ -35,7 +42,7 @@ public class ArenaRectangleState : IArenaState
 		if (!_session.HasValue)
 			return;
 
-		Loop(mousePosition, (i, j) => _session.Value.NewArena[i, j] = ArenaWindow.SelectedHeight);
+		Loop(mousePosition, (i, j) => _session.Value.NewArena[i, j] = _arenaWindow.SelectedHeight);
 
 		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(FileStates.Spawnset.Object.ArenaDimension, _session.Value.NewArena) });
 		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaRectangle);
