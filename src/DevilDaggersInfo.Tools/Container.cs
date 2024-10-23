@@ -4,6 +4,7 @@ using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.AssetEditor;
 using DevilDaggersInfo.Tools.Ui.Config;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
+using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.Ui.Practice.Main;
@@ -70,6 +71,7 @@ namespace DevilDaggersInfo.Tools;
 [Register<LeaderboardListChild>(Scope.SingleInstance)]
 [Register<LeaderboardListViewChild>(Scope.SingleInstance)]
 [Register<RecordingChild>(Scope.SingleInstance)]
+[Register<LeaderboardChild>(Scope.SingleInstance)]
 #pragma warning disable S3881 // "IDisposable" should be implemented correctly. The source generator already implements IDisposable correctly.
 public sealed partial class Container : IContainer<Application>
 #pragma warning restore S3881
