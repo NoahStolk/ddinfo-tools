@@ -12,16 +12,18 @@ public sealed class MainWindow
 	private readonly ResourceManager _resourceManager;
 	private readonly UiLayoutManager _uiLayoutManager;
 	private readonly FrameCounter _frameCounter;
+	private readonly LeaderboardListChild _leaderboardListChild;
 
 	private readonly string _version = $"{AssemblyUtils.EntryAssemblyVersionString} (ALPHA)";
 
 	private Action? _hoveredButtonAction;
 
-	public MainWindow(ResourceManager resourceManager, UiLayoutManager uiLayoutManager, FrameCounter frameCounter)
+	public MainWindow(ResourceManager resourceManager, UiLayoutManager uiLayoutManager, FrameCounter frameCounter, LeaderboardListChild leaderboardListChild)
 	{
 		_resourceManager = resourceManager;
 		_uiLayoutManager = uiLayoutManager;
 		_frameCounter = frameCounter;
+		_leaderboardListChild = leaderboardListChild;
 	}
 
 	public bool ShouldClose { get; private set; }
@@ -97,7 +99,7 @@ public sealed class MainWindow
 				void GoToCustomLeaderboards()
 				{
 					_uiLayoutManager.Layout = LayoutType.CustomLeaderboards;
-					LeaderboardListChild.LoadAll();
+					_leaderboardListChild.LoadAll();
 				}
 
 				void GoToPractice()
