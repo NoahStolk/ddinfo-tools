@@ -5,74 +5,82 @@ using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.GameMemory;
 using ImGuiNET;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-public static class RecordingChild
+public sealed class RecordingChild
 {
-	private static float _statusIntensity;
+	private readonly ResourceManager _resourceManager;
 
-	private static float _playerIntensity;
-	private static float _timeIntensity;
-	private static float _handIntensity;
-	private static float _level2Intensity;
-	private static float _level3Intensity;
-	private static float _level4Intensity;
-	private static float _deathIntensity;
+	private float _statusIntensity;
 
-	private static float _gemsCollectedIntensity;
-	private static float _gemsDespawnedIntensity;
-	private static float _gemsEatenIntensity;
-	private static float _gemsTotalIntensity;
+	private float _playerIntensity;
+	private float _timeIntensity;
+	private float _handIntensity;
+	private float _level2Intensity;
+	private float _level3Intensity;
+	private float _level4Intensity;
+	private float _deathIntensity;
 
-	private static float _homingStoredIntensity;
-	private static float _homingEatenIntensity;
+	private float _gemsCollectedIntensity;
+	private float _gemsDespawnedIntensity;
+	private float _gemsEatenIntensity;
+	private float _gemsTotalIntensity;
 
-	private static float _daggersFiredIntensity;
-	private static float _daggersHitIntensity;
-	private static float _accuracyIntensity;
+	private float _homingStoredIntensity;
+	private float _homingEatenIntensity;
 
-	private static float _enemiesKilledIntensity;
-	private static float _enemiesAliveIntensity;
+	private float _daggersFiredIntensity;
+	private float _daggersHitIntensity;
+	private float _accuracyIntensity;
 
-	private static float _skull1KillCountIntensity;
-	private static float _skull2KillCountIntensity;
-	private static float _skull3KillCountIntensity;
-	private static float _skull4KillCountIntensity;
-	private static float _squid1KillCountIntensity;
-	private static float _squid2KillCountIntensity;
-	private static float _squid3KillCountIntensity;
-	private static float _centipedeKillCountIntensity;
-	private static float _gigapedeKillCountIntensity;
-	private static float _ghostpedeKillCountIntensity;
-	private static float _spider1KillCountIntensity;
-	private static float _spider2KillCountIntensity;
-	private static float _spiderlingKillCountIntensity;
-	private static float _spiderEggKillCountIntensity;
-	private static float _leviathanKillCountIntensity;
-	private static float _orbKillCountIntensity;
-	private static float _thornKillCountIntensity;
+	private float _enemiesKilledIntensity;
+	private float _enemiesAliveIntensity;
 
-	private static float _skull1AliveCountIntensity;
-	private static float _skull2AliveCountIntensity;
-	private static float _skull3AliveCountIntensity;
-	private static float _skull4AliveCountIntensity;
-	private static float _squid1AliveCountIntensity;
-	private static float _squid2AliveCountIntensity;
-	private static float _squid3AliveCountIntensity;
-	private static float _centipedeAliveCountIntensity;
-	private static float _gigapedeAliveCountIntensity;
-	private static float _ghostpedeAliveCountIntensity;
-	private static float _spider1AliveCountIntensity;
-	private static float _spider2AliveCountIntensity;
-	private static float _spiderlingAliveCountIntensity;
-	private static float _spiderEggAliveCountIntensity;
-	private static float _leviathanAliveCountIntensity;
-	private static float _orbAliveCountIntensity;
-	private static float _thornAliveCountIntensity;
+	private float _skull1KillCountIntensity;
+	private float _skull2KillCountIntensity;
+	private float _skull3KillCountIntensity;
+	private float _skull4KillCountIntensity;
+	private float _squid1KillCountIntensity;
+	private float _squid2KillCountIntensity;
+	private float _squid3KillCountIntensity;
+	private float _centipedeKillCountIntensity;
+	private float _gigapedeKillCountIntensity;
+	private float _ghostpedeKillCountIntensity;
+	private float _spider1KillCountIntensity;
+	private float _spider2KillCountIntensity;
+	private float _spiderlingKillCountIntensity;
+	private float _spiderEggKillCountIntensity;
+	private float _leviathanKillCountIntensity;
+	private float _orbKillCountIntensity;
+	private float _thornKillCountIntensity;
 
-	public static void Update(float delta)
+	private float _skull1AliveCountIntensity;
+	private float _skull2AliveCountIntensity;
+	private float _skull3AliveCountIntensity;
+	private float _skull4AliveCountIntensity;
+	private float _squid1AliveCountIntensity;
+	private float _squid2AliveCountIntensity;
+	private float _squid3AliveCountIntensity;
+	private float _centipedeAliveCountIntensity;
+	private float _gigapedeAliveCountIntensity;
+	private float _ghostpedeAliveCountIntensity;
+	private float _spider1AliveCountIntensity;
+	private float _spider2AliveCountIntensity;
+	private float _spiderlingAliveCountIntensity;
+	private float _spiderEggAliveCountIntensity;
+	private float _leviathanAliveCountIntensity;
+	private float _orbAliveCountIntensity;
+	private float _thornAliveCountIntensity;
+
+	public RecordingChild(ResourceManager resourceManager)
+	{
+		_resourceManager = resourceManager;
+	}
+
+	public void Update(float delta)
 	{
 		const float tolerance = 0.0001f;
 
@@ -140,7 +148,7 @@ public static class RecordingChild
 		_thornAliveCountIntensity = b.ThornAliveCount != p.ThornAliveCount ? 1 : MathF.Max(0, _thornAliveCountIntensity - delta);
 	}
 
-	public static void Render()
+	public void Render()
 	{
 		bool renderRecordingValues = Root.GameMemoryService.IsInitialized && !RecordingLogic.ShowUploadResponse && (GameStatus)Root.GameMemoryService.MainBlock.Status is not (GameStatus.Title or GameStatus.Menu or GameStatus.Lobby);
 		if (renderRecordingValues)
@@ -153,8 +161,10 @@ public static class RecordingChild
 		}
 	}
 
-	private static void RenderRecordingValues()
+	private void RenderRecordingValues()
 	{
+		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen in this UI.");
+
 		Vector2 iconSize = new(16);
 
 		if (ImGui.BeginChild("RecordingValues", new Vector2(288, 320)))
@@ -165,7 +175,7 @@ public static class RecordingChild
 			ImGui.Spacing();
 
 			// TODO: Use spans here.
-			ImGuiImage.Image(Root.InternalResources.IconEyeTexture.Id, iconSize, Color.Orange);
+			ImGuiImage.Image(_resourceManager.InternalResources.IconEyeTexture.Id, iconSize, Color.Orange);
 			RenderValue("Player", GetPlayerText(b), Color.White, _playerIntensity);
 			RenderValue("Time", Inline.Span(b.Time, StringFormats.TimeFormat), Color.White, _timeIntensity);
 			RenderValue("Hand", GetUpgrade(b).Name, GetUpgrade(b).Color.ToEngineColor(), _handIntensity);
@@ -175,25 +185,25 @@ public static class RecordingChild
 			RenderValue("Death", b.IsPlayerAlive ? "-" : GetDeath(b)?.Name ?? "?", GetDeath(b)?.Color.ToEngineColor() ?? Color.White, _deathIntensity);
 
 			ImGui.Spacing();
-			ImGuiImage.Image(Root.GameResources.IconMaskGemTexture.Id, iconSize, Color.Red);
+			ImGuiImage.Image(_resourceManager.GameResources.IconMaskGemTexture.Id, iconSize, Color.Red);
 			RenderValue("Gems collected", Inline.Span(b.GemsCollected), Color.Red, _gemsCollectedIntensity);
 			RenderValue("Gems despawned", Inline.Span(b.GemsDespawned), Color.Gray(0.6f), _gemsDespawnedIntensity);
 			RenderValue("Gems eaten", Inline.Span(b.GemsEaten), Color.Green, _gemsEatenIntensity);
 			RenderValue("Gems total", Inline.Span(b.GemsTotal), Color.Red, _gemsTotalIntensity);
 
 			ImGui.Spacing();
-			ImGuiImage.Image(Root.GameResources.IconMaskHomingTexture.Id, iconSize);
+			ImGuiImage.Image(_resourceManager.GameResources.IconMaskHomingTexture.Id, iconSize);
 			RenderValue("Homing stored", Inline.Span(b.HomingStored), Color.Purple, _homingStoredIntensity);
 			RenderValue("Homing eaten", Inline.Span(b.HomingEaten), Color.Red, _homingEatenIntensity);
 
 			ImGui.Spacing();
-			ImGuiImage.Image(Root.GameResources.IconMaskCrosshairTexture.Id, iconSize, Color.Green);
+			ImGuiImage.Image(_resourceManager.GameResources.IconMaskCrosshairTexture.Id, iconSize, Color.Green);
 			RenderValue("Daggers fired", Inline.Span(b.DaggersFired), Color.Yellow, _daggersFiredIntensity);
 			RenderValue("Daggers hit", Inline.Span(b.DaggersHit), Color.Red, _daggersHitIntensity);
 			RenderValue("Accuracy", Inline.Span(GetAccuracy(b), "0.00%"), Color.Orange, _accuracyIntensity);
 
 			ImGui.Spacing();
-			ImGuiImage.Image(Root.GameResources.IconMaskSkullTexture.Id, iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
+			ImGuiImage.Image(_resourceManager.GameResources.IconMaskSkullTexture.Id, iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
 			RenderValue("Enemies killed", Inline.Span(b.EnemiesKilled), Color.Red, _enemiesKilledIntensity);
 			RenderValue("Enemies alive", Inline.Span(b.EnemiesAlive), Color.Yellow, _enemiesAliveIntensity);
 

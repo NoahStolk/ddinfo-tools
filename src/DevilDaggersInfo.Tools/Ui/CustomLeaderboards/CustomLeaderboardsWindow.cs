@@ -10,20 +10,22 @@ public sealed class CustomLeaderboardsWindow
 	private readonly LeaderboardListChild _leaderboardListChild;
 	private readonly LeaderboardListViewChild _leaderboardListViewChild;
 	private readonly CustomLeaderboards3DWindow _customLeaderboards3DWindow;
+	private readonly RecordingChild _recordingChild;
 
 	private float _recordingTimer;
 
-	public CustomLeaderboardsWindow(LeaderboardListChild leaderboardListChild, LeaderboardListViewChild leaderboardListViewChild, CustomLeaderboards3DWindow customLeaderboards3DWindow)
+	public CustomLeaderboardsWindow(LeaderboardListChild leaderboardListChild, LeaderboardListViewChild leaderboardListViewChild, CustomLeaderboards3DWindow customLeaderboards3DWindow, RecordingChild recordingChild)
 	{
 		_leaderboardListChild = leaderboardListChild;
 		_leaderboardListViewChild = leaderboardListViewChild;
 		_customLeaderboards3DWindow = customLeaderboards3DWindow;
+		_recordingChild = recordingChild;
 	}
 
 	public void Update(float delta)
 	{
 		_customLeaderboards3DWindow.Update(delta);
-		RecordingChild.Update(delta);
+		_recordingChild.Update(delta);
 
 		_recordingTimer += delta;
 		if (_recordingTimer < 0.12f)
@@ -56,7 +58,7 @@ public sealed class CustomLeaderboardsWindow
 			if (ImGui.BeginChild("LeftRow", new Vector2(288, 464)))
 			{
 				StateChild.Render();
-				RecordingChild.Render();
+				_recordingChild.Render();
 			}
 
 			ImGui.EndChild();
