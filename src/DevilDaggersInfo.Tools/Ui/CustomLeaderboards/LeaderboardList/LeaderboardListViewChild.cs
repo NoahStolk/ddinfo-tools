@@ -19,11 +19,13 @@ public sealed class LeaderboardListViewChild
 {
 	private readonly LeaderboardListChild _leaderboardListChild;
 	private readonly ResourceManager _resourceManager;
+	private readonly LeaderboardChild _leaderboardChild;
 
-	public LeaderboardListViewChild(LeaderboardListChild leaderboardListChild, ResourceManager resourceManager)
+	public LeaderboardListViewChild(LeaderboardListChild leaderboardListChild, ResourceManager resourceManager, LeaderboardChild leaderboardChild)
 	{
 		_leaderboardListChild = leaderboardListChild;
 		_resourceManager = resourceManager;
+		_leaderboardChild = leaderboardChild;
 	}
 
 	public void Render()
@@ -153,17 +155,17 @@ public sealed class LeaderboardListViewChild
 		ImGui.PopStyleVar();
 	}
 
-	private static void SelectLeaderboard(GetCustomLeaderboardForOverview clOverview)
+	private void SelectLeaderboard(GetCustomLeaderboardForOverview clOverview)
 	{
 		AsyncHandler.Run(
 			getLeaderboardResult =>
 			{
 				getLeaderboardResult.Match(
-					onSuccess: getLeaderboard => LeaderboardChild.Data = new LeaderboardChild.LeaderboardData(getLeaderboard, clOverview.SpawnsetId),
+					onSuccess: getLeaderboard => _leaderboardChild.Data = new LeaderboardChild.LeaderboardData(getLeaderboard, clOverview.SpawnsetId),
 					onError: apiError =>
 					{
 						PopupManager.ShowError("Could not fetch custom leaderboard.", apiError);
-						LeaderboardChild.Data = null;
+						_leaderboardChild.Data = null;
 					});
 			},
 			() => FetchCustomLeaderboardById.HandleAsync(clOverview.Id));

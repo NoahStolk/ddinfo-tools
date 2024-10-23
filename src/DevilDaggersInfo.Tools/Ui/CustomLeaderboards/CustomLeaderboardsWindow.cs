@@ -11,15 +11,17 @@ public sealed class CustomLeaderboardsWindow
 	private readonly LeaderboardListViewChild _leaderboardListViewChild;
 	private readonly CustomLeaderboards3DWindow _customLeaderboards3DWindow;
 	private readonly RecordingChild _recordingChild;
+	private readonly LeaderboardChild _leaderboardChild;
 
 	private float _recordingTimer;
 
-	public CustomLeaderboardsWindow(LeaderboardListChild leaderboardListChild, LeaderboardListViewChild leaderboardListViewChild, CustomLeaderboards3DWindow customLeaderboards3DWindow, RecordingChild recordingChild)
+	public CustomLeaderboardsWindow(LeaderboardListChild leaderboardListChild, LeaderboardListViewChild leaderboardListViewChild, CustomLeaderboards3DWindow customLeaderboards3DWindow, RecordingChild recordingChild, LeaderboardChild leaderboardChild)
 	{
 		_leaderboardListChild = leaderboardListChild;
 		_leaderboardListViewChild = leaderboardListViewChild;
 		_customLeaderboards3DWindow = customLeaderboards3DWindow;
 		_recordingChild = recordingChild;
+		_leaderboardChild = leaderboardChild;
 	}
 
 	public void Update(float delta)
@@ -73,7 +75,7 @@ public sealed class CustomLeaderboardsWindow
 
 			ImGui.EndChild();
 
-			LeaderboardChild.Render();
+			_leaderboardChild.Render();
 		}
 
 		ImGui.End();
