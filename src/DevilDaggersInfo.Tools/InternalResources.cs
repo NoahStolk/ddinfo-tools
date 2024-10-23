@@ -35,7 +35,11 @@ public record InternalResources(
 	public static InternalResources Create()
 	{
 #if DEBUG
+		#if WINDOWS
 		const string? ddInfoToolsContentRootDirectory = @"..\..\..\Content";
+		#elif LINUX
+		const string? ddInfoToolsContentRootDirectory = @"./src/DevilDaggersInfo.Tools/Content/";
+		#endif
 #else
 		const string? ddInfoToolsContentRootDirectory = null;
 #endif
