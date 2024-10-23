@@ -13,6 +13,7 @@ namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 public sealed class RecordingChild
 {
 	private readonly ResourceManager _resourceManager;
+	private readonly RecordingLogic _recordingLogic;
 
 	private float _statusIntensity;
 
@@ -75,9 +76,10 @@ public sealed class RecordingChild
 	private float _orbAliveCountIntensity;
 	private float _thornAliveCountIntensity;
 
-	public RecordingChild(ResourceManager resourceManager)
+	public RecordingChild(ResourceManager resourceManager, RecordingLogic recordingLogic)
 	{
 		_resourceManager = resourceManager;
+		_recordingLogic = recordingLogic;
 	}
 
 	public void Update(float delta)
@@ -150,7 +152,7 @@ public sealed class RecordingChild
 
 	public void Render()
 	{
-		bool renderRecordingValues = Root.GameMemoryService.IsInitialized && !RecordingLogic.ShowUploadResponse && (GameStatus)Root.GameMemoryService.MainBlock.Status is not (GameStatus.Title or GameStatus.Menu or GameStatus.Lobby);
+		bool renderRecordingValues = Root.GameMemoryService.IsInitialized && !_recordingLogic.ShowUploadResponse && (GameStatus)Root.GameMemoryService.MainBlock.Status is not (GameStatus.Title or GameStatus.Menu or GameStatus.Lobby);
 		if (renderRecordingValues)
 		{
 			RenderRecordingValues();

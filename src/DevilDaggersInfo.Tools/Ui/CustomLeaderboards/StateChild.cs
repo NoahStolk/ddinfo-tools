@@ -4,9 +4,16 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-public static class StateChild
+public sealed class StateChild
 {
-	public static void Render()
+	private readonly RecordingLogic _recordingLogic;
+
+	public StateChild(RecordingLogic recordingLogic)
+	{
+		_recordingLogic = recordingLogic;
+	}
+
+	public void Render()
 	{
 		if (ImGui.BeginTable("StateTable", 2, ImGuiTableFlags.None, new Vector2(288, 80)))
 		{
@@ -21,7 +28,7 @@ public static class StateChild
 			ImGui.TableNextColumn();
 			ImGui.Text("State");
 			ImGui.TableNextColumn();
-			ImGui.Text(RecordingLogic.RecordingStateType.ToDisplayString());
+			ImGui.Text(_recordingLogic.RecordingStateType.ToDisplayString());
 			ImGui.TableNextRow();
 
 			ImGui.TableNextColumn();
@@ -33,7 +40,7 @@ public static class StateChild
 			ImGui.TableNextColumn();
 			ImGui.Text("Last upload");
 			ImGui.TableNextColumn();
-			ImGui.Text(DateTimeUtils.FormatTimeAgo(RecordingLogic.LastSubmission));
+			ImGui.Text(DateTimeUtils.FormatTimeAgo(_recordingLogic.LastSubmission));
 			ImGui.TableNextRow();
 
 			ImGui.EndTable();
