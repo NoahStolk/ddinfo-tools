@@ -93,7 +93,7 @@ public static class CustomLeaderboardResultsWindow
 			LevelUpTime3 = Random.Shared.NextSingle() * 500 + 10,
 			LevelUpTime4 = Random.Shared.NextSingle() * 500 + 10,
 		};
-		AddResult(new(GetResponse() with { FirstScore = firstScore }, true, "TestSet", (byte)Random.Shared.Next(0, 17), DateTime.Now));
+		AddResult(new(GetResponse() with { FirstScore = firstScore }, true, "TestSet", (byte)Random.Shared.Next(0, 17), DateTime.UtcNow));
 	}
 
 	private static void AddRandomHighscore()
@@ -116,7 +116,7 @@ public static class CustomLeaderboardResultsWindow
 			LevelUpTime3State = new(Random.Shared.NextSingle() * 500 + 10, Random.Shared.NextSingle() * 500 + 10),
 			LevelUpTime4State = new(Random.Shared.NextSingle() * 500 + 10, Random.Shared.NextSingle() * 500 + 10),
 		};
-		AddResult(new(GetResponse() with { Highscore = highscore }, true, "TestSet", (byte)Random.Shared.Next(0, 17), DateTime.Now));
+		AddResult(new(GetResponse() with { Highscore = highscore }, true, "TestSet", (byte)Random.Shared.Next(0, 17), DateTime.UtcNow));
 	}
 
 	private static void AddRandomNoHighscore()
@@ -138,7 +138,7 @@ public static class CustomLeaderboardResultsWindow
 			LevelUpTime3State = new(Random.Shared.NextSingle() * 500 + 10, Random.Shared.NextSingle() * 500 + 10),
 			LevelUpTime4State = new(Random.Shared.NextSingle() * 500 + 10, Random.Shared.NextSingle() * 500 + 10),
 		};
-		AddResult(new(GetResponse() with { NoHighscore = noHighscore }, true, "TestSet", (byte)Random.Shared.Next(0, 17), DateTime.Now));
+		AddResult(new(GetResponse() with { NoHighscore = noHighscore }, true, "TestSet", (byte)Random.Shared.Next(0, 17), DateTime.UtcNow));
 	}
 
 	private static void AddRandomRejection()
@@ -150,7 +150,7 @@ public static class CustomLeaderboardResultsWindow
 			CriteriaOperator = CustomLeaderboardCriteriaOperator.GreaterThan,
 			ExpectedValue = 6,
 		};
-		AddResult(new(GetResponse() with { CriteriaRejection = rejection }, true, "TestSet", (byte)Random.Shared.Next(0, 17), DateTime.Now));
+		AddResult(new(GetResponse() with { CriteriaRejection = rejection }, true, "TestSet", (byte)Random.Shared.Next(0, 17), DateTime.UtcNow));
 	}
 #endif
 }
