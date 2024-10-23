@@ -2,24 +2,30 @@ using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Scenes;
 using ImGuiNET;
+using Silk.NET.OpenGL;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-public static class SpawnsetEditor3DWindow
+public sealed class SpawnsetEditor3DWindow
 {
-	private static readonly FramebufferData _framebufferData = new();
+	private readonly FramebufferData _framebufferData;
 
-	private static ArenaScene? _arenaScene;
+	private ArenaScene? _arenaScene;
 
-	public static ArenaScene ArenaScene => _arenaScene ?? throw new InvalidOperationException("Scenes are not initialized.");
+	public SpawnsetEditor3DWindow(GL gl)
+	{
+		_framebufferData = new FramebufferData(gl);
+	}
 
-	public static void InitializeScene()
+	public ArenaScene ArenaScene => _arenaScene ?? throw new InvalidOperationException("Scenes are not initialized.");
+
+	public void InitializeScene()
 	{
 		_arenaScene = new ArenaScene(static () => FileStates.Spawnset.Object, false, true);
 	}
 
-	public static void Render(float delta)
+	public void Render(float delta)
 	{
 		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize / 2);
 		if (ImGui.Begin("3D Arena Editor"))
