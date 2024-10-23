@@ -13,15 +13,17 @@ public sealed class GameInstallationValidator
 	private readonly ResourceManager _resourceManager;
 	private readonly MainScene _mainScene;
 	private readonly SpawnsetEditor3DWindow _spawnsetEditor3DWindow;
+	private readonly CustomLeaderboards3DWindow _customLeaderboards3DWindow;
 
 	private bool _contentInitialized;
 
-	public GameInstallationValidator(UiLayoutManager uiLayoutManager, ResourceManager resourceManager, MainScene mainScene, SpawnsetEditor3DWindow spawnsetEditor3DWindow)
+	public GameInstallationValidator(UiLayoutManager uiLayoutManager, ResourceManager resourceManager, MainScene mainScene, SpawnsetEditor3DWindow spawnsetEditor3DWindow, CustomLeaderboards3DWindow customLeaderboards3DWindow)
 	{
 		_uiLayoutManager = uiLayoutManager;
 		_resourceManager = resourceManager;
 		_mainScene = mainScene;
 		_spawnsetEditor3DWindow = spawnsetEditor3DWindow;
+		_customLeaderboards3DWindow = customLeaderboards3DWindow;
 	}
 
 	public string? Error { get; private set; }
@@ -63,7 +65,7 @@ public sealed class GameInstallationValidator
 		// Initialize scenes.
 		_mainScene.Initialize();
 		_spawnsetEditor3DWindow.InitializeScene();
-		CustomLeaderboards3DWindow.InitializeScene();
+		_customLeaderboards3DWindow.InitializeScene();
 		ReplayEditor3DWindow.InitializeScene();
 
 		// Initialize file watchers.
