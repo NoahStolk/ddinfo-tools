@@ -3,6 +3,7 @@ using DevilDaggersInfo.Tools.Engine.Loaders;
 using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.AssetEditor;
 using DevilDaggersInfo.Tools.Ui.Config;
+using DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.Ui.Practice.Main;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor;
@@ -61,6 +62,9 @@ namespace DevilDaggersInfo.Tools;
 
 // Practice
 [Register<PracticeWindow>(Scope.SingleInstance)]
+
+// Custom Leaderboards
+[Register<CustomLeaderboards3DWindow>(Scope.SingleInstance)]
 #pragma warning disable S3881 // "IDisposable" should be implemented correctly. The source generator already implements IDisposable correctly.
 public sealed partial class Container : IContainer<Application>
 #pragma warning restore S3881
