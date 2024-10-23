@@ -17,8 +17,10 @@ public sealed class ResourceManager
 		_shaderLoader = shaderLoader;
 		_textureLoader = textureLoader;
 
-#if DEBUG
+#if DEBUG && WINDOWS
 		const string? ddInfoToolsContentRootDirectory = @"..\..\..\Content";
+#elif DEBUG && LINUX
+		const string? ddInfoToolsContentRootDirectory = @"./src/DevilDaggersInfo.Tools/Content/";
 #else
 		const string? ddInfoToolsContentRootDirectory = null;
 #endif
