@@ -55,10 +55,17 @@ public sealed class ResourceManager
 			TileHitboxModel: GetModelContent(ddInfoToolsContent, "TileHitbox"));
 	}
 
+	// TODO: Rewrite to dictionary.
+
 	/// <summary>
 	/// Holds the internal resources, such as shaders and icons.
 	/// </summary>
 	public InternalResources InternalResources { get; }
+
+	// TODO:
+	// 1. Rewrite to dictionary.
+	// 2. Make non-nullable.
+	// 3. When uninitialized, return some default resource.
 
 	/// <summary>
 	/// Holds the game resources, such as the tile texture and dagger mesh.
