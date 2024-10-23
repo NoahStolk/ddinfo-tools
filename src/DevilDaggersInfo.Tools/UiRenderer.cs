@@ -35,6 +35,9 @@ public sealed class UiRenderer
 
 	private readonly PracticeWindow _practiceWindow;
 
+	private readonly CustomLeaderboardsWindow _customLeaderboardsWindow;
+	private readonly CustomLeaderboards3DWindow _customLeaderboards3DWindow;
+
 	private bool _showDemoWindow;
 	private bool _showAbout;
 	private bool _showUpdate;
@@ -51,7 +54,9 @@ public sealed class UiRenderer
 		SpawnsetEditorMenu spawnsetEditorMenu,
 		ArenaWindow arenaWindow,
 		SpawnsetEditor3DWindow spawnsetEditor3DWindow,
-		PracticeWindow practiceWindow)
+		PracticeWindow practiceWindow,
+		CustomLeaderboardsWindow customLeaderboardsWindow,
+		CustomLeaderboards3DWindow customLeaderboards3DWindow)
 	{
 		_uiLayoutManager = uiLayoutManager;
 		_configLayout = configLayout;
@@ -65,6 +70,8 @@ public sealed class UiRenderer
 		_arenaWindow = arenaWindow;
 		_spawnsetEditor3DWindow = spawnsetEditor3DWindow;
 		_practiceWindow = practiceWindow;
+		_customLeaderboardsWindow = customLeaderboardsWindow;
+		_customLeaderboards3DWindow = customLeaderboards3DWindow;
 	}
 
 	public void ShowDemoWindow()
@@ -118,10 +125,10 @@ public sealed class UiRenderer
 				LeaderboardReplayBrowser.Render();
 				break;
 			case LayoutType.CustomLeaderboards:
-				CustomLeaderboardsWindow.Update(delta);
-				CustomLeaderboardsWindow.Render();
+				_customLeaderboardsWindow.Update(delta);
+				_customLeaderboardsWindow.Render();
 				CustomLeaderboardResultsWindow.Render();
-				CustomLeaderboards3DWindow.Render(delta);
+				_customLeaderboards3DWindow.Render(delta);
 				break;
 			case LayoutType.Practice:
 				_practiceWindow.Render();

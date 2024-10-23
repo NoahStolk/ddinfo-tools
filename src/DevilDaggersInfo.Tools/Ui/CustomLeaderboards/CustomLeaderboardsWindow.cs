@@ -5,13 +5,24 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-public static class CustomLeaderboardsWindow
+public sealed class CustomLeaderboardsWindow
 {
-	private static float _recordingTimer;
+	private readonly LeaderboardListChild _leaderboardListChild;
+	private readonly LeaderboardListViewChild _leaderboardListViewChild;
+	private readonly CustomLeaderboards3DWindow _customLeaderboards3DWindow;
 
-	public static void Update(float delta)
+	private float _recordingTimer;
+
+	public CustomLeaderboardsWindow(LeaderboardListChild leaderboardListChild, LeaderboardListViewChild leaderboardListViewChild, CustomLeaderboards3DWindow customLeaderboards3DWindow)
 	{
-		CustomLeaderboards3DWindow.Update(delta);
+		_leaderboardListChild = leaderboardListChild;
+		_leaderboardListViewChild = leaderboardListViewChild;
+		_customLeaderboards3DWindow = customLeaderboards3DWindow;
+	}
+
+	public void Update(float delta)
+	{
+		_customLeaderboards3DWindow.Update(delta);
 		RecordingChild.Update(delta);
 
 		_recordingTimer += delta;
@@ -25,7 +36,7 @@ public static class CustomLeaderboardsWindow
 		RecordingLogic.Handle();
 	}
 
-	public static void Render()
+	public void Render()
 	{
 #if DEBUG
 		if (ImGui.Begin("Timestamps"))
@@ -54,8 +65,8 @@ public static class CustomLeaderboardsWindow
 
 			if (ImGui.BeginChild("RightRow", new Vector2(0, 464)))
 			{
-				LeaderboardListChild.Render();
-				LeaderboardListViewChild.Render();
+				_leaderboardListChild.Render();
+				_leaderboardListViewChild.Render();
 			}
 
 			ImGui.EndChild();

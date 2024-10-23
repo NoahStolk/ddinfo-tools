@@ -15,6 +15,7 @@ using DevilDaggersInfo.Tools.NativeInterface.Services.Linux;
 namespace DevilDaggersInfo.Tools;
 
 // TODO: Remove.
+[Obsolete]
 public static class Root
 {
 	private static readonly InvalidOperationException _notInitializedException = new("Root component is not initialized.");

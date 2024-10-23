@@ -9,56 +9,63 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 
-public static class LeaderboardListChild
+public sealed class LeaderboardListChild
 {
 	public const int PageSize = 20;
 
-	private static readonly List<GetCustomLeaderboardAllowedCategory> _categories = [];
-	private static string[] _categoryNames = [];
+	private readonly List<GetCustomLeaderboardAllowedCategory> _categories = [];
+	private string[] _categoryNames = [];
 
-	private static int _categoryIndex;
-	private static bool _featuredOnly;
-	private static string _spawnsetFilter = string.Empty;
-	private static string _authorFilter = string.Empty;
+	private int _categoryIndex;
+	private bool _featuredOnly;
+	private string _spawnsetFilter = string.Empty;
+	private string _authorFilter = string.Empty;
 
-	private static readonly List<GetCustomLeaderboardForOverview> _customLeaderboards = [];
+	private readonly List<GetCustomLeaderboardForOverview> _customLeaderboards = [];
 
-	private static CustomLeaderboardRankSorting RankSorting => _categories.Count > _categoryIndex ? _categories[_categoryIndex].RankSorting : CustomLeaderboardRankSorting.TimeDesc;
-	private static SpawnsetGameMode GameMode => _categories.Count > _categoryIndex ? _categories[_categoryIndex].GameMode : SpawnsetGameMode.Survival;
+	private readonly ResourceManager _resourceManager;
 
-	public static bool IsLoading { get; private set; }
-	public static int PageIndex { get; private set; }
-	public static List<GetCustomLeaderboardForOverview> PagedCustomLeaderboards { get; private set; } = [];
-	public static LeaderboardListSorting Sorting { get; set; }
-	public static bool SortAscending { get; set; }
+	public LeaderboardListChild(ResourceManager resourceManager)
+	{
+		_resourceManager = resourceManager;
+	}
 
-	public static int TotalEntries => GetCount();
-	public static int TotalPages => (int)Math.Ceiling(TotalEntries / (float)PageSize);
-	private static int MaxPageIndex => Math.Max(0, TotalPages - 1);
+	private CustomLeaderboardRankSorting RankSorting => _categories.Count > _categoryIndex ? _categories[_categoryIndex].RankSorting : CustomLeaderboardRankSorting.TimeDesc;
+	private SpawnsetGameMode GameMode => _categories.Count > _categoryIndex ? _categories[_categoryIndex].GameMode : SpawnsetGameMode.Survival;
 
-	public static void Render()
+	public bool IsLoading { get; private set; }
+	public int PageIndex { get; private set; }
+	public List<GetCustomLeaderboardForOverview> PagedCustomLeaderboards { get; private set; } = [];
+	public LeaderboardListSorting Sorting { get; set; }
+	public bool SortAscending { get; set; }
+
+	public int TotalEntries => GetCount();
+	public int TotalPages => (int)Math.Ceiling(TotalEntries / (float)PageSize);
+	private int MaxPageIndex => Math.Max(0, TotalPages - 1);
+
+	public void Render()
 	{
 		Vector2 iconSize = new(16);
 
 		if (ImGui.BeginChild("LeaderboardList"))
 		{
-			if (ImGuiImage.ImageButton("Reload", Root.InternalResources.ReloadTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("Reload", _resourceManager.InternalResources.ReloadTexture.Id, iconSize))
 				LoadAll();
 
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Begin", Root.InternalResources.ArrowStartTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("Begin", _resourceManager.InternalResources.ArrowStartTexture.Id, iconSize))
 				SetPageIndex(0);
 
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Previous", Root.InternalResources.ArrowLeftTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("Previous", _resourceManager.InternalResources.ArrowLeftTexture.Id, iconSize))
 				SetPageIndex(PageIndex - 1);
 
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Next", Root.InternalResources.ArrowRightTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("Next", _resourceManager.InternalResources.ArrowRightTexture.Id, iconSize))
 				SetPageIndex(PageIndex + 1);
 
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("End", _resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
 				SetPageIndex(TotalPages - 1);
 
 			ImGui.SameLine();
@@ -97,7 +104,7 @@ public static class LeaderboardListChild
 		ImGui.EndChild();
 	}
 
-	public static void LoadAll()
+	public void LoadAll()
 	{
 		AsyncHandler.Run(
 			getCategoriesResult =>
@@ -176,19 +183,19 @@ public static class LeaderboardListChild
 			() => FetchCustomLeaderboards.HandleAsync(UserCache.Model.PlayerId));
 	}
 
-	private static void SetPageIndex(int pageIndex)
+	private void SetPageIndex(int pageIndex)
 	{
 		PageIndex = pageIndex;
 		ClampPageIndex();
 		UpdatePagedCustomLeaderboards();
 	}
 
-	private static void ClampPageIndex()
+	private void ClampPageIndex()
 	{
 		PageIndex = Math.Clamp(PageIndex, 0, Math.Max(0, MaxPageIndex));
 	}
 
-	public static void UpdatePagedCustomLeaderboards()
+	public void UpdatePagedCustomLeaderboards()
 	{
 		IEnumerable<GetCustomLeaderboardForOverview> sorted = Sorting switch
 		{
@@ -227,7 +234,7 @@ public static class LeaderboardListChild
 		}
 	}
 
-	private static int GetCount()
+	private int GetCount()
 	{
 		int count = 0;
 		for (int i = 0; i < _customLeaderboards.Count; i++)
@@ -239,7 +246,7 @@ public static class LeaderboardListChild
 		return count;
 	}
 
-	private static bool ApplyOverviewFilter(GetCustomLeaderboardForOverview cl)
+	private bool ApplyOverviewFilter(GetCustomLeaderboardForOverview cl)
 	{
 		return
 			cl.RankSorting == RankSorting &&
