@@ -10,8 +10,7 @@ public static class CustomLeaderboardCriteriaTypeExtensions
 {
 	public static Texture GetTexture(this ResourceManager resourceManager, CustomLeaderboardCriteriaType type)
 	{
-		if (resourceManager.GameResources == null)
-			throw new UnreachableException("Game resources not loaded while attempting to retrieve criteria texture for custom leaderboards.");
+		Debug.Assert(resourceManager.GameResources != null, $"{nameof(resourceManager.GameResources)} is null, which should never happen in this UI.");
 
 		return type switch
 		{
