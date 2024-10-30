@@ -31,7 +31,17 @@ public class GameMemoryService
 
 	public void Initialize(long ddstatsMarkerOffset)
 	{
-		_process = _nativeMemoryService.GetDevilDaggersProcess();
+		if (_process == null)
+		{
+			_process = _nativeMemoryService.GetDevilDaggersProcess();
+		}
+		else
+		{
+			_process.Refresh();
+			if (_process.HasExited)
+				_process = null;
+		}
+
 		if (_process?.MainModule == null)
 		{
 			IsInitialized = false;
