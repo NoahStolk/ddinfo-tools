@@ -24,12 +24,13 @@ public static class ContentManager
 		if (!Directory.Exists(UserSettings.Model.DevilDaggersInstallationDirectory))
 			throw new InvalidGameInstallationException("Installation directory does not exist.");
 
-		// TODO: Use correct Linux file name for executable.
 #if WINDOWS
 		string ddExe = Path.Combine(UserSettings.Model.DevilDaggersInstallationDirectory, "dd.exe");
+#elif LINUX
+		string ddExe = Path.Combine(UserSettings.Model.DevilDaggersInstallationDirectory, "devildaggers");
+#endif
 		if (!File.Exists(ddExe))
 			throw new InvalidGameInstallationException("Executable does not exist.");
-#endif
 
 		if (!File.Exists(UserSettings.DdSurvivalPath))
 			throw new InvalidGameInstallationException("File 'dd/survival' does not exist.");
