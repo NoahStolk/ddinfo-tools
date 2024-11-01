@@ -13,7 +13,7 @@ public static class InputValuesChild
 {
 	public static void Render()
 	{
-		if (ImGui.BeginChild("InputValues", new Vector2(380, 200), ImGuiChildFlags.Border))
+		if (ImGui.BeginChild("InputValues", new Vector2(400, 200), ImGuiChildFlags.Border))
 		{
 			ImGui.SeparatorText("Inputs");
 
@@ -33,7 +33,7 @@ public static class InputValuesChild
 			ImGui.Spacing();
 			ImGuiImage.Image(gemOrHomingTexture.Id, new Vector2(16), tintColor);
 			ImGui.SameLine();
-			ImGui.InputInt("Added gems", ref PracticeLogic.State.AdditionalGems, 1);
+			ImGui.InputInt((PracticeLogic.State.HandLevel is HandLevel.Level2)? Inline.Span($"Added gems({PracticeLogic.State.AdditionalGems+10})") : "Added gems", ref PracticeLogic.State.AdditionalGems, 1);
 
 			ImGui.Spacing();
 			ImGuiImage.Image(Root.GameResources.IconMaskStopwatchTexture.Id, new Vector2(16));
