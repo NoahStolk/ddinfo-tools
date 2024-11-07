@@ -8,7 +8,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 
-public static class ArenaWindow
+public sealed class ArenaWindow
 {
 	public const int TileSize = 8;
 	private const int _halfTileSize = TileSize / 2;
@@ -16,21 +16,44 @@ public static class ArenaWindow
 
 	public static readonly Vector2 ArenaSize = new(TileSize * SpawnsetBinary.ArenaDimensionMax);
 
-	private static readonly ArenaPencilState _pencilState = new();
-	private static readonly ArenaLineState _lineState = new();
-	private static readonly ArenaRectangleState _rectangleState = new();
-	private static readonly ArenaEllipseState _ellipseState = new();
-	private static readonly ArenaBucketState _bucketState = new();
-	private static readonly ArenaDaggerState _daggerState = new();
+	private readonly SpawnsetEditor3DWindow _spawnsetEditor3DWindow;
 
-	private static float _currentSecond;
+	private readonly ArenaEditorControls _arenaEditorControls;
+	private readonly ArenaCanvas _arenaCanvas;
+	private readonly ArenaHeightButtons _arenaHeightButtons;
 
-	public static float CurrentSecond => _currentSecond;
+	private readonly ArenaPencilState _pencilState;
+	private readonly ArenaLineState _lineState;
+	private readonly ArenaRectangleState _rectangleState;
+	private readonly ArenaEllipseState _ellipseState;
+	private readonly ArenaBucketState _bucketState;
+	private readonly ArenaDaggerState _daggerState;
 
-	public static float SelectedHeight { get; set; }
-	public static ArenaTool ArenaTool { get; set; }
+	private float _currentSecond;
 
-	private static IArenaState GetActiveState()
+	// TODO: Don't inject other windows.
+	public ArenaWindow(SpawnsetEditor3DWindow spawnsetEditor3DWindow, ResourceManager resourceManager)
+	{
+		_spawnsetEditor3DWindow = spawnsetEditor3DWindow;
+
+		_arenaEditorControls = new ArenaEditorControls(resourceManager, this);
+		_arenaCanvas = new ArenaCanvas(resourceManager, this);
+		_arenaHeightButtons = new ArenaHeightButtons(this);
+
+		_pencilState = new ArenaPencilState(this);
+		_lineState = new ArenaLineState(this);
+		_rectangleState = new ArenaRectangleState(this);
+		_ellipseState = new ArenaEllipseState(this);
+		_bucketState = new ArenaBucketState(this);
+		_daggerState = new ArenaDaggerState(resourceManager);
+	}
+
+	public float CurrentSecond => _currentSecond;
+
+	public float SelectedHeight { get; set; }
+	public ArenaTool ArenaTool { get; set; }
+
+	private IArenaState GetActiveState()
 	{
 		return ArenaTool switch
 		{
@@ -44,7 +67,7 @@ public static class ArenaWindow
 		};
 	}
 
-	public static void Render()
+	public void Render()
 	{
 		if (ImGui.Begin("Topdown Arena Editor"))
 		{
@@ -63,7 +86,7 @@ public static class ArenaWindow
 				}
 
 				IArenaState activeState = GetActiveState();
-				ArenaCanvas.Render();
+				_arenaCanvas.Render();
 				activeState.Render(mousePosition);
 
 				// Capture mouse input when the mouse is over the canvas.
@@ -86,10 +109,10 @@ public static class ArenaWindow
 
 			ImGui.SliderFloat("Time", ref _currentSecond, 0, FileStates.Spawnset.Object.GetSliderMaxSeconds());
 
-			SpawnsetEditor3DWindow.ArenaScene.CurrentTick = (int)MathF.Round(_currentSecond * 60);
+			_spawnsetEditor3DWindow.ArenaScene.CurrentTick = (int)MathF.Round(_currentSecond * 60);
 
-			ArenaEditorControls.Render();
-			ArenaHeightButtons.Render();
+			_arenaEditorControls.Render();
+			_arenaHeightButtons.Render();
 		}
 
 		ImGui.EndChild();

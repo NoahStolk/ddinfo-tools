@@ -7,15 +7,28 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Main;
 
-public static class MainWindow
+public sealed class MainWindow
 {
-	private static readonly string _version = $"{AssemblyUtils.EntryAssemblyVersionString} (ALPHA)";
+	private readonly ResourceManager _resourceManager;
+	private readonly UiLayoutManager _uiLayoutManager;
+	private readonly FrameCounter _frameCounter;
+	private readonly LeaderboardListChild _leaderboardListChild;
 
-	private static Action? _hoveredButtonAction;
+	private readonly string _version = $"{AssemblyUtils.EntryAssemblyVersionString} (ALPHA)";
 
-	public static bool ShouldClose { get; private set; }
+	private Action? _hoveredButtonAction;
 
-	public static void Render()
+	public MainWindow(ResourceManager resourceManager, UiLayoutManager uiLayoutManager, FrameCounter frameCounter, LeaderboardListChild leaderboardListChild)
+	{
+		_resourceManager = resourceManager;
+		_uiLayoutManager = uiLayoutManager;
+		_frameCounter = frameCounter;
+		_leaderboardListChild = leaderboardListChild;
+	}
+
+	public bool ShouldClose { get; private set; }
+
+	public void Render()
 	{
 		Vector2 center = ImGui.GetMainViewport().GetCenter();
 		Vector2 windowSize = new(683, 768);
@@ -29,7 +42,7 @@ public static class MainWindow
 		{
 			ImGui.PushFont(Root.FontGoetheBold60);
 			const string title = "ddinfo tools";
-			ImGui.TextColored(Colors.TitleColor, title);
+			ImGui.TextColored(Colors.TitleColor(_frameCounter.TotalTime), title);
 			float textWidth = ImGui.CalcTextSize(title).X;
 			ImGui.PopFont();
 
@@ -38,16 +51,16 @@ public static class MainWindow
 			ImGui.Text("Developed by Noah Stolk");
 
 			ImGui.SetCursorPos(new Vector2(windowSize.X - 208, 8));
-			AppButton(Root.InternalResources.DownloadTexture, "Updates", UiRenderer.ShowUpdate);
+			AppButton(_resourceManager.InternalResources.DownloadTexture, "Updates", () => { }); // UiRenderer.ShowUpdate // TODO: Re-enable when UiRenderer is refactored.
 
 			ImGui.SameLine();
-			AppButton(Root.InternalResources.ConfigurationTexture, "Configuration", static () => UiRenderer.Layout = LayoutType.Config);
+			AppButton(_resourceManager.InternalResources.ConfigurationTexture, "Configuration", () => _uiLayoutManager.Layout = LayoutType.Config);
 
 			ImGui.SameLine();
-			AppButton(Root.InternalResources.InfoTexture, "About", UiRenderer.ShowAbout);
+			AppButton(_resourceManager.InternalResources.InfoTexture, "About", () => { }); // UiRenderer.ShowAbout // TODO: Re-enable when UiRenderer is refactored.
 
 			ImGui.SameLine();
-			AppButton(Root.InternalResources.CloseTexture, "Exit application", static () => ShouldClose = true);
+			AppButton(_resourceManager.InternalResources.CloseTexture, "Exit application", () => ShouldClose = true);
 
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 40);
 			if (ImGui.BeginChild("ToolButtons", mainButtonsSize))
@@ -68,35 +81,35 @@ public static class MainWindow
 					return primary.Desaturate(buttonColorDesaturation).Darken(0.2f) with { A = buttonAlpha };
 				}
 
-				static void GoToSpawnsetEditor()
+				void GoToSpawnsetEditor()
 				{
-					UiRenderer.Layout = LayoutType.SpawnsetEditor;
+					_uiLayoutManager.Layout = LayoutType.SpawnsetEditor;
 				}
 
-				static void GoToAssetEditor()
+				void GoToAssetEditor()
 				{
-					UiRenderer.Layout = LayoutType.AssetEditor;
+					_uiLayoutManager.Layout = LayoutType.AssetEditor;
 				}
 
-				static void GoToReplayEditor()
+				void GoToReplayEditor()
 				{
-					UiRenderer.Layout = LayoutType.ReplayEditor;
+					_uiLayoutManager.Layout = LayoutType.ReplayEditor;
 				}
 
-				static void GoToCustomLeaderboards()
+				void GoToCustomLeaderboards()
 				{
-					UiRenderer.Layout = LayoutType.CustomLeaderboards;
-					LeaderboardListChild.LoadAll();
+					_uiLayoutManager.Layout = LayoutType.CustomLeaderboards;
+					_leaderboardListChild.LoadAll();
 				}
 
-				static void GoToPractice()
+				void GoToPractice()
 				{
-					UiRenderer.Layout = LayoutType.Practice;
+					_uiLayoutManager.Layout = LayoutType.Practice;
 				}
 
-				static void GoToModManager()
+				void GoToModManager()
 				{
-					UiRenderer.Layout = LayoutType.ModManager;
+					_uiLayoutManager.Layout = LayoutType.ModManager;
 					ModsDirectoryLogic.LoadModsDirectory();
 				}
 			}

@@ -12,13 +12,15 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 
-public class UploadResult
+public sealed class UploadResult
 {
 	private const int _columnWidth = 120;
 	private const int _headerWidth = _columnWidth * 3;
 	private const int _indentation = 12;
 
 	private static readonly Vector2 _iconSize = new(16);
+
+	private readonly ResourceManager _resourceManager;
 
 	private readonly bool _isAscending;
 	private readonly string _spawnsetName;
@@ -30,7 +32,7 @@ public class UploadResult
 	private readonly GetUploadResponseNoHighscore? _noHighscore;
 	private readonly GetUploadResponseCriteriaRejection? _criteriaRejection;
 
-	public UploadResult(GetUploadResponse uploadResponse, bool isAscending, string spawnsetName, byte deathType, DateTime submittedAt)
+	public UploadResult(ResourceManager resourceManager, GetUploadResponse uploadResponse, bool isAscending, string spawnsetName, byte deathType, DateTime submittedAt)
 	{
 		if (uploadResponse.FirstScore != null)
 			_firstScore = uploadResponse.FirstScore;
@@ -43,6 +45,7 @@ public class UploadResult
 		else
 			throw new InvalidOperationException("Invalid upload response returned from server.");
 
+		_resourceManager = resourceManager;
 		_isAscending = isAscending;
 		_spawnsetName = spawnsetName;
 		_death = Deaths.GetDeathByType(GameConstants.CurrentVersion, deathType);
@@ -68,13 +71,15 @@ public class UploadResult
 
 	private void RenderFirstScore(GetUploadResponseFirstScore firstScore)
 	{
+		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen in this UI.");
+
 		if (!RenderHeader(Color.Aqua, "First score!"))
 			return;
 
 		ImGui.Indent(_indentation);
 
 		ImGui.Spacing();
-		ImGuiImage.Image(Root.InternalResources.IconEyeTexture.Id, _iconSize, Color.Orange);
+		ImGuiImage.Image(_resourceManager.InternalResources.IconEyeTexture.Id, _iconSize, Color.Orange);
 
 		if (ImGui.BeginTable("Player", 2))
 		{
@@ -91,7 +96,7 @@ public class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGuiImage.Image(Root.GameResources.IconMaskGemTexture.Id, _iconSize, Color.Red);
+		ImGuiImage.Image(_resourceManager.GameResources.IconMaskGemTexture.Id, _iconSize, Color.Red);
 
 		if (ImGui.BeginTable("Gems", 2))
 		{
@@ -106,7 +111,7 @@ public class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGuiImage.Image(Root.GameResources.IconMaskHomingTexture.Id, _iconSize);
+		ImGuiImage.Image(_resourceManager.GameResources.IconMaskHomingTexture.Id, _iconSize);
 
 		if (ImGui.BeginTable("Homing", 2))
 		{
@@ -119,7 +124,7 @@ public class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGuiImage.Image(Root.GameResources.IconMaskCrosshairTexture.Id, _iconSize, Color.Green);
+		ImGuiImage.Image(_resourceManager.GameResources.IconMaskCrosshairTexture.Id, _iconSize, Color.Green);
 
 		if (ImGui.BeginTable("Daggers", 2))
 		{
@@ -135,7 +140,7 @@ public class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGuiImage.Image(Root.GameResources.IconMaskSkullTexture.Id, _iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
+		ImGuiImage.Image(_resourceManager.GameResources.IconMaskSkullTexture.Id, _iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
 
 		if (ImGui.BeginTable("Enemies", 2))
 		{
@@ -254,7 +259,7 @@ public class UploadResult
 		return IsExpanded;
 	}
 
-	private static void AddStates(
+	private void AddStates(
 		bool isAscending,
 		GetScoreState<int>? rankState,
 		GetScoreState<double> timeState,
@@ -273,8 +278,10 @@ public class UploadResult
 		GetScoreState<int> daggersHitState,
 		Death? death)
 	{
+		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen in this UI.");
+
 		ImGui.Spacing();
-		ImGuiImage.Image(Root.InternalResources.IconEyeTexture.Id, _iconSize, Color.Orange);
+		ImGuiImage.Image(_resourceManager.InternalResources.IconEyeTexture.Id, _iconSize, Color.Orange);
 
 		if (ImGui.BeginTable("Player", 3))
 		{
@@ -292,7 +299,7 @@ public class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGuiImage.Image(Root.GameResources.IconMaskGemTexture.Id, _iconSize, Color.Red);
+		ImGuiImage.Image(_resourceManager.GameResources.IconMaskGemTexture.Id, _iconSize, Color.Red);
 
 		if (ImGui.BeginTable("Gems", 3))
 		{
@@ -307,7 +314,7 @@ public class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGuiImage.Image(Root.GameResources.IconMaskHomingTexture.Id, _iconSize);
+		ImGuiImage.Image(_resourceManager.GameResources.IconMaskHomingTexture.Id, _iconSize);
 
 		if (ImGui.BeginTable("Homing", 3))
 		{
@@ -320,7 +327,7 @@ public class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGuiImage.Image(Root.GameResources.IconMaskCrosshairTexture.Id, _iconSize, Color.Green);
+		ImGuiImage.Image(_resourceManager.GameResources.IconMaskCrosshairTexture.Id, _iconSize, Color.Green);
 
 		if (ImGui.BeginTable("Daggers", 3))
 		{
@@ -342,7 +349,7 @@ public class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGuiImage.Image(Root.GameResources.IconMaskSkullTexture.Id, _iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
+		ImGuiImage.Image(_resourceManager.GameResources.IconMaskSkullTexture.Id, _iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
 
 		if (ImGui.BeginTable("Enemies", 3))
 		{

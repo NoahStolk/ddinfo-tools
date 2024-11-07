@@ -1,5 +1,4 @@
-using DevilDaggersInfo.Tools.Engine;
-using DevilDaggersInfo.Tools.Ui.Config;
+using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.User.Settings;
 using ImGuiGlfw;
 using ImGuiNET;
@@ -9,127 +8,132 @@ using System.Runtime.InteropServices;
 
 namespace DevilDaggersInfo.Tools;
 
-public class Application
+public sealed unsafe class Application
 {
 	private const double _maxMainDelta = 0.25;
 	private const double _mainLoopLength = 1 / 300.0;
 
+	private readonly Glfw _glfw;
+	private readonly GL _gl;
+	private readonly WindowHandle* _window;
 	private readonly ImGuiController _imGuiController;
+	private readonly GlfwInput _glfwInput;
+	private readonly UiRenderer _uiRenderer;
+	private readonly Shortcuts _shortcuts;
+	private readonly MainWindow _mainWindow;
+	private readonly FrameCounter _frameCounter;
+
 	private readonly IntPtr _iconPtr;
 
-	private double _currentTime = Graphics.Glfw.GetTime();
+	private double _currentTime;
 	private double _frameTime;
 
-	private int _currentSecond;
-	private int _renders;
-
-	public unsafe Application(ImGuiController imGuiController)
+	public Application(
+		Glfw glfw,
+		GL gl,
+		WindowHandle* window,
+		ImGuiController imGuiController,
+		GlfwInput glfwInput,
+		ResourceManager resourceManager,
+		GameInstallationValidator gameInstallationValidator,
+		UiRenderer uiRenderer,
+		Shortcuts shortcuts,
+		MainWindow mainWindow,
+		FrameCounter frameCounter)
 	{
+		_glfw = glfw;
+		_gl = gl;
+		_window = window;
 		_imGuiController = imGuiController;
+		_glfwInput = glfwInput;
+		_uiRenderer = uiRenderer;
+		_shortcuts = shortcuts;
+		_mainWindow = mainWindow;
+		_frameCounter = frameCounter;
 
-		Root.InternalResources = InternalResources.Create();
+		_currentTime = glfw.GetTime();
 
-		ConfigLayout.ValidateInstallation();
+		gameInstallationValidator.ValidateInstallation();
 
-		int iconWidth = Root.InternalResources.ApplicationIconTexture.Width;
-		int iconHeight = Root.InternalResources.ApplicationIconTexture.Height;
+		int iconWidth = resourceManager.InternalResources.ApplicationIconTexture.Width;
+		int iconHeight = resourceManager.InternalResources.ApplicationIconTexture.Height;
 
 		_iconPtr = Marshal.AllocHGlobal(iconWidth * iconHeight * 4);
-		Marshal.Copy(Root.InternalResources.ApplicationIconTexture.Pixels, 0, _iconPtr, iconWidth * iconHeight * 4);
+		Marshal.Copy(resourceManager.InternalResources.ApplicationIconTexture.Pixels, 0, _iconPtr, iconWidth * iconHeight * 4);
 		Image image = new()
 		{
 			Width = iconWidth,
 			Height = iconHeight,
 			Pixels = (byte*)_iconPtr,
 		};
-		Graphics.Glfw.SetWindowIcon(Graphics.Window, 1, &image);
+		_glfw.SetWindowIcon(_window, 1, &image);
 
 		Root.Application = this;
 	}
 
-	public int Fps { get; private set; }
-	public float FrameTime => (float)_frameTime;
-	public float TotalTime { get; private set; }
-
-	public PerSecondCounter RenderCounter { get; } = new();
-	public float LastRenderDelta { get; private set; }
-
-	public unsafe void Run()
+	public void Run()
 	{
-		while (!Graphics.Glfw.WindowShouldClose(Graphics.Window))
+		while (!_glfw.WindowShouldClose(_window))
 		{
-			double expectedNextFrame = Graphics.Glfw.GetTime() + _mainLoopLength;
+			double expectedNextFrame = _glfw.GetTime() + _mainLoopLength;
 			Main();
 
-			while (Graphics.Glfw.GetTime() < expectedNextFrame)
+			while (_glfw.GetTime() < expectedNextFrame)
 				Thread.Yield();
 		}
 
 		_imGuiController.Destroy();
-		Graphics.Gl.Dispose();
-		Graphics.Glfw.Terminate();
+		_gl.Dispose();
+		_glfw.Terminate();
 
 		Marshal.FreeHGlobal(_iconPtr);
 	}
 
-	private unsafe void Main()
+	private void Main()
 	{
-		double mainStartTime = Graphics.Glfw.GetTime();
-		if (_currentSecond != (int)mainStartTime)
-		{
-			Fps = _renders;
-			_renders = 0;
-			_currentSecond = (int)mainStartTime;
-		}
+		double mainStartTime = _glfw.GetTime();
 
 		_frameTime = mainStartTime - _currentTime;
 		if (_frameTime > _maxMainDelta)
 			_frameTime = _maxMainDelta;
 
-		TotalTime += FrameTime;
-
 		_currentTime = mainStartTime;
 
-		Graphics.Glfw.PollEvents();
+		_glfw.PollEvents();
 
 		Render();
-		_renders++;
 
-		Graphics.Glfw.SwapBuffers(Graphics.Window);
+		_glfw.SwapBuffers(_window);
 	}
 
 	private void Render()
 	{
 		float deltaF = (float)_frameTime;
 
-		Root.Application.RenderCounter.Increment();
-		Root.Application.LastRenderDelta = deltaF;
+		_frameCounter.Increment(deltaF);
 
 		_imGuiController.Update(deltaF);
 
 		ImGui.DockSpaceOverViewport(0, null, ImGuiDockNodeFlags.PassthruCentralNode);
 
-		Graphics.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+		_gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-		UiRenderer.Render(deltaF);
+		_uiRenderer.Render(deltaF);
 
 		ImGuiIOPtr io = ImGui.GetIO();
 
-		Shortcuts.Handle(io, Input.GlfwInput);
+		_shortcuts.Handle(io, _glfwInput);
 
 		if (io.WantSaveIniSettings)
 			UserSettings.SaveImGuiIni(io);
 
 		_imGuiController.Render();
 
-		Input.GlfwInput.EndFrame();
+		_glfwInput.EndFrame();
 
-		if (Ui.Main.MainWindow.ShouldClose)
+		if (_mainWindow.ShouldClose)
 		{
-			unsafe
-			{
-				Graphics.Glfw.SetWindowShouldClose(Graphics.Window, true);
-			}
+			_glfw.SetWindowShouldClose(_window, true);
 		}
 	}
 }

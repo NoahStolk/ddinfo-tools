@@ -5,14 +5,33 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-public static class CustomLeaderboardsWindow
+public sealed class CustomLeaderboardsWindow
 {
-	private static float _recordingTimer;
+	private readonly LeaderboardListChild _leaderboardListChild;
+	private readonly LeaderboardListViewChild _leaderboardListViewChild;
+	private readonly CustomLeaderboards3DWindow _customLeaderboards3DWindow;
+	private readonly RecordingChild _recordingChild;
+	private readonly LeaderboardChild _leaderboardChild;
+	private readonly RecordingLogic _recordingLogic;
+	private readonly StateChild _stateChild;
 
-	public static void Update(float delta)
+	private float _recordingTimer;
+
+	public CustomLeaderboardsWindow(LeaderboardListChild leaderboardListChild, LeaderboardListViewChild leaderboardListViewChild, CustomLeaderboards3DWindow customLeaderboards3DWindow, RecordingChild recordingChild, LeaderboardChild leaderboardChild, RecordingLogic recordingLogic, StateChild stateChild)
 	{
-		CustomLeaderboards3DWindow.Update(delta);
-		RecordingChild.Update(delta);
+		_leaderboardListChild = leaderboardListChild;
+		_leaderboardListViewChild = leaderboardListViewChild;
+		_customLeaderboards3DWindow = customLeaderboards3DWindow;
+		_recordingChild = recordingChild;
+		_leaderboardChild = leaderboardChild;
+		_recordingLogic = recordingLogic;
+		_stateChild = stateChild;
+	}
+
+	public void Update(float delta)
+	{
+		_customLeaderboards3DWindow.Update(delta);
+		_recordingChild.Update(delta);
 
 		_recordingTimer += delta;
 		if (_recordingTimer < 0.12f)
@@ -22,15 +41,15 @@ public static class CustomLeaderboardsWindow
 		if (!GameMemoryServiceWrapper.Scan())
 			return;
 
-		RecordingLogic.Handle();
+		_recordingLogic.Handle();
 	}
 
-	public static void Render()
+	public void Render()
 	{
 #if DEBUG
 		if (ImGui.Begin("Timestamps"))
 		{
-			foreach (DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards.AddUploadRequestTimestamp timestamp in RecordingLogic.Timestamps)
+			foreach (DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards.AddUploadRequestTimestamp timestamp in _recordingLogic.Timestamps)
 			{
 				ImGui.Text(Inline.Span($"{new DateTime(timestamp.Timestamp, DateTimeKind.Utc)} {timestamp.TimeInSeconds}"));
 			}
@@ -44,8 +63,8 @@ public static class CustomLeaderboardsWindow
 		{
 			if (ImGui.BeginChild("LeftRow", new Vector2(288, 464)))
 			{
-				StateChild.Render();
-				RecordingChild.Render();
+				_stateChild.Render();
+				_recordingChild.Render();
 			}
 
 			ImGui.EndChild();
@@ -54,13 +73,13 @@ public static class CustomLeaderboardsWindow
 
 			if (ImGui.BeginChild("RightRow", new Vector2(0, 464)))
 			{
-				LeaderboardListChild.Render();
-				LeaderboardListViewChild.Render();
+				_leaderboardListChild.Render();
+				_leaderboardListViewChild.Render();
 			}
 
 			ImGui.EndChild();
 
-			LeaderboardChild.Render();
+			_leaderboardChild.Render();
 		}
 
 		ImGui.End();

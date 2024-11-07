@@ -16,8 +16,6 @@ public static class Colors
 	private const byte _alphaFrameBackgroundActive = 171;
 	private const byte _alphaSeparatorHovered = 199;
 
-	public static Vector4 TitleColor => Vector4.Lerp(new Vector4(1, 0.2f, 0.05f, 1), new Vector4(1, 0.5f, 0.2f, 1), MathF.Sin(Root.Application.TotalTime));
-
 	public static ColorConfiguration Main { get; } = new()
 	{
 		Primary = new Color(250, 66, 66, 255),
@@ -73,6 +71,11 @@ public static class Colors
 		Tertiary = new Color(74, 74, 41, 255),
 		Quaternary = new Color(102, 102, 26, 255),
 	};
+
+	public static Vector4 TitleColor(float totalTime)
+	{
+		return Vector4.Lerp(new Vector4(1, 0.2f, 0.05f, 1), new Vector4(1, 0.5f, 0.2f, 1), MathF.Sin(totalTime));
+	}
 
 	public static void SetColors(ColorConfiguration colorConfiguration)
 	{

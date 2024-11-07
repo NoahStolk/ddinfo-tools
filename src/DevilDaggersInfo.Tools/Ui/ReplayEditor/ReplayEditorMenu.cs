@@ -8,9 +8,20 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-public static class ReplayEditorMenu
+public sealed class ReplayEditorMenu
 {
-	public static void Render()
+	private readonly UiLayoutManager _uiLayoutManager;
+	private readonly ReplayEditorWindow _replayEditorWindow;
+	private readonly ReplayEditor3DWindow _replayEditor3DWindow;
+
+	public ReplayEditorMenu(UiLayoutManager uiLayoutManager, ReplayEditorWindow replayEditorWindow, ReplayEditor3DWindow replayEditor3DWindow)
+	{
+		_uiLayoutManager = uiLayoutManager;
+		_replayEditorWindow = replayEditorWindow;
+		_replayEditor3DWindow = replayEditor3DWindow;
+	}
+
+	public void Render()
 	{
 		if (ImGui.BeginMainMenuBar())
 		{
@@ -24,7 +35,7 @@ public static class ReplayEditorMenu
 		}
 	}
 
-	private static void RenderFileMenu()
+	private void RenderFileMenu()
 	{
 		if (ImGui.MenuItem("New", "Ctrl+N"))
 			NewReplay();
@@ -52,19 +63,19 @@ public static class ReplayEditorMenu
 			Close();
 	}
 
-	public static void NewReplay()
+	public void NewReplay()
 	{
 		FileStates.Replay.Update(EditorReplayModel.CreateDefault());
 		FileStates.Replay.SetFile(null, null);
-		ReplayEditorWindow.Reset();
+		_replayEditorWindow.Reset();
 	}
 
-	public static void OpenReplay()
+	public void OpenReplay()
 	{
 		NativeFileDialog.CreateOpenFileDialog(OpenReplayCallback, PathUtils.FileExtensionReplay);
 	}
 
-	private static void OpenReplayCallback(string? filePath)
+	private void OpenReplayCallback(string? filePath)
 	{
 		if (filePath == null)
 			return;
@@ -92,10 +103,10 @@ public static class ReplayEditorMenu
 			return;
 		}
 
-		ReplayEditorWindow.Reset();
+		_replayEditorWindow.Reset();
 
 		ReplaySimulation replaySimulation = ReplaySimulationBuilder.Build(replayBinary);
-		ReplayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
+		_replayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
 	}
 
 	public static void OpenLeaderboardReplay()
@@ -103,7 +114,7 @@ public static class ReplayEditorMenu
 		LeaderboardReplayBrowser.Show();
 	}
 
-	public static void OpenReplayFromGameMemory()
+	public void OpenReplayFromGameMemory()
 	{
 		if (!GameMemoryServiceWrapper.Scan() || !Root.GameMemoryService.IsInitialized)
 		{
@@ -123,10 +134,10 @@ public static class ReplayEditorMenu
 			return;
 		}
 
-		ReplayEditorWindow.Reset();
+		_replayEditorWindow.Reset();
 
 		ReplaySimulation replaySimulation = ReplaySimulationBuilder.Build(replayBinary);
-		ReplayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
+		_replayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
 	}
 
 	public static void SaveReplay()
@@ -154,8 +165,8 @@ public static class ReplayEditorMenu
 		Root.GameMemoryService.WriteReplayToMemory(FileStates.Replay.Object.ToLocalReplay().Compile());
 	}
 
-	public static void Close()
+	public void Close()
 	{
-		UiRenderer.Layout = LayoutType.Main;
+		_uiLayoutManager.Layout = LayoutType.Main;
 	}
 }

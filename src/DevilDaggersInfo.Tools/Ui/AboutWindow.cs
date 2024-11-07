@@ -5,11 +5,18 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-public static class AboutWindow
+public sealed class AboutWindow
 {
-	private static readonly string _versionInfo = $"Version {AssemblyUtils.EntryAssemblyVersionString} (build time: {AssemblyUtils.EntryAssemblyBuildTime})";
+	private readonly FrameCounter _frameCounter;
 
-	public static void Render(ref bool show)
+	private readonly string _versionInfo = $"Version {AssemblyUtils.EntryAssemblyVersionString} (build time: {AssemblyUtils.EntryAssemblyBuildTime})";
+
+	public AboutWindow(FrameCounter frameCounter)
+	{
+		_frameCounter = frameCounter;
+	}
+
+	public void Render(ref bool show)
 	{
 		if (!show)
 			return;
@@ -70,11 +77,11 @@ public static class AboutWindow
 		ImGui.Text(usage);
 	}
 
-	private static void RenderFooter()
+	private void RenderFooter()
 	{
 		ImGui.SetCursorPos(new Vector2(8, ImGui.GetWindowHeight() - 72));
 
-		ImGui.TextColored(Colors.TitleColor, "© DevilDaggers.info 2017-2024");
+		ImGui.TextColored(Colors.TitleColor(_frameCounter.TotalTime), "© DevilDaggers.info 2017-2024");
 
 		ImGuiExt.Hyperlink("https://devildaggers.com/", "Devil Daggers");
 		ImGui.SameLine();

@@ -2,29 +2,47 @@ using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Scenes;
+using ImGuiGlfw;
 using ImGuiNET;
+using Silk.NET.GLFW;
+using Silk.NET.OpenGL;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-public static class CustomLeaderboards3DWindow
+public sealed unsafe class CustomLeaderboards3DWindow
 {
-	private static readonly FramebufferData _framebufferData = new();
+	private readonly Glfw _glfw;
+	private readonly GL _gl;
+	private readonly WindowHandle* _window;
+	private readonly GlfwInput _glfwInput;
+	private readonly ResourceManager _resourceManager;
+	private readonly FramebufferData _framebufferData;
 
-	private static float _time;
+	private float _time;
 
-	private static SpawnsetBinary _spawnset = SpawnsetBinary.CreateDefault();
+	private SpawnsetBinary _spawnset = SpawnsetBinary.CreateDefault();
 
-	private static ArenaScene? _arenaScene;
+	private ArenaScene? _arenaScene;
 
-	private static ArenaScene ArenaScene => _arenaScene ?? throw new InvalidOperationException("Scenes are not initialized.");
-
-	public static void InitializeScene()
+	public CustomLeaderboards3DWindow(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ResourceManager resourceManager)
 	{
-		_arenaScene = new ArenaScene(static () => _spawnset, false, false);
+		_glfw = glfw;
+		_gl = gl;
+		_window = window;
+		_glfwInput = glfwInput;
+		_resourceManager = resourceManager;
+		_framebufferData = new FramebufferData(gl);
 	}
 
-	public static void LoadReplay(ReplayBinary<LocalReplayBinaryHeader> replayBinary)
+	private ArenaScene ArenaScene => _arenaScene ?? throw new InvalidOperationException("Scenes are not initialized.");
+
+	public void InitializeScene()
+	{
+		_arenaScene = new ArenaScene(_glfw, _gl, _window, _glfwInput, _resourceManager, () => _spawnset, false, false);
+	}
+
+	public void LoadReplay(ReplayBinary<LocalReplayBinaryHeader> replayBinary)
 	{
 		_time = 0;
 		_spawnset = replayBinary.Header.Spawnset;
@@ -33,7 +51,7 @@ public static class CustomLeaderboards3DWindow
 		ArenaScene.SetPlayerMovement(replaySimulation);
 	}
 
-	public static void Update(float delta)
+	public void Update(float delta)
 	{
 		if (_time < ArenaScene.ReplaySimulation?.InputSnapshots.Count / 60f)
 			_time += delta;
@@ -41,7 +59,7 @@ public static class CustomLeaderboards3DWindow
 		ArenaScene.CurrentTick = (int)MathF.Round(_time * 60);
 	}
 
-	public static void Render(float delta)
+	public void Render(float delta)
 	{
 		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize / 2);
 		if (ImGui.Begin("3D Replay Viewer"))

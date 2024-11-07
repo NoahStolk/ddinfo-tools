@@ -10,9 +10,9 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-public static class NoFarmTemplatesChild
+public sealed class NoFarmTemplatesChild
 {
-	private static readonly List<NoFarmTemplate> _noFarmTemplates =
+	private readonly List<NoFarmTemplate> _noFarmTemplates =
 	[
 		new NoFarmTemplate("First Spider I & Squid II", EnemiesV3_2.Squid2.Color.ToEngineColor(), HandLevel.Level1, 8, 39),
 		new NoFarmTemplate("First Centipede", EnemiesV3_2.Centipede.Color.ToEngineColor(), HandLevel.Level2, 25, 114),
@@ -23,27 +23,27 @@ public static class NoFarmTemplatesChild
 		new NoFarmTemplate("Post Orb", EnemiesV3_2.TheOrb.Color.ToEngineColor(), HandLevel.Level4, 129, 397),
 	];
 
-	public static void Render()
+	public void Render(Vector2 templateContainerSize, Vector2 templateListSize, float templateWidth)
 	{
-		if (ImGui.BeginChild("NoFarmTemplates", PracticeWindow.TemplateContainerSize, ImGuiChildFlags.Border))
+		if (ImGui.BeginChild("NoFarmTemplates", templateContainerSize, ImGuiChildFlags.Border))
 		{
 			ImGui.Text("No farm templates");
 
-			if (ImGui.BeginChild("NoFarmTemplateDescription", PracticeWindow.TemplateListSize with { Y = PracticeWindow.TemplateDescriptionHeight }))
+			if (ImGui.BeginChild("NoFarmTemplateDescription", templateListSize with { Y = PracticeWindow.TemplateDescriptionHeight }))
 			{
-				ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + PracticeWindow.TemplateWidth);
+				ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + templateWidth);
 				ImGui.Text("The amount of gems is based on how many gems you would have at that point, without farming, without losing gems, and without any homing usage.");
 				ImGui.PopTextWrapPos();
 			}
 
 			ImGui.EndChild();
 
-			if (ImGui.BeginChild("NoFarmTemplateList", PracticeWindow.TemplateListSize))
+			if (ImGui.BeginChild("NoFarmTemplateList", templateListSize))
 			{
 				for (int i = 0; i < _noFarmTemplates.Count; i++)
 				{
 					NoFarmTemplate template = _noFarmTemplates[i];
-					RenderNoFarmTemplate(template);
+					RenderNoFarmTemplate(template, templateWidth);
 				}
 			}
 
@@ -53,7 +53,7 @@ public static class NoFarmTemplatesChild
 		ImGui.EndChild();
 	}
 
-	private static void RenderNoFarmTemplate(NoFarmTemplate noFarmTemplate)
+	private static void RenderNoFarmTemplate(NoFarmTemplate noFarmTemplate, float templateWidth)
 	{
 		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(PracticeLogic.IsActive(noFarmTemplate));
 
@@ -62,7 +62,7 @@ public static class NoFarmTemplatesChild
 		PracticeWindow.GetGemsOrHomingText(noFarmTemplate.HandLevel, noFarmTemplate.AdditionalGems, gemsOrHomingText, out Color gemColor);
 		gemsOrHomingText = gemsOrHomingText.SliceUntilNull(bufferLength);
 
-		Vector2 buttonSize = new(PracticeWindow.TemplateWidth, 48);
+		Vector2 buttonSize = new(templateWidth, 48);
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
 		if (ImGui.BeginChild(noFarmTemplate.Name, buttonSize, ImGuiChildFlags.Border))
 		{

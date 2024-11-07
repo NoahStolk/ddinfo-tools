@@ -9,9 +9,22 @@ using Silk.NET.GLFW;
 
 namespace DevilDaggersInfo.Tools;
 
-public static class Shortcuts
+public sealed class Shortcuts
 {
-	public static void Handle(ImGuiIOPtr io, GlfwInput glfwInput)
+	private readonly UiLayoutManager _uiLayoutManager;
+	private readonly SpawnsetEditorMenu _spawnsetEditorMenu;
+	private readonly AssetEditorMenu _assetEditorMenu;
+	private readonly ReplayEditorMenu _replayEditorMenu;
+
+	public Shortcuts(UiLayoutManager uiLayoutManager, SpawnsetEditorMenu spawnsetEditorMenu, AssetEditorMenu assetEditorMenu, ReplayEditorMenu replayEditorMenu)
+	{
+		_uiLayoutManager = uiLayoutManager;
+		_spawnsetEditorMenu = spawnsetEditorMenu;
+		_assetEditorMenu = assetEditorMenu;
+		_replayEditorMenu = replayEditorMenu;
+	}
+
+	public void Handle(ImGuiIOPtr io, GlfwInput glfwInput)
 	{
 		if (io.WantTextInput)
 			return;
@@ -24,17 +37,17 @@ public static class Shortcuts
 
 		if (glfwInput.IsKeyPressed(Keys.Escape))
 		{
-			switch (UiRenderer.Layout)
+			switch (_uiLayoutManager.Layout)
 			{
-				case LayoutType.SpawnsetEditor: SpawnsetEditorMenu.Close(); break;
-				case LayoutType.AssetEditor: AssetEditorMenu.Close(); break;
-				case LayoutType.ReplayEditor: ReplayEditorMenu.Close(); break;
+				case LayoutType.SpawnsetEditor: _spawnsetEditorMenu.Close(); break;
+				case LayoutType.AssetEditor: _assetEditorMenu.Close(); break;
+				case LayoutType.ReplayEditor: _replayEditorMenu.Close(); break;
 				case LayoutType.Config: break;
-				default: UiRenderer.Layout = LayoutType.Main; break;
+				default: _uiLayoutManager.Layout = LayoutType.Main; break;
 			}
 		}
 
-		switch (UiRenderer.Layout)
+		switch (_uiLayoutManager.Layout)
 		{
 			case LayoutType.SpawnsetEditor: HandleSpawnsetEditorShortcuts(glfwInput, ctrl, shift); break;
 			case LayoutType.AssetEditor: HandleAssetEditorShortcuts(glfwInput, ctrl, shift); break;
@@ -92,22 +105,22 @@ public static class Shortcuts
 		}
 	}
 
-	private static void HandleReplayEditorShortcuts(GlfwInput glfwInput, bool ctrl, bool shift)
+	private void HandleReplayEditorShortcuts(GlfwInput glfwInput, bool ctrl, bool shift)
 	{
 		if (ctrl)
 		{
 			if (!shift)
 			{
 				if (glfwInput.IsKeyPressed(Keys.N))
-					ReplayEditorMenu.NewReplay();
+					_replayEditorMenu.NewReplay();
 				else if (glfwInput.IsKeyPressed(Keys.O))
-					ReplayEditorMenu.OpenReplay();
+					_replayEditorMenu.OpenReplay();
 				else if (glfwInput.IsKeyPressed(Keys.S))
 					ReplayEditorMenu.SaveReplay();
 				else if (glfwInput.IsKeyPressed(Keys.I))
 					ReplayEditorMenu.InjectReplay();
 				else if (glfwInput.IsKeyPressed(Keys.G))
-					ReplayEditorMenu.OpenReplayFromGameMemory();
+					_replayEditorMenu.OpenReplayFromGameMemory();
 			}
 			else
 			{
