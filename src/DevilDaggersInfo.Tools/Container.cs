@@ -117,6 +117,8 @@ public sealed partial class Container : IContainer<Application>
 		// TODO: Inject UserCache.
 		ImGuiController imGuiController = new(gl, glfwInput, UserCache.Model.WindowWidth, UserCache.Model.WindowHeight);
 
+		Colors.SetColors(Colors.Main);
+
 		ImGuiIOPtr io = ImGui.GetIO();
 
 		// Load imgui.ini.
