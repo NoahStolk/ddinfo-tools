@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Tools;
-using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
 using StrongInject;
@@ -8,8 +7,6 @@ AppDomain.CurrentDomain.UnhandledException += (_, args) => Root.Log.Fatal(args.E
 
 UserSettings.Load();
 UserCache.Load();
-
-Colors.SetColors(Colors.Main);
 
 // TODO: Fix this:
 // Always invoke this in case of incorrect cache.
