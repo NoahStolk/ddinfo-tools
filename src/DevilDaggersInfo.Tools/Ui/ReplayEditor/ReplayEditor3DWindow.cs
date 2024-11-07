@@ -3,31 +3,37 @@ using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Scenes;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using ImGuiNET;
+using Silk.NET.OpenGL;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-public static class ReplayEditor3DWindow
+public sealed class ReplayEditor3DWindow
 {
-	private static readonly FramebufferData _framebufferData = new();
+	private readonly FramebufferData _framebufferData;
 
-	private static float _time;
+	private float _time;
 
-	private static ArenaScene? _arenaScene;
+	private ArenaScene? _arenaScene;
 
-	public static ArenaScene ArenaScene => _arenaScene ?? throw new InvalidOperationException("Scenes are not initialized.");
+	public ReplayEditor3DWindow(GL gl)
+	{
+		_framebufferData = new FramebufferData(gl);
+	}
 
-	public static void InitializeScene()
+	public ArenaScene ArenaScene => _arenaScene ?? throw new InvalidOperationException("Scenes are not initialized.");
+
+	public void InitializeScene()
 	{
 		_arenaScene = new ArenaScene(static () => FileStates.Replay.Object.Spawnset, false, false);
 	}
 
-	public static void Reset()
+	public void Reset()
 	{
 		_time = 0;
 	}
 
-	public static void Update(float delta)
+	public void Update(float delta)
 	{
 		if (_time < FileStates.Replay.Object.Time)
 			_time += delta;
@@ -35,7 +41,7 @@ public static class ReplayEditor3DWindow
 		ArenaScene.CurrentTick = TimeUtils.TimeToTick(_time, 0);
 	}
 
-	public static void Render(float delta)
+	public void Render(float delta)
 	{
 		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize / 2);
 		if (ImGui.Begin("3D Replay Viewer"))

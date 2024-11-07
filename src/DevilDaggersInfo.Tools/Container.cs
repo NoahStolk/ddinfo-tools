@@ -9,6 +9,7 @@ using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.Ui.Practice.Main;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 using DevilDaggersInfo.Tools.User.Cache;
@@ -74,6 +75,13 @@ namespace DevilDaggersInfo.Tools;
 [Register<LeaderboardChild>(Scope.SingleInstance)]
 [Register<RecordingLogic>(Scope.SingleInstance)]
 [Register<StateChild>(Scope.SingleInstance)]
+
+// Replay Editor
+[Register<ReplayEventsViewerChild>(Scope.SingleInstance)]
+[Register<ReplayEditorWindow>(Scope.SingleInstance)]
+[Register<ReplayEntitiesChild>(Scope.SingleInstance)]
+[Register<ReplayInputsChild>(Scope.SingleInstance)]
+[Register<ReplayEditor3DWindow>(Scope.SingleInstance)]
 #pragma warning disable S3881 // "IDisposable" should be implemented correctly. The source generator already implements IDisposable correctly.
 public sealed partial class Container : IContainer<Application>
 #pragma warning restore S3881

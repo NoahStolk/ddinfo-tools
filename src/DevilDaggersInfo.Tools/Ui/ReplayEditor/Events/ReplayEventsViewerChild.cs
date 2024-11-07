@@ -11,20 +11,27 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 
-public static class ReplayEventsViewerChild
+public sealed class ReplayEventsViewerChild
 {
-	private static readonly Dictionary<EventType, bool> _eventTypeEnabled = Enum.GetValues<EventType>().ToDictionary(et => et, _ => true);
+	private readonly Dictionary<EventType, bool> _eventTypeEnabled = Enum.GetValues<EventType>().ToDictionary(et => et, _ => true);
 
-	private static int _startIndex;
-	private static int _targetIndex;
+	private readonly ResourceManager _resourceManager;
 
-	public static void Reset()
+	private int _startIndex;
+	private int _targetIndex;
+
+	public ReplayEventsViewerChild(ResourceManager resourceManager)
+	{
+		_resourceManager = resourceManager;
+	}
+
+	public void Reset()
 	{
 		_startIndex = 0;
 		_targetIndex = 0;
 	}
 
-	private static void ToggleAll(bool enabled)
+	private void ToggleAll(bool enabled)
 	{
 		for (int i = 0; i < EnumUtils.EventTypes.Count; i++)
 		{
@@ -33,7 +40,7 @@ public static class ReplayEventsViewerChild
 		}
 	}
 
-	public static void Render(EditorReplayModel replay)
+	public void Render(EditorReplayModel replay)
 	{
 		const int maxEvents = 60;
 		const int height = 216;
@@ -48,16 +55,16 @@ public static class ReplayEventsViewerChild
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
 
 				Vector2 iconSize = new(16);
-				if (ImGuiImage.ImageButton("Start", Root.InternalResources.ArrowStartTexture.Id, iconSize))
+				if (ImGuiImage.ImageButton("Start", _resourceManager.InternalResources.ArrowStartTexture.Id, iconSize))
 					_startIndex = 0;
 				ImGui.SameLine();
-				if (ImGuiImage.ImageButton("Back", Root.InternalResources.ArrowLeftTexture.Id, iconSize))
+				if (ImGuiImage.ImageButton("Back", _resourceManager.InternalResources.ArrowLeftTexture.Id, iconSize))
 					_startIndex = Math.Max(0, _startIndex - maxEvents);
 				ImGui.SameLine();
-				if (ImGuiImage.ImageButton("Forward", Root.InternalResources.ArrowRightTexture.Id, iconSize))
+				if (ImGuiImage.ImageButton("Forward", _resourceManager.InternalResources.ArrowRightTexture.Id, iconSize))
 					_startIndex = Math.Min(replay.Cache.Events.Count - maxEvents, _startIndex + maxEvents);
 				ImGui.SameLine();
-				if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Id, iconSize))
+				if (ImGuiImage.ImageButton("End", _resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
 					_startIndex = replay.Cache.Events.Count - maxEvents;
 
 				ImGui.SameLine();
@@ -134,7 +141,7 @@ public static class ReplayEventsViewerChild
 		ImGui.EndChild(); // ReplayEventsChild
 	}
 
-	private static void RenderEventsTable(EditorReplayModel replay, int maxTicks)
+	private void RenderEventsTable(EditorReplayModel replay, int maxTicks)
 	{
 		if (!ImGui.BeginTable("ReplayEventsTable", 4, ImGuiTableFlags.BordersInnerH))
 			return;
