@@ -1,8 +1,8 @@
-using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Intersections;
 using DevilDaggersInfo.Tools.Engine.Maths;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.User.Settings;
+using ImGuiGlfw;
 using ImGuiNET;
 using Silk.NET.GLFW;
 using Silk.NET.Maths;
@@ -10,12 +10,17 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
-public class Camera
+public unsafe class Camera
 {
 	private const MouseButton _lookButton = MouseButton.Right;
 	private const float _friction = 20;
 
+	private readonly Glfw _glfw;
+	private readonly GlfwInput _glfwInput;
+	private readonly WindowHandle* _window;
 	private readonly bool _isMenuCamera;
+
+	private float _totalTime;
 
 	private Quaternion _rotationState = Quaternion.Identity;
 
@@ -27,8 +32,11 @@ public class Camera
 	private int _windowWidth;
 	private int _windowHeight;
 
-	public Camera(bool isMenuCamera)
+	public Camera(Glfw glfw, GlfwInput glfwInput, WindowHandle* window, bool isMenuCamera)
 	{
+		_glfw = glfw;
+		_glfwInput = glfwInput;
+		_window = window;
 		_isMenuCamera = isMenuCamera;
 	}
 
@@ -43,7 +51,8 @@ public class Camera
 	{
 		if (_isMenuCamera)
 		{
-			float time = Root.Application.TotalTime * 0.7f;
+			_totalTime += delta;
+			float time = _totalTime * 0.7f;
 			Position = new Vector3(MathF.Sin(time) * 5, 6, MathF.Cos(time) * 5);
 			_rotationState = Quaternion.CreateFromRotationMatrix(SetRotationFromDirectionalVector(new Vector3(0, 4, 0) - Position));
 			return;
@@ -117,22 +126,22 @@ public class Camera
 		_speed.Z = Math.Clamp(_speed.Z, -1, 1);
 	}
 
-	private unsafe void HandleMouse()
+	private void HandleMouse()
 	{
-		if (Input.GlfwInput.IsMouseButtonReleased(_lookButton))
+		if (_glfwInput.IsMouseButtonReleased(_lookButton))
 		{
 			_lockedMousePosition = null;
-			Graphics.Glfw.SetInputMode(Graphics.Window, CursorStateAttribute.Cursor, CursorModeValue.CursorNormal);
+			_glfw.SetInputMode(_window, CursorStateAttribute.Cursor, CursorModeValue.CursorNormal);
 		}
 
-		if (Input.GlfwInput.IsMouseButtonPressed(_lookButton))
+		if (_glfwInput.IsMouseButtonPressed(_lookButton))
 		{
-			_lockedMousePosition = FloorToVector2Int32(Input.GlfwInput.CursorPosition);
-			Graphics.Glfw.SetInputMode(Graphics.Window, CursorStateAttribute.Cursor, CursorModeValue.CursorHidden);
+			_lockedMousePosition = FloorToVector2Int32(_glfwInput.CursorPosition);
+			_glfw.SetInputMode(_window, CursorStateAttribute.Cursor, CursorModeValue.CursorHidden);
 		}
 
-		Vector2D<int> mousePosition = FloorToVector2Int32(Input.GlfwInput.CursorPosition);
-		if (!Input.GlfwInput.IsMouseButtonDown(_lookButton) || !_lockedMousePosition.HasValue || mousePosition == _lockedMousePosition)
+		Vector2D<int> mousePosition = FloorToVector2Int32(_glfwInput.CursorPosition);
+		if (!_glfwInput.IsMouseButtonDown(_lookButton) || !_lockedMousePosition.HasValue || mousePosition == _lockedMousePosition)
 			return;
 
 		float lookSpeed = UserSettings.Model.LookSpeed;
@@ -144,7 +153,7 @@ public class Camera
 		_pitch = Math.Clamp(_pitch, MathUtils.ToRadians(-89.9f), MathUtils.ToRadians(89.9f));
 		_rotationState = Quaternion.CreateFromYawPitchRoll(_yaw, -_pitch, 0);
 
-		Graphics.Glfw.SetCursorPos(Graphics.Window, _lockedMousePosition.Value.X, _lockedMousePosition.Value.Y);
+		_glfw.SetCursorPos(_window, _lockedMousePosition.Value.X, _lockedMousePosition.Value.Y);
 	}
 
 	public void PreRender(int windowWidth, int windowHeight)
@@ -191,7 +200,7 @@ public class Camera
 		float aspectRatio = _windowWidth / (float)_windowHeight;
 
 		// Remap so (0, 0) is the center of the window and the edges are at -0.5 and +0.5.
-		Vector2 mousePosition = Input.GlfwInput.CursorPosition - FramebufferOffset;
+		Vector2 mousePosition = _glfwInput.CursorPosition - FramebufferOffset;
 		Vector2 relative = -new Vector2(mousePosition.X / _windowWidth - 0.5f, mousePosition.Y / _windowHeight - 0.5f);
 
 		// Angle in radians from the view axis to the top plane of the view pyramid.

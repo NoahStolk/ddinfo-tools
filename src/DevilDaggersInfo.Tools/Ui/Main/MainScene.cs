@@ -1,26 +1,35 @@
 using DevilDaggersInfo.Core.Spawnset;
-using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Scenes;
 using DevilDaggersInfo.Tools.User.Cache;
+using ImGuiGlfw;
+using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools.Ui.Main;
 
-public sealed class MainScene
+public sealed unsafe class MainScene
 {
+	private readonly Glfw _glfw;
 	private readonly GL _gl;
+	private readonly WindowHandle* _window;
+	private readonly GlfwInput _glfwInput;
+	private readonly ResourceManager _resourceManager;
 	private readonly SpawnsetBinary _mainMenuSpawnset = SpawnsetBinary.CreateDefault();
 
 	private ArenaScene? _mainMenuScene;
 
-	public MainScene(GL gl)
+	public MainScene(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ResourceManager resourceManager)
 	{
+		_glfw = glfw;
 		_gl = gl;
+		_window = window;
+		_glfwInput = glfwInput;
+		_resourceManager = resourceManager;
 	}
 
 	public void Initialize()
 	{
-		_mainMenuScene = new ArenaScene(() => _mainMenuSpawnset, true, false);
+		_mainMenuScene = new ArenaScene(_glfw, _gl, _window, _glfwInput, _resourceManager, () => _mainMenuSpawnset, true, false);
 		_mainMenuScene.AddSkull4();
 	}
 

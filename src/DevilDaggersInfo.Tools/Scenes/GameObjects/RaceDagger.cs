@@ -1,6 +1,4 @@
 using DevilDaggersInfo.Core.Spawnset;
-using DevilDaggersInfo.Tools.Engine;
-using DevilDaggersInfo.Tools.Extensions;
 using Silk.NET.OpenGL;
 using System.Numerics;
 
@@ -10,29 +8,29 @@ public class RaceDagger
 {
 	private const float _yOffset = 4;
 
-	private static uint _vao;
-
 	private static readonly Vector3 _hiddenPosition = new(-1000, -1000, -1000);
 
 	private readonly Quaternion _meshRotationStart;
 
-	private Vector3 _meshPosition;
-	private Quaternion _meshRotation;
-
 	public RaceDagger()
 	{
-		_meshPosition = default;
-		_meshRotation = Quaternion.CreateFromAxisAngle(Vector3.UnitX, MathF.PI * 0.5f);
+		MeshPosition = default;
+		MeshRotation = Quaternion.CreateFromAxisAngle(Vector3.UnitX, MathF.PI * 0.5f);
 
-		_meshRotationStart = _meshRotation;
+		_meshRotationStart = MeshRotation;
 	}
 
-	public static void InitializeRendering()
+	public static uint Vao { get; private set; }
+
+	public Vector3 MeshPosition { get; private set; }
+	public Quaternion MeshRotation { get; private set; }
+
+	public static void InitializeRendering(GL gl)
 	{
-		if (_vao != 0)
+		if (Vao != 0)
 			throw new InvalidOperationException("Race dagger is already initialized.");
 
-		_vao = MeshShaderUtils.CreateVao(ContentManager.Content.DaggerMesh);
+		Vao = MeshShaderUtils.CreateVao(gl, ContentManager.Content.DaggerMesh);
 	}
 
 	public void Update(SpawnsetBinary spawnset, int currentTick)
@@ -45,19 +43,7 @@ public class RaceDagger
 			Y = raceDaggerHeight.Value + _yOffset,
 			Z = spawnset.RaceDaggerPosition.Y,
 		};
-		_meshPosition = basePosition + new Vector3(0, 0.15f + MathF.Sin(currentTime) * 0.15f, 0);
-		_meshRotation = _meshRotationStart * Quaternion.CreateFromAxisAngle(Vector3.UnitZ, currentTime);
-	}
-
-	public unsafe void Render()
-	{
-		Root.GameResources.DaggerSilverTexture.Bind();
-
-		Graphics.Gl.UniformMatrix4x4(Root.InternalResources.MeshShader.GetUniformLocation("model"), Matrix4x4.CreateScale(8) * Matrix4x4.CreateFromQuaternion(_meshRotation) * Matrix4x4.CreateTranslation(_meshPosition));
-
-		Graphics.Gl.BindVertexArray(_vao);
-		fixed (uint* i = &ContentManager.Content.DaggerMesh.Indices[0])
-			Graphics.Gl.DrawElements(PrimitiveType.Triangles, (uint)ContentManager.Content.DaggerMesh.Indices.Length, DrawElementsType.UnsignedInt, i);
-		Graphics.Gl.BindVertexArray(0);
+		MeshPosition = basePosition + new Vector3(0, 0.15f + MathF.Sin(currentTime) * 0.15f, 0);
+		MeshRotation = _meshRotationStart * Quaternion.CreateFromAxisAngle(Vector3.UnitZ, currentTime);
 	}
 }

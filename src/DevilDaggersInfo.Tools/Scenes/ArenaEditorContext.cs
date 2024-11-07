@@ -1,12 +1,14 @@
 // ReSharper disable ForCanBeConvertedToForeach
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
-using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Intersections;
 using DevilDaggersInfo.Tools.Scenes.GameObjects;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
+using ImGuiGlfw;
 using ImGuiNET;
 using Silk.NET.GLFW;
+using Silk.NET.OpenGL;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes;
@@ -14,14 +16,21 @@ namespace DevilDaggersInfo.Tools.Scenes;
 public sealed class ArenaEditorContext
 {
 	private readonly ArenaScene _arenaScene;
+	private readonly GlfwInput _glfwInput;
+	private readonly GL _gl;
+	private readonly ResourceManager _resourceManager;
+
 	private readonly List<(Tile Tile, float Distance)> _hitTiles = [];
 	private readonly List<Tile> _selectedTiles = [];
 
 	private Tile? _closestHitTile;
 
-	public ArenaEditorContext(ArenaScene arenaScene)
+	public ArenaEditorContext(ArenaScene arenaScene, GlfwInput glfwInput, GL gl, ResourceManager resourceManager)
 	{
 		_arenaScene = arenaScene;
+		_glfwInput = glfwInput;
+		_gl = gl;
+		_resourceManager = resourceManager;
 	}
 
 	public void Update(bool isActive, int currentTick)
@@ -29,7 +38,7 @@ public sealed class ArenaEditorContext
 		if (!isActive || currentTick > 0)
 			return;
 
-		bool ctrl = Input.GlfwInput.IsKeyDown(Keys.ControlLeft) || Input.GlfwInput.IsKeyDown(Keys.ControlRight);
+		bool ctrl = _glfwInput.IsKeyDown(Keys.ControlLeft) || _glfwInput.IsKeyDown(Keys.ControlRight);
 		if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
 		{
 			if (_closestHitTile is { Height: > -3 })
@@ -55,7 +64,7 @@ public sealed class ArenaEditorContext
 			_selectedTiles.Add(_closestHitTile);
 		}
 
-		float scroll = Input.GlfwInput.MouseWheelY;
+		float scroll = _glfwInput.MouseWheelY;
 		if (scroll is > -float.Epsilon and < float.Epsilon || _selectedTiles.Count == 0)
 			return;
 
@@ -74,6 +83,8 @@ public sealed class ArenaEditorContext
 
 	public void RenderTiles(bool renderEditorContext, Shader shader)
 	{
+		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen here.");
+
 		_hitTiles.Clear();
 		Ray ray = _arenaScene.Camera.ScreenToWorldPoint();
 		for (int i = 0; i < _arenaScene.Tiles.GetLength(0); i++)
@@ -92,7 +103,7 @@ public sealed class ArenaEditorContext
 		_closestHitTile = _hitTiles.Count == 0 ? null : _hitTiles.MinBy(ht => ht.Distance).Tile;
 
 		// Temporarily use LutScale to highlight the target tile.
-		Root.GameResources.TileTexture.Bind();
+		_resourceManager.GameResources.TileTexture.Bind();
 
 		for (int i = 0; i < _arenaScene.Tiles.GetLength(0); i++)
 		{
@@ -103,16 +114,16 @@ public sealed class ArenaEditorContext
 				bool highlight = highlightColor != default;
 
 				if (highlight)
-					Graphics.Gl.Uniform3(shader.GetUniformLocation("highlightColor"), highlightColor);
+					_gl.Uniform3(shader.GetUniformLocation("highlightColor"), highlightColor);
 
-				tile.RenderTop();
+				tile.RenderTop(_gl, _resourceManager);
 
 				if (highlight)
-					Graphics.Gl.Uniform3(shader.GetUniformLocation("highlightColor"), Vector3.Zero);
+					_gl.Uniform3(shader.GetUniformLocation("highlightColor"), Vector3.Zero);
 			}
 		}
 
-		Root.GameResources.PillarTexture.Bind();
+		_resourceManager.GameResources.PillarTexture.Bind();
 
 		for (int i = 0; i < _arenaScene.Tiles.GetLength(0); i++)
 		{
@@ -123,12 +134,12 @@ public sealed class ArenaEditorContext
 				bool highlight = highlightColor != default;
 
 				if (highlight)
-					Graphics.Gl.Uniform3(shader.GetUniformLocation("highlightColor"), highlightColor);
+					_gl.Uniform3(shader.GetUniformLocation("highlightColor"), highlightColor);
 
-				tile.RenderPillar();
+				tile.RenderPillar(_gl, _resourceManager);
 
 				if (highlight)
-					Graphics.Gl.Uniform3(shader.GetUniformLocation("highlightColor"), Vector3.Zero);
+					_gl.Uniform3(shader.GetUniformLocation("highlightColor"), Vector3.Zero);
 			}
 		}
 

@@ -2,22 +2,34 @@ using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Scenes;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
+using ImGuiGlfw;
 using ImGuiNET;
+using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-public sealed class ReplayEditor3DWindow
+public sealed unsafe class ReplayEditor3DWindow
 {
+	private readonly Glfw _glfw;
+	private readonly GL _gl;
+	private readonly WindowHandle* _window;
+	private readonly GlfwInput _glfwInput;
+	private readonly ResourceManager _resourceManager;
 	private readonly FramebufferData _framebufferData;
 
 	private float _time;
 
 	private ArenaScene? _arenaScene;
 
-	public ReplayEditor3DWindow(GL gl)
+	public ReplayEditor3DWindow(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ResourceManager resourceManager)
 	{
+		_glfw = glfw;
+		_gl = gl;
+		_window = window;
+		_glfwInput = glfwInput;
+		_resourceManager = resourceManager;
 		_framebufferData = new FramebufferData(gl);
 	}
 
@@ -25,7 +37,7 @@ public sealed class ReplayEditor3DWindow
 
 	public void InitializeScene()
 	{
-		_arenaScene = new ArenaScene(static () => FileStates.Replay.Object.Spawnset, false, false);
+		_arenaScene = new ArenaScene(_glfw, _gl, _window, _glfwInput, _resourceManager, static () => FileStates.Replay.Object.Spawnset, false, false);
 	}
 
 	public void Reset()
