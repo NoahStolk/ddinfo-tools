@@ -11,35 +11,42 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-public static class ReplayEntitiesChild
+public sealed class ReplayEntitiesChild
 {
-	private static int _startId;
-	private static bool _showEnemies = true;
-	private static bool _showDaggers = true;
-	private static EnemyHitLog? _enemyHitLog;
+	private readonly ResourceManager _resourceManager;
 
-	public static void Reset()
+	private int _startId;
+	private bool _showEnemies = true;
+	private bool _showDaggers = true;
+	private EnemyHitLog? _enemyHitLog;
+
+	public ReplayEntitiesChild(ResourceManager resourceManager)
+	{
+		_resourceManager = resourceManager;
+	}
+
+	public void Reset()
 	{
 		_enemyHitLog = null;
 	}
 
-	public static void Render(EditorReplayModel replay)
+	public void Render(EditorReplayModel replay)
 	{
 		if (ImGui.BeginChild("ReplayEntities", new Vector2(320, 0)))
 		{
 			const int maxIds = 1000;
 
 			Vector2 iconSize = new(16);
-			if (ImGuiImage.ImageButton("Start", Root.InternalResources.ArrowStartTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("Start", _resourceManager.InternalResources.ArrowStartTexture.Id, iconSize))
 				_startId = 0;
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Back", Root.InternalResources.ArrowLeftTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("Back", _resourceManager.InternalResources.ArrowLeftTexture.Id, iconSize))
 				_startId = Math.Max(0, _startId - maxIds);
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Forward", Root.InternalResources.ArrowRightTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("Forward", _resourceManager.InternalResources.ArrowRightTexture.Id, iconSize))
 				_startId = Math.Min(replay.Cache.Entities.Count - maxIds, _startId + maxIds);
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("End", Root.InternalResources.ArrowEndTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("End", _resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
 				_startId = replay.Cache.Entities.Count - maxIds;
 
 			_startId = Math.Max(0, Math.Min(_startId, replay.Cache.Entities.Count - maxIds));
@@ -97,7 +104,7 @@ public static class ReplayEntitiesChild
 		ImGui.EndChild(); // ReplayEnemyHitLog
 	}
 
-	private static void RenderEnemyHitLog(float startTime)
+	private void RenderEnemyHitLog(float startTime)
 	{
 		if (_enemyHitLog == null)
 		{

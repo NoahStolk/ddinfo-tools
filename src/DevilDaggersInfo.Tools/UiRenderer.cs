@@ -38,6 +38,8 @@ public sealed class UiRenderer
 	private readonly CustomLeaderboardsWindow _customLeaderboardsWindow;
 	private readonly CustomLeaderboards3DWindow _customLeaderboards3DWindow;
 
+	private readonly ReplayEditorWindow _replayEditorWindow;
+
 	private bool _showDemoWindow;
 	private bool _showAbout;
 	private bool _showUpdate;
@@ -56,7 +58,8 @@ public sealed class UiRenderer
 		SpawnsetEditor3DWindow spawnsetEditor3DWindow,
 		PracticeWindow practiceWindow,
 		CustomLeaderboardsWindow customLeaderboardsWindow,
-		CustomLeaderboards3DWindow customLeaderboards3DWindow)
+		CustomLeaderboards3DWindow customLeaderboards3DWindow,
+		ReplayEditorWindow replayEditorWindow)
 	{
 		_uiLayoutManager = uiLayoutManager;
 		_configLayout = configLayout;
@@ -72,6 +75,7 @@ public sealed class UiRenderer
 		_practiceWindow = practiceWindow;
 		_customLeaderboardsWindow = customLeaderboardsWindow;
 		_customLeaderboards3DWindow = customLeaderboards3DWindow;
+		_replayEditorWindow = replayEditorWindow;
 	}
 
 	public void ShowDemoWindow()
@@ -118,9 +122,9 @@ public sealed class UiRenderer
 				ExtractModWindow.Render();
 				break;
 			case LayoutType.ReplayEditor:
-				ReplayEditorWindow.Update(delta);
+				_replayEditorWindow.Update(delta);
 				_replayEditorMenu.Render();
-				ReplayEditorWindow.Render();
+				_replayEditorWindow.Render();
 				ReplayEditor3DWindow.Render(delta);
 				LeaderboardReplayBrowser.Render();
 				break;
