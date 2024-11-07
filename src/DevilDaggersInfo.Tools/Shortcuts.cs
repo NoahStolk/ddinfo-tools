@@ -105,22 +105,22 @@ public sealed class Shortcuts
 		}
 	}
 
-	private static void HandleReplayEditorShortcuts(GlfwInput glfwInput, bool ctrl, bool shift)
+	private void HandleReplayEditorShortcuts(GlfwInput glfwInput, bool ctrl, bool shift)
 	{
 		if (ctrl)
 		{
 			if (!shift)
 			{
 				if (glfwInput.IsKeyPressed(Keys.N))
-					ReplayEditorMenu.NewReplay();
+					_replayEditorMenu.NewReplay();
 				else if (glfwInput.IsKeyPressed(Keys.O))
-					ReplayEditorMenu.OpenReplay();
+					_replayEditorMenu.OpenReplay();
 				else if (glfwInput.IsKeyPressed(Keys.S))
 					ReplayEditorMenu.SaveReplay();
 				else if (glfwInput.IsKeyPressed(Keys.I))
 					ReplayEditorMenu.InjectReplay();
 				else if (glfwInput.IsKeyPressed(Keys.G))
-					ReplayEditorMenu.OpenReplayFromGameMemory();
+					_replayEditorMenu.OpenReplayFromGameMemory();
 			}
 			else
 			{

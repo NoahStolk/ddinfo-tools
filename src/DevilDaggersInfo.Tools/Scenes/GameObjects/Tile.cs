@@ -1,3 +1,4 @@
+using Silk.NET.OpenGL;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
@@ -14,7 +15,7 @@ public class Tile
 	private readonly TileMeshObject _pillar;
 	private readonly TileHitboxMeshObject _tileHitbox;
 
-	public Tile(float positionX, float positionZ, int arenaX, int arenaY, Camera camera)
+	public Tile(float positionX, float positionZ, int arenaX, int arenaY, Camera camera, ResourceManager resourceManager)
 	{
 		PositionX = positionX;
 		PositionZ = positionZ;
@@ -24,7 +25,7 @@ public class Tile
 
 		_top = new TileMeshObject(_vaoTile, ContentManager.Content.TileMesh, positionX, positionZ);
 		_pillar = new TileMeshObject(_vaoPillar, ContentManager.Content.PillarMesh, positionX, positionZ);
-		_tileHitbox = new TileHitboxMeshObject(_vaoHitbox, Root.InternalResources.TileHitboxModel.MainMesh, positionX, positionZ);
+		_tileHitbox = new TileHitboxMeshObject(_vaoHitbox, resourceManager.InternalResources.TileHitboxModel.MainMesh, positionX, positionZ);
 	}
 
 	public float PositionX { get; }
@@ -33,14 +34,14 @@ public class Tile
 	public int ArenaX { get; }
 	public int ArenaY { get; }
 
-	public static void InitializeRendering()
+	public static void InitializeRendering(GL gl, ResourceManager resourceManager)
 	{
 		if (_vaoTile != 0)
 			throw new InvalidOperationException("Skull 4 is already initialized.");
 
-		_vaoTile = MeshShaderUtils.CreateVao(ContentManager.Content.TileMesh);
-		_vaoPillar = MeshShaderUtils.CreateVao(ContentManager.Content.PillarMesh);
-		_vaoHitbox = MeshShaderUtils.CreateVao(Root.InternalResources.TileHitboxModel.MainMesh);
+		_vaoTile = MeshShaderUtils.CreateVao(gl, ContentManager.Content.TileMesh);
+		_vaoPillar = MeshShaderUtils.CreateVao(gl, ContentManager.Content.PillarMesh);
+		_vaoHitbox = MeshShaderUtils.CreateVao(gl, resourceManager.InternalResources.TileHitboxModel.MainMesh);
 	}
 
 	public float SquaredDistanceToCamera()
@@ -62,27 +63,27 @@ public class Tile
 		_tileHitbox.Height = Height - tileMeshHeight / 2 + tileHitboxOffset;
 	}
 
-	public void RenderTop()
+	public void RenderTop(GL gl, ResourceManager resourceManager)
 	{
 		if (_top.PositionY < ArenaScene.MinRenderTileHeight)
 			return;
 
-		_top.Render();
+		_top.Render(gl, resourceManager);
 	}
 
-	public void RenderPillar()
+	public void RenderPillar(GL gl, ResourceManager resourceManager)
 	{
 		if (_top.PositionY < ArenaScene.MinRenderTileHeight)
 			return;
 
-		_pillar.Render();
+		_pillar.Render(gl, resourceManager);
 	}
 
-	public void RenderHitbox()
+	public void RenderHitbox(GL gl, ResourceManager resourceManager)
 	{
 		if (_top.PositionY < ArenaScene.MinRenderTileHeight + 2)
 			return;
 
-		_tileHitbox.Render();
+		_tileHitbox.Render(gl, resourceManager);
 	}
 }

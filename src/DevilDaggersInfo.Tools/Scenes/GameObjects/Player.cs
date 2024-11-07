@@ -1,32 +1,34 @@
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
+using Silk.NET.OpenGL;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
-public class Player
+public sealed class Player
 {
 	private static readonly Quaternion _rotationOffset = Quaternion.CreateFromAxisAngle(Vector3.UnitX, MathF.PI / 2) * Quaternion.CreateFromAxisAngle(Vector3.UnitY, MathF.PI) * Quaternion.CreateFromAxisAngle(Vector3.UnitZ, MathF.PI);
 
 	private static uint _vao;
 
 	private readonly ReplaySimulation _movementTimeline;
-	private readonly PlayerMovement _mesh;
 
 	public Player(ReplaySimulation movementTimeline)
 	{
 		_movementTimeline = movementTimeline;
-		_mesh = new PlayerMovement(_vao, ContentManager.Content.Hand4Mesh, default, default);
+		Mesh = new PlayerMovement(_vao, ContentManager.Content.Hand4Mesh, default, default);
 		Light = new LightObject(6, default, new Vector3(1, 0.5f, 0));
 	}
 
+	public PlayerMovement Mesh { get; }
+
 	public LightObject Light { get; }
 
-	public static void InitializeRendering()
+	public static void InitializeRendering(GL gl)
 	{
 		if (_vao != 0)
 			throw new InvalidOperationException("Player is already initialized.");
 
-		_vao = MeshShaderUtils.CreateVao(ContentManager.Content.Hand4Mesh);
+		_vao = MeshShaderUtils.CreateVao(gl, ContentManager.Content.Hand4Mesh);
 	}
 
 	public void Update(int currentTick)
@@ -34,15 +36,9 @@ public class Player
 		const float offsetY = 3.3f;
 
 		PlayerMovementSnapshot snapshot = _movementTimeline.GetPlayerMovementSnapshot(currentTick);
-		_mesh.Rotation = snapshot.Rotation * _rotationOffset;
-		_mesh.Position = snapshot.Position + new Vector3(0, offsetY, 0);
+		Mesh.Rotation = snapshot.Rotation * _rotationOffset;
+		Mesh.Position = snapshot.Position + new Vector3(0, offsetY, 0);
 
-		Light.Position = _mesh.Position;
-	}
-
-	public void Render()
-	{
-		Root.GameResources.Hand4Texture.Bind();
-		_mesh.Render();
+		Light.Position = Mesh.Position;
 	}
 }

@@ -1,4 +1,3 @@
-using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Content;
 using DevilDaggersInfo.Tools.Extensions;
 using Silk.NET.OpenGL;
@@ -52,13 +51,13 @@ public class TileHitboxMeshObject
 		_model = scaleMatrix * translationMatrix;
 	}
 
-	public unsafe void Render()
+	public unsafe void Render(GL gl, ResourceManager resourceManager)
 	{
-		Graphics.Gl.UniformMatrix4x4(Root.InternalResources.MeshShader.GetUniformLocation("model"), _model);
+		gl.UniformMatrix4x4(resourceManager.InternalResources.MeshShader.GetUniformLocation("model"), _model);
 
-		Graphics.Gl.BindVertexArray(_vao);
+		gl.BindVertexArray(_vao);
 		fixed (uint* i = &_mesh.Indices[0])
-			Graphics.Gl.DrawElements(PrimitiveType.Triangles, (uint)_mesh.Indices.Length, DrawElementsType.UnsignedInt, i);
-		Graphics.Gl.BindVertexArray(0);
+			gl.DrawElements(PrimitiveType.Triangles, (uint)_mesh.Indices.Length, DrawElementsType.UnsignedInt, i);
+		gl.BindVertexArray(0);
 	}
 }
