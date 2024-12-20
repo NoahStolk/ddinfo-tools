@@ -18,7 +18,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6169">
+		<PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6495">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
