@@ -195,7 +195,7 @@ public static class SettingsWindow
 		}
 
 		int additionalGems = FileStates.Spawnset.Object.AdditionalGems;
-		ImGui.InputInt("Added gems", ref additionalGems, 1);
+		ImGui.InputInt((FileStates.Spawnset.Object.HandLevel == HandLevel.Level2)? Inline.Span($"Added gems ({additionalGems+10})") : "Added gems", ref additionalGems, 1);
 		if (ImGui.IsItemDeactivatedAfterEdit())
 		{
 			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { AdditionalGems = additionalGems });
