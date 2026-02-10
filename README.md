@@ -4,7 +4,7 @@ Cross-platform Devil Daggers modding tools, practice tools, and custom leaderboa
 
 ## Features
 
-The new tools are currently in development. The new app is a complete rewrite of the old Windows-only tools, combined into one app. It currently runs on Windows and Linux (some features are still missing on Linux for now).
+The new app is a complete rewrite of the old Windows-only tools, combined into one app. It currently runs on Windows and Linux (some features are still missing on Linux for now).
 
 ### Practice mode
 
@@ -50,7 +50,7 @@ The original tools are not included in this repository. Visit these repositories
 ## Running from source
 
 1. Clone the repository.
-2. Install [the .NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) version 8.0.x or later. The SDK is available for Windows, macOS, and Linux.
+2. Install [the .NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) version 10.0.x or later. The SDK is available for Windows, macOS, and Linux.
 3. Run the project:
    - Execute `dotnet run --project src/DevilDaggersInfo.Tools/DevilDaggersInfo.Tools.csproj` from the command line.
    - Alternatively, you can open the `src/DevilDaggersInfo.Tools.sln` file in an IDE such as JetBrains Rider or Visual Studio and run the `DevilDaggersInfo.Tools` project.

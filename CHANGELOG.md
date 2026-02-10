@@ -9,6 +9,7 @@
 
 ### Miscellaneous
 
+- Updated to .NET 10.0.
 - Updated ImGui.NET dependency from 1.90.6.1 to 1.91.0.1.
 - Minor UI improvements.
 
