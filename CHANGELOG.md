@@ -1,6 +1,10 @@
 # Changelog
 
-## [unreleased]
+## [0.13.6.0] - 2026-02-10
+
+### Practice
+
+- End loops up to wave 60 (~1430s) are now generated.
 
 ### Custom Leaderboards
 
