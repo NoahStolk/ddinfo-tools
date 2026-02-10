@@ -16,7 +16,7 @@ public static class EndLoopTemplatesChild
 
 	private static List<float> CreateEndLoopTimerStarts()
 	{
-		const int endLoopTemplateWaveCount = 33;
+		const int endLoopTemplateWaveCount = 60;
 
 		List<float> endLoopTimerStarts = [];
 		SpawnsView spawnsView = new(ContentManager.Content.DefaultSpawnset, GameVersion.V3_2, endLoopTemplateWaveCount);
