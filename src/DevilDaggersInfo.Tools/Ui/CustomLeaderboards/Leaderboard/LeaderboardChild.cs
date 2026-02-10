@@ -17,14 +17,22 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
 
-public static class LeaderboardChild
+public sealed class LeaderboardChild
 {
-	private static GetCustomEntry? _selectedCustomEntry;
+	private readonly CustomLeaderboards3DWindow _customLeaderboards3DWindow;
 
-	private static List<GetCustomEntry> _sortedEntries = [];
+	private GetCustomEntry? _selectedCustomEntry;
 
-	private static LeaderboardData? _data;
-	public static LeaderboardData? Data
+	private List<GetCustomEntry> _sortedEntries = [];
+
+	private LeaderboardData? _data;
+
+	public LeaderboardChild(CustomLeaderboards3DWindow customLeaderboards3DWindow)
+	{
+		_customLeaderboards3DWindow = customLeaderboards3DWindow;
+	}
+
+	public LeaderboardData? Data
 	{
 		get => _data;
 		set
@@ -35,7 +43,7 @@ public static class LeaderboardChild
 		}
 	}
 
-	public static void Render()
+	public void Render()
 	{
 		if (ImGui.BeginChild("LeaderboardChild"))
 		{
@@ -48,7 +56,7 @@ public static class LeaderboardChild
 		ImGui.EndChild();
 	}
 
-	private static void RenderLeaderboard(LeaderboardData data)
+	private void RenderLeaderboard(LeaderboardData data)
 	{
 		ImGui.Text(data.Leaderboard.SpawnsetName);
 
@@ -96,7 +104,7 @@ public static class LeaderboardChild
 			() => FetchSpawnsetById.HandleAsync(data.SpawnsetId));
 	}
 
-	private static unsafe void RenderTable(CustomLeaderboardRankSorting rankSorting)
+	private unsafe void RenderTable(CustomLeaderboardRankSorting rankSorting)
 	{
 		const ImGuiTableFlags flags = ImGuiTableFlags.Resizable | ImGuiTableFlags.Reorderable | ImGuiTableFlags.Hideable | ImGuiTableFlags.Sortable | ImGuiTableFlags.SortMulti | ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersV | ImGuiTableFlags.NoBordersInBody;
 
@@ -140,7 +148,7 @@ public static class LeaderboardChild
 		ImGui.PopStyleVar();
 	}
 
-	private static void RenderCustomEntry(GetCustomEntry ce, CustomLeaderboardRankSorting rankSorting)
+	private void RenderCustomEntry(GetCustomEntry ce, CustomLeaderboardRankSorting rankSorting)
 	{
 		ImGui.TableNextColumn();
 
@@ -212,7 +220,7 @@ public static class LeaderboardChild
 		}
 	}
 
-	private static void Sort(ImGuiTableSortSpecsPtr sortsSpecs)
+	private void Sort(ImGuiTableSortSpecsPtr sortsSpecs)
 	{
 		LeaderboardSorting sorting = (LeaderboardSorting)sortsSpecs.Specs.ColumnUserID;
 		bool sortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
@@ -234,7 +242,7 @@ public static class LeaderboardChild
 			LeaderboardSorting.LevelUpTime3 => sortAscending ? _sortedEntries.OrderBy(ce => ce.LevelUpTime3InSeconds) : _sortedEntries.OrderByDescending(ce => ce.LevelUpTime3InSeconds),
 			LeaderboardSorting.LevelUpTime4 => sortAscending ? _sortedEntries.OrderBy(ce => ce.LevelUpTime4InSeconds) : _sortedEntries.OrderByDescending(ce => ce.LevelUpTime4InSeconds),
 			LeaderboardSorting.SubmitDate => sortAscending ? _sortedEntries.OrderBy(ce => ce.SubmitDate) : _sortedEntries.OrderByDescending(ce => ce.SubmitDate),
-			_ => throw new UnreachableException(),
+			_ => throw new UnreachableException($"Unknown sorting: {sorting}"),
 		}).ToList();
 
 		static string? DeathSort(GetCustomEntry ce)
@@ -260,7 +268,7 @@ public static class LeaderboardChild
 		}
 	}
 
-	private static void WatchInReplayViewer(int id)
+	private void WatchInReplayViewer(int id)
 	{
 		AsyncHandler.Run(BuildReplayScene, () => FetchCustomEntryReplayById.HandleAsync(id));
 
@@ -281,7 +289,7 @@ public static class LeaderboardChild
 						return;
 					}
 
-					CustomLeaderboards3DWindow.LoadReplay(replayBinary);
+					_customLeaderboards3DWindow.LoadReplay(replayBinary);
 				},
 				apiError => PopupManager.ShowError("Could not fetch replay.", apiError));
 		}

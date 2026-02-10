@@ -11,21 +11,28 @@ using System.Web;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-public static class RecordingLogic
+public sealed class RecordingLogic
 {
-	private static MainBlock? _runToUpload;
+	private readonly ResourceManager _resourceManager;
 
-	private static readonly List<AddUploadRequestTimestamp> _timestamps = [];
+	private readonly List<AddUploadRequestTimestamp> _timestamps = [];
 
-	public static RecordingStateType RecordingStateType { get; private set; }
-	public static DateTime? LastSubmission { get; private set; }
+	private MainBlock? _runToUpload;
+
+	public RecordingLogic(ResourceManager resourceManager)
+	{
+		_resourceManager = resourceManager;
+	}
+
+	public RecordingStateType RecordingStateType { get; private set; }
+	public DateTime? LastSubmission { get; private set; }
 
 	// TODO: Flip values and rename to ShowRecording.
-	public static bool ShowUploadResponse { get; private set; }
+	public bool ShowUploadResponse { get; private set; }
 
-	public static IEnumerable<AddUploadRequestTimestamp> Timestamps => _timestamps;
+	public IEnumerable<AddUploadRequestTimestamp> Timestamps => _timestamps;
 
-	public static void Handle()
+	public void Handle()
 	{
 		// Do not execute if the game is not running.
 		if (!Root.GameMemoryService.IsInitialized)
@@ -110,7 +117,7 @@ public static class RecordingLogic
 		}
 	}
 
-	private static void AddTimestamp(MainBlock mainBlock)
+	private void AddTimestamp(MainBlock mainBlock)
 	{
 		_timestamps.Add(new AddUploadRequestTimestamp
 		{
@@ -119,7 +126,7 @@ public static class RecordingLogic
 		});
 	}
 
-	private static void UploadRunIfExists(MainBlock runToUpload)
+	private void UploadRunIfExists(MainBlock runToUpload)
 	{
 		AsyncHandler.Run(
 			leaderboardExistsResult =>
@@ -141,7 +148,7 @@ public static class RecordingLogic
 			() => CheckIfLeaderboardExists.HandleAsync(runToUpload.SurvivalHashMd5));
 	}
 
-	private static void UploadRun(MainBlock runToUpload)
+	private void UploadRun(MainBlock runToUpload)
 	{
 		byte[] timeAsBytes = BitConverter.GetBytes(runToUpload.Time);
 		byte[] levelUpTime2AsBytes = BitConverter.GetBytes(runToUpload.LevelUpTime2);
@@ -244,7 +251,7 @@ public static class RecordingLogic
 		AsyncHandler.Run(uploadResponse => OnSubmit(uploadResponse, uploadRequest), () => UploadSubmission.HandleAsync(uploadRequest));
 	}
 
-	private static void OnSubmit(ApiResult<GetUploadResponse> getUploadResponseResult, AddUploadRequest uploadRequest)
+	private void OnSubmit(ApiResult<GetUploadResponse> getUploadResponseResult, AddUploadRequest uploadRequest)
 	{
 		getUploadResponseResult.Match(
 			onSuccess: getUploadResponse =>
@@ -252,7 +259,7 @@ public static class RecordingLogic
 				ShowUploadResponse = true;
 				LastSubmission = DateTime.UtcNow;
 
-				UploadResult uploadResult = new(getUploadResponse, getUploadResponse.IsAscending, getUploadResponse.SpawnsetName, uploadRequest.DeathType, DateTime.UtcNow);
+				UploadResult uploadResult = new(_resourceManager, getUploadResponse, getUploadResponse.IsAscending, getUploadResponse.SpawnsetName, uploadRequest.DeathType, DateTime.UtcNow);
 				CustomLeaderboardResultsWindow.AddResult(uploadResult);
 			},
 			onError: apiError =>

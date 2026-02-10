@@ -1,25 +1,43 @@
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Scenes;
+using ImGuiGlfw;
 using ImGuiNET;
+using Silk.NET.GLFW;
+using Silk.NET.OpenGL;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-public static class SpawnsetEditor3DWindow
+public sealed unsafe class SpawnsetEditor3DWindow
 {
-	private static readonly FramebufferData _framebufferData = new();
+	private readonly Glfw _glfw;
+	private readonly GL _gl;
+	private readonly WindowHandle* _window;
+	private readonly GlfwInput _glfwInput;
+	private readonly ResourceManager _resourceManager;
+	private readonly FramebufferData _framebufferData;
 
-	private static ArenaScene? _arenaScene;
+	private ArenaScene? _arenaScene;
 
-	public static ArenaScene ArenaScene => _arenaScene ?? throw new InvalidOperationException("Scenes are not initialized.");
-
-	public static void InitializeScene()
+	public SpawnsetEditor3DWindow(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ResourceManager resourceManager)
 	{
-		_arenaScene = new ArenaScene(static () => FileStates.Spawnset.Object, false, true);
+		_glfw = glfw;
+		_gl = gl;
+		_window = window;
+		_glfwInput = glfwInput;
+		_resourceManager = resourceManager;
+		_framebufferData = new FramebufferData(gl);
 	}
 
-	public static void Render(float delta)
+	public ArenaScene ArenaScene => _arenaScene ?? throw new InvalidOperationException("Scenes are not initialized.");
+
+	public void InitializeScene()
+	{
+		_arenaScene = new ArenaScene(_glfw, _gl, _window, _glfwInput, _resourceManager, static () => FileStates.Spawnset.Object, false, true);
+	}
+
+	public void Render(float delta)
 	{
 		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize / 2);
 		if (ImGui.Begin("3D Arena Editor"))
