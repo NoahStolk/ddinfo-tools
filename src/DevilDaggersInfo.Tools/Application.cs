@@ -69,24 +69,30 @@ public sealed unsafe class Application
 		};
 		_glfw.SetWindowIcon(_window, 1, &image);
 
-		glfw.SetFramebufferSizeCallback(window, (_, w, h) =>
-		{
-			bool isMaximized = glfw.GetWindowAttrib(window, WindowAttributeGetter.Maximized);
+		glfw.SetFramebufferSizeCallback(window, (_, w, h) => ResizeFramebuffer(glfw, gl, window, imGuiController, w, h));
 
-			gl.Viewport(0, 0, (uint)w, (uint)h);
-			imGuiController.WindowResized(w, h);
-
-			UserCache.Model = UserCache.Model with
-			{
-				WindowWidth = w,
-				WindowHeight = h,
-				WindowIsMaximized = isMaximized,
-			};
-		});
+		// Always invoke this in case of incorrect cache.
+		glfw.GetWindowSize(window, out int width, out int height);
+		ResizeFramebuffer(_glfw, _gl, _window, _imGuiController, width, height);
 
 		gl.ClearColor(0, 0, 0, 1);
 
 		Root.Application = this;
+	}
+
+	private static void ResizeFramebuffer(Glfw glfw, GL gl, WindowHandle* window, ImGuiController imGuiController, int w, int h)
+	{
+		bool isMaximized = glfw.GetWindowAttrib(window, WindowAttributeGetter.Maximized);
+
+		gl.Viewport(0, 0, (uint)w, (uint)h);
+		imGuiController.WindowResized(w, h);
+
+		UserCache.Model = UserCache.Model with
+		{
+			WindowWidth = w,
+			WindowHeight = h,
+			WindowIsMaximized = isMaximized,
+		};
 	}
 
 	public void Run()
