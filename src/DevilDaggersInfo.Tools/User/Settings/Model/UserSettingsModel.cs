@@ -2,7 +2,7 @@ using DevilDaggersInfo.Core.Spawnset;
 
 namespace DevilDaggersInfo.Tools.User.Settings.Model;
 
-public record UserSettingsModel
+public sealed record UserSettingsModel
 {
 	public string DevilDaggersInstallationDirectory { get; init; } = string.Empty;
 	public bool ShowDebug { get; init; }

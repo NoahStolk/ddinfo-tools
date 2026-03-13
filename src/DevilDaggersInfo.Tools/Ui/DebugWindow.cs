@@ -89,7 +89,6 @@ public sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter)
 
 			ImGui.Separator();
 
-			// TODO: Re-enable this when ShowDemoWindow is no longer a method on UiRenderer.
 			if (ImGui.Button("Show demo window"))
 				ShowDemoWindow = true;
 
