@@ -12,9 +12,10 @@ namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
 public sealed class EndLoopTemplatesChild
 {
-	private readonly List<float> _endLoopTimerStarts = CreateEndLoopTimerStarts();
+	private List<float> EndLoopTimerStarts => field ??= CreateEndLoopTimerStarts();
 
-	private static List<float> CreateEndLoopTimerStarts()
+	// Inject ContentManager (no static).
+	private List<float> CreateEndLoopTimerStarts()
 	{
 		const int endLoopTemplateWaveCount = 60;
 
@@ -51,8 +52,8 @@ public sealed class EndLoopTemplatesChild
 
 			if (ImGui.BeginChild("EndLoopTemplateList", templateListSize))
 			{
-				for (int i = 0; i < _endLoopTimerStarts.Count; i++)
-					RenderEndLoopTemplate(i, _endLoopTimerStarts[i], templateWidth);
+				for (int i = 0; i < EndLoopTimerStarts.Count; i++)
+					RenderEndLoopTemplate(i, EndLoopTimerStarts[i], templateWidth);
 			}
 
 			ImGui.EndChild();
