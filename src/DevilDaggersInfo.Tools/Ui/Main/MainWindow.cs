@@ -7,24 +7,11 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Main;
 
-public sealed class MainWindow
+public sealed class MainWindow(ResourceManager resourceManager, UiLayoutManager uiLayoutManager, FrameCounter frameCounter, LeaderboardListChild leaderboardListChild, AboutWindow aboutWindow)
 {
-	private readonly ResourceManager _resourceManager;
-	private readonly UiLayoutManager _uiLayoutManager;
-	private readonly FrameCounter _frameCounter;
-	private readonly LeaderboardListChild _leaderboardListChild;
-
 	private readonly string _version = $"{AssemblyUtils.EntryAssemblyVersionString} (ALPHA)";
 
 	private Action? _hoveredButtonAction;
-
-	public MainWindow(ResourceManager resourceManager, UiLayoutManager uiLayoutManager, FrameCounter frameCounter, LeaderboardListChild leaderboardListChild)
-	{
-		_resourceManager = resourceManager;
-		_uiLayoutManager = uiLayoutManager;
-		_frameCounter = frameCounter;
-		_leaderboardListChild = leaderboardListChild;
-	}
 
 	public bool ShouldClose { get; private set; }
 
@@ -42,7 +29,7 @@ public sealed class MainWindow
 		{
 			ImGui.PushFont(Root.FontGoetheBold60);
 			const string title = "ddinfo tools";
-			ImGui.TextColored(Colors.TitleColor(_frameCounter.TotalTime), title);
+			ImGui.TextColored(Colors.TitleColor(frameCounter.TotalTime), title);
 			float textWidth = ImGui.CalcTextSize(title).X;
 			ImGui.PopFont();
 
@@ -51,16 +38,16 @@ public sealed class MainWindow
 			ImGui.Text("Developed by Noah Stolk");
 
 			ImGui.SetCursorPos(new Vector2(windowSize.X - 208, 8));
-			AppButton(_resourceManager.InternalResources.DownloadTexture, "Updates", () => { }); // UiRenderer.ShowUpdate // TODO: Re-enable when UiRenderer is refactored.
+			AppButton(resourceManager.InternalResources.DownloadTexture, "Updates", () => UpdateWindow.Show = true);
 
 			ImGui.SameLine();
-			AppButton(_resourceManager.InternalResources.ConfigurationTexture, "Configuration", () => _uiLayoutManager.Layout = LayoutType.Config);
+			AppButton(resourceManager.InternalResources.ConfigurationTexture, "Configuration", () => uiLayoutManager.Layout = LayoutType.Config);
 
 			ImGui.SameLine();
-			AppButton(_resourceManager.InternalResources.InfoTexture, "About", () => { }); // UiRenderer.ShowAbout // TODO: Re-enable when UiRenderer is refactored.
+			AppButton(resourceManager.InternalResources.InfoTexture, "About", () => aboutWindow.Show = true);
 
 			ImGui.SameLine();
-			AppButton(_resourceManager.InternalResources.CloseTexture, "Exit application", () => ShouldClose = true);
+			AppButton(resourceManager.InternalResources.CloseTexture, "Exit application", () => ShouldClose = true);
 
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 40);
 			if (ImGui.BeginChild("ToolButtons", mainButtonsSize))
@@ -83,33 +70,33 @@ public sealed class MainWindow
 
 				void GoToSpawnsetEditor()
 				{
-					_uiLayoutManager.Layout = LayoutType.SpawnsetEditor;
+					uiLayoutManager.Layout = LayoutType.SpawnsetEditor;
 				}
 
 				void GoToAssetEditor()
 				{
-					_uiLayoutManager.Layout = LayoutType.AssetEditor;
+					uiLayoutManager.Layout = LayoutType.AssetEditor;
 				}
 
 				void GoToReplayEditor()
 				{
-					_uiLayoutManager.Layout = LayoutType.ReplayEditor;
+					uiLayoutManager.Layout = LayoutType.ReplayEditor;
 				}
 
 				void GoToCustomLeaderboards()
 				{
-					_uiLayoutManager.Layout = LayoutType.CustomLeaderboards;
-					_leaderboardListChild.LoadAll();
+					uiLayoutManager.Layout = LayoutType.CustomLeaderboards;
+					leaderboardListChild.LoadAll();
 				}
 
 				void GoToPractice()
 				{
-					_uiLayoutManager.Layout = LayoutType.Practice;
+					uiLayoutManager.Layout = LayoutType.Practice;
 				}
 
 				void GoToModManager()
 				{
-					_uiLayoutManager.Layout = LayoutType.ModManager;
+					uiLayoutManager.Layout = LayoutType.ModManager;
 					ModsDirectoryLogic.LoadModsDirectory();
 				}
 			}

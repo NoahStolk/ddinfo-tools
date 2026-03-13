@@ -5,18 +5,21 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
+// TODO: Rewrite to instance.
 public static class UpdateWindow
 {
-	public static void Render(ref bool show)
+	public static bool Show;
+
+	public static void Render()
 	{
-		if (!show)
+		if (!Show)
 			return;
 
 		Vector2 center = ImGui.GetMainViewport().GetCenter();
 		Vector2 windowSize = new(384, 384);
 		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new Vector2(0.5f, 0.5f));
 		ImGui.SetNextWindowSize(windowSize);
-		if (ImGui.Begin("Updates", ref show, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDocking))
+		if (ImGui.Begin("Updates", ref Show, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDocking))
 		{
 			ImGui.PushTextWrapPos(windowSize.X - 16);
 

@@ -11,21 +11,14 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-public sealed class DebugWindow
+public sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter)
 {
-	private readonly GlfwInput _glfwInput;
-	private readonly FrameCounter _frameCounter;
-
 	private readonly List<string> _debugMessages = [];
 	private readonly DateTime _startUpTime = DateTime.UtcNow;
 
 	private long _previousAllocatedBytes;
 
-	public DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter)
-	{
-		_glfwInput = glfwInput;
-		_frameCounter = frameCounter;
-	}
+	public bool ShowDemoWindow;
 
 	public void Add(object? obj)
 	{
@@ -97,8 +90,8 @@ public sealed class DebugWindow
 			ImGui.Separator();
 
 			// TODO: Re-enable this when ShowDemoWindow is no longer a method on UiRenderer.
-			// if (ImGui.Button("Show demo window"))
-			// 	UiRenderer.ShowDemoWindow();
+			if (ImGui.Button("Show demo window"))
+				ShowDemoWindow = true;
 
 			ImGui.Separator();
 
@@ -209,7 +202,7 @@ public sealed class DebugWindow
 			for (int i = 0; i < EnumUtils.KeyNames.Count; i++)
 			{
 				Keys key = EnumUtils.Keys[i];
-				bool isDown = _glfwInput.IsKeyDown(key);
+				bool isDown = glfwInput.IsKeyDown(key);
 				ImGui.TableNextColumn();
 				ImGui.TextColored(isDown ? Color.White : Color.Gray(0.4f), EnumUtils.KeyNames[key]);
 			}
@@ -220,8 +213,8 @@ public sealed class DebugWindow
 
 	private void RenderMetrics()
 	{
-		AddText("FPS (smoothed)", Inline.Span(_frameCounter.CountPerSecond));
-		AddText("FPS", Inline.Span(1f / _frameCounter.LastRenderDelta, "000.000"));
+		AddText("FPS (smoothed)", Inline.Span(frameCounter.CountPerSecond));
+		AddText("FPS", Inline.Span(1f / frameCounter.LastRenderDelta, "000.000"));
 
 		long allocatedBytes = GC.GetAllocatedBytesForCurrentThread();
 		AddText("Total managed heap alloc in bytes", Inline.Span(allocatedBytes));

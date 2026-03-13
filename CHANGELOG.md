@@ -1,5 +1,11 @@
 # Changelog
 
+## [unreleased]
+
+### Miscellaneous
+
+- Rewrote app internals.
+
 ## [0.13.6.0] - 2026-02-10
 
 ### Practice

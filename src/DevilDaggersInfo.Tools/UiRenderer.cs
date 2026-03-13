@@ -16,129 +16,67 @@ using DevilDaggersInfo.Tools.User.Settings;
 
 namespace DevilDaggersInfo.Tools;
 
-public sealed class UiRenderer
+public sealed class UiRenderer(
+	UiLayoutManager uiLayoutManager,
+	ConfigLayout configLayout,
+	MainScene mainScene,
+	MainWindow mainWindow,
+	DebugWindow debugWindow,
+	AboutWindow aboutWindow,
+	AssetEditorMenu assetEditorMenu,
+	ReplayEditorMenu replayEditorMenu,
+	SpawnsetEditorMenu spawnsetEditorMenu,
+	ArenaWindow arenaWindow,
+	SpawnsetEditor3DWindow spawnsetEditor3DWindow,
+	PracticeWindow practiceWindow,
+	CustomLeaderboardsWindow customLeaderboardsWindow,
+	CustomLeaderboards3DWindow customLeaderboards3DWindow,
+	ReplayEditorWindow replayEditorWindow,
+	ReplayEditor3DWindow replayEditor3DWindow)
 {
-	private readonly UiLayoutManager _uiLayoutManager;
-	private readonly ConfigLayout _configLayout;
-	private readonly MainScene _mainScene;
-
-	private readonly MainWindow _mainWindow;
-	private readonly DebugWindow _debugWindow;
-	private readonly AboutWindow _aboutWindow;
-
-	private readonly AssetEditorMenu _assetEditorMenu;
-	private readonly ReplayEditorMenu _replayEditorMenu;
-	private readonly SpawnsetEditorMenu _spawnsetEditorMenu;
-
-	private readonly ArenaWindow _arenaWindow;
-	private readonly SpawnsetEditor3DWindow _spawnsetEditor3DWindow;
-
-	private readonly PracticeWindow _practiceWindow;
-
-	private readonly CustomLeaderboardsWindow _customLeaderboardsWindow;
-	private readonly CustomLeaderboards3DWindow _customLeaderboards3DWindow;
-
-	private readonly ReplayEditorWindow _replayEditorWindow;
-	private readonly ReplayEditor3DWindow _replayEditor3DWindow;
-
-	private bool _showDemoWindow;
-	private bool _showAbout;
-	private bool _showUpdate;
-
-	public UiRenderer(
-		UiLayoutManager uiLayoutManager,
-		ConfigLayout configLayout,
-		MainScene mainScene,
-		MainWindow mainWindow,
-		DebugWindow debugWindow,
-		AboutWindow aboutWindow,
-		AssetEditorMenu assetEditorMenu,
-		ReplayEditorMenu replayEditorMenu,
-		SpawnsetEditorMenu spawnsetEditorMenu,
-		ArenaWindow arenaWindow,
-		SpawnsetEditor3DWindow spawnsetEditor3DWindow,
-		PracticeWindow practiceWindow,
-		CustomLeaderboardsWindow customLeaderboardsWindow,
-		CustomLeaderboards3DWindow customLeaderboards3DWindow,
-		ReplayEditorWindow replayEditorWindow,
-		ReplayEditor3DWindow replayEditor3DWindow)
-	{
-		_uiLayoutManager = uiLayoutManager;
-		_configLayout = configLayout;
-		_mainScene = mainScene;
-		_mainWindow = mainWindow;
-		_debugWindow = debugWindow;
-		_aboutWindow = aboutWindow;
-		_assetEditorMenu = assetEditorMenu;
-		_replayEditorMenu = replayEditorMenu;
-		_spawnsetEditorMenu = spawnsetEditorMenu;
-		_arenaWindow = arenaWindow;
-		_spawnsetEditor3DWindow = spawnsetEditor3DWindow;
-		_practiceWindow = practiceWindow;
-		_customLeaderboardsWindow = customLeaderboardsWindow;
-		_customLeaderboards3DWindow = customLeaderboards3DWindow;
-		_replayEditorWindow = replayEditorWindow;
-		_replayEditor3DWindow = replayEditor3DWindow;
-	}
-
-	public void ShowDemoWindow()
-	{
-		_showDemoWindow = true;
-	}
-
-	public void ShowAbout()
-	{
-		_showAbout = true;
-	}
-
-	public void ShowUpdate()
-	{
-		_showUpdate = true;
-	}
-
 	public void Render(float delta)
 	{
-		if (_showDemoWindow)
-			ImGuiNET.ImGui.ShowDemoWindow(ref _showDemoWindow);
+		if (debugWindow.ShowDemoWindow)
+			ImGuiNET.ImGui.ShowDemoWindow(ref debugWindow.ShowDemoWindow);
 
-		switch (_uiLayoutManager.Layout)
+		switch (uiLayoutManager.Layout)
 		{
 			case LayoutType.Config:
-				_configLayout.Render();
+				configLayout.Render();
 				break;
 			case LayoutType.Main:
-				_mainWindow.Render();
-				_mainScene.Render(delta);
+				mainWindow.Render();
+				mainScene.Render(delta);
 				break;
 			case LayoutType.SpawnsetEditor:
-				_spawnsetEditorMenu.Render();
+				spawnsetEditorMenu.Render();
 				SpawnsWindow.Render();
 				SettingsWindow.Render();
-				_arenaWindow.Render();
+				arenaWindow.Render();
 				HistoryWindow.Render();
-				_spawnsetEditor3DWindow.Render(delta);
+				spawnsetEditor3DWindow.Render(delta);
 				break;
 			case LayoutType.AssetEditor:
-				_assetEditorMenu.Render();
+				assetEditorMenu.Render();
 				AssetEditorWindow.Render();
 				CompileModWindow.Render();
 				ExtractModWindow.Render();
 				break;
 			case LayoutType.ReplayEditor:
-				_replayEditorWindow.Update(delta);
-				_replayEditorMenu.Render();
-				_replayEditorWindow.Render();
-				_replayEditor3DWindow.Render(delta);
+				replayEditorWindow.Update(delta);
+				replayEditorMenu.Render();
+				replayEditorWindow.Render();
+				replayEditor3DWindow.Render(delta);
 				LeaderboardReplayBrowser.Render();
 				break;
 			case LayoutType.CustomLeaderboards:
-				_customLeaderboardsWindow.Update(delta);
-				_customLeaderboardsWindow.Render();
+				customLeaderboardsWindow.Update(delta);
+				customLeaderboardsWindow.Render();
 				CustomLeaderboardResultsWindow.Render();
-				_customLeaderboards3DWindow.Render(delta);
+				customLeaderboards3DWindow.Render(delta);
 				break;
 			case LayoutType.Practice:
-				_practiceWindow.Render();
+				practiceWindow.Render();
 				RunAnalysisWindow.Update(delta);
 				RunAnalysisWindow.Render();
 				break;
@@ -150,10 +88,10 @@ public sealed class UiRenderer
 		}
 
 		if (UserSettings.Model.ShowDebug)
-			_debugWindow.Render();
+			debugWindow.Render();
 
-		_aboutWindow.Render(ref _showAbout);
-		UpdateWindow.Render(ref _showUpdate);
+		aboutWindow.Render();
+		UpdateWindow.Render();
 
 		PopupManager.Render();
 	}
