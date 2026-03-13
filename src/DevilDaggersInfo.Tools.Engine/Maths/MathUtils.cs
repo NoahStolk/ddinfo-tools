@@ -5,11 +5,13 @@ public static class MathUtils
 	private const float _toRad = MathF.PI / 180;
 	private const float _toDeg = 180 / MathF.PI;
 
+	[Obsolete]
 	public static float ToDegrees(float radians)
 	{
 		return radians * _toDeg;
 	}
 
+	[Obsolete]
 	public static float ToRadians(float degrees)
 	{
 		return degrees * _toRad;

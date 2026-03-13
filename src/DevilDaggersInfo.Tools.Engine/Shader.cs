@@ -2,25 +2,18 @@ using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools.Engine;
 
-public sealed class Shader
+public sealed class Shader(GL gl, uint id)
 {
-	private readonly GL _gl;
 	private readonly Dictionary<string, int> _uniformLocations = new();
 
-	public Shader(GL gl, uint id)
-	{
-		_gl = gl;
-		Id = id;
-	}
-
-	public uint Id { get; }
+	public uint Id { get; } = id;
 
 	public int GetUniformLocation(string name)
 	{
 		if (_uniformLocations.TryGetValue(name, out int location))
 			return location;
 
-		location = _gl.GetUniformLocation(Id, name);
+		location = gl.GetUniformLocation(Id, name);
 		_uniformLocations.Add(name, location);
 
 		return location;

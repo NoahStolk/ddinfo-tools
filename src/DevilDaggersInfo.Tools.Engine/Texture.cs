@@ -2,21 +2,13 @@ using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools.Engine;
 
-public class Texture
+public sealed class Texture(GL gl, uint id)
 {
-	private readonly GL _gl;
-
-	public Texture(GL gl, uint id)
-	{
-		_gl = gl;
-		Id = id;
-	}
-
-	public uint Id { get; }
+	public uint Id { get; } = id;
 
 	public void Bind(TextureUnit textureUnit = TextureUnit.Texture0)
 	{
-		_gl.ActiveTexture(textureUnit);
-		_gl.BindTexture(TextureTarget.Texture2D, Id);
+		gl.ActiveTexture(textureUnit);
+		gl.BindTexture(TextureTarget.Texture2D, Id);
 	}
 }
