@@ -20,33 +20,28 @@ internal static class Root
 {
 	private static readonly InvalidOperationException _notInitializedException = new("Root component is not initialized.");
 
-	private static Application? _application;
-	private static ImFontPtr _fontGoetheBold20;
-	private static ImFontPtr _fontGoetheBold30;
-	private static ImFontPtr _fontGoetheBold60;
-
 	public static Application Application
 	{
-		get => _application ?? throw _notInitializedException;
-		set => _application = value;
+		get => field ?? throw _notInitializedException;
+		set;
 	}
 
 	public static unsafe ImFontPtr FontGoetheBold20
 	{
-		get => _fontGoetheBold20.NativePtr == (void*)0 ? throw _notInitializedException : _fontGoetheBold20;
-		set => _fontGoetheBold20 = value;
+		get => field.NativePtr == (void*)0 ? throw _notInitializedException : field;
+		set;
 	}
 
 	public static unsafe ImFontPtr FontGoetheBold30
 	{
-		get => _fontGoetheBold30.NativePtr == (void*)0 ? throw _notInitializedException : _fontGoetheBold30;
-		set => _fontGoetheBold30 = value;
+		get => field.NativePtr == (void*)0 ? throw _notInitializedException : field;
+		set;
 	}
 
 	public static unsafe ImFontPtr FontGoetheBold60
 	{
-		get => _fontGoetheBold60.NativePtr == (void*)0 ? throw _notInitializedException : _fontGoetheBold60;
-		set => _fontGoetheBold60 = value;
+		get => field.NativePtr == (void*)0 ? throw _notInitializedException : field;
+		set;
 	}
 
 	public static Logger Log { get; } = new LoggerConfiguration()

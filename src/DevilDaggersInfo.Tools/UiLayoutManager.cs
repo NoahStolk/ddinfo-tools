@@ -4,14 +4,12 @@ namespace DevilDaggersInfo.Tools;
 
 internal sealed class UiLayoutManager
 {
-	private LayoutType _layout;
-
 	public LayoutType Layout
 	{
-		get => _layout;
+		get;
 		set
 		{
-			_layout = value;
+			field = value;
 			Colors.SetColors(value switch
 			{
 				LayoutType.Config or LayoutType.Main => Colors.Main,

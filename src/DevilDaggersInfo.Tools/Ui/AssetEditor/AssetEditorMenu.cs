@@ -9,15 +9,8 @@ using System.Text.Json;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
-internal sealed class AssetEditorMenu
+internal sealed class AssetEditorMenu(UiLayoutManager uiLayoutManager)
 {
-	private readonly UiLayoutManager _uiLayoutManager;
-
-	public AssetEditorMenu(UiLayoutManager uiLayoutManager)
-	{
-		_uiLayoutManager = uiLayoutManager;
-	}
-
 	public void Render()
 	{
 		if (ImGui.BeginMainMenuBar())
@@ -125,6 +118,6 @@ internal sealed class AssetEditorMenu
 
 	public void Close()
 	{
-		FileStates.Mod.PromptSave(() => _uiLayoutManager.Layout = LayoutType.Main);
+		FileStates.Mod.PromptSave(() => uiLayoutManager.Layout = LayoutType.Main);
 	}
 }

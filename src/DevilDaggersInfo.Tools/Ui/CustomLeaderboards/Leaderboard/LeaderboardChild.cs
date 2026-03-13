@@ -17,27 +17,18 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
 
-internal sealed class LeaderboardChild
+internal sealed class LeaderboardChild(CustomLeaderboards3DWindow customLeaderboards3DWindow)
 {
-	private readonly CustomLeaderboards3DWindow _customLeaderboards3DWindow;
-
 	private GetCustomEntry? _selectedCustomEntry;
 
 	private List<GetCustomEntry> _sortedEntries = [];
 
-	private LeaderboardData? _data;
-
-	public LeaderboardChild(CustomLeaderboards3DWindow customLeaderboards3DWindow)
-	{
-		_customLeaderboards3DWindow = customLeaderboards3DWindow;
-	}
-
 	public LeaderboardData? Data
 	{
-		get => _data;
+		get;
 		set
 		{
-			_data = value;
+			field = value;
 			_sortedEntries = value?.Leaderboard.SortedEntries ?? [];
 			_selectedCustomEntry = null;
 		}
@@ -289,7 +280,7 @@ internal sealed class LeaderboardChild
 						return;
 					}
 
-					_customLeaderboards3DWindow.LoadReplay(replayBinary);
+					customLeaderboards3DWindow.LoadReplay(replayBinary);
 				},
 				apiError => PopupManager.ShowError("Could not fetch replay.", apiError));
 		}

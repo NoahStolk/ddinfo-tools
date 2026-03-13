@@ -13,8 +13,6 @@ internal class TileHitboxMeshObject
 	private readonly float _positionZ;
 
 	private Matrix4x4 _model;
-	private float _positionY;
-	private float _height;
 
 	public TileHitboxMeshObject(uint vao, MeshContent mesh, float positionX, float positionZ)
 	{
@@ -26,20 +24,20 @@ internal class TileHitboxMeshObject
 
 	public float PositionY
 	{
-		get => _positionY;
+		get;
 		set
 		{
-			_positionY = value;
+			field = value;
 			SetModel();
 		}
 	}
 
 	public float Height
 	{
-		get => _height;
+		get;
 		set
 		{
-			_height = value;
+			field = value;
 			SetModel();
 		}
 	}

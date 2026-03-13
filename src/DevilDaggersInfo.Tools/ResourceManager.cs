@@ -20,7 +20,7 @@ internal sealed class ResourceManager
 #if DEBUG && WINDOWS
 		const string? ddInfoToolsContentRootDirectory = @"..\..\..\Content";
 #elif DEBUG && LINUX
-		const string? ddInfoToolsContentRootDirectory = @"./src/DevilDaggersInfo.Tools/Content/";
+		const string? ddInfoToolsContentRootDirectory = "./src/DevilDaggersInfo.Tools/Content/";
 #else
 		const string? ddInfoToolsContentRootDirectory = null;
 #endif

@@ -155,7 +155,7 @@ internal static class GraphsChild
 		{
 			RenderGraphBackground(drawListPtr, out Vector2 pos, out Vector2 size);
 
-			ReadOnlySpan<int> maxValues = stackalloc int[] { _showHomingStored ? _maxHomingStored : 0, _showHomingEaten ? _maxHomingEaten : 0 };
+			ReadOnlySpan<int> maxValues = [_showHomingStored ? _maxHomingStored : 0, _showHomingEaten ? _maxHomingEaten : 0];
 			int max = MathUtils.Max(maxValues);
 			RenderGraphScales(drawListPtr, pos, size, max);
 			RenderGraphSplits(drawListPtr, pos, size);
