@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Engine.Content.Parsers.Model;
 
-public class ObjParseException : Exception
+public sealed class ObjParseException : Exception
 {
 	public ObjParseException()
 	{

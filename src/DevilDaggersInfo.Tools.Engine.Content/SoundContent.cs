@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Engine.Content;
 
-public class SoundContent
+public sealed class SoundContent
 {
 	public SoundContent(short channels, int sampleRate, short bitsPerSample, int size, byte[] data)
 	{

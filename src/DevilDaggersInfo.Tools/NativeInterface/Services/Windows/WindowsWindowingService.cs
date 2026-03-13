@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace DevilDaggersInfo.Tools.NativeInterface.Services.Windows;
 
-internal class WindowsWindowingService : INativeWindowingService
+internal sealed class WindowsWindowingService : INativeWindowingService
 {
 	public Vector2 GetWindowPosition()
 	{

@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.GameMemory;
 
-internal class GameMemoryService
+internal sealed class GameMemoryService
 {
 	public const int StatsBufferSize = 112;
 

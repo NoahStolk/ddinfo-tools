@@ -2,7 +2,7 @@ using DevilDaggersInfo.Tools.GameMemory;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis.Data;
 
-internal class PracticeStatsData
+internal sealed class PracticeStatsData
 {
 	private readonly byte[] _statsBuffer = new byte[GameMemoryService.StatsBufferSize * 60 * 60]; // Allow up to an hour of data (roughly 3600 seconds in game).
 

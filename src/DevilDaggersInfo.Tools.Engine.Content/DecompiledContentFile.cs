@@ -2,7 +2,7 @@ using DevilDaggersInfo.Tools.Engine.Content.Conversion;
 
 namespace DevilDaggersInfo.Tools.Engine.Content;
 
-public record DecompiledContentFile(
+public sealed record DecompiledContentFile(
 	IReadOnlyDictionary<string, ModelContent> Models,
 	IReadOnlyDictionary<string, ShaderContent> Shaders,
 	IReadOnlyDictionary<string, SoundContent> Sounds,

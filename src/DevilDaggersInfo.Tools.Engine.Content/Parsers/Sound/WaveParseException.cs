@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Engine.Content.Parsers.Sound;
 
-public class WaveParseException : Exception
+public sealed class WaveParseException : Exception
 {
 	public WaveParseException()
 	{

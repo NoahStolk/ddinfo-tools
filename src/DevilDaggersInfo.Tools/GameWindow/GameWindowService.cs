@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.GameWindow;
 
-internal class GameWindowService
+internal sealed class GameWindowService
 {
 	private readonly INativeWindowingService _windowingService;
 

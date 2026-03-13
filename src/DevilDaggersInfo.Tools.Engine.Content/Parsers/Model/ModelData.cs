@@ -5,7 +5,7 @@ namespace DevilDaggersInfo.Tools.Engine.Content.Parsers.Model;
 /// <summary>
 /// Represents data parsed from a model format, such as a .obj file.
 /// </summary>
-public record ModelData
+public sealed record ModelData
 {
 	public ModelData(IReadOnlyList<Vector3> positions, IReadOnlyList<Vector2> textures, IReadOnlyList<Vector3> normals, IReadOnlyList<MeshData> meshes)
 	{

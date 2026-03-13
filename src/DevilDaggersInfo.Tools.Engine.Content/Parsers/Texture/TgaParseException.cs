@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Engine.Content.Parsers.Texture;
 
-public class TgaParseException : Exception
+public sealed class TgaParseException : Exception
 {
 	public TgaParseException()
 	{

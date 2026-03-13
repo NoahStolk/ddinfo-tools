@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 
-internal class AssetPaths
+internal sealed class AssetPaths
 {
 	[JsonRequired]
 	public List<AudioAssetPath> Audio { get; init; } = [];

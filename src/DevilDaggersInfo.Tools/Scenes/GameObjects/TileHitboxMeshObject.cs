@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
-internal class TileHitboxMeshObject
+internal sealed class TileHitboxMeshObject
 {
 	private readonly uint _vao;
 	private readonly MeshContent _mesh;

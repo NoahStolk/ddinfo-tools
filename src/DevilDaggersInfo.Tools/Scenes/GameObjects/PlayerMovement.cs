@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
-internal class PlayerMovement
+internal sealed class PlayerMovement
 {
 	public PlayerMovement(uint vao, MeshContent mesh, Quaternion rotation, Vector3 position)
 	{

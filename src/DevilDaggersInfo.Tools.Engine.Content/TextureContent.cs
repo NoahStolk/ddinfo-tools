@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Engine.Content;
 
-public class TextureContent
+public sealed class TextureContent
 {
 	public TextureContent(int width, int height, byte[] pixels)
 	{

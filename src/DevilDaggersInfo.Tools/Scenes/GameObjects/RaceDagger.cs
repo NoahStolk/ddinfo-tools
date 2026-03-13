@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
-internal class RaceDagger
+internal sealed class RaceDagger
 {
 	private const float _yOffset = 4;
 

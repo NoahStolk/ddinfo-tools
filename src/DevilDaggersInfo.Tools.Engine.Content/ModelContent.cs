@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Engine.Content;
 
-public class ModelContent
+public sealed class ModelContent
 {
 	public ModelContent(Dictionary<MeshContent, TextureContent> meshes)
 	{

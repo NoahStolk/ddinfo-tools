@@ -10,7 +10,7 @@ using System.Text.Json.Serialization.Metadata;
 
 namespace DevilDaggersInfo.Tools.Networking;
 
-internal class ApiHttpClient
+internal sealed class ApiHttpClient
 {
 	private readonly HttpClient _client;
 

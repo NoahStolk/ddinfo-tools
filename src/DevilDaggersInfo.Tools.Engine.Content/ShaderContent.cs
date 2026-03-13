@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Engine.Content;
 
-public class ShaderContent
+public sealed class ShaderContent
 {
 	public ShaderContent(string vertexCode, string? geometryCode, string fragmentCode)
 	{
