@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
-public sealed unsafe class Camera(Glfw glfw, GlfwInput glfwInput, WindowHandle* window, bool isMenuCamera)
+internal sealed unsafe class Camera(Glfw glfw, GlfwInput glfwInput, WindowHandle* window, bool isMenuCamera)
 {
 	private const MouseButton _lookButton = MouseButton.Right;
 	private const float _friction = 20;

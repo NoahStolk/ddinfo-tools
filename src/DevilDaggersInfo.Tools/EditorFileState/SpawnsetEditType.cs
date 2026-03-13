@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.EditorFileState;
 
-public enum SpawnsetEditType
+internal enum SpawnsetEditType
 {
 	Reset,
 	ArenaTileHeight,

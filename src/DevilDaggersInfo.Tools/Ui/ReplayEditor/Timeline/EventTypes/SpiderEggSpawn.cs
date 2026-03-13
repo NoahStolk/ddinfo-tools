@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 
-public static class SpiderEggSpawn
+internal static class SpiderEggSpawn
 {
 	public static void RenderEdit(int uniqueId, SpiderEggSpawnEventData e, EditorReplayModel replay)
 	{

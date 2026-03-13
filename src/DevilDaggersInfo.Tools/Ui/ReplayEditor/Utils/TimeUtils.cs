@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 
-public static class TimeUtils
+internal static class TimeUtils
 {
 	public static float TickToTime(int tick, float startTime)
 	{

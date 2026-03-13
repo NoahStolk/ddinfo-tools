@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Extensions;
 
-public static class EventTypeExtensions
+internal static class EventTypeExtensions
 {
 	public static Vector4 GetColor(this EventType eventType)
 	{

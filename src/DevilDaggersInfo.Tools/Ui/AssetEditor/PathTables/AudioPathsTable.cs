@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
-public sealed class AudioPathsTable : IPathTable<AudioPathsTable>
+internal sealed class AudioPathsTable : IPathTable<AudioPathsTable>
 {
 	public static int ColumnCount => 4;
 

@@ -8,7 +8,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-public sealed class ReplayInputsChild
+internal sealed class ReplayInputsChild
 {
 	private readonly ResourceManager _resourceManager;
 

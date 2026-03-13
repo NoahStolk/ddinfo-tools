@@ -8,7 +8,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 
-public sealed class ArenaEditorControls
+internal sealed class ArenaEditorControls
 {
 	private readonly ResourceManager _resourceManager;
 	private readonly ArenaWindow _arenaWindow;

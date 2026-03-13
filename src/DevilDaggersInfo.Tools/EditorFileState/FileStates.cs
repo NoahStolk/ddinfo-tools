@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 
 namespace DevilDaggersInfo.Tools.EditorFileState;
 
-public static class FileStates
+internal static class FileStates
 {
 	public const string UntitledName = "<untitled>";
 

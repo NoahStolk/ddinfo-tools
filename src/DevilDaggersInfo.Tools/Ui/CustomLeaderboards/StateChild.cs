@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-public sealed class StateChild
+internal sealed class StateChild
 {
 	private readonly RecordingLogic _recordingLogic;
 

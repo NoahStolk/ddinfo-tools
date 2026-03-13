@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
 
-public enum ModFileType
+internal enum ModFileType
 {
 	EnabledMod,
 	DisabledMod,

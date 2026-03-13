@@ -4,7 +4,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class EntityOrientationEvents : IEventTypeRenderer<EntityOrientationEventData>
+internal sealed class EntityOrientationEvents : IEventTypeRenderer<EntityOrientationEventData>
 {
 	public static int ColumnCount => 2;
 

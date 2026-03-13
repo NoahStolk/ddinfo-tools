@@ -11,7 +11,7 @@ using System.Web;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-public sealed class RecordingLogic
+internal sealed class RecordingLogic
 {
 	private readonly ResourceManager _resourceManager;
 

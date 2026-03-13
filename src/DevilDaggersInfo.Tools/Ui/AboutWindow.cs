@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-public sealed class AboutWindow(FrameCounter frameCounter)
+internal sealed class AboutWindow(FrameCounter frameCounter)
 {
 	private readonly string _versionInfo = $"Version {AssemblyUtils.EntryAssemblyVersionString} (build time: {AssemblyUtils.EntryAssemblyBuildTime})";
 

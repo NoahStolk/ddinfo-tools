@@ -5,7 +5,7 @@ using DevilDaggersInfo.Web.ApiSpec.Tools.ProcessMemory;
 
 namespace DevilDaggersInfo.Tools;
 
-public static class GameMemoryServiceWrapper
+internal static class GameMemoryServiceWrapper
 {
 	private static bool _tryDownloadMarker = true;
 

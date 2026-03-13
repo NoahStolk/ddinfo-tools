@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Extensions;
 
-public static class AssetTypeExtensions
+internal static class AssetTypeExtensions
 {
 	public static Vector4 GetColor(this AssetType assetType)
 	{

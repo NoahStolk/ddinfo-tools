@@ -9,4 +9,4 @@ namespace DevilDaggersInfo.Tools.JsonSerializerContexts;
 	UseStringEnumConverter = true,
 	GenerationMode = JsonSourceGenerationMode.Default)]
 [JsonSerializable(typeof(AssetPaths))]
-public partial class AssetPathsContext : JsonSerializerContext;
+internal partial class AssetPathsContext : JsonSerializerContext;

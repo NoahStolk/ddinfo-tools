@@ -5,7 +5,7 @@ namespace DevilDaggersInfo.Tools;
 /// <summary>
 /// Wrapper to make sure the <see cref="Dialog"/> class doesn't block the main thread and cause other problems like key states getting stuck.
 /// </summary>
-public static class NativeFileDialog
+internal static class NativeFileDialog
 {
 	/// <summary>
 	/// Used to prevent multiple dialogs from being opened from the main thread.

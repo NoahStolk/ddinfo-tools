@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.EditorFileState;
 
-public static class SpawnsetEditTypeExtensions
+internal static class SpawnsetEditTypeExtensions
 {
 	private const int _colorValue = 63;
 

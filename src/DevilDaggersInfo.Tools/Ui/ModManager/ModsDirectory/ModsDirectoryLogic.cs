@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 
-public static class ModsDirectoryLogic
+internal static class ModsDirectoryLogic
 {
 	private static List<ModFile> _modFiles = [];
 	private static string _originalFileName = string.Empty;

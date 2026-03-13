@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
-public class MessageWithHideOption : Popup
+internal class MessageWithHideOption : Popup
 {
 	private readonly string _text;
 	private readonly Action<bool> _setDoNotShowAgain;

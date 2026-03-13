@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.NativeInterface.Services;
 
-public interface INativeWindowingService
+internal interface INativeWindowingService
 {
 	Vector2 GetWindowPosition();
 }

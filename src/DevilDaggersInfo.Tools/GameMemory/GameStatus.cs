@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.GameMemory;
 
-public enum GameStatus
+internal enum GameStatus
 {
 	Title = 0,
 	Menu = 1,

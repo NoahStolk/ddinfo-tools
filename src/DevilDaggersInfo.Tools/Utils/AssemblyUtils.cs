@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace DevilDaggersInfo.Tools.Utils;
 
-public static class AssemblyUtils
+internal static class AssemblyUtils
 {
 	public static readonly Assembly EntryAssembly = Assembly.GetEntryAssembly() ?? throw new InvalidOperationException("Could not get entry assembly.");
 

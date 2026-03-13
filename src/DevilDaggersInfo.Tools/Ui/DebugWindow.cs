@@ -11,7 +11,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-public sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter)
+internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter)
 {
 	private readonly List<string> _debugMessages = [];
 	private readonly DateTime _startUpTime = DateTime.UtcNow;

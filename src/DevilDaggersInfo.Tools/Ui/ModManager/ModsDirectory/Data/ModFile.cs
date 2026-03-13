@@ -6,7 +6,7 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
 
-public sealed record ModFile(string FileName, ModFileType FileType, ModBinaryType? BinaryType, int? AssetCount, int? ProhibitedAssetCount, long FileSize)
+internal sealed record ModFile(string FileName, ModFileType FileType, ModBinaryType? BinaryType, int? AssetCount, int? ProhibitedAssetCount, long FileSize)
 {
 	public static ModFileType GetFileType(string fileName)
 	{

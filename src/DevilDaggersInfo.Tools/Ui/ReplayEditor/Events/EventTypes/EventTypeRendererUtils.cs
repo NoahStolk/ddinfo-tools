@@ -9,7 +9,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public static class EventTypeRendererUtils
+internal static class EventTypeRendererUtils
 {
 	public static readonly IReadOnlyDictionary<EventType, string> EventTypeNames = new Dictionary<EventType, string>
 	{

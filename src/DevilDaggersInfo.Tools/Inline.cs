@@ -7,7 +7,7 @@ namespace DevilDaggersInfo.Tools;
 /// Unsafe methods to quickly format values into a <see cref="System.Span{T}"/> without allocating memory.
 /// These must only be used inline, as the <see cref="System.Span{T}"/> is only valid until the next method call.
 /// </summary>
-public static class Inline
+internal static class Inline
 {
 	public static readonly char[] Buffer = new char[512];
 

@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-public static class CustomLeaderboardCriteriaTypeExtensions
+internal static class CustomLeaderboardCriteriaTypeExtensions
 {
 	public static Texture GetTexture(this ResourceManager resourceManager, CustomLeaderboardCriteriaType type)
 	{

@@ -6,7 +6,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-public static class ReplayInputs
+internal static class ReplayInputs
 {
 	public static void Render(Vector2 origin, PlayerInputSnapshot snapshot)
 	{

@@ -2,7 +2,7 @@ using DevilDaggersInfo.Tools.Ui;
 
 namespace DevilDaggersInfo.Tools;
 
-public sealed class UiLayoutManager
+internal sealed class UiLayoutManager
 {
 	private LayoutType _layout;
 

@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
-public sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
+internal sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
 {
 	public static int ColumnCount => 4;
 

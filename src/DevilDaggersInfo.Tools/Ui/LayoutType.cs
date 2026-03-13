@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Ui;
 
-public enum LayoutType
+internal enum LayoutType
 {
 	Config,
 	Main,

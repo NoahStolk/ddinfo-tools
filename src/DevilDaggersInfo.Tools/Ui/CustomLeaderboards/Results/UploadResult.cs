@@ -12,7 +12,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 
-public sealed class UploadResult
+internal sealed class UploadResult
 {
 	private const int _columnWidth = 120;
 	private const int _headerWidth = _columnWidth * 3;

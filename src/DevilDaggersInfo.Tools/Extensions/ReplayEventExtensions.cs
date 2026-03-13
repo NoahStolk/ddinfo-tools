@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Extensions;
 
-public static class ReplayEventExtensions
+internal static class ReplayEventExtensions
 {
 	public static EventType GetEventType(this ReplayEvent replayEvent)
 	{

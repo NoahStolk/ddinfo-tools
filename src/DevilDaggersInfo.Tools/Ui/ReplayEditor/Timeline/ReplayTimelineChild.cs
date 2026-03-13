@@ -12,7 +12,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 
-public static class ReplayTimelineChild
+internal static class ReplayTimelineChild
 {
 	private const float _markerSize = 24;
 

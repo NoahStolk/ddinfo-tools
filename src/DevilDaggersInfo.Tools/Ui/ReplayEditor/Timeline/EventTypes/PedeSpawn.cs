@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 
-public static class PedeSpawn
+internal static class PedeSpawn
 {
 	private static readonly string[] _pedeTypeNamesArray = EnumUtils.PedeTypeNames.Values.ToArray();
 

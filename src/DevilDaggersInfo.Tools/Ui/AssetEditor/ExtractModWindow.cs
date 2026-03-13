@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
-public static class ExtractModWindow
+internal static class ExtractModWindow
 {
 	private static string? _inputFilePath;
 	private static string? _outputDirectory;

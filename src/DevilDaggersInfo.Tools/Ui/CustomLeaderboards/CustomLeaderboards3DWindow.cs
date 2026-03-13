@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-public sealed unsafe class CustomLeaderboards3DWindow
+internal sealed unsafe class CustomLeaderboards3DWindow
 {
 	private readonly Glfw _glfw;
 	private readonly GL _gl;

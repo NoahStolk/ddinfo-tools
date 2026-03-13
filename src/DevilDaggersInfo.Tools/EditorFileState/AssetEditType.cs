@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.EditorFileState;
 
-public enum AssetEditType
+internal enum AssetEditType
 {
 	Reset = 0,
 }

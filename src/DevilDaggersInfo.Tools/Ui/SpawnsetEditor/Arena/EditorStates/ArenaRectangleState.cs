@@ -9,7 +9,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorStates;
 
-public sealed class ArenaRectangleState : IArenaState
+internal sealed class ArenaRectangleState : IArenaState
 {
 	private readonly ArenaWindow _arenaWindow;
 

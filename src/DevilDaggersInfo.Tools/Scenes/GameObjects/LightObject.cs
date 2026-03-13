@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
-public class LightObject
+internal class LightObject
 {
 	public LightObject(float radius, Vector3 position, Vector3 color)
 	{

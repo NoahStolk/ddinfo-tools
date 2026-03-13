@@ -8,7 +8,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-public static class CurrentSpawnsetChild
+internal static class CurrentSpawnsetChild
 {
 	public static void Render()
 	{

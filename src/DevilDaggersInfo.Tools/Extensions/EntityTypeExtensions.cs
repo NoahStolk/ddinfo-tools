@@ -4,7 +4,7 @@ using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 
 namespace DevilDaggersInfo.Tools.Extensions;
 
-public static class EntityTypeExtensions
+internal static class EntityTypeExtensions
 {
 	public static Color GetColor(this EntityType? entityType)
 	{

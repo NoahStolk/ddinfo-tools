@@ -2,7 +2,7 @@ using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-public record struct ColorConfiguration
+internal record struct ColorConfiguration
 {
 	public required Color Primary { get; init; }
 	public required Color Secondary { get; init; }

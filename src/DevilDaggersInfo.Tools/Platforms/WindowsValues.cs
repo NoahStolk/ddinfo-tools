@@ -2,7 +2,7 @@ using DevilDaggersInfo.Web.ApiSpec.Tools;
 
 namespace DevilDaggersInfo.Tools.Platforms;
 
-public class WindowsValues : IPlatformSpecificValues
+internal class WindowsValues : IPlatformSpecificValues
 {
 	public AppOperatingSystem AppOperatingSystem => AppOperatingSystem.Windows;
 

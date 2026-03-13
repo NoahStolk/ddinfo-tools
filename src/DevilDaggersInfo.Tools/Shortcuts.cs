@@ -9,7 +9,7 @@ using Silk.NET.GLFW;
 
 namespace DevilDaggersInfo.Tools;
 
-public sealed class Shortcuts
+internal sealed class Shortcuts
 {
 	private readonly UiLayoutManager _uiLayoutManager;
 	private readonly SpawnsetEditorMenu _spawnsetEditorMenu;

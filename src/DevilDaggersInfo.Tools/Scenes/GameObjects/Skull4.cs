@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
-public sealed class Skull4(GL gl, ResourceManager resourceManager)
+internal sealed class Skull4(GL gl, ResourceManager resourceManager)
 {
 	private static uint _vaoMain;
 	private static uint _vaoJaw;

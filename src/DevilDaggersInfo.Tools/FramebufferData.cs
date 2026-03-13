@@ -3,7 +3,7 @@ using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools;
 
-public unsafe class FramebufferData
+internal unsafe class FramebufferData
 {
 	private readonly GL _gl;
 

@@ -5,7 +5,7 @@ using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools;
 
-public sealed class ResourceManager
+internal sealed class ResourceManager
 {
 	private readonly GL _gl;
 	private readonly ShaderLoader _shaderLoader;

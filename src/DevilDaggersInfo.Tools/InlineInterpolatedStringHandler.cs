@@ -5,7 +5,7 @@ namespace DevilDaggersInfo.Tools;
 // ReSharper disable MemberCanBeMadeStatic.Global
 #pragma warning disable CA1822, RCS1163
 [InterpolatedStringHandler]
-public ref struct InlineInterpolatedStringHandler
+internal ref struct InlineInterpolatedStringHandler
 {
 	private int _charsWritten;
 

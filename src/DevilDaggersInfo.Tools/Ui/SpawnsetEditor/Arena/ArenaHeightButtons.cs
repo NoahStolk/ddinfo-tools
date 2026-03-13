@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 
-public sealed class ArenaHeightButtons
+internal sealed class ArenaHeightButtons
 {
 	private const int _arenaButtonSize = 24;
 	private const int _arenaButtonSizeLarge = 48;

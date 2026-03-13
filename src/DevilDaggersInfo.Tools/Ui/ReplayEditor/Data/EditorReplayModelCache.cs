@@ -3,7 +3,7 @@ using DevilDaggersInfo.Core.Replay.Events.Enums;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 
-public sealed record EditorReplayModelCache
+internal sealed record EditorReplayModelCache
 {
 	public EditorReplayModelCache(IReadOnlyList<ReplayEvent> replayEvents, IReadOnlyList<EntityType> entities, IReadOnlyDictionary<int, int> entityIdByEventIndex)
 	{

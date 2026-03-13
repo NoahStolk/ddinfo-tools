@@ -3,7 +3,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
-public static class AssetEditorWindow
+internal static class AssetEditorWindow
 {
 	public static void Render()
 	{

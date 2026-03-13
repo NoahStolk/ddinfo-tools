@@ -2,7 +2,7 @@ using DevilDaggersInfo.Web.ApiSpec.Tools.Spawnsets;
 
 namespace DevilDaggersInfo.Tools.Networking.TaskHandlers;
 
-public static class FetchSpawnsetByHash
+internal static class FetchSpawnsetByHash
 {
 	public static async Task<GetSpawnsetByHash> HandleAsync(byte[] hash)
 	{

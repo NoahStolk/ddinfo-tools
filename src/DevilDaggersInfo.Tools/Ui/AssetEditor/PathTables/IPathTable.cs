@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
-public interface IPathTable<T>
+internal interface IPathTable<T>
 	where T : IPathTable<T>
 {
 	static abstract int ColumnCount { get; }

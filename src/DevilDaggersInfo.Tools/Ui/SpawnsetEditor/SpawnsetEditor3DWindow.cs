@@ -9,7 +9,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-public sealed unsafe class SpawnsetEditor3DWindow
+internal sealed unsafe class SpawnsetEditor3DWindow
 {
 	private readonly Glfw _glfw;
 	private readonly GL _gl;

@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 
-public static class CustomLeaderboardResultsWindow
+internal static class CustomLeaderboardResultsWindow
 {
 	private static List<UploadResult> _results = [];
 

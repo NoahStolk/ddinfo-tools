@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 
-public static class Hit
+internal static class Hit
 {
 	public static void RenderEdit(int uniqueId, HitEventData e, EditorReplayModel replay)
 	{

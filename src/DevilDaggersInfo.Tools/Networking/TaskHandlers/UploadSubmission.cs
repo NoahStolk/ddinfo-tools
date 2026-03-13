@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace DevilDaggersInfo.Tools.Networking.TaskHandlers;
 
-public static class UploadSubmission
+internal static class UploadSubmission
 {
 	public static async Task<GetUploadResponse> HandleAsync(AddUploadRequest addUploadRequest)
 	{

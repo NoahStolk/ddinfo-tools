@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis.Data;
 
-public class SplitsData
+internal class SplitsData
 {
 	private readonly SplitDataEntry[] _homingSplitData = new SplitDataEntry[SplitData.Count + 2]; // Include start and end.
 

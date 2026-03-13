@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
-public class Tile
+internal class Tile
 {
 	private static uint _vaoTile;
 	private static uint _vaoPillar;

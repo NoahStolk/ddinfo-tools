@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
-public sealed class ObjectBindingPathsTable : IPathTable<ObjectBindingPathsTable>
+internal sealed class ObjectBindingPathsTable : IPathTable<ObjectBindingPathsTable>
 {
 	public static int ColumnCount => 3;
 

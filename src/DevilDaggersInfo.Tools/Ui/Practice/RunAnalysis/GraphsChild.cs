@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
 
-public static class GraphsChild
+internal static class GraphsChild
 {
 	private static readonly List<int> _gemsCollected = [];
 	private static readonly List<int> _gemsDespawned = [];

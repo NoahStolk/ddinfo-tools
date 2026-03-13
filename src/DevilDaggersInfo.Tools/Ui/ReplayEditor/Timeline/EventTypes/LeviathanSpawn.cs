@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 
-public static class LeviathanSpawn
+internal static class LeviathanSpawn
 {
 	public static void RenderEdit(int uniqueId, LeviathanSpawnEventData e, EditorReplayModel replay)
 	{

@@ -2,7 +2,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 
-public static class PencilChild
+internal static class PencilChild
 {
 	private static float _size;
 

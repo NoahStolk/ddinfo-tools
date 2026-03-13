@@ -4,7 +4,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class PedeSpawnEvents : IEventTypeRenderer<PedeSpawnEventData>
+internal sealed class PedeSpawnEvents : IEventTypeRenderer<PedeSpawnEventData>
 {
 	public static int ColumnCount => 5;
 

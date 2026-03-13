@@ -15,7 +15,7 @@ using System.Text;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 
-public sealed class LeaderboardListViewChild
+internal sealed class LeaderboardListViewChild
 {
 	private readonly LeaderboardListChild _leaderboardListChild;
 	private readonly ResourceManager _resourceManager;

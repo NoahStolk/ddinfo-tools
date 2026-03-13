@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-public sealed class EndLoopTemplatesChild
+internal sealed class EndLoopTemplatesChild
 {
 	private List<float> EndLoopTimerStarts => field ??= CreateEndLoopTimerStarts();
 

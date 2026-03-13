@@ -9,7 +9,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 
-public static class ReplayTimelineSelectedEventsChild
+internal static class ReplayTimelineSelectedEventsChild
 {
 	private static readonly string[] _jumpTypeNamesArray = EnumUtils.JumpTypeNames.Values.ToArray();
 	private static readonly string[] _shootTypeNamesArray = EnumUtils.ShootTypeNames.Values.ToArray();

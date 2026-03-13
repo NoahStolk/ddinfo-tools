@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
-public static class ExtractLogic
+internal static class ExtractLogic
 {
 	public static async Task<List<string>> ExtractAsync(string inputFilePath, string outputDirectory)
 	{

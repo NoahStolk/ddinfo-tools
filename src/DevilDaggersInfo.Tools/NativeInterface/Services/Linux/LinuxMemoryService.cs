@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.NativeInterface.Services.Linux;
 
-public class LinuxMemoryService : INativeMemoryService
+internal class LinuxMemoryService : INativeMemoryService
 {
 	public void WriteMemory(Process process, long address, byte[] bytes, int offset, int size)
 	{

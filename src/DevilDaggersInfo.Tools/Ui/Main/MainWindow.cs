@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Main;
 
-public sealed class MainWindow(ResourceManager resourceManager, UiLayoutManager uiLayoutManager, FrameCounter frameCounter, LeaderboardListChild leaderboardListChild, AboutWindow aboutWindow)
+internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManager uiLayoutManager, FrameCounter frameCounter, LeaderboardListChild leaderboardListChild, AboutWindow aboutWindow)
 {
 	private readonly string _version = $"{AssemblyUtils.EntryAssemblyVersionString} (ALPHA)";
 

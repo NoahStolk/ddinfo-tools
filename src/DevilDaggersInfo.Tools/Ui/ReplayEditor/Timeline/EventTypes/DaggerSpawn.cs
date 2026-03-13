@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 
-public static class DaggerSpawn
+internal static class DaggerSpawn
 {
 	private static readonly string[] _daggerTypeNamesArray =
 	[

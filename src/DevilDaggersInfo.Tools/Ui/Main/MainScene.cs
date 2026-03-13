@@ -7,7 +7,7 @@ using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools.Ui.Main;
 
-public sealed unsafe class MainScene
+internal sealed unsafe class MainScene
 {
 	private readonly Glfw _glfw;
 	private readonly GL _gl;

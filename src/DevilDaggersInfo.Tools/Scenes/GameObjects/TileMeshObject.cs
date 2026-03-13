@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
-public class TileMeshObject
+internal class TileMeshObject
 {
 	private readonly uint _vao;
 	private readonly MeshContent _mesh;

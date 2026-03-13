@@ -11,7 +11,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-public static class HitEventExplanation
+internal static class HitEventExplanation
 {
 	public static void Render(HitEventData e, EditorReplayModel replay)
 	{

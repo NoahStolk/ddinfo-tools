@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
-public static class CompileLogic
+internal static class CompileLogic
 {
 	public static async Task CompileAsync(string outputDirectory, string outputFileName, bool createAudio, bool createDd)
 	{

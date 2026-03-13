@@ -2,7 +2,7 @@ using DevilDaggersInfo.Web.ApiSpec.Tools;
 
 namespace DevilDaggersInfo.Tools.Platforms;
 
-public class LinuxValues : IPlatformSpecificValues
+internal class LinuxValues : IPlatformSpecificValues
 {
 	public AppOperatingSystem AppOperatingSystem => AppOperatingSystem.Linux;
 

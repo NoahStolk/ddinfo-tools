@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
-public sealed class MeshPathsTable : IPathTable<MeshPathsTable>
+internal sealed class MeshPathsTable : IPathTable<MeshPathsTable>
 {
 	public static int ColumnCount => 3;
 

@@ -11,7 +11,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes;
 
-public sealed class ArenaScene
+internal sealed class ArenaScene
 {
 	public const float MinRenderTileHeight = -3;
 

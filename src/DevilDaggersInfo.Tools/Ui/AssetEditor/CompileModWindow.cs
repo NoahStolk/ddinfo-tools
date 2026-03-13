@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
-public static class CompileModWindow
+internal static class CompileModWindow
 {
 	private static string _outputDirectory = UserSettings.ModsDirectory;
 	private static string _outputFileName = "mod";

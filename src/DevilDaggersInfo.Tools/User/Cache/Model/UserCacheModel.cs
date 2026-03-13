@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.User.Cache.Model;
 
-public sealed record UserCacheModel
+internal sealed record UserCacheModel
 {
 	public int PlayerId { get; init; }
 	public int WindowWidth { get; init; }

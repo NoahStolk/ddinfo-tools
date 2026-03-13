@@ -8,7 +8,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 
-public static class ModsDirectoryWindow
+internal static class ModsDirectoryWindow
 {
 	private static bool _showEnabledMods = true;
 	private static bool _showDisabledMods = true;

@@ -4,7 +4,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class LeviathanSpawnEvents : IEventTypeRenderer<LeviathanSpawnEventData>
+internal sealed class LeviathanSpawnEvents : IEventTypeRenderer<LeviathanSpawnEventData>
 {
 	public static int ColumnCount => 1;
 

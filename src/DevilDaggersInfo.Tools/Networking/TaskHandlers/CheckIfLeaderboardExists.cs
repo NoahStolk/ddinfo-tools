@@ -2,7 +2,7 @@ using System.Net;
 
 namespace DevilDaggersInfo.Tools.Networking.TaskHandlers;
 
-public static class CheckIfLeaderboardExists
+internal static class CheckIfLeaderboardExists
 {
 	public static async Task<Result> HandleAsync(byte[] survivalHash)
 	{
@@ -10,5 +10,5 @@ public static class CheckIfLeaderboardExists
 		return new Result(hrm.StatusCode != HttpStatusCode.NotFound);
 	}
 
-	public sealed record Result(bool Exists);
+	internal sealed record Result(bool Exists);
 }

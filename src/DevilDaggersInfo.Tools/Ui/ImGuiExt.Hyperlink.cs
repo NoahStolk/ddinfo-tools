@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-public static partial class ImGuiExt
+internal static partial class ImGuiExt
 {
 	public static void Hyperlink(ReadOnlySpan<char> url, ReadOnlySpan<char> text)
 	{

@@ -9,7 +9,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 
-public sealed class LeaderboardListChild
+internal sealed class LeaderboardListChild
 {
 	public const int PageSize = 20;
 

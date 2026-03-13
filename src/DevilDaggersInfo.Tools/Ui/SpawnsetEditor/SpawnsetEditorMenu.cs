@@ -7,7 +7,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-public sealed class SpawnsetEditorMenu
+internal sealed class SpawnsetEditorMenu
 {
 	private readonly UiLayoutManager _uiLayoutManager;
 

@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
-public sealed class AssetEditorMenu
+internal sealed class AssetEditorMenu
 {
 	private readonly UiLayoutManager _uiLayoutManager;
 

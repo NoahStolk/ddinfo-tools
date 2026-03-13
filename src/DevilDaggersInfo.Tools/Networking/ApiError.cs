@@ -1,3 +1,3 @@
 namespace DevilDaggersInfo.Tools.Networking;
 
-public record ApiError(Exception? Exception, string? Message);
+internal record ApiError(Exception? Exception, string? Message);

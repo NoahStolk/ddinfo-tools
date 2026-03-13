@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis.Data;
 
-public record struct SplitDataEntry
+internal record struct SplitDataEntry
 {
 	public int DisplayTimer;
 	public SplitDataEntryKind Kind;

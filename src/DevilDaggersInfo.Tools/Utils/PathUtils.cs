@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Utils;
 
-public static class PathUtils
+internal static class PathUtils
 {
 	public const string FileExtensionReplay = "ddreplay";
 	public const string FileExtensionMod = "json";

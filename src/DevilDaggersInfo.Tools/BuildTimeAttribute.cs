@@ -1,7 +1,7 @@
 namespace DevilDaggersInfo.Tools;
 
 [AttributeUsage(AttributeTargets.Assembly)]
-public sealed class BuildTimeAttribute : Attribute
+internal sealed class BuildTimeAttribute : Attribute
 {
 	public BuildTimeAttribute(string buildTime)
 	{

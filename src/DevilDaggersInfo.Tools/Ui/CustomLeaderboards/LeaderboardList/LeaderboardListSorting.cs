@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 
-public enum LeaderboardListSorting
+internal enum LeaderboardListSorting
 {
 	Name,
 	Author,

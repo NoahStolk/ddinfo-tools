@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-public static class RecordingStateTypeExtensions
+internal static class RecordingStateTypeExtensions
 {
 	public static string ToDisplayString(this RecordingStateType recordingStateType)
 	{

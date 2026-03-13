@@ -8,7 +8,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 
-public sealed class ArenaWindow
+internal sealed class ArenaWindow
 {
 	public const int TileSize = 8;
 	private const int _halfTileSize = TileSize / 2;

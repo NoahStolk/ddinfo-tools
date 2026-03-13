@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-public static class ImGuiImage
+internal static class ImGuiImage
 {
 	public static void AddFramebufferImage(this ImDrawListPtr drawListPtr, FramebufferData framebufferData, Vector2 pMin, Vector2 pMax)
 	{

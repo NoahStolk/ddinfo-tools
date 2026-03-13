@@ -11,7 +11,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager;
 
-public static class ModInstallationWindow
+internal static class ModInstallationWindow
 {
 	private static Dictionary<string, List<EffectiveAsset>> _effectiveAssets = new();
 	private static int _activeAssets;

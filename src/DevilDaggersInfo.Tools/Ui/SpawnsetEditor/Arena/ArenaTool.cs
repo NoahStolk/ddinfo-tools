@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 
-public enum ArenaTool
+internal enum ArenaTool
 {
 	Pencil,
 	Line,

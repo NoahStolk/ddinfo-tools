@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 
-public record EditorReplayModel
+internal record EditorReplayModel
 {
 	private EditorReplayModelCache? _cache;
 

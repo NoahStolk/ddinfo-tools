@@ -5,7 +5,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-public sealed class ReplayEditorWindow
+internal sealed class ReplayEditorWindow
 {
 	private readonly ReplayEventsViewerChild _replayEventsViewerChild;
 	private readonly ReplayEntitiesChild _replayEntitiesChild;

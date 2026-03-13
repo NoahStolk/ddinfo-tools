@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-public enum RecordingStateType
+internal enum RecordingStateType
 {
 	WaitingForGame,
 	Recording,

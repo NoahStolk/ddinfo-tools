@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorStates;
 
-public interface IArenaState
+internal interface IArenaState
 {
 	void InitializeSession(ArenaMousePosition mousePosition);
 

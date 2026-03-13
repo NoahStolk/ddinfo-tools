@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis.Data;
 
-public enum SplitDataEntryKind
+internal enum SplitDataEntryKind
 {
 	Default,
 	Start,

@@ -9,7 +9,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-public static class SettingsWindow
+internal static class SettingsWindow
 {
 	private static void InfoTooltipWhenDisabled(bool disabled, string tooltipText)
 	{

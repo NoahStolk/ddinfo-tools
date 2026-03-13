@@ -8,7 +8,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-public static class LeaderboardReplayBrowser
+internal static class LeaderboardReplayBrowser
 {
 	private static bool _showWindow;
 	private static bool _isDownloading;

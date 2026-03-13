@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 
-public static class DaggerChild
+internal static class DaggerChild
 {
 	private static Vector2 _snap = Vector2.One;
 

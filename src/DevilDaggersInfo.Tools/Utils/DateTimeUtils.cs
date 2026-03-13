@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Utils;
 
-public static class DateTimeUtils
+internal static class DateTimeUtils
 {
 	// TODO: Implement ReadOnlySpan<char> variant.
 	public static string FormatTimeAgo(DateTime? utcDateTime)

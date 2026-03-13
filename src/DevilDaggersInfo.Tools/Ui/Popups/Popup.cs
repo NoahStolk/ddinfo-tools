@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
-public abstract class Popup
+internal abstract class Popup
 {
 	protected Popup(string id)
 	{

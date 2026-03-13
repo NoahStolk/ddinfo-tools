@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 
-public static class EntityPosition
+internal static class EntityPosition
 {
 	public static void RenderEdit(int uniqueId, EntityPositionEventData e, EditorReplayModel replay)
 	{

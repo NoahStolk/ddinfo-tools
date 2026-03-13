@@ -6,7 +6,7 @@ using System.Numerics;
 namespace DevilDaggersInfo.Tools.Ui;
 
 // TODO: Rewrite to instance.
-public static class UpdateWindow
+internal static class UpdateWindow
 {
 	public static bool Show;
 

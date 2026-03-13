@@ -11,7 +11,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 
-public sealed class ReplayEventsViewerChild
+internal sealed class ReplayEventsViewerChild
 {
 	private readonly Dictionary<EventType, bool> _eventTypeEnabled = Enum.GetValues<EventType>().ToDictionary(et => et, _ => true);
 

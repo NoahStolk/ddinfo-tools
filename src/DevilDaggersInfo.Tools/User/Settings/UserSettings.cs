@@ -7,7 +7,7 @@ using System.Text.Json;
 namespace DevilDaggersInfo.Tools.User.Settings;
 
 // TODO: Rewrite to instance.
-public static class UserSettings
+internal static class UserSettings
 {
 	private static readonly string _fileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ddinfo-tools");
 	private static readonly string _filePath = Path.Combine(_fileDirectory, "settings");

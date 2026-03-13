@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 
-public sealed record TimelineCacheEntry
+internal sealed record TimelineCacheEntry
 {
 	public int BoidSpawnEventCount { get; set; }
 	public int LeviathanSpawnEventCount { get; set; }

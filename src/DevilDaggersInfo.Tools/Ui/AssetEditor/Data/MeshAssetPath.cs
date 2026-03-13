@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 
-public record MeshAssetPath(string AssetName, string? AbsolutePath) : IAssetPath
+internal record MeshAssetPath(string AssetName, string? AbsolutePath) : IAssetPath
 {
 	[JsonIgnore]
 	public AssetType AssetType => AssetType.Mesh;

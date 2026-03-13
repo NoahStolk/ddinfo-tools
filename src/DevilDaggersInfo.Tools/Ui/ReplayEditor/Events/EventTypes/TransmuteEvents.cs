@@ -4,7 +4,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class TransmuteEvents : IEventTypeRenderer<TransmuteEventData>
+internal sealed class TransmuteEvents : IEventTypeRenderer<TransmuteEventData>
 {
 	public static int ColumnCount => 4;
 

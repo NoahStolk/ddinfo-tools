@@ -12,7 +12,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager;
 
-public static class ModPreviewWindow
+internal static class ModPreviewWindow
 {
 	private static List<ModBinaryTocEntry> _displayedTocEntries = [];
 	private static ModBinaryType? _binaryType;

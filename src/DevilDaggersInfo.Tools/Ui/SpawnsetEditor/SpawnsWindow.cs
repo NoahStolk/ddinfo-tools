@@ -13,7 +13,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-public static class SpawnsWindow
+internal static class SpawnsWindow
 {
 	public const int MaxSpawns = 4096;
 

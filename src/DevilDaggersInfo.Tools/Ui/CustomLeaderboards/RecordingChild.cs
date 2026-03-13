@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-public sealed class RecordingChild
+internal sealed class RecordingChild
 {
 	private readonly ResourceManager _resourceManager;
 	private readonly RecordingLogic _recordingLogic;

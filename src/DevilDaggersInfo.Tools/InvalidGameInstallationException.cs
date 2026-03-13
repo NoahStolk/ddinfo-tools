@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools;
 
-public class InvalidGameInstallationException : Exception
+internal class InvalidGameInstallationException : Exception
 {
 	public InvalidGameInstallationException(string? message)
 		: base(message)

@@ -13,7 +13,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes;
 
-public sealed class ArenaEditorContext
+internal sealed class ArenaEditorContext
 {
 	private readonly ArenaScene _arenaScene;
 	private readonly GlfwInput _glfwInput;

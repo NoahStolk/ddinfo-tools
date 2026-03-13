@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis.Data;
 
-public record struct StatisticEntry
+internal record struct StatisticEntry
 {
 	public int GemsCollected;
 	public int HomingStored;

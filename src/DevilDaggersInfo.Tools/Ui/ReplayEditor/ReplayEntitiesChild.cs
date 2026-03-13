@@ -11,7 +11,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-public sealed class ReplayEntitiesChild
+internal sealed class ReplayEntitiesChild
 {
 	private readonly ResourceManager _resourceManager;
 

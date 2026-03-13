@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
 
-public static class SplitsChild
+internal static class SplitsChild
 {
 	public static void Render()
 	{

@@ -2,7 +2,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-public static partial class ImGuiExt
+internal static partial class ImGuiExt
 {
 	public static unsafe void Title(ReadOnlySpan<char> title, ImFontPtr font = default)
 	{

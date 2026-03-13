@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Config;
 
-public sealed class ConfigLayout(GameInstallationValidator gameInstallationValidator)
+internal sealed class ConfigLayout(GameInstallationValidator gameInstallationValidator)
 {
 	public void Render()
 	{

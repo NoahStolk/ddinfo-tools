@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
-public class Message : Popup
+internal class Message : Popup
 {
 	private readonly string _text;
 

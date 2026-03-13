@@ -2,7 +2,7 @@ using System.Text;
 
 namespace DevilDaggersInfo.Tools.Networking;
 
-public static class AsyncHandler
+internal static class AsyncHandler
 {
 #if TEST
 	private static readonly HttpClientHandler _clientHandler = new();

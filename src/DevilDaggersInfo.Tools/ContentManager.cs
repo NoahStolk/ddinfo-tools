@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 
 namespace DevilDaggersInfo.Tools;
 
-public static class ContentManager
+internal static class ContentManager
 {
 	public static ContentContainer Content
 	{

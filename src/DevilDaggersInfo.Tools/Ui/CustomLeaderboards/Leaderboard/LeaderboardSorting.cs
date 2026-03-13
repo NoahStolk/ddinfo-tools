@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
 
-public enum LeaderboardSorting
+internal enum LeaderboardSorting
 {
 	Rank,
 	PlayerName,

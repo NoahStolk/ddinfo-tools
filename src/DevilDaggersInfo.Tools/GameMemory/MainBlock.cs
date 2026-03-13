@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DevilDaggersInfo.Tools.GameMemory;
 
-public readonly record struct MainBlock
+internal readonly record struct MainBlock
 {
 	public readonly string Marker = string.Empty;
 	public readonly int FormatVersion;

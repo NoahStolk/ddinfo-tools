@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 
-public static class TimelineCache
+internal static class TimelineCache
 {
 	private static readonly Dictionary<int, TimelineCacheEntry> _cache = new();
 

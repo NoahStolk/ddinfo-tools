@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.EditorFileState;
 
-public class FileState<TObject, TEditType>
+internal class FileState<TObject, TEditType>
 	where TObject : class
 	where TEditType : Enum
 {

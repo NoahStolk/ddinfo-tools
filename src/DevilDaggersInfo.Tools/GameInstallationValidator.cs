@@ -9,7 +9,7 @@ using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools;
 
-public sealed class GameInstallationValidator(
+internal sealed class GameInstallationValidator(
 	GL gl,
 	UiLayoutManager uiLayoutManager,
 	ResourceManager resourceManager,

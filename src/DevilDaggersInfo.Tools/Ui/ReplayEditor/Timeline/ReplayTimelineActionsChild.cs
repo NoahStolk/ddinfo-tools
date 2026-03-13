@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 
-public static class ReplayTimelineActionsChild
+internal static class ReplayTimelineActionsChild
 {
 	private static int _tickCount = 5;
 

@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 
-public static class ThornSpawn
+internal static class ThornSpawn
 {
 	public static void RenderEdit(int uniqueId, ThornSpawnEventData e)
 	{

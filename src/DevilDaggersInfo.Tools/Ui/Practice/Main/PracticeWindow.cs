@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-public sealed class PracticeWindow
+internal sealed class PracticeWindow
 {
 	public const int TemplateDescriptionHeight = 48;
 

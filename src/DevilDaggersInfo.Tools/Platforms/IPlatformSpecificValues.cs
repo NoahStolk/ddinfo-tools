@@ -2,7 +2,7 @@ using DevilDaggersInfo.Web.ApiSpec.Tools;
 
 namespace DevilDaggersInfo.Tools.Platforms;
 
-public interface IPlatformSpecificValues
+internal interface IPlatformSpecificValues
 {
 	AppOperatingSystem AppOperatingSystem { get; }
 

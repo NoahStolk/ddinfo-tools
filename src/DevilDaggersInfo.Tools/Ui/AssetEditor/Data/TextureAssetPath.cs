@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 
-public record TextureAssetPath(string AssetName, string? AbsolutePath) : IAssetPath
+internal record TextureAssetPath(string AssetName, string? AbsolutePath) : IAssetPath
 {
 	[JsonIgnore]
 	public AssetType AssetType => AssetType.Texture;

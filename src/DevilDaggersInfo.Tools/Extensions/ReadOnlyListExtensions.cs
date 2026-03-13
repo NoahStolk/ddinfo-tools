@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Extensions;
 
-public static class ReadOnlyListExtensions
+internal static class ReadOnlyListExtensions
 {
 	public static int IndexOf<T>(this IReadOnlyList<T> self, T elementToFind)
 	{

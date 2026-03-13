@@ -2,7 +2,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 
-public static class RectangleChild
+internal static class RectangleChild
 {
 	private static int _thickness = 1;
 	private static bool _filled = true;

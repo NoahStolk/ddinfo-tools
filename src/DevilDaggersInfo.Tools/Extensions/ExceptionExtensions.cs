@@ -2,7 +2,7 @@ using System.Security;
 
 namespace DevilDaggersInfo.Tools.Extensions;
 
-public static class ExceptionExtensions
+internal static class ExceptionExtensions
 {
 	public static bool IsFileIoException(this Exception ex)
 	{

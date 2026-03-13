@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Extensions;
 
-public static class SpanOfCharExtensions
+internal static class SpanOfCharExtensions
 {
 	public static Span<char> SliceUntilNull(this Span<char> span, int maxLength)
 	{

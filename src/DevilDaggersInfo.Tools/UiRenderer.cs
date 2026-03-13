@@ -16,7 +16,7 @@ using DevilDaggersInfo.Tools.User.Settings;
 
 namespace DevilDaggersInfo.Tools;
 
-public sealed class UiRenderer(
+internal sealed class UiRenderer(
 	UiLayoutManager uiLayoutManager,
 	ConfigLayout configLayout,
 	MainScene mainScene,

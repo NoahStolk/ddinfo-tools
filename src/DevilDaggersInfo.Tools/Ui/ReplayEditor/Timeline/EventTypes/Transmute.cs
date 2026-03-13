@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 
-public static class Transmute
+internal static class Transmute
 {
 	public static void RenderEdit(int uniqueId, TransmuteEventData e, EditorReplayModel replay)
 	{

@@ -2,7 +2,7 @@ using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 
-public static class TileUtils
+internal static class TileUtils
 {
 	public static Color GetColorFromHeight(float tileHeight)
 	{

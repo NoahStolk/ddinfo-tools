@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-public sealed class CustomTemplatesChild
+internal sealed class CustomTemplatesChild
 {
 	private int? _customTemplateIndexToReorder;
 

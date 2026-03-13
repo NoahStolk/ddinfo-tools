@@ -2,7 +2,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Extensions;
 
-public static class ImGuiIoPtrExtensions
+internal static class ImGuiIoPtrExtensions
 {
 	public static bool IsKeyDown(this ImGuiIOPtr io, ImGuiKey key)
 	{

@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-public static class Colors
+internal static class Colors
 {
 	private const byte _alphaButton = 102;
 	private const byte _alphaButtonActive = 191;

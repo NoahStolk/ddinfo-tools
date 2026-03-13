@@ -5,7 +5,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
-public static class AssetPathsChild
+internal static class AssetPathsChild
 {
 	private static readonly uint _audioColor = GetColor(AssetType.Audio);
 	private static readonly uint _meshColor = GetColor(AssetType.Mesh);

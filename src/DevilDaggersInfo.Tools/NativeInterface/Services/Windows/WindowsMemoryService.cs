@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace DevilDaggersInfo.Tools.NativeInterface.Services.Windows;
 
-public class WindowsMemoryService : INativeMemoryService
+internal class WindowsMemoryService : INativeMemoryService
 {
 	public Process? GetDevilDaggersProcess()
 	{

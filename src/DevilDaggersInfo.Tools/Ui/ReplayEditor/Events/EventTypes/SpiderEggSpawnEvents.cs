@@ -4,7 +4,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class SpiderEggSpawnEvents : IEventTypeRenderer<SpiderEggSpawnEventData>
+internal sealed class SpiderEggSpawnEvents : IEventTypeRenderer<SpiderEggSpawnEventData>
 {
 	public static int ColumnCount => 3;
 

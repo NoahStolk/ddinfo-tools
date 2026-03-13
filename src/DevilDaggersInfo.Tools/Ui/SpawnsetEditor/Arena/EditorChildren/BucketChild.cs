@@ -2,7 +2,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 
-public static class BucketChild
+internal static class BucketChild
 {
 	private static float _tolerance = 0.1f;
 	private static float _voidHeight = -2;

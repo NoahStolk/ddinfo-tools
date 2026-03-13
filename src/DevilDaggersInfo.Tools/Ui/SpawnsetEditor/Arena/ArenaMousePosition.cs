@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 
-public readonly record struct ArenaMousePosition(Vector2 Real, Vector2D<int> Tile, bool IsValid)
+internal readonly record struct ArenaMousePosition(Vector2 Real, Vector2D<int> Tile, bool IsValid)
 {
 	public static ArenaMousePosition Get(ImGuiIOPtr io, Vector2 offset)
 	{

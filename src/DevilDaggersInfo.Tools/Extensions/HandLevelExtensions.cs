@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Extensions;
 
-public static class HandLevelExtensions
+internal static class HandLevelExtensions
 {
 	public static Color GetColor(this HandLevel handLevel)
 	{

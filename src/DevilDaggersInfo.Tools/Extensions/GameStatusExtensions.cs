@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Extensions;
 
-public static class GameStatusExtensions
+internal static class GameStatusExtensions
 {
 	public static string ToDisplayString(this GameStatus gameStatus)
 	{

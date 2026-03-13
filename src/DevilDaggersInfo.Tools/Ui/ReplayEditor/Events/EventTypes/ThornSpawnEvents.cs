@@ -4,7 +4,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class ThornSpawnEvents : IEventTypeRenderer<ThornSpawnEventData>
+internal sealed class ThornSpawnEvents : IEventTypeRenderer<ThornSpawnEventData>
 {
 	public static int ColumnCount => 3;
 

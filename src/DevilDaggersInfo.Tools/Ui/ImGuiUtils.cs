@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-public static class ImGuiUtils
+internal static class ImGuiUtils
 {
 	private static readonly Vector2 _maxValue = new(float.MaxValue, float.MaxValue);
 

@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools;
 
-public sealed class FrameCounter
+internal sealed class FrameCounter
 {
 	private int _currentSecond;
 

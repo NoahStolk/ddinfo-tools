@@ -17,7 +17,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
 
-public sealed class LeaderboardChild
+internal sealed class LeaderboardChild
 {
 	private readonly CustomLeaderboards3DWindow _customLeaderboards3DWindow;
 
@@ -295,5 +295,5 @@ public sealed class LeaderboardChild
 		}
 	}
 
-	public sealed record LeaderboardData(GetCustomLeaderboard Leaderboard, int SpawnsetId);
+	internal sealed record LeaderboardData(GetCustomLeaderboard Leaderboard, int SpawnsetId);
 }

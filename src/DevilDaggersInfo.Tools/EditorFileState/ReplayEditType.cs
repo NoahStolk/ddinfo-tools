@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.EditorFileState;
 
-public enum ReplayEditType
+internal enum ReplayEditType
 {
 	Reset = 0,
 }

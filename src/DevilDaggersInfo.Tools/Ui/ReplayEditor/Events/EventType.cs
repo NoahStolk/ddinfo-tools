@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 
-public enum EventType
+internal enum EventType
 {
 	BoidSpawn,
 	LeviathanSpawn,

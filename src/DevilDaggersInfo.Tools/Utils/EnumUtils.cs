@@ -9,7 +9,7 @@ using Silk.NET.GLFW;
 
 namespace DevilDaggersInfo.Tools.Utils;
 
-public static class EnumUtils
+internal static class EnumUtils
 {
 	public static readonly IReadOnlyList<HandLevel> HandLevels = Enum.GetValues<HandLevel>();
 	public static readonly IReadOnlyDictionary<HandLevel, string> HandLevelNames = HandLevels.ToDictionary(h => h, h => h.ToString());

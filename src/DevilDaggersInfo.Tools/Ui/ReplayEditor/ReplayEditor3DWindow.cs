@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-public sealed unsafe class ReplayEditor3DWindow
+internal sealed unsafe class ReplayEditor3DWindow
 {
 	private readonly Glfw _glfw;
 	private readonly GL _gl;

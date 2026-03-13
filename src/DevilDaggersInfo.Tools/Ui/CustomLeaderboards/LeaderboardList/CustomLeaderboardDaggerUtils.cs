@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 
-public static class CustomLeaderboardDaggerUtils
+internal static class CustomLeaderboardDaggerUtils
 {
 	public static Color GetColor(CustomLeaderboardDagger? customLeaderboardDagger)
 	{

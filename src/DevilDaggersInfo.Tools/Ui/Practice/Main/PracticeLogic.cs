@@ -8,7 +8,7 @@ using Serilog;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-public static class PracticeLogic
+internal static class PracticeLogic
 {
 	public const int SpawnVersion = 6;
 

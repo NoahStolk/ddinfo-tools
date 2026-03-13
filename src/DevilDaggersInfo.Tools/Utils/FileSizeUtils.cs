@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Utils;
 
-public static class FileSizeUtils
+internal static class FileSizeUtils
 {
 	public static ReadOnlySpan<char> Format(long fileSizeInBytes)
 	{

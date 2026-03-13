@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-public sealed class NoFarmTemplatesChild
+internal sealed class NoFarmTemplatesChild
 {
 	private readonly List<NoFarmTemplate> _noFarmTemplates =
 	[

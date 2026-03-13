@@ -5,7 +5,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
-public static class PathTableUtils
+internal static class PathTableUtils
 {
 	public static List<AudioAssetInfo> Audio { get; } = AudioAudio.All.ToList();
 	public static List<MeshAssetInfo> Meshes { get; } = DdMeshes.All.ToList();

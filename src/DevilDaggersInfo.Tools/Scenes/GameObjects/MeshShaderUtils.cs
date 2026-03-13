@@ -3,7 +3,7 @@ using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
-public static class MeshShaderUtils
+internal static class MeshShaderUtils
 {
 	public static unsafe uint CreateVao(GL gl, MeshContent mesh)
 	{

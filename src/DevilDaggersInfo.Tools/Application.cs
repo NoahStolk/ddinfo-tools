@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 
 namespace DevilDaggersInfo.Tools;
 
-public sealed unsafe class Application
+internal sealed unsafe class Application
 {
 	private const double _maxMainDelta = 0.25;
 	private const double _mainLoopLength = 1 / 300.0;

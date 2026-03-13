@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-public sealed class InputValuesChild
+internal sealed class InputValuesChild
 {
 	private readonly ResourceManager _resourceManager;
 

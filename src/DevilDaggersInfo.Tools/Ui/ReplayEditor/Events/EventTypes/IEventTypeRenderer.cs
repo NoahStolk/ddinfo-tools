@@ -2,7 +2,7 @@ using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public interface IEventTypeRenderer<in T>
+internal interface IEventTypeRenderer<in T>
 {
 	static abstract int ColumnCount { get; }
 

@@ -6,7 +6,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-public static class HistoryWindow
+internal static class HistoryWindow
 {
 	public static bool UpdateScroll { get; set; }
 

@@ -2,7 +2,7 @@ using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 
 namespace DevilDaggersInfo.Tools.Networking.TaskHandlers;
 
-public static class FetchCustomLeaderboards
+internal static class FetchCustomLeaderboards
 {
 	public static async Task<List<GetCustomLeaderboardForOverview>> HandleAsync(int selectedPlayerId)
 	{

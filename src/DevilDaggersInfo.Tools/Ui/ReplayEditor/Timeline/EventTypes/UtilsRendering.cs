@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 
-public static class UtilsRendering
+internal static class UtilsRendering
 {
 	public static void InputByteEnum<TEnum>(int uniqueId, ReadOnlySpan<char> fieldName, ref TEnum value, IReadOnlyList<TEnum> values, string[] names)
 		where TEnum : Enum

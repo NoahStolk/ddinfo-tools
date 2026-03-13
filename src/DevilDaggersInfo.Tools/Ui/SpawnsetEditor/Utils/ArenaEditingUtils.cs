@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 
-public static class ArenaEditingUtils
+internal static class ArenaEditingUtils
 {
 	public static Vector2 Snap(Vector2 vector, float snap)
 	{
@@ -46,7 +46,7 @@ public static class ArenaEditingUtils
 		return new Rectangle(minX, minY, maxX - minX, maxY - minY);
 	}
 
-	public readonly record struct Rectangle
+	internal readonly record struct Rectangle
 	{
 		public Rectangle(int x, int y, int width, int height)
 		{
@@ -62,7 +62,7 @@ public static class ArenaEditingUtils
 		public int Y2 { get; }
 	}
 
-	public readonly record struct LineSegment
+	internal readonly record struct LineSegment
 	{
 		public LineSegment(Vector2 start, Vector2 end)
 		{
@@ -79,7 +79,7 @@ public static class ArenaEditingUtils
 		public Vector2 Normal { get; }
 	}
 
-	public readonly record struct Stadium
+	internal readonly record struct Stadium
 	{
 		public Stadium(Vector2 start, Vector2 end, float radius)
 		{
@@ -104,7 +104,7 @@ public static class ArenaEditingUtils
 		public Vector2 Edge2Point { get; }
 	}
 
-	public readonly record struct Square(Vector2 Min, Vector2 Max)
+	internal readonly record struct Square(Vector2 Min, Vector2 Max)
 	{
 		public Vector2 TopLeft => Min;
 		public Vector2 TopRight => new(Max.X, Min.Y);
@@ -194,7 +194,7 @@ public static class ArenaEditingUtils
 		}
 	}
 
-	public readonly record struct AlignedEllipse(Vector2 Center, Vector2 Radius)
+	internal readonly record struct AlignedEllipse(Vector2 Center, Vector2 Radius)
 	{
 		public bool Contains(Vector2 point)
 		{

@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools;
 
-public static class StringResources
+internal static class StringResources
 {
 	private const string _movement3D = "Use WASD, space, and left shift to move around.";
 	private const string _camera3D = "Hold right click to look around.";

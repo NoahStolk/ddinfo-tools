@@ -4,7 +4,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
-public sealed class SquidSpawnEvents : IEventTypeRenderer<SquidSpawnEventData>
+internal sealed class SquidSpawnEvents : IEventTypeRenderer<SquidSpawnEventData>
 {
 	public static int ColumnCount => 5;
 

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 
-public record AudioAssetPath(string AssetName, string? AbsolutePath, float? Loudness) : IAssetPath
+internal record AudioAssetPath(string AssetName, string? AbsolutePath, float? Loudness) : IAssetPath
 {
 	[JsonIgnore]
 	public AssetType AssetType => AssetType.Audio;

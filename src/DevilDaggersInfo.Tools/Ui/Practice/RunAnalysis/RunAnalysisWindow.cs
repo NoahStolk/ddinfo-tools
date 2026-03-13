@@ -3,7 +3,7 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
 
-public static class RunAnalysisWindow
+internal static class RunAnalysisWindow
 {
 	private static float _recordingTimer;
 

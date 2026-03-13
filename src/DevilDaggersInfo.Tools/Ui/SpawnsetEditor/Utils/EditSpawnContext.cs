@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 
-public static class EditSpawnContext
+internal static class EditSpawnContext
 {
 	private static readonly List<SpawnUiEntry> _spawns = [];
 

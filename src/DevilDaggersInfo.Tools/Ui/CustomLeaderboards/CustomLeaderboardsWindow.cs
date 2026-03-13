@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-public sealed class CustomLeaderboardsWindow
+internal sealed class CustomLeaderboardsWindow
 {
 	private readonly LeaderboardListChild _leaderboardListChild;
 	private readonly LeaderboardListViewChild _leaderboardListViewChild;

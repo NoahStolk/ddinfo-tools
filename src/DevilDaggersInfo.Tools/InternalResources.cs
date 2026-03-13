@@ -2,7 +2,7 @@ using DevilDaggersInfo.Tools.Engine.Content;
 
 namespace DevilDaggersInfo.Tools;
 
-public sealed record InternalResources(
+internal sealed record InternalResources(
 	Shader MeshShader,
 	TextureContent ApplicationIconTexture,
 	Texture ArrowEndTexture,

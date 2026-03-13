@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
-public sealed class TexturePathsTable : IPathTable<TexturePathsTable>
+internal sealed class TexturePathsTable : IPathTable<TexturePathsTable>
 {
 	public static int ColumnCount => 3;
 

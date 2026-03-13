@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools;
 
-public sealed record GameResources(
+internal sealed record GameResources(
 	Texture IconMaskCrosshairTexture,
 	Texture IconMaskDaggerTexture,
 	Texture IconMaskGemTexture,
