@@ -84,6 +84,8 @@ public sealed unsafe class Application
 			};
 		});
 
+		gl.ClearColor(0, 0, 0, 1);
+
 		Root.Application = this;
 	}
 

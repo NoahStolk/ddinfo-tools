@@ -98,6 +98,9 @@ public sealed partial class Container : IContainer<Application>
 		glfw.WindowHint(WindowHintOpenGlProfile.OpenGlProfile, OpenGlProfile.Core);
 		glfw.WindowHint(WindowHintBool.Focused, true);
 		glfw.WindowHint(WindowHintBool.Resizable, true);
+#if DEBUG
+		glfw.WindowHint(WindowHintBool.OpenGLDebugContext, true);
+#endif
 		glfw.CheckError();
 
 		return glfw;
@@ -106,9 +109,7 @@ public sealed partial class Container : IContainer<Application>
 	[Factory(Scope.SingleInstance)]
 	private static GL GetGl(Glfw glfw)
 	{
-		GL gl = GL.GetApi(glfw.GetProcAddress);
-		gl.ClearColor(0, 0, 0, 1);
-		return gl;
+		return GL.GetApi(glfw.GetProcAddress);
 	}
 
 	[Factory(Scope.SingleInstance)]
