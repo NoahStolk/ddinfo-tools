@@ -115,6 +115,6 @@ internal sealed class ArenaWindow
 			_arenaHeightButtons.Render();
 		}
 
-		ImGui.EndChild();
+		ImGui.End();
 	}
 }

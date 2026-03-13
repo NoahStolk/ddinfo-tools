@@ -23,7 +23,7 @@ internal sealed class InputValuesChild
 	{
 		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen in this UI.");
 
-		if (ImGui.BeginChild("InputValues", new Vector2(380, 200), ImGuiChildFlags.Border))
+		if (ImGui.BeginChild("InputValues", new Vector2(380, 200), ImGuiChildFlags.Border)) // TODO: Borders in ImGui update.
 		{
 			ImGui.SeparatorText("Inputs");
 

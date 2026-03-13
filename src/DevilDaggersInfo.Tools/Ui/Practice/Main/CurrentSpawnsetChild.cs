@@ -12,7 +12,7 @@ internal static class CurrentSpawnsetChild
 {
 	public static void Render()
 	{
-		if (ImGui.BeginChild("CurrentSpawnset", new Vector2(0, 200), ImGuiChildFlags.Border))
+		if (ImGui.BeginChild("CurrentSpawnset", new Vector2(0, 200), ImGuiChildFlags.Border)) // TODO: Borders in ImGui update.
 		{
 			ImGui.SeparatorText("Current practice configuration");
 			ImGui.Spacing();

@@ -54,38 +54,38 @@ internal sealed class ReplayInputsChild
 
 		if (ImGui.BeginChild("ReplayInputsChild", new Vector2(0, 0)))
 		{
-			if (!ImGui.BeginTable("ReplayInputsTable", 2, ImGuiTableFlags.BordersInnerH))
-				return;
-
-			ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 128);
-			ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.None, 384);
-			ImGui.TableHeadersRow();
-
-			ImGui.TextColored(Color.White, Inline.Span($"Look Speed: {replay.LookSpeed}"));
-
-			int i = 0;
-			foreach (InputsEventData inputs in replay.InputsEvents)
+			if (ImGui.BeginTable("ReplayInputsTable", 2, ImGuiTableFlags.BordersInnerH))
 			{
-				if (i < _startTick)
+				ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 128);
+				ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.None, 384);
+				ImGui.TableHeadersRow();
+
+				ImGui.TextColored(Color.White, Inline.Span($"Look Speed: {replay.LookSpeed}"));
+
+				int i = 0;
+				foreach (InputsEventData inputs in replay.InputsEvents)
 				{
+					if (i < _startTick)
+					{
+						i++;
+						continue;
+					}
+
+					ImGui.TableNextRow();
+
+					ImGui.TableNextColumn();
+					ImGui.Text(Inline.Span($"{TimeUtils.TickToTime(i, replay.StartTime):0.0000} ({i})"));
+
+					ImGui.TableNextColumn();
+					RenderInputsEvent(inputs.Left, inputs.Right, inputs.Forward, inputs.Backward, inputs.Jump, inputs.Shoot, inputs.ShootHoming, inputs.MouseX, inputs.MouseY);
+
 					i++;
-					continue;
+					if (i > _endTick)
+						break;
 				}
 
-				ImGui.TableNextRow();
-
-				ImGui.TableNextColumn();
-				ImGui.Text(Inline.Span($"{TimeUtils.TickToTime(i, replay.StartTime):0.0000} ({i})"));
-
-				ImGui.TableNextColumn();
-				RenderInputsEvent(inputs.Left, inputs.Right, inputs.Forward, inputs.Backward, inputs.Jump, inputs.Shoot, inputs.ShootHoming, inputs.MouseX, inputs.MouseY);
-
-				i++;
-				if (i > _endTick)
-					break;
+				ImGui.EndTable();
 			}
-
-			ImGui.EndTable();
 		}
 
 		ImGui.EndChild(); // ReplayInputsChild

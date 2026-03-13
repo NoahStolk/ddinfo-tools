@@ -50,9 +50,9 @@ internal static class HistoryWindow
 			}
 		}
 
-		ImGui.PopStyleVar();
-
 		ImGui.End();
+
+		ImGui.PopStyleVar();
 
 		ImGuiIOPtr io = ImGui.GetIO();
 		if (io.KeyCtrl)

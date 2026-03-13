@@ -129,9 +129,9 @@ internal static class ReplayTimelineChild
 
 			// Always render these invisible buttons so the scroll bar is always visible.
 			ImGui.SetCursorScreenPos(origin);
-			ImGui.InvisibleButton("InvisibleStartMarker", default);
+			ImGui.InvisibleButton("InvisibleStartMarker", default); // TODO: Fix. This is not allowed by ImGui.
 			ImGui.SetCursorScreenPos(origin + new Vector2((replay.TickCount - 1) * _markerSize, 0));
-			ImGui.InvisibleButton("InvisibleEndMarker", default);
+			ImGui.InvisibleButton("InvisibleEndMarker", default); // TODO: Fix. This is not allowed by ImGui.
 
 			for (int i = Math.Max(startTickIndex, 0); i < Math.Min(endTickIndex, replay.TickCount); i++)
 			{

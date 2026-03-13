@@ -46,8 +46,9 @@ internal static class SpawnsWindow
 				if (ImGui.BeginChild("Warning", new Vector2(0, 56)))
 				{
 					ImGui.TextWrapped(Inline.Span($"(!) The end loop is only {endLoopLength.Value} seconds long, which will probably result in severe lag or a crash. If you intend to have no end loop, make sure to add an empty spawn at the end of the spawns list."));
-					ImGui.EndChild();
 				}
+
+				ImGui.EndChild();
 
 				ImGui.PopStyleColor();
 			}

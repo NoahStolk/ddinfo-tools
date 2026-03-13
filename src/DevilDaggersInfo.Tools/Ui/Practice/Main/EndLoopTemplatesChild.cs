@@ -37,7 +37,7 @@ internal sealed class EndLoopTemplatesChild
 
 	public void Render(Vector2 templateContainerSize, Vector2 templateListSize, float templateWidth)
 	{
-		if (ImGui.BeginChild("EndLoopTemplates", templateContainerSize, ImGuiChildFlags.Border))
+		if (ImGui.BeginChild("EndLoopTemplates", templateContainerSize, ImGuiChildFlags.Border)) // TODO: Borders in ImGui update.
 		{
 			ImGui.Text("End loop templates");
 
@@ -69,7 +69,7 @@ internal sealed class EndLoopTemplatesChild
 		Color color = waveIndex % 3 == 2 ? EnemiesV3_2.Ghostpede.Color.ToEngineColor() : EnemiesV3_2.Gigapede.Color.ToEngineColor();
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
-		if (ImGui.BeginChild(Inline.Span($"Wave{waveIndex + 1}"), buttonSize, ImGuiChildFlags.Border))
+		if (ImGui.BeginChild(Inline.Span($"Wave{waveIndex + 1}"), buttonSize, ImGuiChildFlags.Border)) // TODO: Borders in ImGui update.
 		{
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
