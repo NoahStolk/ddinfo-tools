@@ -1,8 +1,7 @@
 using DevilDaggersInfo.Tools.Engine.Intersections;
-using DevilDaggersInfo.Tools.Engine.Maths;
 using DevilDaggersInfo.Tools.Extensions;
+using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.User.Settings;
-using ImGuiGlfw;
 using ImGuiNET;
 using Silk.NET.GLFW;
 using Silk.NET.Maths;

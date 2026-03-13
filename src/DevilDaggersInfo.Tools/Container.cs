@@ -15,7 +15,6 @@ using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiGlfw;
 using ImGuiNET;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
@@ -111,10 +110,10 @@ internal sealed partial class Container : IContainer<Application>
 	}
 
 	[Factory(Scope.SingleInstance)]
-	private static unsafe ImGuiController CreateImGuiController(GL gl, GlfwInput glfwInput)
+	private static unsafe ImGuiController CreateImGuiController(GL gl, GlfwInput glfwInput, ShaderLoader shaderLoader)
 	{
 		// TODO: Inject UserCache.
-		ImGuiController imGuiController = new(gl, glfwInput, UserCache.Model.WindowWidth, UserCache.Model.WindowHeight);
+		ImGuiController imGuiController = new(gl, glfwInput, shaderLoader, UserCache.Model.WindowWidth, UserCache.Model.WindowHeight);
 
 		Colors.SetColors(Colors.Main);
 

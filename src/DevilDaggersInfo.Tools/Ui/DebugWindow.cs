@@ -4,7 +4,6 @@ using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiGlfw;
 using ImGuiNET;
 using Silk.NET.GLFW;
 using System.Numerics;

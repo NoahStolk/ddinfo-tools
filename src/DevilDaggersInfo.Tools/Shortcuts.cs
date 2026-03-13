@@ -3,27 +3,13 @@ using DevilDaggersInfo.Tools.Ui.AssetEditor;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
-using ImGuiGlfw;
 using ImGuiNET;
 using Silk.NET.GLFW;
 
 namespace DevilDaggersInfo.Tools;
 
-internal sealed class Shortcuts
+internal sealed class Shortcuts(UiLayoutManager uiLayoutManager, SpawnsetEditorMenu spawnsetEditorMenu, AssetEditorMenu assetEditorMenu, ReplayEditorMenu replayEditorMenu)
 {
-	private readonly UiLayoutManager _uiLayoutManager;
-	private readonly SpawnsetEditorMenu _spawnsetEditorMenu;
-	private readonly AssetEditorMenu _assetEditorMenu;
-	private readonly ReplayEditorMenu _replayEditorMenu;
-
-	public Shortcuts(UiLayoutManager uiLayoutManager, SpawnsetEditorMenu spawnsetEditorMenu, AssetEditorMenu assetEditorMenu, ReplayEditorMenu replayEditorMenu)
-	{
-		_uiLayoutManager = uiLayoutManager;
-		_spawnsetEditorMenu = spawnsetEditorMenu;
-		_assetEditorMenu = assetEditorMenu;
-		_replayEditorMenu = replayEditorMenu;
-	}
-
 	public void Handle(ImGuiIOPtr io, GlfwInput glfwInput)
 	{
 		if (io.WantTextInput)
@@ -37,17 +23,17 @@ internal sealed class Shortcuts
 
 		if (glfwInput.IsKeyPressed(Keys.Escape))
 		{
-			switch (_uiLayoutManager.Layout)
+			switch (uiLayoutManager.Layout)
 			{
-				case LayoutType.SpawnsetEditor: _spawnsetEditorMenu.Close(); break;
-				case LayoutType.AssetEditor: _assetEditorMenu.Close(); break;
-				case LayoutType.ReplayEditor: _replayEditorMenu.Close(); break;
+				case LayoutType.SpawnsetEditor: spawnsetEditorMenu.Close(); break;
+				case LayoutType.AssetEditor: assetEditorMenu.Close(); break;
+				case LayoutType.ReplayEditor: replayEditorMenu.Close(); break;
 				case LayoutType.Config: break;
-				default: _uiLayoutManager.Layout = LayoutType.Main; break;
+				default: uiLayoutManager.Layout = LayoutType.Main; break;
 			}
 		}
 
-		switch (_uiLayoutManager.Layout)
+		switch (uiLayoutManager.Layout)
 		{
 			case LayoutType.SpawnsetEditor: HandleSpawnsetEditorShortcuts(glfwInput, ctrl, shift); break;
 			case LayoutType.AssetEditor: HandleAssetEditorShortcuts(glfwInput, ctrl, shift); break;
@@ -112,15 +98,15 @@ internal sealed class Shortcuts
 			if (!shift)
 			{
 				if (glfwInput.IsKeyPressed(Keys.N))
-					_replayEditorMenu.NewReplay();
+					replayEditorMenu.NewReplay();
 				else if (glfwInput.IsKeyPressed(Keys.O))
-					_replayEditorMenu.OpenReplay();
+					replayEditorMenu.OpenReplay();
 				else if (glfwInput.IsKeyPressed(Keys.S))
 					ReplayEditorMenu.SaveReplay();
 				else if (glfwInput.IsKeyPressed(Keys.I))
 					ReplayEditorMenu.InjectReplay();
 				else if (glfwInput.IsKeyPressed(Keys.G))
-					_replayEditorMenu.OpenReplayFromGameMemory();
+					replayEditorMenu.OpenReplayFromGameMemory();
 			}
 			else
 			{

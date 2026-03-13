@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Scenes;
 using DevilDaggersInfo.Tools.User.Cache;
-using ImGuiGlfw;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 

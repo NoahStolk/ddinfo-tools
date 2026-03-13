@@ -3,8 +3,8 @@ using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Intersections;
 using DevilDaggersInfo.Tools.Scenes.GameObjects;
+using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
-using ImGuiGlfw;
 using ImGuiNET;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
@@ -13,32 +13,19 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes;
 
-internal sealed class ArenaEditorContext
+internal sealed class ArenaEditorContext(ArenaScene arenaScene, GlfwInput glfwInput, GL gl, ResourceManager resourceManager)
 {
-	private readonly ArenaScene _arenaScene;
-	private readonly GlfwInput _glfwInput;
-	private readonly GL _gl;
-	private readonly ResourceManager _resourceManager;
-
 	private readonly List<(Tile Tile, float Distance)> _hitTiles = [];
 	private readonly List<Tile> _selectedTiles = [];
 
 	private Tile? _closestHitTile;
-
-	public ArenaEditorContext(ArenaScene arenaScene, GlfwInput glfwInput, GL gl, ResourceManager resourceManager)
-	{
-		_arenaScene = arenaScene;
-		_glfwInput = glfwInput;
-		_gl = gl;
-		_resourceManager = resourceManager;
-	}
 
 	public void Update(bool isActive, int currentTick)
 	{
 		if (!isActive || currentTick > 0)
 			return;
 
-		bool ctrl = _glfwInput.IsKeyDown(Keys.ControlLeft) || _glfwInput.IsKeyDown(Keys.ControlRight);
+		bool ctrl = glfwInput.IsKeyDown(Keys.ControlLeft) || glfwInput.IsKeyDown(Keys.ControlRight);
 		if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
 		{
 			if (_closestHitTile is { Height: > -3 })
@@ -64,7 +51,7 @@ internal sealed class ArenaEditorContext
 			_selectedTiles.Add(_closestHitTile);
 		}
 
-		float scroll = _glfwInput.MouseWheelY;
+		float scroll = glfwInput.MouseWheelY;
 		if (scroll is > -float.Epsilon and < float.Epsilon || _selectedTiles.Count == 0)
 			return;
 
@@ -83,15 +70,15 @@ internal sealed class ArenaEditorContext
 
 	public void RenderTiles(bool renderEditorContext, Shader shader)
 	{
-		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen here.");
+		Debug.Assert(resourceManager.GameResources != null, $"{nameof(resourceManager.GameResources)} is null, which should never happen here.");
 
 		_hitTiles.Clear();
-		Ray ray = _arenaScene.Camera.ScreenToWorldPoint();
-		for (int i = 0; i < _arenaScene.Tiles.GetLength(0); i++)
+		Ray ray = arenaScene.Camera.ScreenToWorldPoint();
+		for (int i = 0; i < arenaScene.Tiles.GetLength(0); i++)
 		{
-			for (int j = 0; j < _arenaScene.Tiles.GetLength(1); j++)
+			for (int j = 0; j < arenaScene.Tiles.GetLength(1); j++)
 			{
-				Tile tile = _arenaScene.Tiles[i, j];
+				Tile tile = arenaScene.Tiles[i, j];
 				Vector3 min = new(tile.PositionX - 2, -2, tile.PositionZ - 2);
 				Vector3 max = new(tile.PositionX + 2, tile.Height + 2, tile.PositionZ + 2);
 				RayVsAabbIntersection? intersects = ray.Intersects(min, max);
@@ -103,43 +90,43 @@ internal sealed class ArenaEditorContext
 		_closestHitTile = _hitTiles.Count == 0 ? null : _hitTiles.MinBy(ht => ht.Distance).Tile;
 
 		// Temporarily use LutScale to highlight the target tile.
-		_resourceManager.GameResources.TileTexture.Bind();
+		resourceManager.GameResources.TileTexture.Bind();
 
-		for (int i = 0; i < _arenaScene.Tiles.GetLength(0); i++)
+		for (int i = 0; i < arenaScene.Tiles.GetLength(0); i++)
 		{
-			for (int j = 0; j < _arenaScene.Tiles.GetLength(1); j++)
+			for (int j = 0; j < arenaScene.Tiles.GetLength(1); j++)
 			{
-				Tile tile = _arenaScene.Tiles[i, j];
+				Tile tile = arenaScene.Tiles[i, j];
 				Vector3 highlightColor = GetHighlightColor(tile);
 				bool highlight = highlightColor != default;
 
 				if (highlight)
-					_gl.Uniform3(shader.GetUniformLocation("highlightColor"), highlightColor);
+					gl.Uniform3(shader.GetUniformLocation("highlightColor"), highlightColor);
 
-				tile.RenderTop(_gl, _resourceManager);
+				tile.RenderTop(gl, resourceManager);
 
 				if (highlight)
-					_gl.Uniform3(shader.GetUniformLocation("highlightColor"), Vector3.Zero);
+					gl.Uniform3(shader.GetUniformLocation("highlightColor"), Vector3.Zero);
 			}
 		}
 
-		_resourceManager.GameResources.PillarTexture.Bind();
+		resourceManager.GameResources.PillarTexture.Bind();
 
-		for (int i = 0; i < _arenaScene.Tiles.GetLength(0); i++)
+		for (int i = 0; i < arenaScene.Tiles.GetLength(0); i++)
 		{
-			for (int j = 0; j < _arenaScene.Tiles.GetLength(1); j++)
+			for (int j = 0; j < arenaScene.Tiles.GetLength(1); j++)
 			{
-				Tile tile = _arenaScene.Tiles[i, j];
+				Tile tile = arenaScene.Tiles[i, j];
 				Vector3 highlightColor = GetHighlightColor(tile);
 				bool highlight = highlightColor != default;
 
 				if (highlight)
-					_gl.Uniform3(shader.GetUniformLocation("highlightColor"), highlightColor);
+					gl.Uniform3(shader.GetUniformLocation("highlightColor"), highlightColor);
 
-				tile.RenderPillar(_gl, _resourceManager);
+				tile.RenderPillar(gl, resourceManager);
 
 				if (highlight)
-					_gl.Uniform3(shader.GetUniformLocation("highlightColor"), Vector3.Zero);
+					gl.Uniform3(shader.GetUniformLocation("highlightColor"), Vector3.Zero);
 			}
 		}
 
