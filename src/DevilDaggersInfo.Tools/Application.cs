@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.Ui.Main;
+using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
 using ImGuiGlfw;
 using ImGuiNET;
@@ -67,6 +68,21 @@ public sealed unsafe class Application
 			Pixels = (byte*)_iconPtr,
 		};
 		_glfw.SetWindowIcon(_window, 1, &image);
+
+		glfw.SetFramebufferSizeCallback(window, (_, w, h) =>
+		{
+			bool isMaximized = glfw.GetWindowAttrib(window, WindowAttributeGetter.Maximized);
+
+			gl.Viewport(0, 0, (uint)w, (uint)h);
+			imGuiController.WindowResized(w, h);
+
+			UserCache.Model = UserCache.Model with
+			{
+				WindowWidth = w,
+				WindowHeight = h,
+				WindowIsMaximized = isMaximized,
+			};
+		});
 
 		Root.Application = this;
 	}

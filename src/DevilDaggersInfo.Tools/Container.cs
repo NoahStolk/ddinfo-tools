@@ -146,28 +146,14 @@ public sealed partial class Container : IContainer<Application>
 	}
 
 	[Factory(Scope.SingleInstance)]
-	private static unsafe WindowHandle* CreateWindow(GL gl, Glfw glfw, GlfwInput glfwInput, ImGuiController imGuiController)
+	private static unsafe WindowHandle* CreateWindow(Glfw glfw, GlfwInput glfwInput)
 	{
 		// TODO: Inject UserCache.
 		WindowHandle* window = glfw.CreateWindow(UserCache.Model.WindowWidth, UserCache.Model.WindowHeight, $"ddinfo tools {AssemblyUtils.EntryAssemblyVersionString}", null, null);
 		glfw.CheckError();
 		if (window == null)
-			throw new InvalidOperationException("Could not create window.");
+			throw new InvalidOperationException("Could not create window. Window pointer was null.");
 
-		glfw.SetFramebufferSizeCallback(window, (_, w, h) =>
-		{
-			bool isMaximized = glfw.GetWindowAttrib(window, WindowAttributeGetter.Maximized);
-
-			gl.Viewport(0, 0, (uint)w, (uint)h);
-			imGuiController.WindowResized(w, h);
-
-			UserCache.Model = UserCache.Model with
-			{
-				WindowWidth = w,
-				WindowHeight = h,
-				WindowIsMaximized = isMaximized,
-			};
-		});
 		glfw.SetCursorPosCallback(window, (_, x, y) => glfwInput.CursorPosCallback(x, y));
 		glfw.SetScrollCallback(window, (_, _, y) => glfwInput.MouseWheelCallback(y));
 		glfw.SetMouseButtonCallback(window, (_, button, state, _) => glfwInput.MouseButtonCallback(button, state));
