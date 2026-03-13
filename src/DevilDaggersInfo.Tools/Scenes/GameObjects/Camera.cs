@@ -137,7 +137,7 @@ internal sealed unsafe class Camera(Glfw glfw, GlfwInput glfwInput, WindowHandle
 		_yaw -= lookSpeed * delta.X * 0.0001f;
 		_pitch -= lookSpeed * delta.Y * 0.0001f;
 
-		_pitch = Math.Clamp(_pitch, MathUtils.ToRadians(-89.9f), MathUtils.ToRadians(89.9f));
+		_pitch = Math.Clamp(_pitch, float.DegreesToRadians(-89.9f), float.DegreesToRadians(89.9f));
 		_rotationState = Quaternion.CreateFromYawPitchRoll(_yaw, -_pitch, 0);
 
 		glfw.SetCursorPos(window, _lockedMousePosition.Value.X, _lockedMousePosition.Value.Y);
@@ -156,7 +156,7 @@ internal sealed unsafe class Camera(Glfw glfw, GlfwInput glfwInput, WindowHandle
 
 		const float nearPlaneDistance = 0.05f;
 		const float farPlaneDistance = 10_000f;
-		Projection = Matrix4x4.CreatePerspectiveFieldOfView(MathUtils.ToRadians(UserSettings.Model.FieldOfView), aspectRatio, nearPlaneDistance, farPlaneDistance);
+		Projection = Matrix4x4.CreatePerspectiveFieldOfView(float.DegreesToRadians(UserSettings.Model.FieldOfView), aspectRatio, nearPlaneDistance, farPlaneDistance);
 	}
 
 	private static Matrix4x4 SetRotationFromDirectionalVector(Vector3 direction)
@@ -191,7 +191,7 @@ internal sealed unsafe class Camera(Glfw glfw, GlfwInput glfwInput, WindowHandle
 		Vector2 relative = -new Vector2(mousePosition.X / _windowWidth - 0.5f, mousePosition.Y / _windowHeight - 0.5f);
 
 		// Angle in radians from the view axis to the top plane of the view pyramid.
-		float verticalAngle = 0.5f * MathUtils.ToRadians(UserSettings.Model.FieldOfView);
+		float verticalAngle = 0.5f * float.DegreesToRadians(UserSettings.Model.FieldOfView);
 
 		// World space height of the view pyramid measured at 1m depth from the camera.
 		float worldHeight = 2f * MathF.Tan(verticalAngle);

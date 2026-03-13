@@ -2,21 +2,6 @@ namespace DevilDaggersInfo.Tools.Engine.Maths;
 
 public static class MathUtils
 {
-	private const float _toRad = MathF.PI / 180;
-	private const float _toDeg = 180 / MathF.PI;
-
-	[Obsolete]
-	public static float ToDegrees(float radians)
-	{
-		return radians * _toDeg;
-	}
-
-	[Obsolete]
-	public static float ToRadians(float degrees)
-	{
-		return degrees * _toRad;
-	}
-
 	public static float Lerp(float value1, float value2, float amount)
 	{
 		return value1 + (value2 - value1) * amount;
