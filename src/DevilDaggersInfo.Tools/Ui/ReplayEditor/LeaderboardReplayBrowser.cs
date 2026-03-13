@@ -74,7 +74,7 @@ internal static class LeaderboardReplayBrowser
 			},
 			onError: apiError =>
 			{
-				Root.Log.Warning(apiError.Message);
+				Root.Log.Warning("The Devil Daggers leaderboard servers did not return a successful response: {Message}", apiError.Message ?? "(empty)");
 				PopupManager.ShowError("The Devil Daggers leaderboard servers did not return a successful response.", apiError);
 				_isDownloading = false;
 			});
