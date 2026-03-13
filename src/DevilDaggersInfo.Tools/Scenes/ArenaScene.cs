@@ -26,7 +26,7 @@ public sealed class ArenaScene
 	private readonly ArenaEditorContext? _editorContext;
 
 	private Player? _player;
-	// private Skull4? _skull4;
+	private Skull4? _skull4;
 
 	public unsafe ArenaScene(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ResourceManager resourceManager, Func<SpawnsetBinary> getSpawnset, bool useMenuCamera, bool isEditor)
 	{
@@ -76,7 +76,7 @@ public sealed class ArenaScene
 
 	public void AddSkull4()
 	{
-		//_skull4 = new Skull4();
+		_skull4 = new Skull4(_gl, _resourceManager);
 	}
 
 	public void SetPlayerMovement(ReplaySimulation replaySimulation)
@@ -175,7 +175,7 @@ public sealed class ArenaScene
 			_gl.BindVertexArray(0);
 		}
 
-		// _skull4?.Render();
+		_skull4?.Render();
 
 		_resourceManager.InternalResources.TileHitboxTexture.Bind();
 

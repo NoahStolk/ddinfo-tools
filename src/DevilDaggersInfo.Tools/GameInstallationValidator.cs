@@ -65,7 +65,7 @@ public sealed class GameInstallationValidator
 		Player.InitializeRendering(_gl);
 		RaceDagger.InitializeRendering(_gl);
 		Tile.InitializeRendering(_gl, _resourceManager);
-		// Skull4.InitializeRendering();
+		Skull4.InitializeRendering(_gl);
 
 		// Initialize scenes.
 		_mainScene.Initialize();
