@@ -5,6 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
+// TODO: Rewrite to instance.
 public static class PopupManager
 {
 	private static readonly List<Popup> _popups = [];

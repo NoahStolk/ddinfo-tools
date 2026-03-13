@@ -2,38 +2,38 @@ using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools.Engine.Loaders;
 
-public static class ShaderLoader
+public sealed class ShaderLoader(GL gl)
 {
-	public static uint Load(string vertexCode, string fragmentCode)
+	public uint Load(string vertexCode, string fragmentCode)
 	{
-		uint vs = Graphics.Gl.CreateShader(ShaderType.VertexShader);
-		Graphics.Gl.ShaderSource(vs, vertexCode);
-		Graphics.Gl.CompileShader(vs);
+		uint vs = gl.CreateShader(ShaderType.VertexShader);
+		gl.ShaderSource(vs, vertexCode);
+		gl.CompileShader(vs);
 		CheckShaderStatus(ShaderType.VertexShader, vs);
 
-		uint fs = Graphics.Gl.CreateShader(ShaderType.FragmentShader);
-		Graphics.Gl.ShaderSource(fs, fragmentCode);
-		Graphics.Gl.CompileShader(fs);
+		uint fs = gl.CreateShader(ShaderType.FragmentShader);
+		gl.ShaderSource(fs, fragmentCode);
+		gl.CompileShader(fs);
 		CheckShaderStatus(ShaderType.FragmentShader, fs);
 
-		uint id = Graphics.Gl.CreateProgram();
+		uint id = gl.CreateProgram();
 
-		Graphics.Gl.AttachShader(id, vs);
-		Graphics.Gl.AttachShader(id, fs);
-		Graphics.Gl.LinkProgram(id);
+		gl.AttachShader(id, vs);
+		gl.AttachShader(id, fs);
+		gl.LinkProgram(id);
 
-		Graphics.Gl.DetachShader(id, vs);
-		Graphics.Gl.DetachShader(id, fs);
+		gl.DetachShader(id, vs);
+		gl.DetachShader(id, fs);
 
-		Graphics.Gl.DeleteShader(vs);
-		Graphics.Gl.DeleteShader(fs);
+		gl.DeleteShader(vs);
+		gl.DeleteShader(fs);
 
 		return id;
 	}
 
-	private static void CheckShaderStatus(ShaderType shaderType, uint shaderId)
+	private void CheckShaderStatus(ShaderType shaderType, uint shaderId)
 	{
-		string infoLog = Graphics.Gl.GetShaderInfoLog(shaderId);
+		string infoLog = gl.GetShaderInfoLog(shaderId);
 		if (!string.IsNullOrWhiteSpace(infoLog))
 			throw new InvalidOperationException($"{shaderType} compile error: {infoLog}");
 	}

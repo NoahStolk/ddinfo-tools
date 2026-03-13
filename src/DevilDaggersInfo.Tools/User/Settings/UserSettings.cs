@@ -1,12 +1,12 @@
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.JsonSerializerContexts;
-using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.User.Settings.Model;
 using ImGuiNET;
 using System.Text.Json;
 
 namespace DevilDaggersInfo.Tools.User.Settings;
 
+// TODO: Rewrite to instance.
 public static class UserSettings
 {
 	private static readonly string _fileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ddinfo-tools");
@@ -79,7 +79,7 @@ public static class UserSettings
 			Root.Log.Error(ex, "Could not load imgui.ini.");
 		}
 
-		DebugWindow.Add("Loaded imgui.ini");
+		// DebugWindow.Add("Loaded imgui.ini");
 	}
 
 	public static void SaveImGuiIni(ImGuiIOPtr io)
@@ -89,7 +89,7 @@ public static class UserSettings
 		string iniContents = ImGui.SaveIniSettingsToMemory(out _);
 		File.WriteAllText(_imguiIniFilePath, iniContents);
 
-		DebugWindow.Add("Saved imgui.ini");
+		// DebugWindow.Add("Saved imgui.ini");
 
 		io.WantSaveIniSettings = false;
 	}

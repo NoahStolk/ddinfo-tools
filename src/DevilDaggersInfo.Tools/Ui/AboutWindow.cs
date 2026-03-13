@@ -5,18 +5,20 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-public static class AboutWindow
+public sealed class AboutWindow(FrameCounter frameCounter)
 {
-	private static readonly string _versionInfo = $"Version {AssemblyUtils.EntryAssemblyVersionString} (build time: {AssemblyUtils.EntryAssemblyBuildTime})";
+	private readonly string _versionInfo = $"Version {AssemblyUtils.EntryAssemblyVersionString} (build time: {AssemblyUtils.EntryAssemblyBuildTime})";
 
-	public static void Render(ref bool show)
+	public bool Show;
+
+	public void Render()
 	{
-		if (!show)
+		if (!Show)
 			return;
 
 		Vector2 windowSize = new(640, 640);
 		ImGuiUtils.SetNextWindowMinSize(windowSize);
-		if (ImGui.Begin("About ddinfo tools", ref show, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoDocking))
+		if (ImGui.Begin("About ddinfo tools", ref Show, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoDocking))
 		{
 			ImGui.PushStyleVar(ImGuiStyleVar.SeparatorTextPadding, new Vector2(20, 12));
 			ImGui.PushTextWrapPos(ImGui.GetWindowWidth() - 16);
@@ -70,11 +72,11 @@ public static class AboutWindow
 		ImGui.Text(usage);
 	}
 
-	private static void RenderFooter()
+	private void RenderFooter()
 	{
 		ImGui.SetCursorPos(new Vector2(8, ImGui.GetWindowHeight() - 72));
 
-		ImGui.TextColored(Colors.TitleColor, "© DevilDaggers.info 2017-2024");
+		ImGui.TextColored(Colors.TitleColor(frameCounter.TotalTime), "© DevilDaggers.info 2017-2026");
 
 		ImGuiExt.Hyperlink("https://devildaggers.com/", "Devil Daggers");
 		ImGui.SameLine();

@@ -4,6 +4,7 @@ using System.Text.Json;
 
 namespace DevilDaggersInfo.Tools.User.Cache;
 
+// TODO: Rewrite to instance.
 public static class UserCache
 {
 	private static readonly string _fileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ddinfo-tools");

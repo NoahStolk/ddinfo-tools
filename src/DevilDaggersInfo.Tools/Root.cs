@@ -14,34 +14,16 @@ using DevilDaggersInfo.Tools.NativeInterface.Services.Linux;
 
 namespace DevilDaggersInfo.Tools;
 
+// TODO: Remove.
+[Obsolete]
 public static class Root
 {
 	private static readonly InvalidOperationException _notInitializedException = new("Root component is not initialized.");
 
-	private static InternalResources? _internalResources;
-	private static GameResources? _gameResources;
 	private static Application? _application;
 	private static ImFontPtr _fontGoetheBold20;
 	private static ImFontPtr _fontGoetheBold30;
 	private static ImFontPtr _fontGoetheBold60;
-
-	/// <summary>
-	/// Holds the internal resources, such as shaders and icons.
-	/// </summary>
-	public static InternalResources InternalResources
-	{
-		get => _internalResources ?? throw _notInitializedException;
-		set => _internalResources = value;
-	}
-
-	/// <summary>
-	/// Holds the game resources, such as the tile texture and dagger mesh.
-	/// </summary>
-	public static GameResources GameResources
-	{
-		get => _gameResources ?? throw _notInitializedException;
-		set => _gameResources = value;
-	}
 
 	public static Application Application
 	{

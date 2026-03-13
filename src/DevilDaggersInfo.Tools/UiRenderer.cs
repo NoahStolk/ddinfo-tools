@@ -16,92 +16,67 @@ using DevilDaggersInfo.Tools.User.Settings;
 
 namespace DevilDaggersInfo.Tools;
 
-public static class UiRenderer
+public sealed class UiRenderer(
+	UiLayoutManager uiLayoutManager,
+	ConfigLayout configLayout,
+	MainScene mainScene,
+	MainWindow mainWindow,
+	DebugWindow debugWindow,
+	AboutWindow aboutWindow,
+	AssetEditorMenu assetEditorMenu,
+	ReplayEditorMenu replayEditorMenu,
+	SpawnsetEditorMenu spawnsetEditorMenu,
+	ArenaWindow arenaWindow,
+	SpawnsetEditor3DWindow spawnsetEditor3DWindow,
+	PracticeWindow practiceWindow,
+	CustomLeaderboardsWindow customLeaderboardsWindow,
+	CustomLeaderboards3DWindow customLeaderboards3DWindow,
+	ReplayEditorWindow replayEditorWindow,
+	ReplayEditor3DWindow replayEditor3DWindow)
 {
-	private static LayoutType _layout;
-
-	private static bool _showDemoWindow;
-	private static bool _showAbout;
-	private static bool _showUpdate;
-
-	public static LayoutType Layout
+	public void Render(float delta)
 	{
-		get => _layout;
-		set
-		{
-			_layout = value;
-			Colors.SetColors(value switch
-			{
-				LayoutType.Config or LayoutType.Main => Colors.Main,
-				LayoutType.SpawnsetEditor => Colors.SpawnsetEditor,
-				LayoutType.AssetEditor => Colors.AssetEditor,
-				LayoutType.ReplayEditor => Colors.ReplayEditor,
-				LayoutType.CustomLeaderboards => Colors.CustomLeaderboards,
-				LayoutType.Practice => Colors.Practice,
-				LayoutType.ModManager => Colors.ModManager,
-				_ => throw new ArgumentOutOfRangeException(nameof(value), value, null),
-			});
-		}
-	}
+		if (debugWindow.ShowDemoWindow)
+			ImGuiNET.ImGui.ShowDemoWindow(ref debugWindow.ShowDemoWindow);
 
-	public static void ShowDemoWindow()
-	{
-		_showDemoWindow = true;
-	}
-
-	public static void ShowAbout()
-	{
-		_showAbout = true;
-	}
-
-	public static void ShowUpdate()
-	{
-		_showUpdate = true;
-	}
-
-	public static void Render(float delta)
-	{
-		if (_showDemoWindow)
-			ImGuiNET.ImGui.ShowDemoWindow(ref _showDemoWindow);
-
-		switch (Layout)
+		switch (uiLayoutManager.Layout)
 		{
 			case LayoutType.Config:
-				ConfigLayout.Render();
+				configLayout.Render();
 				break;
 			case LayoutType.Main:
-				MainWindow.Render();
-				MainScene.Render(delta);
+				mainWindow.Render();
+				mainScene.Render(delta);
 				break;
 			case LayoutType.SpawnsetEditor:
-				SpawnsetEditorMenu.Render();
+				spawnsetEditorMenu.Render();
 				SpawnsWindow.Render();
 				SettingsWindow.Render();
-				ArenaWindow.Render();
+				arenaWindow.Render();
 				HistoryWindow.Render();
-				SpawnsetEditor3DWindow.Render(delta);
+				spawnsetEditor3DWindow.Render(delta);
 				break;
 			case LayoutType.AssetEditor:
-				AssetEditorMenu.Render();
+				assetEditorMenu.Render();
 				AssetEditorWindow.Render();
 				CompileModWindow.Render();
 				ExtractModWindow.Render();
 				break;
 			case LayoutType.ReplayEditor:
-				ReplayEditorWindow.Update(delta);
-				ReplayEditorMenu.Render();
-				ReplayEditorWindow.Render();
-				ReplayEditor3DWindow.Render(delta);
+				replayEditorWindow.Update(delta);
+				replayEditorMenu.Render();
+				replayEditorWindow.Render();
+				replayEditor3DWindow.Render(delta);
 				LeaderboardReplayBrowser.Render();
 				break;
 			case LayoutType.CustomLeaderboards:
-				CustomLeaderboardsWindow.Update(delta);
-				CustomLeaderboardsWindow.Render();
+				customLeaderboardsWindow.Update(delta);
+				customLeaderboardsWindow.Render();
 				CustomLeaderboardResultsWindow.Render();
-				CustomLeaderboards3DWindow.Render(delta);
+				customLeaderboards3DWindow.Render(delta);
 				break;
 			case LayoutType.Practice:
-				PracticeWindow.Render();
+				practiceWindow.Render();
 				RunAnalysisWindow.Update(delta);
 				RunAnalysisWindow.Render();
 				break;
@@ -113,10 +88,10 @@ public static class UiRenderer
 		}
 
 		if (UserSettings.Model.ShowDebug)
-			DebugWindow.Render();
+			debugWindow.Render();
 
-		AboutWindow.Render(ref _showAbout);
-		UpdateWindow.Render(ref _showUpdate);
+		aboutWindow.Render();
+		UpdateWindow.Render();
 
 		PopupManager.Render();
 	}

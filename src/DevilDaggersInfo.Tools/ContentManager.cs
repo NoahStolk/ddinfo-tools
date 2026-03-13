@@ -11,12 +11,10 @@ namespace DevilDaggersInfo.Tools;
 
 public static class ContentManager
 {
-	private static ContentContainer? _content;
-
 	public static ContentContainer Content
 	{
-		get => _content ?? throw new InvalidOperationException("Content is not initialized.");
-		private set => _content = value;
+		get => field ?? throw new InvalidOperationException("Content is not initialized.");
+		private set;
 	}
 
 	public static void Initialize()

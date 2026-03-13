@@ -1,8 +1,3 @@
-using DevilDaggersInfo.Tools.Scenes.GameObjects;
-using DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
-using DevilDaggersInfo.Tools.Ui.Main;
-using DevilDaggersInfo.Tools.Ui.ReplayEditor;
-using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.User.Settings.Model;
 using ImGuiNET;
@@ -10,58 +5,9 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Config;
 
-public static class ConfigLayout
+public sealed class ConfigLayout(GameInstallationValidator gameInstallationValidator)
 {
-	private static string? _error;
-	private static bool _contentInitialized;
-	private static string _installationDirectoryInput = string.Empty;
-
-	/// <summary>
-	/// Is called on launch, and when the user changes the installation directory.
-	/// Must be called on the main thread.
-	/// </summary>
-	public static void ValidateInstallation()
-	{
-		_installationDirectoryInput = UserSettings.Model.DevilDaggersInstallationDirectory;
-
-		try
-		{
-			ContentManager.Initialize();
-		}
-		catch (InvalidGameInstallationException ex)
-		{
-			_error = ex.Message;
-			return;
-		}
-
-		UiRenderer.Layout = LayoutType.Main;
-		_error = null;
-
-		if (_contentInitialized)
-			return;
-
-		// Initialize game resources.
-		Root.GameResources = GameResources.Create();
-
-		// Initialize 3D rendering.
-		Player.InitializeRendering();
-		RaceDagger.InitializeRendering();
-		Tile.InitializeRendering();
-		Skull4.InitializeRendering();
-
-		// Initialize scenes.
-		MainScene.Initialize();
-		SpawnsetEditor3DWindow.InitializeScene();
-		CustomLeaderboards3DWindow.InitializeScene();
-		ReplayEditor3DWindow.InitializeScene();
-
-		// Initialize file watchers.
-		SurvivalFileWatcher.Initialize();
-
-		_contentInitialized = true;
-	}
-
-	public static void Render()
+	public void Render()
 	{
 #pragma warning disable S1075
 #if LINUX
@@ -100,13 +46,13 @@ public static class ConfigLayout
 						NativeFileDialog.SelectDirectory(OpenInstallationDirectoryCallback);
 
 					ImGui.SameLine();
-					ImGui.InputText("##installationDirectoryInput", ref _installationDirectoryInput, 1024, ImGuiInputTextFlags.None);
+					ImGui.InputText("##installationDirectoryInput", ref gameInstallationValidator.InstallationDirectoryInput, 1024, ImGuiInputTextFlags.None);
 
 					ImGui.Spacing();
 					ImGui.Spacing();
 
-					if (!string.IsNullOrWhiteSpace(_error))
-						ImGui.TextColored(new Vector4(1, 0, 0, 1), _error);
+					if (!string.IsNullOrWhiteSpace(gameInstallationValidator.Error))
+						ImGui.TextColored(new Vector4(1, 0, 0, 1), gameInstallationValidator.Error);
 				}
 
 				ImGui.EndChild();
@@ -146,10 +92,10 @@ public static class ConfigLayout
 			{
 				UserSettings.Model = UserSettings.Model with
 				{
-					DevilDaggersInstallationDirectory = _installationDirectoryInput,
+					DevilDaggersInstallationDirectory = gameInstallationValidator.InstallationDirectoryInput,
 				};
 
-				ValidateInstallation();
+				gameInstallationValidator.ValidateInstallation();
 			}
 
 			ImGui.PopFont();
@@ -158,12 +104,12 @@ public static class ConfigLayout
 		ImGui.End();
 
 		if (ImGui.IsKeyPressed(ImGuiKey.Escape))
-			ValidateInstallation();
+			gameInstallationValidator.ValidateInstallation();
 	}
 
-	private static void OpenInstallationDirectoryCallback(string? directory)
+	private void OpenInstallationDirectoryCallback(string? directory)
 	{
 		if (directory != null)
-			_installationDirectoryInput = directory;
+			gameInstallationValidator.InstallationDirectoryInput = directory;
 	}
 }
