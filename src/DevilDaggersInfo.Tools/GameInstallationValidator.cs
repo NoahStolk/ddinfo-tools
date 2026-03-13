@@ -4,32 +4,23 @@ using DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
+using DevilDaggersInfo.Tools.User.Settings;
 using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools;
 
-public sealed class GameInstallationValidator
+public sealed class GameInstallationValidator(
+	GL gl,
+	UiLayoutManager uiLayoutManager,
+	ResourceManager resourceManager,
+	MainScene mainScene,
+	SpawnsetEditor3DWindow spawnsetEditor3DWindow,
+	CustomLeaderboards3DWindow customLeaderboards3DWindow,
+	ReplayEditor3DWindow replayEditor3DWindow)
 {
-	private readonly GL _gl;
-	private readonly UiLayoutManager _uiLayoutManager;
-	private readonly ResourceManager _resourceManager;
-	private readonly MainScene _mainScene;
-	private readonly SpawnsetEditor3DWindow _spawnsetEditor3DWindow;
-	private readonly CustomLeaderboards3DWindow _customLeaderboards3DWindow;
-	private readonly ReplayEditor3DWindow _replayEditor3DWindow;
-
 	private bool _contentInitialized;
 
-	public GameInstallationValidator(GL gl, UiLayoutManager uiLayoutManager, ResourceManager resourceManager, MainScene mainScene, SpawnsetEditor3DWindow spawnsetEditor3DWindow, CustomLeaderboards3DWindow customLeaderboards3DWindow, ReplayEditor3DWindow replayEditor3DWindow)
-	{
-		_gl = gl;
-		_uiLayoutManager = uiLayoutManager;
-		_resourceManager = resourceManager;
-		_mainScene = mainScene;
-		_spawnsetEditor3DWindow = spawnsetEditor3DWindow;
-		_customLeaderboards3DWindow = customLeaderboards3DWindow;
-		_replayEditor3DWindow = replayEditor3DWindow;
-	}
+	public string InstallationDirectoryInput = string.Empty;
 
 	public string? Error { get; private set; }
 
@@ -39,8 +30,7 @@ public sealed class GameInstallationValidator
 	/// </summary>
 	public void ValidateInstallation()
 	{
-		// TODO: Move this field (which is in ConfigLayout) to a state class or something.
-		// _installationDirectoryInput = UserSettings.Model.DevilDaggersInstallationDirectory;
+		InstallationDirectoryInput = UserSettings.Model.DevilDaggersInstallationDirectory;
 
 		try
 		{
@@ -52,26 +42,26 @@ public sealed class GameInstallationValidator
 			return;
 		}
 
-		_uiLayoutManager.Layout = LayoutType.Main;
+		uiLayoutManager.Layout = LayoutType.Main;
 		Error = null;
 
 		if (_contentInitialized)
 			return;
 
 		// Initialize game resources.
-		_resourceManager.LoadGameResources();
+		resourceManager.LoadGameResources();
 
 		// Initialize 3D rendering.
-		Player.InitializeRendering(_gl);
-		RaceDagger.InitializeRendering(_gl);
-		Tile.InitializeRendering(_gl, _resourceManager);
-		Skull4.InitializeRendering(_gl);
+		Player.InitializeRendering(gl);
+		RaceDagger.InitializeRendering(gl);
+		Tile.InitializeRendering(gl, resourceManager);
+		Skull4.InitializeRendering(gl);
 
 		// Initialize scenes.
-		_mainScene.Initialize();
-		_spawnsetEditor3DWindow.InitializeScene();
-		_customLeaderboards3DWindow.InitializeScene();
-		_replayEditor3DWindow.InitializeScene();
+		mainScene.Initialize();
+		spawnsetEditor3DWindow.InitializeScene();
+		customLeaderboards3DWindow.InitializeScene();
+		replayEditor3DWindow.InitializeScene();
 
 		// Initialize file watchers.
 		SurvivalFileWatcher.Initialize();

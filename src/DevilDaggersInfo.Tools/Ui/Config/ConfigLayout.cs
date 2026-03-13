@@ -5,17 +5,8 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Config;
 
-public sealed class ConfigLayout
+public sealed class ConfigLayout(GameInstallationValidator gameInstallationValidator)
 {
-	private readonly GameInstallationValidator _gameInstallationValidator;
-
-	private string _installationDirectoryInput = string.Empty;
-
-	public ConfigLayout(GameInstallationValidator gameInstallationValidator)
-	{
-		_gameInstallationValidator = gameInstallationValidator;
-	}
-
 	public void Render()
 	{
 #pragma warning disable S1075
@@ -55,13 +46,13 @@ public sealed class ConfigLayout
 						NativeFileDialog.SelectDirectory(OpenInstallationDirectoryCallback);
 
 					ImGui.SameLine();
-					ImGui.InputText("##installationDirectoryInput", ref _installationDirectoryInput, 1024, ImGuiInputTextFlags.None);
+					ImGui.InputText("##installationDirectoryInput", ref gameInstallationValidator.InstallationDirectoryInput, 1024, ImGuiInputTextFlags.None);
 
 					ImGui.Spacing();
 					ImGui.Spacing();
 
-					if (!string.IsNullOrWhiteSpace(_gameInstallationValidator.Error))
-						ImGui.TextColored(new Vector4(1, 0, 0, 1), _gameInstallationValidator.Error);
+					if (!string.IsNullOrWhiteSpace(gameInstallationValidator.Error))
+						ImGui.TextColored(new Vector4(1, 0, 0, 1), gameInstallationValidator.Error);
 				}
 
 				ImGui.EndChild();
@@ -101,10 +92,10 @@ public sealed class ConfigLayout
 			{
 				UserSettings.Model = UserSettings.Model with
 				{
-					DevilDaggersInstallationDirectory = _installationDirectoryInput,
+					DevilDaggersInstallationDirectory = gameInstallationValidator.InstallationDirectoryInput,
 				};
 
-				_gameInstallationValidator.ValidateInstallation();
+				gameInstallationValidator.ValidateInstallation();
 			}
 
 			ImGui.PopFont();
@@ -113,12 +104,12 @@ public sealed class ConfigLayout
 		ImGui.End();
 
 		if (ImGui.IsKeyPressed(ImGuiKey.Escape))
-			_gameInstallationValidator.ValidateInstallation();
+			gameInstallationValidator.ValidateInstallation();
 	}
 
 	private void OpenInstallationDirectoryCallback(string? directory)
 	{
 		if (directory != null)
-			_installationDirectoryInput = directory;
+			gameInstallationValidator.InstallationDirectoryInput = directory;
 	}
 }
