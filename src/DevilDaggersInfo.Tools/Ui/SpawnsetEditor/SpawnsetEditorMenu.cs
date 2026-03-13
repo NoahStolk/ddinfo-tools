@@ -7,15 +7,8 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-internal sealed class SpawnsetEditorMenu
+internal sealed class SpawnsetEditorMenu(UiLayoutManager uiLayoutManager)
 {
-	private readonly UiLayoutManager _uiLayoutManager;
-
-	public SpawnsetEditorMenu(UiLayoutManager uiLayoutManager)
-	{
-		_uiLayoutManager = uiLayoutManager;
-	}
-
 	public void Render()
 	{
 		if (ImGui.BeginMainMenuBar())
@@ -196,6 +189,6 @@ internal sealed class SpawnsetEditorMenu
 
 	public void Close()
 	{
-		FileStates.Spawnset.PromptSave(() => _uiLayoutManager.Layout = LayoutType.Main);
+		FileStates.Spawnset.PromptSave(() => uiLayoutManager.Layout = LayoutType.Main);
 	}
 }

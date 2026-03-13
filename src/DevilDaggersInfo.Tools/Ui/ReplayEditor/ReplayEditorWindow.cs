@@ -5,34 +5,25 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-internal sealed class ReplayEditorWindow
+internal sealed class ReplayEditorWindow(
+	ReplayEventsViewerChild replayEventsViewerChild,
+	ReplayEntitiesChild replayEntitiesChild,
+	ReplayInputsChild replayInputsChild,
+	ReplayEditor3DWindow replayEditor3DWindow)
 {
-	private readonly ReplayEventsViewerChild _replayEventsViewerChild;
-	private readonly ReplayEntitiesChild _replayEntitiesChild;
-	private readonly ReplayInputsChild _replayInputsChild;
-	private readonly ReplayEditor3DWindow _replayEditor3DWindow;
-
 	private float _gameMemoryTimer = 5;
-
-	public ReplayEditorWindow(ReplayEventsViewerChild replayEventsViewerChild, ReplayEntitiesChild replayEntitiesChild, ReplayInputsChild replayInputsChild, ReplayEditor3DWindow replayEditor3DWindow)
-	{
-		_replayEventsViewerChild = replayEventsViewerChild;
-		_replayEntitiesChild = replayEntitiesChild;
-		_replayInputsChild = replayInputsChild;
-		_replayEditor3DWindow = replayEditor3DWindow;
-	}
 
 	public void Reset()
 	{
-		_replayEditor3DWindow.Reset();
-		_replayEventsViewerChild.Reset();
-		_replayEntitiesChild.Reset();
+		replayEditor3DWindow.Reset();
+		replayEventsViewerChild.Reset();
+		replayEntitiesChild.Reset();
 		ReplayTimelineChild.Reset();
 	}
 
 	public void Update(float delta)
 	{
-		_replayEditor3DWindow.Update(delta);
+		replayEditor3DWindow.Update(delta);
 
 		_gameMemoryTimer += delta;
 		if (_gameMemoryTimer < 5f)
@@ -59,19 +50,19 @@ internal sealed class ReplayEditorWindow
 
 				if (ImGui.BeginTabItem("Events viewer"))
 				{
-					_replayEventsViewerChild.Render(FileStates.Replay.Object);
+					replayEventsViewerChild.Render(FileStates.Replay.Object);
 					ImGui.EndTabItem();
 				}
 
 				if (ImGui.BeginTabItem("Entities viewer"))
 				{
-					_replayEntitiesChild.Render(FileStates.Replay.Object);
+					replayEntitiesChild.Render(FileStates.Replay.Object);
 					ImGui.EndTabItem();
 				}
 
 				if (ImGui.BeginTabItem("Inputs viewer"))
 				{
-					_replayInputsChild.Render(FileStates.Replay.Object);
+					replayInputsChild.Render(FileStates.Replay.Object);
 					ImGui.EndTabItem();
 				}
 

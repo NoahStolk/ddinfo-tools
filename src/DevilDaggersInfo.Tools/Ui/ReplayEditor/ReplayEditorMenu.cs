@@ -8,19 +8,8 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-internal sealed class ReplayEditorMenu
+internal sealed class ReplayEditorMenu(UiLayoutManager uiLayoutManager, ReplayEditorWindow replayEditorWindow, ReplayEditor3DWindow replayEditor3DWindow)
 {
-	private readonly UiLayoutManager _uiLayoutManager;
-	private readonly ReplayEditorWindow _replayEditorWindow;
-	private readonly ReplayEditor3DWindow _replayEditor3DWindow;
-
-	public ReplayEditorMenu(UiLayoutManager uiLayoutManager, ReplayEditorWindow replayEditorWindow, ReplayEditor3DWindow replayEditor3DWindow)
-	{
-		_uiLayoutManager = uiLayoutManager;
-		_replayEditorWindow = replayEditorWindow;
-		_replayEditor3DWindow = replayEditor3DWindow;
-	}
-
 	public void Render()
 	{
 		if (ImGui.BeginMainMenuBar())
@@ -67,7 +56,7 @@ internal sealed class ReplayEditorMenu
 	{
 		FileStates.Replay.Update(EditorReplayModel.CreateDefault());
 		FileStates.Replay.SetFile(null, null);
-		_replayEditorWindow.Reset();
+		replayEditorWindow.Reset();
 	}
 
 	public void OpenReplay()
@@ -103,10 +92,10 @@ internal sealed class ReplayEditorMenu
 			return;
 		}
 
-		_replayEditorWindow.Reset();
+		replayEditorWindow.Reset();
 
 		ReplaySimulation replaySimulation = ReplaySimulationBuilder.Build(replayBinary);
-		_replayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
+		replayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
 	}
 
 	public static void OpenLeaderboardReplay()
@@ -134,10 +123,10 @@ internal sealed class ReplayEditorMenu
 			return;
 		}
 
-		_replayEditorWindow.Reset();
+		replayEditorWindow.Reset();
 
 		ReplaySimulation replaySimulation = ReplaySimulationBuilder.Build(replayBinary);
-		_replayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
+		replayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
 	}
 
 	public static void SaveReplay()
@@ -167,6 +156,6 @@ internal sealed class ReplayEditorMenu
 
 	public void Close()
 	{
-		_uiLayoutManager.Layout = LayoutType.Main;
+		uiLayoutManager.Layout = LayoutType.Main;
 	}
 }
