@@ -5,6 +5,7 @@
 ### Miscellaneous
 
 - Rewrote app internals.
+- Updated Serilog dependency from 5.0.0 to 7.0.0.
 
 ## [0.13.6.0] - 2026-02-10
 
