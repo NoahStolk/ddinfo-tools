@@ -18,7 +18,7 @@ internal static class PracticeLogic
 
 	public static void GenerateAndApplyPracticeSpawnset()
 	{
-		State.TimerStart = Math.Clamp(State.TimerStart, 0, 1400);
+		State.TimerStart = Math.Clamp(State.TimerStart, 0, 2000);
 
 		SpawnsetBinary spawnset = ContentManager.Content.DefaultSpawnset;
 		float shrinkStart = MathUtils.Lerp(spawnset.ShrinkStart, spawnset.ShrinkEnd, State.TimerStart / ((spawnset.ShrinkStart - spawnset.ShrinkEnd) / spawnset.ShrinkRate));

@@ -2,9 +2,14 @@
 
 ## [unreleased]
 
+### Fixed
+
+- Fixed practice timer start not exceeding 1400s.
+
 ### Miscellaneous
 
 - Rewrote app internals to use dependency injection.
+- Simplified build process and removed unwanted dependencies.
 - Updated Serilog dependency from 5.0.0 to 7.0.0.
 - Updated Silk.NET dependency from 2.21.0 to 2.23.0.
 - Fixed some ImGui violations.
