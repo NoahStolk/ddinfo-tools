@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Common;
+using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.Popups;
@@ -10,7 +11,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter, NativeFileDialog nativeFileDialog, PopupManager popupManager)
+internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter, INativeFileDialog nativeFileDialog, PopupManager popupManager)
 {
 	private readonly List<string> _debugMessages = [];
 	private readonly DateTime _startUpTime = DateTime.UtcNow;
