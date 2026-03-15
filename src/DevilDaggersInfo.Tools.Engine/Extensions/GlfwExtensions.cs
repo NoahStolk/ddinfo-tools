@@ -1,4 +1,5 @@
 using Silk.NET.GLFW;
+using System.Text;
 
 namespace DevilDaggersInfo.Tools.Engine.Extensions;
 

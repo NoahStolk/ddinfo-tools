@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace DevilDaggersInfo.Tools.Engine.Intersections;
 
 public readonly record struct Ray(Vector3 Position, Vector3 Direction)
