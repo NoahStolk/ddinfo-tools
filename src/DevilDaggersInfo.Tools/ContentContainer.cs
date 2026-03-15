@@ -21,9 +21,6 @@ internal record ContentContainer(
 	TextureContent TileTexture,
 	MeshContent PillarMesh,
 	TextureContent PillarTexture,
-	SoundContent SoundJump1,
-	SoundContent SoundJump2,
-	SoundContent SoundJump3,
 	TextureContent PostLut,
 	MeshContent Hand4Mesh,
 	TextureContent Hand4Texture);

@@ -3,7 +3,6 @@ using DevilDaggersInfo.Core.Mod;
 using DevilDaggersInfo.Core.Mod.Extensions;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Engine.Content;
-using DevilDaggersInfo.Tools.Engine.Content.Parsers.Sound;
 using DevilDaggersInfo.Tools.User.Settings;
 using System.Security.Cryptography;
 
@@ -70,18 +69,9 @@ internal static class ContentManager
 			new AssetKey(AssetType.Mesh, "hand4"),
 			new AssetKey(AssetType.Texture, "hand6"));
 
-		ModBinaryReadFilter audioReadFilter = ModBinaryReadFilter.Assets(
-			new AssetKey(AssetType.Audio, "jump1"),
-			new AssetKey(AssetType.Audio, "jump2"),
-			new AssetKey(AssetType.Audio, "jump3"));
-
 		ModBinary ddBinary;
 		using (FileStream fs = new(UserSettings.ResDdPath, FileMode.Open, FileAccess.Read))
 			ddBinary = new ModBinary(fs, ddReadFilter);
-
-		ModBinary audioBinary;
-		using (FileStream fs = new(UserSettings.ResAudioPath, FileMode.Open, FileAccess.Read))
-			audioBinary = new ModBinary(fs, audioReadFilter);
 
 		Content = new ContentContainer(
 			DefaultSpawnset: defaultSpawnset,
@@ -101,9 +91,6 @@ internal static class ContentManager
 			TileTexture: GetTexture(ddBinary, "tile"),
 			PillarMesh: GetMesh(ddBinary, "pillar"),
 			PillarTexture: GetTexture(ddBinary, "pillar"),
-			SoundJump1: GetSound(audioBinary, "jump1"),
-			SoundJump2: GetSound(audioBinary, "jump2"),
-			SoundJump3: GetSound(audioBinary, "jump3"),
 			PostLut: GetTexture(ddBinary, "post_lut"),
 			Hand4Mesh: GetMesh(ddBinary, "hand4"),
 			Hand4Texture: GetTexture(ddBinary, "hand6"));
@@ -123,23 +110,6 @@ internal static class ContentManager
 			throw new InvalidGameInstallationException($"Required texture '{textureName}' from 'res/dd' was not found.");
 
 		return ToEngineTexture(textureName, textureData.Buffer, flipVertically);
-	}
-
-	private static SoundContent GetSound(ModBinary audioBinary, string soundName)
-	{
-		if (!audioBinary.AssetMap.TryGetValue(new AssetKey(AssetType.Audio, soundName), out AssetData? audioData))
-			throw new InvalidGameInstallationException($"Required audio '{soundName}' from 'res/audio' was not found.");
-
-		try
-		{
-			SoundData waveData = WaveParser.Parse(audioData.Buffer);
-			return new SoundContent(waveData.Channels, waveData.SampleRate, waveData.BitsPerSample, waveData.Data.Length, waveData.Data);
-		}
-		catch (WaveParseException ex)
-		{
-			Root.Log.Warning(ex, $"Could not parse .wav file {soundName}.");
-			throw new InvalidGameInstallationException($"Required audio '{soundName}' from 'res/audio' was not in a valid format. Make sure your game files are not corrupted.");
-		}
 	}
 
 	private static MeshContent ToEngineMesh(string meshName, byte[] ddMeshBuffer)
