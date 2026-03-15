@@ -231,7 +231,19 @@ internal sealed partial class Container : IContainer<Application>
 	[Factory(Scope.SingleInstance)]
 	private static INativeFileDialog CreateNativeFileDialog()
 	{
-		bool isWayland = Environment.GetEnvironmentVariable("XDG_SESSION_TYPE") == "wayland";
-		return isWayland ? new NativeFileDialogWayland() : new NativeFileDialog();
+		return IsWayland() ? new NativeFileDialogWayland() : new NativeFileDialog();
+
+		static bool IsWayland()
+		{
+			if (!OperatingSystem.IsLinux())
+				return false;
+
+			string? session = Environment.GetEnvironmentVariable("XDG_SESSION_TYPE");
+			if (string.Equals(session, "wayland", StringComparison.OrdinalIgnoreCase))
+				return true;
+
+			// Fallback used by many compositors
+			return !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WAYLAND_DISPLAY"));
+		}
 	}
 }
