@@ -17,7 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Build and test
-        run: dotnet test src/DevilDaggersInfo.Tools.sln -c Release
+        run: dotnet test src/DevilDaggersInfo.Tools.slnx -c Release
       - name: Create encryption.ini
         run: echo "${{ secrets.ENCRYPTION }}" > src/DevilDaggersInfo.Tools/Content/encryption.ini
       - name: Build optimized release

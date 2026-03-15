@@ -53,7 +53,7 @@ The original tools are not included in this repository. Visit these repositories
 2. Install [the .NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) version 10.0.x or later. The SDK is available for Windows, macOS, and Linux.
 3. Run the project:
    - Execute `dotnet run --project src/DevilDaggersInfo.Tools/DevilDaggersInfo.Tools.csproj` from the command line.
-   - Alternatively, you can open the `src/DevilDaggersInfo.Tools.sln` file in an IDE such as JetBrains Rider or Visual Studio and run the `DevilDaggersInfo.Tools` project.
+   - Alternatively, you can open the `src/DevilDaggersInfo.Tools.slnx` file in an IDE such as JetBrains Rider or Visual Studio and run the `DevilDaggersInfo.Tools` project.
 
 ## Disclaimer
 
