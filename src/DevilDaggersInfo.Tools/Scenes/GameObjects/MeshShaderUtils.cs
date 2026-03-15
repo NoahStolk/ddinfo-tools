@@ -28,7 +28,7 @@ internal static class MeshShaderUtils
 
 		gl.BindVertexArray(0);
 		gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
-		gl.DeleteBuffer(vbo);
+		gl.DeleteBuffer(vbo); // TODO: This is wrong.
 
 		return vao;
 	}

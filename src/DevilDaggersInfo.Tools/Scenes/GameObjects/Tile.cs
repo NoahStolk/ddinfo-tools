@@ -3,36 +3,21 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
-internal sealed class Tile
+internal sealed class Tile(float positionX, float positionZ, int arenaX, int arenaY, Camera camera, ResourceManager resourceManager)
 {
 	private static uint _vaoTile;
 	private static uint _vaoPillar;
 	private static uint _vaoHitbox;
 
-	private readonly Camera _camera;
+	private readonly TileMeshObject _top = new(_vaoTile, ContentManager.Content.TileMesh, positionX, positionZ);
+	private readonly TileMeshObject _pillar = new(_vaoPillar, ContentManager.Content.PillarMesh, positionX, positionZ);
+	private readonly TileHitboxMeshObject _tileHitbox = new(_vaoHitbox, resourceManager.InternalResources.TileHitboxModel.MainMesh, positionX, positionZ);
 
-	private readonly TileMeshObject _top;
-	private readonly TileMeshObject _pillar;
-	private readonly TileHitboxMeshObject _tileHitbox;
-
-	public Tile(float positionX, float positionZ, int arenaX, int arenaY, Camera camera, ResourceManager resourceManager)
-	{
-		PositionX = positionX;
-		PositionZ = positionZ;
-		ArenaX = arenaX;
-		ArenaY = arenaY;
-		_camera = camera;
-
-		_top = new TileMeshObject(_vaoTile, ContentManager.Content.TileMesh, positionX, positionZ);
-		_pillar = new TileMeshObject(_vaoPillar, ContentManager.Content.PillarMesh, positionX, positionZ);
-		_tileHitbox = new TileHitboxMeshObject(_vaoHitbox, resourceManager.InternalResources.TileHitboxModel.MainMesh, positionX, positionZ);
-	}
-
-	public float PositionX { get; }
+	public float PositionX { get; } = positionX;
 	public float Height { get; private set; }
-	public float PositionZ { get; }
-	public int ArenaX { get; }
-	public int ArenaY { get; }
+	public float PositionZ { get; } = positionZ;
+	public int ArenaX { get; } = arenaX;
+	public int ArenaY { get; } = arenaY;
 
 	public static void InitializeRendering(GL gl, ResourceManager resourceManager)
 	{
@@ -46,7 +31,7 @@ internal sealed class Tile
 
 	public float SquaredDistanceToCamera()
 	{
-		return Vector2.DistanceSquared(new Vector2(PositionX, PositionZ), new Vector2(_camera.Position.X, _camera.Position.Z));
+		return Vector2.DistanceSquared(new Vector2(PositionX, PositionZ), new Vector2(camera.Position.X, camera.Position.Z));
 	}
 
 	public void SetDisplayHeight(float height)

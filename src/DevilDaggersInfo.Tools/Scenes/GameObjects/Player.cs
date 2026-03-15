@@ -4,24 +4,15 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
-internal sealed class Player
+internal sealed class Player(ReplaySimulation movementTimeline)
 {
 	private static readonly Quaternion _rotationOffset = Quaternion.CreateFromAxisAngle(Vector3.UnitX, MathF.PI / 2) * Quaternion.CreateFromAxisAngle(Vector3.UnitY, MathF.PI) * Quaternion.CreateFromAxisAngle(Vector3.UnitZ, MathF.PI);
 
 	private static uint _vao;
 
-	private readonly ReplaySimulation _movementTimeline;
+	public PlayerMovement Mesh { get; } = new(_vao, ContentManager.Content.Hand4Mesh, default, default);
 
-	public Player(ReplaySimulation movementTimeline)
-	{
-		_movementTimeline = movementTimeline;
-		Mesh = new PlayerMovement(_vao, ContentManager.Content.Hand4Mesh, default, default);
-		Light = new LightObject(6, default, new Vector3(1, 0.5f, 0));
-	}
-
-	public PlayerMovement Mesh { get; }
-
-	public LightObject Light { get; }
+	public LightObject Light { get; } = new(6, default, new Vector3(1, 0.5f, 0));
 
 	public static void InitializeRendering(GL gl)
 	{
@@ -35,7 +26,7 @@ internal sealed class Player
 	{
 		const float offsetY = 3.3f;
 
-		PlayerMovementSnapshot snapshot = _movementTimeline.GetPlayerMovementSnapshot(currentTick);
+		PlayerMovementSnapshot snapshot = movementTimeline.GetPlayerMovementSnapshot(currentTick);
 		Mesh.Rotation = snapshot.Rotation * _rotationOffset;
 		Mesh.Position = snapshot.Position + new Vector3(0, offsetY, 0);
 

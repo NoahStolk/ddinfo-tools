@@ -2,16 +2,9 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
-internal sealed class LightObject
+internal sealed class LightObject(float radius, Vector3 position, Vector3 color)
 {
-	public LightObject(float radius, Vector3 position, Vector3 color)
-	{
-		Radius = radius;
-		Position = position;
-		Color = color;
-	}
-
-	public float Radius { get; set; }
-	public Vector3 Position { get; set; }
-	public Vector3 Color { get; set; }
+	public float Radius { get; set; } = radius;
+	public Vector3 Position { get; set; } = position;
+	public Vector3 Color { get; set; } = color;
 }
