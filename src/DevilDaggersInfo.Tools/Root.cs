@@ -20,12 +20,6 @@ internal static class Root
 {
 	private static readonly InvalidOperationException _notInitializedException = new("Root component is not initialized.");
 
-	public static Application Application
-	{
-		get => field ?? throw _notInitializedException;
-		set;
-	}
-
 	public static unsafe ImFontPtr FontGoetheBold20
 	{
 		get => field.NativePtr == (void*)0 ? throw _notInitializedException : field;

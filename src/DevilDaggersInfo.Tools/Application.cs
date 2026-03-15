@@ -76,8 +76,6 @@ internal sealed unsafe class Application
 		ResizeFramebuffer(_glfw, _gl, _window, _imGuiController, width, height);
 
 		gl.ClearColor(0, 0, 0, 1);
-
-		Root.Application = this;
 	}
 
 	private static void ResizeFramebuffer(Glfw glfw, GL gl, WindowHandle* window, ImGuiController imGuiController, int w, int h)
