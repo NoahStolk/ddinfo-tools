@@ -1,5 +1,4 @@
 <Solution>
-  <Project Path="DevilDaggersInfo.DevUtil.BuildAssets/DevilDaggersInfo.DevUtil.BuildAssets.csproj" />
   <Project Path="DevilDaggersInfo.Tools.Engine.Content/DevilDaggersInfo.Tools.Engine.Content.csproj" />
   <Project Path="DevilDaggersInfo.Tools.Engine/DevilDaggersInfo.Tools.Engine.csproj" />
   <Project Path="DevilDaggersInfo.Tools/DevilDaggersInfo.Tools.csproj" />

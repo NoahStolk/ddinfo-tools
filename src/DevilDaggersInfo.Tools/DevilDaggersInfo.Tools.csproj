@@ -3,7 +3,6 @@
   <PropertyGroup>
     <AssemblyName>ddinfo-tools</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>SA1633</NoWarn>
     <Version>0.13.6.0</Version>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
@@ -88,9 +87,9 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup Label="Encryption" Condition="Exists('Content\encryption.ini')">
-    <None Remove="Content\encryption.ini"/>
-    <EmbeddedResource Include="Content\encryption.ini">
+  <ItemGroup Label="Content">
+    <None Remove="Content/**/*"/>
+    <EmbeddedResource Include="Content/**/*">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

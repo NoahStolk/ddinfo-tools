@@ -1,13 +1,7 @@
 namespace DevilDaggersInfo.Tools.Engine.Content;
 
-public sealed class MeshContent
+public sealed class MeshContent(Vertex[] vertices, uint[] indices)
 {
-	public MeshContent(Vertex[] vertices, uint[] indices)
-	{
-		Vertices = vertices;
-		Indices = indices;
-	}
-
-	public Vertex[] Vertices { get; }
-	public uint[] Indices { get; }
+	public Vertex[] Vertices { get; } = vertices;
+	public uint[] Indices { get; } = indices;
 }

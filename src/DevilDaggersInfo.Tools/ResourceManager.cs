@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Tools.Engine.Content;
 using DevilDaggersInfo.Tools.Engine.Loaders;
-using DevilDaggersInfo.Tools.Utils;
 using Silk.NET.OpenGL;
+using System.Reflection;
 
 namespace DevilDaggersInfo.Tools;
 
@@ -17,14 +17,8 @@ internal sealed class ResourceManager
 		_shaderLoader = shaderLoader;
 		_textureLoader = textureLoader;
 
-#if DEBUG && WINDOWS
-		const string? ddInfoToolsContentRootDirectory = @"..\..\..\Content";
-#elif DEBUG && LINUX
-		const string? ddInfoToolsContentRootDirectory = "./src/DevilDaggersInfo.Tools/Content/";
-#else
-		const string? ddInfoToolsContentRootDirectory = null;
-#endif
-		DecompiledContentFile ddInfoToolsContent = DecompiledContentFile.Create(ddInfoToolsContentRootDirectory, Path.Combine(AssemblyUtils.InstallationDirectory, "ddinfo-assets"));
+		Assembly assembly = Assembly.GetExecutingAssembly();
+		InternalContent ddInfoToolsContent = InternalResourceReader.Read(assembly);
 
 		InternalResources = new InternalResources(
 			MeshShader: GetShader(ddInfoToolsContent, "Mesh"),
@@ -90,7 +84,7 @@ internal sealed class ResourceManager
 			Hand4Texture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.Hand4Texture)));
 	}
 
-	private Shader GetShader(DecompiledContentFile content, string name)
+	private Shader GetShader(InternalContent content, string name)
 	{
 		content.Shaders.TryGetValue(name, out ShaderContent? shaderContent);
 		if (shaderContent == null)
@@ -100,7 +94,7 @@ internal sealed class ResourceManager
 		return new Shader(_gl, id);
 	}
 
-	private static TextureContent GetTextureContent(DecompiledContentFile content, string name)
+	private static TextureContent GetTextureContent(InternalContent content, string name)
 	{
 		content.Textures.TryGetValue(name, out TextureContent? textureContent);
 		if (textureContent == null)
@@ -109,14 +103,14 @@ internal sealed class ResourceManager
 		return textureContent;
 	}
 
-	private Texture GetTexture(DecompiledContentFile content, string name)
+	private Texture GetTexture(InternalContent content, string name)
 	{
 		TextureContent textureContent = GetTextureContent(content, name);
 		uint id = _textureLoader.Load(textureContent);
 		return new Texture(_gl, id);
 	}
 
-	private static ModelContent GetModelContent(DecompiledContentFile content, string name)
+	private static ModelContent GetModelContent(InternalContent content, string name)
 	{
 		content.Models.TryGetValue(name, out ModelContent? modelContent);
 		if (modelContent == null)
