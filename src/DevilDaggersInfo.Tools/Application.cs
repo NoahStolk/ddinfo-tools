@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.User.Cache;
@@ -23,6 +24,7 @@ internal sealed unsafe class Application
 	private readonly Shortcuts _shortcuts;
 	private readonly MainWindow _mainWindow;
 	private readonly FrameCounter _frameCounter;
+	private readonly INativeFileDialog _nativeFileDialog;
 
 	private readonly IntPtr _iconPtr;
 
@@ -40,7 +42,8 @@ internal sealed unsafe class Application
 		UiRenderer uiRenderer,
 		Shortcuts shortcuts,
 		MainWindow mainWindow,
-		FrameCounter frameCounter)
+		FrameCounter frameCounter,
+		INativeFileDialog nativeFileDialog)
 	{
 		_glfw = glfw;
 		_gl = gl;
@@ -51,6 +54,7 @@ internal sealed unsafe class Application
 		_shortcuts = shortcuts;
 		_mainWindow = mainWindow;
 		_frameCounter = frameCounter;
+		_nativeFileDialog = nativeFileDialog;
 
 		_currentTime = glfw.GetTime();
 
@@ -123,6 +127,7 @@ internal sealed unsafe class Application
 
 		_glfw.PollEvents();
 
+		_nativeFileDialog.Update();
 		Render();
 
 		_glfw.SwapBuffers(_window);

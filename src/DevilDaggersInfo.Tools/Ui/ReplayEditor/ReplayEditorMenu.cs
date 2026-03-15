@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
+using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
@@ -13,7 +14,7 @@ internal sealed class ReplayEditorMenu(
 	ReplayEditorWindow replayEditorWindow,
 	ReplayEditor3DWindow replayEditor3DWindow,
 	LeaderboardReplayBrowser leaderboardReplayBrowser,
-	NativeFileDialog nativeFileDialog,
+	INativeFileDialog nativeFileDialog,
 	PopupManager popupManager,
 	FileStates fileStates,
 	GameMemoryServiceWrapper gameMemoryServiceWrapper)

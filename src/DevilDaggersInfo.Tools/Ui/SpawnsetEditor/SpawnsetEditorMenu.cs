@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
@@ -10,7 +11,7 @@ namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 internal sealed class SpawnsetEditorMenu(
 	FileStates fileStates,
 	UiLayoutManager uiLayoutManager,
-	NativeFileDialog nativeFileDialog,
+	INativeFileDialog nativeFileDialog,
 	PopupManager popupManager,
 	HistoryWindow historyWindow,
 	SpawnsWindow spawnsWindow,

@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
@@ -10,9 +11,9 @@ internal sealed class FileStates
 {
 	public const string UntitledName = "<untitled>";
 
-	private readonly NativeFileDialog _nativeFileDialog;
+	private readonly INativeFileDialog _nativeFileDialog;
 
-	public FileStates(PopupManager popupManager, NativeFileDialog nativeFileDialog)
+	public FileStates(PopupManager popupManager, INativeFileDialog nativeFileDialog)
 	{
 		_nativeFileDialog = nativeFileDialog;
 

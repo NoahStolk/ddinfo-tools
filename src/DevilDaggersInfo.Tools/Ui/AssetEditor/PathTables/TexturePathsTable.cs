@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Asset;
+using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
@@ -7,7 +8,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
-internal sealed class TexturePathsTable(FileStates fileStates, NativeFileDialog nativeFileDialog) : IPathTable
+internal sealed class TexturePathsTable(FileStates fileStates, INativeFileDialog nativeFileDialog) : IPathTable
 {
 	public int ColumnCount => 3;
 
