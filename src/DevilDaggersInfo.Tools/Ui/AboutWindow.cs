@@ -40,7 +40,6 @@ internal sealed class AboutWindow(FrameCounter frameCounter)
 			RenderLibrary("https://github.com/NoahStolk/ddinfo-tools", "ddinfo-tools", "Main repository for the tools (this app)");
 			RenderLibrary("https://github.com/NoahStolk/ddinfo-core", "ddinfo-core", "Core libraries for DevilDaggers.info projects");
 			RenderLibrary("https://github.com/NoahStolk/ddinfo-web", "ddinfo-web", "DevilDaggers.info website and web server");
-			RenderLibrary("https://github.com/NoahStolk/imgui-glfw-dotnet", "imgui-glfw-dotnet", "ImGui.NET rendering back-end for GLFW");
 
 			ImGui.SeparatorText("Third-party libraries");
 			ImGui.Text("The app uses the following third-party libraries:");
