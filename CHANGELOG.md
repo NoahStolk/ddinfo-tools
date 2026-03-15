@@ -12,6 +12,7 @@
 - Simplified build process and removed unwanted dependencies.
 - Updated Serilog dependency from 5.0.0 to 7.0.0.
 - Updated Silk.NET dependency from 2.21.0 to 2.23.0.
+- Updated SixLabors.ImageSharp dependency from 3.1.6 to 3.1.12.
 - Fixed some ImGui violations.
 
 ## [0.13.6.0] - 2026-02-10
