@@ -1,11 +1,11 @@
 using NativeFileDialogSharp;
 
-namespace DevilDaggersInfo.Tools;
+namespace DevilDaggersInfo.Tools.Dialogs;
 
 /// <summary>
 /// Wrapper to make sure the <see cref="Dialog"/> class doesn't block the main thread and cause other problems like key states getting stuck.
 /// </summary>
-internal sealed class NativeFileDialog
+internal sealed class NativeFileDialog : INativeFileDialog
 {
 	/// <summary>
 	/// Used to prevent multiple dialogs from being opened from the main thread.
@@ -55,6 +55,10 @@ internal sealed class NativeFileDialog
 			DialogOpen = false;
 			return dialogResult.Path;
 		});
+	}
+
+	public void Update()
+	{
 	}
 
 	private static void OpenDialog(Action<string?> callback, Func<Task<string?>> call)
