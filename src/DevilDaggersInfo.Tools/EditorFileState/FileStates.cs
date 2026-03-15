@@ -6,34 +6,77 @@ using System.Security.Cryptography;
 
 namespace DevilDaggersInfo.Tools.EditorFileState;
 
-internal static class FileStates
+internal sealed class FileStates
 {
 	public const string UntitledName = "<untitled>";
 
-	public static FileState<SpawnsetBinary, SpawnsetEditType> Spawnset { get; } = new(
-		obj: SpawnsetBinary.CreateDefault(),
-		defaultEditType: SpawnsetEditType.Reset,
-		toHash: s => MD5.HashData(s.ToBytes()),
-		save: s => s.ToBytes(),
-		deepCopy: s => s.DeepCopy(),
-		editTypeEquals: (a, b) => a == b,
-		savePromptAction: PopupManager.ShowSaveSpawnsetPrompt);
+	private readonly NativeFileDialog _nativeFileDialog;
 
-	public static FileState<EditorReplayModel, ReplayEditType> Replay { get; } = new(
-		obj: EditorReplayModel.CreateDefault(),
-		defaultEditType: ReplayEditType.Reset,
-		toHash: r => r.ToHash(),
-		save: r => r.ToLocalReplay().Compile(),
-		deepCopy: _ => throw new NotImplementedException(),
-		editTypeEquals: (a, b) => a == b,
-		savePromptAction: _ => throw new NotImplementedException());
+	public FileStates(PopupManager popupManager, NativeFileDialog nativeFileDialog)
+	{
+		_nativeFileDialog = nativeFileDialog;
 
-	public static FileState<AssetPaths, AssetEditType> Mod { get; } = new(
-		obj: new AssetPaths(),
-		defaultEditType: AssetEditType.Reset,
-		toHash: m => MD5.HashData(m.ToJsonBytes()),
-		save: m => m.ToJsonBytes(),
-		deepCopy: _ => throw new NotImplementedException(),
-		editTypeEquals: (a, b) => a == b,
-		savePromptAction: _ => throw new NotImplementedException());
+		Spawnset = new FileState<SpawnsetBinary, SpawnsetEditType>(
+			obj: SpawnsetBinary.CreateDefault(),
+			defaultEditType: SpawnsetEditType.Reset,
+			toHash: s => MD5.HashData(s.ToBytes()),
+			save: s => s.ToBytes(),
+			deepCopy: s => s.DeepCopy(),
+			editTypeEquals: (a, b) => a == b,
+			savePromptAction: action =>
+			{
+				popupManager.ShowQuestion(
+					"Save spawnset?",
+					"Do you want to save the current spawnset?",
+					() =>
+					{
+						SaveSpawnset();
+						action();
+					},
+					action);
+			});
+
+		Replay = new FileState<EditorReplayModel, ReplayEditType>(
+			obj: EditorReplayModel.CreateDefault(),
+			defaultEditType: ReplayEditType.Reset,
+			toHash: r => r.ToHash(),
+			save: r => r.ToLocalReplay().Compile(),
+			deepCopy: _ => throw new NotImplementedException(),
+			editTypeEquals: (a, b) => a == b,
+			savePromptAction: _ => throw new NotImplementedException());
+
+		Mod = new FileState<AssetPaths, AssetEditType>(
+			obj: new AssetPaths(),
+			defaultEditType: AssetEditType.Reset,
+			toHash: m => MD5.HashData(m.ToJsonBytes()),
+			save: m => m.ToJsonBytes(),
+			deepCopy: _ => throw new NotImplementedException(),
+			editTypeEquals: (a, b) => a == b,
+			savePromptAction: _ => throw new NotImplementedException());
+	}
+
+	public FileState<SpawnsetBinary, SpawnsetEditType> Spawnset { get; }
+
+	public FileState<EditorReplayModel, ReplayEditType> Replay { get; }
+
+	public FileState<AssetPaths, AssetEditType> Mod { get; }
+
+	public void SaveSpawnset()
+	{
+		if (Spawnset.FilePath != null)
+			Spawnset.SaveFile(Spawnset.FilePath);
+		else
+			SaveSpawnsetAs();
+	}
+
+	public void SaveSpawnsetAs()
+	{
+		_nativeFileDialog.CreateSaveFileDialog(SaveSpawnsetAsCallback, null);
+	}
+
+	private void SaveSpawnsetAsCallback(string? filePath)
+	{
+		if (filePath != null)
+			Spawnset.SaveFile(filePath);
+	}
 }

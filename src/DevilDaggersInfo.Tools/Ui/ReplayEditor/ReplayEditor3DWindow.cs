@@ -2,6 +2,7 @@ using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Scenes;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
+using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using ImGuiNET;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
@@ -9,7 +10,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-internal sealed unsafe class ReplayEditor3DWindow(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ResourceManager resourceManager)
+internal sealed unsafe class ReplayEditor3DWindow(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ResourceManager resourceManager, FileStates fileStates, SpawnsetSaver spawnsetSaver)
 {
 	private readonly FramebufferData _framebufferData = new(gl);
 
@@ -21,7 +22,7 @@ internal sealed unsafe class ReplayEditor3DWindow(Glfw glfw, GL gl, WindowHandle
 
 	public void InitializeScene()
 	{
-		_arenaScene = new ArenaScene(glfw, gl, window, glfwInput, resourceManager, static () => FileStates.Replay.Object.Spawnset, false, false);
+		_arenaScene = new ArenaScene(glfw, gl, window, glfwInput, resourceManager, () => fileStates.Replay.Object.Spawnset, false, false, fileStates, spawnsetSaver);
 	}
 
 	public void Reset()
@@ -31,7 +32,7 @@ internal sealed unsafe class ReplayEditor3DWindow(Glfw glfw, GL gl, WindowHandle
 
 	public void Update(float delta)
 	{
-		if (_time < FileStates.Replay.Object.Time)
+		if (_time < fileStates.Replay.Object.Time)
 			_time += delta;
 
 		ArenaScene.CurrentTick = TimeUtils.TimeToTick(_time, 0);
@@ -46,7 +47,7 @@ internal sealed unsafe class ReplayEditor3DWindow(Glfw glfw, GL gl, WindowHandle
 				ImGui.SetWindowFocus();
 
 			ImGui.Text(StringResources.ReplaySimulator3D);
-			ImGui.SliderFloat("Time", ref _time, 0, FileStates.Replay.Object.Time, "%.4f", ImGuiSliderFlags.NoInput);
+			ImGui.SliderFloat("Time", ref _time, 0, fileStates.Replay.Object.Time, "%.4f", ImGuiSliderFlags.NoInput);
 
 			PlayerInputSnapshot snapshot = default;
 			if (ArenaScene.CurrentTick < ArenaScene.ReplaySimulation?.InputSnapshots.Count)

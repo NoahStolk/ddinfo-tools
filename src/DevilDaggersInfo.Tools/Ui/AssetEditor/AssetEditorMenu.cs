@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
-internal sealed class AssetEditorMenu(UiLayoutManager uiLayoutManager)
+internal sealed class AssetEditorMenu(UiLayoutManager uiLayoutManager, NativeFileDialog nativeFileDialog, PopupManager popupManager, FileStates fileStates)
 {
 	public void Render()
 	{
@@ -45,18 +45,18 @@ internal sealed class AssetEditorMenu(UiLayoutManager uiLayoutManager)
 			Close();
 	}
 
-	public static void NewMod()
+	public void NewMod()
 	{
-		FileStates.Mod.Update(new AssetPaths());
-		FileStates.Mod.SetFile(null, null);
+		fileStates.Mod.Update(new AssetPaths());
+		fileStates.Mod.SetFile(null, null);
 	}
 
-	public static void OpenMod()
+	public void OpenMod()
 	{
-		NativeFileDialog.CreateOpenFileDialog(OpenModCallback, PathUtils.FileExtensionMod);
+		nativeFileDialog.CreateOpenFileDialog(OpenModCallback, PathUtils.FileExtensionMod);
 	}
 
-	private static void OpenModCallback(string? filePath)
+	private void OpenModCallback(string? filePath)
 	{
 		if (filePath == null)
 			return;
@@ -68,7 +68,7 @@ internal sealed class AssetEditorMenu(UiLayoutManager uiLayoutManager)
 		}
 		catch (Exception ex) when (ex.IsFileIoException())
 		{
-			PopupManager.ShowError($"Could not open file '{filePath}'.", ex);
+			popupManager.ShowError($"Could not open file '{filePath}'.", ex);
 			Root.Log.Error(ex, "Could not open file");
 			return;
 		}
@@ -80,44 +80,44 @@ internal sealed class AssetEditorMenu(UiLayoutManager uiLayoutManager)
 		}
 		catch (JsonException ex)
 		{
-			PopupManager.ShowError($"File '{filePath}' could not be parsed as a mod.", ex);
+			popupManager.ShowError($"File '{filePath}' could not be parsed as a mod.", ex);
 			return;
 		}
 
 		if (mod == null)
 		{
-			PopupManager.ShowError($"File '{filePath}' could not be parsed as a mod.");
+			popupManager.ShowError($"File '{filePath}' could not be parsed as a mod.");
 			return;
 		}
 
-		FileStates.Mod.Update(mod);
-		FileStates.Mod.SetFile(filePath, Path.GetFileName(filePath));
+		fileStates.Mod.Update(mod);
+		fileStates.Mod.SetFile(filePath, Path.GetFileName(filePath));
 	}
 
-	public static void SaveMod()
+	public void SaveMod()
 	{
-		if (FileStates.Mod.FilePath != null)
-			FileStates.Mod.SaveFile(FileStates.Mod.FilePath);
+		if (fileStates.Mod.FilePath != null)
+			fileStates.Mod.SaveFile(fileStates.Mod.FilePath);
 		else
 			SaveModAs();
 	}
 
-	public static void SaveModAs()
+	public void SaveModAs()
 	{
-		NativeFileDialog.CreateSaveFileDialog(SaveModCallback, PathUtils.FileExtensionMod);
+		nativeFileDialog.CreateSaveFileDialog(SaveModCallback, PathUtils.FileExtensionMod);
 	}
 
-	private static void SaveModCallback(string? filePath)
+	private void SaveModCallback(string? filePath)
 	{
 		if (filePath == null)
 			return;
 
 		filePath = Path.ChangeExtension(filePath, PathUtils.FileExtensionMod);
-		FileStates.Mod.SaveFile(filePath);
+		fileStates.Mod.SaveFile(filePath);
 	}
 
 	public void Close()
 	{
-		FileStates.Mod.PromptSave(() => uiLayoutManager.Layout = LayoutType.Main);
+		fileStates.Mod.PromptSave(() => uiLayoutManager.Layout = LayoutType.Main);
 	}
 }

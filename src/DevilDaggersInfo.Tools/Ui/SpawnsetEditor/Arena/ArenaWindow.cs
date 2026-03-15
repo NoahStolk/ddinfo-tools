@@ -17,6 +17,8 @@ internal sealed class ArenaWindow
 	public static readonly Vector2 ArenaSize = new(TileSize * SpawnsetBinary.ArenaDimensionMax);
 
 	private readonly SpawnsetEditor3DWindow _spawnsetEditor3DWindow;
+	private readonly FileStates _fileStates;
+	private readonly SpawnsetSaver _spawnsetSaver;
 
 	private readonly ArenaEditorControls _arenaEditorControls;
 	private readonly ArenaCanvas _arenaCanvas;
@@ -32,20 +34,22 @@ internal sealed class ArenaWindow
 	private float _currentSecond;
 
 	// TODO: Don't inject other windows.
-	public ArenaWindow(SpawnsetEditor3DWindow spawnsetEditor3DWindow, ResourceManager resourceManager)
+	public ArenaWindow(SpawnsetEditor3DWindow spawnsetEditor3DWindow, ResourceManager resourceManager, FileStates fileStates, SpawnsetSaver spawnsetSaver)
 	{
 		_spawnsetEditor3DWindow = spawnsetEditor3DWindow;
+		_fileStates = fileStates;
+		_spawnsetSaver = spawnsetSaver;
 
-		_arenaEditorControls = new ArenaEditorControls(resourceManager, this);
-		_arenaCanvas = new ArenaCanvas(resourceManager, this);
+		_arenaEditorControls = new ArenaEditorControls(resourceManager, this, fileStates);
+		_arenaCanvas = new ArenaCanvas(resourceManager, this, fileStates);
 		_arenaHeightButtons = new ArenaHeightButtons(this);
 
-		_pencilState = new ArenaPencilState(this);
-		_lineState = new ArenaLineState(this);
-		_rectangleState = new ArenaRectangleState(this);
-		_ellipseState = new ArenaEllipseState(this);
-		_bucketState = new ArenaBucketState(this);
-		_daggerState = new ArenaDaggerState(resourceManager);
+		_pencilState = new ArenaPencilState(this, fileStates, spawnsetSaver);
+		_lineState = new ArenaLineState(this, fileStates, spawnsetSaver);
+		_rectangleState = new ArenaRectangleState(this, fileStates, spawnsetSaver);
+		_ellipseState = new ArenaEllipseState(this, fileStates, spawnsetSaver);
+		_bucketState = new ArenaBucketState(this, fileStates, spawnsetSaver);
+		_daggerState = new ArenaDaggerState(resourceManager, fileStates, spawnsetSaver);
 	}
 
 	public float CurrentSecond => _currentSecond;
@@ -75,14 +79,14 @@ internal sealed class ArenaWindow
 			{
 				ImGuiIOPtr io = ImGui.GetIO();
 
-				ArenaMousePosition mousePosition = ArenaMousePosition.Get(io, ImGui.GetCursorScreenPos());
+				ArenaMousePosition mousePosition = ArenaMousePosition.Get(io, ImGui.GetCursorScreenPos(), _fileStates.Spawnset.Object.ArenaDimension);
 
 				if (mousePosition.IsValid && io.MouseWheel is < -float.Epsilon or > float.Epsilon)
 				{
-					float[,] newTiles = FileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
+					float[,] newTiles = _fileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
 					newTiles[mousePosition.Tile.X, mousePosition.Tile.Y] -= io.MouseWheel;
-					FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(FileStates.Spawnset.Object.ArenaDimension, newTiles) });
-					SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaTileHeight);
+					_fileStates.Spawnset.Update(_fileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(_fileStates.Spawnset.Object.ArenaDimension, newTiles) });
+					_spawnsetSaver.Save(SpawnsetEditType.ArenaTileHeight);
 				}
 
 				IArenaState activeState = GetActiveState();
@@ -94,7 +98,7 @@ internal sealed class ArenaWindow
 				ImGui.InvisibleButton("ArenaCanvas", ArenaSize, ImGuiButtonFlags.MouseButtonLeft);
 				bool isArenaHovered = ImGui.IsItemHovered();
 				if (isArenaHovered)
-					ImGui.SetTooltip(Inline.Span($"{FileStates.Spawnset.Object.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y]}\n<{mousePosition.Tile.X}, {mousePosition.Tile.Y}>"));
+					ImGui.SetTooltip(Inline.Span($"{_fileStates.Spawnset.Object.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y]}\n<{mousePosition.Tile.X}, {mousePosition.Tile.Y}>"));
 
 				if (isArenaHovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
 					activeState.InitializeSession(mousePosition);
@@ -107,7 +111,7 @@ internal sealed class ArenaWindow
 
 			ImGui.EndChild();
 
-			ImGui.SliderFloat("Time", ref _currentSecond, 0, FileStates.Spawnset.Object.GetSliderMaxSeconds());
+			ImGui.SliderFloat("Time", ref _currentSecond, 0, _fileStates.Spawnset.Object.GetSliderMaxSeconds());
 
 			_spawnsetEditor3DWindow.ArenaScene.CurrentTick = (int)MathF.Round(_currentSecond * 60);
 

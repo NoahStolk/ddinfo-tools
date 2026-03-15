@@ -1,17 +1,25 @@
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Extensions;
 using DevilDaggersInfo.Tools.Engine.Loaders;
 using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.AssetEditor;
+using DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 using DevilDaggersInfo.Tools.Ui.Config;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 using DevilDaggersInfo.Tools.Ui.Main;
+using DevilDaggersInfo.Tools.Ui.ModManager;
+using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
+using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.Practice.Main;
+using DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
+using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
@@ -33,6 +41,10 @@ namespace DevilDaggersInfo.Tools;
 [Register<TextureLoader>(Scope.SingleInstance)]
 [Register<ResourceManager>(Scope.SingleInstance)]
 [Register<FrameCounter>(Scope.SingleInstance)]
+[Register<NativeFileDialog>(Scope.SingleInstance)]
+
+// Game Memory
+[Register<GameMemoryServiceWrapper>(Scope.SingleInstance)]
 
 // Interop
 [Register<GameInstallationValidator>(Scope.SingleInstance)]
@@ -41,6 +53,8 @@ namespace DevilDaggersInfo.Tools;
 [Register<MainScene>(Scope.SingleInstance)]
 
 // UI
+[Register<FileStates>(Scope.SingleInstance)]
+[Register<PopupManager>(Scope.SingleInstance)]
 [Register<Shortcuts>(Scope.SingleInstance)]
 [Register<UiLayoutManager>(Scope.SingleInstance)]
 [Register<UiRenderer>(Scope.SingleInstance)]
@@ -48,22 +62,36 @@ namespace DevilDaggersInfo.Tools;
 // Layouts
 [Register<ConfigLayout>(Scope.SingleInstance)]
 
-// Menus
-[Register<AssetEditorMenu>(Scope.SingleInstance)]
-[Register<ReplayEditorMenu>(Scope.SingleInstance)]
-[Register<SpawnsetEditorMenu>(Scope.SingleInstance)]
-
 // Windows
 [Register<AboutWindow>(Scope.SingleInstance)]
 [Register<DebugWindow>(Scope.SingleInstance)]
 [Register<MainWindow>(Scope.SingleInstance)]
 
 // Spawnset Editor
+[Register<SpawnsetEditorMenu>(Scope.SingleInstance)]
 [Register<ArenaWindow>(Scope.SingleInstance)]
 [Register<SpawnsetEditor3DWindow>(Scope.SingleInstance)]
+[Register<SpawnsWindow>(Scope.SingleInstance)]
+[Register<HistoryWindow>(Scope.SingleInstance)]
+[Register<SettingsWindow>(Scope.SingleInstance)]
+
+[Register<SpawnsetSaver>(Scope.SingleInstance)]
+
+// Mod Manager
+[Register<ModsDirectoryWindow>(Scope.SingleInstance)]
+[Register<ModPreviewWindow>(Scope.SingleInstance)]
+[Register<ModInstallationWindow>(Scope.SingleInstance)]
+
+[Register<ModManagerState>(Scope.SingleInstance)]
+
+// Asset Editor
+[Register<ModsDirectoryLogic>(Scope.SingleInstance)]
 
 // Practice
 [Register<PracticeWindow>(Scope.SingleInstance)]
+[Register<RunAnalysisWindow>(Scope.SingleInstance)]
+
+[Register<PracticeLogic>(Scope.SingleInstance)]
 
 // Custom Leaderboards
 [Register<CustomLeaderboardsWindow>(Scope.SingleInstance)]
@@ -76,11 +104,27 @@ namespace DevilDaggersInfo.Tools;
 [Register<StateChild>(Scope.SingleInstance)]
 
 // Replay Editor
+[Register<ReplayEditorMenu>(Scope.SingleInstance)]
 [Register<ReplayEventsViewerChild>(Scope.SingleInstance)]
 [Register<ReplayEditorWindow>(Scope.SingleInstance)]
 [Register<ReplayEntitiesChild>(Scope.SingleInstance)]
 [Register<ReplayInputsChild>(Scope.SingleInstance)]
 [Register<ReplayEditor3DWindow>(Scope.SingleInstance)]
+[Register<LeaderboardReplayBrowser>(Scope.SingleInstance)]
+[Register<ReplayTimelineChild>(Scope.SingleInstance)]
+[Register<ReplayTimelineSelectedEventsChild>(Scope.SingleInstance)]
+
+// Asset Editor
+[Register<AssetEditorMenu>(Scope.SingleInstance)]
+[Register<AssetEditorWindow>(Scope.SingleInstance)]
+[Register<CompileModWindow>(Scope.SingleInstance)]
+[Register<ExtractModWindow>(Scope.SingleInstance)]
+[Register<AssetPathsChild>(Scope.SingleInstance)]
+[Register<AudioPathsTable>(Scope.SingleInstance)]
+[Register<MeshPathsTable>(Scope.SingleInstance)]
+[Register<ObjectBindingPathsTable>(Scope.SingleInstance)]
+[Register<ShaderPathsTable>(Scope.SingleInstance)]
+[Register<TexturePathsTable>(Scope.SingleInstance)]
 internal sealed partial class Container : IContainer<Application>
 {
 	[Factory(Scope.SingleInstance)]

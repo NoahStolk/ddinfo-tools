@@ -9,7 +9,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 
-internal sealed class LeaderboardListChild
+internal sealed class LeaderboardListChild(ResourceManager resourceManager, PopupManager popupManager)
 {
 	public const int PageSize = 20;
 
@@ -22,13 +22,6 @@ internal sealed class LeaderboardListChild
 	private string _authorFilter = string.Empty;
 
 	private readonly List<GetCustomLeaderboardForOverview> _customLeaderboards = [];
-
-	private readonly ResourceManager _resourceManager;
-
-	public LeaderboardListChild(ResourceManager resourceManager)
-	{
-		_resourceManager = resourceManager;
-	}
 
 	private CustomLeaderboardRankSorting RankSorting => _categories.Count > _categoryIndex ? _categories[_categoryIndex].RankSorting : CustomLeaderboardRankSorting.TimeDesc;
 	private SpawnsetGameMode GameMode => _categories.Count > _categoryIndex ? _categories[_categoryIndex].GameMode : SpawnsetGameMode.Survival;
@@ -49,23 +42,23 @@ internal sealed class LeaderboardListChild
 
 		if (ImGui.BeginChild("LeaderboardList"))
 		{
-			if (ImGuiImage.ImageButton("Reload", _resourceManager.InternalResources.ReloadTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("Reload", resourceManager.InternalResources.ReloadTexture.Id, iconSize))
 				LoadAll();
 
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Begin", _resourceManager.InternalResources.ArrowStartTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("Begin", resourceManager.InternalResources.ArrowStartTexture.Id, iconSize))
 				SetPageIndex(0);
 
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Previous", _resourceManager.InternalResources.ArrowLeftTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("Previous", resourceManager.InternalResources.ArrowLeftTexture.Id, iconSize))
 				SetPageIndex(PageIndex - 1);
 
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Next", _resourceManager.InternalResources.ArrowRightTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("Next", resourceManager.InternalResources.ArrowRightTexture.Id, iconSize))
 				SetPageIndex(PageIndex + 1);
 
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("End", _resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("End", resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
 				SetPageIndex(TotalPages - 1);
 
 			ImGui.SameLine();
@@ -152,7 +145,7 @@ internal sealed class LeaderboardListChild
 					},
 					onError: apiError =>
 					{
-						PopupManager.ShowError("Failed to fetch allowed categories.", apiError);
+						popupManager.ShowError("Failed to fetch allowed categories.", apiError);
 						Root.Log.Error(apiError.Exception, "Failed to fetch allowed categories.");
 					});
 			},
@@ -174,7 +167,7 @@ internal sealed class LeaderboardListChild
 					onError: apiError =>
 					{
 						PageIndex = 0;
-						PopupManager.ShowError("Failed to fetch custom leaderboards.", apiError);
+						popupManager.ShowError("Failed to fetch custom leaderboards.", apiError);
 						Root.Log.Error(apiError.Exception, "Failed to fetch custom leaderboards.");
 					});
 

@@ -7,23 +7,23 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
-internal sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
+internal sealed class ShaderPathsTable(FileStates fileStates, NativeFileDialog nativeFileDialog) : IPathTable
 {
-	public static int ColumnCount => 4;
+	public int ColumnCount => 4;
 
-	public static int PathCount => PathTableUtils.Shaders.Count;
+	public int PathCount => PathTableUtils.Shaders.Count;
 
-	public static void SetupColumns()
+	public void SetupColumns()
 	{
 		PathTableUtils.SetupDefaultColumns();
 		ImGui.TableSetupColumn("Vertex Path", ImGuiTableColumnFlags.WidthStretch, 0, 2);
 		ImGui.TableSetupColumn("Fragment Path", ImGuiTableColumnFlags.WidthStretch, 0, 3);
 	}
 
-	public static void RenderPath(int index)
+	public void RenderPath(int index)
 	{
 		ShaderAssetInfo assetInfo = PathTableUtils.Shaders[index];
-		ShaderAssetPath? path = PathTableUtils.Find(FileStates.Mod.Object.Shaders, assetInfo.AssetName);
+		ShaderAssetPath? path = PathTableUtils.Find(fileStates.Mod.Object.Shaders, assetInfo.AssetName);
 
 		PathTableUtils.RenderDefaultColumns(assetInfo);
 
@@ -46,29 +46,29 @@ internal sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
 		ImGui.Text(path?.AbsoluteFragmentPath ?? "<none>");
 	}
 
-	private static void SetVertexPath(ShaderAssetInfo assetInfo, ShaderAssetPath? path)
+	private void SetVertexPath(ShaderAssetInfo assetInfo, ShaderAssetPath? path)
 	{
 		if (path == null)
 		{
 			path = new ShaderAssetPath(assetInfo.AssetName, null, null);
-			FileStates.Mod.Object.Shaders.Add(path);
+			fileStates.Mod.Object.Shaders.Add(path);
 		}
 
-		NativeFileDialog.CreateOpenFileDialog(path.SetVertexPath, PathUtils.GetFileFilter(path.AssetType));
+		nativeFileDialog.CreateOpenFileDialog(path.SetVertexPath, PathUtils.GetFileFilter(path.AssetType));
 	}
 
-	private static void SetFragmentPath(ShaderAssetInfo assetInfo, ShaderAssetPath? path)
+	private void SetFragmentPath(ShaderAssetInfo assetInfo, ShaderAssetPath? path)
 	{
 		if (path == null)
 		{
 			path = new ShaderAssetPath(assetInfo.AssetName, null, null);
-			FileStates.Mod.Object.Shaders.Add(path);
+			fileStates.Mod.Object.Shaders.Add(path);
 		}
 
-		NativeFileDialog.CreateOpenFileDialog(path.SetFragmentPath, PathUtils.GetFileFilter(path.AssetType));
+		nativeFileDialog.CreateOpenFileDialog(path.SetFragmentPath, PathUtils.GetFileFilter(path.AssetType));
 	}
 
-	public static void Sort(uint sorting, bool sortAscending)
+	public void Sort(uint sorting, bool sortAscending)
 	{
 		PathTableUtils.Shaders.Sort((a, b) =>
 		{
@@ -84,6 +84,6 @@ internal sealed class ShaderPathsTable : IPathTable<ShaderPathsTable>
 			return sortAscending ? result : -result;
 		});
 
-		static ShaderAssetPath? Find(string assetName) => FileStates.Mod.Object.Shaders.Find(audio => audio.AssetName == assetName);
+		ShaderAssetPath? Find(string assetName) => fileStates.Mod.Object.Shaders.Find(audio => audio.AssetName == assetName);
 	}
 }

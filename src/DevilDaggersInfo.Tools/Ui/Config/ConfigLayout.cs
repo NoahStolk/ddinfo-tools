@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Config;
 
-internal sealed class ConfigLayout(GameInstallationValidator gameInstallationValidator)
+internal sealed class ConfigLayout(GameInstallationValidator gameInstallationValidator, NativeFileDialog nativeFileDialog)
 {
 	public void Render()
 	{
@@ -43,7 +43,7 @@ internal sealed class ConfigLayout(GameInstallationValidator gameInstallationVal
 				if (ImGui.BeginChild("InputDirectory", new Vector2(0, 64)))
 				{
 					if (ImGui.Button("Browse", new Vector2(96, 20)))
-						NativeFileDialog.SelectDirectory(OpenInstallationDirectoryCallback);
+						nativeFileDialog.SelectDirectory(OpenInstallationDirectoryCallback);
 
 					ImGui.SameLine();
 					ImGui.InputText("##installationDirectoryInput", ref gameInstallationValidator.InstallationDirectoryInput, 1024, ImGuiInputTextFlags.None);

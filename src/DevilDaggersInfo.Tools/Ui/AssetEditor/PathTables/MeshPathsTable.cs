@@ -7,22 +7,22 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
-internal sealed class MeshPathsTable : IPathTable<MeshPathsTable>
+internal sealed class MeshPathsTable(FileStates fileStates, NativeFileDialog nativeFileDialog) : IPathTable
 {
-	public static int ColumnCount => 3;
+	public int ColumnCount => 3;
 
-	public static int PathCount => PathTableUtils.Meshes.Count;
+	public int PathCount => PathTableUtils.Meshes.Count;
 
-	public static void SetupColumns()
+	public void SetupColumns()
 	{
 		PathTableUtils.SetupDefaultColumns();
 		ImGui.TableSetupColumn("Path", ImGuiTableColumnFlags.WidthStretch, 0, 2);
 	}
 
-	public static void RenderPath(int index)
+	public void RenderPath(int index)
 	{
 		MeshAssetInfo assetInfo = PathTableUtils.Meshes[index];
-		MeshAssetPath? path = PathTableUtils.Find(FileStates.Mod.Object.Meshes, assetInfo.AssetName);
+		MeshAssetPath? path = PathTableUtils.Find(fileStates.Mod.Object.Meshes, assetInfo.AssetName);
 
 		PathTableUtils.RenderDefaultColumns(assetInfo);
 
@@ -36,18 +36,18 @@ internal sealed class MeshPathsTable : IPathTable<MeshPathsTable>
 		ImGui.Text(path?.AbsolutePath ?? "<none>");
 	}
 
-	private static void SetPath(MeshAssetInfo assetInfo, MeshAssetPath? path)
+	private void SetPath(MeshAssetInfo assetInfo, MeshAssetPath? path)
 	{
 		if (path == null)
 		{
 			path = new MeshAssetPath(assetInfo.AssetName, null);
-			FileStates.Mod.Object.Meshes.Add(path);
+			fileStates.Mod.Object.Meshes.Add(path);
 		}
 
-		NativeFileDialog.CreateOpenFileDialog(path.SetPath, PathUtils.GetFileFilter(path.AssetType));
+		nativeFileDialog.CreateOpenFileDialog(path.SetPath, PathUtils.GetFileFilter(path.AssetType));
 	}
 
-	public static void Sort(uint sorting, bool sortAscending)
+	public void Sort(uint sorting, bool sortAscending)
 	{
 		PathTableUtils.Meshes.Sort((a, b) =>
 		{
@@ -62,6 +62,6 @@ internal sealed class MeshPathsTable : IPathTable<MeshPathsTable>
 			return sortAscending ? result : -result;
 		});
 
-		static MeshAssetPath? Find(string assetName) => FileStates.Mod.Object.Meshes.Find(audio => audio.AssetName == assetName);
+		MeshAssetPath? Find(string assetName) => fileStates.Mod.Object.Meshes.Find(audio => audio.AssetName == assetName);
 	}
 }

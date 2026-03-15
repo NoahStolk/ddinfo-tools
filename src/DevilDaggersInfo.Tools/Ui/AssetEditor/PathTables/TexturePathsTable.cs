@@ -7,22 +7,22 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
-internal sealed class TexturePathsTable : IPathTable<TexturePathsTable>
+internal sealed class TexturePathsTable(FileStates fileStates, NativeFileDialog nativeFileDialog) : IPathTable
 {
-	public static int ColumnCount => 3;
+	public int ColumnCount => 3;
 
-	public static int PathCount => PathTableUtils.Textures.Count;
+	public int PathCount => PathTableUtils.Textures.Count;
 
-	public static void SetupColumns()
+	public void SetupColumns()
 	{
 		PathTableUtils.SetupDefaultColumns();
 		ImGui.TableSetupColumn("Path", ImGuiTableColumnFlags.WidthStretch, 0, 2);
 	}
 
-	public static void RenderPath(int index)
+	public void RenderPath(int index)
 	{
 		TextureAssetInfo assetInfo = PathTableUtils.Textures[index];
-		TextureAssetPath? path = PathTableUtils.Find(FileStates.Mod.Object.Textures, assetInfo.AssetName);
+		TextureAssetPath? path = PathTableUtils.Find(fileStates.Mod.Object.Textures, assetInfo.AssetName);
 
 		PathTableUtils.RenderDefaultColumns(assetInfo);
 
@@ -36,18 +36,18 @@ internal sealed class TexturePathsTable : IPathTable<TexturePathsTable>
 		ImGui.Text(path?.AbsolutePath ?? "<none>");
 	}
 
-	private static void SetPath(TextureAssetInfo assetInfo, TextureAssetPath? path)
+	private void SetPath(TextureAssetInfo assetInfo, TextureAssetPath? path)
 	{
 		if (path == null)
 		{
 			path = new TextureAssetPath(assetInfo.AssetName, null);
-			FileStates.Mod.Object.Textures.Add(path);
+			fileStates.Mod.Object.Textures.Add(path);
 		}
 
-		NativeFileDialog.CreateOpenFileDialog(path.SetPath, PathUtils.GetFileFilter(path.AssetType));
+		nativeFileDialog.CreateOpenFileDialog(path.SetPath, PathUtils.GetFileFilter(path.AssetType));
 	}
 
-	public static void Sort(uint sorting, bool sortAscending)
+	public void Sort(uint sorting, bool sortAscending)
 	{
 		PathTableUtils.Textures.Sort((a, b) =>
 		{
@@ -62,6 +62,6 @@ internal sealed class TexturePathsTable : IPathTable<TexturePathsTable>
 			return sortAscending ? result : -result;
 		});
 
-		static TextureAssetPath? Find(string assetName) => FileStates.Mod.Object.Textures.Find(audio => audio.AssetName == assetName);
+		TextureAssetPath? Find(string assetName) => fileStates.Mod.Object.Textures.Find(audio => audio.AssetName == assetName);
 	}
 }

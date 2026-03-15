@@ -15,35 +15,24 @@ using System.Text;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 
-internal sealed class LeaderboardListViewChild
+internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardListChild, ResourceManager resourceManager, LeaderboardChild leaderboardChild, PopupManager popupManager)
 {
-	private readonly LeaderboardListChild _leaderboardListChild;
-	private readonly ResourceManager _resourceManager;
-	private readonly LeaderboardChild _leaderboardChild;
-
-	public LeaderboardListViewChild(LeaderboardListChild leaderboardListChild, ResourceManager resourceManager, LeaderboardChild leaderboardChild)
-	{
-		_leaderboardListChild = leaderboardListChild;
-		_resourceManager = resourceManager;
-		_leaderboardChild = leaderboardChild;
-	}
-
 	public void Render()
 	{
 		if (ImGui.BeginChild("LeaderboardList"))
 		{
-			if (_leaderboardListChild.IsLoading)
+			if (leaderboardListChild.IsLoading)
 			{
 				ImGui.TextColored(Color.Yellow, "Loading...");
 			}
 			else
 			{
-				int page = _leaderboardListChild.PageIndex + 1;
-				int totalPages = _leaderboardListChild.TotalPages;
-				int totalEntries = _leaderboardListChild.TotalEntries;
+				int page = leaderboardListChild.PageIndex + 1;
+				int totalPages = leaderboardListChild.TotalPages;
+				int totalEntries = leaderboardListChild.TotalEntries;
 
-				int start = _leaderboardListChild.PageIndex * LeaderboardListChild.PageSize + 1;
-				int end = Math.Min((_leaderboardListChild.PageIndex + 1) * LeaderboardListChild.PageSize, totalEntries);
+				int start = leaderboardListChild.PageIndex * LeaderboardListChild.PageSize + 1;
+				int end = Math.Min((leaderboardListChild.PageIndex + 1) * LeaderboardListChild.PageSize, totalEntries);
 
 				ImGui.Text(Inline.Span($"Page {page} of {totalPages} ({start}-{end} of {totalEntries})"));
 
@@ -76,15 +65,15 @@ internal sealed class LeaderboardListViewChild
 			ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
 			if (sortsSpecs.NativePtr != (void*)0 && sortsSpecs.SpecsDirty)
 			{
-				_leaderboardListChild.Sorting = (LeaderboardListSorting)sortsSpecs.Specs.ColumnUserID;
-				_leaderboardListChild.SortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
-				_leaderboardListChild.UpdatePagedCustomLeaderboards();
+				leaderboardListChild.Sorting = (LeaderboardListSorting)sortsSpecs.Specs.ColumnUserID;
+				leaderboardListChild.SortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
+				leaderboardListChild.UpdatePagedCustomLeaderboards();
 				sortsSpecs.SpecsDirty = false;
 			}
 
-			for (int i = 0; i < _leaderboardListChild.PagedCustomLeaderboards.Count; i++)
+			for (int i = 0; i < leaderboardListChild.PagedCustomLeaderboards.Count; i++)
 			{
-				GetCustomLeaderboardForOverview clOverview = _leaderboardListChild.PagedCustomLeaderboards[i];
+				GetCustomLeaderboardForOverview clOverview = leaderboardListChild.PagedCustomLeaderboards[i];
 				ImGui.TableNextRow();
 				ImGui.TableNextColumn();
 
@@ -105,7 +94,7 @@ internal sealed class LeaderboardListViewChild
 				for (int j = 0; j < clOverview.Criteria.Count; j++)
 				{
 					GetCustomLeaderboardCriteria criteria = clOverview.Criteria[j];
-					ImGuiImage.Image(_resourceManager.GetTexture(criteria.Type).Id, new Vector2(16), criteria.Type.GetColor());
+					ImGuiImage.Image(resourceManager.GetTexture(criteria.Type).Id, new Vector2(16), criteria.Type.GetColor());
 					if (ImGui.IsItemHovered())
 					{
 						// TODO: May need to improve performance here by caching the text, or perhaps return the text from the API.
@@ -161,11 +150,11 @@ internal sealed class LeaderboardListViewChild
 			getLeaderboardResult =>
 			{
 				getLeaderboardResult.Match(
-					onSuccess: getLeaderboard => _leaderboardChild.Data = new LeaderboardChild.LeaderboardData(getLeaderboard, clOverview.SpawnsetId),
+					onSuccess: getLeaderboard => leaderboardChild.Data = new LeaderboardChild.LeaderboardData(getLeaderboard, clOverview.SpawnsetId),
 					onError: apiError =>
 					{
-						PopupManager.ShowError("Could not fetch custom leaderboard.", apiError);
-						_leaderboardChild.Data = null;
+						popupManager.ShowError("Could not fetch custom leaderboard.", apiError);
+						leaderboardChild.Data = null;
 					});
 			},
 			() => FetchCustomLeaderboardById.HandleAsync(clOverview.Id));

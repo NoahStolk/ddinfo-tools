@@ -9,25 +9,25 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
-internal static class CompileModWindow
+internal sealed class CompileModWindow(NativeFileDialog nativeFileDialog, PopupManager popupManager, FileStates fileStates)
 {
-	private static string _outputDirectory = UserSettings.ModsDirectory;
-	private static string _outputFileName = "mod";
-	private static bool _isCompiling;
-	private static DateTime? _lastStartTime;
-	private static DateTime? _lastEndTime;
+	private string _outputDirectory = UserSettings.ModsDirectory;
+	private string _outputFileName = "mod";
+	private bool _isCompiling;
+	private DateTime? _lastStartTime;
+	private DateTime? _lastEndTime;
 
-	private static bool CreateAudio => FileStates.Mod.Object.Audio.Count > 0;
-	private static bool CreateDd => FileStates.Mod.Object.Meshes.Count > 0 || FileStates.Mod.Object.ObjectBindings.Count > 0 || FileStates.Mod.Object.Shaders.Count > 0 || FileStates.Mod.Object.Textures.Count > 0;
+	private bool CreateAudio => fileStates.Mod.Object.Audio.Count > 0;
+	private bool CreateDd => fileStates.Mod.Object.Meshes.Count > 0 || fileStates.Mod.Object.ObjectBindings.Count > 0 || fileStates.Mod.Object.Shaders.Count > 0 || fileStates.Mod.Object.Textures.Count > 0;
 
-	public static void Render()
+	public void Render()
 	{
 		if (ImGui.Begin("Compile mod"))
 		{
 			ImGui.SeparatorText("File locations");
 			if (ImGui.Button("Browse"))
 			{
-				NativeFileDialog.SelectDirectory(s =>
+				nativeFileDialog.SelectDirectory(s =>
 				{
 					if (s != null)
 						_outputDirectory = s;
@@ -75,36 +75,36 @@ internal static class CompileModWindow
 		ImGui.End();
 	}
 
-	private static void Compile()
+	private void Compile()
 	{
 		if (!Directory.Exists(_outputDirectory))
 		{
-			PopupManager.ShowError("Output directory does not exist.");
+			popupManager.ShowError("Output directory does not exist.");
 			return;
 		}
 
 		if (_outputFileName.Length == 0)
 		{
-			PopupManager.ShowError("File name cannot be empty.");
+			popupManager.ShowError("File name cannot be empty.");
 			return;
 		}
 
 		if (_outputFileName.Any(c => Path.GetInvalidFileNameChars().Contains(c)))
 		{
-			PopupManager.ShowError("File name contains invalid characters.");
+			popupManager.ShowError("File name contains invalid characters.");
 			return;
 		}
 
 		// TODO: Ask to overwrite the file if it already exists instead.
 		if (File.Exists(Path.Combine(_outputDirectory, $"audio{_outputFileName}")))
 		{
-			PopupManager.ShowError($"File 'audio{_outputFileName}' already exists in the output directory.");
+			popupManager.ShowError($"File 'audio{_outputFileName}' already exists in the output directory.");
 			return;
 		}
 
 		if (File.Exists(Path.Combine(_outputDirectory, $"dd{_outputFileName}")))
 		{
-			PopupManager.ShowError($"File 'dd{_outputFileName}' already exists in the output directory.");
+			popupManager.ShowError($"File 'dd{_outputFileName}' already exists in the output directory.");
 			return;
 		}
 
@@ -115,11 +115,11 @@ internal static class CompileModWindow
 		Task.Run(async () => CompilationCompletedCallback(await TryCompileAsync()));
 	}
 
-	private static async Task<CompilationResult> TryCompileAsync()
+	private async Task<CompilationResult> TryCompileAsync()
 	{
 		try
 		{
-			await CompileLogic.CompileAsync(_outputDirectory, _outputFileName, CreateAudio, CreateDd);
+			await CompileLogic.CompileAsync(fileStates.Mod.Object, _outputDirectory, _outputFileName, CreateAudio, CreateDd);
 			return CompilationResult.Succeeded();
 		}
 		catch (InvalidObjException ex)
@@ -140,13 +140,13 @@ internal static class CompileModWindow
 		}
 	}
 
-	private static void CompilationCompletedCallback(CompilationResult compilationResult)
+	private void CompilationCompletedCallback(CompilationResult compilationResult)
 	{
 		if (!compilationResult.Success)
 		{
 			Debug.Assert(compilationResult.Error != null, "compilationResult.Error != null");
 			Debug.Assert(compilationResult.Exception != null, "compilationResult.Exception != null");
-			PopupManager.ShowError($"Compilation failed: {compilationResult.Error}", compilationResult.Exception.Message);
+			popupManager.ShowError($"Compilation failed: {compilationResult.Error}", compilationResult.Exception.Message);
 		}
 
 		_isCompiling = false;

@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter)
+internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter, NativeFileDialog nativeFileDialog, PopupManager popupManager)
 {
 	private readonly List<string> _debugMessages = [];
 	private readonly DateTime _startUpTime = DateTime.UtcNow;
@@ -33,7 +33,7 @@ internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter
 	{
 		if (ImGui.Begin("Debug"))
 		{
-			ImGui.TextColored(NativeFileDialog.DialogOpen ? Color.White : Color.Gray(0.4f), NativeFileDialog.DialogOpen ? "Native dialog open" : "Native dialog closed");
+			ImGui.TextColored(nativeFileDialog.DialogOpen ? Color.White : Color.Gray(0.4f), nativeFileDialog.DialogOpen ? "Native dialog open" : "Native dialog closed");
 			ImGui.TextColored(Root.AesBase32Wrapper == null ? Color.Red : Color.Green, Root.AesBase32Wrapper == null ? "Encryption unavailable" : "Encryption available");
 
 			if (ImGui.CollapsingHeader("Popup debug info"))
@@ -94,16 +94,16 @@ internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter
 			ImGui.Separator();
 
 			if (ImGui.Button("Error window"))
-				PopupManager.ShowError("Test error!", "Test stack trace.");
+				popupManager.ShowError("Test error!", "Test stack trace.");
 
 			if (ImGui.Button("3 error windows"))
 			{
 				for (int i = 0; i < 3; i++)
-					PopupManager.ShowError($"Test error {i + 1}!", "Test stack trace.");
+					popupManager.ShowError($"Test error {i + 1}!", "Test stack trace.");
 			}
 
 			if (ImGui.Button("Message window"))
-				PopupManager.ShowMessage("Message", "Test message!");
+				popupManager.ShowMessage("Message", "Test message!");
 
 			if (ImGui.Button("Warning log"))
 				Root.Log.Warning("Test warning! This should be logged as WARNING.");
@@ -144,9 +144,9 @@ internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter
 		ImGui.End();
 	}
 
-	private static void RenderPopupDebugInfo()
+	private void RenderPopupDebugInfo()
 	{
-		ImGui.TextColored(PopupManager.IsAnyOpen ? Color.White : Color.Gray(0.4f), PopupManager.Popups.Count > 0 ? Inline.Span($"{PopupManager.Popups.Count} popup(s) active") : "No popups active");
+		ImGui.TextColored(popupManager.IsAnyOpen ? Color.White : Color.Gray(0.4f), popupManager.Popups.Count > 0 ? Inline.Span($"{popupManager.Popups.Count} popup(s) active") : "No popups active");
 
 		if (ImGui.BeginChild("PopupTableWrapper", new Vector2(0, 512)))
 		{
@@ -160,9 +160,9 @@ internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter
 				ImGui.TableHeadersRow();
 
 				// ReSharper disable once ForCanBeConvertedToForeach
-				for (int i = 0; i < PopupManager.Popups.Count; i++)
+				for (int i = 0; i < popupManager.Popups.Count; i++)
 				{
-					Popup popup = PopupManager.Popups[i];
+					Popup popup = popupManager.Popups[i];
 					ImGui.TableNextRow();
 
 					ImGui.TableNextColumn();

@@ -8,15 +8,15 @@ using Serilog;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-internal static class PracticeLogic
+internal sealed class PracticeLogic(PopupManager popupManager)
 {
 	public const int SpawnVersion = 6;
 
 #pragma warning disable SA1401, S1104, S2223, CA2211
-	public static PracticeState State = PracticeState.Default;
+	public PracticeState State = PracticeState.Default;
 #pragma warning restore CA2211, S2223, S1104, SA1401
 
-	public static void GenerateAndApplyPracticeSpawnset()
+	public void GenerateAndApplyPracticeSpawnset()
 	{
 		State.TimerStart = Math.Clamp(State.TimerStart, 0, 2000);
 
@@ -44,7 +44,7 @@ internal static class PracticeLogic
 				There is no need to restart the game itself.
 				""";
 
-			PopupManager.ShowMessageWithHideOption(
+			popupManager.ShowMessageWithHideOption(
 				"Practice spawnset applied",
 				messageText,
 				UserSettings.Model.DoNotShowAgainPracticeSpawnsetApplied,
@@ -54,11 +54,11 @@ internal static class PracticeLogic
 		{
 			const string message = "Could not write to the mods/survival file, probably because Devil Daggers is currently reading the file. Please try again.";
 			Log.Error(ex, message);
-			PopupManager.ShowError(message, ex);
+			popupManager.ShowError(message, ex);
 		}
 	}
 
-	public static void DeleteModdedSpawnset()
+	public void DeleteModdedSpawnset()
 	{
 		if (File.Exists(UserSettings.ModsSurvivalPath))
 			File.Delete(UserSettings.ModsSurvivalPath);
@@ -71,7 +71,7 @@ internal static class PracticeLogic
 			There is no need to restart the game itself.
 			""";
 
-		PopupManager.ShowMessageWithHideOption(
+		popupManager.ShowMessageWithHideOption(
 			"Default game restored",
 			messageText,
 			UserSettings.Model.DoNotShowAgainPracticeSpawnsetDeleted,

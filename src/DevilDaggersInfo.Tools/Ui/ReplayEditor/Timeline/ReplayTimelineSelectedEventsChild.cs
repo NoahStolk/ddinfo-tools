@@ -9,14 +9,14 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 
-internal static class ReplayTimelineSelectedEventsChild
+internal sealed class ReplayTimelineSelectedEventsChild
 {
 	private static readonly string[] _jumpTypeNamesArray = EnumUtils.JumpTypeNames.Values.ToArray();
 	private static readonly string[] _shootTypeNamesArray = EnumUtils.ShootTypeNames.Values.ToArray();
 
-	private static readonly List<EditorEvent> _checkedEvents = [];
+	private readonly List<EditorEvent> _checkedEvents = [];
 
-	public static void Render(EditorReplayModel replay, List<EditorEvent> selectedEvents, int selectedTick)
+	public void Render(EditorReplayModel replay, List<EditorEvent> selectedEvents, int selectedTick, Action<EditorReplayModel, int> selectEvents)
 	{
 		ImGui.SeparatorText("Inputs");
 
@@ -93,7 +93,7 @@ internal static class ReplayTimelineSelectedEventsChild
 
 		if (ImGui.Button("Duplicate selected events"))
 		{
-			DuplicateSelectedEvents(replay);
+			DuplicateSelectedEvents(replay, selectEvents);
 		}
 
 		ImGui.EndDisabled();
@@ -106,7 +106,7 @@ internal static class ReplayTimelineSelectedEventsChild
 		ImGui.EndChild();
 	}
 
-	private static void RenderEventsTable(EditorReplayModel replay, List<EditorEvent> selectedEvents)
+	private void RenderEventsTable(EditorReplayModel replay, List<EditorEvent> selectedEvents)
 	{
 		if (ImGui.BeginTable("EventsTable", 2, ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX))
 		{
@@ -180,7 +180,7 @@ internal static class ReplayTimelineSelectedEventsChild
 		}
 	}
 
-	private static void DuplicateSelectedEvents(EditorReplayModel replay)
+	private void DuplicateSelectedEvents(EditorReplayModel replay, Action<EditorReplayModel, int> selectEvents)
 	{
 		if (_checkedEvents.Count == 0)
 			return;
@@ -190,7 +190,7 @@ internal static class ReplayTimelineSelectedEventsChild
 			replay.AddEvent(replayEvent.TickIndex, replayEvent.Data.CloneEventData());
 		}
 
-		ReplayTimelineChild.SelectEvents(replay, _checkedEvents[0].TickIndex);
+		selectEvents(replay, _checkedEvents[0].TickIndex);
 		TimelineCache.Clear();
 		_checkedEvents.Clear();
 	}

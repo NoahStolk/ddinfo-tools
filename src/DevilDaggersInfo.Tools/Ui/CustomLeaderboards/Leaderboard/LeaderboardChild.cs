@@ -17,7 +17,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
 
-internal sealed class LeaderboardChild(CustomLeaderboards3DWindow customLeaderboards3DWindow)
+internal sealed class LeaderboardChild(CustomLeaderboards3DWindow customLeaderboards3DWindow, PopupManager popupManager)
 {
 	private GetCustomEntry? _selectedCustomEntry;
 
@@ -83,14 +83,14 @@ internal sealed class LeaderboardChild(CustomLeaderboards3DWindow customLeaderbo
 		ImGui.EndChild();
 	}
 
-	private static void PlaySpawnset(LeaderboardData data)
+	private void PlaySpawnset(LeaderboardData data)
 	{
 		AsyncHandler.Run(
 			getSpawnsetResult =>
 			{
 				getSpawnsetResult.Match(
 					getSpawnset => File.WriteAllBytes(UserSettings.ModsSurvivalPath, getSpawnset.FileBytes),
-					apiError => PopupManager.ShowError("Could not fetch spawnset.", apiError));
+					apiError => popupManager.ShowError("Could not fetch spawnset.", apiError));
 			},
 			() => FetchSpawnsetById.HandleAsync(data.SpawnsetId));
 	}
@@ -247,7 +247,7 @@ internal sealed class LeaderboardChild(CustomLeaderboards3DWindow customLeaderbo
 		return ce.DaggersFired == 0 ? 0 : ce.DaggersHit / (float)ce.DaggersFired;
 	}
 
-	private static void WatchInGame(int id)
+	private void WatchInGame(int id)
 	{
 		AsyncHandler.Run(Inject, () => FetchCustomEntryReplayById.HandleAsync(id));
 
@@ -255,7 +255,7 @@ internal sealed class LeaderboardChild(CustomLeaderboards3DWindow customLeaderbo
 		{
 			getCustomEntryReplayBufferResult.Match(
 				getCustomEntryReplayBuffer => Root.GameMemoryService.WriteReplayToMemory(getCustomEntryReplayBuffer.Data),
-				apiError => PopupManager.ShowError("Could not fetch replay.", apiError));
+				apiError => popupManager.ShowError("Could not fetch replay.", apiError));
 		}
 	}
 
@@ -276,13 +276,13 @@ internal sealed class LeaderboardChild(CustomLeaderboards3DWindow customLeaderbo
 					catch (Exception ex)
 					{
 						Root.Log.Error(ex, "Could not parse replay.");
-						PopupManager.ShowError("Could not parse replay.", ex);
+						popupManager.ShowError("Could not parse replay.", ex);
 						return;
 					}
 
 					customLeaderboards3DWindow.LoadReplay(replayBinary);
 				},
-				apiError => PopupManager.ShowError("Could not fetch replay.", apiError));
+				apiError => popupManager.ShowError("Could not fetch replay.", apiError));
 		}
 	}
 

@@ -5,7 +5,12 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
-internal static class AssetPathsChild
+internal sealed class AssetPathsChild(
+	AudioPathsTable audioPathsTable,
+	MeshPathsTable meshPathsTable,
+	ObjectBindingPathsTable objectBindingPathsTable,
+	ShaderPathsTable shaderPathsTable,
+	TexturePathsTable texturePathsTable)
 {
 	private static readonly uint _audioColor = GetColor(AssetType.Audio);
 	private static readonly uint _meshColor = GetColor(AssetType.Mesh);
@@ -18,17 +23,17 @@ internal static class AssetPathsChild
 		return ImGui.ColorConvertFloat4ToU32(assetType.GetColor() with { W = 0.1f });
 	}
 
-	public static void Render()
+	public void Render()
 	{
 		if (ImGui.BeginChild("Asset Paths"))
 		{
 			if (ImGui.BeginTabBar("Asset Browser Tabs"))
 			{
-				RenderAssets<AudioPathsTable>("Audio", _audioColor);
-				RenderAssets<MeshPathsTable>("Meshes", _meshColor);
-				RenderAssets<ObjectBindingPathsTable>("Object Bindings", _objectBindingColor);
-				RenderAssets<ShaderPathsTable>("Shaders", _shaderColor);
-				RenderAssets<TexturePathsTable>("Textures", _textureColor);
+				RenderAssets(audioPathsTable, "Audio", _audioColor);
+				RenderAssets(meshPathsTable, "Meshes", _meshColor);
+				RenderAssets(objectBindingPathsTable, "Object Bindings", _objectBindingColor);
+				RenderAssets(shaderPathsTable, "Shaders", _shaderColor);
+				RenderAssets(texturePathsTable, "Textures", _textureColor);
 
 				ImGui.EndTabBar();
 			}
@@ -37,16 +42,15 @@ internal static class AssetPathsChild
 		ImGui.EndChild();
 	}
 
-	private static unsafe void RenderAssets<T>(ReadOnlySpan<char> id, uint backgroundColor)
-		where T : IPathTable<T>
+	private static unsafe void RenderAssets(IPathTable pathTable, ReadOnlySpan<char> id, uint backgroundColor)
 	{
 		const ImGuiTableFlags tableFlags = ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable | ImGuiTableFlags.Sortable | ImGuiTableFlags.Hideable | ImGuiTableFlags.Reorderable | ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.ScrollY;
 		if (ImGui.BeginTabItem(Inline.Span($"{id}##Tab")))
 		{
-			if (ImGui.BeginTable(Inline.Span($"{id}_PathsTable"), T.ColumnCount, tableFlags))
+			if (ImGui.BeginTable(Inline.Span($"{id}_PathsTable"), pathTable.ColumnCount, tableFlags))
 			{
 				ImGui.TableSetupScrollFreeze(0, 1); // Make top row always visible
-				T.SetupColumns();
+				pathTable.SetupColumns();
 				ImGui.TableHeadersRow();
 
 				ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
@@ -55,13 +59,13 @@ internal static class AssetPathsChild
 					uint sorting = sortsSpecs.Specs.ColumnUserID;
 					bool sortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
 
-					T.Sort(sorting, sortAscending);
+					pathTable.Sort(sorting, sortAscending);
 
 					sortsSpecs.SpecsDirty = false;
 				}
 
 				ImGuiListClipperPtr clipper = new(ImGuiNative.ImGuiListClipper_ImGuiListClipper());
-				clipper.Begin(T.PathCount);
+				clipper.Begin(pathTable.PathCount);
 				while (clipper.Step())
 				{
 					for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
@@ -69,7 +73,7 @@ internal static class AssetPathsChild
 						ImGui.TableNextRow();
 						ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, backgroundColor);
 
-						T.RenderPath(i);
+						pathTable.RenderPath(i);
 					}
 				}
 

@@ -8,20 +8,13 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorStates;
 
-internal sealed class ArenaEllipseState : IArenaState
+internal sealed class ArenaEllipseState(ArenaWindow arenaWindow, FileStates fileStates, SpawnsetSaver spawnsetSaver) : IArenaState
 {
-	private readonly ArenaWindow _arenaWindow;
-
 	private Session? _session;
-
-	public ArenaEllipseState(ArenaWindow arenaWindow)
-	{
-		_arenaWindow = arenaWindow;
-	}
 
 	public void InitializeSession(ArenaMousePosition mousePosition)
 	{
-		_session ??= new Session(mousePosition.Real, FileStates.Spawnset.Object.ArenaTiles.GetMutableClone());
+		_session ??= new Session(mousePosition.Real, fileStates.Spawnset.Object.ArenaTiles.GetMutableClone());
 	}
 
 	public void Handle(ArenaMousePosition mousePosition)
@@ -41,10 +34,10 @@ internal sealed class ArenaEllipseState : IArenaState
 		if (!_session.HasValue)
 			return;
 
-		Loop(mousePosition, (i, j) => _session.Value.NewArena[i, j] = _arenaWindow.SelectedHeight);
+		Loop(mousePosition, (i, j) => _session.Value.NewArena[i, j] = arenaWindow.SelectedHeight);
 
-		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(FileStates.Spawnset.Object.ArenaDimension, _session.Value.NewArena) });
-		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaEllipse);
+		fileStates.Spawnset.Update(fileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(fileStates.Spawnset.Object.ArenaDimension, _session.Value.NewArena) });
+		spawnsetSaver.Save(SpawnsetEditType.ArenaEllipse);
 
 		Reset();
 	}
@@ -88,9 +81,9 @@ internal sealed class ArenaEllipseState : IArenaState
 
 		if (EllipseChild.Filled)
 		{
-			for (int i = 0; i < FileStates.Spawnset.Object.ArenaDimension; i++)
+			for (int i = 0; i < fileStates.Spawnset.Object.ArenaDimension; i++)
 			{
-				for (int j = 0; j < FileStates.Spawnset.Object.ArenaDimension; j++)
+				for (int j = 0; j < fileStates.Spawnset.Object.ArenaDimension; j++)
 				{
 					Vector2 visualTileCenter = new Vector2(i, j) * ArenaWindow.TileSize + ArenaWindow.HalfTileSizeAsVector2;
 
@@ -103,9 +96,9 @@ internal sealed class ArenaEllipseState : IArenaState
 		else
 		{
 			ArenaEditingUtils.AlignedEllipse innerEllipse = GetEllipse(_session.Value.StartPosition, mousePosition, (EllipseChild.Thickness - 1) * ArenaWindow.TileSize);
-			for (int i = 0; i < FileStates.Spawnset.Object.ArenaDimension; i++)
+			for (int i = 0; i < fileStates.Spawnset.Object.ArenaDimension; i++)
 			{
-				for (int j = 0; j < FileStates.Spawnset.Object.ArenaDimension; j++)
+				for (int j = 0; j < fileStates.Spawnset.Object.ArenaDimension; j++)
 				{
 					Vector2 visualTileCenter = new Vector2(i, j) * ArenaWindow.TileSize + ArenaWindow.HalfTileSizeAsVector2;
 					ArenaEditingUtils.Square square = ArenaEditingUtils.Square.FromCenter(visualTileCenter, ArenaWindow.TileSize);

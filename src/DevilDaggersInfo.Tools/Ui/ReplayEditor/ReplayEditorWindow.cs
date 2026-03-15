@@ -9,7 +9,10 @@ internal sealed class ReplayEditorWindow(
 	ReplayEventsViewerChild replayEventsViewerChild,
 	ReplayEntitiesChild replayEntitiesChild,
 	ReplayInputsChild replayInputsChild,
-	ReplayEditor3DWindow replayEditor3DWindow)
+	ReplayTimelineChild replayTimelineChild,
+	ReplayEditor3DWindow replayEditor3DWindow,
+	FileStates fileStates,
+	GameMemoryServiceWrapper gameMemoryServiceWrapper)
 {
 	private float _gameMemoryTimer = 5;
 
@@ -18,7 +21,7 @@ internal sealed class ReplayEditorWindow(
 		replayEditor3DWindow.Reset();
 		replayEventsViewerChild.Reset();
 		replayEntitiesChild.Reset();
-		ReplayTimelineChild.Reset();
+		replayTimelineChild.Reset();
 	}
 
 	public void Update(float delta)
@@ -30,7 +33,7 @@ internal sealed class ReplayEditorWindow(
 			return;
 
 		_gameMemoryTimer = 0;
-		GameMemoryServiceWrapper.Scan();
+		gameMemoryServiceWrapper.Scan();
 	}
 
 	public void Render()
@@ -38,31 +41,31 @@ internal sealed class ReplayEditorWindow(
 		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize);
 		if (ImGui.Begin("Replay Editor", ImGuiWindowFlags.NoCollapse))
 		{
-			ReplayFileInfo.Render();
+			ReplayFileInfo.Render(fileStates.Replay.Object);
 
 			if (ImGui.BeginTabBar("Replay Editor Tabs"))
 			{
 				if (ImGui.BeginTabItem("Events editor"))
 				{
-					ReplayTimelineChild.Render(FileStates.Replay.Object);
+					replayTimelineChild.Render(fileStates.Replay.Object);
 					ImGui.EndTabItem();
 				}
 
 				if (ImGui.BeginTabItem("Events viewer"))
 				{
-					replayEventsViewerChild.Render(FileStates.Replay.Object);
+					replayEventsViewerChild.Render(fileStates.Replay.Object);
 					ImGui.EndTabItem();
 				}
 
 				if (ImGui.BeginTabItem("Entities viewer"))
 				{
-					replayEntitiesChild.Render(FileStates.Replay.Object);
+					replayEntitiesChild.Render(fileStates.Replay.Object);
 					ImGui.EndTabItem();
 				}
 
 				if (ImGui.BeginTabItem("Inputs viewer"))
 				{
-					replayInputsChild.Render(FileStates.Replay.Object);
+					replayInputsChild.Render(fileStates.Replay.Object);
 					ImGui.EndTabItem();
 				}
 

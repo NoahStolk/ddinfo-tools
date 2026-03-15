@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.EditorFileState;
+using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using ImGuiNET;
 using System.Numerics;
 
@@ -9,7 +10,7 @@ internal static class ReplayTimelineActionsChild
 {
 	private static int _tickCount = 5;
 
-	public static void Render()
+	public static void Render(EditorReplayModel editorReplayModel)
 	{
 		if (ImGui.BeginChild("ActionsChild", new Vector2(320, 96)))
 		{
@@ -20,7 +21,7 @@ internal static class ReplayTimelineActionsChild
 			if (ImGui.Button("Insert empty data"))
 			{
 				for (int i = 0; i < _tickCount; i++)
-					FileStates.Replay.Object.InputsEvents.Add(InputsEventData.CreateDefault());
+					editorReplayModel.InputsEvents.Add(InputsEventData.CreateDefault());
 
 				TimelineCache.Clear();
 			}

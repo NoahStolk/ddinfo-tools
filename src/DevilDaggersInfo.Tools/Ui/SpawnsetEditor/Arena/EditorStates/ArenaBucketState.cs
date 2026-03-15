@@ -9,26 +9,19 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorStates;
 
-internal sealed class ArenaBucketState : IArenaState
+internal sealed class ArenaBucketState(ArenaWindow arenaWindow, FileStates fileStates, SpawnsetSaver spawnsetSaver) : IArenaState
 {
-	private readonly ArenaWindow _arenaWindow;
-
 	private readonly HashSet<Vector2D<int>> _targetCoords = [];
 	private Vector2D<int> _cachedPosition;
 	private bool _isFilling;
 
-	public ArenaBucketState(ArenaWindow arenaWindow)
-	{
-		_arenaWindow = arenaWindow;
-	}
-
 	private void FillNeighbors(int x, int y)
 	{
-		int dimension = FileStates.Spawnset.Object.ArenaDimension;
+		int dimension = fileStates.Spawnset.Object.ArenaDimension;
 		if (x < 0 || y < 0 || x >= dimension || y >= dimension)
 			return;
 
-		float targetHeight = FileStates.Spawnset.Object.ArenaTiles[x, y];
+		float targetHeight = fileStates.Spawnset.Object.ArenaTiles[x, y];
 
 		_targetCoords.Add(new Vector2D<int>(x, y));
 
@@ -51,7 +44,7 @@ internal sealed class ArenaBucketState : IArenaState
 			if (_targetCoords.Contains(new Vector2D<int>(newX, newY)))
 				return;
 
-			float tileHeight = FileStates.Spawnset.Object.ArenaTiles[newX, newY];
+			float tileHeight = fileStates.Spawnset.Object.ArenaTiles[newX, newY];
 
 			float clampedTargetHeight = targetHeight;
 			if (targetHeight < BucketChild.VoidHeight)
@@ -70,12 +63,12 @@ internal sealed class ArenaBucketState : IArenaState
 			return;
 
 		_isFilling = true;
-		float[,] newArena = FileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
+		float[,] newArena = fileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
 		foreach (Vector2D<int> coord in _targetCoords)
-			newArena[coord.X, coord.Y] = _arenaWindow.SelectedHeight;
+			newArena[coord.X, coord.Y] = arenaWindow.SelectedHeight;
 
-		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(FileStates.Spawnset.Object.ArenaDimension, newArena) });
-		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaBucket);
+		fileStates.Spawnset.Update(fileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(fileStates.Spawnset.Object.ArenaDimension, newArena) });
+		spawnsetSaver.Save(SpawnsetEditType.ArenaBucket);
 	}
 
 	public void InitializeSession(ArenaMousePosition mousePosition)

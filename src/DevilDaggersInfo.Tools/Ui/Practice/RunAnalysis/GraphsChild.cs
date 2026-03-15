@@ -68,7 +68,7 @@ internal static class GraphsChild
 		_maxHomingEaten = _homingEaten.Count > 0 ? _homingEaten.Max() : 0;
 	}
 
-	public static unsafe void Render()
+	public static unsafe void Render(PracticeStatsData statsData)
 	{
 		Debug.Assert(_gemsCollected.Count == _gemsDespawned.Count, "All lists should have the same length.");
 		Debug.Assert(_gemsCollected.Count == _gemsEaten.Count, "All lists should have the same length.");
@@ -95,7 +95,7 @@ internal static class GraphsChild
 			ImGui.Checkbox("Gems Eaten", ref _showGemsEaten);
 			ImGui.SameLine();
 			ImGui.Checkbox("Gems Total", ref _showGemsTotal);
-			RenderGemsGraph(drawListPtr, mousePos);
+			RenderGemsGraph(statsData, drawListPtr, mousePos);
 
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + graphHeight + 8);
 
@@ -104,20 +104,20 @@ internal static class GraphsChild
 			ImGui.Checkbox("Homing Stored", ref _showHomingStored);
 			ImGui.SameLine();
 			ImGui.Checkbox("Homing Eaten", ref _showHomingEaten);
-			RenderHomingGraph(drawListPtr, mousePos);
+			RenderHomingGraph(statsData, drawListPtr, mousePos);
 		}
 
 		ImGui.EndChild();
 
-		void RenderGemsGraph(ImDrawListPtr drawListPtr, Vector2 mousePos)
+		void RenderGemsGraph(PracticeStatsData statsData, ImDrawListPtr drawListPtr, Vector2 mousePos)
 		{
 			RenderGraphBackground(drawListPtr, out Vector2 pos, out Vector2 size);
 
 			// TODO: Check if this allocates.
 			ReadOnlySpan<int> maxValues = [_showGemsCollected ? _maxGemsCollected : 0, _showGemsDespawned ? _maxGemsDespawned : 0, _showGemsEaten ? _maxGemsEaten : 0, _showGemsTotal ? _maxGemsTotal : 0];
 			int max = MathUtils.Max(maxValues);
-			RenderGraphScales(drawListPtr, pos, size, max);
-			RenderGraphSplits(drawListPtr, pos, size);
+			RenderGraphScales(statsData, drawListPtr, pos, size, max);
+			RenderGraphSplits(statsData, drawListPtr, pos, size);
 
 			if (_showGemsCollected)
 				RenderGraphLine(drawListPtr, _gemsCollected, max, _gemsCollectedPoints, 0xff0000ff, pos, size);
@@ -141,7 +141,7 @@ internal static class GraphsChild
 
 				ImGui.BeginTooltip();
 
-				AddTooltipText("Time", Inline.Span(GetTimeFromIndex(index), StringFormats.TimeFormat), Color.White);
+				AddTooltipText("Time", Inline.Span(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Color.White);
 				AddTooltipText("Gems Collected", Inline.Span(gemsCollected), Color.Red);
 				AddTooltipText("Gems Despawned", Inline.Span(gemsDespawned), Color.Gray(0.5f));
 				AddTooltipText("Gems Eaten", Inline.Span(gemsEaten), Color.Green);
@@ -151,14 +151,14 @@ internal static class GraphsChild
 			}
 		}
 
-		void RenderHomingGraph(ImDrawListPtr drawListPtr, Vector2 mousePos)
+		void RenderHomingGraph(PracticeStatsData statsData, ImDrawListPtr drawListPtr, Vector2 mousePos)
 		{
 			RenderGraphBackground(drawListPtr, out Vector2 pos, out Vector2 size);
 
 			ReadOnlySpan<int> maxValues = [_showHomingStored ? _maxHomingStored : 0, _showHomingEaten ? _maxHomingEaten : 0];
 			int max = MathUtils.Max(maxValues);
-			RenderGraphScales(drawListPtr, pos, size, max);
-			RenderGraphSplits(drawListPtr, pos, size);
+			RenderGraphScales(statsData, drawListPtr, pos, size, max);
+			RenderGraphSplits(statsData, drawListPtr, pos, size);
 
 			if (_showHomingStored)
 				RenderGraphLine(drawListPtr, _homingStored, max, _homingStoredPoints, ImGui.GetColorU32(UpgradeColors.Level4.ToEngineColor()), pos, size);
@@ -174,7 +174,7 @@ internal static class GraphsChild
 
 				ImGui.BeginTooltip();
 
-				AddTooltipText("Time", Inline.Span(GetTimeFromIndex(index), StringFormats.TimeFormat), Color.White);
+				AddTooltipText("Time", Inline.Span(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Color.White);
 				AddTooltipText("Homing Stored", Inline.Span(homingStored), UpgradeColors.Level4.ToEngineColor());
 				AddTooltipText("Homing Eaten", Inline.Span(homingEaten), Color.Red);
 
@@ -189,10 +189,10 @@ internal static class GraphsChild
 			drawListPtr.AddRectFilled(pos, pos + size, 0xff080808);
 		}
 
-		void RenderGraphScales(ImDrawListPtr drawListPtr, Vector2 pos, Vector2 size, int maxY)
+		void RenderGraphScales(PracticeStatsData statsData, ImDrawListPtr drawListPtr, Vector2 pos, Vector2 size, int maxY)
 		{
-			float timerStart = RunAnalysisWindow.StatsData.TimerStart;
-			float timerEnd = RunAnalysisWindow.StatsData.TimerEnd;
+			float timerStart = statsData.TimerStart;
+			float timerEnd = statsData.TimerEnd;
 
 			const int timerEndBufferSize = 16;
 			Span<char> timerEndSpan = stackalloc char[timerEndBufferSize];
@@ -219,10 +219,10 @@ internal static class GraphsChild
 				drawListPtr.AddPolyline(ref p[0], data.Count, color, ImDrawFlags.None, 1);
 		}
 
-		void RenderGraphSplits(ImDrawListPtr drawListPtr, Vector2 pos, Vector2 size)
+		void RenderGraphSplits(PracticeStatsData statsData, ImDrawListPtr drawListPtr, Vector2 pos, Vector2 size)
 		{
-			float timerStart = RunAnalysisWindow.StatsData.TimerStart;
-			float timerEnd = RunAnalysisWindow.StatsData.TimerEnd;
+			float timerStart = statsData.TimerStart;
+			float timerEnd = statsData.TimerEnd;
 
 			for (int i = 0; i < SplitsData.SplitData.Count; i++)
 			{
@@ -238,9 +238,9 @@ internal static class GraphsChild
 		}
 	}
 
-	private static float GetTimeFromIndex(int index)
+	private static float GetTimeFromIndex(PracticeStatsData statsData, int index)
 	{
-		return Math.Clamp((int)(index + RunAnalysisWindow.StatsData.TimerStart), RunAnalysisWindow.StatsData.TimerStart, RunAnalysisWindow.StatsData.TimerEnd);
+		return Math.Clamp((int)(index + statsData.TimerStart), statsData.TimerStart, statsData.TimerEnd);
 	}
 
 	private static void AddTooltipText(ReadOnlySpan<char> textLeft, ReadOnlySpan<char> textRight, Color textColor)

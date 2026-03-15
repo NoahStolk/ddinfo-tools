@@ -9,17 +9,10 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorStates;
 
-internal sealed class ArenaDaggerState : IArenaState
+internal sealed class ArenaDaggerState(ResourceManager resourceManager, FileStates fileStates, SpawnsetSaver spawnsetSaver) : IArenaState
 {
-	private readonly ResourceManager _resourceManager;
-
 	private Vector2? _position;
 	private bool _dragging;
-
-	public ArenaDaggerState(ResourceManager resourceManager)
-	{
-		_resourceManager = resourceManager;
-	}
 
 	public void InitializeSession(ArenaMousePosition mousePosition)
 	{
@@ -28,7 +21,7 @@ internal sealed class ArenaDaggerState : IArenaState
 
 	public void Handle(ArenaMousePosition mousePosition)
 	{
-		if (FileStates.Spawnset.Object.GameMode != GameMode.Race)
+		if (fileStates.Spawnset.Object.GameMode != GameMode.Race)
 			return;
 
 		if (_dragging && ImGui.IsMouseDown(ImGuiMouseButton.Left))
@@ -41,10 +34,10 @@ internal sealed class ArenaDaggerState : IArenaState
 				return;
 
 			Vector2 tileCoordinate = _position.Value / ArenaWindow.TileSize;
-			Vector2 daggerPosition = new(FileStates.Spawnset.Object.TileToWorldCoordinate(tileCoordinate.X), FileStates.Spawnset.Object.TileToWorldCoordinate(tileCoordinate.Y));
+			Vector2 daggerPosition = new(fileStates.Spawnset.Object.TileToWorldCoordinate(tileCoordinate.X), fileStates.Spawnset.Object.TileToWorldCoordinate(tileCoordinate.Y));
 
-			FileStates.Spawnset.Update(FileStates.Spawnset.Object with { RaceDaggerPosition = daggerPosition });
-			SpawnsetHistoryUtils.Save(SpawnsetEditType.RaceDagger);
+			fileStates.Spawnset.Update(fileStates.Spawnset.Object with { RaceDaggerPosition = daggerPosition });
+			spawnsetSaver.Save(SpawnsetEditType.RaceDagger);
 
 			Reset();
 		}
@@ -68,7 +61,7 @@ internal sealed class ArenaDaggerState : IArenaState
 
 	public void Render(ArenaMousePosition mousePosition)
 	{
-		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen in this UI.");
+		Debug.Assert(resourceManager.GameResources != null, $"{nameof(resourceManager.GameResources)} is null, which should never happen in this UI.");
 
 		if (!_position.HasValue)
 			return;
@@ -76,6 +69,6 @@ internal sealed class ArenaDaggerState : IArenaState
 		ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 		Vector2 origin = ImGui.GetCursorScreenPos();
 		Vector2 center = origin + _position.Value + ArenaWindow.HalfTileSizeAsVector2;
-		drawList.AddImage(_resourceManager.GameResources.IconMaskDaggerTexture.Id, center - new Vector2(8), center + new Vector2(8), Color.HalfTransparentWhite);
+		drawList.AddImage(resourceManager.GameResources.IconMaskDaggerTexture.Id, center - new Vector2(8), center + new Vector2(8), Color.HalfTransparentWhite);
 	}
 }

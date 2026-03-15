@@ -3,14 +3,14 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
-internal static class AssetEditorWindow
+internal sealed class AssetEditorWindow(AssetPathsChild assetPathsChild, FileStates fileStates)
 {
-	public static void Render()
+	public void Render()
 	{
 		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize);
-		if (ImGui.Begin(Inline.Span($"Asset Editor - {FileStates.Mod.FileName ?? FileStates.UntitledName}{(FileStates.Mod.IsModified && FileStates.Mod.FileName != null ? "*" : string.Empty)}###asset_editor"), ImGuiWindowFlags.NoCollapse))
+		if (ImGui.Begin(Inline.Span($"Asset Editor - {fileStates.Mod.FileName ?? FileStates.UntitledName}{(fileStates.Mod.IsModified && fileStates.Mod.FileName != null ? "*" : string.Empty)}###asset_editor"), ImGuiWindowFlags.NoCollapse))
 		{
-			AssetPathsChild.Render();
+			assetPathsChild.Render();
 		}
 
 		ImGui.End();

@@ -7,12 +7,10 @@ namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
 internal static class CompileLogic
 {
-	public static async Task CompileAsync(string outputDirectory, string outputFileName, bool createAudio, bool createDd)
+	public static async Task CompileAsync(AssetPaths mod, string outputDirectory, string outputFileName, bool createAudio, bool createDd)
 	{
 		if (!createAudio && !createDd)
 			return;
-
-		AssetPaths mod = FileStates.Mod.Object;
 
 		if (createAudio)
 		{

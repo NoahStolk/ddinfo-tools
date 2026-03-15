@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-internal sealed class NoFarmTemplatesChild
+internal sealed class NoFarmTemplatesChild(PracticeLogic practiceLogic)
 {
 	private readonly List<NoFarmTemplate> _noFarmTemplates =
 	[
@@ -53,7 +53,7 @@ internal sealed class NoFarmTemplatesChild
 		ImGui.EndChild();
 	}
 
-	private static void RenderNoFarmTemplate(NoFarmTemplate noFarmTemplate, float templateWidth)
+	private void RenderNoFarmTemplate(NoFarmTemplate noFarmTemplate, float templateWidth)
 	{
 		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(PracticeLogic.IsActive(noFarmTemplate));
 
@@ -73,8 +73,8 @@ internal sealed class NoFarmTemplatesChild
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 				{
-					PracticeLogic.State = new PracticeState(noFarmTemplate.HandLevel, noFarmTemplate.AdditionalGems, noFarmTemplate.TimerStart);
-					PracticeLogic.GenerateAndApplyPracticeSpawnset();
+					practiceLogic.State = new PracticeState(noFarmTemplate.HandLevel, noFarmTemplate.AdditionalGems, noFarmTemplate.TimerStart);
+					practiceLogic.GenerateAndApplyPracticeSpawnset();
 				}
 
 				float windowWidth = ImGui.GetWindowWidth();

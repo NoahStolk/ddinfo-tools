@@ -7,23 +7,23 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
-internal sealed class AudioPathsTable : IPathTable<AudioPathsTable>
+internal sealed class AudioPathsTable(FileStates fileStates, NativeFileDialog nativeFileDialog) : IPathTable
 {
-	public static int ColumnCount => 4;
+	public int ColumnCount => 4;
 
-	public static int PathCount => PathTableUtils.Audio.Count;
+	public int PathCount => PathTableUtils.Audio.Count;
 
-	public static void SetupColumns()
+	public void SetupColumns()
 	{
 		PathTableUtils.SetupDefaultColumns();
 		ImGui.TableSetupColumn("Loudness", ImGuiTableColumnFlags.WidthFixed, 160, 2);
 		ImGui.TableSetupColumn("Path", ImGuiTableColumnFlags.WidthStretch, 0, 3);
 	}
 
-	public static void RenderPath(int index)
+	public void RenderPath(int index)
 	{
 		AudioAssetInfo assetInfo = PathTableUtils.Audio[index];
-		AudioAssetPath? path = PathTableUtils.Find(FileStates.Mod.Object.Audio, assetInfo.AssetName);
+		AudioAssetPath? path = PathTableUtils.Find(fileStates.Mod.Object.Audio, assetInfo.AssetName);
 
 		PathTableUtils.RenderDefaultColumns(assetInfo);
 
@@ -50,29 +50,29 @@ internal sealed class AudioPathsTable : IPathTable<AudioPathsTable>
 		ImGui.Text(path?.AbsolutePath ?? "<none>");
 	}
 
-	private static void SetPath(AudioAssetInfo assetInfo, AudioAssetPath? path)
+	private void SetPath(AudioAssetInfo assetInfo, AudioAssetPath? path)
 	{
 		if (path == null)
 		{
 			path = new AudioAssetPath(assetInfo.AssetName, null, null);
-			FileStates.Mod.Object.Audio.Add(path);
+			fileStates.Mod.Object.Audio.Add(path);
 		}
 
-		NativeFileDialog.CreateOpenFileDialog(path.SetPath, PathUtils.GetFileFilter(path.AssetType));
+		nativeFileDialog.CreateOpenFileDialog(path.SetPath, PathUtils.GetFileFilter(path.AssetType));
 	}
 
-	private static void SetLoudness(AudioAssetInfo assetInfo, AudioAssetPath? path, float? loudness)
+	private void SetLoudness(AudioAssetInfo assetInfo, AudioAssetPath? path, float? loudness)
 	{
 		if (path == null)
 		{
 			path = new AudioAssetPath(assetInfo.AssetName, null, null);
-			FileStates.Mod.Object.Audio.Add(path);
+			fileStates.Mod.Object.Audio.Add(path);
 		}
 
 		path.SetLoudness(loudness);
 	}
 
-	public static void Sort(uint sorting, bool sortAscending)
+	public void Sort(uint sorting, bool sortAscending)
 	{
 		PathTableUtils.Audio.Sort((a, b) =>
 		{
@@ -88,6 +88,6 @@ internal sealed class AudioPathsTable : IPathTable<AudioPathsTable>
 			return sortAscending ? result : -result;
 		});
 
-		static AudioAssetPath? Find(string assetName) => FileStates.Mod.Object.Audio.Find(audio => audio.AssetName == assetName);
+		AudioAssetPath? Find(string assetName) => fileStates.Mod.Object.Audio.Find(audio => audio.AssetName == assetName);
 	}
 }

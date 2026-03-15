@@ -7,22 +7,22 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
-internal static class ExtractModWindow
+internal sealed class ExtractModWindow(NativeFileDialog nativeFileDialog, PopupManager popupManager)
 {
-	private static string? _inputFilePath;
-	private static string? _outputDirectory;
-	private static bool _isExtracting;
-	private static DateTime? _lastStartTime;
-	private static DateTime? _lastEndTime;
+	private string? _inputFilePath;
+	private string? _outputDirectory;
+	private bool _isExtracting;
+	private DateTime? _lastStartTime;
+	private DateTime? _lastEndTime;
 
-	public static void Render()
+	public void Render()
 	{
 		if (ImGui.Begin("Extract binary"))
 		{
 			ImGui.SeparatorText("Input file path");
 			if (ImGui.Button("Browse##file"))
 			{
-				NativeFileDialog.CreateOpenFileDialog(
+				nativeFileDialog.CreateOpenFileDialog(
 					s =>
 					{
 						if (s != null)
@@ -37,7 +37,7 @@ internal static class ExtractModWindow
 			ImGui.SeparatorText("Output directory");
 			if (ImGui.Button("Browse##directory"))
 			{
-				NativeFileDialog.SelectDirectory(s =>
+				nativeFileDialog.SelectDirectory(s =>
 				{
 					if (s != null)
 						_outputDirectory = s;
@@ -70,17 +70,17 @@ internal static class ExtractModWindow
 		ImGui.End();
 	}
 
-	private static void Extract()
+	private void Extract()
 	{
 		if (!Directory.Exists(_outputDirectory))
 		{
-			PopupManager.ShowError("Output directory does not exist.");
+			popupManager.ShowError("Output directory does not exist.");
 			return;
 		}
 
 		if (!File.Exists(_inputFilePath))
 		{
-			PopupManager.ShowError("Input file does not exist.");
+			popupManager.ShowError("Input file does not exist.");
 			return;
 		}
 
@@ -112,13 +112,13 @@ internal static class ExtractModWindow
 		}
 	}
 
-	private static void ExtractionCompletedCallback(ExtractionResult extractionResult)
+	private void ExtractionCompletedCallback(ExtractionResult extractionResult)
 	{
 		if (!extractionResult.Success)
 		{
 			Debug.Assert(extractionResult.Error != null, "extractionResult.Error != null");
 			Debug.Assert(extractionResult.Exception != null, "extractionResult.Exception != null");
-			PopupManager.ShowError($"Extraction failed: {extractionResult.Error}", extractionResult.Exception.Message);
+			popupManager.ShowError($"Extraction failed: {extractionResult.Error}", extractionResult.Exception.Message);
 		}
 
 		_isExtracting = false;
@@ -126,11 +126,12 @@ internal static class ExtractModWindow
 
 		if (extractionResult.Errors.Count > 0)
 		{
-			PopupManager.ShowError($"""
-	            Extraction completed with {extractionResult.Errors.Count} error(s):
+			popupManager.ShowError(
+				$"""
+				Extraction completed with {extractionResult.Errors.Count} error(s):
 
-	            {string.Join("\n\n", extractionResult.Errors)}
-	            """);
+				{string.Join("\n\n", extractionResult.Errors)}
+				""");
 		}
 	}
 

@@ -9,16 +9,9 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorStates;
 
-internal sealed class ArenaPencilState : IArenaState
+internal sealed class ArenaPencilState(ArenaWindow arenaWindow, FileStates fileStates, SpawnsetSaver spawnsetSaver) : IArenaState
 {
-	private readonly ArenaWindow _arenaWindow;
-
 	private Session? _session;
-
-	public ArenaPencilState(ArenaWindow arenaWindow)
-	{
-		_arenaWindow = arenaWindow;
-	}
 
 	public void InitializeSession(ArenaMousePosition mousePosition)
 	{
@@ -72,13 +65,13 @@ internal sealed class ArenaPencilState : IArenaState
 		if (_session == null)
 			return;
 
-		float[,] newArena = FileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
+		float[,] newArena = fileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
 
 		foreach (Vector2D<int> position in _session.ModifiedCoords)
-			newArena[position.X, position.Y] = _arenaWindow.SelectedHeight;
+			newArena[position.X, position.Y] = arenaWindow.SelectedHeight;
 
-		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(FileStates.Spawnset.Object.ArenaDimension, newArena) });
-		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaPencil);
+		fileStates.Spawnset.Update(fileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(fileStates.Spawnset.Object.ArenaDimension, newArena) });
+		spawnsetSaver.Save(SpawnsetEditType.ArenaPencil);
 
 		Reset();
 	}

@@ -8,7 +8,15 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-internal sealed class ReplayEditorMenu(UiLayoutManager uiLayoutManager, ReplayEditorWindow replayEditorWindow, ReplayEditor3DWindow replayEditor3DWindow)
+internal sealed class ReplayEditorMenu(
+	UiLayoutManager uiLayoutManager,
+	ReplayEditorWindow replayEditorWindow,
+	ReplayEditor3DWindow replayEditor3DWindow,
+	LeaderboardReplayBrowser leaderboardReplayBrowser,
+	NativeFileDialog nativeFileDialog,
+	PopupManager popupManager,
+	FileStates fileStates,
+	GameMemoryServiceWrapper gameMemoryServiceWrapper)
 {
 	public void Render()
 	{
@@ -54,14 +62,14 @@ internal sealed class ReplayEditorMenu(UiLayoutManager uiLayoutManager, ReplayEd
 
 	public void NewReplay()
 	{
-		FileStates.Replay.Update(EditorReplayModel.CreateDefault());
-		FileStates.Replay.SetFile(null, null);
+		fileStates.Replay.Update(EditorReplayModel.CreateDefault());
+		fileStates.Replay.SetFile(null, null);
 		replayEditorWindow.Reset();
 	}
 
 	public void OpenReplay()
 	{
-		NativeFileDialog.CreateOpenFileDialog(OpenReplayCallback, PathUtils.FileExtensionReplay);
+		nativeFileDialog.CreateOpenFileDialog(OpenReplayCallback, PathUtils.FileExtensionReplay);
 	}
 
 	private void OpenReplayCallback(string? filePath)
@@ -76,19 +84,19 @@ internal sealed class ReplayEditorMenu(UiLayoutManager uiLayoutManager, ReplayEd
 		}
 		catch (Exception ex)
 		{
-			PopupManager.ShowError($"Could not open file '{filePath}'.", ex);
+			popupManager.ShowError($"Could not open file '{filePath}'.", ex);
 			Root.Log.Error(ex, "Could not open file");
 			return;
 		}
 
 		if (ReplayBinary<LocalReplayBinaryHeader>.TryParse(fileContents, out ReplayBinary<LocalReplayBinaryHeader>? replayBinary))
 		{
-			FileStates.Replay.Update(EditorReplayModel.CreateFromLocalReplay(replayBinary));
-			FileStates.Replay.SetFile(filePath, Path.GetFileName(filePath));
+			fileStates.Replay.Update(EditorReplayModel.CreateFromLocalReplay(replayBinary));
+			fileStates.Replay.SetFile(filePath, Path.GetFileName(filePath));
 		}
 		else
 		{
-			PopupManager.ShowError($"The file '{filePath}' could not be parsed as a local replay.");
+			popupManager.ShowError($"The file '{filePath}' could not be parsed as a local replay.");
 			return;
 		}
 
@@ -98,28 +106,28 @@ internal sealed class ReplayEditorMenu(UiLayoutManager uiLayoutManager, ReplayEd
 		replayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
 	}
 
-	public static void OpenLeaderboardReplay()
+	public void OpenLeaderboardReplay()
 	{
-		LeaderboardReplayBrowser.Show();
+		leaderboardReplayBrowser.Show();
 	}
 
 	public void OpenReplayFromGameMemory()
 	{
-		if (!GameMemoryServiceWrapper.Scan() || !Root.GameMemoryService.IsInitialized)
+		if (!gameMemoryServiceWrapper.Scan() || !Root.GameMemoryService.IsInitialized)
 		{
-			PopupManager.ShowError("Could not read replay from game memory. Make sure the game is running.");
+			popupManager.ShowError("Could not read replay from game memory. Make sure the game is running.");
 			return;
 		}
 
 		byte[] replayBytes = Root.GameMemoryService.ReadReplayFromMemory();
 		if (ReplayBinary<LocalReplayBinaryHeader>.TryParse(replayBytes, out ReplayBinary<LocalReplayBinaryHeader>? replayBinary))
 		{
-			FileStates.Replay.Update(EditorReplayModel.CreateFromLocalReplay(replayBinary));
-			FileStates.Replay.SetFile(null, "(untitled from game memory)");
+			fileStates.Replay.Update(EditorReplayModel.CreateFromLocalReplay(replayBinary));
+			fileStates.Replay.SetFile(null, "(untitled from game memory)");
 		}
 		else
 		{
-			PopupManager.ShowError("The data from game memory could not be parsed as a local replay. Make sure to open a replay first.");
+			popupManager.ShowError("The data from game memory could not be parsed as a local replay. Make sure to open a replay first.");
 			return;
 		}
 
@@ -129,29 +137,29 @@ internal sealed class ReplayEditorMenu(UiLayoutManager uiLayoutManager, ReplayEd
 		replayEditor3DWindow.ArenaScene.SetPlayerMovement(replaySimulation);
 	}
 
-	public static void SaveReplay()
+	public void SaveReplay()
 	{
-		NativeFileDialog.CreateSaveFileDialog(SaveReplayCallback, PathUtils.FileExtensionReplay);
+		nativeFileDialog.CreateSaveFileDialog(SaveReplayCallback, PathUtils.FileExtensionReplay);
 	}
 
-	private static void SaveReplayCallback(string? filePath)
+	private void SaveReplayCallback(string? filePath)
 	{
 		if (filePath == null)
 			return;
 
 		filePath = Path.ChangeExtension(filePath, PathUtils.FileExtensionReplay);
-		FileStates.Replay.SaveFile(filePath);
+		fileStates.Replay.SaveFile(filePath);
 	}
 
-	public static void InjectReplay()
+	public void InjectReplay()
 	{
-		if (!GameMemoryServiceWrapper.Scan() || !Root.GameMemoryService.IsInitialized)
+		if (!gameMemoryServiceWrapper.Scan() || !Root.GameMemoryService.IsInitialized)
 		{
-			PopupManager.ShowError("Could not inject replay into game memory. Make sure the game is running.");
+			popupManager.ShowError("Could not inject replay into game memory. Make sure the game is running.");
 			return;
 		}
 
-		Root.GameMemoryService.WriteReplayToMemory(FileStates.Replay.Object.ToLocalReplay().Compile());
+		Root.GameMemoryService.WriteReplayToMemory(fileStates.Replay.Object.ToLocalReplay().Compile());
 	}
 
 	public void Close()

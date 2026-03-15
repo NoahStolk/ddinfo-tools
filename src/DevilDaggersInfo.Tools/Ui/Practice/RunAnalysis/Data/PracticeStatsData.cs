@@ -46,6 +46,6 @@ internal sealed class PracticeStatsData
 		TimerStart = Root.GameMemoryService.MainBlock.StartTimer;
 		TimerEnd = Root.GameMemoryService.MainBlock.StartTimer + Root.GameMemoryService.MainBlock.Time;
 
-		SplitsData.Populate();
+		SplitsData.Populate(this);
 	}
 }

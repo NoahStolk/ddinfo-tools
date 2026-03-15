@@ -11,18 +11,11 @@ using System.Web;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-internal sealed class RecordingLogic
+internal sealed class RecordingLogic(ResourceManager resourceManager, PopupManager popupManager)
 {
-	private readonly ResourceManager _resourceManager;
-
 	private readonly List<AddUploadRequestTimestamp> _timestamps = [];
 
 	private MainBlock? _runToUpload;
-
-	public RecordingLogic(ResourceManager resourceManager)
-	{
-		_resourceManager = resourceManager;
-	}
 
 	public RecordingStateType RecordingStateType { get; private set; }
 	public DateTime? LastSubmission { get; private set; }
@@ -259,13 +252,13 @@ internal sealed class RecordingLogic
 				ShowUploadResponse = true;
 				LastSubmission = DateTime.UtcNow;
 
-				UploadResult uploadResult = new(_resourceManager, getUploadResponse, getUploadResponse.IsAscending, getUploadResponse.SpawnsetName, uploadRequest.DeathType, DateTime.UtcNow);
+				UploadResult uploadResult = new(resourceManager, getUploadResponse, getUploadResponse.IsAscending, getUploadResponse.SpawnsetName, uploadRequest.DeathType, DateTime.UtcNow);
 				CustomLeaderboardResultsWindow.AddResult(uploadResult);
 			},
 			onError: apiError =>
 			{
 				Root.Log.Error(apiError.Exception, "Failed to upload run.");
-				PopupManager.ShowError("Failed to upload run.", apiError);
+				popupManager.ShowError("Failed to upload run.", apiError);
 			});
 	}
 

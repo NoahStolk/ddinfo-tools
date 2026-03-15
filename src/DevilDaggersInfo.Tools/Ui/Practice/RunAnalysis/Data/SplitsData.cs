@@ -20,7 +20,7 @@ internal sealed class SplitsData
 		(1160, 1170),
 	};
 
-	public void Populate()
+	public void Populate(PracticeStatsData statsData)
 	{
 		bool addedTimerStart = false;
 		bool addedTimerEnd = false;
@@ -29,25 +29,25 @@ internal sealed class SplitsData
 		{
 			(int Label, int Seconds) splitEntry = SplitData[i];
 
-			if (!addedTimerStart && splitEntry.Seconds > RunAnalysisWindow.StatsData.TimerStart)
+			if (!addedTimerStart && splitEntry.Seconds > statsData.TimerStart)
 			{
-				int? firstHomingStored = RunAnalysisWindow.StatsData.Statistics.Count > 0 ? RunAnalysisWindow.StatsData.Statistics[0].HomingStored : null;
+				int? firstHomingStored = statsData.Statistics.Count > 0 ? statsData.Statistics[0].HomingStored : null;
 				addedTimerStart = true;
-				_homingSplitData[homingSplitDataIndex] = new SplitDataEntry((int)RunAnalysisWindow.StatsData.TimerStart, SplitDataEntryKind.Start, firstHomingStored, firstHomingStored);
+				_homingSplitData[homingSplitDataIndex] = new SplitDataEntry((int)statsData.TimerStart, SplitDataEntryKind.Start, firstHomingStored, firstHomingStored);
 				homingSplitDataIndex++;
 			}
 
-			if (!addedTimerEnd && splitEntry.Seconds > RunAnalysisWindow.StatsData.TimerEnd)
+			if (!addedTimerEnd && splitEntry.Seconds > statsData.TimerEnd)
 			{
-				int? lastHomingStored = RunAnalysisWindow.StatsData.Statistics.Count > 0 ? RunAnalysisWindow.StatsData.Statistics[^1].HomingStored : null;
+				int? lastHomingStored = statsData.Statistics.Count > 0 ? statsData.Statistics[^1].HomingStored : null;
 				addedTimerEnd = true;
-				_homingSplitData[homingSplitDataIndex] = new SplitDataEntry((int)RunAnalysisWindow.StatsData.TimerEnd, SplitDataEntryKind.End, lastHomingStored, homingSplitDataIndex == 0 ? null : _homingSplitData[homingSplitDataIndex - 1].Homing);
+				_homingSplitData[homingSplitDataIndex] = new SplitDataEntry((int)statsData.TimerEnd, SplitDataEntryKind.End, lastHomingStored, homingSplitDataIndex == 0 ? null : _homingSplitData[homingSplitDataIndex - 1].Homing);
 				homingSplitDataIndex++;
 			}
 
-			int actualIndex = splitEntry.Seconds - (int)MathF.Ceiling(RunAnalysisWindow.StatsData.TimerStart); // TODO: Test if ceiling is correct.
-			bool hasValue = actualIndex >= 0 && actualIndex < RunAnalysisWindow.StatsData.Statistics.Count;
-			int? homing = hasValue ? RunAnalysisWindow.StatsData.Statistics[actualIndex].HomingStored : null;
+			int actualIndex = splitEntry.Seconds - (int)MathF.Ceiling(statsData.TimerStart); // TODO: Test if ceiling is correct.
+			bool hasValue = actualIndex >= 0 && actualIndex < statsData.Statistics.Count;
+			int? homing = hasValue ? statsData.Statistics[actualIndex].HomingStored : null;
 			int? previousHoming = homingSplitDataIndex > 0 ? _homingSplitData[homingSplitDataIndex - 1].Homing : null;
 
 			_homingSplitData[homingSplitDataIndex] = new SplitDataEntry(splitEntry.Label, SplitDataEntryKind.Default, homing, previousHoming);
@@ -57,7 +57,7 @@ internal sealed class SplitsData
 		// Clear values before timer start and after timer end.
 		for (int i = 0; i < homingSplitDataIndex; i++)
 		{
-			if (_homingSplitData[i].DisplayTimer < (int)RunAnalysisWindow.StatsData.TimerStart || _homingSplitData[i].DisplayTimer > (int)RunAnalysisWindow.StatsData.TimerEnd)
+			if (_homingSplitData[i].DisplayTimer < (int)statsData.TimerStart || _homingSplitData[i].DisplayTimer > (int)statsData.TimerEnd)
 				_homingSplitData[i] = new SplitDataEntry(_homingSplitData[i].DisplayTimer, _homingSplitData[i].Kind, null, null);
 		}
 	}

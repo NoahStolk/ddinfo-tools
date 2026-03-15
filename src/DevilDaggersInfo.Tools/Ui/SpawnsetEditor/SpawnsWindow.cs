@@ -13,24 +13,24 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-internal static class SpawnsWindow
+internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileStates, SpawnsetSaver spawnsetSaver)
 {
 	public const int MaxSpawns = 4096;
 
-	private static readonly bool[] _selected = new bool[MaxSpawns];
-	private static EnemyType _selectedEnemyType;
+	private readonly bool[] _selected = new bool[MaxSpawns];
+	private EnemyType _selectedEnemyType;
 
-	private static int? _scrollToIndex;
+	private int? _scrollToIndex;
 
-	private static int _lastSelectedIndex = -1;
-	private static float _editDelay;
-	private static bool _delayEdited;
+	private int _lastSelectedIndex = -1;
+	private float _editDelay;
+	private bool _delayEdited;
 
-	private static float _addDelay;
+	private float _addDelay;
 
-	private static bool _windowIsFocused;
+	private bool _windowIsFocused;
 
-	public static void Render()
+	public void Render()
 	{
 		ImGuiUtils.SetNextWindowMinSize(360, 400);
 		if (ImGui.Begin("Spawns"))
@@ -66,15 +66,15 @@ internal static class SpawnsWindow
 				{
 					if (ImGui.Button("Add", new Vector2(64, 32)))
 					{
-						if (FileStates.Spawnset.Object.Spawns.Length >= MaxSpawns)
+						if (fileStates.Spawnset.Object.Spawns.Length >= MaxSpawns)
 						{
-							PopupManager.ShowError("Reached max amount of spawns.");
+							popupManager.ShowError("Reached max amount of spawns.");
 						}
 						else
 						{
-							FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Add(new Spawn(_selectedEnemyType, _addDelay)) });
-							SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnAdd);
-							_scrollToIndex = FileStates.Spawnset.Object.Spawns.Length - 1;
+							fileStates.Spawnset.Update(fileStates.Spawnset.Object with { Spawns = fileStates.Spawnset.Object.Spawns.Add(new Spawn(_selectedEnemyType, _addDelay)) });
+							spawnsetSaver.Save(SpawnsetEditType.SpawnAdd);
+							_scrollToIndex = fileStates.Spawnset.Object.Spawns.Length - 1;
 						}
 					}
 
@@ -84,14 +84,14 @@ internal static class SpawnsWindow
 						if (selectedIndex == -1)
 							selectedIndex = 0;
 
-						if (FileStates.Spawnset.Object.Spawns.Length >= MaxSpawns)
+						if (fileStates.Spawnset.Object.Spawns.Length >= MaxSpawns)
 						{
-							PopupManager.ShowError("Reached max amount of spawns.");
+							popupManager.ShowError("Reached max amount of spawns.");
 						}
 						else
 						{
-							FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = FileStates.Spawnset.Object.Spawns.Insert(selectedIndex, new Spawn(_selectedEnemyType, _addDelay)) });
-							SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnInsert);
+							fileStates.Spawnset.Update(fileStates.Spawnset.Object with { Spawns = fileStates.Spawnset.Object.Spawns.Insert(selectedIndex, new Spawn(_selectedEnemyType, _addDelay)) });
+							spawnsetSaver.Save(SpawnsetEditType.SpawnInsert);
 							_scrollToIndex = selectedIndex;
 						}
 					}
@@ -131,7 +131,7 @@ internal static class SpawnsWindow
 		ImGui.End();
 	}
 
-	private static void EnemyButton(EnemyType enemyType, bool sameLine)
+	private void EnemyButton(EnemyType enemyType, bool sameLine)
 	{
 		bool isCurrent = _selectedEnemyType == enemyType;
 		Engine.Maths.Numerics.Color enemyColor = enemyType.GetColor(GameVersion.V3_2).ToEngineColor().Darken(isCurrent ? 0 : 0.8f);
@@ -153,7 +153,7 @@ internal static class SpawnsWindow
 		ImGui.PopStyleVar();
 	}
 
-	private static void RenderSpawnsTable()
+	private void RenderSpawnsTable()
 	{
 		const int columnCount = 6;
 
@@ -173,9 +173,9 @@ internal static class SpawnsWindow
 
 				if (io.IsKeyDown(ImGuiKey.Delete) && Array.Exists(_selected, b => b))
 				{
-					FileStates.Spawnset.Update(FileStates.Spawnset.Object with { Spawns = [..FileStates.Spawnset.Object.Spawns.Where((_, i) => !_selected[i])] });
+					fileStates.Spawnset.Update(fileStates.Spawnset.Object with { Spawns = [..fileStates.Spawnset.Object.Spawns.Where((_, i) => !_selected[i])] });
 					Array.Fill(_selected, false);
-					SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnDelete);
+					spawnsetSaver.Save(SpawnsetEditType.SpawnDelete);
 				}
 			}
 
@@ -210,7 +210,7 @@ internal static class SpawnsWindow
 				ImGui.SetTooltip(tooltip);
 			}
 
-			EditSpawnContext.BuildFrom(FileStates.Spawnset.Object);
+			EditSpawnContext.BuildFrom(fileStates.Spawnset.Object);
 			for (int i = 0; i < EditSpawnContext.Spawns.Count; i++)
 			{
 				SpawnUiEntry spawn = EditSpawnContext.Spawns[i];
@@ -269,7 +269,7 @@ internal static class SpawnsWindow
 		ImGui.PopStyleVar();
 	}
 
-	private static void EditContextItem(SpawnUiEntry spawn)
+	private void EditContextItem(SpawnUiEntry spawn)
 	{
 		bool saved = false;
 		if (ImGui.BeginPopupContextItem(Inline.Span(spawn.Index)))
@@ -309,36 +309,36 @@ internal static class SpawnsWindow
 			ImGui.EndPopup();
 		}
 
-		static void SaveEditedSpawn(int spawnIndex, EnemyType enemyType, float delay)
+		void SaveEditedSpawn(int spawnIndex, EnemyType enemyType, float delay)
 		{
-			FileStates.Spawnset.Update(FileStates.Spawnset.Object with
+			fileStates.Spawnset.Update(fileStates.Spawnset.Object with
 			{
-				Spawns = FileStates.Spawnset.Object.Spawns.SetItem(spawnIndex, new Spawn(enemyType, delay)),
+				Spawns = fileStates.Spawnset.Object.Spawns.SetItem(spawnIndex, new Spawn(enemyType, delay)),
 			});
 
-			SpawnsetHistoryUtils.Save(SpawnsetEditType.SpawnEdit);
+			spawnsetSaver.Save(SpawnsetEditType.SpawnEdit);
 			ImGui.CloseCurrentPopup();
 			_delayEdited = false;
 		}
 	}
 
-	public static void ClearUnusedSelections()
+	public void ClearUnusedSelections()
 	{
-		for (int i = FileStates.Spawnset.Object.Spawns.Length; i < _selected.Length; i++)
+		for (int i = fileStates.Spawnset.Object.Spawns.Length; i < _selected.Length; i++)
 			_selected[i] = false;
 	}
 
-	public static void ClearAllSelections()
+	public void ClearAllSelections()
 	{
 		Array.Clear(_selected);
 	}
 
-	private static float? GetEndLoopLength()
+	private float? GetEndLoopLength()
 	{
-		if (FileStates.Spawnset.Object.GameMode != GameMode.Survival)
+		if (fileStates.Spawnset.Object.GameMode != GameMode.Survival)
 			return null;
 
-		(SpawnSectionInfo PreLoopSection, SpawnSectionInfo LoopSection) sections = FileStates.Spawnset.Object.CalculateSections();
+		(SpawnSectionInfo PreLoopSection, SpawnSectionInfo LoopSection) sections = fileStates.Spawnset.Object.CalculateSections();
 		return sections.LoopSection.Length;
 	}
 }

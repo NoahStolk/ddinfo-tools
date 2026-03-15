@@ -10,10 +10,8 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
 internal static class ReplayFileInfo
 {
-	public static void Render()
+	public static void Render(EditorReplayModel model)
 	{
-		EditorReplayModel model = FileStates.Replay.Object;
-
 #if DEBUG
 		RenderData("Version", Inline.Span(model.Version));
 		RenderData("Timestamp", Inline.Span(model.TimestampSinceGameRelease));

@@ -2,11 +2,11 @@ using DevilDaggersInfo.Tools.EditorFileState;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 
-internal static class SpawnsetHistoryUtils
+internal sealed class SpawnsetSaver(FileStates fileStates)
 {
-	public static void Save(SpawnsetEditType editType)
+	public void Save(SpawnsetEditType editType)
 	{
-		FileStates.Spawnset.Save(editType);
+		fileStates.Spawnset.Save(editType);
 
 		HistoryWindow.UpdateScroll = true;
 	}

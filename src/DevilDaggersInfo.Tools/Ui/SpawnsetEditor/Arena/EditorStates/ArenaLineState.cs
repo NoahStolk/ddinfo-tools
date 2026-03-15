@@ -8,20 +8,13 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorStates;
 
-internal sealed class ArenaLineState : IArenaState
+internal sealed class ArenaLineState(ArenaWindow arenaWindow, FileStates fileStates, SpawnsetSaver spawnsetSaver) : IArenaState
 {
-	private readonly ArenaWindow _arenaWindow;
-
 	private Session? _session;
-
-	public ArenaLineState(ArenaWindow arenaWindow)
-	{
-		_arenaWindow = arenaWindow;
-	}
 
 	public void InitializeSession(ArenaMousePosition mousePosition)
 	{
-		_session ??= new Session(mousePosition.Real, FileStates.Spawnset.Object.ArenaTiles.GetMutableClone());
+		_session ??= new Session(mousePosition.Real, fileStates.Spawnset.Object.ArenaTiles.GetMutableClone());
 	}
 
 	public void Handle(ArenaMousePosition mousePosition)
@@ -41,10 +34,10 @@ internal sealed class ArenaLineState : IArenaState
 		if (_session == null)
 			return;
 
-		Loop(mousePosition, (i, j) => _session.Value.NewArena[i, j] = _arenaWindow.SelectedHeight);
+		Loop(mousePosition, (i, j) => _session.Value.NewArena[i, j] = arenaWindow.SelectedHeight);
 
-		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(FileStates.Spawnset.Object.ArenaDimension, _session.Value.NewArena) });
-		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaLine);
+		fileStates.Spawnset.Update(fileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(fileStates.Spawnset.Object.ArenaDimension, _session.Value.NewArena) });
+		spawnsetSaver.Save(SpawnsetEditType.ArenaLine);
 
 		Reset();
 	}

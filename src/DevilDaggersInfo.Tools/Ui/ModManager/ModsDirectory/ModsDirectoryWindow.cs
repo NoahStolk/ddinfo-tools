@@ -8,17 +8,17 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 
-internal static class ModsDirectoryWindow
+internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, PopupManager popupManager, ModsDirectoryLogic modsDirectoryLogic)
 {
-	private static bool _showEnabledMods = true;
-	private static bool _showDisabledMods = true;
-	private static bool _showModsWithInvalidPrefix = true;
-	private static bool _showOtherFiles;
-	private static bool _showErrors = true;
+	private bool _showEnabledMods = true;
+	private bool _showDisabledMods = true;
+	private bool _showModsWithInvalidPrefix = true;
+	private bool _showOtherFiles;
+	private bool _showErrors = true;
 
-	private static string? _renameErrorMessage;
+	private string? _renameErrorMessage;
 
-	public static void Render()
+	public void Render()
 	{
 		ImGuiUtils.SetNextWindowMinSize(1280, 768);
 		if (ImGui.Begin("Mod Manager", ImGuiWindowFlags.NoCollapse))
@@ -34,7 +34,7 @@ internal static class ModsDirectoryWindow
 				"""));
 
 			if (ImGui.Button("Reload"))
-				ModsDirectoryLogic.LoadModsDirectory();
+				modsDirectoryLogic.LoadModsDirectory();
 
 			ImGui.Separator();
 
@@ -46,7 +46,7 @@ internal static class ModsDirectoryWindow
 
 			if (ImGui.BeginChild("table_child"))
 			{
-				if (ModsDirectoryLogic.IsLoading)
+				if (modsDirectoryLogic.IsLoading)
 					ImGui.Text("Loading...");
 				else
 					RenderTable();
@@ -70,7 +70,7 @@ internal static class ModsDirectoryWindow
 		ImGui.End();
 	}
 
-	private static unsafe void RenderTable()
+	private unsafe void RenderTable()
 	{
 		const int columnCount = 4;
 		if (ImGui.BeginTable("mod_file_table", columnCount, ImGuiTableFlags.Resizable | ImGuiTableFlags.Sortable))
@@ -113,14 +113,14 @@ internal static class ModsDirectoryWindow
 				uint sorting = sortsSpecs.Specs.ColumnUserID;
 				bool sortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
 
-				ModsDirectoryLogic.SortModFiles(sorting, sortAscending);
+				modsDirectoryLogic.SortModFiles(sorting, sortAscending);
 
 				sortsSpecs.SpecsDirty = false;
 			}
 
-			for (int i = 0; i < ModsDirectoryLogic.ModFiles.Count; i++)
+			for (int i = 0; i < modsDirectoryLogic.ModFiles.Count; i++)
 			{
-				ModFile modFile = ModsDirectoryLogic.ModFiles[i];
+				ModFile modFile = modsDirectoryLogic.ModFiles[i];
 				if (!_showEnabledMods && modFile.FileType == ModFileType.EnabledMod ||
 				    !_showDisabledMods && modFile.FileType == ModFileType.DisabledMod ||
 				    !_showModsWithInvalidPrefix && modFile.FileType == ModFileType.ModWithInvalidPrefix ||
@@ -133,13 +133,13 @@ internal static class ModsDirectoryWindow
 				ImGui.TableNextRow();
 				ImGui.TableNextColumn();
 
-				ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, modFile.FileName == ModPreviewWindow.SelectedFileName ? 0x4400ffffU : modFile.FileType == ModFileType.EnabledMod ? 0x4400ff00U : 0x00000000U);
+				ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, modFile.FileName == modManagerState.SelectedFileName ? 0x4400ffffU : modFile.FileType == ModFileType.EnabledMod ? 0x4400ff00U : 0x00000000U);
 
 				bool setFocus = false;
 				if (ImGui.SmallButton(Inline.Span($"Rename##{i}")))
 				{
 					ImGui.OpenPopup(Inline.Span($"Rename##rename_mod_file_{i}"));
-					ModsDirectoryLogic.InitializeRename(modFile.FileName);
+					modsDirectoryLogic.InitializeRename(modFile.FileName);
 					setFocus = true;
 				}
 
@@ -149,14 +149,14 @@ internal static class ModsDirectoryWindow
 					if (setFocus)
 						ImGui.SetKeyboardFocusHere(0);
 
-					ImGui.InputText("##rename", ref ModsDirectoryLogic.NewFileName, 128);
+					ImGui.InputText("##rename", ref modsDirectoryLogic.NewFileName, 128);
 
 					if (_renameErrorMessage != null)
 						ImGui.TextColored(Color.Red, _renameErrorMessage);
 
 					if (ImGui.Button("OK", new Vector2(128, 0)) || ImGuiUtils.IsEnterPressed())
 					{
-						_renameErrorMessage = ModsDirectoryLogic.RenameModFile();
+						_renameErrorMessage = modsDirectoryLogic.RenameModFile();
 						if (_renameErrorMessage == null)
 							ImGui.CloseCurrentPopup();
 					}
@@ -170,24 +170,24 @@ internal static class ModsDirectoryWindow
 					// Only capture the fileName variable when needed.
 					// If we use modFile.FileName directly in the onConfirm lambda, it will capture the variable every frame, which allocates a couple kilobytes of memory per frame.
 					string fileName = modFile.FileName;
-					PopupManager.ShowQuestion(
+					popupManager.ShowQuestion(
 						"Delete mod file?",
 						$"Are you sure you want to delete the mod file '{modFile.FileName}'?",
-						() => ModsDirectoryLogic.DeleteModFile(fileName),
+						() => modsDirectoryLogic.DeleteModFile(fileName),
 						static () => { });
 				}
 
 				ImGui.SameLine();
 				ImGui.BeginDisabled(modFile.FileType is not ModFileType.EnabledMod and not ModFileType.DisabledMod);
 				if (ImGui.SmallButton(Inline.Span($"Toggle##{i}")))
-					ModsDirectoryLogic.ToggleModFile(modFile.FileName);
+					modsDirectoryLogic.ToggleModFile(modFile.FileName);
 				ImGui.EndDisabled();
 
 				ImGui.SameLine();
 				ImGui.PushStyleColor(ImGuiCol.Text, GetColor(modFile.FileType));
 				bool temp = false;
 				if (ImGui.Selectable(modFile.FileName, ref temp, ImGuiSelectableFlags.SpanAllColumns))
-					ModPreviewWindow.SelectedFileName = ModPreviewWindow.SelectedFileName == modFile.FileName ? null : modFile.FileName;
+					modManagerState.SelectedFileName = modManagerState.SelectedFileName == modFile.FileName ? null : modFile.FileName;
 				ImGui.PopStyleColor();
 
 				ImGui.TableNextColumn();

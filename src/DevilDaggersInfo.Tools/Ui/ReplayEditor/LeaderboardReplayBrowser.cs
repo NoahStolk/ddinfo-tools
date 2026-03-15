@@ -8,18 +8,18 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-internal static class LeaderboardReplayBrowser
+internal sealed class LeaderboardReplayBrowser(PopupManager popupManager, FileStates fileStates)
 {
-	private static bool _showWindow;
-	private static bool _isDownloading;
-	private static int _selectedPlayerId;
+	private bool _showWindow;
+	private bool _isDownloading;
+	private int _selectedPlayerId;
 
-	public static void Show()
+	public void Show()
 	{
 		_showWindow = true;
 	}
 
-	public static void Render()
+	public void Render()
 	{
 		if (!_showWindow)
 			return;
@@ -45,7 +45,7 @@ internal static class LeaderboardReplayBrowser
 		ImGui.End(); // Leaderboard Replay Browser
 	}
 
-	private static void HandleDownloadedReplay(ApiResult<Response> responseResult)
+	private void HandleDownloadedReplay(ApiResult<Response> responseResult)
 	{
 		responseResult.Match(
 			onSuccess: response =>
@@ -62,12 +62,12 @@ internal static class LeaderboardReplayBrowser
 					// DF_RPL0Replay not found.
 					// We could parse this, but it's not worth the effort.
 					Root.Log.Warning(ex, "The replay could not be parsed.");
-					PopupManager.ShowError("The replay could not be parsed.", ex);
+					popupManager.ShowError("The replay could not be parsed.", ex);
 					_isDownloading = false;
 					return;
 				}
 
-				FileStates.Replay.Update(EditorReplayModel.CreateFromLeaderboardReplay(response.PlayerId, leaderboardReplay.Header.Username, leaderboardReplay.Events));
+				fileStates.Replay.Update(EditorReplayModel.CreateFromLeaderboardReplay(response.PlayerId, leaderboardReplay.Header.Username, leaderboardReplay.Events));
 
 				_isDownloading = false;
 				_showWindow = false;
@@ -75,7 +75,7 @@ internal static class LeaderboardReplayBrowser
 			onError: apiError =>
 			{
 				Root.Log.Warning("The Devil Daggers leaderboard servers did not return a successful response: {Message}", apiError.Message ?? "(empty)");
-				PopupManager.ShowError("The Devil Daggers leaderboard servers did not return a successful response.", apiError);
+				popupManager.ShowError("The Devil Daggers leaderboard servers did not return a successful response.", apiError);
 				_isDownloading = false;
 			});
 	}

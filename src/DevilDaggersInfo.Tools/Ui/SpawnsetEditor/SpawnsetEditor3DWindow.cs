@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Scenes;
+using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using ImGuiNET;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
@@ -8,7 +9,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-internal sealed unsafe class SpawnsetEditor3DWindow(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ResourceManager resourceManager)
+internal sealed unsafe class SpawnsetEditor3DWindow(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ResourceManager resourceManager, FileStates fileStates, SpawnsetSaver spawnsetSaver)
 {
 	private readonly FramebufferData _framebufferData = new(gl);
 
@@ -18,7 +19,7 @@ internal sealed unsafe class SpawnsetEditor3DWindow(Glfw glfw, GL gl, WindowHand
 
 	public void InitializeScene()
 	{
-		_arenaScene = new ArenaScene(glfw, gl, window, glfwInput, resourceManager, static () => FileStates.Spawnset.Object, false, true);
+		_arenaScene = new ArenaScene(glfw, gl, window, glfwInput, resourceManager, () => fileStates.Spawnset.Object, false, true, fileStates, spawnsetSaver);
 	}
 
 	public void Render(float delta)

@@ -1,30 +1,32 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using DevilDaggersInfo.Tools.Ui.Popups;
 using ImGuiNET;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-internal static class HistoryWindow
+// TODO: Don't inject other windows.
+internal sealed class HistoryWindow(SpawnsWindow spawnsWindow, FileStates fileStates)
 {
 	public static bool UpdateScroll { get; set; }
 
-	public static void Render()
+	public void Render()
 	{
 		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(8, 1));
 		if (ImGui.Begin("History"))
 		{
-			ImGui.Text(Inline.Span($"{FileStates.Spawnset.FileName ?? FileStates.UntitledName}{(FileStates.Spawnset.IsModified && FileStates.Spawnset.FileName != null ? "*" : string.Empty)}"));
+			ImGui.Text(Inline.Span($"{fileStates.Spawnset.FileName ?? FileStates.UntitledName}{(fileStates.Spawnset.IsModified && fileStates.Spawnset.FileName != null ? "*" : string.Empty)}"));
 			ImGui.Separator();
 
 			float buttonWidth = ImGui.GetContentRegionAvail().X;
 
-			for (int i = 0; i < FileStates.Spawnset.History.Count; i++)
+			for (int i = 0; i < fileStates.Spawnset.History.Count; i++)
 			{
-				HistoryEntry<SpawnsetBinary, SpawnsetEditType> history = FileStates.Spawnset.History[i];
+				HistoryEntry<SpawnsetBinary, SpawnsetEditType> history = fileStates.Spawnset.History[i];
 
-				if (UpdateScroll && i == FileStates.Spawnset.CurrentHistoryIndex)
+				if (UpdateScroll && i == fileStates.Spawnset.CurrentHistoryIndex)
 				{
 					ImGui.SetScrollHereY();
 					UpdateScroll = false;
@@ -38,7 +40,7 @@ internal static class HistoryWindow
 				ImGui.PushStyleColor(ImGuiCol.Button, color);
 				ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color + new Vector4(0.3f, 0.3f, 0.3f, 0));
 				ImGui.PushStyleColor(ImGuiCol.ButtonActive, color + new Vector4(0.5f, 0.5f, 0.5f, 0));
-				ImGui.PushStyleColor(ImGuiCol.Border, i == FileStates.Spawnset.CurrentHistoryIndex ? Color.White : Color.Black);
+				ImGui.PushStyleColor(ImGuiCol.Border, i == fileStates.Spawnset.CurrentHistoryIndex ? Color.White : Color.Black);
 
 				ImGui.PushID(Inline.Span($"HistoryButton{i}"));
 				if (ImGui.Button(history.EditType.GetChange(), new Vector2(buttonWidth, 20)))
@@ -64,19 +66,19 @@ internal static class HistoryWindow
 		}
 	}
 
-	public static void Undo()
+	public void Undo()
 	{
-		SetHistoryIndex(FileStates.Spawnset.CurrentHistoryIndex - 1);
+		SetHistoryIndex(fileStates.Spawnset.CurrentHistoryIndex - 1);
 	}
 
-	public static void Redo()
+	public void Redo()
 	{
-		SetHistoryIndex(FileStates.Spawnset.CurrentHistoryIndex + 1);
+		SetHistoryIndex(fileStates.Spawnset.CurrentHistoryIndex + 1);
 	}
 
-	private static void SetHistoryIndex(int index)
+	private void SetHistoryIndex(int index)
 	{
-		if (index < 0 || index >= FileStates.Spawnset.History.Count)
+		if (index < 0 || index >= fileStates.Spawnset.History.Count)
 			return;
 
 		// Remove the keyboard focus to prevent undo/redo not working when a text input is focused, and the next/previous history entry changes the value of that text input.
@@ -84,9 +86,9 @@ internal static class HistoryWindow
 		// A way to fix this would be to unfocus the keyboard earlier?
 		ImGui.SetKeyboardFocusHere(-1);
 
-		FileStates.Spawnset.SetHistoryIndex(index);
+		fileStates.Spawnset.SetHistoryIndex(index);
 
 		UpdateScroll = true;
-		SpawnsWindow.ClearUnusedSelections();
+		spawnsWindow.ClearUnusedSelections();
 	}
 }

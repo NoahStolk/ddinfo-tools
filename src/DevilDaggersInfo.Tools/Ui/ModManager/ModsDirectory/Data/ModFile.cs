@@ -15,7 +15,8 @@ internal sealed record ModFile(string FileName, ModFileType FileType, ModBinaryT
 			ModFileType.ModWithInvalidPrefix;
 	}
 
-	public static ModFile FromPath(string filePath)
+	// TODO: Move to instance class (factory) so we can use DI and not depend on static methods.
+	public static ModFile FromPath(PopupManager popupManager, string filePath)
 	{
 		string fileName = Path.GetFileName(filePath);
 
@@ -36,7 +37,7 @@ internal sealed record ModFile(string FileName, ModFileType FileType, ModBinaryT
 		}
 		catch (Exception ex) when (ex.IsFileIoException())
 		{
-			PopupManager.ShowError($"Error loading file '{filePath}'.", ex);
+			popupManager.ShowError($"Error loading file '{filePath}'.", ex);
 			Root.Log.Error(ex, $"Error loading file '{filePath}'.");
 			return new ModFile(fileName, ModFileType.Error, null, null, null, fileSize);
 		}

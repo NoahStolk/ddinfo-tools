@@ -1,15 +1,14 @@
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
-internal interface IPathTable<T>
-	where T : IPathTable<T>
+internal interface IPathTable
 {
-	static abstract int ColumnCount { get; }
+	int ColumnCount { get; }
 
-	static abstract int PathCount { get; }
+	int PathCount { get; }
 
-	static abstract void SetupColumns();
+	void SetupColumns();
 
-	static abstract void RenderPath(int index);
+	void RenderPath(int index);
 
-	static abstract void Sort(uint sorting, bool sortAscending);
+	void Sort(uint sorting, bool sortAscending);
 }

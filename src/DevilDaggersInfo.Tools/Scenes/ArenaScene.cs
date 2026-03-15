@@ -1,9 +1,11 @@
 // ReSharper disable ForCanBeConvertedToForeach
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Scenes.GameObjects;
 using DevilDaggersInfo.Tools.Ui;
+using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 using System.Diagnostics;
@@ -28,7 +30,17 @@ internal sealed class ArenaScene
 	private Player? _player;
 	private Skull4? _skull4;
 
-	public unsafe ArenaScene(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ResourceManager resourceManager, Func<SpawnsetBinary> getSpawnset, bool useMenuCamera, bool isEditor)
+	public unsafe ArenaScene(
+		Glfw glfw,
+		GL gl,
+		WindowHandle* window,
+		GlfwInput glfwInput,
+		ResourceManager resourceManager,
+		Func<SpawnsetBinary> getSpawnset,
+		bool useMenuCamera,
+		bool isEditor,
+		FileStates fileStates,
+		SpawnsetSaver spawnsetSaver)
 	{
 		_gl = gl;
 		_resourceManager = resourceManager;
@@ -40,7 +52,7 @@ internal sealed class ArenaScene
 		InitializeArena();
 
 		if (isEditor)
-			_editorContext = new ArenaEditorContext(this, glfwInput, gl, resourceManager);
+			_editorContext = new ArenaEditorContext(this, glfwInput, gl, resourceManager, fileStates, spawnsetSaver);
 	}
 
 	public Camera Camera { get; }

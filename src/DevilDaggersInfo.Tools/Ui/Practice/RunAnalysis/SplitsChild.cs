@@ -7,9 +7,9 @@ namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
 
 internal static class SplitsChild
 {
-	public static void Render()
+	public static void Render(PracticeStatsData statsData)
 	{
-		IReadOnlyList<SplitDataEntry> data = RunAnalysisWindow.StatsData.SplitsData.HomingSplitData;
+		IReadOnlyList<SplitDataEntry> data = statsData.SplitsData.HomingSplitData;
 
 		if (ImGui.BeginChild("Splits", new Vector2(192, 256)))
 		{

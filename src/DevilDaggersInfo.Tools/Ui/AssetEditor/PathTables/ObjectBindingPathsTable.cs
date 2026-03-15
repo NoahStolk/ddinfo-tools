@@ -7,22 +7,22 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
-internal sealed class ObjectBindingPathsTable : IPathTable<ObjectBindingPathsTable>
+internal sealed class ObjectBindingPathsTable(FileStates fileStates, NativeFileDialog nativeFileDialog) : IPathTable
 {
-	public static int ColumnCount => 3;
+	public int ColumnCount => 3;
 
-	public static int PathCount => PathTableUtils.ObjectBindings.Count;
+	public int PathCount => PathTableUtils.ObjectBindings.Count;
 
-	public static void SetupColumns()
+	public void SetupColumns()
 	{
 		PathTableUtils.SetupDefaultColumns();
 		ImGui.TableSetupColumn("Path", ImGuiTableColumnFlags.WidthStretch, 0, 2);
 	}
 
-	public static void RenderPath(int index)
+	public void RenderPath(int index)
 	{
 		ObjectBindingAssetInfo assetInfo = PathTableUtils.ObjectBindings[index];
-		ObjectBindingAssetPath? path = PathTableUtils.Find(FileStates.Mod.Object.ObjectBindings, assetInfo.AssetName);
+		ObjectBindingAssetPath? path = PathTableUtils.Find(fileStates.Mod.Object.ObjectBindings, assetInfo.AssetName);
 
 		PathTableUtils.RenderDefaultColumns(assetInfo);
 
@@ -36,18 +36,18 @@ internal sealed class ObjectBindingPathsTable : IPathTable<ObjectBindingPathsTab
 		ImGui.Text(path?.AbsolutePath ?? "<none>");
 	}
 
-	private static void SetPath(ObjectBindingAssetInfo assetInfo, ObjectBindingAssetPath? path)
+	private void SetPath(ObjectBindingAssetInfo assetInfo, ObjectBindingAssetPath? path)
 	{
 		if (path == null)
 		{
 			path = new ObjectBindingAssetPath(assetInfo.AssetName, null);
-			FileStates.Mod.Object.ObjectBindings.Add(path);
+			fileStates.Mod.Object.ObjectBindings.Add(path);
 		}
 
-		NativeFileDialog.CreateOpenFileDialog(path.SetPath, PathUtils.GetFileFilter(path.AssetType));
+		nativeFileDialog.CreateOpenFileDialog(path.SetPath, PathUtils.GetFileFilter(path.AssetType));
 	}
 
-	public static void Sort(uint sorting, bool sortAscending)
+	public void Sort(uint sorting, bool sortAscending)
 	{
 		PathTableUtils.ObjectBindings.Sort((a, b) =>
 		{
@@ -62,6 +62,6 @@ internal sealed class ObjectBindingPathsTable : IPathTable<ObjectBindingPathsTab
 			return sortAscending ? result : -result;
 		});
 
-		static ObjectBindingAssetPath? Find(string assetName) => FileStates.Mod.Object.ObjectBindings.Find(audio => audio.AssetName == assetName);
+		ObjectBindingAssetPath? Find(string assetName) => fileStates.Mod.Object.ObjectBindings.Find(audio => audio.AssetName == assetName);
 	}
 }

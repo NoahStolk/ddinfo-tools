@@ -20,19 +20,37 @@ internal sealed class UiRenderer(
 	UiLayoutManager uiLayoutManager,
 	ConfigLayout configLayout,
 	MainScene mainScene,
+	PopupManager popupManager,
 	MainWindow mainWindow,
 	DebugWindow debugWindow,
 	AboutWindow aboutWindow,
-	AssetEditorMenu assetEditorMenu,
-	ReplayEditorMenu replayEditorMenu,
+
 	SpawnsetEditorMenu spawnsetEditorMenu,
-	ArenaWindow arenaWindow,
 	SpawnsetEditor3DWindow spawnsetEditor3DWindow,
+	ArenaWindow arenaWindow,
+	SpawnsWindow spawnsWindow,
+	SettingsWindow settingsWindow,
+	HistoryWindow historyWindow,
+
 	PracticeWindow practiceWindow,
+	RunAnalysisWindow runAnalysisWindow,
+
 	CustomLeaderboardsWindow customLeaderboardsWindow,
 	CustomLeaderboards3DWindow customLeaderboards3DWindow,
+
+	ReplayEditorMenu replayEditorMenu,
 	ReplayEditorWindow replayEditorWindow,
-	ReplayEditor3DWindow replayEditor3DWindow)
+	ReplayEditor3DWindow replayEditor3DWindow,
+	LeaderboardReplayBrowser leaderboardReplayBrowser,
+
+	AssetEditorMenu assetEditorMenu,
+	AssetEditorWindow assetEditorWindow,
+	CompileModWindow compileModWindow,
+	ExtractModWindow extractModWindow,
+
+	ModsDirectoryWindow modsDirectoryWindow,
+	ModPreviewWindow modPreviewWindow,
+	ModInstallationWindow modInstallationWindow)
 {
 	public void Render(float delta)
 	{
@@ -50,24 +68,25 @@ internal sealed class UiRenderer(
 				break;
 			case LayoutType.SpawnsetEditor:
 				spawnsetEditorMenu.Render();
-				SpawnsWindow.Render();
-				SettingsWindow.Render();
+				spawnsWindow.Render();
+				settingsWindow.Render();
 				arenaWindow.Render();
-				HistoryWindow.Render();
+				historyWindow.Render();
 				spawnsetEditor3DWindow.Render(delta);
 				break;
 			case LayoutType.AssetEditor:
 				assetEditorMenu.Render();
-				AssetEditorWindow.Render();
-				CompileModWindow.Render();
-				ExtractModWindow.Render();
+				assetEditorWindow.Render();
+				compileModWindow.Render();
+				extractModWindow.Render();
 				break;
 			case LayoutType.ReplayEditor:
 				replayEditorWindow.Update(delta);
+
 				replayEditorMenu.Render();
 				replayEditorWindow.Render();
 				replayEditor3DWindow.Render(delta);
-				LeaderboardReplayBrowser.Render();
+				leaderboardReplayBrowser.Render();
 				break;
 			case LayoutType.CustomLeaderboards:
 				customLeaderboardsWindow.Update(delta);
@@ -77,13 +96,13 @@ internal sealed class UiRenderer(
 				break;
 			case LayoutType.Practice:
 				practiceWindow.Render();
-				RunAnalysisWindow.Update(delta);
-				RunAnalysisWindow.Render();
+				runAnalysisWindow.Update(delta);
+				runAnalysisWindow.Render();
 				break;
 			case LayoutType.ModManager:
-				ModsDirectoryWindow.Render();
-				ModPreviewWindow.Render();
-				ModInstallationWindow.Render();
+				modsDirectoryWindow.Render();
+				modPreviewWindow.Render();
+				modInstallationWindow.Render();
 				break;
 		}
 
@@ -93,6 +112,6 @@ internal sealed class UiRenderer(
 		aboutWindow.Render();
 		UpdateWindow.Render();
 
-		PopupManager.Render();
+		popupManager.Render();
 	}
 }

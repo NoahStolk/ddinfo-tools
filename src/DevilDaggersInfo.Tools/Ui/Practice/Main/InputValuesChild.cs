@@ -10,56 +10,49 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-internal sealed class InputValuesChild
+internal sealed class InputValuesChild(ResourceManager resourceManager, PracticeLogic practiceLogic)
 {
-	private readonly ResourceManager _resourceManager;
-
-	public InputValuesChild(ResourceManager resourceManager)
-	{
-		_resourceManager = resourceManager;
-	}
-
 	public void Render()
 	{
-		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen in this UI.");
+		Debug.Assert(resourceManager.GameResources != null, $"{nameof(resourceManager.GameResources)} is null, which should never happen in this UI.");
 
 		if (ImGui.BeginChild("InputValues", new Vector2(380, 200), ImGuiChildFlags.Border)) // TODO: Borders in ImGui update.
 		{
 			ImGui.SeparatorText("Inputs");
 
 			ImGui.Spacing();
-			ImGuiImage.Image(_resourceManager.InternalResources.IconHandTexture.Id, new Vector2(16), PracticeLogic.State.HandLevel.GetColor());
+			ImGuiImage.Image(resourceManager.InternalResources.IconHandTexture.Id, new Vector2(16), practiceLogic.State.HandLevel.GetColor());
 			ImGui.SameLine();
 			foreach (HandLevel level in EnumUtils.HandLevels)
 			{
-				if (ImGui.RadioButton(Inline.Span($"Lvl {(int)level}"), level == PracticeLogic.State.HandLevel) && PracticeLogic.State.HandLevel != level)
-					PracticeLogic.State.HandLevel = level;
+				if (ImGui.RadioButton(Inline.Span($"Lvl {(int)level}"), level == practiceLogic.State.HandLevel) && practiceLogic.State.HandLevel != level)
+					practiceLogic.State.HandLevel = level;
 
 				if (level != HandLevel.Level4)
 					ImGui.SameLine();
 			}
 
-			(Texture gemOrHomingTexture, Color tintColor) = PracticeLogic.State.HandLevel is HandLevel.Level3 or HandLevel.Level4 ? (_resourceManager.GameResources.IconMaskHomingTexture, Color.White) : (_resourceManager.GameResources.IconMaskGemTexture, Color.Red);
+			(Texture gemOrHomingTexture, Color tintColor) = practiceLogic.State.HandLevel is HandLevel.Level3 or HandLevel.Level4 ? (resourceManager.GameResources.IconMaskHomingTexture, Color.White) : (resourceManager.GameResources.IconMaskGemTexture, Color.Red);
 			ImGui.Spacing();
 			ImGuiImage.Image(gemOrHomingTexture.Id, new Vector2(16), tintColor);
 			ImGui.SameLine();
-			ImGui.InputInt("Added gems", ref PracticeLogic.State.AdditionalGems, 1);
+			ImGui.InputInt("Added gems", ref practiceLogic.State.AdditionalGems, 1);
 
 			ImGui.Spacing();
-			ImGuiImage.Image(_resourceManager.GameResources.IconMaskStopwatchTexture.Id, new Vector2(16));
+			ImGuiImage.Image(resourceManager.GameResources.IconMaskStopwatchTexture.Id, new Vector2(16));
 			ImGui.SameLine();
-			ImGui.InputFloat("Timer start", ref PracticeLogic.State.TimerStart, 1, 5, "%.4f");
+			ImGui.InputFloat("Timer start", ref practiceLogic.State.TimerStart, 1, 5, "%.4f");
 
 			ImGui.Spacing();
 
 			const float buttonHeight = 30;
 			if (ImGui.Button("Apply inputs", new Vector2(0, buttonHeight)))
-				PracticeLogic.GenerateAndApplyPracticeSpawnset();
+				practiceLogic.GenerateAndApplyPracticeSpawnset();
 
 			ImGui.SameLine();
 			if (ImGui.Button("Save template", new Vector2(0, buttonHeight)))
 			{
-				UserSettingsPracticeTemplate newTemplate = new(null, PracticeLogic.State.HandLevel, PracticeLogic.State.AdditionalGems, PracticeLogic.State.TimerStart);
+				UserSettingsPracticeTemplate newTemplate = new(null, practiceLogic.State.HandLevel, practiceLogic.State.AdditionalGems, practiceLogic.State.TimerStart);
 				if (!UserSettings.Model.PracticeTemplates.Contains(newTemplate))
 				{
 					UserSettings.Model = UserSettings.Model with
@@ -77,7 +70,7 @@ internal sealed class InputValuesChild
 			ImGui.SameLine();
 			ImGui.BeginDisabled(!SurvivalFileWatcher.Exists);
 			if (ImGui.Button("Return to normal game", new Vector2(0, buttonHeight)))
-				PracticeLogic.DeleteModdedSpawnset();
+				practiceLogic.DeleteModdedSpawnset();
 
 			if (ImGui.IsItemHovered())
 				ImGui.SetTooltip("This will delete the modded spawnset and return you to the normal game.");

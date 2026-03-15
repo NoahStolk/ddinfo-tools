@@ -13,7 +13,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes;
 
-internal sealed class ArenaEditorContext(ArenaScene arenaScene, GlfwInput glfwInput, GL gl, ResourceManager resourceManager)
+internal sealed class ArenaEditorContext(ArenaScene arenaScene, GlfwInput glfwInput, GL gl, ResourceManager resourceManager, FileStates fileStates, SpawnsetSaver spawnsetSaver)
 {
 	private readonly List<(Tile Tile, float Distance)> _hitTiles = [];
 	private readonly List<Tile> _selectedTiles = [];
@@ -55,17 +55,17 @@ internal sealed class ArenaEditorContext(ArenaScene arenaScene, GlfwInput glfwIn
 		if (scroll is > -float.Epsilon and < float.Epsilon || _selectedTiles.Count == 0)
 			return;
 
-		float[,] newArena = FileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
+		float[,] newArena = fileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
 		for (int i = 0; i < _selectedTiles.Count; i++)
 		{
 			Tile tile = _selectedTiles[i];
-			float height = FileStates.Spawnset.Object.ArenaTiles[tile.ArenaX, tile.ArenaY] - scroll;
+			float height = fileStates.Spawnset.Object.ArenaTiles[tile.ArenaX, tile.ArenaY] - scroll;
 			tile.SetDisplayHeight(height);
 			newArena[tile.ArenaX, tile.ArenaY] = height;
 		}
 
-		FileStates.Spawnset.Update(FileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(FileStates.Spawnset.Object.ArenaDimension, newArena) });
-		SpawnsetHistoryUtils.Save(SpawnsetEditType.ArenaTileHeight);
+		fileStates.Spawnset.Update(fileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(fileStates.Spawnset.Object.ArenaDimension, newArena) });
+		spawnsetSaver.Save(SpawnsetEditType.ArenaTileHeight);
 	}
 
 	public void RenderTiles(bool renderEditorContext, Shader shader)

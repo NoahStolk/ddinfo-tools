@@ -8,17 +8,10 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 
-internal sealed class ArenaEditorControls
+// TODO: Register this.
+// TODO: Don't inject other windows.
+internal sealed class ArenaEditorControls(ResourceManager resourceManager, ArenaWindow arenaWindow, FileStates fileStates)
 {
-	private readonly ResourceManager _resourceManager;
-	private readonly ArenaWindow _arenaWindow;
-
-	// TODO: Don't inject other windows.
-	public ArenaEditorControls(ResourceManager resourceManager, ArenaWindow arenaWindow)
-	{
-		_resourceManager = resourceManager;
-		_arenaWindow = arenaWindow;
-	}
 
 	public void Render()
 	{
@@ -33,17 +26,17 @@ internal sealed class ArenaEditorControls
 				ReadOnlySpan<char> arenaToolText = EnumUtils.ArenaToolNames[arenaTool];
 
 				bool isDagger = arenaTool == ArenaTool.Dagger;
-				bool isCurrent = arenaTool == _arenaWindow.ArenaTool;
+				bool isCurrent = arenaTool == arenaWindow.ArenaTool;
 				ImGui.SetCursorPos(new Vector2(offsetX + borderSize * 2, borderSize));
 
 				if (isDagger)
-					ImGui.BeginDisabled(FileStates.Spawnset.Object.GameMode != GameMode.Race);
+					ImGui.BeginDisabled(fileStates.Spawnset.Object.GameMode != GameMode.Race);
 
 				if (isCurrent)
 					ImGui.PushStyleColor(ImGuiCol.Button, ImGui.GetStyle().Colors[(int)ImGuiCol.ButtonHovered]);
 
-				if (ImGuiImage.ImageButton(arenaToolText, GetTexture(arenaTool), new Vector2(size)) && _arenaWindow.ArenaTool != arenaTool)
-					_arenaWindow.ArenaTool = arenaTool;
+				if (ImGuiImage.ImageButton(arenaToolText, GetTexture(arenaTool), new Vector2(size)) && arenaWindow.ArenaTool != arenaTool)
+					arenaWindow.ArenaTool = arenaTool;
 
 				if (isCurrent)
 					ImGui.PopStyleColor();
@@ -62,7 +55,7 @@ internal sealed class ArenaEditorControls
 
 		if (ImGui.BeginChild("ArenaToolControls", new Vector2(256, 112)))
 		{
-			switch (_arenaWindow.ArenaTool)
+			switch (arenaWindow.ArenaTool)
 			{
 				case ArenaTool.Pencil:
 					PencilChild.Render();
@@ -80,7 +73,7 @@ internal sealed class ArenaEditorControls
 					BucketChild.Render();
 					break;
 				case ArenaTool.Dagger:
-					DaggerChild.Render();
+					DaggerChild.Render(fileStates.Spawnset.Object.GameMode);
 					break;
 			}
 		}
@@ -92,12 +85,12 @@ internal sealed class ArenaEditorControls
 	{
 		return arenaTool switch
 		{
-			ArenaTool.Pencil => _resourceManager.InternalResources.PencilTexture.Id,
-			ArenaTool.Line => _resourceManager.InternalResources.LineTexture.Id,
-			ArenaTool.Rectangle => _resourceManager.InternalResources.RectangleTexture.Id,
-			ArenaTool.Ellipse => _resourceManager.InternalResources.EllipseTexture.Id,
-			ArenaTool.Bucket => _resourceManager.InternalResources.BucketTexture.Id,
-			ArenaTool.Dagger => _resourceManager.InternalResources.DaggerTexture.Id,
+			ArenaTool.Pencil => resourceManager.InternalResources.PencilTexture.Id,
+			ArenaTool.Line => resourceManager.InternalResources.LineTexture.Id,
+			ArenaTool.Rectangle => resourceManager.InternalResources.RectangleTexture.Id,
+			ArenaTool.Ellipse => resourceManager.InternalResources.EllipseTexture.Id,
+			ArenaTool.Bucket => resourceManager.InternalResources.BucketTexture.Id,
+			ArenaTool.Dagger => resourceManager.InternalResources.DaggerTexture.Id,
 			_ => throw new UnreachableException($"Unknown arena tool {arenaTool}."),
 		};
 	}

@@ -4,15 +4,8 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-internal sealed class StateChild
+internal sealed class StateChild(RecordingLogic recordingLogic, GameMemoryServiceWrapper gameMemoryServiceWrapper)
 {
-	private readonly RecordingLogic _recordingLogic;
-
-	public StateChild(RecordingLogic recordingLogic)
-	{
-		_recordingLogic = recordingLogic;
-	}
-
 	public void Render()
 	{
 		if (ImGui.BeginTable("StateTable", 2, ImGuiTableFlags.None, new Vector2(288, 80)))
@@ -22,13 +15,13 @@ internal sealed class StateChild
 			ImGui.TableNextColumn();
 			ImGui.Text("Memory");
 			ImGui.TableNextColumn();
-			ImGui.Text(GameMemoryServiceWrapper.Marker.HasValue ? Inline.Span($"0x{GameMemoryServiceWrapper.Marker.Value:X}") : "Waiting...");
+			ImGui.Text(gameMemoryServiceWrapper.Marker.HasValue ? Inline.Span($"0x{gameMemoryServiceWrapper.Marker.Value:X}") : "Waiting...");
 			ImGui.TableNextRow();
 
 			ImGui.TableNextColumn();
 			ImGui.Text("State");
 			ImGui.TableNextColumn();
-			ImGui.Text(_recordingLogic.RecordingStateType.ToDisplayString());
+			ImGui.Text(recordingLogic.RecordingStateType.ToDisplayString());
 			ImGui.TableNextRow();
 
 			ImGui.TableNextColumn();
@@ -40,7 +33,7 @@ internal sealed class StateChild
 			ImGui.TableNextColumn();
 			ImGui.Text("Last upload");
 			ImGui.TableNextColumn();
-			ImGui.Text(DateTimeUtils.FormatTimeAgo(_recordingLogic.LastSubmission));
+			ImGui.Text(DateTimeUtils.FormatTimeAgo(recordingLogic.LastSubmission));
 			ImGui.TableNextRow();
 
 			ImGui.EndTable();

@@ -11,9 +11,9 @@ internal static class DaggerChild
 
 	public static Vector2 Snap => _snap;
 
-	public static void Render()
+	public static void Render(GameMode gameMode)
 	{
-		ImGui.BeginDisabled(FileStates.Spawnset.Object.GameMode != GameMode.Race);
+		ImGui.BeginDisabled(gameMode != GameMode.Race);
 		ImGui.SliderFloat2("Snap", ref _snap, 0.25f, 2, "%.2f");
 		ImGui.EndDisabled();
 	}

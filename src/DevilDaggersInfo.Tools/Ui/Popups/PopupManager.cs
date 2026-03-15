@@ -5,12 +5,11 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
-// TODO: Rewrite to instance.
-internal static class PopupManager
+internal sealed class PopupManager
 {
-	private static readonly List<Popup> _popups = [];
+	private readonly List<Popup> _popups = [];
 
-	public static bool IsAnyOpen
+	public bool IsAnyOpen
 	{
 		get
 		{
@@ -24,29 +23,29 @@ internal static class PopupManager
 		}
 	}
 
-	public static IReadOnlyList<Popup> Popups => _popups;
+	public IReadOnlyList<Popup> Popups => _popups;
 
-	public static void ShowError(string errorText, ApiError? apiError)
+	public void ShowError(string errorText, ApiError? apiError)
 	{
 		ShowError(errorText, apiError?.Message + Environment.NewLine + apiError?.Exception?.Message);
 	}
 
-	public static void ShowError(string errorText, Exception? exception)
+	public void ShowError(string errorText, Exception? exception)
 	{
 		ShowError(errorText, exception?.Message);
 	}
 
-	public static void ShowError(string errorText, string? technicalDetails = null)
+	public void ShowError(string errorText, string? technicalDetails = null)
 	{
 		_popups.Add(new ErrorMessage("Error", errorText, technicalDetails));
 	}
 
-	public static void ShowMessage(string title, string text)
+	public void ShowMessage(string title, string text)
 	{
 		_popups.Add(new Message(title, text));
 	}
 
-	public static void ShowMessageWithHideOption(string title, string text, bool doNotShowAgain, Action<bool> setDoNotShowAgain)
+	public void ShowMessageWithHideOption(string title, string text, bool doNotShowAgain, Action<bool> setDoNotShowAgain)
 	{
 		if (doNotShowAgain)
 			return;
@@ -54,25 +53,12 @@ internal static class PopupManager
 		_popups.Add(new MessageWithHideOption(title, text, setDoNotShowAgain, doNotShowAgain));
 	}
 
-	public static void ShowSaveSpawnsetPrompt(Action action)
-	{
-		ShowQuestion(
-			"Save spawnset?",
-			"Do you want to save the current spawnset?",
-			() =>
-			{
-				SpawnsetEditorMenu.SaveSpawnset();
-				action();
-			},
-			action);
-	}
-
-	public static void ShowQuestion(string title, string text, Action onConfirm, Action onDeny)
+	public void ShowQuestion(string title, string text, Action onConfirm, Action onDeny)
 	{
 		_popups.Add(new Question(title, text, onConfirm, onDeny));
 	}
 
-	public static void Render()
+	public void Render()
 	{
 		// Render all open popups (there should be only one at a time).
 		// We remove popups from the list during rendering, so we need to iterate backwards.
@@ -105,7 +91,7 @@ internal static class PopupManager
 		}
 	}
 
-	private static void RenderModal(Popup popup)
+	private void RenderModal(Popup popup)
 	{
 		Vector2 center = ImGui.GetMainViewport().GetCenter();
 		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new Vector2(0.5f, 0.5f));

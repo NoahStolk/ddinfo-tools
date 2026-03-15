@@ -7,20 +7,14 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-internal sealed class PracticeWindow
+internal sealed class PracticeWindow(ResourceManager resourceManager, PracticeLogic practiceLogic)
 {
 	public const int TemplateDescriptionHeight = 48;
 
-	private readonly CustomTemplatesChild _customTemplatesChild;
-	private readonly EndLoopTemplatesChild _endLoopTemplatesChild = new();
-	private readonly NoFarmTemplatesChild _noFarmTemplatesChild = new();
-	private readonly InputValuesChild _inputValuesChild;
-
-	public PracticeWindow(ResourceManager resourceManager)
-	{
-		_customTemplatesChild = new CustomTemplatesChild(resourceManager);
-		_inputValuesChild = new InputValuesChild(resourceManager);
-	}
+	private readonly CustomTemplatesChild _customTemplatesChild = new(resourceManager, practiceLogic);
+	private readonly EndLoopTemplatesChild _endLoopTemplatesChild = new(practiceLogic);
+	private readonly NoFarmTemplatesChild _noFarmTemplatesChild = new(practiceLogic);
+	private readonly InputValuesChild _inputValuesChild = new(resourceManager, practiceLogic);
 
 	public void Render()
 	{

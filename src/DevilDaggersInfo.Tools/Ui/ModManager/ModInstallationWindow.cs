@@ -11,7 +11,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager;
 
-internal static class ModInstallationWindow
+internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogic)
 {
 	private static Dictionary<string, List<EffectiveAsset>> _effectiveAssets = new();
 	private static int _activeAssets;
@@ -76,12 +76,12 @@ internal static class ModInstallationWindow
 		_activeProhibitedAssets = _effectiveAssets.Sum(kvp => kvp.Value.Count(c => c.OverriddenByModFileName == null && c.TocEntry.IsEnabled && AssetContainer.IsProhibited(c.TocEntry.AssetType, c.TocEntry.Name)));
 	}
 
-	public static void Render()
+	public void Render()
 	{
 		ImGuiUtils.SetNextWindowMinSize(768, 384);
 		if (ImGui.Begin("Mod Installation", ImGuiWindowFlags.NoCollapse))
 		{
-			if (ModsDirectoryLogic.IsLoading)
+			if (modsDirectoryLogic.IsLoading)
 			{
 				ImGui.Text("Loading...");
 			}

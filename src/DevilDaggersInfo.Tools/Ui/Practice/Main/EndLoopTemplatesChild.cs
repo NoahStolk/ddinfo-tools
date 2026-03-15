@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-internal sealed class EndLoopTemplatesChild
+internal sealed class EndLoopTemplatesChild(PracticeLogic practiceLogic)
 {
 	private List<float> EndLoopTimerStarts => field ??= CreateEndLoopTimerStarts();
 
@@ -62,7 +62,7 @@ internal sealed class EndLoopTemplatesChild
 		ImGui.EndChild();
 	}
 
-	private static void RenderEndLoopTemplate(int waveIndex, float timerStart, float templateWidth)
+	private void RenderEndLoopTemplate(int waveIndex, float timerStart, float templateWidth)
 	{
 		Vector2 buttonSize = new(templateWidth, 30);
 		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(PracticeLogic.IsActive(HandLevel.Level4, 0, timerStart));
@@ -78,8 +78,8 @@ internal sealed class EndLoopTemplatesChild
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 				{
-					PracticeLogic.State = new PracticeState(HandLevel.Level4, 0, timerStart);
-					PracticeLogic.GenerateAndApplyPracticeSpawnset();
+					practiceLogic.State = new PracticeState(HandLevel.Level4, 0, timerStart);
+					practiceLogic.GenerateAndApplyPracticeSpawnset();
 				}
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 8));

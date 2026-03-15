@@ -10,16 +10,9 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-internal sealed class CustomTemplatesChild
+internal sealed class CustomTemplatesChild(ResourceManager resourceManager, PracticeLogic practiceLogic)
 {
 	private int? _customTemplateIndexToReorder;
-
-	private readonly ResourceManager _resourceManager;
-
-	public CustomTemplatesChild(ResourceManager resourceManager)
-	{
-		_resourceManager = resourceManager;
-	}
 
 	public void Render(Vector2 templateContainerSize, Vector2 templateListSize, float templateWidth)
 	{
@@ -67,7 +60,7 @@ internal sealed class CustomTemplatesChild
 		RenderDragDropTarget(i, templateWidth);
 	}
 
-	private static void RenderTemplateButton(UserSettingsPracticeTemplate customTemplate, float templateWidth)
+	private void RenderTemplateButton(UserSettingsPracticeTemplate customTemplate, float templateWidth)
 	{
 		Vector2 buttonSize = new(templateWidth - 96, 48);
 		ReadOnlySpan<char> buttonName = Inline.Span($"{EnumUtils.HandLevelNames[customTemplate.HandLevel]}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart}");
@@ -91,8 +84,8 @@ internal sealed class CustomTemplatesChild
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 				{
-					PracticeLogic.State = new PracticeState(customTemplate.HandLevel, customTemplate.AdditionalGems, customTemplate.TimerStart);
-					PracticeLogic.GenerateAndApplyPracticeSpawnset();
+					practiceLogic.State = new PracticeState(customTemplate.HandLevel, customTemplate.AdditionalGems, customTemplate.TimerStart);
+					practiceLogic.GenerateAndApplyPracticeSpawnset();
 				}
 
 				float windowWidth = ImGui.GetWindowWidth();
@@ -158,7 +151,7 @@ internal sealed class CustomTemplatesChild
 		ImGui.PushID(Inline.Span($"drag indicator {i}"));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-		ImGuiImage.ImageButton("CustomTemplateReorderImageButton", _resourceManager.InternalResources.DragIndicatorTexture.Id, new Vector2(32, 48), _customTemplateIndexToReorder == i ? Color.Gray(0.7f) : gray);
+		ImGuiImage.ImageButton("CustomTemplateReorderImageButton", resourceManager.InternalResources.DragIndicatorTexture.Id, new Vector2(32, 48), _customTemplateIndexToReorder == i ? Color.Gray(0.7f) : gray);
 		ImGui.PopStyleVar();
 
 		if (ImGui.IsItemHovered())
@@ -186,7 +179,7 @@ internal sealed class CustomTemplatesChild
 		ImGui.PushID(Inline.Span($"delete button {i}"));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(12));
-		if (ImGuiImage.ImageButton("CustomTemplateDeleteImageButton", _resourceManager.InternalResources.BinTexture.Id, new Vector2(24)))
+		if (ImGuiImage.ImageButton("CustomTemplateDeleteImageButton", resourceManager.InternalResources.BinTexture.Id, new Vector2(24)))
 		{
 			UserSettings.Model = UserSettings.Model with
 			{

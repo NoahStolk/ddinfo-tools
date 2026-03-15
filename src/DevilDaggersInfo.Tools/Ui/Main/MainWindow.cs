@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Main;
 
-internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManager uiLayoutManager, FrameCounter frameCounter, LeaderboardListChild leaderboardListChild, AboutWindow aboutWindow)
+internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManager uiLayoutManager, FrameCounter frameCounter, LeaderboardListChild leaderboardListChild, AboutWindow aboutWindow, ModsDirectoryLogic modsDirectoryLogic)
 {
 	private readonly string _version = $"{AssemblyUtils.EntryAssemblyVersionString} (ALPHA)";
 
@@ -97,7 +97,7 @@ internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManage
 				void GoToModManager()
 				{
 					uiLayoutManager.Layout = LayoutType.ModManager;
-					ModsDirectoryLogic.LoadModsDirectory();
+					modsDirectoryLogic.LoadModsDirectory();
 				}
 			}
 

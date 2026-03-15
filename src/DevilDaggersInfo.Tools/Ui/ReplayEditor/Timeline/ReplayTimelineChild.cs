@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Replay.Events.Data;
+using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
@@ -12,20 +13,20 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 
-internal static class ReplayTimelineChild
+internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineSelectedEventsChild replayTimelineSelectedEventsChild)
 {
 	private const float _markerSize = 24;
 
-	private static readonly List<EventType> _shownEventTypes = Enum.GetValues<EventType>().Where(et => et is not EventType.End and not EventType.InitialInputs and not EventType.Inputs).ToList();
+	private readonly List<EventType> _shownEventTypes = Enum.GetValues<EventType>().Where(et => et is not EventType.End and not EventType.InitialInputs and not EventType.Inputs).ToList();
 
-	private static readonly Dictionary<EventType, int> _eventTypeRowIndices = [];
-	private static readonly Color _lineColorDefault = Color.Gray(0.4f);
-	private static readonly Color _lineColorSub = Color.Gray(0.2f);
+	private readonly Dictionary<EventType, int> _eventTypeRowIndices = [];
+	private readonly Color _lineColorDefault = Color.Gray(0.4f);
+	private readonly Color _lineColorSub = Color.Gray(0.2f);
 
-	private static readonly List<EditorEvent> _selectedEvents = [];
-	private static int? _selectedTickIndex;
+	private readonly List<EditorEvent> _selectedEvents = [];
+	private int? _selectedTickIndex;
 
-	private static int GetIndex(EventType eventType)
+	private int GetIndex(EventType eventType)
 	{
 		if (_eventTypeRowIndices.TryGetValue(eventType, out int index))
 			return index;
@@ -38,14 +39,14 @@ internal static class ReplayTimelineChild
 		return index;
 	}
 
-	public static void Reset()
+	public void Reset()
 	{
 		TimelineCache.Clear();
 		_selectedEvents.Clear();
 		_selectedTickIndex = null;
 	}
 
-	public static void Render(EditorReplayModel replay)
+	public void Render(EditorReplayModel replay)
 	{
 		if (TimelineCache.IsEmpty)
 			TimelineCache.Build(replay);
@@ -59,7 +60,7 @@ internal static class ReplayTimelineChild
 
 		ImGui.EndChild();
 
-		ReplayTimelineActionsChild.Render();
+		ReplayTimelineActionsChild.Render(fileStates.Replay.Object);
 
 		ImGui.PushStyleColor(ImGuiCol.ChildBg, Color.Gray(0.08f));
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8));
@@ -71,7 +72,7 @@ internal static class ReplayTimelineChild
 				ImGui.Text(Inline.Span($"Tick {_selectedTickIndex.Value} selected"));
 				ImGui.PopFont();
 
-				ReplayTimelineSelectedEventsChild.Render(replay, _selectedEvents, _selectedTickIndex.Value);
+				replayTimelineSelectedEventsChild.Render(replay, _selectedEvents, _selectedTickIndex.Value, SelectEvents);
 			}
 		}
 
@@ -81,7 +82,7 @@ internal static class ReplayTimelineChild
 		ImGui.PopStyleColor();
 	}
 
-	private static void RenderTimeline(EditorReplayModel replay)
+	private void RenderTimeline(EditorReplayModel replay)
 	{
 		ImGui.PushStyleColor(ImGuiCol.ChildBg, Color.Gray(0.1f));
 		const float legendWidth = 160;
@@ -176,7 +177,7 @@ internal static class ReplayTimelineChild
 		}
 	}
 
-	private static void RenderMarker(float startTime, EventType eventType, Vector2 origin, int tickIndex, ImDrawListPtr drawList, int eventCount)
+	private void RenderMarker(float startTime, EventType eventType, Vector2 origin, int tickIndex, ImDrawListPtr drawList, int eventCount)
 	{
 		if (eventCount == 0)
 			return;
@@ -218,7 +219,7 @@ internal static class ReplayTimelineChild
 		}
 	}
 
-	public static void SelectEvents(EditorReplayModel replay, int tickIndex)
+	private void SelectEvents(EditorReplayModel replay, int tickIndex)
 	{
 		List<EditorEvent> replayEvents = replay.BoidSpawnEvents
 			.Concat(replay.LeviathanSpawnEvents)
@@ -242,7 +243,7 @@ internal static class ReplayTimelineChild
 		_selectedTickIndex = tickIndex;
 	}
 
-	private static void HandleInput(EditorReplayModel replay, Vector2 origin)
+	private void HandleInput(EditorReplayModel replay, Vector2 origin)
 	{
 		if (!ImGui.IsWindowHovered())
 			return;
@@ -272,7 +273,7 @@ internal static class ReplayTimelineChild
 		}
 	}
 
-	private static void HandleClick(EditorReplayModel replay, bool isDoubleClicked, Vector2 origin)
+	private void HandleClick(EditorReplayModel replay, bool isDoubleClicked, Vector2 origin)
 	{
 		Vector2 mousePos = ImGui.GetMousePos() - origin;
 		int tickIndex = (int)Math.Floor(mousePos.X / _markerSize);

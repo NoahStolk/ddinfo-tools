@@ -7,22 +7,22 @@ using System.Text;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 
-internal static class ModsDirectoryLogic
+internal sealed class ModsDirectoryLogic(PopupManager popupManager, ModManagerState modManagerState)
 {
-	private static List<ModFile> _modFiles = [];
-	private static string _originalFileName = string.Empty;
-	public static string NewFileName = string.Empty;
+	private List<ModFile> _modFiles = [];
+	private string _originalFileName = string.Empty;
+	public string NewFileName = string.Empty;
 
-	public static IReadOnlyList<ModFile> ModFiles => _modFiles;
-	public static bool IsLoading { get; private set; }
+	public IReadOnlyList<ModFile> ModFiles => _modFiles;
+	public bool IsLoading { get; private set; }
 
-	public static void InitializeRename(string fileName)
+	public void InitializeRename(string fileName)
 	{
 		_originalFileName = fileName;
 		NewFileName = fileName;
 	}
 
-	public static void LoadModsDirectory()
+	public void LoadModsDirectory()
 	{
 		Task.Run(async () =>
 		{
@@ -40,12 +40,12 @@ internal static class ModsDirectoryLogic
 				string[] files = Directory.GetFiles(UserSettings.ModsDirectory);
 				foreach (string file in files)
 				{
-					_modFiles.Add(ModFile.FromPath(file));
+					_modFiles.Add(ModFile.FromPath(popupManager, file));
 				}
 			}
 			catch (Exception ex) when (ex.IsFileIoException())
 			{
-				PopupManager.ShowError("Error loading files in the mods directory.", ex);
+				popupManager.ShowError("Error loading files in the mods directory.", ex);
 				Root.Log.Error(ex, "Error loading files in the mods directory.");
 			}
 
@@ -58,7 +58,7 @@ internal static class ModsDirectoryLogic
 		});
 	}
 
-	public static void SortModFiles(uint sorting, bool sortAscending)
+	public void SortModFiles(uint sorting, bool sortAscending)
 	{
 		if (IsLoading)
 			return; // Cannot sort while loading because List<T> is not thread-safe.
@@ -76,7 +76,7 @@ internal static class ModsDirectoryLogic
 	/// <summary>
 	/// Renames the mod file and returns an error message if the renaming failed.
 	/// </summary>
-	public static string? RenameModFile()
+	public string? RenameModFile()
 	{
 		if (IsLoading)
 			return null;
@@ -122,12 +122,12 @@ internal static class ModsDirectoryLogic
 		}
 
 		ModInstallationWindow.LoadEffectiveAssets();
-		ModPreviewWindow.UpdateIfSelected(_originalFileName, NewFileName);
+		modManagerState.UpdateIfSelected(_originalFileName, NewFileName);
 
 		return null;
 	}
 
-	public static void DeleteModFile(string fileName)
+	public void DeleteModFile(string fileName)
 	{
 		if (IsLoading)
 			return;
@@ -141,7 +141,7 @@ internal static class ModsDirectoryLogic
 		catch (Exception ex) when (ex.IsFileIoException())
 		{
 			Root.Log.Error(ex, $"Error deleting file '{fileName}'.");
-			PopupManager.ShowError($"Error deleting file '{fileName}'.", ex);
+			popupManager.ShowError($"Error deleting file '{fileName}'.", ex);
 		}
 
 		ModFile? modFile = _modFiles.Find(m => m.FileName == fileName);
@@ -151,10 +151,10 @@ internal static class ModsDirectoryLogic
 			_modFiles.Remove(modFile);
 
 		ModInstallationWindow.LoadEffectiveAssets();
-		ModPreviewWindow.DeleteIfSelected(fileName);
+		modManagerState.DeleteIfSelected(fileName);
 	}
 
-	public static void ToggleModFile(string originalFileName)
+	public void ToggleModFile(string originalFileName)
 	{
 		if (IsLoading)
 			return;
@@ -174,7 +174,7 @@ internal static class ModsDirectoryLogic
 		catch (Exception ex) when (ex.IsFileIoException())
 		{
 			Root.Log.Error(ex, $"Error toggling file '{originalFileName}'.");
-			PopupManager.ShowError($"Error toggling file '{originalFileName}'.", ex);
+			popupManager.ShowError($"Error toggling file '{originalFileName}'.", ex);
 		}
 
 		ModFile? originalModFile = _modFiles.Find(m => m.FileName == originalFileName);
@@ -194,10 +194,10 @@ internal static class ModsDirectoryLogic
 		}
 
 		ModInstallationWindow.LoadEffectiveAssets();
-		ModPreviewWindow.UpdateIfSelected(originalFileName, newFileName);
+		modManagerState.UpdateIfSelected(originalFileName, newFileName);
 	}
 
-	public static void ToggleAssets(string fileName, Func<ModBinaryToc, ModBinaryToc> toggleFunction)
+	public void ToggleAssets(string fileName, Func<ModBinaryToc, ModBinaryToc> toggleFunction)
 	{
 		if (IsLoading)
 			return;
@@ -215,7 +215,7 @@ internal static class ModsDirectoryLogic
 		catch (Exception ex) when (ex.IsFileIoException())
 		{
 			Root.Log.Error(ex, $"Error toggling prohibited assets for file '{fileName}'.");
-			PopupManager.ShowError($"Error toggling prohibited assets for file '{fileName}'.", ex);
+			popupManager.ShowError($"Error toggling prohibited assets for file '{fileName}'.", ex);
 		}
 
 		ModFile? originalModFile = _modFiles.Find(m => m.FileName == fileName);
@@ -227,10 +227,10 @@ internal static class ModsDirectoryLogic
 		{
 			int originalIndex = _modFiles.IndexOf(originalModFile);
 			_modFiles.Remove(originalModFile);
-			_modFiles.Insert(originalIndex, ModFile.FromPath(Path.Combine(UserSettings.ModsDirectory, fileName)));
+			_modFiles.Insert(originalIndex, ModFile.FromPath(popupManager, Path.Combine(UserSettings.ModsDirectory, fileName)));
 		}
 
-		ModPreviewWindow.LoadTocEntries();
+		modManagerState.LoadTocEntries();
 		ModInstallationWindow.LoadEffectiveAssets();
 	}
 

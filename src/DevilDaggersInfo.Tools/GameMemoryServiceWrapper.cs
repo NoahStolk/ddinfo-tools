@@ -5,17 +5,17 @@ using DevilDaggersInfo.Web.ApiSpec.Tools.ProcessMemory;
 
 namespace DevilDaggersInfo.Tools;
 
-internal static class GameMemoryServiceWrapper
+internal sealed class GameMemoryServiceWrapper(PopupManager popupManager)
 {
-	private static bool _tryDownloadMarker = true;
+	private bool _tryDownloadMarker = true;
 
-	public static long? Marker { get; private set; }
+	public long? Marker { get; private set; }
 
 	/// <summary>
 	/// Scans game memory. If the marker is not known, fires the call to retrieve it, then returns false because memory can't be scanned until the HTTP call has returned successfully.
 	/// </summary>
 	/// <returns>Whether the marker is known.</returns>
-	public static bool Scan()
+	public bool Scan()
 	{
 		if (!Marker.HasValue)
 		{
@@ -33,10 +33,10 @@ internal static class GameMemoryServiceWrapper
 		return true;
 	}
 
-	private static void InitializeMarker()
+	private void InitializeMarker()
 	{
 		// Workaround to prevent multiple popups from appearing during continuous retry.
-		if (PopupManager.IsAnyOpen)
+		if (popupManager.IsAnyOpen)
 			return;
 
 		AsyncHandler.Run(SetMarker, () => FetchMarker.HandleAsync(Root.PlatformSpecificValues.AppOperatingSystem));
@@ -62,7 +62,7 @@ internal static class GameMemoryServiceWrapper
 						If you select "No", you will have to restart the app to try again.
 						""";
 
-					PopupManager.ShowQuestion("Failed to retrieve marker", message, () => _tryDownloadMarker = true, () => _tryDownloadMarker = false);
+					popupManager.ShowQuestion("Failed to retrieve marker", message, () => _tryDownloadMarker = true, () => _tryDownloadMarker = false);
 				});
 		}
 	}

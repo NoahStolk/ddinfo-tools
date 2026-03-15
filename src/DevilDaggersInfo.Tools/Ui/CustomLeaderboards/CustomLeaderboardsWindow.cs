@@ -5,43 +5,32 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-internal sealed class CustomLeaderboardsWindow
+internal sealed class CustomLeaderboardsWindow(
+	LeaderboardListChild leaderboardListChild,
+	LeaderboardListViewChild leaderboardListViewChild,
+	CustomLeaderboards3DWindow customLeaderboards3DWindow,
+	RecordingChild recordingChild,
+	LeaderboardChild leaderboardChild,
+	RecordingLogic recordingLogic,
+	StateChild stateChild,
+	GameMemoryServiceWrapper gameMemoryServiceWrapper)
 {
-	private readonly LeaderboardListChild _leaderboardListChild;
-	private readonly LeaderboardListViewChild _leaderboardListViewChild;
-	private readonly CustomLeaderboards3DWindow _customLeaderboards3DWindow;
-	private readonly RecordingChild _recordingChild;
-	private readonly LeaderboardChild _leaderboardChild;
-	private readonly RecordingLogic _recordingLogic;
-	private readonly StateChild _stateChild;
-
 	private float _recordingTimer;
-
-	public CustomLeaderboardsWindow(LeaderboardListChild leaderboardListChild, LeaderboardListViewChild leaderboardListViewChild, CustomLeaderboards3DWindow customLeaderboards3DWindow, RecordingChild recordingChild, LeaderboardChild leaderboardChild, RecordingLogic recordingLogic, StateChild stateChild)
-	{
-		_leaderboardListChild = leaderboardListChild;
-		_leaderboardListViewChild = leaderboardListViewChild;
-		_customLeaderboards3DWindow = customLeaderboards3DWindow;
-		_recordingChild = recordingChild;
-		_leaderboardChild = leaderboardChild;
-		_recordingLogic = recordingLogic;
-		_stateChild = stateChild;
-	}
 
 	public void Update(float delta)
 	{
-		_customLeaderboards3DWindow.Update(delta);
-		_recordingChild.Update(delta);
+		customLeaderboards3DWindow.Update(delta);
+		recordingChild.Update(delta);
 
 		_recordingTimer += delta;
 		if (_recordingTimer < 0.12f)
 			return;
 
 		_recordingTimer = 0;
-		if (!GameMemoryServiceWrapper.Scan())
+		if (!gameMemoryServiceWrapper.Scan())
 			return;
 
-		_recordingLogic.Handle();
+		recordingLogic.Handle();
 	}
 
 	public void Render()
@@ -49,7 +38,7 @@ internal sealed class CustomLeaderboardsWindow
 #if DEBUG
 		if (ImGui.Begin("Timestamps"))
 		{
-			foreach (DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards.AddUploadRequestTimestamp timestamp in _recordingLogic.Timestamps)
+			foreach (DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards.AddUploadRequestTimestamp timestamp in recordingLogic.Timestamps)
 			{
 				ImGui.Text(Inline.Span($"{new DateTime(timestamp.Timestamp, DateTimeKind.Utc)} {timestamp.TimeInSeconds}"));
 			}
@@ -63,8 +52,8 @@ internal sealed class CustomLeaderboardsWindow
 		{
 			if (ImGui.BeginChild("LeftRow", new Vector2(288, 464)))
 			{
-				_stateChild.Render();
-				_recordingChild.Render();
+				stateChild.Render();
+				recordingChild.Render();
 			}
 
 			ImGui.EndChild();
@@ -73,13 +62,13 @@ internal sealed class CustomLeaderboardsWindow
 
 			if (ImGui.BeginChild("RightRow", new Vector2(0, 464)))
 			{
-				_leaderboardListChild.Render();
-				_leaderboardListViewChild.Render();
+				leaderboardListChild.Render();
+				leaderboardListViewChild.Render();
 			}
 
 			ImGui.EndChild();
 
-			_leaderboardChild.Render();
+			leaderboardChild.Render();
 		}
 
 		ImGui.End();

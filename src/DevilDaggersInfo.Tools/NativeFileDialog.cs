@@ -5,14 +5,14 @@ namespace DevilDaggersInfo.Tools;
 /// <summary>
 /// Wrapper to make sure the <see cref="Dialog"/> class doesn't block the main thread and cause other problems like key states getting stuck.
 /// </summary>
-internal static class NativeFileDialog
+internal sealed class NativeFileDialog
 {
 	/// <summary>
 	/// Used to prevent multiple dialogs from being opened from the main thread.
 	/// </summary>
-	public static bool DialogOpen { get; private set; }
+	public bool DialogOpen { get; private set; }
 
-	public static void CreateOpenFileDialog(Action<string?> callback, string? extensionFilter)
+	public void CreateOpenFileDialog(Action<string?> callback, string? extensionFilter)
 	{
 		if (DialogOpen)
 			return;
@@ -27,7 +27,7 @@ internal static class NativeFileDialog
 		});
 	}
 
-	public static void CreateSaveFileDialog(Action<string?> callback, string? extensionFilter)
+	public void CreateSaveFileDialog(Action<string?> callback, string? extensionFilter)
 	{
 		if (DialogOpen)
 			return;
@@ -42,7 +42,7 @@ internal static class NativeFileDialog
 		});
 	}
 
-	public static void SelectDirectory(Action<string?> callback)
+	public void SelectDirectory(Action<string?> callback)
 	{
 		if (DialogOpen)
 			return;
