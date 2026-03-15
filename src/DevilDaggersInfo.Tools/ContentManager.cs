@@ -8,17 +8,17 @@ using System.Security.Cryptography;
 
 namespace DevilDaggersInfo.Tools;
 
-internal static class ContentManager
+internal sealed class ContentManager(UserSettings userSettings)
 {
-	public static ContentContainer Content
+	public ContentContainer Content
 	{
 		get => field ?? throw new InvalidOperationException("Content is not initialized.");
 		private set;
 	}
 
-	public static void Initialize()
+	public void Initialize()
 	{
-		if (!Directory.Exists(UserSettings.Model.DevilDaggersInstallationDirectory))
+		if (!Directory.Exists(userSettings.Model.DevilDaggersInstallationDirectory))
 			throw new InvalidGameInstallationException("Installation directory does not exist.");
 
 		// TODO: Use correct Linux file name for executable.
@@ -28,16 +28,16 @@ internal static class ContentManager
 			throw new InvalidGameInstallationException("Executable does not exist.");
 #endif
 
-		if (!File.Exists(UserSettings.DdSurvivalPath))
+		if (!File.Exists(userSettings.DdSurvivalPath))
 			throw new InvalidGameInstallationException("File 'dd/survival' does not exist.");
 
-		if (!File.Exists(UserSettings.ResAudioPath))
+		if (!File.Exists(userSettings.ResAudioPath))
 			throw new InvalidGameInstallationException("File 'res/audio' does not exist.");
 
-		if (!File.Exists(UserSettings.ResDdPath))
+		if (!File.Exists(userSettings.ResDdPath))
 			throw new InvalidGameInstallationException("File 'res/dd' does not exist.");
 
-		byte[] survivalBytes = File.ReadAllBytes(UserSettings.DdSurvivalPath);
+		byte[] survivalBytes = File.ReadAllBytes(userSettings.DdSurvivalPath);
 		if (!SpawnsetBinary.TryParse(survivalBytes, out SpawnsetBinary? defaultSpawnset))
 			throw new InvalidGameInstallationException("File 'dd/survival' could not be parsed.");
 
@@ -45,7 +45,7 @@ internal static class ContentManager
 		if (!SpawnsetBinary.V3Hash.SequenceEqual(survivalHash))
 			throw new InvalidGameInstallationException("File 'dd/survival' is invalid. Make sure you have not modified the file. Validate your game files and try again.");
 
-		if (Directory.Exists(UserSettings.ModsSurvivalPath))
+		if (Directory.Exists(userSettings.ModsSurvivalPath))
 			throw new InvalidGameInstallationException("There must not be a directory named 'survival' in the 'mods' directory. You must delete the directory, or mods will not work.");
 
 		ModBinaryReadFilter ddReadFilter = ModBinaryReadFilter.Assets(
@@ -70,7 +70,7 @@ internal static class ContentManager
 			new AssetKey(AssetType.Texture, "hand6"));
 
 		ModBinary ddBinary;
-		using (FileStream fs = new(UserSettings.ResDdPath, FileMode.Open, FileAccess.Read))
+		using (FileStream fs = new(userSettings.ResDdPath, FileMode.Open, FileAccess.Read))
 			ddBinary = new ModBinary(fs, ddReadFilter);
 
 		Content = new ContentContainer(

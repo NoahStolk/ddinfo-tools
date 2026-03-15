@@ -3,12 +3,23 @@ using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Scenes;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Tools.User.Cache;
+using DevilDaggersInfo.Tools.User.Settings;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools.Ui.Main;
 
-internal sealed unsafe class MainScene(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ResourceManager resourceManager, FileStates fileStates, SpawnsetSaver spawnsetSaver)
+internal sealed unsafe class MainScene(
+	Glfw glfw,
+	GL gl,
+	WindowHandle* window,
+	GlfwInput glfwInput,
+	ResourceManager resourceManager,
+	FileStates fileStates,
+	SpawnsetSaver spawnsetSaver,
+	UserSettings userSettings,
+	UserCache userCache,
+	ContentManager contentManager)
 {
 	private readonly SpawnsetBinary _mainMenuSpawnset = SpawnsetBinary.CreateDefault();
 
@@ -16,7 +27,7 @@ internal sealed unsafe class MainScene(Glfw glfw, GL gl, WindowHandle* window, G
 
 	public void Initialize()
 	{
-		_mainMenuScene = new ArenaScene(glfw, gl, window, glfwInput, resourceManager, () => _mainMenuSpawnset, true, false, fileStates, spawnsetSaver);
+		_mainMenuScene = new ArenaScene(gl, resourceManager, contentManager, glfw, window, glfwInput, () => _mainMenuSpawnset, true, false, fileStates, spawnsetSaver, userSettings);
 		_mainMenuScene.AddSkull4();
 	}
 
@@ -26,8 +37,8 @@ internal sealed unsafe class MainScene(Glfw glfw, GL gl, WindowHandle* window, G
 
 		gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
-		int framebufferWidth = UserCache.Model.WindowWidth;
-		int framebufferHeight = UserCache.Model.WindowHeight;
+		int framebufferWidth = userCache.Model.WindowWidth;
+		int framebufferHeight = userCache.Model.WindowHeight;
 
 		// Keep track of the original viewport so we can restore it later.
 		Span<int> originalViewport = stackalloc int[4];

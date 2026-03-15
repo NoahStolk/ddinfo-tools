@@ -7,11 +7,12 @@ using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using Serilog.Core;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager;
 
-internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogic)
+internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogic, UserSettings userSettings, Logger logger)
 {
 	private static Dictionary<string, List<EffectiveAsset>> _effectiveAssets = new();
 	private static int _activeAssets;
@@ -19,12 +20,12 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 
 	private static readonly List<string> _errors = [];
 
-	public static void LoadEffectiveAssets()
+	public void LoadEffectiveAssets()
 	{
 		_effectiveAssets.Clear();
 		_errors.Clear();
 
-		string[] filePaths = Directory.GetFiles(UserSettings.ModsDirectory);
+		string[] filePaths = Directory.GetFiles(userSettings.ModsDirectory);
 		List<Mod> mods = [];
 		foreach (string filePath in filePaths)
 		{
@@ -45,7 +46,7 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 			catch (Exception ex)
 			{
 				_errors.Add($"Error loading file '{filePath}'.");
-				Root.Log.Error(ex, $"Error loading file '{filePath}'.");
+				logger.Error(ex, $"Error loading file '{filePath}'.");
 			}
 		}
 

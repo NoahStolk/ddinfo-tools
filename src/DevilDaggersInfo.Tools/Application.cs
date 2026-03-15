@@ -23,6 +23,8 @@ internal sealed unsafe class Application
 	private readonly Shortcuts _shortcuts;
 	private readonly MainWindow _mainWindow;
 	private readonly FrameCounter _frameCounter;
+	private readonly UserSettings _userSettings;
+	private readonly UserCache _userCache;
 
 	private readonly IntPtr _iconPtr;
 
@@ -40,7 +42,9 @@ internal sealed unsafe class Application
 		UiRenderer uiRenderer,
 		Shortcuts shortcuts,
 		MainWindow mainWindow,
-		FrameCounter frameCounter)
+		FrameCounter frameCounter,
+		UserSettings userSettings,
+		UserCache userCache)
 	{
 		_glfw = glfw;
 		_gl = gl;
@@ -51,6 +55,8 @@ internal sealed unsafe class Application
 		_shortcuts = shortcuts;
 		_mainWindow = mainWindow;
 		_frameCounter = frameCounter;
+		_userSettings = userSettings;
+		_userCache = userCache;
 
 		_currentTime = glfw.GetTime();
 
@@ -76,18 +82,16 @@ internal sealed unsafe class Application
 		ResizeFramebuffer(_glfw, _gl, _window, _imGuiController, width, height);
 
 		gl.ClearColor(0, 0, 0, 1);
-
-		Root.Application = this;
 	}
 
-	private static void ResizeFramebuffer(Glfw glfw, GL gl, WindowHandle* window, ImGuiController imGuiController, int w, int h)
+	private void ResizeFramebuffer(Glfw glfw, GL gl, WindowHandle* window, ImGuiController imGuiController, int w, int h)
 	{
 		bool isMaximized = glfw.GetWindowAttrib(window, WindowAttributeGetter.Maximized);
 
 		gl.Viewport(0, 0, (uint)w, (uint)h);
 		imGuiController.WindowResized(w, h);
 
-		UserCache.Model = UserCache.Model with
+		_userCache.Model = _userCache.Model with
 		{
 			WindowWidth = w,
 			WindowHeight = h,
@@ -149,7 +153,7 @@ internal sealed unsafe class Application
 		_shortcuts.Handle(io, _glfwInput);
 
 		if (io.WantSaveIniSettings)
-			UserSettings.SaveImGuiIni(io);
+			_userSettings.SaveImGuiIni(io);
 
 		_imGuiController.Render();
 

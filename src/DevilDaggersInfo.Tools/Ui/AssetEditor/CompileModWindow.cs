@@ -9,9 +9,9 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
-internal sealed class CompileModWindow(NativeFileDialog nativeFileDialog, PopupManager popupManager, FileStates fileStates)
+internal sealed class CompileModWindow(NativeFileDialog nativeFileDialog, PopupManager popupManager, FileStates fileStates, UserSettings userSettings)
 {
-	private string _outputDirectory = UserSettings.ModsDirectory;
+	private string _outputDirectory = userSettings.ModsDirectory;
 	private string _outputFileName = "mod";
 	private bool _isCompiling;
 	private DateTime? _lastStartTime;

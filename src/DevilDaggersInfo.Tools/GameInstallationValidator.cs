@@ -16,7 +16,10 @@ internal sealed class GameInstallationValidator(
 	MainScene mainScene,
 	SpawnsetEditor3DWindow spawnsetEditor3DWindow,
 	CustomLeaderboards3DWindow customLeaderboards3DWindow,
-	ReplayEditor3DWindow replayEditor3DWindow)
+	ReplayEditor3DWindow replayEditor3DWindow,
+	SurvivalFileWatcher survivalFileWatcher,
+	UserSettings userSettings,
+	ContentManager contentManager)
 {
 	private bool _contentInitialized;
 
@@ -30,11 +33,11 @@ internal sealed class GameInstallationValidator(
 	/// </summary>
 	public void ValidateInstallation()
 	{
-		InstallationDirectoryInput = UserSettings.Model.DevilDaggersInstallationDirectory;
+		InstallationDirectoryInput = userSettings.Model.DevilDaggersInstallationDirectory;
 
 		try
 		{
-			ContentManager.Initialize();
+			contentManager.Initialize();
 		}
 		catch (InvalidGameInstallationException ex)
 		{
@@ -64,7 +67,7 @@ internal sealed class GameInstallationValidator(
 		replayEditor3DWindow.InitializeScene();
 
 		// Initialize file watchers.
-		SurvivalFileWatcher.Initialize();
+		survivalFileWatcher.Initialize();
 
 		_contentInitialized = true;
 	}

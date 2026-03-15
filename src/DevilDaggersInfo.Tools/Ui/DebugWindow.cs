@@ -1,16 +1,26 @@
 using DevilDaggersInfo.Core.Common;
+using DevilDaggersInfo.Core.Encryption;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using Serilog.Core;
 using Silk.NET.GLFW;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter, NativeFileDialog nativeFileDialog, PopupManager popupManager)
+internal sealed class DebugWindow(
+	GlfwInput glfwInput,
+	FrameCounter frameCounter,
+	NativeFileDialog nativeFileDialog,
+	PopupManager popupManager,
+	AesBase32Wrapper? aesBase32Wrapper,
+	SurvivalFileWatcher survivalFileWatcher,
+	UserCache userCache,
+	Logger logger)
 {
 	private readonly List<string> _debugMessages = [];
 	private readonly DateTime _startUpTime = DateTime.UtcNow;
@@ -34,7 +44,7 @@ internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter
 		if (ImGui.Begin("Debug"))
 		{
 			ImGui.TextColored(nativeFileDialog.DialogOpen ? Color.White : Color.Gray(0.4f), nativeFileDialog.DialogOpen ? "Native dialog open" : "Native dialog closed");
-			ImGui.TextColored(Root.AesBase32Wrapper == null ? Color.Red : Color.Green, Root.AesBase32Wrapper == null ? "Encryption unavailable" : "Encryption available");
+			ImGui.TextColored(aesBase32Wrapper == null ? Color.Red : Color.Green, aesBase32Wrapper == null ? "Encryption unavailable" : "Encryption available");
 
 			if (ImGui.CollapsingHeader("Popup debug info"))
 			{
@@ -43,11 +53,11 @@ internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter
 
 			if (ImGui.CollapsingHeader("Modded survival file"))
 			{
-				if (SurvivalFileWatcher.Exists)
+				if (survivalFileWatcher.Exists)
 				{
-					ImGui.Text(EnumUtils.HandLevelNames[SurvivalFileWatcher.HandLevel]);
-					ImGui.Text(Inline.Span(SurvivalFileWatcher.AdditionalGems));
-					ImGui.Text(Inline.Span(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
+					ImGui.Text(EnumUtils.HandLevelNames[survivalFileWatcher.HandLevel]);
+					ImGui.Text(Inline.Span(survivalFileWatcher.AdditionalGems));
+					ImGui.Text(Inline.Span(survivalFileWatcher.TimerStart, StringFormats.TimeFormat));
 				}
 				else
 				{
@@ -106,10 +116,10 @@ internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter
 				popupManager.ShowMessage("Message", "Test message!");
 
 			if (ImGui.Button("Warning log"))
-				Root.Log.Warning("Test warning! This should be logged as WARNING.");
+				logger.Warning("Test warning! This should be logged as WARNING.");
 
 			if (ImGui.Button("Error log"))
-				Root.Log.Error("Test error! This should be logged as ERROR.");
+				logger.Error("Test error! This should be logged as ERROR.");
 
 			ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 127 });
 			ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red);
@@ -237,14 +247,14 @@ internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter
 		AddText("Devil Daggers window position", Inline.Span(Root.GameWindowService.GetWindowPosition()));
 	}
 
-	private static void RenderUserCache()
+	private void RenderUserCache()
 	{
-		AddText("Player id", Inline.Span(UserCache.Model.PlayerId));
+		AddText("Player id", Inline.Span(userCache.Model.PlayerId));
 
 		ImGui.SeparatorText("Window");
-		AddText("Maximized", UserCache.Model.WindowIsMaximized ? "True" : "False");
-		AddText("Width", Inline.Span(UserCache.Model.WindowWidth));
-		AddText("Height", Inline.Span(UserCache.Model.WindowHeight));
+		AddText("Maximized", userCache.Model.WindowIsMaximized ? "True" : "False");
+		AddText("Width", Inline.Span(userCache.Model.WindowWidth));
+		AddText("Height", Inline.Span(userCache.Model.WindowHeight));
 	}
 
 	private static void AddText(ReadOnlySpan<char> textLeft, ReadOnlySpan<char> textRight)

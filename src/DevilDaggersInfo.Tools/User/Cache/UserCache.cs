@@ -1,18 +1,18 @@
 using DevilDaggersInfo.Tools.JsonSerializerContexts;
 using DevilDaggersInfo.Tools.User.Cache.Model;
+using Serilog.Core;
 using System.Text.Json;
 
 namespace DevilDaggersInfo.Tools.User.Cache;
 
-// TODO: Rewrite to instance.
-internal static class UserCache
+internal sealed class UserCache(Logger logger)
 {
 	private static readonly string _fileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ddinfo-tools");
 	private static readonly string _filePath = Path.Combine(_fileDirectory, "cache");
 
-	private static UserCacheModel _model = UserCacheModel.Default;
+	private UserCacheModel _model = UserCacheModel.Default;
 
-	public static UserCacheModel Model
+	public UserCacheModel Model
 	{
 		get => _model;
 		set
@@ -22,7 +22,7 @@ internal static class UserCache
 		}
 	}
 
-	public static void Load()
+	public void Load()
 	{
 		if (File.Exists(_filePath))
 		{
@@ -34,12 +34,12 @@ internal static class UserCache
 			}
 			catch (Exception ex)
 			{
-				Root.Log.Error(ex, "Failed to load user cache.");
+				logger.Error(ex, "Failed to load user cache.");
 			}
 		}
 	}
 
-	private static void Save()
+	private void Save()
 	{
 		Directory.CreateDirectory(_fileDirectory);
 		File.WriteAllText(_filePath, JsonSerializer.Serialize(_model, UserJsonModelsContext.Default.UserCacheModel));

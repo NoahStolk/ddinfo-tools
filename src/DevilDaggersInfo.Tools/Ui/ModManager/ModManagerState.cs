@@ -4,10 +4,11 @@ using DevilDaggersInfo.Core.Mod.Exceptions;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Settings;
+using Serilog.Core;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager;
 
-internal sealed class ModManagerState(PopupManager popupManager)
+internal sealed class ModManagerState(PopupManager popupManager, UserSettings userSettings, Logger logger)
 {
 	private string? _selectedFileName;
 
@@ -32,7 +33,7 @@ internal sealed class ModManagerState(PopupManager popupManager)
 		if (_selectedFileName == null)
 			return;
 
-		string filePath = Path.Combine(UserSettings.ModsDirectory, _selectedFileName);
+		string filePath = Path.Combine(userSettings.ModsDirectory, _selectedFileName);
 		if (!File.Exists(filePath))
 			return;
 
@@ -54,7 +55,7 @@ internal sealed class ModManagerState(PopupManager popupManager)
 		}
 		catch (Exception ex) when (ex.IsFileIoException())
 		{
-			Root.Log.Error(ex, $"Error loading mod binary '{_selectedFileName}'.");
+			logger.Error(ex, $"Error loading mod binary '{_selectedFileName}'.");
 			popupManager.ShowError($"Error loading mod binary '{_selectedFileName}'.", ex);
 			ClearState();
 		}

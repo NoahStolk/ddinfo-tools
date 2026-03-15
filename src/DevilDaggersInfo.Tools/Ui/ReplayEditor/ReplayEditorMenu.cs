@@ -5,6 +5,7 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using Serilog.Core;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
@@ -16,7 +17,8 @@ internal sealed class ReplayEditorMenu(
 	NativeFileDialog nativeFileDialog,
 	PopupManager popupManager,
 	FileStates fileStates,
-	GameMemoryServiceWrapper gameMemoryServiceWrapper)
+	GameMemoryServiceWrapper gameMemoryServiceWrapper,
+	Logger logger)
 {
 	public void Render()
 	{
@@ -85,7 +87,7 @@ internal sealed class ReplayEditorMenu(
 		catch (Exception ex)
 		{
 			popupManager.ShowError($"Could not open file '{filePath}'.", ex);
-			Root.Log.Error(ex, "Could not open file");
+			logger.Error(ex, "Could not open file");
 			return;
 		}
 

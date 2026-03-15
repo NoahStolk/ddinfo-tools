@@ -8,7 +8,7 @@ using Serilog;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-internal sealed class PracticeLogic(PopupManager popupManager)
+internal sealed class PracticeLogic(PopupManager popupManager, UserSettings userSettings, SurvivalFileWatcher survivalFileWatcher, ContentManager contentManager)
 {
 	public const int SpawnVersion = 6;
 
@@ -20,7 +20,7 @@ internal sealed class PracticeLogic(PopupManager popupManager)
 	{
 		State.TimerStart = Math.Clamp(State.TimerStart, 0, 2000);
 
-		SpawnsetBinary spawnset = ContentManager.Content.DefaultSpawnset;
+		SpawnsetBinary spawnset = contentManager.Content.DefaultSpawnset;
 		float shrinkStart = MathUtils.Lerp(spawnset.ShrinkStart, spawnset.ShrinkEnd, State.TimerStart / ((spawnset.ShrinkStart - spawnset.ShrinkEnd) / spawnset.ShrinkRate));
 
 		SpawnsetBinary generatedSpawnset = spawnset.GetWithHardcodedEndLoop(70).GetWithTrimmedStart(State.TimerStart) with
@@ -34,7 +34,7 @@ internal sealed class PracticeLogic(PopupManager popupManager)
 
 		try
 		{
-			File.WriteAllBytes(UserSettings.ModsSurvivalPath, generatedSpawnset.ToBytes());
+			File.WriteAllBytes(userSettings.ModsSurvivalPath, generatedSpawnset.ToBytes());
 
 			const string messageText = """
 				The practice spawnset has been applied!
@@ -47,8 +47,8 @@ internal sealed class PracticeLogic(PopupManager popupManager)
 			popupManager.ShowMessageWithHideOption(
 				"Practice spawnset applied",
 				messageText,
-				UserSettings.Model.DoNotShowAgainPracticeSpawnsetApplied,
-				b => UserSettings.Model = UserSettings.Model with { DoNotShowAgainPracticeSpawnsetApplied = b });
+				userSettings.Model.DoNotShowAgainPracticeSpawnsetApplied,
+				b => userSettings.Model = userSettings.Model with { DoNotShowAgainPracticeSpawnsetApplied = b });
 		}
 		catch (IOException ex)
 		{
@@ -60,8 +60,8 @@ internal sealed class PracticeLogic(PopupManager popupManager)
 
 	public void DeleteModdedSpawnset()
 	{
-		if (File.Exists(UserSettings.ModsSurvivalPath))
-			File.Delete(UserSettings.ModsSurvivalPath);
+		if (File.Exists(userSettings.ModsSurvivalPath))
+			File.Delete(userSettings.ModsSurvivalPath);
 
 		const string messageText = """
 			The default game has been restored!
@@ -74,25 +74,25 @@ internal sealed class PracticeLogic(PopupManager popupManager)
 		popupManager.ShowMessageWithHideOption(
 			"Default game restored",
 			messageText,
-			UserSettings.Model.DoNotShowAgainPracticeSpawnsetDeleted,
-			b => UserSettings.Model = UserSettings.Model with { DoNotShowAgainPracticeSpawnsetDeleted = b });
+			userSettings.Model.DoNotShowAgainPracticeSpawnsetDeleted,
+			b => userSettings.Model = userSettings.Model with { DoNotShowAgainPracticeSpawnsetDeleted = b });
 	}
 
-	public static bool IsActive(UserSettingsPracticeTemplate customTemplate)
+	public bool IsActive(UserSettingsPracticeTemplate customTemplate)
 	{
 		return IsActive(customTemplate.HandLevel, customTemplate.AdditionalGems, customTemplate.TimerStart);
 	}
 
-	public static bool IsActive(NoFarmTemplate noFarmTemplate)
+	public bool IsActive(NoFarmTemplate noFarmTemplate)
 	{
 		return IsActive(noFarmTemplate.HandLevel, noFarmTemplate.AdditionalGems, noFarmTemplate.TimerStart);
 	}
 
-	public static bool IsActive(HandLevel handLevel, int additionalGems, float timerStart)
+	public bool IsActive(HandLevel handLevel, int additionalGems, float timerStart)
 	{
-		if (!SurvivalFileWatcher.Exists)
+		if (!survivalFileWatcher.Exists)
 			return false;
 
-		return handLevel == SurvivalFileWatcher.HandLevel && additionalGems == SurvivalFileWatcher.AdditionalGems && Math.Abs(timerStart - SurvivalFileWatcher.TimerStart) < PracticeDataConstants.TimerStartTolerance;
+		return handLevel == survivalFileWatcher.HandLevel && additionalGems == survivalFileWatcher.AdditionalGems && Math.Abs(timerStart - survivalFileWatcher.TimerStart) < PracticeDataConstants.TimerStartTolerance;
 	}
 }

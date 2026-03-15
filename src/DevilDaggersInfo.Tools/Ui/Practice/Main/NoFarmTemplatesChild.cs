@@ -55,7 +55,7 @@ internal sealed class NoFarmTemplatesChild(PracticeLogic practiceLogic)
 
 	private void RenderNoFarmTemplate(NoFarmTemplate noFarmTemplate, float templateWidth)
 	{
-		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(PracticeLogic.IsActive(noFarmTemplate));
+		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(practiceLogic.IsActive(noFarmTemplate));
 
 		const int bufferLength = 32;
 		Span<char> gemsOrHomingText = stackalloc char[bufferLength];

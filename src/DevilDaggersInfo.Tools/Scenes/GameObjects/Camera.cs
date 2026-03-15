@@ -9,7 +9,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
-internal sealed unsafe class Camera(Glfw glfw, GlfwInput glfwInput, WindowHandle* window, bool isMenuCamera)
+internal sealed unsafe class Camera(Glfw glfw, GlfwInput glfwInput, WindowHandle* window, bool isMenuCamera, UserSettings userSettings)
 {
 	private const MouseButton _lookButton = MouseButton.Right;
 	private const float _friction = 20;
@@ -130,7 +130,7 @@ internal sealed unsafe class Camera(Glfw glfw, GlfwInput glfwInput, WindowHandle
 		if (!glfwInput.IsMouseButtonDown(_lookButton) || !_lockedMousePosition.HasValue || mousePosition == _lockedMousePosition)
 			return;
 
-		float lookSpeed = UserSettings.Model.LookSpeed;
+		float lookSpeed = userSettings.Model.LookSpeed;
 
 		Vector2D<int> delta = mousePosition - _lockedMousePosition.Value;
 		_yaw -= lookSpeed * delta.X * 0.0001f;
@@ -155,7 +155,7 @@ internal sealed unsafe class Camera(Glfw glfw, GlfwInput glfwInput, WindowHandle
 
 		const float nearPlaneDistance = 0.05f;
 		const float farPlaneDistance = 10_000f;
-		Projection = Matrix4x4.CreatePerspectiveFieldOfView(float.DegreesToRadians(UserSettings.Model.FieldOfView), aspectRatio, nearPlaneDistance, farPlaneDistance);
+		Projection = Matrix4x4.CreatePerspectiveFieldOfView(float.DegreesToRadians(userSettings.Model.FieldOfView), aspectRatio, nearPlaneDistance, farPlaneDistance);
 	}
 
 	private static Matrix4x4 SetRotationFromDirectionalVector(Vector3 direction)
@@ -190,7 +190,7 @@ internal sealed unsafe class Camera(Glfw glfw, GlfwInput glfwInput, WindowHandle
 		Vector2 relative = -new Vector2(mousePosition.X / _windowWidth - 0.5f, mousePosition.Y / _windowHeight - 0.5f);
 
 		// Angle in radians from the view axis to the top plane of the view pyramid.
-		float verticalAngle = 0.5f * float.DegreesToRadians(UserSettings.Model.FieldOfView);
+		float verticalAngle = 0.5f * float.DegreesToRadians(userSettings.Model.FieldOfView);
 
 		// World space height of the view pyramid measured at 1m depth from the camera.
 		float worldHeight = 2f * MathF.Tan(verticalAngle);

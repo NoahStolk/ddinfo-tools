@@ -1,9 +1,10 @@
 using DevilDaggersInfo.Tools.Scenes;
+using Serilog.Core;
 using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools;
 
-internal unsafe class FramebufferData(GL gl)
+internal unsafe class FramebufferData(GL gl, Logger logger)
 {
 	public uint TextureHandle { get; private set; }
 	public uint Framebuffer { get; private set; }
@@ -43,7 +44,7 @@ internal unsafe class FramebufferData(GL gl)
 		gl.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rbo);
 
 		if (gl.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != GLEnum.FramebufferComplete)
-			Root.Log.Warning("Framebuffer is not complete.");
+			logger.Warning("Framebuffer is not complete.");
 
 		gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 		gl.DeleteRenderbuffer(rbo);

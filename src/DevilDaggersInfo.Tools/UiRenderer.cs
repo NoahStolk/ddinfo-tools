@@ -17,6 +17,8 @@ using DevilDaggersInfo.Tools.User.Settings;
 namespace DevilDaggersInfo.Tools;
 
 internal sealed class UiRenderer(
+	UserSettings userSettings,
+
 	UiLayoutManager uiLayoutManager,
 	ConfigLayout configLayout,
 	MainScene mainScene,
@@ -106,7 +108,7 @@ internal sealed class UiRenderer(
 				break;
 		}
 
-		if (UserSettings.Model.ShowDebug)
+		if (userSettings.Model.ShowDebug)
 			debugWindow.Render();
 
 		aboutWindow.Render();

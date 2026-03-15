@@ -4,11 +4,12 @@ using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using ImGuiNET;
+using Serilog.Core;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-internal sealed class LeaderboardReplayBrowser(PopupManager popupManager, FileStates fileStates)
+internal sealed class LeaderboardReplayBrowser(PopupManager popupManager, FileStates fileStates, Logger logger)
 {
 	private bool _showWindow;
 	private bool _isDownloading;
@@ -61,7 +62,7 @@ internal sealed class LeaderboardReplayBrowser(PopupManager popupManager, FileSt
 					// When using an id like -1, this gives us the following data:
 					// DF_RPL0Replay not found.
 					// We could parse this, but it's not worth the effort.
-					Root.Log.Warning(ex, "The replay could not be parsed.");
+					logger.Warning(ex, "The replay could not be parsed.");
 					popupManager.ShowError("The replay could not be parsed.", ex);
 					_isDownloading = false;
 					return;
@@ -74,7 +75,7 @@ internal sealed class LeaderboardReplayBrowser(PopupManager popupManager, FileSt
 			},
 			onError: apiError =>
 			{
-				Root.Log.Warning("The Devil Daggers leaderboard servers did not return a successful response: {Message}", apiError.Message ?? "(empty)");
+				logger.Warning("The Devil Daggers leaderboard servers did not return a successful response: {Message}", apiError.Message ?? "(empty)");
 				popupManager.ShowError("The Devil Daggers leaderboard servers did not return a successful response.", apiError);
 				_isDownloading = false;
 			});

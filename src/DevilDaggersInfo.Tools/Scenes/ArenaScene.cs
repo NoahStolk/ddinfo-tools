@@ -6,6 +6,7 @@ using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Scenes.GameObjects;
 using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
+using DevilDaggersInfo.Tools.User.Settings;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 using System.Diagnostics;
@@ -19,6 +20,7 @@ internal sealed class ArenaScene
 
 	private readonly GL _gl;
 	private readonly ResourceManager _resourceManager;
+	private readonly ContentManager _contentManager;
 
 	private readonly Func<SpawnsetBinary> _getSpawnset;
 
@@ -31,23 +33,26 @@ internal sealed class ArenaScene
 	private Skull4? _skull4;
 
 	public unsafe ArenaScene(
-		Glfw glfw,
 		GL gl,
+		ResourceManager resourceManager,
+		ContentManager contentManager,
+		Glfw glfw,
 		WindowHandle* window,
 		GlfwInput glfwInput,
-		ResourceManager resourceManager,
 		Func<SpawnsetBinary> getSpawnset,
 		bool useMenuCamera,
 		bool isEditor,
 		FileStates fileStates,
-		SpawnsetSaver spawnsetSaver)
+		SpawnsetSaver spawnsetSaver,
+		UserSettings userSettings)
 	{
 		_gl = gl;
 		_resourceManager = resourceManager;
+		_contentManager = contentManager;
 
 		_getSpawnset = getSpawnset;
 
-		Camera = new Camera(glfw, glfwInput, window, useMenuCamera) { Position = new Vector3(0, 5, 0) };
+		Camera = new Camera(glfw, glfwInput, window, useMenuCamera, userSettings) { Position = new Vector3(0, 5, 0) };
 
 		InitializeArena();
 
@@ -169,8 +174,8 @@ internal sealed class ArenaScene
 		_gl.UniformMatrix4x4(_resourceManager.InternalResources.MeshShader.GetUniformLocation("model"), Matrix4x4.CreateScale(8) * Matrix4x4.CreateFromQuaternion(_raceDagger.MeshRotation) * Matrix4x4.CreateTranslation(_raceDagger.MeshPosition));
 
 		_gl.BindVertexArray(RaceDagger.Vao);
-		fixed (uint* i = &ContentManager.Content.DaggerMesh.Indices[0])
-			_gl.DrawElements(PrimitiveType.Triangles, (uint)ContentManager.Content.DaggerMesh.Indices.Length, DrawElementsType.UnsignedInt, i);
+		fixed (uint* i = &_contentManager.Content.DaggerMesh.Indices[0])
+			_gl.DrawElements(PrimitiveType.Triangles, (uint)_contentManager.Content.DaggerMesh.Indices.Length, DrawElementsType.UnsignedInt, i);
 
 		_gl.BindVertexArray(0);
 

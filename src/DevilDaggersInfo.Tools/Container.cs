@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Core.Encryption;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Extensions;
 using DevilDaggersInfo.Tools.Engine.Loaders;
@@ -24,10 +25,13 @@ using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using Serilog;
+using Serilog.Core;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 using StrongInject;
 using System.Diagnostics;
+using Constants = DevilDaggersInfo.Tools.Ui.Constants;
 using Monitor = Silk.NET.GLFW.Monitor;
 
 namespace DevilDaggersInfo.Tools;
@@ -42,6 +46,7 @@ namespace DevilDaggersInfo.Tools;
 [Register<ResourceManager>(Scope.SingleInstance)]
 [Register<FrameCounter>(Scope.SingleInstance)]
 [Register<NativeFileDialog>(Scope.SingleInstance)]
+[Register<ContentManager>(Scope.SingleInstance)]
 
 // Game Memory
 [Register<GameMemoryServiceWrapper>(Scope.SingleInstance)]
@@ -127,6 +132,34 @@ namespace DevilDaggersInfo.Tools;
 [Register<TexturePathsTable>(Scope.SingleInstance)]
 internal sealed partial class Container : IContainer<Application>
 {
+	[Factory(Scope.SingleInstance)]
+	private static Logger CreateLogger()
+	{
+		Logger logger = new LoggerConfiguration()
+			.WriteTo.File($"ddinfo-{AssemblyUtils.EntryAssemblyVersionString}.log", rollingInterval: RollingInterval.Infinite)
+			.CreateLogger();
+
+		AppDomain.CurrentDomain.UnhandledException += (_, args) => logger.Fatal("Unhandled exception: {Exception}", args.ExceptionObject);
+
+		return logger;
+	}
+
+	[Factory(Scope.SingleInstance)]
+	private static UserSettings GetUserSettings(Logger logger)
+	{
+		UserSettings userSettings = new(logger);
+		userSettings.Load();
+		return userSettings;
+	}
+
+	[Factory(Scope.SingleInstance)]
+	private static UserCache GetUserCache(Logger logger)
+	{
+		UserCache userCache = new(logger);
+		userCache.Load();
+		return userCache;
+	}
+
 	[Factory(Scope.SingleInstance)]
 	private static Glfw GetGlfw()
 	{
@@ -226,5 +259,36 @@ internal sealed partial class Container : IContainer<Application>
 		glfw.SetWindowSizeLimits(window, (int)Constants.MinWindowSize.X, (int)Constants.MinWindowSize.Y, -1, -1);
 
 		return window;
+	}
+
+	[Factory(Scope.SingleInstance)]
+	private static AesBase32Wrapper? CreateAesBase32Wrapper()
+	{
+		using Stream? stream = AssemblyUtils.EntryAssembly.GetManifestResourceStream("DevilDaggersInfo.Tools.Content.encryption.ini");
+		if (stream == null)
+		{
+			Log.Error("Could not get resource stream.");
+			return null;
+		}
+
+		using StreamReader reader = new(stream);
+		string ini = reader.ReadToEnd();
+		string[] lines = ini.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+		string? iv = GetValue(lines, "iv");
+		string? pass = GetValue(lines, "pass");
+		string? salt = GetValue(lines, "salt");
+
+		if (string.IsNullOrWhiteSpace(iv) || string.IsNullOrWhiteSpace(pass) || string.IsNullOrWhiteSpace(salt))
+			return null;
+
+		return new AesBase32Wrapper(iv, pass, salt);
+
+		static string? GetValue(string[] iniLines, string key)
+		{
+			string? line = Array.Find(iniLines, l => l.StartsWith(key, StringComparison.OrdinalIgnoreCase));
+			string[]? values = line?.Split('=');
+			return values?.Length != 2 ? null : values[1].Trim();
+		}
 	}
 }

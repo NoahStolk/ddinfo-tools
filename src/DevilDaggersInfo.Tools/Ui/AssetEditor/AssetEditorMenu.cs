@@ -5,11 +5,12 @@ using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using Serilog.Core;
 using System.Text.Json;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
-internal sealed class AssetEditorMenu(UiLayoutManager uiLayoutManager, NativeFileDialog nativeFileDialog, PopupManager popupManager, FileStates fileStates)
+internal sealed class AssetEditorMenu(UiLayoutManager uiLayoutManager, NativeFileDialog nativeFileDialog, PopupManager popupManager, FileStates fileStates, Logger logger)
 {
 	public void Render()
 	{
@@ -69,7 +70,7 @@ internal sealed class AssetEditorMenu(UiLayoutManager uiLayoutManager, NativeFil
 		catch (Exception ex) when (ex.IsFileIoException())
 		{
 			popupManager.ShowError($"Could not open file '{filePath}'.", ex);
-			Root.Log.Error(ex, "Could not open file");
+			logger.Error(ex, "Could not open file");
 			return;
 		}
 

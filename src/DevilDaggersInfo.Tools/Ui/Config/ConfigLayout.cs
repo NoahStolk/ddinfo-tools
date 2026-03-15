@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Config;
 
-internal sealed class ConfigLayout(GameInstallationValidator gameInstallationValidator, NativeFileDialog nativeFileDialog)
+internal sealed class ConfigLayout(GameInstallationValidator gameInstallationValidator, NativeFileDialog nativeFileDialog, UserSettings userSettings)
 {
 	public void Render()
 	{
@@ -59,30 +59,30 @@ internal sealed class ConfigLayout(GameInstallationValidator gameInstallationVal
 
 				ImGui.SeparatorText("Settings");
 
-				float lookSpeed = UserSettings.Model.LookSpeed;
+				float lookSpeed = userSettings.Model.LookSpeed;
 				ImGui.SliderFloat("Look speed", ref lookSpeed, UserSettingsModel.LookSpeedMin, UserSettingsModel.LookSpeedMax, "%.2f");
-				if (Math.Abs(UserSettings.Model.LookSpeed - lookSpeed) > 0.001f)
-					UserSettings.Model = UserSettings.Model with { LookSpeed = lookSpeed };
+				if (Math.Abs(userSettings.Model.LookSpeed - lookSpeed) > 0.001f)
+					userSettings.Model = userSettings.Model with { LookSpeed = lookSpeed };
 
-				int fieldOfView = UserSettings.Model.FieldOfView;
+				int fieldOfView = userSettings.Model.FieldOfView;
 				ImGui.SliderInt("Field of view", ref fieldOfView, UserSettingsModel.FieldOfViewMin, UserSettingsModel.FieldOfViewMax);
-				if (UserSettings.Model.FieldOfView != fieldOfView)
-					UserSettings.Model = UserSettings.Model with { FieldOfView = fieldOfView };
+				if (userSettings.Model.FieldOfView != fieldOfView)
+					userSettings.Model = userSettings.Model with { FieldOfView = fieldOfView };
 
-				bool showDebug = UserSettings.Model.ShowDebug;
+				bool showDebug = userSettings.Model.ShowDebug;
 				ImGui.Checkbox("Show debug", ref showDebug);
-				if (UserSettings.Model.ShowDebug != showDebug)
-					UserSettings.Model = UserSettings.Model with { ShowDebug = showDebug };
+				if (userSettings.Model.ShowDebug != showDebug)
+					userSettings.Model = userSettings.Model with { ShowDebug = showDebug };
 
-				bool doNotShowAgainPracticeSpawnsetApplied = UserSettings.Model.DoNotShowAgainPracticeSpawnsetApplied;
+				bool doNotShowAgainPracticeSpawnsetApplied = userSettings.Model.DoNotShowAgainPracticeSpawnsetApplied;
 				ImGui.Checkbox("Do not show message again when applying practice spawnset", ref doNotShowAgainPracticeSpawnsetApplied);
-				if (UserSettings.Model.DoNotShowAgainPracticeSpawnsetApplied != doNotShowAgainPracticeSpawnsetApplied)
-					UserSettings.Model = UserSettings.Model with { DoNotShowAgainPracticeSpawnsetApplied = doNotShowAgainPracticeSpawnsetApplied };
+				if (userSettings.Model.DoNotShowAgainPracticeSpawnsetApplied != doNotShowAgainPracticeSpawnsetApplied)
+					userSettings.Model = userSettings.Model with { DoNotShowAgainPracticeSpawnsetApplied = doNotShowAgainPracticeSpawnsetApplied };
 
-				bool doNotShowAgainPracticeSpawnsetDeleted = UserSettings.Model.DoNotShowAgainPracticeSpawnsetDeleted;
+				bool doNotShowAgainPracticeSpawnsetDeleted = userSettings.Model.DoNotShowAgainPracticeSpawnsetDeleted;
 				ImGui.Checkbox("Do not show message again when deleting practice spawnset", ref doNotShowAgainPracticeSpawnsetDeleted);
-				if (UserSettings.Model.DoNotShowAgainPracticeSpawnsetDeleted != doNotShowAgainPracticeSpawnsetDeleted)
-					UserSettings.Model = UserSettings.Model with { DoNotShowAgainPracticeSpawnsetDeleted = doNotShowAgainPracticeSpawnsetDeleted };
+				if (userSettings.Model.DoNotShowAgainPracticeSpawnsetDeleted != doNotShowAgainPracticeSpawnsetDeleted)
+					userSettings.Model = userSettings.Model with { DoNotShowAgainPracticeSpawnsetDeleted = doNotShowAgainPracticeSpawnsetDeleted };
 			}
 
 			ImGui.EndChild();
@@ -90,7 +90,7 @@ internal sealed class ConfigLayout(GameInstallationValidator gameInstallationVal
 			ImGui.PushFont(Root.FontGoetheBold30);
 			if (ImGui.Button("Save and continue", new Vector2(752, 64)))
 			{
-				UserSettings.Model = UserSettings.Model with
+				userSettings.Model = userSettings.Model with
 				{
 					DevilDaggersInstallationDirectory = gameInstallationValidator.InstallationDirectoryInput,
 				};

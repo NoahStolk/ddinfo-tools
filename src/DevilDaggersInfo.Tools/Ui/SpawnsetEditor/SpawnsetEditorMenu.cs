@@ -4,6 +4,7 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Tools.User.Settings;
 using ImGuiNET;
+using Serilog.Core;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
@@ -14,7 +15,10 @@ internal sealed class SpawnsetEditorMenu(
 	PopupManager popupManager,
 	HistoryWindow historyWindow,
 	SpawnsWindow spawnsWindow,
-	SpawnsetSaver spawnsetSaver)
+	SpawnsetSaver spawnsetSaver,
+	UserSettings userSettings,
+	Logger logger,
+	ContentManager contentManager)
 {
 	public void Render()
 	{
@@ -123,7 +127,7 @@ internal sealed class SpawnsetEditorMenu(
 		catch (Exception ex)
 		{
 			popupManager.ShowError($"Could not open file '{filePath}'.", ex);
-			Root.Log.Error(ex, "Could not open file");
+			logger.Error(ex, "Could not open file");
 			return;
 		}
 
@@ -146,7 +150,7 @@ internal sealed class SpawnsetEditorMenu(
 	{
 		fileStates.Spawnset.PromptSave(() =>
 		{
-			fileStates.Spawnset.Update(ContentManager.Content.DefaultSpawnset.DeepCopy());
+			fileStates.Spawnset.Update(contentManager.Content.DefaultSpawnset.DeepCopy());
 			fileStates.Spawnset.SetFile(null, "V3");
 			spawnsetSaver.Save(SpawnsetEditType.Reset);
 			spawnsWindow.ClearAllSelections();
@@ -155,22 +159,22 @@ internal sealed class SpawnsetEditorMenu(
 
 	public void OpenCurrentSpawnset()
 	{
-		if (File.Exists(UserSettings.ModsSurvivalPath))
-			fileStates.Spawnset.PromptSave(() => OpenSpawnset(UserSettings.ModsSurvivalPath));
+		if (File.Exists(userSettings.ModsSurvivalPath))
+			fileStates.Spawnset.PromptSave(() => OpenSpawnset(userSettings.ModsSurvivalPath));
 		else
 			popupManager.ShowError("There is no modded survival file to open.");
 	}
 
 	public void ReplaceCurrentSpawnset()
 	{
-		File.WriteAllBytes(UserSettings.ModsSurvivalPath, fileStates.Spawnset.Object.ToBytes());
+		File.WriteAllBytes(userSettings.ModsSurvivalPath, fileStates.Spawnset.Object.ToBytes());
 		popupManager.ShowMessage("Successfully replaced current survival file", "The current survival file has been replaced with the current spawnset.");
 	}
 
 	public void DeleteCurrentSpawnset()
 	{
-		if (File.Exists(UserSettings.ModsSurvivalPath))
-			File.Delete(UserSettings.ModsSurvivalPath);
+		if (File.Exists(userSettings.ModsSurvivalPath))
+			File.Delete(userSettings.ModsSurvivalPath);
 
 		popupManager.ShowMessage("Successfully deleted current survival file", "The current survival file has been deleted.");
 	}

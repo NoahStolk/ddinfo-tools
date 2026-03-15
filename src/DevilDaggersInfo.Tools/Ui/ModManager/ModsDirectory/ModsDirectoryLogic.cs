@@ -1,13 +1,16 @@
+using DevilDaggersInfo.Core.Asset;
 using DevilDaggersInfo.Core.Mod;
+using DevilDaggersInfo.Core.Mod.Exceptions;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Settings;
+using Serilog.Core;
 using System.Text;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 
-internal sealed class ModsDirectoryLogic(PopupManager popupManager, ModManagerState modManagerState)
+internal sealed class ModsDirectoryLogic(PopupManager popupManager, ModManagerState modManagerState, UserSettings userSettings, Logger logger)
 {
 	private List<ModFile> _modFiles = [];
 	private string _originalFileName = string.Empty;
@@ -37,16 +40,16 @@ internal sealed class ModsDirectoryLogic(PopupManager popupManager, ModManagerSt
 			{
 				_modFiles.Clear();
 
-				string[] files = Directory.GetFiles(UserSettings.ModsDirectory);
+				string[] files = Directory.GetFiles(userSettings.ModsDirectory);
 				foreach (string file in files)
 				{
-					_modFiles.Add(ModFile.FromPath(popupManager, file));
+					_modFiles.Add(CreateModFile(file));
 				}
 			}
 			catch (Exception ex) when (ex.IsFileIoException())
 			{
 				popupManager.ShowError("Error loading files in the mods directory.", ex);
-				Root.Log.Error(ex, "Error loading files in the mods directory.");
+				logger.Error(ex, "Error loading files in the mods directory.");
 			}
 
 			ModInstallationWindow.LoadEffectiveAssets();
@@ -81,8 +84,8 @@ internal sealed class ModsDirectoryLogic(PopupManager popupManager, ModManagerSt
 		if (IsLoading)
 			return null;
 
-		string originalPath = Path.Combine(UserSettings.ModsDirectory, _originalFileName);
-		string newPath = Path.Combine(UserSettings.ModsDirectory, NewFileName);
+		string originalPath = Path.Combine(userSettings.ModsDirectory, _originalFileName);
+		string newPath = Path.Combine(userSettings.ModsDirectory, NewFileName);
 		if (originalPath == newPath)
 			return null;
 
@@ -101,14 +104,14 @@ internal sealed class ModsDirectoryLogic(PopupManager popupManager, ModManagerSt
 		}
 		catch (Exception ex) when (ex.IsFileIoException())
 		{
-			Root.Log.Error(ex, $"Error renaming file '{_originalFileName}' to '{NewFileName}'.");
+			logger.Error(ex, $"Error renaming file '{_originalFileName}' to '{NewFileName}'.");
 			return $"Error renaming file '{_originalFileName}' to '{NewFileName}'.\n\n" + ex.Message;
 		}
 
 		ModFile? originalModFile = _modFiles.Find(m => m.FileName == _originalFileName);
 		if (originalModFile == null)
 		{
-			Root.Log.Warning("Renamed file does not exist in memory.");
+			logger.Warning("Renamed file does not exist in memory.");
 		}
 		else
 		{
@@ -132,7 +135,7 @@ internal sealed class ModsDirectoryLogic(PopupManager popupManager, ModManagerSt
 		if (IsLoading)
 			return;
 
-		string path = Path.Combine(UserSettings.ModsDirectory, fileName);
+		string path = Path.Combine(userSettings.ModsDirectory, fileName);
 
 		try
 		{
@@ -140,13 +143,13 @@ internal sealed class ModsDirectoryLogic(PopupManager popupManager, ModManagerSt
 		}
 		catch (Exception ex) when (ex.IsFileIoException())
 		{
-			Root.Log.Error(ex, $"Error deleting file '{fileName}'.");
+			logger.Error(ex, $"Error deleting file '{fileName}'.");
 			popupManager.ShowError($"Error deleting file '{fileName}'.", ex);
 		}
 
 		ModFile? modFile = _modFiles.Find(m => m.FileName == fileName);
 		if (modFile == null)
-			Root.Log.Warning("Deleted file does not exist in memory.");
+			logger.Warning("Deleted file does not exist in memory.");
 		else
 			_modFiles.Remove(modFile);
 
@@ -164,8 +167,8 @@ internal sealed class ModsDirectoryLogic(PopupManager popupManager, ModManagerSt
 
 		string newFileName = originalFileName.StartsWith("audio") || originalFileName.StartsWith("dd") ? $"_{originalFileName}" : originalFileName[1..];
 
-		string originalPath = Path.Combine(UserSettings.ModsDirectory, originalFileName);
-		string newPath = Path.Combine(UserSettings.ModsDirectory, newFileName);
+		string originalPath = Path.Combine(userSettings.ModsDirectory, originalFileName);
+		string newPath = Path.Combine(userSettings.ModsDirectory, newFileName);
 
 		try
 		{
@@ -173,14 +176,14 @@ internal sealed class ModsDirectoryLogic(PopupManager popupManager, ModManagerSt
 		}
 		catch (Exception ex) when (ex.IsFileIoException())
 		{
-			Root.Log.Error(ex, $"Error toggling file '{originalFileName}'.");
+			logger.Error(ex, $"Error toggling file '{originalFileName}'.");
 			popupManager.ShowError($"Error toggling file '{originalFileName}'.", ex);
 		}
 
 		ModFile? originalModFile = _modFiles.Find(m => m.FileName == originalFileName);
 		if (originalModFile == null)
 		{
-			Root.Log.Warning("Renamed file does not exist in memory.");
+			logger.Warning("Renamed file does not exist in memory.");
 		}
 		else
 		{
@@ -204,7 +207,7 @@ internal sealed class ModsDirectoryLogic(PopupManager popupManager, ModManagerSt
 
 		try
 		{
-			string path = Path.Combine(UserSettings.ModsDirectory, fileName);
+			string path = Path.Combine(userSettings.ModsDirectory, fileName);
 			using FileStream fs = new(path, FileMode.Open, FileAccess.ReadWrite);
 			using BinaryReader reader = new(fs);
 			ModBinaryToc modBinaryToc = ModBinaryToc.FromReader(reader);
@@ -214,20 +217,20 @@ internal sealed class ModsDirectoryLogic(PopupManager popupManager, ModManagerSt
 		}
 		catch (Exception ex) when (ex.IsFileIoException())
 		{
-			Root.Log.Error(ex, $"Error toggling prohibited assets for file '{fileName}'.");
+			logger.Error(ex, $"Error toggling prohibited assets for file '{fileName}'.");
 			popupManager.ShowError($"Error toggling prohibited assets for file '{fileName}'.", ex);
 		}
 
 		ModFile? originalModFile = _modFiles.Find(m => m.FileName == fileName);
 		if (originalModFile == null)
 		{
-			Root.Log.Warning("File with toggled assets does not exist in memory.");
+			logger.Warning("File with toggled assets does not exist in memory.");
 		}
 		else
 		{
 			int originalIndex = _modFiles.IndexOf(originalModFile);
 			_modFiles.Remove(originalModFile);
-			_modFiles.Insert(originalIndex, ModFile.FromPath(popupManager, Path.Combine(UserSettings.ModsDirectory, fileName)));
+			_modFiles.Insert(originalIndex, CreateModFile(Path.Combine(userSettings.ModsDirectory, fileName)));
 		}
 
 		modManagerState.LoadTocEntries();
@@ -244,6 +247,33 @@ internal sealed class ModsDirectoryLogic(PopupManager popupManager, ModManagerSt
 			fs.Write(Encoding.UTF8.GetBytes(tocEntry.Name));
 			fs.Seek(sizeof(byte), SeekOrigin.Current); // Skip null terminator
 			fs.Seek(sizeof(int) * 3, SeekOrigin.Current); // Skip offset, size, and unknown
+		}
+	}
+
+	private ModFile CreateModFile(string filePath)
+	{
+		string fileName = Path.GetFileName(filePath);
+
+		long fileSize = 0;
+		try
+		{
+			using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read);
+			fileSize = fs.Length;
+			using BinaryReader reader = new(fs);
+			ModBinaryToc modBinaryToc = ModBinaryToc.FromReader(reader);
+
+			int prohibitedCount = modBinaryToc.Entries.Count(c => AssetContainer.IsProhibited(c.AssetType, c.Name));
+			return new ModFile(fileName, ModFile.GetFileType(fileName), modBinaryToc.Type, modBinaryToc.Entries.Count, prohibitedCount, fileSize);
+		}
+		catch (InvalidModBinaryException)
+		{
+			return new ModFile(fileName, ModFileType.Other, null, null, null, fileSize);
+		}
+		catch (Exception ex) when (ex.IsFileIoException())
+		{
+			popupManager.ShowError($"Error loading file '{filePath}'.", ex);
+			logger.Error(ex, $"Error loading file '{filePath}'.");
+			return new ModFile(fileName, ModFileType.Error, null, null, null, fileSize);
 		}
 	}
 }

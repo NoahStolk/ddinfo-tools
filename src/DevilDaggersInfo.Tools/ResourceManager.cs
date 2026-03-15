@@ -10,12 +10,14 @@ internal sealed class ResourceManager
 	private readonly GL _gl;
 	private readonly ShaderLoader _shaderLoader;
 	private readonly TextureLoader _textureLoader;
+	private readonly ContentManager _contentManager;
 
-	public ResourceManager(GL gl, ShaderLoader shaderLoader, TextureLoader textureLoader)
+	public ResourceManager(GL gl, ShaderLoader shaderLoader, TextureLoader textureLoader, ContentManager contentManager)
 	{
 		_gl = gl;
 		_shaderLoader = shaderLoader;
 		_textureLoader = textureLoader;
+		_contentManager = contentManager;
 
 		Assembly assembly = Assembly.GetExecutingAssembly();
 		InternalContent ddInfoToolsContent = InternalResourceReader.Read(assembly);
@@ -69,19 +71,19 @@ internal sealed class ResourceManager
 	public void LoadGameResources()
 	{
 		GameResources = new GameResources(
-			IconMaskCrosshairTexture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.IconMaskCrosshairTexture)),
-			IconMaskDaggerTexture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.IconMaskDaggerTexture)),
-			IconMaskGemTexture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.IconMaskGemTexture)),
-			IconMaskHomingTexture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.IconMaskHomingTexture)),
-			IconMaskSkullTexture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.IconMaskSkullTexture)),
-			IconMaskStopwatchTexture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.IconMaskStopwatchTexture)),
-			DaggerSilverTexture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.DaggerSilverTexture)),
-			Skull4Texture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.Skull4Texture)),
-			Skull4JawTexture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.Skull4JawTexture)),
-			TileTexture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.TileTexture)),
-			PillarTexture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.PillarTexture)),
-			PostLut: new Texture(_gl, _textureLoader.Load(ContentManager.Content.PostLut)),
-			Hand4Texture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.Hand4Texture)));
+			IconMaskCrosshairTexture: new Texture(_gl, _textureLoader.Load(_contentManager.Content.IconMaskCrosshairTexture)),
+			IconMaskDaggerTexture: new Texture(_gl, _textureLoader.Load(_contentManager.Content.IconMaskDaggerTexture)),
+			IconMaskGemTexture: new Texture(_gl, _textureLoader.Load(_contentManager.Content.IconMaskGemTexture)),
+			IconMaskHomingTexture: new Texture(_gl, _textureLoader.Load(_contentManager.Content.IconMaskHomingTexture)),
+			IconMaskSkullTexture: new Texture(_gl, _textureLoader.Load(_contentManager.Content.IconMaskSkullTexture)),
+			IconMaskStopwatchTexture: new Texture(_gl, _textureLoader.Load(_contentManager.Content.IconMaskStopwatchTexture)),
+			DaggerSilverTexture: new Texture(_gl, _textureLoader.Load(_contentManager.Content.DaggerSilverTexture)),
+			Skull4Texture: new Texture(_gl, _textureLoader.Load(_contentManager.Content.Skull4Texture)),
+			Skull4JawTexture: new Texture(_gl, _textureLoader.Load(_contentManager.Content.Skull4JawTexture)),
+			TileTexture: new Texture(_gl, _textureLoader.Load(_contentManager.Content.TileTexture)),
+			PillarTexture: new Texture(_gl, _textureLoader.Load(_contentManager.Content.PillarTexture)),
+			PostLut: new Texture(_gl, _textureLoader.Load(_contentManager.Content.PostLut)),
+			Hand4Texture: new Texture(_gl, _textureLoader.Load(_contentManager.Content.Hand4Texture)));
 	}
 
 	private Shader GetShader(InternalContent content, string name)

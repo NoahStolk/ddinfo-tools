@@ -4,12 +4,13 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using ImGuiNET;
+using Serilog.Core;
 using System.Diagnostics;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 
-internal sealed class LeaderboardListChild(ResourceManager resourceManager, PopupManager popupManager)
+internal sealed class LeaderboardListChild(ResourceManager resourceManager, PopupManager popupManager, UserCache userCache, Logger logger)
 {
 	public const int PageSize = 20;
 
@@ -146,7 +147,7 @@ internal sealed class LeaderboardListChild(ResourceManager resourceManager, Popu
 					onError: apiError =>
 					{
 						popupManager.ShowError("Failed to fetch allowed categories.", apiError);
-						Root.Log.Error(apiError.Exception, "Failed to fetch allowed categories.");
+						logger.Error(apiError.Exception, "Failed to fetch allowed categories.");
 					});
 			},
 			FetchAllowedCategories.HandleAsync);
@@ -168,12 +169,12 @@ internal sealed class LeaderboardListChild(ResourceManager resourceManager, Popu
 					{
 						PageIndex = 0;
 						popupManager.ShowError("Failed to fetch custom leaderboards.", apiError);
-						Root.Log.Error(apiError.Exception, "Failed to fetch custom leaderboards.");
+						logger.Error(apiError.Exception, "Failed to fetch custom leaderboards.");
 					});
 
 				UpdatePagedCustomLeaderboards();
 			},
-			() => FetchCustomLeaderboards.HandleAsync(UserCache.Model.PlayerId));
+			() => FetchCustomLeaderboards.HandleAsync(userCache.Model.PlayerId));
 	}
 
 	private void SetPageIndex(int pageIndex)
