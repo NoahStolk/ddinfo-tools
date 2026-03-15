@@ -2,9 +2,6 @@ using NativeFileDialogSharp;
 
 namespace DevilDaggersInfo.Tools.Dialogs;
 
-/// <summary>
-/// Wrapper to make sure the <see cref="Dialog"/> class doesn't block the main thread and cause other problems like key states getting stuck.
-/// </summary>
 internal sealed class NativeFileDialogWayland : INativeFileDialog
 {
 	private Func<string?>? _pendingDialog;
