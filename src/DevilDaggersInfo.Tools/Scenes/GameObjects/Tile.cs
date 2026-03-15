@@ -5,10 +5,6 @@ namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
 internal sealed class Tile(float positionX, float positionZ, int arenaX, int arenaY, Camera camera, ResourceManager resourceManager)
 {
-	private static uint _vaoTile;
-	private static uint _vaoPillar;
-	private static uint _vaoHitbox;
-
 	private readonly TileMeshObject _top = new(_vaoTile, ContentManager.Content.TileMesh, positionX, positionZ);
 	private readonly TileMeshObject _pillar = new(_vaoPillar, ContentManager.Content.PillarMesh, positionX, positionZ);
 	private readonly TileHitboxMeshObject _tileHitbox = new(_vaoHitbox, resourceManager.InternalResources.TileHitboxModel.MainMesh, positionX, positionZ);
@@ -18,16 +14,6 @@ internal sealed class Tile(float positionX, float positionZ, int arenaX, int are
 	public float PositionZ { get; } = positionZ;
 	public int ArenaX { get; } = arenaX;
 	public int ArenaY { get; } = arenaY;
-
-	public static void InitializeRendering(GL gl, ResourceManager resourceManager)
-	{
-		if (_vaoTile != 0)
-			throw new InvalidOperationException("Skull 4 is already initialized.");
-
-		_vaoTile = MeshShaderUtils.CreateVao(gl, ContentManager.Content.TileMesh);
-		_vaoPillar = MeshShaderUtils.CreateVao(gl, ContentManager.Content.PillarMesh);
-		_vaoHitbox = MeshShaderUtils.CreateVao(gl, resourceManager.InternalResources.TileHitboxModel.MainMesh);
-	}
 
 	public float SquaredDistanceToCamera()
 	{

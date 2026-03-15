@@ -1,22 +1,21 @@
-using DevilDaggersInfo.Tools.Scenes.GameObjects;
+using DevilDaggersInfo.Tools.Scenes;
 using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 using DevilDaggersInfo.Tools.User.Settings;
-using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools;
 
 internal sealed class GameInstallationValidator(
-	GL gl,
 	UiLayoutManager uiLayoutManager,
 	ResourceManager resourceManager,
 	MainScene mainScene,
 	SpawnsetEditor3DWindow spawnsetEditor3DWindow,
 	CustomLeaderboards3DWindow customLeaderboards3DWindow,
-	ReplayEditor3DWindow replayEditor3DWindow)
+	ReplayEditor3DWindow replayEditor3DWindow,
+	ArenaSceneRendering arenaSceneRendering)
 {
 	private bool _contentInitialized;
 
@@ -52,10 +51,7 @@ internal sealed class GameInstallationValidator(
 		resourceManager.LoadGameResources();
 
 		// Initialize 3D rendering.
-		Player.InitializeRendering(gl);
-		RaceDagger.InitializeRendering(gl);
-		Tile.InitializeRendering(gl, resourceManager);
-		Skull4.InitializeRendering(gl);
+		arenaSceneRendering.InitializeRendering();
 
 		// Initialize scenes.
 		mainScene.Initialize();

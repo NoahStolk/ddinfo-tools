@@ -27,8 +27,10 @@ internal sealed class ArenaScene
 	private readonly List<LightObject> _lights = [];
 	private readonly ArenaEditorContext? _editorContext;
 
+	private readonly ArenaSceneRendering _arenaSceneRendering;
+
 	private Player? _player;
-	private Skull4? _skull4;
+	private bool _renderSkull4;
 
 	public unsafe ArenaScene(
 		Glfw glfw,
@@ -53,6 +55,8 @@ internal sealed class ArenaScene
 
 		if (isEditor)
 			_editorContext = new ArenaEditorContext(this, glfwInput, gl, resourceManager, fileStates, spawnsetSaver);
+
+		_arenaSceneRendering = new ArenaSceneRendering(_gl, _resourceManager);
 	}
 
 	public Camera Camera { get; }
@@ -88,7 +92,7 @@ internal sealed class ArenaScene
 
 	public void AddSkull4()
 	{
-		_skull4 = new Skull4(_gl, _resourceManager);
+		_renderSkull4 = true;
 	}
 
 	public void SetPlayerMovement(ReplaySimulation replaySimulation)
@@ -164,31 +168,15 @@ internal sealed class ArenaScene
 		else
 			RenderTilesDefault();
 
-		// Render dagger.
-		_resourceManager.GameResources.DaggerSilverTexture.Bind();
-		_gl.UniformMatrix4x4(_resourceManager.InternalResources.MeshShader.GetUniformLocation("model"), Matrix4x4.CreateScale(8) * Matrix4x4.CreateFromQuaternion(_raceDagger.MeshRotation) * Matrix4x4.CreateTranslation(_raceDagger.MeshPosition));
+		_arenaSceneRendering.RenderDagger(_raceDagger);
 
-		_gl.BindVertexArray(RaceDagger.Vao);
-		fixed (uint* i = &ContentManager.Content.DaggerMesh.Indices[0])
-			_gl.DrawElements(PrimitiveType.Triangles, (uint)ContentManager.Content.DaggerMesh.Indices.Length, DrawElementsType.UnsignedInt, i);
-
-		_gl.BindVertexArray(0);
-
-		// Render player.
 		if (_player != null)
-		{
-			_resourceManager.GameResources.Hand4Texture.Bind();
-			_gl.UniformMatrix4x4(_resourceManager.InternalResources.MeshShader.GetUniformLocation("model"), Matrix4x4.CreateScale(4) * Matrix4x4.CreateFromQuaternion(_player.Mesh.Rotation) * Matrix4x4.CreateTranslation(_player.Mesh.Position));
+			_arenaSceneRendering.RenderPlayer(_player);
 
-			_gl.BindVertexArray(_player.Mesh.Vao);
-			fixed (uint* i = &_player.Mesh.Mesh.Indices[0])
-				_gl.DrawElements(PrimitiveType.Triangles, (uint)_player.Mesh.Mesh.Indices.Length, DrawElementsType.UnsignedInt, i);
+		if (_renderSkull4)
+			_arenaSceneRendering.RenderSkull4();
 
-			_gl.BindVertexArray(0);
-		}
-
-		_skull4?.Render();
-
+		// Render tiles.
 		_resourceManager.InternalResources.TileHitboxTexture.Bind();
 
 		Array.Sort(_sortedTiles, static (a, b) => a.SquaredDistanceToCamera().CompareTo(b.SquaredDistanceToCamera()));
