@@ -58,6 +58,8 @@ internal sealed class ImGuiController
 
 	private int _windowWidth;
 	private int _windowHeight;
+	private int _framebufferWidth;
+	private int _framebufferHeight;
 
 	public ImGuiController(GL gl, GlfwInput glfwInput, ShaderLoader shaderLoader, int windowWidth, int windowHeight)
 	{
@@ -65,6 +67,8 @@ internal sealed class ImGuiController
 		_glfwInput = glfwInput;
 		_windowWidth = windowWidth;
 		_windowHeight = windowHeight;
+		_framebufferWidth = windowWidth;
+		_framebufferHeight = windowHeight;
 
 		_context = ImGui.CreateContext();
 		ImGui.SetCurrentContext(_context);
@@ -124,6 +128,12 @@ internal sealed class ImGuiController
 		_windowHeight = height;
 	}
 
+	public void FramebufferResized(int width, int height)
+	{
+		_framebufferWidth = width;
+		_framebufferHeight = height;
+	}
+
 	public void Render()
 	{
 		ImGui.Render();
@@ -134,7 +144,9 @@ internal sealed class ImGuiController
 	{
 		ImGuiIOPtr io = ImGui.GetIO();
 		io.DisplaySize = new Vector2(_windowWidth, _windowHeight);
-		io.DisplayFramebufferScale = Vector2.One;
+		float scaleX = _windowWidth > 0 ? (float)_framebufferWidth / _windowWidth : 1f;
+		float scaleY = _windowHeight > 0 ? (float)_framebufferHeight / _windowHeight : 1f;
+		io.DisplayFramebufferScale = new Vector2(scaleX, scaleY);
 		io.DeltaTime = deltaSeconds;
 
 		UpdateImGuiInput();

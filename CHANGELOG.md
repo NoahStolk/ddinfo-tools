@@ -7,6 +7,7 @@
 - Fixed practice timer start not exceeding 1400s.
 - Fixed file dialogs crashing on Wayland (Linux).
 - Fixed app crashing on start when the mods folder doesn't exist.
+- Fixed unreadably small UI and incorrect mouse click positions on Wayland (Linux) with HiDPI display scaling.
 
 ### Miscellaneous
 

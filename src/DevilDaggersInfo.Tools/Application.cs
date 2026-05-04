@@ -73,20 +73,28 @@ internal sealed unsafe class Application
 		};
 		_glfw.SetWindowIcon(_window, 1, &image);
 
-		glfw.SetFramebufferSizeCallback(window, (_, w, h) => ResizeFramebuffer(glfw, gl, window, imGuiController, w, h));
+		glfw.SetFramebufferSizeCallback(window, (_, w, h) =>
+		{
+			gl.Viewport(0, 0, (uint)w, (uint)h);
+			imGuiController.FramebufferResized(w, h);
+		});
+		glfw.SetWindowSizeCallback(window, (_, w, h) => ResizeWindow(glfw, window, imGuiController, w, h));
 
-		// Always invoke this in case of incorrect cache.
-		glfw.GetWindowSize(window, out int width, out int height);
-		ResizeFramebuffer(_glfw, _gl, _window, _imGuiController, width, height);
+		// Always invoke both in case of incorrect cache. On Wayland with HiDPI scaling, framebuffer and window sizes differ.
+		glfw.GetFramebufferSize(window, out int framebufferWidth, out int framebufferHeight);
+		gl.Viewport(0, 0, (uint)framebufferWidth, (uint)framebufferHeight);
+		imGuiController.FramebufferResized(framebufferWidth, framebufferHeight);
+
+		glfw.GetWindowSize(window, out int windowWidth, out int windowHeight);
+		ResizeWindow(_glfw, _window, _imGuiController, windowWidth, windowHeight);
 
 		gl.ClearColor(0, 0, 0, 1);
 	}
 
-	private static void ResizeFramebuffer(Glfw glfw, GL gl, WindowHandle* window, ImGuiController imGuiController, int w, int h)
+	private static void ResizeWindow(Glfw glfw, WindowHandle* window, ImGuiController imGuiController, int w, int h)
 	{
 		bool isMaximized = glfw.GetWindowAttrib(window, WindowAttributeGetter.Maximized);
 
-		gl.Viewport(0, 0, (uint)w, (uint)h);
 		imGuiController.WindowResized(w, h);
 
 		UserCache.Model = UserCache.Model with

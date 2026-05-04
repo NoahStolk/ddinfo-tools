@@ -154,7 +154,7 @@ internal sealed partial class Container : IContainer<Application>
 	}
 
 	[Factory(Scope.SingleInstance)]
-	private static unsafe ImGuiController CreateImGuiController(GL gl, GlfwInput glfwInput, ShaderLoader shaderLoader)
+	private static unsafe ImGuiController CreateImGuiController(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ShaderLoader shaderLoader)
 	{
 		// TODO: Inject UserCache.
 		ImGuiController imGuiController = new(gl, glfwInput, shaderLoader, UserCache.Model.WindowWidth, UserCache.Model.WindowHeight);
@@ -170,12 +170,21 @@ internal sealed partial class Container : IContainer<Application>
 		// Add the default font first so it is actually used by default.
 		io.Fonts.AddFontDefault();
 
-		// Load custom fonts.
+		// Determine DPI scale from framebuffer/window ratio (e.g. 3.0 on Wayland with 300% scaling at 4K).
+		glfw.GetFramebufferSize(window, out int fbWidth, out int fbHeight);
+		glfw.GetWindowSize(window, out int winWidth, out int winHeight);
+		float dpiScale = winWidth > 0 ? (float)fbWidth / winWidth : 1f;
+		float fontScale = 1f / dpiScale;
+
+		// Rasterize custom fonts at physical pixel size for crispness, then scale back so layout stays in logical pixels.
 		string fontPath = Path.Combine(AssemblyUtils.InstallationDirectory, "goethebold.ttf");
 		Debug.Assert(File.Exists(fontPath), $"Font file not found: {fontPath}");
-		Root.FontGoetheBold20 = io.Fonts.AddFontFromFileTTF(fontPath, 20);
-		Root.FontGoetheBold30 = io.Fonts.AddFontFromFileTTF(fontPath, 30);
-		Root.FontGoetheBold60 = io.Fonts.AddFontFromFileTTF(fontPath, 60);
+		Root.FontGoetheBold20 = io.Fonts.AddFontFromFileTTF(fontPath, 20 * dpiScale);
+		Root.FontGoetheBold20.Scale = fontScale;
+		Root.FontGoetheBold30 = io.Fonts.AddFontFromFileTTF(fontPath, 30 * dpiScale);
+		Root.FontGoetheBold30.Scale = fontScale;
+		Root.FontGoetheBold60 = io.Fonts.AddFontFromFileTTF(fontPath, 60 * dpiScale);
+		Root.FontGoetheBold60.Scale = fontScale;
 
 		imGuiController.CreateDefaultFont();
 
