@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Mod.Exceptions;
+using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Utils;
@@ -7,7 +8,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
-internal sealed class ExtractModWindow(NativeFileDialog nativeFileDialog, PopupManager popupManager)
+internal sealed class ExtractModWindow(INativeFileDialog nativeFileDialog, PopupManager popupManager)
 {
 	private string? _inputFilePath;
 	private string? _outputDirectory;

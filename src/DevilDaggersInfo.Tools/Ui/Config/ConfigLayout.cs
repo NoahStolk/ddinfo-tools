@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.User.Settings.Model;
 using ImGuiNET;
@@ -5,7 +6,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Config;
 
-internal sealed class ConfigLayout(GameInstallationValidator gameInstallationValidator, NativeFileDialog nativeFileDialog)
+internal sealed class ConfigLayout(GameInstallationValidator gameInstallationValidator, INativeFileDialog nativeFileDialog)
 {
 	public void Render()
 	{

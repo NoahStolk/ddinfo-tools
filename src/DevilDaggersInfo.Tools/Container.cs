@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Extensions;
 using DevilDaggersInfo.Tools.Engine.Loaders;
@@ -41,7 +42,6 @@ namespace DevilDaggersInfo.Tools;
 [Register<TextureLoader>(Scope.SingleInstance)]
 [Register<ResourceManager>(Scope.SingleInstance)]
 [Register<FrameCounter>(Scope.SingleInstance)]
-[Register<NativeFileDialog>(Scope.SingleInstance)]
 
 // Game Memory
 [Register<GameMemoryServiceWrapper>(Scope.SingleInstance)]
@@ -226,5 +226,24 @@ internal sealed partial class Container : IContainer<Application>
 		glfw.SetWindowSizeLimits(window, (int)Constants.MinWindowSize.X, (int)Constants.MinWindowSize.Y, -1, -1);
 
 		return window;
+	}
+
+	[Factory(Scope.SingleInstance)]
+	private static INativeFileDialog CreateNativeFileDialog()
+	{
+		return IsWayland() ? new NativeFileDialogWayland() : new NativeFileDialog();
+
+		static bool IsWayland()
+		{
+			if (!OperatingSystem.IsLinux())
+				return false;
+
+			string? session = Environment.GetEnvironmentVariable("XDG_SESSION_TYPE");
+			if (string.Equals(session, "wayland", StringComparison.OrdinalIgnoreCase))
+				return true;
+
+			// Fallback used by many compositors
+			return !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WAYLAND_DISPLAY"));
+		}
 	}
 }

@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.JsonSerializerContexts;
@@ -9,7 +10,7 @@ using System.Text.Json;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
-internal sealed class AssetEditorMenu(UiLayoutManager uiLayoutManager, NativeFileDialog nativeFileDialog, PopupManager popupManager, FileStates fileStates)
+internal sealed class AssetEditorMenu(UiLayoutManager uiLayoutManager, INativeFileDialog nativeFileDialog, PopupManager popupManager, FileStates fileStates)
 {
 	public void Render()
 	{
