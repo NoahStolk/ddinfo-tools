@@ -27,6 +27,9 @@ public static class InternalResourceReader
 		foreach (string resourceName in assembly.GetManifestResourceNames())
 		{
 			string extension = Path.GetExtension(resourceName);
+			if (extension is not (".obj" or ".vert" or ".frag" or ".tga"))
+				continue;
+
 			Stream? stream = assembly.GetManifestResourceStream(resourceName);
 			if (stream == null)
 				throw new InvalidOperationException($"Resource '{resourceName}' not found.");
@@ -42,7 +45,6 @@ public static class InternalResourceReader
 				case ".vert": SetShaderSource(shaderSourceCollections, stream, assetName, ShaderType.Vertex); break;
 				case ".frag": SetShaderSource(shaderSourceCollections, stream, assetName, ShaderType.Fragment); break;
 				case ".tga": textures[assetName] = GetTexture(stream); break;
-				default: throw new NotSupportedException($"Reading content with extension '{extension}' is not supported.");
 			}
 
 			stream.Dispose();
