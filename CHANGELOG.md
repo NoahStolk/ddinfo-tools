@@ -5,6 +5,8 @@
 ### Fixed
 
 - Fixed practice timer start not exceeding 1400s.
+- Fixed file dialogs crashing on Wayland (Linux).
+- Fixed app crashing on start when the mods folder doesn't exist.
 
 ### Miscellaneous
 

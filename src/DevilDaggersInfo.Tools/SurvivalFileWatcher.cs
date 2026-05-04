@@ -28,6 +28,12 @@ internal static class SurvivalFileWatcher
 	{
 		UpdateActiveSpawnsetBasedOnHash();
 
+		if (!Directory.Exists(UserSettings.ModsDirectory))
+		{
+			Root.Log.Warning("Mods directory '{Path}' does not exist; survival file watcher disabled.", UserSettings.ModsDirectory);
+			return;
+		}
+
 		_survivalFileWatcher = new FileSystemWatcher(UserSettings.ModsDirectory, "survival");
 		_survivalFileWatcher.NotifyFilter = NotifyFilters.CreationTime
 			| NotifyFilters.DirectoryName
