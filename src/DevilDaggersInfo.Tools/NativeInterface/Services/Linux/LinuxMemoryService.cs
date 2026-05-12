@@ -11,7 +11,10 @@ internal sealed class LinuxMemoryService : INativeMemoryService
 
 	public void ReadMemory(Process process, long address, byte[] bytes, int offset, int size)
 	{
-		// TODO: Implement.
+		FileStream processMem = File.OpenRead($"/proc/{process.Id}/mem");
+		processMem.Seek(address, SeekOrigin.Begin);
+
+		processMem.ReadExactly(bytes, offset, size);
 	}
 
 	public Process? GetDevilDaggersProcess()
