@@ -312,6 +312,9 @@ dotnet_diagnostic.S3903.severity                                              = 
 # Use 'Guid.NewGuid()' or 'Guid.Empty' or add arguments to this GUID instantiation.
 dotnet_diagnostic.S4581.severity                                              = none
 
+# Allowing unsafe code is security-sensitive.
+dotnet_diagnostic.S6640.severity                                              = none
+
 # Enable XML documentation output.
 dotnet_diagnostic.SA0001.severity                                             = none
 
