@@ -1,5 +1,11 @@
 # Changelog
 
+## [unreleased]
+
+### Added
+
+- Added support for reading game memory on Linux, which enables live run data (splits, homing usage, gem collection) in the practice tool.
+
 ## [0.13.7.1] - 2026-05-04
 
 ### Fixed
