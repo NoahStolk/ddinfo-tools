@@ -260,7 +260,7 @@ internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManage
 
 			Save templates to quickly load your desired practice settings.
 
-			View live data from the current run (Windows only for now):
+			View live data from the current run:
 			- Splits
 			- Homing usage
 			- Gem collection
