@@ -16,33 +16,33 @@ namespace DevilDaggersInfo.Tools.Scenes.Rendering;
 /// A single instance is shared by every scene. That is safe because only one layout renders per frame and all rendering
 /// happens on the GL thread, but it means this type must not cache anything scene-specific between frames.
 /// </remarks>
-internal sealed class ArenaRenderer(GL gl, ResourceManager resourceManager)
+internal sealed class ArenaRenderer(GL gl, MeshCache meshCache, ResourceManager resourceManager)
 {
 	private ArenaMeshes? _meshes;
 
 	/// <summary>
-	/// Uploads the meshes needed to render an arena. Must be called after the game content has been loaded.
+	/// Uploads the meshes needed to render an arena, so the cost is not paid during the first frame. Optional; they are
+	/// resolved on demand otherwise.
 	/// </summary>
-	public void Initialize()
+	public void WarmUpMeshes()
 	{
-		if (_meshes != null)
-			throw new InvalidOperationException($"{nameof(ArenaRenderer)} is already initialized.");
+		_ = GetMeshes();
+	}
 
-		_meshes = new ArenaMeshes(
-			Tile: GpuMesh.Create(gl, ContentManager.Content.TileMesh),
-			Pillar: GpuMesh.Create(gl, ContentManager.Content.PillarMesh),
-			TileHitbox: GpuMesh.Create(gl, resourceManager.InternalResources.TileHitboxModel.MainMesh),
-			Dagger: GpuMesh.Create(gl, ContentManager.Content.DaggerMesh),
-			Hand: GpuMesh.Create(gl, ContentManager.Content.Hand4Mesh),
-			Skull4: GpuMesh.Create(gl, ContentManager.Content.Skull4Mesh),
-			Skull4Jaw: GpuMesh.Create(gl, ContentManager.Content.Skull4JawMesh));
+	/// <summary>
+	/// Drops the resolved meshes so they are looked up again on the next frame. Must be called whenever the game content
+	/// is reloaded, because the previous <see cref="GpuMesh"/> instances are disposed with the cache.
+	/// </summary>
+	public void InvalidateMeshes()
+	{
+		_meshes = null;
 	}
 
 	public void Render(ArenaScene scene, bool isHovering, int windowWidth, int windowHeight)
 	{
 		Debug.Assert(resourceManager.GameResources != null, $"{nameof(resourceManager.GameResources)} is null, which should never happen here.");
 
-		ArenaMeshes meshes = _meshes ?? throw new InvalidOperationException($"{nameof(ArenaRenderer)} is not initialized.");
+		ArenaMeshes meshes = GetMeshes();
 
 		scene.Camera.PreRender(windowWidth, windowHeight);
 
@@ -227,6 +227,18 @@ internal sealed class ArenaRenderer(GL gl, ResourceManager resourceManager)
 		matrix.M42 = y;
 		matrix.M43 = z;
 		return matrix;
+	}
+
+	private ArenaMeshes GetMeshes()
+	{
+		return _meshes ??= new ArenaMeshes(
+			Tile: meshCache.GetOrCreate(ContentManager.Content.TileMesh),
+			Pillar: meshCache.GetOrCreate(ContentManager.Content.PillarMesh),
+			TileHitbox: meshCache.GetOrCreate(resourceManager.InternalResources.TileHitboxModel.MainMesh),
+			Dagger: meshCache.GetOrCreate(ContentManager.Content.DaggerMesh),
+			Hand: meshCache.GetOrCreate(ContentManager.Content.Hand4Mesh),
+			Skull4: meshCache.GetOrCreate(ContentManager.Content.Skull4Mesh),
+			Skull4Jaw: meshCache.GetOrCreate(ContentManager.Content.Skull4JawMesh));
 	}
 
 	private sealed record ArenaMeshes(

@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.EditorFileState;
+using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Extensions;
 using DevilDaggersInfo.Tools.Engine.Loaders;
 using DevilDaggersInfo.Tools.Scenes.Rendering;
@@ -41,6 +42,7 @@ namespace DevilDaggersInfo.Tools;
 [Register<GlfwInput>(Scope.SingleInstance)]
 [Register<ShaderLoader>(Scope.SingleInstance)]
 [Register<TextureLoader>(Scope.SingleInstance)]
+[Register<MeshCache>(Scope.SingleInstance)]
 [Register<ResourceManager>(Scope.SingleInstance)]
 [Register<FrameCounter>(Scope.SingleInstance)]
 

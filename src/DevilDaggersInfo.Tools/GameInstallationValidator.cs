@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Scenes.Rendering;
 using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
@@ -11,6 +12,7 @@ namespace DevilDaggersInfo.Tools;
 
 internal sealed class GameInstallationValidator(
 	UiLayoutManager uiLayoutManager,
+	MeshCache meshCache,
 	ResourceManager resourceManager,
 	ArenaRenderer arenaRenderer,
 	MainScene mainScene,
@@ -45,14 +47,15 @@ internal sealed class GameInstallationValidator(
 		uiLayoutManager.Layout = LayoutType.Main;
 		Error = null;
 
+		// ContentManager.Initialize builds fresh content objects every time, so the GPU-side resources must be rebuilt
+		// every time too. Skipping this left the meshes and textures belonging to the previously loaded installation.
+		meshCache.Clear();
+		arenaRenderer.InvalidateMeshes();
+		resourceManager.LoadGameResources();
+		arenaRenderer.WarmUpMeshes();
+
 		if (_contentInitialized)
 			return;
-
-		// Initialize game resources.
-		resourceManager.LoadGameResources();
-
-		// Initialize 3D rendering.
-		arenaRenderer.Initialize();
 
 		// Initialize scenes.
 		mainScene.Initialize();

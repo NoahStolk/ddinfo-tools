@@ -66,8 +66,14 @@ internal sealed class ResourceManager
 	/// </summary>
 	public GameResources? GameResources { get; private set; }
 
+	/// <summary>
+	/// Uploads the game textures. Safe to call again after the installation directory changes; the previous textures are
+	/// deleted rather than leaked.
+	/// </summary>
 	public void LoadGameResources()
 	{
+		GameResources?.Dispose();
+
 		GameResources = new GameResources(
 			IconMaskCrosshairTexture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.IconMaskCrosshairTexture)),
 			IconMaskDaggerTexture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.IconMaskDaggerTexture)),
