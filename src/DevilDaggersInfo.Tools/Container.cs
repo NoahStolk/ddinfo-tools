@@ -2,6 +2,7 @@ using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Extensions;
 using DevilDaggersInfo.Tools.Engine.Loaders;
+using DevilDaggersInfo.Tools.Scenes.Rendering;
 using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.AssetEditor;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
@@ -50,6 +51,7 @@ namespace DevilDaggersInfo.Tools;
 [Register<GameInstallationValidator>(Scope.SingleInstance)]
 
 // 3D
+[Register<ArenaRenderer>(Scope.SingleInstance)]
 [Register<MainScene>(Scope.SingleInstance)]
 
 // UI

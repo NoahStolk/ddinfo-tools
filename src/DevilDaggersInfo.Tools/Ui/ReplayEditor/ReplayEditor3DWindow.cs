@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Scenes;
+using DevilDaggersInfo.Tools.Scenes.Rendering;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using ImGuiNET;
@@ -10,7 +11,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
-internal sealed unsafe class ReplayEditor3DWindow(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ResourceManager resourceManager, FileStates fileStates, SpawnsetSaver spawnsetSaver)
+internal sealed unsafe class ReplayEditor3DWindow(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ArenaRenderer arenaRenderer, FileStates fileStates, SpawnsetSaver spawnsetSaver)
 {
 	private readonly FramebufferData _framebufferData = new(gl);
 
@@ -22,7 +23,7 @@ internal sealed unsafe class ReplayEditor3DWindow(Glfw glfw, GL gl, WindowHandle
 
 	public void InitializeScene()
 	{
-		_arenaScene = new ArenaScene(glfw, gl, window, glfwInput, resourceManager, () => fileStates.Replay.Object.Spawnset, false, false, fileStates, spawnsetSaver);
+		_arenaScene = new ArenaScene(glfw, window, glfwInput, () => fileStates.Replay.Object.Spawnset, false, false, fileStates, spawnsetSaver);
 	}
 
 	public void Reset()
@@ -67,7 +68,7 @@ internal sealed unsafe class ReplayEditor3DWindow(Glfw glfw, GL gl, WindowHandle
 
 			bool isWindowFocused = ImGui.IsWindowFocused();
 			bool isMouseOverFramebuffer = isWindowFocused && ImGui.IsWindowHovered() && ImGui.IsMouseHoveringRect(cursorScreenPos, cursorScreenPos + framebufferSize);
-			_framebufferData.RenderArena(isMouseOverFramebuffer, isWindowFocused, delta, ArenaScene);
+			_framebufferData.RenderArena(isMouseOverFramebuffer, isWindowFocused, delta, ArenaScene, arenaRenderer);
 
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 			drawList.AddFramebufferImage(_framebufferData, cursorScreenPos, cursorScreenPos + new Vector2(_framebufferData.Width, _framebufferData.Height));

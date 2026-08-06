@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.Scenes;
+using DevilDaggersInfo.Tools.Scenes.Rendering;
 using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools;
@@ -58,7 +59,7 @@ internal unsafe class FramebufferData(GL gl)
 		gl.DeleteRenderbuffer(rbo);
 	}
 
-	public void RenderArena(bool activateMouse, bool activateKeyboard, float delta, ArenaScene arenaScene)
+	public void RenderArena(bool activateMouse, bool activateKeyboard, float delta, ArenaScene arenaScene, ArenaRenderer arenaRenderer)
 	{
 		arenaScene.Update(activateMouse, activateKeyboard, delta);
 
@@ -79,7 +80,7 @@ internal unsafe class FramebufferData(GL gl)
 		gl.Enable(EnableCap.CullFace);
 		gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-		arenaScene.Render(activateMouse, framebufferWidth, framebufferHeight);
+		arenaRenderer.Render(arenaScene, activateMouse, framebufferWidth, framebufferHeight);
 
 		gl.Viewport(originalViewport[0], originalViewport[1], (uint)originalViewport[2], (uint)originalViewport[3]);
 		gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);

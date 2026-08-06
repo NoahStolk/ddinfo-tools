@@ -1,6 +1,4 @@
 using DevilDaggersInfo.Core.Spawnset;
-using DevilDaggersInfo.Tools.Engine;
-using Silk.NET.OpenGL;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
@@ -21,20 +19,8 @@ internal sealed class RaceDagger
 		_meshRotationStart = MeshRotation;
 	}
 
-	private static GpuMesh? _daggerMesh;
-
 	public Vector3 MeshPosition { get; private set; }
 	public Quaternion MeshRotation { get; private set; }
-
-	public static GpuMesh Mesh => _daggerMesh ?? throw new InvalidOperationException("Race dagger rendering is not initialized.");
-
-	public static void InitializeRendering(GL gl)
-	{
-		if (_daggerMesh != null)
-			throw new InvalidOperationException("Race dagger is already initialized.");
-
-		_daggerMesh = GpuMesh.Create(gl, ContentManager.Content.DaggerMesh);
-	}
 
 	public void Update(SpawnsetBinary spawnset, int currentTick)
 	{

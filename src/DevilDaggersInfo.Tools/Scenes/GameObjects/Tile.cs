@@ -1,82 +1,42 @@
-using DevilDaggersInfo.Tools.Engine;
-using Silk.NET.OpenGL;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
+/// <summary>
+/// State for a single arena tile. Holds no GPU resources and issues no draw calls; see
+/// <see cref="Rendering.ArenaRenderer"/>.
+/// </summary>
 internal sealed class Tile(float positionX, float positionZ, int arenaX, int arenaY, Camera camera)
 {
-	private static GpuMesh? _tileMesh;
-	private static GpuMesh? _pillarMesh;
-	private static GpuMesh? _hitboxMesh;
-
-	private readonly TileMeshObject _top = new(TileMesh, positionX, positionZ);
-	private readonly TileMeshObject _pillar = new(PillarMesh, positionX, positionZ);
-	private readonly TileHitboxMeshObject _tileHitbox = new(HitboxMesh, positionX, positionZ);
+	private const float _meshHeight = 4;
+	private const float _hitboxOffset = 1;
 
 	public float PositionX { get; } = positionX;
-	public float Height { get; private set; }
 	public float PositionZ { get; } = positionZ;
+	public float Height { get; private set; }
 	public int ArenaX { get; } = arenaX;
 	public int ArenaY { get; } = arenaY;
 
-	/// <summary>
-	/// Whether this tile's hitbox is high enough to be worth drawing. Callers filter on this before sorting the
-	/// transparent pass, so <see cref="RenderHitbox"/> does not check it again.
-	/// </summary>
+	/// <summary>The vertical centre of this tile's hitbox.</summary>
+	public float HitboxPositionY { get; private set; }
+
+	/// <summary>The vertical scale of this tile's hitbox.</summary>
+	public float HitboxHeight { get; private set; }
+
+	public bool IsVisible => Height >= ArenaScene.MinRenderTileHeight;
+
 	public bool IsHitboxVisible => Height >= ArenaScene.MinRenderTileHeight + 2;
-
-	private static GpuMesh TileMesh => _tileMesh ?? throw new InvalidOperationException("Tile rendering is not initialized.");
-	private static GpuMesh PillarMesh => _pillarMesh ?? throw new InvalidOperationException("Tile rendering is not initialized.");
-	private static GpuMesh HitboxMesh => _hitboxMesh ?? throw new InvalidOperationException("Tile rendering is not initialized.");
-
-	public static void InitializeRendering(GL gl, ResourceManager resourceManager)
-	{
-		if (_tileMesh != null)
-			throw new InvalidOperationException("Tile is already initialized.");
-
-		_tileMesh = GpuMesh.Create(gl, ContentManager.Content.TileMesh);
-		_pillarMesh = GpuMesh.Create(gl, ContentManager.Content.PillarMesh);
-		_hitboxMesh = GpuMesh.Create(gl, resourceManager.InternalResources.TileHitboxModel.MainMesh);
-	}
-
-	public float SquaredDistanceToCamera()
-	{
-		return Vector2.DistanceSquared(new Vector2(PositionX, PositionZ), new Vector2(camera.Position.X, camera.Position.Z));
-	}
 
 	public void SetDisplayHeight(float height)
 	{
 		Height = height;
 
-		_top.PositionY = Height;
-		_pillar.PositionY = Height;
-
-		const float tileMeshHeight = 4;
-		_tileHitbox.PositionY = Height - tileMeshHeight / 2;
-
-		const float tileHitboxOffset = 1;
-		_tileHitbox.Height = Height - tileMeshHeight / 2 + tileHitboxOffset;
+		HitboxPositionY = height - _meshHeight / 2;
+		HitboxHeight = height - _meshHeight / 2 + _hitboxOffset;
 	}
 
-	public void RenderTop(GL gl, ResourceManager resourceManager)
+	public float SquaredDistanceToCamera()
 	{
-		if (_top.PositionY < ArenaScene.MinRenderTileHeight)
-			return;
-
-		_top.Render(gl, resourceManager);
-	}
-
-	public void RenderPillar(GL gl, ResourceManager resourceManager)
-	{
-		if (_top.PositionY < ArenaScene.MinRenderTileHeight)
-			return;
-
-		_pillar.Render(gl, resourceManager);
-	}
-
-	public void RenderHitbox(GL gl, ResourceManager resourceManager)
-	{
-		_tileHitbox.Render(gl, resourceManager);
+		return Vector2.DistanceSquared(new Vector2(PositionX, PositionZ), new Vector2(camera.Position.X, camera.Position.Z));
 	}
 }
