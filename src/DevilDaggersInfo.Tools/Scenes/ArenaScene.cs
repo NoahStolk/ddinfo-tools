@@ -92,11 +92,20 @@ internal sealed class ArenaScene
 		_lights.Add(_player.Light);
 	}
 
-	public void Update(bool activateMouse, bool activateKeyboard, float delta)
+	/// <summary>
+	/// Advances the scene. <paramref name="viewportWidth"/> and <paramref name="viewportHeight"/> are the size the scene
+	/// will be rendered at; the camera needs them to build its matrices, which tile picking then depends on.
+	/// </summary>
+	public void Update(bool activateMouse, bool activateKeyboard, float delta, int viewportWidth, int viewportHeight)
 	{
 		SpawnsetBinary spawnset = _getSpawnset();
 
 		Camera.Update(activateMouse, activateKeyboard, delta);
+
+		// Must run after Camera.Update and before the editor context picks a tile: it builds the view and projection
+		// matrices from the rotation Camera.Update just set, and is the only thing that gives the camera its viewport size.
+		Camera.PreRender(viewportWidth, viewportHeight);
+
 		_raceDagger.Update(spawnset, CurrentTick);
 		_player?.Update(CurrentTick);
 

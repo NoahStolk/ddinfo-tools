@@ -21,7 +21,13 @@ internal sealed class ArenaEditorContext(ArenaScene arenaScene, GlfwInput glfwIn
 	public void Update(bool isActive, int currentTick)
 	{
 		if (!isActive || currentTick > 0)
+		{
+			// Clear the hover, otherwise the highlight stays stuck on whichever tile was last under the cursor.
+			_closestHitTile = null;
 			return;
+		}
+
+		UpdateHoveredTile();
 
 		bool ctrl = glfwInput.IsKeyDown(Keys.ControlLeft) || glfwInput.IsKeyDown(Keys.ControlRight);
 		if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
@@ -69,7 +75,7 @@ internal sealed class ArenaEditorContext(ArenaScene arenaScene, GlfwInput glfwIn
 	/// <summary>
 	/// Raycasts the cursor against the tile hitboxes to determine which tile is under it.
 	/// </summary>
-	public void UpdateHoveredTile()
+	private void UpdateHoveredTile()
 	{
 		_hitTiles.Clear();
 		Ray ray = arenaScene.Camera.ScreenToWorldPoint();

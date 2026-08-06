@@ -61,7 +61,12 @@ internal unsafe class FramebufferData(GL gl)
 
 	public void RenderArena(bool activateMouse, bool activateKeyboard, float delta, ArenaScene arenaScene, ArenaRenderer arenaRenderer)
 	{
-		arenaScene.Update(activateMouse, activateKeyboard, delta);
+		// No valid framebuffer yet, e.g. because the very first requested size was degenerate. Updating anyway would build
+		// camera matrices from a zero-sized viewport, giving a NaN aspect ratio and dividing by zero during tile picking.
+		if (Width < 1 || Height < 1)
+			return;
+
+		arenaScene.Update(activateMouse, activateKeyboard, delta, Width, Height);
 
 		gl.BindFramebuffer(FramebufferTarget.Framebuffer, Framebuffer);
 
@@ -80,7 +85,7 @@ internal unsafe class FramebufferData(GL gl)
 		gl.Enable(EnableCap.CullFace);
 		gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-		arenaRenderer.Render(arenaScene, activateMouse, framebufferWidth, framebufferHeight);
+		arenaRenderer.Render(arenaScene, activateMouse);
 
 		gl.Viewport(originalViewport[0], originalViewport[1], (uint)originalViewport[2], (uint)originalViewport[3]);
 		gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);

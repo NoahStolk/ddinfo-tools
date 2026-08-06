@@ -38,13 +38,15 @@ internal sealed class ArenaRenderer(GL gl, MeshCache meshCache, ResourceManager 
 		_meshes = null;
 	}
 
-	public void Render(ArenaScene scene, bool isHovering, int windowWidth, int windowHeight)
+	/// <summary>
+	/// Draws the scene as it currently stands. This only reads scene state; advancing it, including camera matrices and
+	/// tile picking, is <see cref="ArenaScene.Update"/>'s job.
+	/// </summary>
+	public void Render(ArenaScene scene, bool isHovering)
 	{
 		Debug.Assert(resourceManager.GameResources != null, $"{nameof(resourceManager.GameResources)} is null, which should never happen here.");
 
 		ArenaMeshes meshes = GetMeshes();
-
-		scene.Camera.PreRender(windowWidth, windowHeight);
 
 		Shader shader = resourceManager.InternalResources.MeshShader;
 		gl.UseProgram(shader.Id);
@@ -112,7 +114,6 @@ internal sealed class ArenaRenderer(GL gl, MeshCache meshCache, ResourceManager 
 
 		// Tile highlighting only applies in the editor, and only while the shrink preview is not active.
 		ArenaEditorContext? editorContext = scene.CurrentTick == 0 ? scene.EditorContext : null;
-		editorContext?.UpdateHoveredTile();
 
 		int highlightLocation = shader.GetUniformLocation("highlightColor");
 

@@ -22,13 +22,14 @@ internal sealed unsafe class MainScene(Glfw glfw, GL gl, WindowHandle* window, G
 
 	public void Render(float delta)
 	{
-		_mainMenuScene?.Update(false, false, delta);
-
 		gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
 		// Use physical pixels for the GL viewport.
 		// UserCache stores logical window size, which differs on HiDPI Wayland.
+		// Must be queried before Update, which needs the size to build the camera matrices.
 		glfw.GetFramebufferSize(window, out int framebufferWidth, out int framebufferHeight);
+
+		_mainMenuScene?.Update(false, false, delta, framebufferWidth, framebufferHeight);
 
 		// Keep track of the original viewport so we can restore it later.
 		Span<int> originalViewport = stackalloc int[4];
@@ -43,7 +44,7 @@ internal sealed unsafe class MainScene(Glfw glfw, GL gl, WindowHandle* window, G
 		gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
 		if (_mainMenuScene != null)
-			arenaRenderer.Render(_mainMenuScene, false, framebufferWidth, framebufferHeight);
+			arenaRenderer.Render(_mainMenuScene, false);
 
 		gl.Viewport(originalViewport[0], originalViewport[1], (uint)originalViewport[2], (uint)originalViewport[3]);
 		gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
