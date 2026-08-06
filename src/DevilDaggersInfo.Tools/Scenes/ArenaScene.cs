@@ -22,7 +22,10 @@ internal sealed class ArenaScene
 
 	private readonly Func<SpawnsetBinary> _getSpawnset;
 
-	private readonly Tile[] _sortedTiles = new Tile[SpawnsetBinary.ArenaDimensionMax * SpawnsetBinary.ArenaDimensionMax];
+	// Scratch buffers for the transparent hitbox pass, reused every frame.
+	private readonly Tile[] _hitboxTiles = new Tile[SpawnsetBinary.ArenaDimensionMax * SpawnsetBinary.ArenaDimensionMax];
+	private readonly float[] _hitboxSquaredDistances = new float[SpawnsetBinary.ArenaDimensionMax * SpawnsetBinary.ArenaDimensionMax];
+
 	private readonly RaceDagger _raceDagger = new();
 	private readonly List<LightObject> _lights = [];
 	private readonly ArenaEditorContext? _editorContext;
@@ -70,7 +73,6 @@ internal sealed class ArenaScene
 				float x = (i - halfSize) * 4;
 				float z = (j - halfSize) * 4;
 				Tiles[i, j] = new Tile(x, z, i, j, Camera);
-				_sortedTiles[i * SpawnsetBinary.ArenaDimensionMax + j] = Tiles[i, j];
 			}
 		}
 
@@ -181,14 +183,46 @@ internal sealed class ArenaScene
 
 		_skull4?.Render();
 
+		RenderTileHitboxes();
+	}
+
+	/// <summary>
+	/// Renders the alpha-blended tile hitboxes. These must be drawn back to front with depth writes disabled, otherwise
+	/// each hitbox occludes the ones behind it instead of blending with them.
+	/// </summary>
+	private void RenderTileHitboxes()
+	{
+		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen here.");
+
+		int count = 0;
+		for (int i = 0; i < Tiles.GetLength(0); i++)
+		{
+			for (int j = 0; j < Tiles.GetLength(1); j++)
+			{
+				Tile tile = Tiles[i, j];
+				if (!tile.IsHitboxVisible)
+					continue;
+
+				_hitboxTiles[count] = tile;
+				_hitboxSquaredDistances[count] = tile.SquaredDistanceToCamera();
+				count++;
+			}
+		}
+
+		if (count == 0)
+			return;
+
+		// Sorts nearest first; the draw loop below then walks the range backwards to get farthest first.
+		Array.Sort(_hitboxSquaredDistances, _hitboxTiles, 0, count);
+
 		_resourceManager.InternalResources.TileHitboxTexture.Bind();
 
-		Array.Sort(_sortedTiles, static (a, b) => a.SquaredDistanceToCamera().CompareTo(b.SquaredDistanceToCamera()));
-		for (int i = 0; i < _sortedTiles.Length; i++)
-		{
-			Tile tile = _sortedTiles[i];
-			tile.RenderHitbox(_gl, _resourceManager);
-		}
+		_gl.DepthMask(false);
+		for (int i = count - 1; i >= 0; i--)
+			_hitboxTiles[i].RenderHitbox(_gl, _resourceManager);
+
+		// Depth writes must be restored, otherwise the next frame's glClear cannot clear the depth buffer.
+		_gl.DepthMask(true);
 	}
 
 	private void RenderTilesDefault()

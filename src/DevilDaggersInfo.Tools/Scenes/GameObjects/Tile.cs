@@ -20,6 +20,12 @@ internal sealed class Tile(float positionX, float positionZ, int arenaX, int are
 	public int ArenaX { get; } = arenaX;
 	public int ArenaY { get; } = arenaY;
 
+	/// <summary>
+	/// Whether this tile's hitbox is high enough to be worth drawing. Callers filter on this before sorting the
+	/// transparent pass, so <see cref="RenderHitbox"/> does not check it again.
+	/// </summary>
+	public bool IsHitboxVisible => Height >= ArenaScene.MinRenderTileHeight + 2;
+
 	private static GpuMesh TileMesh => _tileMesh ?? throw new InvalidOperationException("Tile rendering is not initialized.");
 	private static GpuMesh PillarMesh => _pillarMesh ?? throw new InvalidOperationException("Tile rendering is not initialized.");
 	private static GpuMesh HitboxMesh => _hitboxMesh ?? throw new InvalidOperationException("Tile rendering is not initialized.");
@@ -71,9 +77,6 @@ internal sealed class Tile(float positionX, float positionZ, int arenaX, int are
 
 	public void RenderHitbox(GL gl, ResourceManager resourceManager)
 	{
-		if (_top.PositionY < ArenaScene.MinRenderTileHeight + 2)
-			return;
-
 		_tileHitbox.Render(gl, resourceManager);
 	}
 }
