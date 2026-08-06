@@ -69,7 +69,7 @@ internal sealed class ArenaScene
 			{
 				float x = (i - halfSize) * 4;
 				float z = (j - halfSize) * 4;
-				Tiles[i, j] = new Tile(x, z, i, j, Camera, _resourceManager);
+				Tiles[i, j] = new Tile(x, z, i, j, Camera);
 				_sortedTiles[i * SpawnsetBinary.ArenaDimensionMax + j] = Tiles[i, j];
 			}
 		}
@@ -123,7 +123,7 @@ internal sealed class ArenaScene
 		_editorContext?.Update(activateMouse, CurrentTick);
 	}
 
-	public unsafe void Render(bool renderEditorContext, int windowWidth, int windowHeight)
+	public void Render(bool renderEditorContext, int windowWidth, int windowHeight)
 	{
 		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen here.");
 
@@ -152,7 +152,7 @@ internal sealed class ArenaScene
 			lightRadii[i] = lightObject.Radius;
 		}
 
-		_gl.Uniform1(shader.GetUniformLocation("lightCount"), lightPositions.Length);
+		_gl.Uniform1(shader.GetUniformLocation("lightCount"), _lights.Count);
 		_gl.Uniform3(shader.GetUniformLocation("lightPosition"), lightPositions);
 		_gl.Uniform3(shader.GetUniformLocation("lightColor"), lightColors);
 		_gl.Uniform1(shader.GetUniformLocation("lightRadius"), lightRadii);
@@ -168,11 +168,7 @@ internal sealed class ArenaScene
 		_resourceManager.GameResources.DaggerSilverTexture.Bind();
 		_gl.UniformMatrix4x4(_resourceManager.InternalResources.MeshShader.GetUniformLocation("model"), Matrix4x4.CreateScale(8) * Matrix4x4.CreateFromQuaternion(_raceDagger.MeshRotation) * Matrix4x4.CreateTranslation(_raceDagger.MeshPosition));
 
-		_gl.BindVertexArray(RaceDagger.Vao);
-		fixed (uint* i = &ContentManager.Content.DaggerMesh.Indices[0])
-			_gl.DrawElements(PrimitiveType.Triangles, (uint)ContentManager.Content.DaggerMesh.Indices.Length, DrawElementsType.UnsignedInt, i);
-
-		_gl.BindVertexArray(0);
+		RaceDagger.Mesh.Draw();
 
 		// Render player.
 		if (_player != null)
@@ -180,11 +176,7 @@ internal sealed class ArenaScene
 			_resourceManager.GameResources.Hand4Texture.Bind();
 			_gl.UniformMatrix4x4(_resourceManager.InternalResources.MeshShader.GetUniformLocation("model"), Matrix4x4.CreateScale(4) * Matrix4x4.CreateFromQuaternion(_player.Mesh.Rotation) * Matrix4x4.CreateTranslation(_player.Mesh.Position));
 
-			_gl.BindVertexArray(_player.Mesh.Vao);
-			fixed (uint* i = &_player.Mesh.Mesh.Indices[0])
-				_gl.DrawElements(PrimitiveType.Triangles, (uint)_player.Mesh.Mesh.Indices.Length, DrawElementsType.UnsignedInt, i);
-
-			_gl.BindVertexArray(0);
+			_player.Mesh.Mesh.Draw();
 		}
 
 		_skull4?.Render();

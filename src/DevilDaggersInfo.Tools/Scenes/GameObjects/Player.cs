@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
+using DevilDaggersInfo.Tools.Engine;
 using Silk.NET.OpenGL;
 using System.Numerics;
 
@@ -8,18 +9,20 @@ internal sealed class Player(ReplaySimulation movementTimeline)
 {
 	private static readonly Quaternion _rotationOffset = Quaternion.CreateFromAxisAngle(Vector3.UnitX, MathF.PI / 2) * Quaternion.CreateFromAxisAngle(Vector3.UnitY, MathF.PI) * Quaternion.CreateFromAxisAngle(Vector3.UnitZ, MathF.PI);
 
-	private static uint _vao;
+	private static GpuMesh? _handMesh;
 
-	public PlayerMovement Mesh { get; } = new(_vao, ContentManager.Content.Hand4Mesh, default, default);
+	public PlayerMovement Mesh { get; } = new(HandMesh, default, default);
 
 	public LightObject Light { get; } = new(6, default, new Vector3(1, 0.5f, 0));
 
+	private static GpuMesh HandMesh => _handMesh ?? throw new InvalidOperationException("Player rendering is not initialized.");
+
 	public static void InitializeRendering(GL gl)
 	{
-		if (_vao != 0)
+		if (_handMesh != null)
 			throw new InvalidOperationException("Player is already initialized.");
 
-		_vao = MeshShaderUtils.CreateVao(gl, ContentManager.Content.Hand4Mesh);
+		_handMesh = GpuMesh.Create(gl, ContentManager.Content.Hand4Mesh);
 	}
 
 	public void Update(int currentTick)

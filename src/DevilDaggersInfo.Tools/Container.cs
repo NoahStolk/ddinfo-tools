@@ -147,11 +147,42 @@ internal sealed partial class Container : IContainer<Application>
 		return glfw;
 	}
 
+	/// <remarks>
+	/// The <paramref name="window"/> parameter is unused, but it forces the window (and therefore the current GL context)
+	/// to exist before the entry points are resolved. <c>glfwGetProcAddress</c> is only guaranteed to work with a current
+	/// context; it happens to work without one on GLX, but not on WGL or EGL.
+	/// </remarks>
 	[Factory(Scope.SingleInstance)]
-	private static GL GetGl(Glfw glfw)
+	private static unsafe GL GetGl(Glfw glfw, WindowHandle* window)
 	{
-		return GL.GetApi(glfw.GetProcAddress);
+		_ = window;
+
+		GL gl = GL.GetApi(glfw.GetProcAddress);
+
+#if DEBUG
+		// A debug context is requested in GetGlfw. Without a callback installed, the driver's diagnostics are discarded,
+		// which is how spec violations end up only being noticed as visual glitches on stricter drivers.
+		gl.Enable(EnableCap.DebugOutput);
+		gl.Enable(EnableCap.DebugOutputSynchronous);
+		gl.DebugMessageCallback(LogGlDebugMessage, null);
+#endif
+
+		return gl;
 	}
+
+#if DEBUG
+	private static void LogGlDebugMessage(GLEnum source, GLEnum type, int id, GLEnum severity, int length, nint message, nint userParam)
+	{
+		string text = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(message, length);
+		switch (severity)
+		{
+			case GLEnum.DebugSeverityHigh: Root.Log.Error("GL {Type} ({Source}): {Message}", type, source, text); break;
+			case GLEnum.DebugSeverityMedium: Root.Log.Warning("GL {Type} ({Source}): {Message}", type, source, text); break;
+			case GLEnum.DebugSeverityLow: Root.Log.Information("GL {Type} ({Source}): {Message}", type, source, text); break;
+			default: Root.Log.Debug("GL {Type} ({Source}): {Message}", type, source, text); break;
+		}
+	}
+#endif
 
 	[Factory(Scope.SingleInstance)]
 	private static unsafe ImGuiController CreateImGuiController(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ShaderLoader shaderLoader)

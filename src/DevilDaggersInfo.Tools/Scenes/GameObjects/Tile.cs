@@ -1,17 +1,18 @@
+using DevilDaggersInfo.Tools.Engine;
 using Silk.NET.OpenGL;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
-internal sealed class Tile(float positionX, float positionZ, int arenaX, int arenaY, Camera camera, ResourceManager resourceManager)
+internal sealed class Tile(float positionX, float positionZ, int arenaX, int arenaY, Camera camera)
 {
-	private static uint _vaoTile;
-	private static uint _vaoPillar;
-	private static uint _vaoHitbox;
+	private static GpuMesh? _tileMesh;
+	private static GpuMesh? _pillarMesh;
+	private static GpuMesh? _hitboxMesh;
 
-	private readonly TileMeshObject _top = new(_vaoTile, ContentManager.Content.TileMesh, positionX, positionZ);
-	private readonly TileMeshObject _pillar = new(_vaoPillar, ContentManager.Content.PillarMesh, positionX, positionZ);
-	private readonly TileHitboxMeshObject _tileHitbox = new(_vaoHitbox, resourceManager.InternalResources.TileHitboxModel.MainMesh, positionX, positionZ);
+	private readonly TileMeshObject _top = new(TileMesh, positionX, positionZ);
+	private readonly TileMeshObject _pillar = new(PillarMesh, positionX, positionZ);
+	private readonly TileHitboxMeshObject _tileHitbox = new(HitboxMesh, positionX, positionZ);
 
 	public float PositionX { get; } = positionX;
 	public float Height { get; private set; }
@@ -19,14 +20,18 @@ internal sealed class Tile(float positionX, float positionZ, int arenaX, int are
 	public int ArenaX { get; } = arenaX;
 	public int ArenaY { get; } = arenaY;
 
+	private static GpuMesh TileMesh => _tileMesh ?? throw new InvalidOperationException("Tile rendering is not initialized.");
+	private static GpuMesh PillarMesh => _pillarMesh ?? throw new InvalidOperationException("Tile rendering is not initialized.");
+	private static GpuMesh HitboxMesh => _hitboxMesh ?? throw new InvalidOperationException("Tile rendering is not initialized.");
+
 	public static void InitializeRendering(GL gl, ResourceManager resourceManager)
 	{
-		if (_vaoTile != 0)
-			throw new InvalidOperationException("Skull 4 is already initialized.");
+		if (_tileMesh != null)
+			throw new InvalidOperationException("Tile is already initialized.");
 
-		_vaoTile = MeshShaderUtils.CreateVao(gl, ContentManager.Content.TileMesh);
-		_vaoPillar = MeshShaderUtils.CreateVao(gl, ContentManager.Content.PillarMesh);
-		_vaoHitbox = MeshShaderUtils.CreateVao(gl, resourceManager.InternalResources.TileHitboxModel.MainMesh);
+		_tileMesh = GpuMesh.Create(gl, ContentManager.Content.TileMesh);
+		_pillarMesh = GpuMesh.Create(gl, ContentManager.Content.PillarMesh);
+		_hitboxMesh = GpuMesh.Create(gl, resourceManager.InternalResources.TileHitboxModel.MainMesh);
 	}
 
 	public float SquaredDistanceToCamera()
