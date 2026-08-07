@@ -69,6 +69,12 @@ internal sealed class ReplayEditorWindow(
 					ImGui.EndTabItem();
 				}
 
+				if (ImGui.BeginTabItem("Shotgun speed"))
+				{
+					ReplayShotgunSpeedChild.Render(FileStates.Replay.Object.EventsData);
+					ImGui.EndTabItem();
+				}
+
 				ImGui.EndTabBar();
 			}
 		}
