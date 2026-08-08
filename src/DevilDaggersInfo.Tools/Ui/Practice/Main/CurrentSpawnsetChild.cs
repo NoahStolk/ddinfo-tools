@@ -8,9 +8,9 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-internal static class CurrentSpawnsetChild
+internal sealed class CurrentSpawnsetChild(FontService fontService)
 {
-	public static void Render()
+	public void Render()
 	{
 		if (ImGui.BeginChild("CurrentSpawnset", new Vector2(0, 200), ImGuiChildFlags.Border)) // TODO: Borders in ImGui update.
 		{
@@ -19,7 +19,7 @@ internal static class CurrentSpawnsetChild
 
 			if (SurvivalFileWatcher.Exists)
 			{
-				ImGui.PushFont(Root.FontGoetheBold20);
+				ImGui.PushFont(fontService.GoetheBold20);
 				ImGui.Text("Practice is enabled!");
 				ImGui.PopFont();
 				ImGui.Spacing();
@@ -60,7 +60,7 @@ internal static class CurrentSpawnsetChild
 			}
 			else
 			{
-				ImGui.PushFont(Root.FontGoetheBold20);
+				ImGui.PushFont(fontService.GoetheBold20);
 				ImGui.Text("Practice is disabled.");
 				ImGui.PopFont();
 				ImGui.Text("Click on a template to enable practice, then press the restart button in the game.");

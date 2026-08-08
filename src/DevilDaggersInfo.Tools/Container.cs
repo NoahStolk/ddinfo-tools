@@ -63,6 +63,7 @@ namespace DevilDaggersInfo.Tools;
 [Register<Shortcuts>(Scope.SingleInstance)]
 [Register<UiLayoutManager>(Scope.SingleInstance)]
 [Register<UiRenderer>(Scope.SingleInstance)]
+[Register<FontService>(Scope.SingleInstance)]
 
 // Layouts
 [Register<ConfigLayout>(Scope.SingleInstance)]
@@ -190,7 +191,7 @@ internal sealed partial class Container : IContainer<Application>
 #endif
 
 	[Factory(Scope.SingleInstance)]
-	private static unsafe ImGuiController CreateImGuiController(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ShaderLoader shaderLoader)
+	private static unsafe ImGuiController CreateImGuiController(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ShaderLoader shaderLoader, FontService fontService)
 	{
 		// TODO: Inject UserCache.
 		ImGuiController imGuiController = new(gl, glfwInput, shaderLoader, UserCache.Model.WindowWidth, UserCache.Model.WindowHeight);
@@ -210,17 +211,8 @@ internal sealed partial class Container : IContainer<Application>
 		glfw.GetFramebufferSize(window, out int fbWidth, out int fbHeight);
 		glfw.GetWindowSize(window, out int winWidth, out int winHeight);
 		float dpiScale = winWidth > 0 ? (float)fbWidth / winWidth : 1f;
-		float fontScale = 1f / dpiScale;
 
-		// Rasterize custom fonts at physical pixel size for crispness, then scale back so layout stays in logical pixels.
-		string fontPath = Path.Combine(AssemblyUtils.InstallationDirectory, "goethebold.ttf");
-		Debug.Assert(File.Exists(fontPath), $"Font file not found: {fontPath}");
-		Root.FontGoetheBold20 = io.Fonts.AddFontFromFileTTF(fontPath, 20 * dpiScale);
-		Root.FontGoetheBold20.Scale = fontScale;
-		Root.FontGoetheBold30 = io.Fonts.AddFontFromFileTTF(fontPath, 30 * dpiScale);
-		Root.FontGoetheBold30.Scale = fontScale;
-		Root.FontGoetheBold60 = io.Fonts.AddFontFromFileTTF(fontPath, 60 * dpiScale);
-		Root.FontGoetheBold60.Scale = fontScale;
+		fontService.Load(dpiScale);
 
 		imGuiController.CreateDefaultFont();
 

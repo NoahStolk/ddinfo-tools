@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Main;
 
-internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManager uiLayoutManager, FrameCounter frameCounter, LeaderboardListChild leaderboardListChild, AboutWindow aboutWindow, ModsDirectoryLogic modsDirectoryLogic)
+internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManager uiLayoutManager, FrameCounter frameCounter, LeaderboardListChild leaderboardListChild, AboutWindow aboutWindow, ModsDirectoryLogic modsDirectoryLogic, FontService fontService)
 {
 	private readonly string _version = $"{AssemblyUtils.EntryAssemblyVersionString} (ALPHA)";
 
@@ -27,7 +27,7 @@ internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManage
 
 		if (ImGui.Begin("Main Menu", ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoDocking))
 		{
-			ImGui.PushFont(Root.FontGoetheBold60);
+			ImGui.PushFont(fontService.GoetheBold60);
 			const string title = "ddinfo tools";
 			ImGui.TextColored(Colors.TitleColor(frameCounter.TotalTime), title);
 			float textWidth = ImGui.CalcTextSize(title).X;
@@ -130,7 +130,7 @@ internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManage
 			ImGui.SetTooltip(tooltip);
 	}
 
-	private static void ToolButton(Color color, ReadOnlySpan<char> text, Action action, ref Action? hoveredAction, Action onHover)
+	private void ToolButton(Color color, ReadOnlySpan<char> text, Action action, ref Action? hoveredAction, Action onHover)
 	{
 		ImGui.PushStyleColor(ImGuiCol.Button, color);
 		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color + new Vector4(0, 0, 0, 0.2f));
@@ -138,7 +138,7 @@ internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManage
 		ImGui.PushStyleColor(ImGuiCol.Border, color with { A = 255 });
 		ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, 2);
 
-		ImGui.PushFont(Root.FontGoetheBold20);
+		ImGui.PushFont(fontService.GoetheBold20);
 		bool clicked = ImGui.Button(text, new Vector2(198, 48));
 		ImGui.PopFont();
 
@@ -154,9 +154,9 @@ internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManage
 		ImGui.Spacing();
 	}
 
-	private static void RenderSpawnsetEditorPreview()
+	private void RenderSpawnsetEditorPreview()
 	{
-		ImGuiExt.Title("Spawnset Editor");
+		ImGuiExt.Title("Spawnset Editor", fontService.GoetheBold30);
 		ImGui.Text("""
 			WORK IN PROGRESS
 
@@ -178,9 +178,9 @@ internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManage
 			""");
 	}
 
-	private static void RenderAssetEditorPreview()
+	private void RenderAssetEditorPreview()
 	{
-		ImGuiExt.Title("Asset Editor");
+		ImGuiExt.Title("Asset Editor", fontService.GoetheBold30);
 		ImGui.Text("""
 			WORK IN PROGRESS
 
@@ -197,9 +197,9 @@ internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManage
 			""");
 	}
 
-	private static void RenderReplayEditorPreview()
+	private void RenderReplayEditorPreview()
 	{
-		ImGuiExt.Title("Replay Editor");
+		ImGuiExt.Title("Replay Editor", fontService.GoetheBold30);
 		ImGui.Text("""
 			WORK IN PROGRESS
 
@@ -216,9 +216,9 @@ internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManage
 			""");
 	}
 
-	private static void RenderCustomLeaderboardsPreview()
+	private void RenderCustomLeaderboardsPreview()
 	{
-		ImGuiExt.Title("Custom Leaderboards");
+		ImGuiExt.Title("Custom Leaderboards", fontService.GoetheBold30);
 		ImGui.Text("""
 			WINDOWS ONLY (FOR NOW)
 
@@ -252,9 +252,9 @@ internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManage
 			""");
 	}
 
-	private static void RenderPracticePreview()
+	private void RenderPracticePreview()
 	{
-		ImGuiExt.Title("Practice");
+		ImGuiExt.Title("Practice", fontService.GoetheBold30);
 		ImGui.Text("""
 			Practice the main game by starting at any point in time with any hand upgrade and amount of gems/homing, using custom spawnsets that are automatically generated.
 
@@ -271,9 +271,9 @@ internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManage
 			""");
 	}
 
-	private static void RenderModManagerPreview()
+	private void RenderModManagerPreview()
 	{
-		ImGuiExt.Title("Mod Manager");
+		ImGuiExt.Title("Mod Manager", fontService.GoetheBold30);
 		ImGui.Text("""
 			WORK IN PROGRESS
 

@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-internal sealed class AboutWindow(FrameCounter frameCounter)
+internal sealed class AboutWindow(FrameCounter frameCounter, FontService fontService)
 {
 	private readonly string _versionInfo = $"Version {AssemblyUtils.EntryAssemblyVersionString} (build time: {AssemblyUtils.EntryAssemblyBuildTime})";
 
@@ -23,7 +23,7 @@ internal sealed class AboutWindow(FrameCounter frameCounter)
 			ImGui.PushStyleVar(ImGuiStyleVar.SeparatorTextPadding, new Vector2(20, 12));
 			ImGui.PushTextWrapPos(ImGui.GetWindowWidth() - 16);
 
-			ImGuiExt.Title("About");
+			ImGuiExt.Title("About", fontService.GoetheBold30);
 			ImGui.Text("ddinfo tools is a collection of tools for Devil Daggers. The tools are part of the DevilDaggers.info project.");
 
 			ImGui.SeparatorText("Alpha notice");

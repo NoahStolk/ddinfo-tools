@@ -6,7 +6,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Config;
 
-internal sealed class ConfigLayout(GameInstallationValidator gameInstallationValidator, INativeFileDialog nativeFileDialog)
+internal sealed class ConfigLayout(GameInstallationValidator gameInstallationValidator, INativeFileDialog nativeFileDialog, FontService fontService)
 {
 	public void Render()
 	{
@@ -88,7 +88,7 @@ internal sealed class ConfigLayout(GameInstallationValidator gameInstallationVal
 
 			ImGui.EndChild();
 
-			ImGui.PushFont(Root.FontGoetheBold30);
+			ImGui.PushFont(fontService.GoetheBold30);
 			if (ImGui.Button("Save and continue", new Vector2(752, 64)))
 			{
 				UserSettings.Model = UserSettings.Model with

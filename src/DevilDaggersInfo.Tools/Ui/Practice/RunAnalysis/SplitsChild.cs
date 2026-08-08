@@ -5,15 +5,15 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
 
-internal static class SplitsChild
+internal sealed class SplitsChild(FontService fontService)
 {
-	public static void Render(PracticeStatsData statsData)
+	public void Render(PracticeStatsData statsData)
 	{
 		IReadOnlyList<SplitDataEntry> data = statsData.SplitsData.HomingSplitData;
 
 		if (ImGui.BeginChild("Splits", new Vector2(192, 256)))
 		{
-			ImGuiExt.Title("Splits", Root.FontGoetheBold20);
+			ImGuiExt.Title("Splits", fontService.GoetheBold20);
 
 			if (ImGui.BeginTable("LeaderboardTable", 3, ImGuiTableFlags.None))
 			{

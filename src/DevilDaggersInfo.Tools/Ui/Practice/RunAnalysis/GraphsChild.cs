@@ -10,38 +10,38 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
 
-internal static class GraphsChild
+internal sealed class GraphsChild(FontService fontService)
 {
-	private static readonly List<int> _gemsCollected = [];
-	private static readonly List<int> _gemsDespawned = [];
-	private static readonly List<int> _gemsEaten = [];
-	private static readonly List<int> _gemsTotal = [];
-	private static readonly List<int> _homingStored = [];
-	private static readonly List<int> _homingEaten = [];
+	private readonly List<int> _gemsCollected = [];
+	private readonly List<int> _gemsDespawned = [];
+	private readonly List<int> _gemsEaten = [];
+	private readonly List<int> _gemsTotal = [];
+	private readonly List<int> _homingStored = [];
+	private readonly List<int> _homingEaten = [];
 
 	// Allow up to an hour of data (roughly 3600 seconds in game).
-	private static readonly Vector2[] _gemsCollectedPoints = new Vector2[60 * 60];
-	private static readonly Vector2[] _gemsDespawnedPoints = new Vector2[60 * 60];
-	private static readonly Vector2[] _gemsEatenPoints = new Vector2[60 * 60];
-	private static readonly Vector2[] _gemsTotalPoints = new Vector2[60 * 60];
-	private static readonly Vector2[] _homingStoredPoints = new Vector2[60 * 60];
-	private static readonly Vector2[] _homingEatenPoints = new Vector2[60 * 60];
+	private readonly Vector2[] _gemsCollectedPoints = new Vector2[60 * 60];
+	private readonly Vector2[] _gemsDespawnedPoints = new Vector2[60 * 60];
+	private readonly Vector2[] _gemsEatenPoints = new Vector2[60 * 60];
+	private readonly Vector2[] _gemsTotalPoints = new Vector2[60 * 60];
+	private readonly Vector2[] _homingStoredPoints = new Vector2[60 * 60];
+	private readonly Vector2[] _homingEatenPoints = new Vector2[60 * 60];
 
-	private static int _maxGemsCollected;
-	private static int _maxGemsDespawned;
-	private static int _maxGemsEaten;
-	private static int _maxGemsTotal;
-	private static int _maxHomingStored;
-	private static int _maxHomingEaten;
+	private int _maxGemsCollected;
+	private int _maxGemsDespawned;
+	private int _maxGemsEaten;
+	private int _maxGemsTotal;
+	private int _maxHomingStored;
+	private int _maxHomingEaten;
 
-	private static bool _showGemsCollected = true;
-	private static bool _showGemsDespawned = true;
-	private static bool _showGemsEaten = true;
-	private static bool _showGemsTotal = true;
-	private static bool _showHomingStored = true;
-	private static bool _showHomingEaten = true;
+	private bool _showGemsCollected = true;
+	private bool _showGemsDespawned = true;
+	private bool _showGemsEaten = true;
+	private bool _showGemsTotal = true;
+	private bool _showHomingStored = true;
+	private bool _showHomingEaten = true;
 
-	public static void Update(IReadOnlyList<StatisticEntry> data)
+	public void Update(IReadOnlyList<StatisticEntry> data)
 	{
 		_gemsCollected.Clear();
 		_gemsDespawned.Clear();
@@ -68,7 +68,7 @@ internal static class GraphsChild
 		_maxHomingEaten = _homingEaten.Count > 0 ? _homingEaten.Max() : 0;
 	}
 
-	public static unsafe void Render(PracticeStatsData statsData)
+	public unsafe void Render(PracticeStatsData statsData)
 	{
 		Debug.Assert(_gemsCollected.Count == _gemsDespawned.Count, "All lists should have the same length.");
 		Debug.Assert(_gemsCollected.Count == _gemsEaten.Count, "All lists should have the same length.");
@@ -86,7 +86,7 @@ internal static class GraphsChild
 			ImDrawListPtr drawListPtr = ImGui.GetWindowDrawList();
 			Vector2 mousePos = ImGui.GetMousePos();
 
-			ImGuiExt.Title("Gems", Root.FontGoetheBold20);
+			ImGuiExt.Title("Gems", fontService.GoetheBold20);
 
 			ImGui.Checkbox("Gems Collected", ref _showGemsCollected);
 			ImGui.SameLine();
@@ -99,7 +99,7 @@ internal static class GraphsChild
 
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + graphHeight + 8);
 
-			ImGuiExt.Title("Homing", Root.FontGoetheBold20);
+			ImGuiExt.Title("Homing", fontService.GoetheBold20);
 
 			ImGui.Checkbox("Homing Stored", ref _showHomingStored);
 			ImGui.SameLine();

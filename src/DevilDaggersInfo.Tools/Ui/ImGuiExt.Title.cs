@@ -4,10 +4,8 @@ namespace DevilDaggersInfo.Tools.Ui;
 
 internal static partial class ImGuiExt
 {
-	public static unsafe void Title(ReadOnlySpan<char> title, ImFontPtr font = default)
+	public static void Title(ReadOnlySpan<char> title, ImFontPtr font)
 	{
-		if (font == (void*)0)
-			font = Root.FontGoetheBold30;
 		ImGui.PushFont(font);
 		ImGui.Text(title);
 		ImGui.PopFont();

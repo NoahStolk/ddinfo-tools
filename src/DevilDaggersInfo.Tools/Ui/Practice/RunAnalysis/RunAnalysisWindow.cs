@@ -3,8 +3,11 @@ using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
 
-internal sealed class RunAnalysisWindow(GameMemoryServiceWrapper gameMemoryServiceWrapper)
+internal sealed class RunAnalysisWindow(GameMemoryServiceWrapper gameMemoryServiceWrapper, FontService fontService)
 {
+	private readonly GraphsChild _graphsChild = new(fontService);
+	private readonly SplitsChild _splitsChild = new(fontService);
+
 	private float _recordingTimer;
 
 	public PracticeStatsData StatsData { get; } = new();
@@ -20,7 +23,7 @@ internal sealed class RunAnalysisWindow(GameMemoryServiceWrapper gameMemoryServi
 			return;
 
 		StatsData.Populate();
-		GraphsChild.Update(StatsData.Statistics);
+		_graphsChild.Update(StatsData.Statistics);
 	}
 
 	public void Render()
@@ -28,8 +31,8 @@ internal sealed class RunAnalysisWindow(GameMemoryServiceWrapper gameMemoryServi
 		ImGuiUtils.SetNextWindowMinSize(512, 1024);
 		if (ImGui.Begin("Run Analysis"))
 		{
-			SplitsChild.Render(StatsData);
-			GraphsChild.Render(StatsData);
+			_splitsChild.Render(StatsData);
+			_graphsChild.Render(StatsData);
 		}
 
 		ImGui.End();

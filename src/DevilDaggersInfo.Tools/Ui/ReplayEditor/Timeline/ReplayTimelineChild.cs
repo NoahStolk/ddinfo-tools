@@ -13,7 +13,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 
-internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineSelectedEventsChild replayTimelineSelectedEventsChild)
+internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineSelectedEventsChild replayTimelineSelectedEventsChild, FontService fontService)
 {
 	private const float _markerSize = 24;
 
@@ -68,7 +68,7 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 		{
 			if (_selectedTickIndex.HasValue)
 			{
-				ImGui.PushFont(Root.FontGoetheBold20);
+				ImGui.PushFont(fontService.GoetheBold20);
 				ImGui.Text(Inline.Span($"Tick {_selectedTickIndex.Value} selected"));
 				ImGui.PopFont();
 

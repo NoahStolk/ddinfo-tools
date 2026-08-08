@@ -11,7 +11,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager;
 
-internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogic)
+internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogic, FontService fontService)
 {
 	private static Dictionary<string, List<EffectiveAsset>> _effectiveAssets = new();
 	private static int _activeAssets;
@@ -199,11 +199,9 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 		}
 	}
 
-	private static void Title(ReadOnlySpan<char> label)
+	private void Title(ReadOnlySpan<char> label)
 	{
-		ImGui.PushFont(Root.FontGoetheBold20);
-		ImGui.Text(label);
-		ImGui.PopFont();
+		ImGuiExt.Title(label, fontService.GoetheBold20);
 	}
 
 	private static void NextColumnText(ReadOnlySpan<char> label)
