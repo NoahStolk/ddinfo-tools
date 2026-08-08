@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Scenes;
+using DevilDaggersInfo.Tools.Scenes.Rendering;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using ImGuiNET;
 using Silk.NET.GLFW;
@@ -9,7 +10,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 
-internal sealed unsafe class SpawnsetEditor3DWindow(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ResourceManager resourceManager, FileStates fileStates, SpawnsetSaver spawnsetSaver)
+internal sealed unsafe class SpawnsetEditor3DWindow(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ArenaRenderer arenaRenderer, FileStates fileStates, SpawnsetSaver spawnsetSaver)
 {
 	private readonly FramebufferData _framebufferData = new(gl);
 
@@ -19,7 +20,7 @@ internal sealed unsafe class SpawnsetEditor3DWindow(Glfw glfw, GL gl, WindowHand
 
 	public void InitializeScene()
 	{
-		_arenaScene = new ArenaScene(glfw, gl, window, glfwInput, resourceManager, () => fileStates.Spawnset.Object, false, true, fileStates, spawnsetSaver);
+		_arenaScene = new ArenaScene(glfw, window, glfwInput, () => fileStates.Spawnset.Object, false, true, fileStates, spawnsetSaver);
 	}
 
 	public void Render(float delta)
@@ -41,7 +42,7 @@ internal sealed unsafe class SpawnsetEditor3DWindow(Glfw glfw, GL gl, WindowHand
 
 			bool isWindowFocused = ImGui.IsWindowFocused();
 			bool isMouseOverFramebuffer = ImGui.IsMouseHoveringRect(cursorScreenPos, cursorScreenPos + framebufferSize);
-			_framebufferData.RenderArena(isWindowFocused && isMouseOverFramebuffer, isWindowFocused, delta, ArenaScene);
+			_framebufferData.RenderArena(isWindowFocused && isMouseOverFramebuffer, isWindowFocused, delta, ArenaScene, arenaRenderer);
 
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 			drawList.AddFramebufferImage(_framebufferData, cursorScreenPos, cursorScreenPos + new Vector2(_framebufferData.Width, _framebufferData.Height), isWindowFocused ? Color.White : Color.Gray(0.5f));

@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.Scenes;
+using DevilDaggersInfo.Tools.Scenes.Rendering;
 using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools;
@@ -12,6 +13,15 @@ internal unsafe class FramebufferData(GL gl)
 
 	public void ResizeIfNecessary(int width, int height)
 	{
+		// ImGui ignores size constraints for docked windows, so callers deriving the framebuffer size by subtracting
+		// padding from the window size can end up asking for a zero or negative size. Creating a framebuffer from that
+		// yields GL_INVALID_VALUE and an incomplete framebuffer, which renders as garbage rather than failing loudly.
+		if (width < 1 || height < 1)
+		{
+			Root.Log.Warning("Ignoring framebuffer resize to invalid size {Width}x{Height}.", width, height);
+			return;
+		}
+
 		if (width == Width && height == Height)
 			return;
 
@@ -49,9 +59,14 @@ internal unsafe class FramebufferData(GL gl)
 		gl.DeleteRenderbuffer(rbo);
 	}
 
-	public void RenderArena(bool activateMouse, bool activateKeyboard, float delta, ArenaScene arenaScene)
+	public void RenderArena(bool activateMouse, bool activateKeyboard, float delta, ArenaScene arenaScene, ArenaRenderer arenaRenderer)
 	{
-		arenaScene.Update(activateMouse, activateKeyboard, delta);
+		// No valid framebuffer yet, e.g. because the very first requested size was degenerate. Updating anyway would build
+		// camera matrices from a zero-sized viewport, giving a NaN aspect ratio and dividing by zero during tile picking.
+		if (Width < 1 || Height < 1)
+			return;
+
+		arenaScene.Update(activateMouse, activateKeyboard, delta, Width, Height);
 
 		gl.BindFramebuffer(FramebufferTarget.Framebuffer, Framebuffer);
 
@@ -70,7 +85,7 @@ internal unsafe class FramebufferData(GL gl)
 		gl.Enable(EnableCap.CullFace);
 		gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-		arenaScene.Render(activateMouse, framebufferWidth, framebufferHeight);
+		arenaRenderer.Render(arenaScene, activateMouse);
 
 		gl.Viewport(originalViewport[0], originalViewport[1], (uint)originalViewport[2], (uint)originalViewport[3]);
 		gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);

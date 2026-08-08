@@ -20,6 +20,9 @@ internal sealed class ResourceManager
 		Assembly assembly = Assembly.GetExecutingAssembly();
 		InternalContent ddInfoToolsContent = InternalResourceReader.Read(assembly);
 
+		// CA2000 cannot see that ownership of each Texture transfers to the record being constructed. These live for the
+		// lifetime of the process; the game-side equivalents are released by GameResources.Dispose on reload.
+#pragma warning disable CA2000
 		InternalResources = new InternalResources(
 			MeshShader: GetShader(ddInfoToolsContent, "Mesh"),
 			ApplicationIconTexture: GetTextureContent(ddInfoToolsContent, "ApplicationIcon"),
@@ -47,6 +50,7 @@ internal sealed class ResourceManager
 			ReloadTexture: GetTexture(ddInfoToolsContent, "Reload"),
 			TileHitboxTexture: GetTexture(ddInfoToolsContent, "TileHitbox"),
 			TileHitboxModel: GetModelContent(ddInfoToolsContent, "TileHitbox"));
+#pragma warning restore CA2000
 	}
 
 	// TODO: Rewrite to dictionary.
@@ -66,8 +70,17 @@ internal sealed class ResourceManager
 	/// </summary>
 	public GameResources? GameResources { get; private set; }
 
+	/// <summary>
+	/// Uploads the game textures. Safe to call again after the installation directory changes; the previous textures are
+	/// deleted rather than leaked.
+	/// </summary>
 	public void LoadGameResources()
 	{
+		GameResources?.Dispose();
+
+		// CA2000 cannot see that ownership of each Texture transfers to the record being constructed. They are released by
+		// GameResources.Dispose above, on the next reload.
+#pragma warning disable CA2000
 		GameResources = new GameResources(
 			IconMaskCrosshairTexture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.IconMaskCrosshairTexture)),
 			IconMaskDaggerTexture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.IconMaskDaggerTexture)),
@@ -82,6 +95,7 @@ internal sealed class ResourceManager
 			PillarTexture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.PillarTexture)),
 			PostLut: new Texture(_gl, _textureLoader.Load(ContentManager.Content.PostLut)),
 			Hand4Texture: new Texture(_gl, _textureLoader.Load(ContentManager.Content.Hand4Texture)));
+#pragma warning restore CA2000
 	}
 
 	private Shader GetShader(InternalContent content, string name)

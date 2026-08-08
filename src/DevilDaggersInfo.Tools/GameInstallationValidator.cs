@@ -1,4 +1,5 @@
-using DevilDaggersInfo.Tools.Scenes.GameObjects;
+using DevilDaggersInfo.Tools.Engine;
+using DevilDaggersInfo.Tools.Scenes.Rendering;
 using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 using DevilDaggersInfo.Tools.Ui.Main;
@@ -10,9 +11,10 @@ using Silk.NET.OpenGL;
 namespace DevilDaggersInfo.Tools;
 
 internal sealed class GameInstallationValidator(
-	GL gl,
 	UiLayoutManager uiLayoutManager,
+	MeshCache meshCache,
 	ResourceManager resourceManager,
+	ArenaRenderer arenaRenderer,
 	MainScene mainScene,
 	SpawnsetEditor3DWindow spawnsetEditor3DWindow,
 	CustomLeaderboards3DWindow customLeaderboards3DWindow,
@@ -45,17 +47,15 @@ internal sealed class GameInstallationValidator(
 		uiLayoutManager.Layout = LayoutType.Main;
 		Error = null;
 
+		// ContentManager.Initialize builds fresh content objects every time, so the GPU-side resources must be rebuilt
+		// every time too. Skipping this left the meshes and textures belonging to the previously loaded installation.
+		meshCache.Clear();
+		arenaRenderer.InvalidateMeshes();
+		resourceManager.LoadGameResources();
+		arenaRenderer.WarmUpMeshes();
+
 		if (_contentInitialized)
 			return;
-
-		// Initialize game resources.
-		resourceManager.LoadGameResources();
-
-		// Initialize 3D rendering.
-		Player.InitializeRendering(gl);
-		RaceDagger.InitializeRendering(gl);
-		Tile.InitializeRendering(gl, resourceManager);
-		Skull4.InitializeRendering(gl);
 
 		// Initialize scenes.
 		mainScene.Initialize();

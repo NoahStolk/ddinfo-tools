@@ -6,6 +6,16 @@
 
 - Added support for reading game memory on Linux, which enables live run data (splits, homing usage, gem collection) in the practice tool.
 
+### Fixed
+
+- Fixed 3D meshes and textures not being reloaded when the Devil Daggers installation directory changes, which could render the dagger, skull and hand using data from the previously loaded installation.
+- Fixed tile hitboxes hiding each other instead of blending, in the 3D views.
+- Fixed the 3D views breaking when their window is made very small.
+
+### Miscellaneous
+
+- Rewrote the 3D rendering internals so that all rendering happens in one place, separate from the scene it draws.
+
 ## [0.13.7.1] - 2026-05-04
 
 ### Fixed

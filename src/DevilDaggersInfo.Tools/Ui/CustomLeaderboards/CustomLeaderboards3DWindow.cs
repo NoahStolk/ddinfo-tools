@@ -3,6 +3,7 @@ using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Scenes;
+using DevilDaggersInfo.Tools.Scenes.Rendering;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using ImGuiNET;
 using Silk.NET.GLFW;
@@ -11,7 +12,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-internal sealed unsafe class CustomLeaderboards3DWindow(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ResourceManager resourceManager, FileStates fileStates, SpawnsetSaver spawnsetSaver)
+internal sealed unsafe class CustomLeaderboards3DWindow(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ArenaRenderer arenaRenderer, FileStates fileStates, SpawnsetSaver spawnsetSaver)
 {
 	private readonly FramebufferData _framebufferData = new(gl);
 
@@ -25,7 +26,7 @@ internal sealed unsafe class CustomLeaderboards3DWindow(Glfw glfw, GL gl, Window
 
 	public void InitializeScene()
 	{
-		_arenaScene = new ArenaScene(glfw, gl, window, glfwInput, resourceManager, () => _spawnset, false, false, fileStates, spawnsetSaver);
+		_arenaScene = new ArenaScene(glfw, window, glfwInput, () => _spawnset, false, false, fileStates, spawnsetSaver);
 	}
 
 	public void LoadReplay(ReplayBinary<LocalReplayBinaryHeader> replayBinary)
@@ -63,7 +64,7 @@ internal sealed unsafe class CustomLeaderboards3DWindow(Glfw glfw, GL gl, Window
 
 			bool isWindowFocused = ImGui.IsWindowFocused();
 			bool isMouseOverFramebuffer = isWindowFocused && ImGui.IsWindowHovered() && ImGui.IsMouseHoveringRect(cursorScreenPos, cursorScreenPos + framebufferSize);
-			_framebufferData.RenderArena(isMouseOverFramebuffer, isWindowFocused, delta, ArenaScene);
+			_framebufferData.RenderArena(isMouseOverFramebuffer, isWindowFocused, delta, ArenaScene, arenaRenderer);
 
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 			drawList.AddFramebufferImage(_framebufferData, cursorScreenPos, cursorScreenPos + new Vector2(_framebufferData.Width, _framebufferData.Height));
