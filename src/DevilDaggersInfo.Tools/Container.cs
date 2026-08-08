@@ -4,6 +4,9 @@ using DevilDaggersInfo.Tools.Encryption;
 using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Extensions;
 using DevilDaggersInfo.Tools.Engine.Loaders;
+using DevilDaggersInfo.Tools.GameMemory;
+using DevilDaggersInfo.Tools.GameWindow;
+using DevilDaggersInfo.Tools.Platforms;
 using DevilDaggersInfo.Tools.Scenes.Rendering;
 using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.AssetEditor;
@@ -31,7 +34,6 @@ using ImGuiNET;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 using StrongInject;
-using System.Diagnostics;
 using Monitor = Silk.NET.GLFW.Monitor;
 
 namespace DevilDaggersInfo.Tools;
@@ -72,6 +74,7 @@ namespace DevilDaggersInfo.Tools;
 [Register<AboutWindow>(Scope.SingleInstance)]
 [Register<DebugWindow>(Scope.SingleInstance)]
 [Register<MainWindow>(Scope.SingleInstance)]
+[Register<UpdateWindow>(Scope.SingleInstance)]
 
 // Spawnset Editor
 [Register<SpawnsetEditorMenu>(Scope.SingleInstance)]
@@ -293,5 +296,37 @@ internal sealed partial class Container : IContainer<Application>
 			// Fallback used by many compositors
 			return !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WAYLAND_DISPLAY"));
 		}
+	}
+
+	[Factory(Scope.SingleInstance)]
+	private static GameMemoryService CreateGameMemoryService()
+	{
+#if WINDOWS
+		return new GameMemoryService(new NativeInterface.Services.Windows.WindowsMemoryService());
+#elif LINUX
+		return new GameMemoryService(new NativeInterface.Services.Linux.LinuxMemoryService());
+#endif
+	}
+
+	[Factory(Scope.SingleInstance)]
+	private static GameWindowService CreateGameWindowService()
+	{
+#if WINDOWS
+		return new GameWindowService(new NativeInterface.Services.Windows.WindowsWindowingService());
+#elif LINUX
+		return new GameWindowService(new NativeInterface.Services.Linux.LinuxWindowingService());
+#endif
+	}
+
+	[Factory(Scope.SingleInstance)]
+#pragma warning disable CA1859 // Change return type of method 'CreatePlatformSpecificValues' from 'DevilDaggersInfo.Tools.Platforms.IPlatformSpecificValues' to 'DevilDaggersInfo.Tools.Platforms.LinuxValues' for improved performance.
+	private static IPlatformSpecificValues CreatePlatformSpecificValues()
+#pragma warning restore CA1859
+	{
+#if WINDOWS
+		return new WindowsValues();
+#elif LINUX
+		return new LinuxValues();
+#endif
 	}
 }

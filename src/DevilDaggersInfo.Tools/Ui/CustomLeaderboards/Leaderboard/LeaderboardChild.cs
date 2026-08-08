@@ -4,6 +4,7 @@ using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
+using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
@@ -17,7 +18,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
 
-internal sealed class LeaderboardChild(CustomLeaderboards3DWindow customLeaderboards3DWindow, PopupManager popupManager)
+internal sealed class LeaderboardChild(CustomLeaderboards3DWindow customLeaderboards3DWindow, PopupManager popupManager, GameMemoryService gameMemoryService)
 {
 	private GetCustomEntry? _selectedCustomEntry;
 
@@ -254,7 +255,7 @@ internal sealed class LeaderboardChild(CustomLeaderboards3DWindow customLeaderbo
 		void Inject(ApiResult<GetCustomEntryReplayBuffer> getCustomEntryReplayBufferResult)
 		{
 			getCustomEntryReplayBufferResult.Match(
-				getCustomEntryReplayBuffer => Root.GameMemoryService.WriteReplayToMemory(getCustomEntryReplayBuffer.Data),
+				getCustomEntryReplayBuffer => gameMemoryService.WriteReplayToMemory(getCustomEntryReplayBuffer.Data),
 				apiError => popupManager.ShowError("Could not fetch replay.", apiError));
 		}
 	}

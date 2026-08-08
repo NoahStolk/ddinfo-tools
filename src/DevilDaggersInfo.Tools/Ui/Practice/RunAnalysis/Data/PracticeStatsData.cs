@@ -13,15 +13,15 @@ internal sealed class PracticeStatsData
 	public float TimerStart { get; private set; }
 	public float TimerEnd { get; private set; }
 
-	public void Populate()
+	public void Populate(GameMemoryService gameMemoryService)
 	{
 		_statistics.Clear();
 
 		Array.Clear(_statsBuffer);
-		Root.GameMemoryService.GetStatsBuffer(_statsBuffer);
+		gameMemoryService.GetStatsBuffer(_statsBuffer);
 		using MemoryStream ms = new(_statsBuffer);
 		using BinaryReader br = new(ms);
-		for (int i = 0; i < Root.GameMemoryService.MainBlock.StatsCount; i++)
+		for (int i = 0; i < gameMemoryService.MainBlock.StatsCount; i++)
 		{
 			int gemsCollected = br.ReadInt32();
 			br.BaseStream.Seek(sizeof(int) * 5, SeekOrigin.Current); // Skip 5 int stats.
@@ -43,8 +43,8 @@ internal sealed class PracticeStatsData
 			});
 		}
 
-		TimerStart = Root.GameMemoryService.MainBlock.StartTimer;
-		TimerEnd = Root.GameMemoryService.MainBlock.StartTimer + Root.GameMemoryService.MainBlock.Time;
+		TimerStart = gameMemoryService.MainBlock.StartTimer;
+		TimerEnd = gameMemoryService.MainBlock.StartTimer + gameMemoryService.MainBlock.Time;
 
 		SplitsData.Populate(this);
 	}

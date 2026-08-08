@@ -24,6 +24,7 @@ internal sealed class UiRenderer(
 	MainWindow mainWindow,
 	DebugWindow debugWindow,
 	AboutWindow aboutWindow,
+	UpdateWindow updateWindow,
 
 	SpawnsetEditorMenu spawnsetEditorMenu,
 	SpawnsetEditor3DWindow spawnsetEditor3DWindow,
@@ -110,7 +111,7 @@ internal sealed class UiRenderer(
 			debugWindow.Render();
 
 		aboutWindow.Render();
-		UpdateWindow.Render();
+		updateWindow.Render();
 
 		popupManager.Render();
 	}

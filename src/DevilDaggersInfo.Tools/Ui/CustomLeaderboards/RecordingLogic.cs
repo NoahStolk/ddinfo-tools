@@ -3,6 +3,7 @@ using DevilDaggersInfo.Tools.Encryption;
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
+using DevilDaggersInfo.Tools.Platforms;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
@@ -12,7 +13,12 @@ using System.Web;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-internal sealed class RecordingLogic(ResourceManager resourceManager, IEncryptionService encryptionService, PopupManager popupManager)
+internal sealed class RecordingLogic(
+	ResourceManager resourceManager,
+	IEncryptionService encryptionService,
+	PopupManager popupManager,
+	GameMemoryService gameMemoryService,
+	IPlatformSpecificValues platformSpecificValues)
 {
 	private readonly List<AddUploadRequestTimestamp> _timestamps = [];
 
@@ -29,14 +35,14 @@ internal sealed class RecordingLogic(ResourceManager resourceManager, IEncryptio
 	public void Handle()
 	{
 		// Do not execute if the game is not running.
-		if (!Root.GameMemoryService.IsInitialized)
+		if (!gameMemoryService.IsInitialized)
 		{
 			RecordingStateType = RecordingStateType.WaitingForGame;
 			return;
 		}
 
-		MainBlock mainBlock = Root.GameMemoryService.MainBlock;
-		MainBlock mainBlockPrevious = Root.GameMemoryService.MainBlockPrevious;
+		MainBlock mainBlock = gameMemoryService.MainBlock;
+		MainBlock mainBlockPrevious = gameMemoryService.MainBlockPrevious;
 
 		// When a run is scheduled to upload, keep trying until stats have loaded and the replay is valid.
 		if (_runToUpload != null)
@@ -46,7 +52,7 @@ internal sealed class RecordingLogic(ResourceManager resourceManager, IEncryptio
 				return;
 
 			RecordingStateType = RecordingStateType.WaitingForReplay;
-			if (!Root.GameMemoryService.IsReplayValid())
+			if (!gameMemoryService.IsReplayValid())
 				return;
 
 			UploadRunIfExists(_runToUpload.Value);
@@ -183,7 +189,7 @@ internal sealed class RecordingLogic(ResourceManager resourceManager, IEncryptio
 			runToUpload.ProhibitedMods);
 		string validation = encryptionService.EncryptAndEncode(toEncrypt);
 
-		byte[] statsBuffer = Root.GameMemoryService.GetStatsBuffer();
+		byte[] statsBuffer = gameMemoryService.GetStatsBuffer();
 
 		AddUploadRequest uploadRequest = new()
 		{
@@ -227,10 +233,10 @@ internal sealed class RecordingLogic(ResourceManager resourceManager, IEncryptio
 #else
 			BuildMode = "RELEASE",
 #endif
-			OperatingSystem = Root.PlatformSpecificValues.AppOperatingSystem.ToString(),
+			OperatingSystem = platformSpecificValues.AppOperatingSystem.ToString(),
 			ProhibitedMods = runToUpload.ProhibitedMods,
 			Client = "ddinfo-tools",
-			ReplayData = Root.GameMemoryService.ReadReplayFromMemory(),
+			ReplayData = gameMemoryService.ReadReplayFromMemory(),
 #if FORCE_LOCAL_REPLAYS
 			Status = (int)GameStatus.Dead,
 #else

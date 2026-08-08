@@ -1,9 +1,10 @@
+using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis.Data;
 using ImGuiNET;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
 
-internal sealed class RunAnalysisWindow(GameMemoryServiceWrapper gameMemoryServiceWrapper, FontService fontService)
+internal sealed class RunAnalysisWindow(GameMemoryServiceWrapper gameMemoryServiceWrapper, FontService fontService, GameMemoryService gameMemoryService)
 {
 	private readonly GraphsChild _graphsChild = new(fontService);
 	private readonly SplitsChild _splitsChild = new(fontService);
@@ -19,10 +20,10 @@ internal sealed class RunAnalysisWindow(GameMemoryServiceWrapper gameMemoryServi
 			return;
 
 		_recordingTimer = 0;
-		if (!gameMemoryServiceWrapper.Scan() || !Root.GameMemoryService.IsInitialized)
+		if (!gameMemoryServiceWrapper.Scan() || !gameMemoryService.IsInitialized)
 			return;
 
-		StatsData.Populate();
+		StatsData.Populate(gameMemoryService);
 		_graphsChild.Update(StatsData.Statistics);
 	}
 

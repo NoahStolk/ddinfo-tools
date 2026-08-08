@@ -7,7 +7,15 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Main;
 
-internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManager uiLayoutManager, FrameCounter frameCounter, LeaderboardListChild leaderboardListChild, AboutWindow aboutWindow, ModsDirectoryLogic modsDirectoryLogic, FontService fontService)
+internal sealed class MainWindow(
+	ResourceManager resourceManager,
+	UiLayoutManager uiLayoutManager,
+	FrameCounter frameCounter,
+	LeaderboardListChild leaderboardListChild,
+	AboutWindow aboutWindow,
+	UpdateWindow updateWindow,
+	ModsDirectoryLogic modsDirectoryLogic,
+	FontService fontService)
 {
 	private readonly string _version = $"{AssemblyUtils.EntryAssemblyVersionString} (ALPHA)";
 
@@ -38,7 +46,7 @@ internal sealed class MainWindow(ResourceManager resourceManager, UiLayoutManage
 			ImGui.Text("Developed by Noah Stolk");
 
 			ImGui.SetCursorPos(new Vector2(windowSize.X - 208, 8));
-			AppButton(resourceManager.InternalResources.DownloadTexture, "Updates", () => UpdateWindow.Show = true);
+			AppButton(resourceManager.InternalResources.DownloadTexture, "Updates", () => updateWindow.Show = true);
 
 			ImGui.SameLine();
 			AppButton(resourceManager.InternalResources.ConfigurationTexture, "Configuration", () => uiLayoutManager.Layout = LayoutType.Config);

@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Platforms;
 using DevilDaggersInfo.Tools.Utils;
 using DevilDaggersInfo.Web.ApiSpec.Tools;
 using ImGuiNET;
@@ -5,12 +6,11 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-// TODO: Rewrite to instance.
-internal static class UpdateWindow
+internal sealed class UpdateWindow(IPlatformSpecificValues platformSpecificValues)
 {
-	public static bool Show;
+	public bool Show;
 
-	public static void Render()
+	public void Render()
 	{
 		if (!Show)
 			return;
@@ -51,9 +51,9 @@ internal static class UpdateWindow
 		ImGui.End();
 	}
 
-	private static string GetZipAssetDisplayName()
+	private string GetZipAssetDisplayName()
 	{
-		return Root.PlatformSpecificValues.AppOperatingSystem switch
+		return platformSpecificValues.AppOperatingSystem switch
 		{
 			AppOperatingSystem.Windows => "ddinfo-tools-win-x64.zip",
 			AppOperatingSystem.Linux => "ddinfo-tools-linux-x64.zip",
@@ -61,9 +61,9 @@ internal static class UpdateWindow
 		};
 	}
 
-	private static string GetExecutableDisplayName()
+	private string GetExecutableDisplayName()
 	{
-		return Root.PlatformSpecificValues.AppOperatingSystem switch
+		return platformSpecificValues.AppOperatingSystem switch
 		{
 			AppOperatingSystem.Windows => "ddinfo-tools.exe",
 			AppOperatingSystem.Linux => "ddinfo-tools",

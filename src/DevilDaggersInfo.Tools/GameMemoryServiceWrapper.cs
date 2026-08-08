@@ -1,11 +1,13 @@
+using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
+using DevilDaggersInfo.Tools.Platforms;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Web.ApiSpec.Tools.ProcessMemory;
 
 namespace DevilDaggersInfo.Tools;
 
-internal sealed class GameMemoryServiceWrapper(PopupManager popupManager)
+internal sealed class GameMemoryServiceWrapper(PopupManager popupManager, GameMemoryService gameMemoryService, IPlatformSpecificValues platformSpecificValues)
 {
 	private bool _tryDownloadMarker = true;
 
@@ -27,8 +29,8 @@ internal sealed class GameMemoryServiceWrapper(PopupManager popupManager)
 		}
 
 		// Always initialize the process, so we detach properly when the game exits.
-		Root.GameMemoryService.Initialize(Marker.Value);
-		Root.GameMemoryService.Scan();
+		gameMemoryService.Initialize(Marker.Value);
+		gameMemoryService.Scan();
 
 		return true;
 	}
@@ -39,7 +41,7 @@ internal sealed class GameMemoryServiceWrapper(PopupManager popupManager)
 		if (popupManager.IsAnyOpen)
 			return;
 
-		AsyncHandler.Run(SetMarker, () => FetchMarker.HandleAsync(Root.PlatformSpecificValues.AppOperatingSystem));
+		AsyncHandler.Run(SetMarker, () => FetchMarker.HandleAsync(platformSpecificValues.AppOperatingSystem));
 
 		void SetMarker(ApiResult<GetMarker> getMarkerResult)
 		{

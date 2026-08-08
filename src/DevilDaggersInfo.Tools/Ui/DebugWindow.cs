@@ -2,6 +2,7 @@ using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.Encryption;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using DevilDaggersInfo.Tools.GameWindow;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
@@ -12,7 +13,13 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter, INativeFileDialog nativeFileDialog, IEncryptionService encryptionService, PopupManager popupManager)
+internal sealed class DebugWindow(
+	GlfwInput glfwInput,
+	FrameCounter frameCounter,
+	INativeFileDialog nativeFileDialog,
+	IEncryptionService encryptionService,
+	PopupManager popupManager,
+	GameWindowService gameWindowService)
 {
 	private readonly List<string> _debugMessages = [];
 	private readonly DateTime _startUpTime = DateTime.UtcNow;
@@ -236,7 +243,7 @@ internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter
 		AddText("Gen 2 GCs", Inline.Span(GC.CollectionCount(2)));
 		AddText("Total GC pause duration", Inline.Span(GC.GetTotalPauseDuration()));
 		AddText("Total app time", Inline.Span(DateTime.UtcNow - _startUpTime));
-		AddText("Devil Daggers window position", Inline.Span(Root.GameWindowService.GetWindowPosition()));
+		AddText("Devil Daggers window position", Inline.Span(gameWindowService.GetWindowPosition()));
 	}
 
 	private static void RenderUserCache()

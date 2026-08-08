@@ -2,6 +2,7 @@ using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.EditorFileState;
+using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
@@ -17,7 +18,8 @@ internal sealed class ReplayEditorMenu(
 	INativeFileDialog nativeFileDialog,
 	PopupManager popupManager,
 	FileStates fileStates,
-	GameMemoryServiceWrapper gameMemoryServiceWrapper)
+	GameMemoryServiceWrapper gameMemoryServiceWrapper,
+	GameMemoryService gameMemoryService)
 {
 	public void Render()
 	{
@@ -114,13 +116,13 @@ internal sealed class ReplayEditorMenu(
 
 	public void OpenReplayFromGameMemory()
 	{
-		if (!gameMemoryServiceWrapper.Scan() || !Root.GameMemoryService.IsInitialized)
+		if (!gameMemoryServiceWrapper.Scan() || !gameMemoryService.IsInitialized)
 		{
 			popupManager.ShowError("Could not read replay from game memory. Make sure the game is running.");
 			return;
 		}
 
-		byte[] replayBytes = Root.GameMemoryService.ReadReplayFromMemory();
+		byte[] replayBytes = gameMemoryService.ReadReplayFromMemory();
 		if (ReplayBinary<LocalReplayBinaryHeader>.TryParse(replayBytes, out ReplayBinary<LocalReplayBinaryHeader>? replayBinary))
 		{
 			fileStates.Replay.Update(EditorReplayModel.CreateFromLocalReplay(replayBinary));
@@ -154,13 +156,13 @@ internal sealed class ReplayEditorMenu(
 
 	public void InjectReplay()
 	{
-		if (!gameMemoryServiceWrapper.Scan() || !Root.GameMemoryService.IsInitialized)
+		if (!gameMemoryServiceWrapper.Scan() || !gameMemoryService.IsInitialized)
 		{
 			popupManager.ShowError("Could not inject replay into game memory. Make sure the game is running.");
 			return;
 		}
 
-		Root.GameMemoryService.WriteReplayToMemory(fileStates.Replay.Object.ToLocalReplay().Compile());
+		gameMemoryService.WriteReplayToMemory(fileStates.Replay.Object.ToLocalReplay().Compile());
 	}
 
 	public void Close()

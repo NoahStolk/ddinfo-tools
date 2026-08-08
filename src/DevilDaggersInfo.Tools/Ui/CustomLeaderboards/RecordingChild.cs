@@ -10,11 +10,8 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-internal sealed class RecordingChild
+internal sealed class RecordingChild(ResourceManager resourceManager, RecordingLogic recordingLogic, GameMemoryService gameMemoryService)
 {
-	private readonly ResourceManager _resourceManager;
-	private readonly RecordingLogic _recordingLogic;
-
 	private float _statusIntensity;
 
 	private float _playerIntensity;
@@ -76,18 +73,12 @@ internal sealed class RecordingChild
 	private float _orbAliveCountIntensity;
 	private float _thornAliveCountIntensity;
 
-	public RecordingChild(ResourceManager resourceManager, RecordingLogic recordingLogic)
-	{
-		_resourceManager = resourceManager;
-		_recordingLogic = recordingLogic;
-	}
-
 	public void Update(float delta)
 	{
 		const float tolerance = 0.0001f;
 
-		MainBlock b = Root.GameMemoryService.MainBlock;
-		MainBlock p = Root.GameMemoryService.MainBlockPrevious;
+		MainBlock b = gameMemoryService.MainBlock;
+		MainBlock p = gameMemoryService.MainBlockPrevious;
 
 		_statusIntensity = b.Status != p.Status ? 1 : MathF.Max(0, _statusIntensity - delta);
 		_playerIntensity = !b.ArePlayersEqual(p) ? 1 : MathF.Max(0, _playerIntensity - delta);
@@ -152,7 +143,7 @@ internal sealed class RecordingChild
 
 	public void Render()
 	{
-		bool renderRecordingValues = Root.GameMemoryService.IsInitialized && !_recordingLogic.ShowUploadResponse && (GameStatus)Root.GameMemoryService.MainBlock.Status is not (GameStatus.Title or GameStatus.Menu or GameStatus.Lobby);
+		bool renderRecordingValues = gameMemoryService.IsInitialized && !recordingLogic.ShowUploadResponse && (GameStatus)gameMemoryService.MainBlock.Status is not (GameStatus.Title or GameStatus.Menu or GameStatus.Lobby);
 		if (renderRecordingValues)
 		{
 			RenderRecordingValues();
@@ -165,19 +156,19 @@ internal sealed class RecordingChild
 
 	private void RenderRecordingValues()
 	{
-		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen in this UI.");
+		Debug.Assert(resourceManager.GameResources != null, $"{nameof(resourceManager.GameResources)} is null, which should never happen in this UI.");
 
 		Vector2 iconSize = new(16);
 
 		if (ImGui.BeginChild("RecordingValues", new Vector2(288, 320)))
 		{
-			MainBlock b = Root.GameMemoryService.MainBlock;
+			MainBlock b = gameMemoryService.MainBlock;
 			RenderValue("Status", ((GameStatus)b.Status).ToDisplayString(), Color.White, _statusIntensity);
 
 			ImGui.Spacing();
 
 			// TODO: Use spans here.
-			ImGuiImage.Image(_resourceManager.InternalResources.IconEyeTexture.Id, iconSize, Color.Orange);
+			ImGuiImage.Image(resourceManager.InternalResources.IconEyeTexture.Id, iconSize, Color.Orange);
 			RenderValue("Player", GetPlayerText(b), Color.White, _playerIntensity);
 			RenderValue("Time", Inline.Span(b.Time, StringFormats.TimeFormat), Color.White, _timeIntensity);
 			RenderValue("Hand", GetUpgrade(b).Name, GetUpgrade(b).Color.ToEngineColor(), _handIntensity);
@@ -187,25 +178,25 @@ internal sealed class RecordingChild
 			RenderValue("Death", b.IsPlayerAlive ? "-" : GetDeath(b)?.Name ?? "?", GetDeath(b)?.Color.ToEngineColor() ?? Color.White, _deathIntensity);
 
 			ImGui.Spacing();
-			ImGuiImage.Image(_resourceManager.GameResources.IconMaskGemTexture.Id, iconSize, Color.Red);
+			ImGuiImage.Image(resourceManager.GameResources.IconMaskGemTexture.Id, iconSize, Color.Red);
 			RenderValue("Gems collected", Inline.Span(b.GemsCollected), Color.Red, _gemsCollectedIntensity);
 			RenderValue("Gems despawned", Inline.Span(b.GemsDespawned), Color.Gray(0.6f), _gemsDespawnedIntensity);
 			RenderValue("Gems eaten", Inline.Span(b.GemsEaten), Color.Green, _gemsEatenIntensity);
 			RenderValue("Gems total", Inline.Span(b.GemsTotal), Color.Red, _gemsTotalIntensity);
 
 			ImGui.Spacing();
-			ImGuiImage.Image(_resourceManager.GameResources.IconMaskHomingTexture.Id, iconSize);
+			ImGuiImage.Image(resourceManager.GameResources.IconMaskHomingTexture.Id, iconSize);
 			RenderValue("Homing stored", Inline.Span(b.HomingStored), Color.Purple, _homingStoredIntensity);
 			RenderValue("Homing eaten", Inline.Span(b.HomingEaten), Color.Red, _homingEatenIntensity);
 
 			ImGui.Spacing();
-			ImGuiImage.Image(_resourceManager.GameResources.IconMaskCrosshairTexture.Id, iconSize, Color.Green);
+			ImGuiImage.Image(resourceManager.GameResources.IconMaskCrosshairTexture.Id, iconSize, Color.Green);
 			RenderValue("Daggers fired", Inline.Span(b.DaggersFired), Color.Yellow, _daggersFiredIntensity);
 			RenderValue("Daggers hit", Inline.Span(b.DaggersHit), Color.Red, _daggersHitIntensity);
 			RenderValue("Accuracy", Inline.Span(GetAccuracy(b), "0.00%"), Color.Orange, _accuracyIntensity);
 
 			ImGui.Spacing();
-			ImGuiImage.Image(_resourceManager.GameResources.IconMaskSkullTexture.Id, iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
+			ImGuiImage.Image(resourceManager.GameResources.IconMaskSkullTexture.Id, iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
 			RenderValue("Enemies killed", Inline.Span(b.EnemiesKilled), Color.Red, _enemiesKilledIntensity);
 			RenderValue("Enemies alive", Inline.Span(b.EnemiesAlive), Color.Yellow, _enemiesAliveIntensity);
 
