@@ -2,9 +2,11 @@ using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools.Engine;
 
-public sealed class Shader(GL gl, uint id)
+public sealed class Shader(GL gl, uint id) : IDisposable
 {
 	private readonly Dictionary<string, int> _uniformLocations = new();
+
+	private bool _disposed;
 
 	public uint Id { get; } = id;
 
@@ -17,5 +19,15 @@ public sealed class Shader(GL gl, uint id)
 		_uniformLocations.Add(name, location);
 
 		return location;
+	}
+
+	public void Dispose()
+	{
+		if (_disposed)
+			return;
+
+		_disposed = true;
+
+		gl.DeleteProgram(Id);
 	}
 }
