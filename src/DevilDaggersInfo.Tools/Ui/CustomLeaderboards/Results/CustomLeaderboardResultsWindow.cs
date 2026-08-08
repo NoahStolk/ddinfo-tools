@@ -7,6 +7,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 
+// TODO: Rewrite to instance and extract state.
 internal static class CustomLeaderboardResultsWindow
 {
 	private static List<UploadResult> _results = [];

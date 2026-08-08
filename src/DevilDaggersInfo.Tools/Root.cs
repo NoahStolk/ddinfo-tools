@@ -1,11 +1,6 @@
 using DevilDaggersInfo.Tools.Utils;
 using Serilog;
 using Serilog.Core;
-#if WINDOWS
-using DevilDaggersInfo.Tools.NativeInterface.Services.Windows;
-#elif LINUX
-using DevilDaggersInfo.Tools.NativeInterface.Services.Linux;
-#endif
 
 namespace DevilDaggersInfo.Tools;
 
