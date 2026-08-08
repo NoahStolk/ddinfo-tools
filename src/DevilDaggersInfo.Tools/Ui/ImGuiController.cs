@@ -47,7 +47,7 @@ internal sealed class ImGuiController
 
 	private readonly uint _vbo;
 	private readonly uint _ebo;
-	private uint _vao;
+	private readonly uint _vao;
 
 	private readonly GL _gl;
 	private readonly GlfwInput _glfwInput;
@@ -61,7 +61,7 @@ internal sealed class ImGuiController
 	private int _framebufferWidth;
 	private int _framebufferHeight;
 
-	public ImGuiController(GL gl, GlfwInput glfwInput, ShaderLoader shaderLoader, int windowWidth, int windowHeight)
+	public unsafe ImGuiController(GL gl, GlfwInput glfwInput, ShaderLoader shaderLoader, int windowWidth, int windowHeight)
 	{
 		_gl = gl;
 		_glfwInput = glfwInput;
@@ -80,6 +80,21 @@ internal sealed class ImGuiController
 
 		_vbo = _gl.GenBuffer();
 		_ebo = _gl.GenBuffer();
+
+		// Create the VAO once and record the vertex layout into it. The attribute pointers capture _vbo (bound here) as
+		// their source, and the element buffer binding is VAO state, so both are restored by a single BindVertexArray at
+		// render time. Previously this was regenerated and deleted every frame, churning a GL object per frame.
+		_vao = _gl.GenVertexArray();
+		_gl.BindVertexArray(_vao);
+		_gl.BindBuffer(GLEnum.ArrayBuffer, _vbo);
+		_gl.BindBuffer(GLEnum.ElementArrayBuffer, _ebo);
+		_gl.EnableVertexAttribArray(0);
+		_gl.EnableVertexAttribArray(1);
+		_gl.EnableVertexAttribArray(2);
+		_gl.VertexAttribPointer(0, 2, GLEnum.Float, false, (uint)sizeof(ImDrawVert), (void*)0);
+		_gl.VertexAttribPointer(1, 2, GLEnum.Float, false, (uint)sizeof(ImDrawVert), (void*)8);
+		_gl.VertexAttribPointer(2, 4, GLEnum.UnsignedByte, true, (uint)sizeof(ImDrawVert), (void*)16);
+		_gl.BindVertexArray(0);
 
 		_shaderId = shaderLoader.Load(_vertexShader, _fragmentShader);
 		_projectionMatrixLocation = _gl.GetUniformLocation(_shaderId, "projectionMatrix");
@@ -210,19 +225,11 @@ internal sealed class ImGuiController
 
 		_gl.BindSampler(0, 0);
 
-		_vao = _gl.GenVertexArray();
+		// Bind the VAO built once in the constructor. _vbo still needs an explicit ArrayBuffer binding because the
+		// glBufferData calls in RenderImDrawData target the ArrayBuffer binding point, which is not VAO state; the element
+		// buffer is restored from the VAO.
 		_gl.BindVertexArray(_vao);
-
 		_gl.BindBuffer(GLEnum.ArrayBuffer, _vbo);
-		_gl.BindBuffer(GLEnum.ElementArrayBuffer, _ebo);
-
-		_gl.EnableVertexAttribArray(0);
-		_gl.EnableVertexAttribArray(1);
-		_gl.EnableVertexAttribArray(2);
-
-		_gl.VertexAttribPointer(0, 2, GLEnum.Float, false, (uint)sizeof(ImDrawVert), (void*)0);
-		_gl.VertexAttribPointer(1, 2, GLEnum.Float, false, (uint)sizeof(ImDrawVert), (void*)8);
-		_gl.VertexAttribPointer(2, 4, GLEnum.UnsignedByte, true, (uint)sizeof(ImDrawVert), (void*)16);
 	}
 
 	private unsafe void RenderImDrawData(ImDrawDataPtr drawDataPtr)
@@ -265,10 +272,6 @@ internal sealed class ImGuiController
 				_gl.DrawElementsBaseVertex(GLEnum.Triangles, cmdPtr.ElemCount, GLEnum.UnsignedShort, (void*)(cmdPtr.IdxOffset * sizeof(ushort)), (int)cmdPtr.VtxOffset);
 			}
 		}
-
-		// Destroy the temporary VAO.
-		_gl.DeleteVertexArray(_vao);
-		_vao = 0;
 
 		// Restore scissors.
 		_gl.Disable(EnableCap.ScissorTest);

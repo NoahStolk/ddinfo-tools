@@ -11,6 +11,8 @@ internal unsafe class FramebufferData(GL gl)
 	public int Width { get; private set; }
 	public int Height { get; private set; }
 
+	private uint DepthRenderbuffer { get; set; }
+
 	public void ResizeIfNecessary(int width, int height)
 	{
 		// ImGui ignores size constraints for docked windows, so callers deriving the framebuffer size by subtracting
@@ -28,12 +30,16 @@ internal unsafe class FramebufferData(GL gl)
 		Width = width;
 		Height = height;
 
-		// Delete previous data.
+		// Delete previous data. The framebuffer goes first so that deleting its attachments below releases their storage
+		// straight away rather than leaving it held by a container that is about to be destroyed anyway.
 		if (Framebuffer != 0)
 			gl.DeleteFramebuffer(Framebuffer);
 
 		if (TextureHandle != 0)
 			gl.DeleteTexture(TextureHandle);
+
+		if (DepthRenderbuffer != 0)
+			gl.DeleteRenderbuffer(DepthRenderbuffer);
 
 		// Create new data.
 		Framebuffer = gl.GenFramebuffer();
@@ -46,17 +52,20 @@ internal unsafe class FramebufferData(GL gl)
 		gl.TexParameterI(TextureTarget.Texture2D, GLEnum.TextureMagFilter, (int)GLEnum.Linear);
 		gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, TextureHandle, 0);
 
-		uint rbo = gl.GenRenderbuffer();
-		gl.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rbo);
+		// The handle is kept so this renderbuffer can be deleted on the next resize. Deleting it here while it is attached
+		// happens to be legal, because an unbound framebuffer's attachment keeps the storage alive, but it discards the
+		// only way to ever free it explicitly and leaves the correctness resting on the unbind ordering.
+		DepthRenderbuffer = gl.GenRenderbuffer();
+		gl.BindRenderbuffer(RenderbufferTarget.Renderbuffer, DepthRenderbuffer);
 
 		gl.RenderbufferStorage(RenderbufferTarget.Renderbuffer, InternalFormat.DepthComponent24, (uint)Width, (uint)Height);
-		gl.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rbo);
+		gl.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, DepthRenderbuffer);
 
 		if (gl.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != GLEnum.FramebufferComplete)
 			Root.Log.Warning("Framebuffer is not complete.");
 
+		gl.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
 		gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-		gl.DeleteRenderbuffer(rbo);
 	}
 
 	public void RenderArena(bool activateMouse, bool activateKeyboard, float delta, ArenaScene arenaScene, ArenaRenderer arenaRenderer)
