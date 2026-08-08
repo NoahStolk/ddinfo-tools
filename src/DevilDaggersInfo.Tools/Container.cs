@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.EditorFileState;
+using DevilDaggersInfo.Tools.Encryption;
 using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Extensions;
 using DevilDaggersInfo.Tools.Engine.Loaders;
@@ -270,6 +271,17 @@ internal sealed partial class Container : IContainer<Application>
 		glfw.SetWindowSizeLimits(window, (int)Constants.MinWindowSize.X, (int)Constants.MinWindowSize.Y, -1, -1);
 
 		return window;
+	}
+
+	[Factory(Scope.SingleInstance)]
+	private static IEncryptionService CreateEncryptionService()
+	{
+		EncryptionService? encryptionService = EncryptionService.TryCreate();
+		if (encryptionService != null)
+			return encryptionService;
+
+		Root.Log.Error("Could not create the encryption service. The encryption.ini resource is missing or incomplete.");
+		return new DummyEncryptionService();
 	}
 
 	[Factory(Scope.SingleInstance)]

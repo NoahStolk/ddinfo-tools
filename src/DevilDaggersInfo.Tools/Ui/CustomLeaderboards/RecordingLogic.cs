@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Common.Extensions;
+using DevilDaggersInfo.Tools.Encryption;
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
@@ -11,7 +12,7 @@ using System.Web;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-internal sealed class RecordingLogic(ResourceManager resourceManager, PopupManager popupManager)
+internal sealed class RecordingLogic(ResourceManager resourceManager, IEncryptionService encryptionService, PopupManager popupManager)
 {
 	private readonly List<AddUploadRequestTimestamp> _timestamps = [];
 
@@ -180,7 +181,7 @@ internal sealed class RecordingLogic(ResourceManager resourceManager, PopupManag
 			runToUpload.GameMode,
 			runToUpload.TimeAttackOrRaceFinished,
 			runToUpload.ProhibitedMods);
-		string validation = Root.AesBase32Wrapper?.EncryptAndEncode(toEncrypt) ?? "Encryption not available.";
+		string validation = encryptionService.EncryptAndEncode(toEncrypt);
 
 		byte[] statsBuffer = Root.GameMemoryService.GetStatsBuffer();
 

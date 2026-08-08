@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Tools.Dialogs;
+using DevilDaggersInfo.Tools.Encryption;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.Popups;
@@ -11,7 +12,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter, INativeFileDialog nativeFileDialog, PopupManager popupManager)
+internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter, INativeFileDialog nativeFileDialog, IEncryptionService encryptionService, PopupManager popupManager)
 {
 	private readonly List<string> _debugMessages = [];
 	private readonly DateTime _startUpTime = DateTime.UtcNow;
@@ -35,7 +36,7 @@ internal sealed class DebugWindow(GlfwInput glfwInput, FrameCounter frameCounter
 		if (ImGui.Begin("Debug"))
 		{
 			ImGui.TextColored(nativeFileDialog.DialogOpen ? Color.White : Color.Gray(0.4f), nativeFileDialog.DialogOpen ? "Native dialog open" : "Native dialog closed");
-			ImGui.TextColored(Root.AesBase32Wrapper == null ? Color.Red : Color.Green, Root.AesBase32Wrapper == null ? "Encryption unavailable" : "Encryption available");
+			ImGui.TextColored(encryptionService.IsAvailable ? Color.Green : Color.Red, encryptionService.IsAvailable ? "Encryption available" : "Encryption unavailable");
 
 			if (ImGui.CollapsingHeader("Popup debug info"))
 			{
