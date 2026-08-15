@@ -6,7 +6,7 @@ using DevilDaggersInfo.Tools.Scenes;
 using DevilDaggersInfo.Tools.Scenes.Rendering;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Tools.User.Settings;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using Serilog;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;

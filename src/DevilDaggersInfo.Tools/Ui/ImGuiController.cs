@@ -1,14 +1,12 @@
 using DevilDaggersInfo.Tools.Engine.Loaders;
 using DevilDaggersInfo.Tools.Extensions;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 using System.Numerics;
-using System.Runtime.InteropServices;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-// TODO: Use new implementation.
 internal sealed class ImGuiController
 {
 	private const string _vertexShader = """
@@ -51,7 +49,8 @@ internal sealed class ImGuiController
 
 	private readonly GL _gl;
 	private readonly GlfwInput _glfwInput;
-	private readonly IntPtr _context;
+	private readonly ImGuiContextPtr _context;
+	private readonly List<uint> _ownedTextures = [];
 	private readonly uint _shaderId;
 	private readonly int _projectionMatrixLocation;
 	private readonly int _imageLocation;
@@ -76,6 +75,7 @@ internal sealed class ImGuiController
 
 		ImGuiIOPtr io = ImGui.GetIO();
 		io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
+		io.BackendFlags |= ImGuiBackendFlags.RendererHasTextures;
 		io.ConfigFlags |= ImGuiConfigFlags.DockingEnable;
 
 		_vbo = _gl.GenBuffer();
@@ -101,38 +101,16 @@ internal sealed class ImGuiController
 		_imageLocation = _gl.GetUniformLocation(_shaderId, "image");
 	}
 
-	#region Initialization
-
-	public unsafe void CreateDefaultFont()
-	{
-		ImGuiIOPtr io = ImGui.GetIO();
-
-		io.Fonts.GetTexDataAsRGBA32(out IntPtr pixels, out int width, out int height, out int bytesPerPixel);
-
-		byte[] data = new byte[width * height * bytesPerPixel];
-		Marshal.Copy(pixels, data, 0, data.Length);
-		uint textureId = _gl.GenTexture();
-
-		_gl.BindTexture(TextureTarget.Texture2D, textureId);
-
-		_gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)GLEnum.Repeat);
-		_gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)GLEnum.Repeat);
-		_gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)GLEnum.Linear);
-		_gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)GLEnum.Linear);
-
-		fixed (byte* b = data)
-			_gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgba, (uint)width, (uint)height, 0, GLEnum.Rgba, PixelType.UnsignedByte, b);
-
-		io.Fonts.SetTexID((IntPtr)textureId);
-	}
-
-	#endregion Initialization
-
 	public void Destroy()
 	{
 		_gl.DeleteBuffer(_vbo);
 		_gl.DeleteBuffer(_ebo);
 		_gl.DeleteVertexArray(_vao);
+
+		foreach (uint textureId in _ownedTextures)
+			_gl.DeleteTexture(textureId);
+
+		_ownedTextures.Clear();
 
 		ImGui.DestroyContext(_context);
 	}
@@ -152,7 +130,10 @@ internal sealed class ImGuiController
 	public void Render()
 	{
 		ImGui.Render();
-		RenderImDrawData(ImGui.GetDrawData());
+
+		ImDrawDataPtr drawData = ImGui.GetDrawData();
+		UpdateTextures(drawData);
+		RenderImDrawData(drawData);
 	}
 
 	public void Update(float deltaSeconds)
@@ -196,6 +177,93 @@ internal sealed class ImGuiController
 	#endregion Input
 
 	#region Rendering
+
+	/// <summary>
+	/// Services ImGui's texture requests. Since <see cref="ImGuiBackendFlags.RendererHasTextures" /> is set, ImGui owns
+	/// the font atlas texture and tells us when to create, update, or destroy it. Textures the app owns (framebuffers,
+	/// mod previews) never appear here; they are passed straight through as an <see cref="ImTextureID" />.
+	/// </summary>
+	private void UpdateTextures(ImDrawDataPtr drawData)
+	{
+		for (int i = 0; i < drawData.Textures.Size; i++)
+		{
+			ImTextureDataPtr tex = drawData.Textures[i];
+			switch (tex.Status)
+			{
+				case ImTextureStatus.WantCreate:
+					CreateTexture(tex);
+					break;
+
+				case ImTextureStatus.WantUpdates:
+					UpdateTexture(tex);
+					break;
+
+				case ImTextureStatus.WantDestroy when tex.UnusedFrames > 0:
+					DestroyTexture(tex);
+					break;
+			}
+		}
+	}
+
+	private unsafe void CreateTexture(ImTextureDataPtr tex)
+	{
+		uint textureId = _gl.GenTexture();
+		_ownedTextures.Add(textureId);
+
+		_gl.BindTexture(TextureTarget.Texture2D, textureId);
+
+		_gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)GLEnum.Repeat);
+		_gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)GLEnum.Repeat);
+		_gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)GLEnum.Linear);
+		_gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)GLEnum.Linear);
+
+		(InternalFormat internalFormat, GLEnum sourceFormat) = GetTextureFormats(tex.Format);
+
+		_gl.PixelStore(GLEnum.UnpackRowLength, 0);
+		_gl.TexImage2D(TextureTarget.Texture2D, 0, internalFormat, (uint)tex.Width, (uint)tex.Height, 0, sourceFormat, PixelType.UnsignedByte, tex.Pixels);
+
+		tex.SetTexID(new ImTextureID(textureId));
+		tex.SetStatus(ImTextureStatus.Ok);
+	}
+
+	private unsafe void UpdateTexture(ImTextureDataPtr tex)
+	{
+		_gl.BindTexture(TextureTarget.Texture2D, (uint)tex.GetTexID().Handle);
+
+		(_, GLEnum sourceFormat) = GetTextureFormats(tex.Format);
+
+		// Only the changed rectangles are re-uploaded. UnpackRowLength makes GL read each row from the full-width
+		// source image, so the sub-rectangles can be copied without repacking them first.
+		_gl.PixelStore(GLEnum.UnpackRowLength, tex.Width);
+		for (int i = 0; i < tex.Updates.Size; i++)
+		{
+			ImTextureRect rect = tex.Updates[i];
+			_gl.TexSubImage2D(TextureTarget.Texture2D, 0, rect.X, rect.Y, rect.W, rect.H, sourceFormat, PixelType.UnsignedByte, tex.GetPixelsAt(rect.X, rect.Y));
+		}
+
+		_gl.PixelStore(GLEnum.UnpackRowLength, 0);
+		tex.SetStatus(ImTextureStatus.Ok);
+	}
+
+	private void DestroyTexture(ImTextureDataPtr tex)
+	{
+		uint textureId = (uint)tex.GetTexID().Handle;
+		_gl.DeleteTexture(textureId);
+		_ownedTextures.Remove(textureId);
+
+		tex.SetTexID(new ImTextureID(0UL));
+		tex.SetStatus(ImTextureStatus.Destroyed);
+	}
+
+	private static (InternalFormat InternalFormat, GLEnum SourceFormat) GetTextureFormats(ImTextureFormat format)
+	{
+		return format switch
+		{
+			ImTextureFormat.Rgba32 => (InternalFormat.Rgba, GLEnum.Rgba),
+			ImTextureFormat.Alpha8 => (InternalFormat.R8, GLEnum.Red),
+			_ => throw new NotSupportedException($"Unsupported ImTextureFormat: {format}"),
+		};
+	}
 
 	private unsafe void SetUpRenderState(ImDrawDataPtr drawDataPtr)
 	{
@@ -249,14 +317,22 @@ internal sealed class ImGuiController
 		{
 			ImDrawListPtr cmdListPtr = drawDataPtr.CmdLists[i];
 
-			_gl.BufferData(GLEnum.ArrayBuffer, (nuint)(cmdListPtr.VtxBuffer.Size * sizeof(ImDrawVert)), (void*)cmdListPtr.VtxBuffer.Data, GLEnum.StreamDraw);
-			_gl.BufferData(GLEnum.ElementArrayBuffer, (nuint)(cmdListPtr.IdxBuffer.Size * sizeof(ushort)), (void*)cmdListPtr.IdxBuffer.Data, GLEnum.StreamDraw);
+			_gl.BufferData(GLEnum.ArrayBuffer, (nuint)(cmdListPtr.VtxBuffer.Size * sizeof(ImDrawVert)), cmdListPtr.VtxBuffer.Data, GLEnum.StreamDraw);
+			_gl.BufferData(GLEnum.ElementArrayBuffer, (nuint)(cmdListPtr.IdxBuffer.Size * sizeof(ushort)), cmdListPtr.IdxBuffer.Data, GLEnum.StreamDraw);
 
 			for (int j = 0; j < cmdListPtr.CmdBuffer.Size; j++)
 			{
-				ImDrawCmdPtr cmdPtr = cmdListPtr.CmdBuffer[j];
-				if (cmdPtr.UserCallback != IntPtr.Zero)
-					throw new NotImplementedException();
+				ImDrawCmd cmdPtr = cmdListPtr.CmdBuffer[j];
+				if (cmdPtr.UserCallback != null)
+				{
+					// ImGui asks the backend to reset its render state by passing this sentinel instead of a real callback.
+					if ((nint)cmdPtr.UserCallback == ImGui.ImDrawCallbackResetRenderState)
+						SetUpRenderState(drawDataPtr);
+					else
+						((delegate* unmanaged[Cdecl]<ImDrawList*, ImDrawCmd*, void>)cmdPtr.UserCallback)(cmdListPtr.Handle, &cmdPtr);
+
+					continue;
+				}
 
 				Vector4 clipRect;
 				clipRect.X = (cmdPtr.ClipRect.X - clipOff.X) * clipScale.X;
@@ -268,7 +344,7 @@ internal sealed class ImGuiController
 					continue;
 
 				_gl.Scissor((int)clipRect.X, (int)(framebufferHeight - clipRect.W), (uint)(clipRect.Z - clipRect.X), (uint)(clipRect.W - clipRect.Y));
-				_gl.BindTexture(GLEnum.Texture2D, (uint)cmdPtr.TextureId);
+				_gl.BindTexture(GLEnum.Texture2D, (uint)cmdPtr.GetTexID().Handle);
 				_gl.DrawElementsBaseVertex(GLEnum.Triangles, cmdPtr.ElemCount, GLEnum.UnsignedShort, (void*)(cmdPtr.IdxOffset * sizeof(ushort)), (int)cmdPtr.VtxOffset);
 			}
 		}
@@ -286,7 +362,7 @@ internal sealed class ImGuiController
 			>= Keys.F1 and <= Keys.F24 => ConvertRange(key, Keys.F1, ImGuiKey.F1),
 			>= Keys.Keypad0 and <= Keys.Keypad9 => ConvertRange(key, Keys.Keypad0, ImGuiKey.Keypad0),
 			>= Keys.A and <= Keys.Z => ConvertRange(key, Keys.A, ImGuiKey.A),
-			>= Keys.Number0 and <= Keys.Number9 => ConvertRange(key, Keys.Number0, ImGuiKey._0),
+			>= Keys.Number0 and <= Keys.Number9 => ConvertRange(key, Keys.Number0, ImGuiKey.Key0),
 			Keys.ShiftLeft or Keys.ShiftRight => ImGuiKey.ModShift,
 			Keys.ControlLeft or Keys.ControlRight => ImGuiKey.ModCtrl,
 			Keys.AltLeft or Keys.AltRight => ImGuiKey.ModAlt,

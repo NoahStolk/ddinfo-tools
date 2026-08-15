@@ -4,7 +4,7 @@ using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
@@ -32,7 +32,7 @@ internal static class EventTypeRendererUtils
 		[EventType.End] = "End events",
 	};
 
-	private static ImGuiTableFlags EventTableFlags => ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX;
+	private static ImGuiTableFlags EventTableFlags => ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX | ImGuiTableFlags.SizingStretchSame;
 
 	public static void RenderTable<TEvent, TRenderer>(EventType eventType, TEvent @event, EditorReplayModel replay)
 		where TEvent : IEventData
@@ -52,26 +52,26 @@ internal static class EventTypeRendererUtils
 	}
 
 	public static void NextColumnEnum<TEnum>(TEnum value)
-		where TEnum : Enum
+		where TEnum : struct, Enum
 	{
 		ImGui.TableNextColumn();
-		ImGui.Text(Inline.Span(value));
+		ImGui.Text(Inline.Utf8Formattable(value));
 	}
 
 	public static void NextColumn<T>(T value, ReadOnlySpan<char> format = default)
-		where T : ISpanFormattable
+		where T : IUtf8SpanFormattable
 	{
 		ImGui.TableNextColumn();
-		ImGui.Text(Inline.Span(value, format));
+		ImGui.Text(Inline.Utf8(value, format));
 	}
 
 	public static void NextColumnVector3(Vector3 value, ReadOnlySpan<char> format = default)
 	{
 		ImGui.TableNextColumn();
-		ImGui.Text(Inline.Span(value, format));
+		ImGui.Text(Inline.Utf8(value, format));
 	}
 
-	public static void NextColumnBool(bool value, ReadOnlySpan<char> trueText, ReadOnlySpan<char> falseText)
+	public static void NextColumnBool(bool value, ReadOnlySpan<byte> trueText, ReadOnlySpan<byte> falseText)
 	{
 		ImGui.TableNextColumn();
 		ImGui.Text(value ? trueText : falseText);
@@ -84,7 +84,7 @@ internal static class EventTypeRendererUtils
 		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
 
 		ImGui.TableNextColumn();
-		ImGui.Text(Inline.Span(entityId));
+		ImGui.Text(Inline.Utf8(entityId));
 		ImGui.SameLine();
 
 		ImGui.Text(" (");

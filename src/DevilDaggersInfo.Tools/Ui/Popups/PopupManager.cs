@@ -1,5 +1,5 @@
 using DevilDaggersInfo.Tools.Networking;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
@@ -92,7 +92,7 @@ internal sealed class PopupManager
 
 	private void RenderModal(Popup popup)
 	{
-		Vector2 center = ImGui.GetMainViewport().GetCenter();
+		Vector2 center = ImGui.GetCenter(ImGui.GetMainViewport());
 		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new Vector2(0.5f, 0.5f));
 
 		ImGui.SetNextWindowSizeConstraints(new Vector2(192, 128), new Vector2(float.MaxValue, float.MaxValue));

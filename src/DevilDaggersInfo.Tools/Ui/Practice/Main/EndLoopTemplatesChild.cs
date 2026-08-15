@@ -5,7 +5,7 @@ using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Practice.Main.Data;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
@@ -36,7 +36,7 @@ internal sealed class EndLoopTemplatesChild(PracticeLogic practiceLogic, Content
 
 	public void Render(Vector2 templateContainerSize, Vector2 templateListSize, float templateWidth)
 	{
-		if (ImGui.BeginChild("EndLoopTemplates", templateContainerSize, ImGuiChildFlags.Border)) // TODO: Borders in ImGui update.
+		if (ImGui.BeginChild("EndLoopTemplates", templateContainerSize, ImGuiChildFlags.Borders))
 		{
 			ImGui.Text("End loop templates");
 
@@ -68,12 +68,12 @@ internal sealed class EndLoopTemplatesChild(PracticeLogic practiceLogic, Content
 		Color color = waveIndex % 3 == 2 ? EnemiesV3_2.Ghostpede.Color.ToEngineColor() : EnemiesV3_2.Gigapede.Color.ToEngineColor();
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
-		if (ImGui.BeginChild(Inline.Span($"Wave{waveIndex + 1}"), buttonSize, ImGuiChildFlags.Border)) // TODO: Borders in ImGui update.
+		if (ImGui.BeginChild(Inline.Utf8($"Wave{waveIndex + 1}"), buttonSize, ImGuiChildFlags.Borders))
 		{
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
 
-			if (ImGui.BeginChild(Inline.Span($"WaveChild{waveIndex + 1}"), buttonSize, ImGuiChildFlags.None, ImGuiWindowFlags.NoInputs))
+			if (ImGui.BeginChild(Inline.Utf8($"WaveChild{waveIndex + 1}"), buttonSize, ImGuiChildFlags.None, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 				{
@@ -83,9 +83,9 @@ internal sealed class EndLoopTemplatesChild(PracticeLogic practiceLogic, Content
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 8));
 
-				ImGui.TextColored(color with { A = textAlpha }, Inline.Span($"Wave {waveIndex + 1}"));
-				ImGui.SameLine(ImGui.GetWindowWidth() - ImGui.CalcTextSize(Inline.Span(timerStart, StringFormats.TimeFormat)).X - 8);
-				ImGui.TextColored(Color.White with { A = textAlpha }, Inline.Span(timerStart, StringFormats.TimeFormat));
+				ImGui.TextColored(color with { A = textAlpha }, Inline.Utf8($"Wave {waveIndex + 1}"));
+				ImGui.SameLine(ImGui.GetWindowWidth() - ImGui.CalcTextSize(Inline.Utf8(timerStart, StringFormats.TimeFormat)).X - 8);
+				ImGui.TextColored(Color.White with { A = textAlpha }, Inline.Utf8(timerStart, StringFormats.TimeFormat));
 			}
 
 			ImGui.EndChild();

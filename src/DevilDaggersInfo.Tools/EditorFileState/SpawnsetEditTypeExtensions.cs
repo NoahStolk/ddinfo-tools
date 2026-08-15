@@ -15,32 +15,32 @@ internal static class SpawnsetEditTypeExtensions
 	private static readonly Color _colorPractice = new(0, _colorValue, _colorValue, 255);
 	private static readonly Color _colorSpawn = new(_colorValue, 0, _colorValue, 255);
 
-	public static ReadOnlySpan<char> GetChange(this SpawnsetEditType spawnsetEditType)
+	public static ReadOnlySpan<byte> GetChange(this SpawnsetEditType spawnsetEditType)
 	{
 		return spawnsetEditType switch
 		{
-			SpawnsetEditType.Reset => "Spawnset reset",
-			SpawnsetEditType.ArenaTileHeight => "Arena tile height edit",
-			SpawnsetEditType.ArenaPencil => "Arena pencil edit",
-			SpawnsetEditType.ArenaLine => "Arena line edit",
-			SpawnsetEditType.ArenaRectangle => "Arena rectangle edit",
-			SpawnsetEditType.ArenaEllipse => "Arena ellipse edit",
-			SpawnsetEditType.ArenaBucket => "Arena bucket edit",
-			SpawnsetEditType.RaceDagger => "Race dagger position change",
-			SpawnsetEditType.ShrinkStart => "Shrink start change",
-			SpawnsetEditType.ShrinkEnd => "Shrink end change",
-			SpawnsetEditType.ShrinkRate => "Shrink rate change",
-			SpawnsetEditType.Brightness => "Brightness change",
-			SpawnsetEditType.Format => "Format change",
-			SpawnsetEditType.GameMode => "Game mode change",
-			SpawnsetEditType.HandLevel => "Hand level change",
-			SpawnsetEditType.AdditionalGems => "Additional gems change",
-			SpawnsetEditType.TimerStart => "Timer start change",
-			SpawnsetEditType.SpawnDelete => "Spawn deletion",
-			SpawnsetEditType.SpawnAdd => "Spawn addition",
-			SpawnsetEditType.SpawnEdit => "Spawn edit",
-			SpawnsetEditType.SpawnInsert => "Spawn insertion",
-			SpawnsetEditType.SpawnsTransformation => "Spawns transformation",
+			SpawnsetEditType.Reset => "Spawnset reset"u8,
+			SpawnsetEditType.ArenaTileHeight => "Arena tile height edit"u8,
+			SpawnsetEditType.ArenaPencil => "Arena pencil edit"u8,
+			SpawnsetEditType.ArenaLine => "Arena line edit"u8,
+			SpawnsetEditType.ArenaRectangle => "Arena rectangle edit"u8,
+			SpawnsetEditType.ArenaEllipse => "Arena ellipse edit"u8,
+			SpawnsetEditType.ArenaBucket => "Arena bucket edit"u8,
+			SpawnsetEditType.RaceDagger => "Race dagger position change"u8,
+			SpawnsetEditType.ShrinkStart => "Shrink start change"u8,
+			SpawnsetEditType.ShrinkEnd => "Shrink end change"u8,
+			SpawnsetEditType.ShrinkRate => "Shrink rate change"u8,
+			SpawnsetEditType.Brightness => "Brightness change"u8,
+			SpawnsetEditType.Format => "Format change"u8,
+			SpawnsetEditType.GameMode => "Game mode change"u8,
+			SpawnsetEditType.HandLevel => "Hand level change"u8,
+			SpawnsetEditType.AdditionalGems => "Additional gems change"u8,
+			SpawnsetEditType.TimerStart => "Timer start change"u8,
+			SpawnsetEditType.SpawnDelete => "Spawn deletion"u8,
+			SpawnsetEditType.SpawnAdd => "Spawn addition"u8,
+			SpawnsetEditType.SpawnEdit => "Spawn edit"u8,
+			SpawnsetEditType.SpawnInsert => "Spawn insertion"u8,
+			SpawnsetEditType.SpawnsTransformation => "Spawns transformation"u8,
 			_ => throw new UnreachableException(),
 		};
 	}

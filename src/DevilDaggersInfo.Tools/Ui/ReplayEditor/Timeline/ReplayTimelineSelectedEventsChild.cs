@@ -5,7 +5,7 @@ using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 
@@ -37,23 +37,23 @@ internal sealed class ReplayTimelineSelectedEventsChild
 
 			InputsEventData e = replay.InputsEvents[selectedTick];
 			ImGui.TableNextColumn();
-			UtilsRendering.Checkbox(selectedTick, nameof(InputsEventData.Left), ref e.Left, "On", "Off");
+			UtilsRendering.Checkbox(selectedTick, "Left"u8, ref e.Left, "On"u8, "Off"u8);
 			ImGui.TableNextColumn();
-			UtilsRendering.Checkbox(selectedTick, nameof(InputsEventData.Right), ref e.Right, "On", "Off");
+			UtilsRendering.Checkbox(selectedTick, "Right"u8, ref e.Right, "On"u8, "Off"u8);
 			ImGui.TableNextColumn();
-			UtilsRendering.Checkbox(selectedTick, nameof(InputsEventData.Forward), ref e.Forward, "On", "Off");
+			UtilsRendering.Checkbox(selectedTick, "Forward"u8, ref e.Forward, "On"u8, "Off"u8);
 			ImGui.TableNextColumn();
-			UtilsRendering.Checkbox(selectedTick, nameof(InputsEventData.Backward), ref e.Backward, "On", "Off");
+			UtilsRendering.Checkbox(selectedTick, "Backward"u8, ref e.Backward, "On"u8, "Off"u8);
 			ImGui.TableNextColumn();
-			UtilsRendering.InputByteEnum(selectedTick, nameof(InputsEventData.Jump), ref e.Jump, EnumUtils.JumpTypes, _jumpTypeNamesArray);
+			UtilsRendering.InputByteEnum(selectedTick, "Jump"u8, ref e.Jump, EnumUtils.JumpTypes, _jumpTypeNamesArray);
 			ImGui.TableNextColumn();
-			UtilsRendering.InputByteEnum(selectedTick, nameof(InputsEventData.Shoot), ref e.Shoot, EnumUtils.ShootTypes, _shootTypeNamesArray);
+			UtilsRendering.InputByteEnum(selectedTick, "Shoot"u8, ref e.Shoot, EnumUtils.ShootTypes, _shootTypeNamesArray);
 			ImGui.TableNextColumn();
-			UtilsRendering.InputByteEnum(selectedTick, nameof(InputsEventData.ShootHoming), ref e.ShootHoming, EnumUtils.ShootTypes, _shootTypeNamesArray);
+			UtilsRendering.InputByteEnum(selectedTick, "ShootHoming"u8, ref e.ShootHoming, EnumUtils.ShootTypes, _shootTypeNamesArray);
 			ImGui.TableNextColumn();
-			UtilsRendering.InputShort(selectedTick, nameof(InputsEventData.MouseX), ref e.MouseX);
+			UtilsRendering.InputShort(selectedTick, "MouseX"u8, ref e.MouseX);
 			ImGui.TableNextColumn();
-			UtilsRendering.InputShort(selectedTick, nameof(InputsEventData.MouseY), ref e.MouseY);
+			UtilsRendering.InputShort(selectedTick, "MouseY"u8, ref e.MouseY);
 
 			ImGui.EndTable();
 		}
@@ -127,7 +127,7 @@ internal sealed class ReplayTimelineSelectedEventsChild
 
 				bool temp = _checkedEvents.Contains(replayEvent);
 				ImGui.PushStyleColor(ImGuiCol.Text, eventType.GetColor());
-				if (ImGui.Checkbox(Inline.Span($"{EnumUtils.EventTypeFriendlyNames[eventType]}##EventCheckbox{i}"), ref temp))
+				if (ImGui.Checkbox(Inline.Utf8($"{EnumUtils.EventTypeFriendlyNames[eventType]}##EventCheckbox{i}"), ref temp))
 				{
 					if (temp)
 						_checkedEvents.Add(replayEvent);
@@ -142,10 +142,10 @@ internal sealed class ReplayTimelineSelectedEventsChild
 				{
 					ImGui.Text("No data");
 				}
-				else if (ImGui.CollapsingHeader(Inline.Span($"Event data##{i}")))
+				else if (ImGui.CollapsingHeader(Inline.Utf8($"Event data##{i}")))
 				{
 					if (replayEvent.EntityId.HasValue)
-						ImGui.Text(Inline.Span($"Entity Id: {replayEvent.EntityId.Value}"));
+						ImGui.Text(Inline.Utf8($"Entity Id: {replayEvent.EntityId.Value}"));
 
 					if (replayEvent.Data is BoidSpawnEventData boidSpawn)
 						BoidSpawn.RenderEdit(i, boidSpawn, replay);

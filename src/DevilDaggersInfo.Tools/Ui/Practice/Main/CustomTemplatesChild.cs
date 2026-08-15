@@ -5,7 +5,7 @@ using DevilDaggersInfo.Tools.Ui.Practice.Main.Data;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.User.Settings.Model;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
@@ -16,7 +16,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 
 	public void Render(Vector2 templateContainerSize, Vector2 templateListSize, float templateWidth)
 	{
-		if (ImGui.BeginChild("CustomTemplates", templateContainerSize, ImGuiChildFlags.Border)) // TODO: Borders in ImGui update.
+		if (ImGui.BeginChild("CustomTemplates", templateContainerSize, ImGuiChildFlags.Borders))
 		{
 			ImGui.Text("Custom templates");
 
@@ -63,24 +63,24 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 	private void RenderTemplateButton(UserSettingsPracticeTemplate customTemplate, float templateWidth)
 	{
 		Vector2 buttonSize = new(templateWidth - 96, 48);
-		ReadOnlySpan<char> buttonName = Inline.Span($"{EnumUtils.HandLevelNames[customTemplate.HandLevel]}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart}");
+		ReadOnlySpan<byte> buttonName = Inline.Utf8($"{EnumUtils.HandLevelNames[customTemplate.HandLevel]}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart}");
 
 		Color color = Color.White;
 
-		const int bufferLength = 32;
-		Span<char> gemsOrHomingText = stackalloc char[bufferLength];
-		PracticeWindow.GetGemsOrHomingText(customTemplate.HandLevel, customTemplate.AdditionalGems, gemsOrHomingText, out Color gemColor);
-		gemsOrHomingText = gemsOrHomingText.SliceUntilNull(bufferLength);
+		Span<byte> gemsOrHomingBuffer = stackalloc byte[32];
+		ReadOnlySpan<byte> gemsOrHomingText = PracticeWindow.GetGemsOrHomingText(customTemplate.HandLevel, customTemplate.AdditionalGems, gemsOrHomingBuffer, out Color gemColor);
 
 		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(practiceLogic.IsActive(customTemplate));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
-		if (ImGui.BeginChild(buttonName, buttonSize, ImGuiChildFlags.Border)) // TODO: Borders in ImGui update.
+		if (ImGui.BeginChild(buttonName, buttonSize, ImGuiChildFlags.Borders))
 		{
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
 
-			if (ImGui.BeginChild(Inline.Span($"{buttonName}Child"), buttonSize, ImGuiChildFlags.None, ImGuiWindowFlags.NoInputs))
+			// The id is scoped to the enclosing child window, which is already unique per template, so a constant is
+			// enough. Deriving it from buttonName would interpolate a slice of the Inline buffer back into itself.
+			if (ImGui.BeginChild("Child"u8, buttonSize, ImGuiChildFlags.None, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 				{
@@ -94,7 +94,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 
 				ImGui.TextColored(color with { A = textAlpha }, string.IsNullOrWhiteSpace(customTemplate.Name) ? "<untitled>" : customTemplate.Name);
 
-				ReadOnlySpan<char> timerStartString = Inline.Span(customTemplate.TimerStart, StringFormats.TimeFormat);
+				ReadOnlySpan<byte> timerStartString = Inline.Utf8(customTemplate.TimerStart, StringFormats.TimeFormat);
 				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(timerStartString).X - 8);
 				ImGui.TextColored(Color.White with { A = textAlpha }, timerStartString);
 
@@ -114,7 +114,10 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 
 		ImGui.EndChild();
 
-		if (ImGui.BeginPopupContextItem(Inline.Span($"{buttonName} rename"), ImGuiPopupFlags.MouseButtonRight))
+		// Built from the template values rather than from buttonName, which is a slice of the Inline buffer and cannot be
+		// interpolated back into it. The templates are siblings in one window, so the id has to stay unique per template.
+		ReadOnlySpan<byte> renameName = Inline.Utf8($"rename {(int)customTemplate.HandLevel}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart}");
+		if (ImGui.BeginPopupContextItem(renameName, ImGuiPopupFlags.MouseButtonRight))
 		{
 			string name = customTemplate.Name ?? string.Empty;
 			ImGui.SetKeyboardFocusHere();
@@ -142,16 +145,16 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 		}
 	}
 
-	private void RenderDragIndicator(int i, UserSettingsPracticeTemplate customTemplate)
+	private unsafe void RenderDragIndicator(int i, UserSettingsPracticeTemplate customTemplate)
 	{
 		Color gray = Color.Gray(0.3f);
 		ImGui.PushStyleColor(ImGuiCol.Button, gray with { A = 159 });
 		ImGui.PushStyleColor(ImGuiCol.ButtonActive, gray);
 		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, gray with { A = 223 });
-		ImGui.PushID(Inline.Span($"drag indicator {i}"));
+		ImGui.PushID(Inline.Utf8($"drag indicator {i}"));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-		ImGuiImage.ImageButton("CustomTemplateReorderImageButton", resourceManager.InternalResources.DragIndicatorTexture.Id, new Vector2(32, 48), _customTemplateIndexToReorder == i ? Color.Gray(0.7f) : gray);
+		ImGuiImage.ImageButton("CustomTemplateReorderImageButton"u8, resourceManager.InternalResources.DragIndicatorTexture.Id, new Vector2(32, 48), _customTemplateIndexToReorder == i ? Color.Gray(0.7f) : gray);
 		ImGui.PopStyleVar();
 
 		if (ImGui.IsItemHovered())
@@ -161,7 +164,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 		{
 			_customTemplateIndexToReorder = i;
 
-			ImGui.SetDragDropPayload("CustomTemplateReorder", IntPtr.Zero, 0);
+			ImGui.SetDragDropPayload("CustomTemplateReorder"u8, null, 0);
 			string templateDragName = customTemplate.Name != null ? $"\"{customTemplate.Name}\"" : $"{customTemplate.HandLevel} (+{customTemplate.AdditionalGems}) {customTemplate.TimerStart.ToString(StringFormats.TimeFormat)}";
 			ImGui.Text($"Reorder {templateDragName}");
 			ImGui.EndDragDropSource();
@@ -176,10 +179,10 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 		ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 159 });
 		ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red);
 		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red with { A = 223 });
-		ImGui.PushID(Inline.Span($"delete button {i}"));
+		ImGui.PushID(Inline.Utf8($"delete button {i}"));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(12));
-		if (ImGuiImage.ImageButton("CustomTemplateDeleteImageButton", resourceManager.InternalResources.BinTexture.Id, new Vector2(24)))
+		if (ImGuiImage.ImageButton("CustomTemplateDeleteImageButton"u8, resourceManager.InternalResources.BinTexture.Id, new Vector2(24)))
 		{
 			userSettings.Model = userSettings.Model with
 			{

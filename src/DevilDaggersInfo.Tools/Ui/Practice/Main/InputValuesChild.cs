@@ -4,7 +4,7 @@ using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.User.Settings.Model;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Diagnostics;
 using System.Numerics;
 
@@ -16,7 +16,7 @@ internal sealed class InputValuesChild(ResourceManager resourceManager, Practice
 	{
 		Debug.Assert(resourceManager.GameResources != null, $"{nameof(resourceManager.GameResources)} is null, which should never happen in this UI.");
 
-		if (ImGui.BeginChild("InputValues", new Vector2(380, 200), ImGuiChildFlags.Border)) // TODO: Borders in ImGui update.
+		if (ImGui.BeginChild("InputValues", new Vector2(380, 200), ImGuiChildFlags.Borders))
 		{
 			ImGui.SeparatorText("Inputs");
 
@@ -25,7 +25,7 @@ internal sealed class InputValuesChild(ResourceManager resourceManager, Practice
 			ImGui.SameLine();
 			foreach (HandLevel level in EnumUtils.HandLevels)
 			{
-				if (ImGui.RadioButton(Inline.Span($"Lvl {(int)level}"), level == practiceLogic.State.HandLevel) && practiceLogic.State.HandLevel != level)
+				if (ImGui.RadioButton(Inline.Utf8($"Lvl {(int)level}"), level == practiceLogic.State.HandLevel) && practiceLogic.State.HandLevel != level)
 					practiceLogic.State.HandLevel = level;
 
 				if (level != HandLevel.Level4)

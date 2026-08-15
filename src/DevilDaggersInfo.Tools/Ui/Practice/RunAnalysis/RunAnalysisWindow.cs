@@ -1,6 +1,6 @@
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis.Data;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
 

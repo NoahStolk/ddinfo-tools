@@ -7,7 +7,7 @@ using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using Serilog;
 using Silk.NET.GLFW;
 using System.Numerics;
@@ -61,8 +61,8 @@ internal sealed class DebugWindow(
 				if (survivalFileWatcher.Exists)
 				{
 					ImGui.Text(EnumUtils.HandLevelNames[survivalFileWatcher.HandLevel]);
-					ImGui.Text(Inline.Span(survivalFileWatcher.AdditionalGems));
-					ImGui.Text(Inline.Span(survivalFileWatcher.TimerStart, StringFormats.TimeFormat));
+					ImGui.Text(Inline.Utf8(survivalFileWatcher.AdditionalGems));
+					ImGui.Text(Inline.Utf8(survivalFileWatcher.TimerStart, StringFormats.TimeFormat));
 				}
 				else
 				{
@@ -134,15 +134,15 @@ internal sealed class DebugWindow(
 
 			ImGui.Separator();
 
-			ColorsButton("Main Colors", Colors.Main);
-			ColorsButton("Spawnset Editor Colors", Colors.SpawnsetEditor);
-			ColorsButton("Asset Editor Colors", Colors.AssetEditor);
-			ColorsButton("Replay Editor Colors", Colors.ReplayEditor);
-			ColorsButton("Custom Leaderboards Colors", Colors.CustomLeaderboards);
-			ColorsButton("Practice Colors", Colors.Practice);
-			ColorsButton("Mod Manager Colors", Colors.ModManager);
+			ColorsButton("Main Colors"u8, Colors.Main);
+			ColorsButton("Spawnset Editor Colors"u8, Colors.SpawnsetEditor);
+			ColorsButton("Asset Editor Colors"u8, Colors.AssetEditor);
+			ColorsButton("Replay Editor Colors"u8, Colors.ReplayEditor);
+			ColorsButton("Custom Leaderboards Colors"u8, Colors.CustomLeaderboards);
+			ColorsButton("Practice Colors"u8, Colors.Practice);
+			ColorsButton("Mod Manager Colors"u8, Colors.ModManager);
 
-			static void ColorsButton(ReadOnlySpan<char> label, ColorConfiguration colorConfiguration)
+			static void ColorsButton(ReadOnlySpan<byte> label, ColorConfiguration colorConfiguration)
 			{
 				ImGui.PushStyleColor(ImGuiCol.Button, colorConfiguration.Tertiary);
 				ImGui.PushStyleColor(ImGuiCol.ButtonHovered, colorConfiguration.Secondary);
@@ -161,7 +161,7 @@ internal sealed class DebugWindow(
 
 	private void RenderPopupDebugInfo()
 	{
-		ImGui.TextColored(popupManager.IsAnyOpen ? Color.White : Color.Gray(0.4f), popupManager.Popups.Count > 0 ? Inline.Span($"{popupManager.Popups.Count} popup(s) active") : "No popups active");
+		ImGui.TextColored(popupManager.IsAnyOpen ? Color.White : Color.Gray(0.4f), popupManager.Popups.Count > 0 ? Inline.Utf8($"{popupManager.Popups.Count} popup(s) active") : "No popups active"u8);
 
 		if (ImGui.BeginChild("PopupTableWrapper", new Vector2(0, 512)))
 		{
@@ -226,11 +226,11 @@ internal sealed class DebugWindow(
 
 	private void RenderMetrics()
 	{
-		AddText("FPS (smoothed)", Inline.Span(frameCounter.CountPerSecond));
-		AddText("FPS", Inline.Span(1f / frameCounter.LastRenderDelta, "000.000"));
+		AddText("FPS (smoothed)"u8, Inline.Utf8(frameCounter.CountPerSecond));
+		AddText("FPS"u8, Inline.Utf8(1f / frameCounter.LastRenderDelta, "000.000"));
 
 		long allocatedBytes = GC.GetAllocatedBytesForCurrentThread();
-		AddText("Total managed heap alloc in bytes", Inline.Span(allocatedBytes));
+		AddText("Total managed heap alloc in bytes"u8, Inline.Utf8(allocatedBytes));
 
 		long allocatedBytesDiff = allocatedBytes - _previousAllocatedBytes;
 		Color color = allocatedBytesDiff switch
@@ -241,33 +241,33 @@ internal sealed class DebugWindow(
 			> 0 => new Color(255, 255, 127, 255),
 			_ => Color.Green,
 		};
-		AddText("Heap alloc bytes since last frame", Inline.Span(allocatedBytesDiff), color);
+		AddText("Heap alloc bytes since last frame"u8, Inline.Utf8(allocatedBytesDiff), color);
 		_previousAllocatedBytes = allocatedBytes;
 
-		AddText("Gen 0 GCs", Inline.Span(GC.CollectionCount(0)));
-		AddText("Gen 1 GCs", Inline.Span(GC.CollectionCount(1)));
-		AddText("Gen 2 GCs", Inline.Span(GC.CollectionCount(2)));
-		AddText("Total GC pause duration", Inline.Span(GC.GetTotalPauseDuration()));
-		AddText("Total app time", Inline.Span(DateTime.UtcNow - _startUpTime));
-		AddText("Devil Daggers window position", Inline.Span(gameWindowService.GetWindowPosition()));
+		AddText("Gen 0 GCs"u8, Inline.Utf8(GC.CollectionCount(0)));
+		AddText("Gen 1 GCs"u8, Inline.Utf8(GC.CollectionCount(1)));
+		AddText("Gen 2 GCs"u8, Inline.Utf8(GC.CollectionCount(2)));
+		AddText("Total GC pause duration"u8, Inline.Utf8(GC.GetTotalPauseDuration()));
+		AddText("Total app time"u8, Inline.Utf8(DateTime.UtcNow - _startUpTime));
+		AddText("Devil Daggers window position"u8, Inline.Utf8(gameWindowService.GetWindowPosition()));
 	}
 
 	private void RenderUserCache()
 	{
-		AddText("Player id", Inline.Span(userCache.Model.PlayerId));
+		AddText("Player id"u8, Inline.Utf8(userCache.Model.PlayerId));
 
 		ImGui.SeparatorText("Window");
-		AddText("Maximized", userCache.Model.WindowIsMaximized ? "True" : "False");
-		AddText("Width", Inline.Span(userCache.Model.WindowWidth));
-		AddText("Height", Inline.Span(userCache.Model.WindowHeight));
+		AddText("Maximized"u8, userCache.Model.WindowIsMaximized ? "True"u8 : "False"u8);
+		AddText("Width"u8, Inline.Utf8(userCache.Model.WindowWidth));
+		AddText("Height"u8, Inline.Utf8(userCache.Model.WindowHeight));
 	}
 
-	private static void AddText(ReadOnlySpan<char> textLeft, ReadOnlySpan<char> textRight)
+	private static void AddText(ReadOnlySpan<byte> textLeft, ReadOnlySpan<byte> textRight)
 	{
 		AddText(textLeft, textRight, Color.White);
 	}
 
-	private static void AddText(ReadOnlySpan<char> textLeft, ReadOnlySpan<char> textRight, Color textColor)
+	private static void AddText(ReadOnlySpan<byte> textLeft, ReadOnlySpan<byte> textRight, Color textColor)
 	{
 		ImGui.TextColored(textColor, textLeft);
 		ImGui.SameLine(256);

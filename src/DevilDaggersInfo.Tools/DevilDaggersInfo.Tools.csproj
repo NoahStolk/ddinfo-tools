@@ -76,6 +76,7 @@
   </ItemGroup>
 
   <ItemGroup Label="External dependencies">
+    <PackageReference Include="Hexa.NET.ImGui"/>
     <PackageReference Include="NativeFileDialogSharp"/>
     <PackageReference Include="NoahStolk.EnumGenerator">
       <PrivateAssets>all</PrivateAssets>

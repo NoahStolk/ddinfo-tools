@@ -1,6 +1,6 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
@@ -23,6 +23,6 @@ internal sealed class DaggerSpawnEvents : IEventTypeRenderer<DaggerSpawnEventDat
 		EventTypeRendererUtils.NextColumn(e.A);
 		EventTypeRendererUtils.NextColumn(e.Position);
 		EventTypeRendererUtils.NextColumn(e.Orientation);
-		EventTypeRendererUtils.NextColumnBool(e.IsShot, "Shot", "Rapid");
+		EventTypeRendererUtils.NextColumnBool(e.IsShot, "Shot"u8, "Rapid"u8);
 	}
 }

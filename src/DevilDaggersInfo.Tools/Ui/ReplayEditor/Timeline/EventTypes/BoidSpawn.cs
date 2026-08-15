@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
@@ -16,7 +16,7 @@ internal static class BoidSpawn
 		const float rightColumnWidth = 160;
 		const float tableWidth = leftColumnWidth + rightColumnWidth;
 
-		if (ImGui.BeginChild(Inline.Span($"BoidSpawnEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
+		if (ImGui.BeginChild(Inline.Utf8($"BoidSpawnEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
 		{
 			if (ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new Vector2(tableWidth, 0)))
 			{
@@ -28,17 +28,17 @@ internal static class BoidSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("Spawner Entity Id");
 				ImGui.TableNextColumn();
-				UtilsRendering.EditableEntityId(uniqueId, nameof(BoidSpawnEventData.SpawnerEntityId), replay, ref e.SpawnerEntityId);
+				UtilsRendering.EditableEntityId(uniqueId, "SpawnerEntityId"u8, replay, ref e.SpawnerEntityId);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Type");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputByteEnum(uniqueId, nameof(BoidSpawnEventData.BoidType), ref e.BoidType, EnumUtils.BoidTypes, _boidTypeNamesArray);
+				UtilsRendering.InputByteEnum(uniqueId, "BoidType"u8, ref e.BoidType, EnumUtils.BoidTypes, _boidTypeNamesArray);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Position");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputInt16Vec3(uniqueId, nameof(BoidSpawnEventData.Position), ref e.Position);
+				UtilsRendering.InputInt16Vec3(uniqueId, "Position"u8, ref e.Position);
 
 				ImGui.EndTable();
 			}
@@ -55,17 +55,17 @@ internal static class BoidSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("Orientation");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputInt16Mat3x3Square(uniqueId, nameof(BoidSpawnEventData.Orientation), ref e.Orientation);
+				UtilsRendering.InputInt16Mat3x3Square(uniqueId, "Orientation"u8, ref e.Orientation);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Velocity");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputVector3(uniqueId, nameof(BoidSpawnEventData.Velocity), ref e.Velocity, "%.2f");
+				UtilsRendering.InputVector3(uniqueId, "Velocity"u8, ref e.Velocity, "%.2f"u8);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Speed");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputFloat(uniqueId, nameof(BoidSpawnEventData.Speed), ref e.Speed, "%.2f");
+				UtilsRendering.InputFloat(uniqueId, "Speed"u8, ref e.Speed, "%.2f"u8);
 
 				ImGui.EndTable();
 			}

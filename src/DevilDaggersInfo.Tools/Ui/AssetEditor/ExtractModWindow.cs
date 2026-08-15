@@ -3,7 +3,7 @@ using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
@@ -63,7 +63,7 @@ internal sealed class ExtractModWindow(INativeFileDialog nativeFileDialog, Popup
 			{
 				if (_lastStartTime.HasValue && _lastEndTime.HasValue)
 				{
-					ImGui.Text(Inline.Span($"Extracted in {(_lastEndTime.Value - _lastStartTime.Value).TotalSeconds:0.000} seconds ({DateTimeUtils.FormatTimeAgo(_lastEndTime.Value)})."));
+					ImGui.Text(Inline.Utf8($"Extracted in {(_lastEndTime.Value - _lastStartTime.Value).TotalSeconds:0.000} seconds ({DateTimeUtils.FormatTimeAgo(_lastEndTime.Value)})."));
 				}
 			}
 		}

@@ -1,5 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
@@ -12,7 +12,7 @@ internal static class ThornSpawn
 		const float rightColumnWidth = 160;
 		const float tableWidth = leftColumnWidth + rightColumnWidth;
 
-		if (ImGui.BeginChild(Inline.Span($"ThornSpawnEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
+		if (ImGui.BeginChild(Inline.Utf8($"ThornSpawnEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
 		{
 			if (ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new Vector2(tableWidth, 0)))
 			{
@@ -24,17 +24,17 @@ internal static class ThornSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("Position");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputVector3(uniqueId, nameof(ThornSpawnEventData.Position), ref e.Position, "%.2f");
+				UtilsRendering.InputVector3(uniqueId, "Position"u8, ref e.Position, "%.2f"u8);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Rotation");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputFloat(uniqueId, nameof(ThornSpawnEventData.RotationInRadians), ref e.RotationInRadians, "%.2f");
+				UtilsRendering.InputFloat(uniqueId, "RotationInRadians"u8, ref e.RotationInRadians, "%.2f"u8);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("?");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputInt(uniqueId, nameof(ThornSpawnEventData.A), ref e.A);
+				UtilsRendering.InputInt(uniqueId, "A"u8, ref e.A);
 
 				ImGui.EndTable();
 			}

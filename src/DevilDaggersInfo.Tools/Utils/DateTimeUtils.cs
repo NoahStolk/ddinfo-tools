@@ -2,7 +2,7 @@ namespace DevilDaggersInfo.Tools.Utils;
 
 internal static class DateTimeUtils
 {
-	// TODO: Implement ReadOnlySpan<char> variant.
+	// TODO: Implement ReadOnlySpan<byte> variant.
 	public static string FormatTimeAgo(DateTime? utcDateTime)
 	{
 		if (!utcDateTime.HasValue)

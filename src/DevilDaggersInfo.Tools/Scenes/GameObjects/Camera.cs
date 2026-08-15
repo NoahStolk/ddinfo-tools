@@ -2,7 +2,7 @@ using DevilDaggersInfo.Tools.Engine.Intersections;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.User.Settings;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using Silk.NET.GLFW;
 using Silk.NET.Maths;
 using System.Numerics;
@@ -46,8 +46,7 @@ internal sealed unsafe class Camera(Glfw glfw, GlfwInput glfwInput, WindowHandle
 
 		if (activateKeyboard)
 		{
-			ImGuiIOPtr io = ImGui.GetIO();
-			HandleKeys(io, delta);
+			HandleKeys(delta);
 		}
 		else
 		{
@@ -66,7 +65,7 @@ internal sealed unsafe class Camera(Glfw glfw, GlfwInput glfwInput, WindowHandle
 		Position += _speed * maxSpeed * delta;
 	}
 
-	private void HandleKeys(ImGuiIOPtr io, float delta)
+	private void HandleKeys(float delta)
 	{
 		const float acceleration = 20;
 		const ImGuiKey forwardInput = ImGuiKey.W;
@@ -75,12 +74,12 @@ internal sealed unsafe class Camera(Glfw glfw, GlfwInput glfwInput, WindowHandle
 		const ImGuiKey rightInput = ImGuiKey.D;
 		const ImGuiKey upInput = ImGuiKey.E;
 		const ImGuiKey downInput = ImGuiKey.Q;
-		bool forwardHold = io.IsKeyDown(forwardInput);
-		bool leftHold = io.IsKeyDown(leftInput);
-		bool backwardHold = io.IsKeyDown(backwardInput);
-		bool rightHold = io.IsKeyDown(rightInput);
-		bool upHold = io.IsKeyDown(upInput);
-		bool downHold = io.IsKeyDown(downInput);
+		bool forwardHold = ImGui.IsKeyDown(forwardInput);
+		bool leftHold = ImGui.IsKeyDown(leftInput);
+		bool backwardHold = ImGui.IsKeyDown(backwardInput);
+		bool rightHold = ImGui.IsKeyDown(rightInput);
+		bool upHold = ImGui.IsKeyDown(upInput);
+		bool downHold = ImGui.IsKeyDown(downInput);
 
 		float accelerationDt = acceleration * delta;
 		float frictionDt = _friction * delta;

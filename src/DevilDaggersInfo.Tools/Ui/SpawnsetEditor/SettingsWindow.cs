@@ -3,7 +3,7 @@ using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Diagnostics;
 using System.Numerics;
 
@@ -56,7 +56,7 @@ internal sealed class SettingsWindow(FileStates fileStates, SpawnsetSaver spawns
 		ImGui.SameLine();
 		for (int i = 8; i < 10; i++)
 		{
-			if (ImGui.RadioButton(Inline.Span(i), i == fileStates.Spawnset.Object.WorldVersion) && fileStates.Spawnset.Object.WorldVersion != i)
+			if (ImGui.RadioButton(Inline.Utf8(i), i == fileStates.Spawnset.Object.WorldVersion) && fileStates.Spawnset.Object.WorldVersion != i)
 			{
 				fileStates.Spawnset.Update(fileStates.Spawnset.Object with { WorldVersion = i });
 				spawnsetSaver.Save(SpawnsetEditType.Format);
@@ -70,7 +70,7 @@ internal sealed class SettingsWindow(FileStates fileStates, SpawnsetSaver spawns
 		ImGui.SameLine();
 		for (int i = 4; i < 7; i++)
 		{
-			if (ImGui.RadioButton(Inline.Span(i), i == fileStates.Spawnset.Object.SpawnVersion) && fileStates.Spawnset.Object.SpawnVersion != i)
+			if (ImGui.RadioButton(Inline.Utf8(i), i == fileStates.Spawnset.Object.SpawnVersion) && fileStates.Spawnset.Object.SpawnVersion != i)
 			{
 				fileStates.Spawnset.Update(fileStates.Spawnset.Object with { SpawnVersion = i });
 				spawnsetSaver.Save(SpawnsetEditType.Format);
@@ -96,11 +96,11 @@ internal sealed class SettingsWindow(FileStates fileStates, SpawnsetSaver spawns
 
 		foreach (GameMode gameMode in EnumUtils.GameModes)
 		{
-			ReadOnlySpan<char> displayGameMode = gameMode switch
+			ReadOnlySpan<byte> displayGameMode = gameMode switch
 			{
-				GameMode.Survival => "Survival",
-				GameMode.TimeAttack => "Time Attack",
-				GameMode.Race => "Race",
+				GameMode.Survival => "Survival"u8,
+				GameMode.TimeAttack => "Time Attack"u8,
+				GameMode.Race => "Race"u8,
 				_ => throw new UnreachableException(),
 			};
 
@@ -184,7 +184,7 @@ internal sealed class SettingsWindow(FileStates fileStates, SpawnsetSaver spawns
 		for (int i = 0; i < EnumUtils.HandLevels.Count; i++)
 		{
 			HandLevel level = EnumUtils.HandLevels[i];
-			if (ImGui.RadioButton(Inline.Span($"Lvl {(int)level}"), level == fileStates.Spawnset.Object.HandLevel) && fileStates.Spawnset.Object.HandLevel != level)
+			if (ImGui.RadioButton(Inline.Utf8($"Lvl {(int)level}"), level == fileStates.Spawnset.Object.HandLevel) && fileStates.Spawnset.Object.HandLevel != level)
 			{
 				fileStates.Spawnset.Update(fileStates.Spawnset.Object with { HandLevel = level });
 				spawnsetSaver.Save(SpawnsetEditType.HandLevel);

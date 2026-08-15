@@ -1,4 +1,4 @@
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Diagnostics;
 using System.Numerics;
 
@@ -6,7 +6,7 @@ namespace DevilDaggersInfo.Tools.Ui;
 
 internal static partial class ImGuiExt
 {
-	public static void Hyperlink(ReadOnlySpan<char> url, ReadOnlySpan<char> text)
+	public static void Hyperlink(ReadOnlySpan<byte> url, ReadOnlySpan<byte> text)
 	{
 		Vector4 hyperlinkColor = new(0, 0.625f, 1, 1);
 		Vector4 hyperlinkHoverColor = new(0.25f, 0.875f, 1, 0.25f);

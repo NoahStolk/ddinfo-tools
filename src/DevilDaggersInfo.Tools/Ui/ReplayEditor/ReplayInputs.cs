@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
@@ -26,21 +26,21 @@ internal static class ReplayInputs
 		Vector2 mouseCoordinates = new(snapshot.MouseX, snapshot.MouseY);
 		Vector2 pointerCenter = origin + new Vector2(center) + Clamp(mouseCoordinates * pointerScale, -max, max);
 		drawList.AddRect(pointerCenter - new Vector2(pointerSize / 2f), pointerCenter + new Vector2(pointerSize / 2f), 0xFFFFFFFF);
-		drawList.AddText(origin + new Vector2(0, mousePointerAreaSize), 0xFFFFFFFF, Inline.Span(mouseCoordinates, "+000;-000;+000"));
+		drawList.AddText(origin + new Vector2(0, mousePointerAreaSize), 0xFFFFFFFF, Inline.Utf8(mouseCoordinates, "+000;-000;+000"));
 
 		// Inputs
 		const int inputSize = 32;
 		Vector2 inputRect = new(inputSize);
-		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize, inputSize), inputRect, snapshot.Left, "A");
-		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 2, inputSize), inputRect, snapshot.Right, "D");
-		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize, 0), inputRect, snapshot.Forward, "W");
-		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize, inputSize), inputRect, snapshot.Backward, "S");
-		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 3, inputSize), new Vector2(64, 32), snapshot.Jump is JumpType.StartedPress or JumpType.Hold, "Space");
-		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 3, 0), inputRect, snapshot.Shoot == ShootType.Hold, "LMB");
-		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 4, 0), inputRect, snapshot.ShootHoming == ShootType.Hold, "RMB");
+		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize, inputSize), inputRect, snapshot.Left, "A"u8);
+		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 2, inputSize), inputRect, snapshot.Right, "D"u8);
+		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize, 0), inputRect, snapshot.Forward, "W"u8);
+		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize, inputSize), inputRect, snapshot.Backward, "S"u8);
+		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 3, inputSize), new Vector2(64, 32), snapshot.Jump is JumpType.StartedPress or JumpType.Hold, "Space"u8);
+		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 3, 0), inputRect, snapshot.Shoot == ShootType.Hold, "LMB"u8);
+		RenderInput(drawList, origin + new Vector2(mousePointerAreaSize + inputSize * 4, 0), inputRect, snapshot.ShootHoming == ShootType.Hold, "RMB"u8);
 	}
 
-	private static void RenderInput(ImDrawListPtr drawList, Vector2 position, Vector2 size, bool used, ReadOnlySpan<char> input)
+	private static void RenderInput(ImDrawListPtr drawList, Vector2 position, Vector2 size, bool used, ReadOnlySpan<byte> input)
 	{
 		uint color = ImGui.GetColorU32(used ? Color.Red : Color.White);
 		drawList.AddRect(position, position + size, color);

@@ -1,13 +1,18 @@
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
 internal static partial class ImGuiExt
 {
-	public static void Title(ReadOnlySpan<char> title, ImFontPtr font)
+	public static void Title(ReadOnlySpan<byte> title, Font font)
 	{
-		ImGui.PushFont(font);
+		PushFont(font);
 		ImGui.Text(title);
 		ImGui.PopFont();
+	}
+
+	public static void PushFont(Font font)
+	{
+		ImGui.PushFont(font.Ptr, font.Size);
 	}
 }

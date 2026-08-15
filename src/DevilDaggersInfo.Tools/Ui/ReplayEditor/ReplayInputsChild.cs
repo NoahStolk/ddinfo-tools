@@ -3,7 +3,7 @@ using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
@@ -31,36 +31,36 @@ internal sealed class ReplayInputsChild
 			ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
 
 			Vector2 iconSize = new(16);
-			if (ImGuiImage.ImageButton("Start", _resourceManager.InternalResources.ArrowStartTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("Start"u8, _resourceManager.InternalResources.ArrowStartTexture.Id, iconSize))
 				_startTick = 0;
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Back", _resourceManager.InternalResources.ArrowLeftTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("Back"u8, _resourceManager.InternalResources.ArrowLeftTexture.Id, iconSize))
 				_startTick = Math.Max(0, _startTick - maxTicks);
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Forward", _resourceManager.InternalResources.ArrowRightTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("Forward"u8, _resourceManager.InternalResources.ArrowRightTexture.Id, iconSize))
 				_startTick = Math.Min(replay.TickCount - maxTicks, _startTick + maxTicks);
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("End", _resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
+			if (ImGuiImage.ImageButton("End"u8, _resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
 				_startTick = replay.TickCount - maxTicks;
 
 			_startTick = Math.Max(0, Math.Min(_startTick, replay.TickCount - maxTicks));
 			_endTick = Math.Min(_startTick + maxTicks - 1, replay.TickCount);
 
 			ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
-			ImGui.Text(Inline.Span($"Showing {_startTick} - {_endTick} of {replay.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, replay.StartTime):0.0000} - {TimeUtils.TickToTime(_endTick, replay.StartTime):0.0000}"));
+			ImGui.Text(Inline.Utf8($"Showing {_startTick} - {_endTick} of {replay.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, replay.StartTime):0.0000} - {TimeUtils.TickToTime(_endTick, replay.StartTime):0.0000}"));
 		}
 
 		ImGui.EndChild(); // TickNavigation
 
 		if (ImGui.BeginChild("ReplayInputsChild", new Vector2(0, 0)))
 		{
-			if (ImGui.BeginTable("ReplayInputsTable", 2, ImGuiTableFlags.BordersInnerH))
+			if (ImGui.BeginTable("ReplayInputsTable", 2, ImGuiTableFlags.BordersInnerH | ImGuiTableFlags.SizingStretchSame))
 			{
 				ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 128);
 				ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.None, 384);
 				ImGui.TableHeadersRow();
 
-				ImGui.TextColored(Color.White, Inline.Span($"Look Speed: {replay.LookSpeed}"));
+				ImGui.TextColored(Color.White, Inline.Utf8($"Look Speed: {replay.LookSpeed}"));
 
 				int i = 0;
 				foreach (InputsEventData inputs in replay.InputsEvents)
@@ -74,7 +74,7 @@ internal sealed class ReplayInputsChild
 					ImGui.TableNextRow();
 
 					ImGui.TableNextColumn();
-					ImGui.Text(Inline.Span($"{TimeUtils.TickToTime(i, replay.StartTime):0.0000} ({i})"));
+					ImGui.Text(Inline.Utf8($"{TimeUtils.TickToTime(i, replay.StartTime):0.0000} ({i})"));
 
 					ImGui.TableNextColumn();
 					RenderInputsEvent(inputs.Left, inputs.Right, inputs.Forward, inputs.Backward, inputs.Jump, inputs.Shoot, inputs.ShootHoming, inputs.MouseX, inputs.MouseY);
@@ -116,9 +116,9 @@ internal sealed class ReplayInputsChild
 		ImGui.SameLine();
 		ImGui.TextColored(GetShootTypeColor(shootHoming), "[RMB]");
 		ImGui.SameLine();
-		ImGui.TextColored(mouseX == 0 ? Color.White : Color.Red, Inline.Span($"X:{mouseX}"));
+		ImGui.TextColored(mouseX == 0 ? Color.White : Color.Red, Inline.Utf8($"X:{mouseX}"));
 		ImGui.SameLine();
-		ImGui.TextColored(mouseY == 0 ? Color.White : Color.Red, Inline.Span($"Y:{mouseY}"));
+		ImGui.TextColored(mouseY == 0 ? Color.White : Color.Red, Inline.Utf8($"Y:{mouseY}"));
 
 		static Color GetJumpTypeColor(JumpType jumpType) => jumpType switch
 		{

@@ -2,7 +2,7 @@ using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorStates;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Diagnostics;
 using System.Numerics;
 
@@ -98,7 +98,7 @@ internal sealed class ArenaWindow
 				ImGui.InvisibleButton("ArenaCanvas", ArenaSize, ImGuiButtonFlags.MouseButtonLeft);
 				bool isArenaHovered = ImGui.IsItemHovered();
 				if (isArenaHovered)
-					ImGui.SetTooltip(Inline.Span($"{_fileStates.Spawnset.Object.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y]}\n<{mousePosition.Tile.X}, {mousePosition.Tile.Y}>"));
+					ImGui.SetTooltip(Inline.Utf8($"{_fileStates.Spawnset.Object.ArenaTiles[mousePosition.Tile.X, mousePosition.Tile.Y]}\n<{mousePosition.Tile.X}, {mousePosition.Tile.Y}>"));
 
 				if (isArenaHovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
 					activeState.InitializeSession(mousePosition);

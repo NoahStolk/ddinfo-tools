@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Core.Asset;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
