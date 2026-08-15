@@ -113,7 +113,6 @@ internal sealed class GraphsChild(FontService fontService)
 		{
 			RenderGraphBackground(drawListPtr, out Vector2 pos, out Vector2 size);
 
-			// TODO: Check if this allocates.
 			ReadOnlySpan<int> maxValues = [_showGemsCollected ? _maxGemsCollected : 0, _showGemsDespawned ? _maxGemsDespawned : 0, _showGemsEaten ? _maxGemsEaten : 0, _showGemsTotal ? _maxGemsTotal : 0];
 			int max = MathUtils.Max(maxValues);
 			RenderGraphScales(statsData, drawListPtr, pos, size, max);

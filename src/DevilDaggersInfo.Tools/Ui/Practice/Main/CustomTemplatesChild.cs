@@ -16,7 +16,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 
 	public void Render(Vector2 templateContainerSize, Vector2 templateListSize, float templateWidth)
 	{
-		if (ImGui.BeginChild("CustomTemplates", templateContainerSize, ImGuiChildFlags.Borders)) // TODO: Borders in ImGui update.
+		if (ImGui.BeginChild("CustomTemplates", templateContainerSize, ImGuiChildFlags.Borders))
 		{
 			ImGui.Text("Custom templates");
 
@@ -75,7 +75,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(practiceLogic.IsActive(customTemplate));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
-		if (ImGui.BeginChild(buttonName, buttonSize, ImGuiChildFlags.Borders)) // TODO: Borders in ImGui update.
+		if (ImGui.BeginChild(buttonName, buttonSize, ImGuiChildFlags.Borders))
 		{
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });

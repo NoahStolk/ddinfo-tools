@@ -25,7 +25,7 @@ internal sealed class NoFarmTemplatesChild(PracticeLogic practiceLogic)
 
 	public void Render(Vector2 templateContainerSize, Vector2 templateListSize, float templateWidth)
 	{
-		if (ImGui.BeginChild("NoFarmTemplates", templateContainerSize, ImGuiChildFlags.Borders)) // TODO: Borders in ImGui update.
+		if (ImGui.BeginChild("NoFarmTemplates", templateContainerSize, ImGuiChildFlags.Borders))
 		{
 			ImGui.Text("No farm templates");
 
@@ -64,7 +64,7 @@ internal sealed class NoFarmTemplatesChild(PracticeLogic practiceLogic)
 
 		Vector2 buttonSize = new(templateWidth, 48);
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
-		if (ImGui.BeginChild(noFarmTemplate.Name, buttonSize, ImGuiChildFlags.Borders)) // TODO: Borders in ImGui update.
+		if (ImGui.BeginChild(noFarmTemplate.Name, buttonSize, ImGuiChildFlags.Borders))
 		{
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, noFarmTemplate.Color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });

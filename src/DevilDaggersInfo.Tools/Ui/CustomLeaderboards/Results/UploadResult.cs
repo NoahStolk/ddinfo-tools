@@ -237,7 +237,7 @@ internal sealed class UploadResult
 	{
 		ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = 32 });
 
-		if (ImGui.BeginChild(Inline.Utf8($"{SubmittedAt.Ticks}{_spawnsetName}"), new Vector2(_headerWidth, 48), ImGuiChildFlags.Borders)) // TODO: Borders in ImGui update.
+		if (ImGui.BeginChild(Inline.Utf8($"{SubmittedAt.Ticks}{_spawnsetName}"), new Vector2(_headerWidth, 48), ImGuiChildFlags.Borders))
 		{
 			bool hover = ImGui.IsWindowHovered();
 			if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))

@@ -12,7 +12,7 @@ internal sealed class CurrentSpawnsetChild(FontService fontService, SurvivalFile
 {
 	public void Render()
 	{
-		if (ImGui.BeginChild("CurrentSpawnset", new Vector2(0, 200), ImGuiChildFlags.Borders)) // TODO: Borders in ImGui update.
+		if (ImGui.BeginChild("CurrentSpawnset", new Vector2(0, 200), ImGuiChildFlags.Borders))
 		{
 			ImGui.SeparatorText("Current practice configuration");
 			ImGui.Spacing();
