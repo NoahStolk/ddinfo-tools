@@ -52,10 +52,10 @@ internal sealed class ReplayEntitiesChild(ResourceManager resourceManager)
 
 			if (ImGui.BeginChild("ReplayEntitiesChild", new Vector2(0, 0)))
 			{
-				if (ImGui.BeginTable("ReplayEntitiesTable", 2, ImGuiTableFlags.None))
+				if (ImGui.BeginTable("ReplayEntitiesTable", 2, ImGuiTableFlags.SizingStretchSame))
 				{
 					ImGui.TableSetupColumn("Id", ImGuiTableColumnFlags.WidthFixed, 64);
-					ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 128);
+					ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.None, 128);
 					ImGui.TableHeadersRow();
 
 					for (int i = _startId; i < Math.Min(_startId + maxIds, replay.Cache.Entities.Count + 1); i++)
@@ -110,13 +110,13 @@ internal sealed class ReplayEntitiesChild(ResourceManager resourceManager)
 			ImGui.Text(Inline.Utf8($"Enemy hit log for {EnumUtils.EntityTypeShortNames[_enemyHitLog.EntityType]} (id {_enemyHitLog.EntityId}):"));
 
 			int initialHp = _enemyHitLog.EntityType.GetInitialHp();
-			if (ImGui.BeginTable("EnemyHitLog", 5, ImGuiTableFlags.None))
+			if (ImGui.BeginTable("EnemyHitLog", 5, ImGuiTableFlags.SizingStretchSame))
 			{
-				ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 128);
-				ImGui.TableSetupColumn("HP", ImGuiTableColumnFlags.WidthFixed, 128);
-				ImGui.TableSetupColumn("Damage", ImGuiTableColumnFlags.WidthFixed, 128);
-				ImGui.TableSetupColumn("Dagger Type", ImGuiTableColumnFlags.WidthFixed, 128);
-				ImGui.TableSetupColumn("User Data", ImGuiTableColumnFlags.WidthFixed, 128);
+				ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.None, 128);
+				ImGui.TableSetupColumn("HP", ImGuiTableColumnFlags.None, 128);
+				ImGui.TableSetupColumn("Damage", ImGuiTableColumnFlags.None, 128);
+				ImGui.TableSetupColumn("Dagger Type", ImGuiTableColumnFlags.None, 128);
+				ImGui.TableSetupColumn("User Data", ImGuiTableColumnFlags.None, 128);
 				ImGui.TableHeadersRow();
 
 				ImGui.TableNextRow();

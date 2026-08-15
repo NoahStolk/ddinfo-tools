@@ -54,10 +54,10 @@ internal sealed class ReplayInputsChild
 
 		if (ImGui.BeginChild("ReplayInputsChild", new Vector2(0, 0)))
 		{
-			if (ImGui.BeginTable("ReplayInputsTable", 2, ImGuiTableFlags.BordersInnerH))
+			if (ImGui.BeginTable("ReplayInputsTable", 2, ImGuiTableFlags.BordersInnerH | ImGuiTableFlags.SizingStretchSame))
 			{
 				ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 128);
-				ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.WidthFixed, 384);
+				ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.None, 384);
 				ImGui.TableHeadersRow();
 
 				ImGui.TextColored(Color.White, Inline.Utf8($"Look Speed: {replay.LookSpeed}"));

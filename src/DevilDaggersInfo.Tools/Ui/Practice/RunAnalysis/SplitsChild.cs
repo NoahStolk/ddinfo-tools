@@ -15,11 +15,11 @@ internal sealed class SplitsChild(FontService fontService)
 		{
 			ImGuiExt.Title("Splits"u8, fontService.GoetheBold20);
 
-			if (ImGui.BeginTable("LeaderboardTable", 3, ImGuiTableFlags.None))
+			if (ImGui.BeginTable("LeaderboardTable", 3, ImGuiTableFlags.SizingStretchSame))
 			{
-				ImGui.TableSetupColumn("Split", ImGuiTableColumnFlags.WidthFixed, 40);
-				ImGui.TableSetupColumn("Homing", ImGuiTableColumnFlags.WidthFixed, 40);
-				ImGui.TableSetupColumn("Delta", ImGuiTableColumnFlags.WidthFixed, 40);
+				ImGui.TableSetupColumn("Split", ImGuiTableColumnFlags.None, 40);
+				ImGui.TableSetupColumn("Homing", ImGuiTableColumnFlags.None, 40);
+				ImGui.TableSetupColumn("Delta", ImGuiTableColumnFlags.None, 40);
 				ImGui.TableHeadersRow();
 
 				for (int i = 0; i < data.Count; i++)

@@ -9,14 +9,13 @@
 ### Fixed
 
 - Fixed the splits table in the practice tool corrupting the colors of the UI rendered after it.
-- Fixed column widths being ignored in the mod manager, replay editor, and practice tables.
 - Fixed 3D meshes and textures not being reloaded when the Devil Daggers installation directory changes, which could render the dagger, skull and hand using data from the previously loaded installation.
 - Fixed tile hitboxes hiding each other instead of blending, in the 3D views.
 - Fixed the 3D views breaking when their window is made very small.
 
 ### Miscellaneous
 
-- Switched the UI library from ImGui.NET to Hexa.NET.ImGui, which updates Dear ImGui from 1.91 to 1.92. This adds validation of incorrect UI API usage, which uncovered the table and color bugs listed above.
+- Switched the UI library from ImGui.NET to Hexa.NET.ImGui, which updates Dear ImGui from 1.91 to 1.92. This adds validation of incorrect UI API usage, which uncovered the color bug listed above.
 - Rewrote the 3D rendering internals so that all rendering happens in one place, separate from the scene it draws.
 
 ## [0.13.7.1] - 2026-05-04

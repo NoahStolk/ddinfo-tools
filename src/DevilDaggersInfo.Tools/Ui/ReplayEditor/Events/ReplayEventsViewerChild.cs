@@ -143,13 +143,13 @@ internal sealed class ReplayEventsViewerChild
 
 	private void RenderEventsTable(EditorReplayModel replay, int maxTicks)
 	{
-		if (!ImGui.BeginTable("ReplayEventsTable", 4, ImGuiTableFlags.BordersInnerH))
+		if (!ImGui.BeginTable("ReplayEventsTable", 4, ImGuiTableFlags.BordersInnerH | ImGuiTableFlags.SizingStretchSame))
 			return;
 
 		ImGui.TableSetupColumn("Index", ImGuiTableColumnFlags.WidthFixed, 128);
 		ImGui.TableSetupColumn("Entity Id", ImGuiTableColumnFlags.WidthFixed, 128);
 		ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 192);
-		ImGui.TableSetupColumn("Data", ImGuiTableColumnFlags.WidthFixed, 384);
+		ImGui.TableSetupColumn("Data", ImGuiTableColumnFlags.None, 384);
 		ImGui.TableHeadersRow();
 
 		for (int i = _startIndex; i < Math.Min(_startIndex + maxTicks, replay.Cache.Events.Count); i++)

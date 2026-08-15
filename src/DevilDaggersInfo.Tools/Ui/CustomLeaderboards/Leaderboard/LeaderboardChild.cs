@@ -111,22 +111,22 @@ internal sealed class LeaderboardChild(
 		ImGui.PushStyleVar(ImGuiStyleVar.CellPadding, new Vector2(4, 1));
 		if (ImGui.BeginTable("LeaderboardTable", 16, flags))
 		{
-			ImGui.TableSetupColumn("Rank", ImGuiTableColumnFlags.DefaultSort | ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.Rank);
-			ImGui.TableSetupColumn("Player", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.PlayerName);
-			ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.Time);
-			ImGui.TableSetupColumn("Enemies alive", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.EnemiesAlive);
-			ImGui.TableSetupColumn("Enemies killed", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.EnemiesKilled);
-			ImGui.TableSetupColumn("Gems collected", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.GemsCollected);
-			ImGui.TableSetupColumn("Gems despawned", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.GemsDespawned);
-			ImGui.TableSetupColumn("Gems eaten", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.GemsEaten);
-			ImGui.TableSetupColumn("Accuracy", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.Accuracy);
-			ImGui.TableSetupColumn("Death type", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.DeathType);
-			ImGui.TableSetupColumn("Homing stored", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.HomingStored);
-			ImGui.TableSetupColumn("Homing eaten", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.HomingEaten);
-			ImGui.TableSetupColumn("Level 2", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.LevelUpTime2);
-			ImGui.TableSetupColumn("Level 3", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.LevelUpTime3);
-			ImGui.TableSetupColumn("Level 4", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.LevelUpTime4);
-			ImGui.TableSetupColumn("Submit date", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.SubmitDate);
+			ImGui.TableSetupColumn("Rank", ImGuiTableColumnFlags.DefaultSort, 0, (int)LeaderboardSorting.Rank);
+			ImGui.TableSetupColumn("Player", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.PlayerName);
+			ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.Time);
+			ImGui.TableSetupColumn("Enemies alive", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.EnemiesAlive);
+			ImGui.TableSetupColumn("Enemies killed", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.EnemiesKilled);
+			ImGui.TableSetupColumn("Gems collected", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.GemsCollected);
+			ImGui.TableSetupColumn("Gems despawned", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.GemsDespawned);
+			ImGui.TableSetupColumn("Gems eaten", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.GemsEaten);
+			ImGui.TableSetupColumn("Accuracy", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.Accuracy);
+			ImGui.TableSetupColumn("Death type", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.DeathType);
+			ImGui.TableSetupColumn("Homing stored", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.HomingStored);
+			ImGui.TableSetupColumn("Homing eaten", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.HomingEaten);
+			ImGui.TableSetupColumn("Level 2", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.LevelUpTime2);
+			ImGui.TableSetupColumn("Level 3", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.LevelUpTime3);
+			ImGui.TableSetupColumn("Level 4", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.LevelUpTime4);
+			ImGui.TableSetupColumn("Submit date", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.SubmitDate);
 			ImGui.TableHeadersRow();
 
 			ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();

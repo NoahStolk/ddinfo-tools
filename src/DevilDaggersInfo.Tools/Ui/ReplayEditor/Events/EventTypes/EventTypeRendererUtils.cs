@@ -32,7 +32,7 @@ internal static class EventTypeRendererUtils
 		[EventType.End] = "End events",
 	};
 
-	private static ImGuiTableFlags EventTableFlags => ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX;
+	private static ImGuiTableFlags EventTableFlags => ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX | ImGuiTableFlags.SizingStretchSame;
 
 	public static void RenderTable<TEvent, TRenderer>(EventType eventType, TEvent @event, EditorReplayModel replay)
 		where TEvent : IEventData

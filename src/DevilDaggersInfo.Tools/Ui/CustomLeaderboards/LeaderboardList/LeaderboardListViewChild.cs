@@ -50,16 +50,16 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 		ImGui.PushStyleVar(ImGuiStyleVar.CellPadding, new Vector2(4, 1));
 		if (ImGui.BeginTable("LeaderboardListTable", 10, flags))
 		{
-			ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.DefaultSort | ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.Name);
-			ImGui.TableSetupColumn("Author", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.Author);
+			ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.DefaultSort, 0, (int)LeaderboardListSorting.Name);
+			ImGui.TableSetupColumn("Author", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Author);
 			ImGui.TableSetupColumn("Criteria", ImGuiTableColumnFlags.NoSort);
-			ImGui.TableSetupColumn("Score", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.Score);
-			ImGui.TableSetupColumn("Next dagger", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.NextDagger);
-			ImGui.TableSetupColumn("Rank", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.Rank);
-			ImGui.TableSetupColumn("Players", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.Players);
-			ImGui.TableSetupColumn("World record", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.WorldRecord);
-			ImGui.TableSetupColumn("Date created", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.DateCreated);
-			ImGui.TableSetupColumn("Date last played", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.DateLastPlayed);
+			ImGui.TableSetupColumn("Score", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Score);
+			ImGui.TableSetupColumn("Next dagger", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.NextDagger);
+			ImGui.TableSetupColumn("Rank", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Rank);
+			ImGui.TableSetupColumn("Players", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Players);
+			ImGui.TableSetupColumn("World record", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.WorldRecord);
+			ImGui.TableSetupColumn("Date created", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.DateCreated);
+			ImGui.TableSetupColumn("Date last played", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.DateLastPlayed);
 			ImGui.TableHeadersRow();
 
 			ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();

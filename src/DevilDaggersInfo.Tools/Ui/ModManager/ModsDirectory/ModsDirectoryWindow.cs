@@ -73,12 +73,12 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 	private unsafe void RenderTable()
 	{
 		const int columnCount = 4;
-		if (ImGui.BeginTable("mod_file_table", columnCount, ImGuiTableFlags.Resizable | ImGuiTableFlags.Sortable))
+		if (ImGui.BeginTable("mod_file_table", columnCount, ImGuiTableFlags.Resizable | ImGuiTableFlags.Sortable | ImGuiTableFlags.SizingStretchSame))
 		{
-			ImGui.TableSetupColumn("File name", ImGuiTableColumnFlags.DefaultSort | ImGuiTableColumnFlags.WidthFixed, 256, 0);
-			ImGui.TableSetupColumn("Mod type", ImGuiTableColumnFlags.WidthFixed, 128, 1);
-			ImGui.TableSetupColumn("Prohibited", ImGuiTableColumnFlags.WidthFixed, 64, 2);
-			ImGui.TableSetupColumn("File size", ImGuiTableColumnFlags.WidthFixed, 64, 3);
+			ImGui.TableSetupColumn("File name", ImGuiTableColumnFlags.DefaultSort, 256, 0);
+			ImGui.TableSetupColumn("Mod type", ImGuiTableColumnFlags.None, 128, 1);
+			ImGui.TableSetupColumn("Prohibited", ImGuiTableColumnFlags.None, 64, 2);
+			ImGui.TableSetupColumn("File size", ImGuiTableColumnFlags.None, 64, 3);
 			ImGui.TableHeadersRow();
 
 			for (int i = 0; i < columnCount; i++)
