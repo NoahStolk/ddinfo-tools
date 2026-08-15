@@ -1,5 +1,8 @@
+using EnumGenerator;
+
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 
+[GenerateEnumUtilities]
 internal enum ArenaTool
 {
 	Pencil,

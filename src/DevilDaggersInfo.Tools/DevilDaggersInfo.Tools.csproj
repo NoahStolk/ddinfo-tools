@@ -77,6 +77,10 @@
 
   <ItemGroup Label="External dependencies">
     <PackageReference Include="NativeFileDialogSharp" Version="0.5.0"/>
+    <PackageReference Include="NoahStolk.EnumGenerator" Version="0.6.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0"/>
     <PackageReference Include="StrongInject" Version="1.4.4"/>
   </ItemGroup>

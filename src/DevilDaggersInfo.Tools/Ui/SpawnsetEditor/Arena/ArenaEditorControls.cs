@@ -12,7 +12,6 @@ namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 // TODO: Don't inject other windows.
 internal sealed class ArenaEditorControls(ResourceManager resourceManager, ArenaWindow arenaWindow, FileStates fileStates)
 {
-
 	public void Render()
 	{
 		if (ImGui.BeginChild("ArenaEditorControls", new Vector2(256, 26)))
@@ -20,10 +19,10 @@ internal sealed class ArenaEditorControls(ResourceManager resourceManager, Arena
 			const int borderSize = 2;
 			const int size = 16;
 			int offsetX = 0;
-			for (int i = 0; i < EnumUtils.ArenaTools.Count; i++)
+			for (int i = 0; i < ArenaToolGen.Values.Count; i++)
 			{
-				ArenaTool arenaTool = EnumUtils.ArenaTools[i];
-				ReadOnlySpan<char> arenaToolText = EnumUtils.ArenaToolNames[arenaTool];
+				ArenaTool arenaTool = ArenaToolGen.Values[i];
+				ReadOnlySpan<char> arenaToolText = arenaTool.ToStringFast();
 
 				bool isDagger = arenaTool == ArenaTool.Dagger;
 				bool isCurrent = arenaTool == arenaWindow.ArenaTool;
