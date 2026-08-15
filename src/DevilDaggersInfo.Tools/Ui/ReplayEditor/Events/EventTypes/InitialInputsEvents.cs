@@ -28,9 +28,9 @@ internal sealed class InitialInputsEvents : IEventTypeRenderer<InitialInputsEven
 		EventTypeRendererUtils.NextColumnBool(e.Right, "On"u8, "Off"u8);
 		EventTypeRendererUtils.NextColumnBool(e.Forward, "On"u8, "Off"u8);
 		EventTypeRendererUtils.NextColumnBool(e.Backward, "On"u8, "Off"u8);
-		EventTypeRendererUtils.NextColumn(e.Jump);
-		EventTypeRendererUtils.NextColumn(e.Shoot);
-		EventTypeRendererUtils.NextColumn(e.ShootHoming);
+		EventTypeRendererUtils.NextColumnEnum(e.Jump);
+		EventTypeRendererUtils.NextColumnEnum(e.Shoot);
+		EventTypeRendererUtils.NextColumnEnum(e.ShootHoming);
 		EventTypeRendererUtils.NextColumn(e.MouseX);
 		EventTypeRendererUtils.NextColumn(e.MouseY);
 		EventTypeRendererUtils.NextColumn(e.LookSpeed, "0.00");

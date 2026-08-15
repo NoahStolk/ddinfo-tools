@@ -59,10 +59,10 @@ internal static class EventTypeRendererUtils
 	}
 
 	public static void NextColumn<T>(T value, ReadOnlySpan<char> format = default)
-		where T : ISpanFormattable
+		where T : IUtf8SpanFormattable
 	{
 		ImGui.TableNextColumn();
-		ImGui.Text(Inline.Utf8Formattable(value, format));
+		ImGui.Text(Inline.Utf8(value, format));
 	}
 
 	public static void NextColumnVector3(Vector3 value, ReadOnlySpan<char> format = default)

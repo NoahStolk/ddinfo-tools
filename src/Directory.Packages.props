@@ -5,7 +5,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageVersion Include="DevilDaggersInfo.Core" Version="0.14.2"/>
+		<PackageVersion Include="DevilDaggersInfo.Core" Version="0.15.0"/>
 		<PackageVersion Include="DevilDaggersInfo.Web.ApiSpec.Tools" Version="1.1.0"/>
 		<PackageVersion Include="Hexa.NET.ImGui" Version="2.2.9"/>
 		<PackageVersion Include="NoahStolk.EnumGenerator" Version="0.6.0"/>

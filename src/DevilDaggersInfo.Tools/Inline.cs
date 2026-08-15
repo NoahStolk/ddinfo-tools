@@ -65,15 +65,15 @@ internal static class Inline
 	}
 
 	/// <summary>
-	/// Formats a value that only implements <see cref="ISpanFormattable" />, by formatting to UTF-16 first and then
-	/// transcoding. Enums and the numeric types from DevilDaggersInfo.Core take this path; anything implementing
-	/// <see cref="IUtf8SpanFormattable" /> should use <see cref="Utf8{T}" /> instead, which formats directly to UTF-8.
+	/// Formats an enum, by formatting to UTF-16 first and then transcoding. Enums implement
+	/// <see cref="ISpanFormattable" /> but not <see cref="IUtf8SpanFormattable" />, so they cannot go through
+	/// <see cref="Utf8{T}" />, which formats directly to UTF-8 and should be used for everything that can.
 	/// </summary>
-	public static ReadOnlySpan<byte> Utf8Formattable<T>(T value, ReadOnlySpan<char> format = default, IFormatProvider? provider = null)
-		where T : ISpanFormattable
+	public static ReadOnlySpan<byte> Utf8Formattable<TEnum>(TEnum value, ReadOnlySpan<char> format = default)
+		where TEnum : struct, Enum
 	{
 		Span<char> chars = stackalloc char[512];
-		if (!value.TryFormat(chars, out int charsWritten, format, provider))
+		if (!Enum.TryFormat(value, chars, out int charsWritten, format))
 			throw new InvalidOperationException("The formatted string is too long.");
 
 		return Utf8(chars[..charsWritten]);
