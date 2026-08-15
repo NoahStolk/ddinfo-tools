@@ -8,7 +8,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 
-internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, PopupManager popupManager, ModsDirectoryLogic modsDirectoryLogic)
+internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, PopupManager popupManager, ModsDirectoryLogic modsDirectoryLogic, UserSettings userSettings)
 {
 	private bool _showEnabledMods = true;
 	private bool _showDisabledMods = true;
@@ -30,7 +30,7 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 
 				Note: When enabling or disabling mods, the game must be restarted for the changes to take effect.
 
-				Current mods directory: {UserSettings.ModsDirectory}
+				Current mods directory: {userSettings.ModsDirectory}
 				"""));
 
 			if (ImGui.Button("Reload"))

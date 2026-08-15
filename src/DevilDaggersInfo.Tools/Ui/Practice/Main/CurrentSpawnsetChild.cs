@@ -8,7 +8,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-internal sealed class CurrentSpawnsetChild(FontService fontService)
+internal sealed class CurrentSpawnsetChild(FontService fontService, SurvivalFileWatcher survivalFileWatcher)
 {
 	public void Render()
 	{
@@ -17,7 +17,7 @@ internal sealed class CurrentSpawnsetChild(FontService fontService)
 			ImGui.SeparatorText("Current practice configuration");
 			ImGui.Spacing();
 
-			if (SurvivalFileWatcher.Exists)
+			if (survivalFileWatcher.Exists)
 			{
 				ImGui.PushFont(fontService.GoetheBold20);
 				ImGui.Text("Practice is enabled!");
@@ -34,26 +34,26 @@ internal sealed class CurrentSpawnsetChild(FontService fontService)
 					ImGui.Text("Hand");
 
 					ImGui.TableNextColumn();
-					Color handColor = SurvivalFileWatcher.EffectivePlayerSettings.HandLevel.GetColor();
-					if (SurvivalFileWatcher.EffectivePlayerSettings.HandLevel != SurvivalFileWatcher.EffectivePlayerSettings.HandMesh)
-						ImGui.TextColored(handColor, Inline.Span($"{EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]} ({EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandMesh]} hand mesh)"));
+					Color handColor = survivalFileWatcher.EffectivePlayerSettings.HandLevel.GetColor();
+					if (survivalFileWatcher.EffectivePlayerSettings.HandLevel != survivalFileWatcher.EffectivePlayerSettings.HandMesh)
+						ImGui.TextColored(handColor, Inline.Span($"{EnumUtils.HandLevelNames[survivalFileWatcher.EffectivePlayerSettings.HandLevel]} ({EnumUtils.HandLevelNames[survivalFileWatcher.EffectivePlayerSettings.HandMesh]} hand mesh)"));
 					else
-						ImGui.TextColored(handColor, EnumUtils.HandLevelNames[SurvivalFileWatcher.EffectivePlayerSettings.HandLevel]);
+						ImGui.TextColored(handColor, EnumUtils.HandLevelNames[survivalFileWatcher.EffectivePlayerSettings.HandLevel]);
 
 					ImGui.TableNextColumn();
 					ImGui.Text("Gems/Homing");
 
 					ImGui.TableNextColumn();
-					if (SurvivalFileWatcher.EffectivePlayerSettings.HandLevel is HandLevel.Level3 or HandLevel.Level4)
-						ImGui.TextColored(handColor, Inline.Span($"{SurvivalFileWatcher.EffectivePlayerSettings.GemsOrHoming} homing"));
+					if (survivalFileWatcher.EffectivePlayerSettings.HandLevel is HandLevel.Level3 or HandLevel.Level4)
+						ImGui.TextColored(handColor, Inline.Span($"{survivalFileWatcher.EffectivePlayerSettings.GemsOrHoming} homing"));
 					else
-						ImGui.TextColored(Color.Red, Inline.Span($"{SurvivalFileWatcher.EffectivePlayerSettings.GemsOrHoming} gems"));
+						ImGui.TextColored(Color.Red, Inline.Span($"{survivalFileWatcher.EffectivePlayerSettings.GemsOrHoming} gems"));
 
 					ImGui.TableNextColumn();
 					ImGui.Text("Starts at");
 
 					ImGui.TableNextColumn();
-					ImGui.Text(Inline.Span(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
+					ImGui.Text(Inline.Span(survivalFileWatcher.TimerStart, StringFormats.TimeFormat));
 
 					ImGui.EndTable();
 				}

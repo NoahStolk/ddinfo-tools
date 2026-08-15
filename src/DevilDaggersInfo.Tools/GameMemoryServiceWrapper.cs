@@ -4,10 +4,15 @@ using DevilDaggersInfo.Tools.Networking.TaskHandlers;
 using DevilDaggersInfo.Tools.Platforms;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Web.ApiSpec.Tools.ProcessMemory;
+using Serilog;
 
 namespace DevilDaggersInfo.Tools;
 
-internal sealed class GameMemoryServiceWrapper(PopupManager popupManager, GameMemoryService gameMemoryService, IPlatformSpecificValues platformSpecificValues)
+internal sealed class GameMemoryServiceWrapper(
+	PopupManager popupManager,
+	GameMemoryService gameMemoryService,
+	IPlatformSpecificValues platformSpecificValues,
+	ILogger logger)
 {
 	private bool _tryDownloadMarker = true;
 
@@ -49,7 +54,7 @@ internal sealed class GameMemoryServiceWrapper(PopupManager popupManager, GameMe
 				onSuccess: getMarker => Marker = getMarker.Value,
 				onError: apiError =>
 				{
-					Root.Log.Error(apiError.Exception, "API error: " + apiError.Message);
+					logger.Error(apiError.Exception, "API error: {Message}", apiError.Message);
 
 					const string message = """
 						Could not fetch marker from the DevilDaggers.info API.

@@ -5,16 +5,27 @@ using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Scenes;
 using DevilDaggersInfo.Tools.Scenes.Rendering;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
+using DevilDaggersInfo.Tools.User.Settings;
 using ImGuiNET;
+using Serilog;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-internal sealed unsafe class CustomLeaderboards3DWindow(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ArenaRenderer arenaRenderer, FileStates fileStates, SpawnsetSaver spawnsetSaver)
+internal sealed unsafe class CustomLeaderboards3DWindow(
+	Glfw glfw,
+	GL gl,
+	WindowHandle* window,
+	GlfwInput glfwInput,
+	ArenaRenderer arenaRenderer,
+	FileStates fileStates,
+	SpawnsetSaver spawnsetSaver,
+	ILogger logger,
+	UserSettings userSettings)
 {
-	private readonly FramebufferData _framebufferData = new(gl);
+	private readonly FramebufferData _framebufferData = new(gl, logger);
 
 	private float _time;
 
@@ -26,7 +37,7 @@ internal sealed unsafe class CustomLeaderboards3DWindow(Glfw glfw, GL gl, Window
 
 	public void InitializeScene()
 	{
-		_arenaScene = new ArenaScene(glfw, window, glfwInput, () => _spawnset, false, false, fileStates, spawnsetSaver);
+		_arenaScene = new ArenaScene(glfw, window, glfwInput, () => _spawnset, false, false, fileStates, spawnsetSaver, userSettings);
 	}
 
 	public void LoadReplay(ReplayBinary<LocalReplayBinaryHeader> replayBinary)

@@ -5,6 +5,7 @@ using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Scenes.GameObjects;
 using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
+using DevilDaggersInfo.Tools.User.Settings;
 using Silk.NET.GLFW;
 using System.Numerics;
 
@@ -37,11 +38,12 @@ internal sealed class ArenaScene
 		bool useMenuCamera,
 		bool isEditor,
 		FileStates fileStates,
-		SpawnsetSaver spawnsetSaver)
+		SpawnsetSaver spawnsetSaver,
+		UserSettings userSettings)
 	{
 		_getSpawnset = getSpawnset;
 
-		Camera = new Camera(glfw, glfwInput, window, useMenuCamera) { Position = new Vector3(0, 5, 0) };
+		Camera = new Camera(glfw, glfwInput, window, useMenuCamera, userSettings) { Position = new Vector3(0, 5, 0) };
 
 		InitializeArena();
 

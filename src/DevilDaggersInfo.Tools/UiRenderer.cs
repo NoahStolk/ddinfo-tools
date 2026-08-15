@@ -51,7 +51,9 @@ internal sealed class UiRenderer(
 
 	ModsDirectoryWindow modsDirectoryWindow,
 	ModPreviewWindow modPreviewWindow,
-	ModInstallationWindow modInstallationWindow)
+	ModInstallationWindow modInstallationWindow,
+
+	UserSettings userSettings)
 {
 	public void Render(float delta)
 	{
@@ -107,7 +109,7 @@ internal sealed class UiRenderer(
 				break;
 		}
 
-		if (UserSettings.Model.ShowDebug)
+		if (userSettings.Model.ShowDebug)
 			debugWindow.Render();
 
 		aboutWindow.Render();

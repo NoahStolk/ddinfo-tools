@@ -25,6 +25,8 @@ internal sealed unsafe class Application
 	private readonly MainWindow _mainWindow;
 	private readonly FrameCounter _frameCounter;
 	private readonly INativeFileDialog _nativeFileDialog;
+	private readonly UserSettings _userSettings;
+	private readonly UserCache _userCache;
 
 	private readonly IntPtr _iconPtr;
 
@@ -43,7 +45,9 @@ internal sealed unsafe class Application
 		Shortcuts shortcuts,
 		MainWindow mainWindow,
 		FrameCounter frameCounter,
-		INativeFileDialog nativeFileDialog)
+		INativeFileDialog nativeFileDialog,
+		UserSettings userSettings,
+		UserCache userCache)
 	{
 		_glfw = glfw;
 		_gl = gl;
@@ -55,6 +59,8 @@ internal sealed unsafe class Application
 		_mainWindow = mainWindow;
 		_frameCounter = frameCounter;
 		_nativeFileDialog = nativeFileDialog;
+		_userSettings = userSettings;
+		_userCache = userCache;
 
 		_currentTime = glfw.GetTime();
 
@@ -91,13 +97,13 @@ internal sealed unsafe class Application
 		gl.ClearColor(0, 0, 0, 1);
 	}
 
-	private static void ResizeWindow(Glfw glfw, WindowHandle* window, ImGuiController imGuiController, int w, int h)
+	private void ResizeWindow(Glfw glfw, WindowHandle* window, ImGuiController imGuiController, int w, int h)
 	{
 		bool isMaximized = glfw.GetWindowAttrib(window, WindowAttributeGetter.Maximized);
 
 		imGuiController.WindowResized(w, h);
 
-		UserCache.Model = UserCache.Model with
+		_userCache.Model = _userCache.Model with
 		{
 			WindowWidth = w,
 			WindowHeight = h,
@@ -160,7 +166,7 @@ internal sealed unsafe class Application
 		_shortcuts.Handle(io, _glfwInput);
 
 		if (io.WantSaveIniSettings)
-			UserSettings.SaveImGuiIni(io);
+			_userSettings.SaveImGuiIni(io);
 
 		_imGuiController.Render();
 

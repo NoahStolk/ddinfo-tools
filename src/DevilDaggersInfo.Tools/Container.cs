@@ -31,6 +31,7 @@ using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using Serilog;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 using StrongInject;
@@ -48,9 +49,13 @@ namespace DevilDaggersInfo.Tools;
 [Register<MeshCache>(Scope.SingleInstance)]
 [Register<ResourceManager>(Scope.SingleInstance)]
 [Register<FrameCounter>(Scope.SingleInstance)]
+[Register<ContentManager>(Scope.SingleInstance)]
 
 // Game Memory
 [Register<GameMemoryServiceWrapper>(Scope.SingleInstance)]
+
+// File Watcher
+[Register<SurvivalFileWatcher>(Scope.SingleInstance)]
 
 // Interop
 [Register<GameInstallationValidator>(Scope.SingleInstance)]
@@ -99,6 +104,11 @@ namespace DevilDaggersInfo.Tools;
 // Practice
 [Register<PracticeWindow>(Scope.SingleInstance)]
 [Register<RunAnalysisWindow>(Scope.SingleInstance)]
+[Register<CurrentSpawnsetChild>(Scope.SingleInstance)]
+[Register<CustomTemplatesChild>(Scope.SingleInstance)]
+[Register<EndLoopTemplatesChild>(Scope.SingleInstance)]
+[Register<NoFarmTemplatesChild>(Scope.SingleInstance)]
+[Register<InputValuesChild>(Scope.SingleInstance)]
 
 [Register<PracticeLogic>(Scope.SingleInstance)]
 
@@ -137,6 +147,28 @@ namespace DevilDaggersInfo.Tools;
 internal sealed partial class Container : IContainer<Application>
 {
 	[Factory(Scope.SingleInstance)]
+	private static ILogger CreateLogger()
+	{
+		return StaticLog.Log;
+	}
+
+	[Factory(Scope.SingleInstance)]
+	private static UserSettings CreateUserSettings(ILogger logger)
+	{
+		UserSettings userSettings = new(logger);
+		userSettings.Load();
+		return userSettings;
+	}
+
+	[Factory(Scope.SingleInstance)]
+	private static UserCache CreateUserCache(ILogger logger)
+	{
+		UserCache userCache = new(logger);
+		userCache.Load();
+		return userCache;
+	}
+
+	[Factory(Scope.SingleInstance)]
 	private static Glfw GetGlfw()
 	{
 		Glfw glfw = Glfw.GetApi();
@@ -162,7 +194,7 @@ internal sealed partial class Container : IContainer<Application>
 	/// context; it happens to work without one on GLX, but not on WGL or EGL.
 	/// </remarks>
 	[Factory(Scope.SingleInstance)]
-	private static unsafe GL GetGl(Glfw glfw, WindowHandle* window)
+	private static unsafe GL GetGl(Glfw glfw, WindowHandle* window, ILogger logger)
 	{
 		_ = window;
 
@@ -173,31 +205,40 @@ internal sealed partial class Container : IContainer<Application>
 		// which is how spec violations end up only being noticed as visual glitches on stricter drivers.
 		gl.Enable(EnableCap.DebugOutput);
 		gl.Enable(EnableCap.DebugOutputSynchronous);
-		gl.DebugMessageCallback(LogGlDebugMessage, null);
+		gl.DebugMessageCallback(
+			callback: (source, type, _, severity, length, message, _) => LogGlDebugMessage(logger, source, type, severity, length, message),
+			userParam: null);
 #endif
 
 		return gl;
 	}
 
 #if DEBUG
-	private static void LogGlDebugMessage(GLEnum source, GLEnum type, int id, GLEnum severity, int length, nint message, nint userParam)
+	private static void LogGlDebugMessage(ILogger logger, GLEnum source, GLEnum type, GLEnum severity, int length, nint message)
 	{
 		string text = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(message, length);
 		switch (severity)
 		{
-			case GLEnum.DebugSeverityHigh: Root.Log.Error("GL {Type} ({Source}): {Message}", type, source, text); break;
-			case GLEnum.DebugSeverityMedium: Root.Log.Warning("GL {Type} ({Source}): {Message}", type, source, text); break;
-			case GLEnum.DebugSeverityLow: Root.Log.Information("GL {Type} ({Source}): {Message}", type, source, text); break;
-			default: Root.Log.Debug("GL {Type} ({Source}): {Message}", type, source, text); break;
+			case GLEnum.DebugSeverityHigh: logger.Error("GL {Type} ({Source}): {Message}", type, source, text); break;
+			case GLEnum.DebugSeverityMedium: logger.Warning("GL {Type} ({Source}): {Message}", type, source, text); break;
+			case GLEnum.DebugSeverityLow: logger.Information("GL {Type} ({Source}): {Message}", type, source, text); break;
+			default: logger.Debug("GL {Type} ({Source}): {Message}", type, source, text); break;
 		}
 	}
 #endif
 
 	[Factory(Scope.SingleInstance)]
-	private static unsafe ImGuiController CreateImGuiController(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ShaderLoader shaderLoader, FontService fontService)
+	private static unsafe ImGuiController CreateImGuiController(
+		Glfw glfw,
+		GL gl,
+		WindowHandle* window,
+		GlfwInput glfwInput,
+		ShaderLoader shaderLoader,
+		FontService fontService,
+		UserSettings userSettings,
+		UserCache userCache)
 	{
-		// TODO: Inject UserCache.
-		ImGuiController imGuiController = new(gl, glfwInput, shaderLoader, UserCache.Model.WindowWidth, UserCache.Model.WindowHeight);
+		ImGuiController imGuiController = new(gl, glfwInput, shaderLoader, userCache.Model.WindowWidth, userCache.Model.WindowHeight);
 
 		Colors.SetColors(Colors.Main);
 
@@ -205,14 +246,14 @@ internal sealed partial class Container : IContainer<Application>
 
 		// Load imgui.ini.
 		io.NativePtr->IniFilename = null;
-		UserSettings.LoadImGuiIni();
+		userSettings.LoadImGuiIni();
 
 		// Add the default font first so it is actually used by default.
 		io.Fonts.AddFontDefault();
 
 		// Determine DPI scale from framebuffer/window ratio (e.g. 3.0 on Wayland with 300% scaling at 4K).
-		glfw.GetFramebufferSize(window, out int fbWidth, out int fbHeight);
-		glfw.GetWindowSize(window, out int winWidth, out int winHeight);
+		glfw.GetFramebufferSize(window, out int fbWidth, out _);
+		glfw.GetWindowSize(window, out int winWidth, out _);
 		float dpiScale = winWidth > 0 ? (float)fbWidth / winWidth : 1f;
 
 		fontService.Load(dpiScale);
@@ -228,10 +269,9 @@ internal sealed partial class Container : IContainer<Application>
 	}
 
 	[Factory(Scope.SingleInstance)]
-	private static unsafe WindowHandle* CreateWindow(Glfw glfw, GlfwInput glfwInput)
+	private static unsafe WindowHandle* CreateWindow(Glfw glfw, GlfwInput glfwInput, UserCache userCache)
 	{
-		// TODO: Inject UserCache.
-		WindowHandle* window = glfw.CreateWindow(UserCache.Model.WindowWidth, UserCache.Model.WindowHeight, $"ddinfo tools {AssemblyUtils.EntryAssemblyVersionString}", null, null);
+		WindowHandle* window = glfw.CreateWindow(userCache.Model.WindowWidth, userCache.Model.WindowHeight, $"ddinfo tools {AssemblyUtils.EntryAssemblyVersionString}", null, null);
 		glfw.CheckError();
 		if (window == null)
 			throw new InvalidOperationException("Could not create window. Window pointer was null.");
@@ -242,7 +282,7 @@ internal sealed partial class Container : IContainer<Application>
 		glfw.SetKeyCallback(window, (_, keys, _, state, _) => glfwInput.KeyCallback(keys, state));
 		glfw.SetCharCallback(window, (_, codepoint) => glfwInput.CharCallback(codepoint));
 
-		if (UserCache.Model.WindowIsMaximized)
+		if (userCache.Model.WindowIsMaximized)
 		{
 			glfw.MaximizeWindow(window);
 		}
@@ -255,7 +295,7 @@ internal sealed partial class Container : IContainer<Application>
 			else
 				(primaryMonitorWidth, primaryMonitorHeight) = (1024, 768);
 
-			glfw.SetWindowPos(window, (primaryMonitorWidth - UserCache.Model.WindowWidth) / 2, (primaryMonitorHeight - UserCache.Model.WindowHeight) / 2);
+			glfw.SetWindowPos(window, (primaryMonitorWidth - userCache.Model.WindowWidth) / 2, (primaryMonitorHeight - userCache.Model.WindowHeight) / 2);
 		}
 
 		glfw.MakeContextCurrent(window);
@@ -269,13 +309,13 @@ internal sealed partial class Container : IContainer<Application>
 	}
 
 	[Factory(Scope.SingleInstance)]
-	private static IEncryptionService CreateEncryptionService()
+	private static IEncryptionService CreateEncryptionService(ILogger logger)
 	{
 		EncryptionService? encryptionService = EncryptionService.TryCreate();
 		if (encryptionService != null)
 			return encryptionService;
 
-		Root.Log.Error("Could not create the encryption service. The encryption.ini resource is missing or incomplete.");
+		logger.Error("Could not create the encryption service. The encryption.ini resource is missing or incomplete.");
 		return new DummyEncryptionService();
 	}
 
@@ -299,12 +339,12 @@ internal sealed partial class Container : IContainer<Application>
 	}
 
 	[Factory(Scope.SingleInstance)]
-	private static GameMemoryService CreateGameMemoryService()
+	private static GameMemoryService CreateGameMemoryService(ILogger logger)
 	{
 #if WINDOWS
 		return new GameMemoryService(new NativeInterface.Services.Windows.WindowsMemoryService());
 #elif LINUX
-		return new GameMemoryService(new NativeInterface.Services.Linux.LinuxMemoryService());
+		return new GameMemoryService(new NativeInterface.Services.Linux.LinuxMemoryService(logger));
 #endif
 	}
 

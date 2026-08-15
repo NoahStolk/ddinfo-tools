@@ -13,12 +13,20 @@ using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using ImGuiNET;
+using Serilog;
 using System.Diagnostics;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
 
-internal sealed class LeaderboardChild(CustomLeaderboards3DWindow customLeaderboards3DWindow, PopupManager popupManager, GameMemoryService gameMemoryService)
+internal sealed class LeaderboardChild(
+	CustomLeaderboards3DWindow customLeaderboards3DWindow,
+	PopupManager popupManager,
+	GameMemoryService gameMemoryService,
+	ILogger logger,
+	UserSettings userSettings,
+	UserCache userCache,
+	SurvivalFileWatcher survivalFileWatcher)
 {
 	private GetCustomEntry? _selectedCustomEntry;
 
@@ -55,7 +63,7 @@ internal sealed class LeaderboardChild(CustomLeaderboards3DWindow customLeaderbo
 		if (ImGui.Button("Play", new Vector2(80, 20)))
 			PlaySpawnset(data);
 
-		if (SurvivalFileWatcher.SpawnsetName == data.Leaderboard.SpawnsetName)
+		if (survivalFileWatcher.SpawnsetName == data.Leaderboard.SpawnsetName)
 		{
 			ImGui.SameLine();
 			ImGui.TextColored(Color.Green, "Current spawnset");
@@ -90,7 +98,7 @@ internal sealed class LeaderboardChild(CustomLeaderboards3DWindow customLeaderbo
 			getSpawnsetResult =>
 			{
 				getSpawnsetResult.Match(
-					getSpawnset => File.WriteAllBytes(UserSettings.ModsSurvivalPath, getSpawnset.FileBytes),
+					getSpawnset => File.WriteAllBytes(userSettings.ModsSurvivalPath, getSpawnset.FileBytes),
 					apiError => popupManager.ShowError("Could not fetch spawnset.", apiError));
 			},
 			() => FetchSpawnsetById.HandleAsync(data.SpawnsetId));
@@ -155,7 +163,7 @@ internal sealed class LeaderboardChild(CustomLeaderboards3DWindow customLeaderbo
 
 		ImGui.TableNextColumn();
 
-		ImGui.TextColored(ce.PlayerId == UserCache.Model.PlayerId ? Color.Green : Color.White, ce.PlayerName);
+		ImGui.TextColored(ce.PlayerId == userCache.Model.PlayerId ? Color.Green : Color.White, ce.PlayerName);
 		ImGui.TableNextColumn();
 
 		Color daggerColor = CustomLeaderboardDaggerUtils.GetColor(ce.CustomLeaderboardDagger);
@@ -276,7 +284,7 @@ internal sealed class LeaderboardChild(CustomLeaderboards3DWindow customLeaderbo
 					}
 					catch (Exception ex)
 					{
-						Root.Log.Error(ex, "Could not parse replay.");
+						logger.Error(ex, "Could not parse replay.");
 						popupManager.ShowError("Could not parse replay.", ex);
 						return;
 					}

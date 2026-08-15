@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-internal sealed class InputValuesChild(ResourceManager resourceManager, PracticeLogic practiceLogic)
+internal sealed class InputValuesChild(ResourceManager resourceManager, PracticeLogic practiceLogic, UserSettings userSettings, SurvivalFileWatcher survivalFileWatcher)
 {
 	public void Render()
 	{
@@ -53,11 +53,11 @@ internal sealed class InputValuesChild(ResourceManager resourceManager, Practice
 			if (ImGui.Button("Save template", new Vector2(0, buttonHeight)))
 			{
 				UserSettingsPracticeTemplate newTemplate = new(null, practiceLogic.State.HandLevel, practiceLogic.State.AdditionalGems, practiceLogic.State.TimerStart);
-				if (!UserSettings.Model.PracticeTemplates.Contains(newTemplate))
+				if (!userSettings.Model.PracticeTemplates.Contains(newTemplate))
 				{
-					UserSettings.Model = UserSettings.Model with
+					userSettings.Model = userSettings.Model with
 					{
-						PracticeTemplates = UserSettings.Model.PracticeTemplates
+						PracticeTemplates = userSettings.Model.PracticeTemplates
 							.Append(newTemplate)
 							.ToList(),
 					};
@@ -68,7 +68,7 @@ internal sealed class InputValuesChild(ResourceManager resourceManager, Practice
 				ImGui.SetTooltip("Save the current configuration as a custom template. Custom templates can be accessed on the right side of the window.");
 
 			ImGui.SameLine();
-			ImGui.BeginDisabled(!SurvivalFileWatcher.Exists);
+			ImGui.BeginDisabled(!survivalFileWatcher.Exists);
 			if (ImGui.Button("Return to normal game", new Vector2(0, buttonHeight)))
 				practiceLogic.DeleteModdedSpawnset();
 

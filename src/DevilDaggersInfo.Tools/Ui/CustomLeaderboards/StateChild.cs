@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
-internal sealed class StateChild(RecordingLogic recordingLogic, GameMemoryServiceWrapper gameMemoryServiceWrapper)
+internal sealed class StateChild(RecordingLogic recordingLogic, GameMemoryServiceWrapper gameMemoryServiceWrapper, SurvivalFileWatcher survivalFileWatcher)
 {
 	public void Render()
 	{
@@ -27,7 +27,7 @@ internal sealed class StateChild(RecordingLogic recordingLogic, GameMemoryServic
 			ImGui.TableNextColumn();
 			ImGui.Text("Spawnset");
 			ImGui.TableNextColumn();
-			ImGui.Text(SurvivalFileWatcher.SpawnsetName ?? "(unknown)");
+			ImGui.Text(survivalFileWatcher.SpawnsetName ?? "(unknown)");
 			ImGui.TableNextRow();
 
 			ImGui.TableNextColumn();

@@ -6,7 +6,6 @@ using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 using DevilDaggersInfo.Tools.User.Settings;
-using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools;
 
@@ -18,7 +17,10 @@ internal sealed class GameInstallationValidator(
 	MainScene mainScene,
 	SpawnsetEditor3DWindow spawnsetEditor3DWindow,
 	CustomLeaderboards3DWindow customLeaderboards3DWindow,
-	ReplayEditor3DWindow replayEditor3DWindow)
+	ReplayEditor3DWindow replayEditor3DWindow,
+	UserSettings userSettings,
+	ContentManager contentManager,
+	SurvivalFileWatcher survivalFileWatcher)
 {
 	private bool _contentInitialized;
 
@@ -32,11 +34,11 @@ internal sealed class GameInstallationValidator(
 	/// </summary>
 	public void ValidateInstallation()
 	{
-		InstallationDirectoryInput = UserSettings.Model.DevilDaggersInstallationDirectory;
+		InstallationDirectoryInput = userSettings.Model.DevilDaggersInstallationDirectory;
 
 		try
 		{
-			ContentManager.Initialize();
+			contentManager.Initialize();
 		}
 		catch (InvalidGameInstallationException ex)
 		{
@@ -64,7 +66,7 @@ internal sealed class GameInstallationValidator(
 		replayEditor3DWindow.InitializeScene();
 
 		// Initialize file watchers.
-		SurvivalFileWatcher.Initialize();
+		survivalFileWatcher.Initialize();
 
 		_contentInitialized = true;
 	}
