@@ -6,7 +6,6 @@ using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 using DevilDaggersInfo.Tools.User.Settings;
-using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools;
 

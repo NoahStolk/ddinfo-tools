@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
-using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using ImGuiNET;
 using System.Numerics;

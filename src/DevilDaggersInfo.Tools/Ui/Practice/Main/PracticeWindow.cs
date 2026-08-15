@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
-using DevilDaggersInfo.Tools.User.Settings;
 using ImGuiNET;
 using System.Diagnostics;
 using System.Numerics;
