@@ -144,9 +144,7 @@ internal sealed partial class Container : IContainer<Application>
 	[Factory(Scope.SingleInstance)]
 	private static ILogger CreateLogger()
 	{
-		ILogger logger = StaticLog.Log;
-		Log.Logger = logger;
-		return logger;
+		return StaticLog.Log;
 	}
 
 	[Factory(Scope.SingleInstance)]
@@ -249,8 +247,8 @@ internal sealed partial class Container : IContainer<Application>
 		io.Fonts.AddFontDefault();
 
 		// Determine DPI scale from framebuffer/window ratio (e.g. 3.0 on Wayland with 300% scaling at 4K).
-		glfw.GetFramebufferSize(window, out int fbWidth, out int _);
-		glfw.GetWindowSize(window, out int winWidth, out int _);
+		glfw.GetFramebufferSize(window, out int fbWidth, out _);
+		glfw.GetWindowSize(window, out int winWidth, out _);
 		float dpiScale = winWidth > 0 ? (float)fbWidth / winWidth : 1f;
 
 		fontService.Load(dpiScale);

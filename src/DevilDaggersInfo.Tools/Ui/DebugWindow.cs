@@ -21,7 +21,9 @@ internal sealed class DebugWindow(
 	IEncryptionService encryptionService,
 	PopupManager popupManager,
 	GameWindowService gameWindowService,
+#if DEBUG
 	ILogger logger,
+#endif
 	UserCache userCache,
 	SurvivalFileWatcher survivalFileWatcher)
 {

@@ -8,7 +8,7 @@ using Serilog;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-internal sealed class PracticeLogic(PopupManager popupManager, UserSettings userSettings, SurvivalFileWatcher survivalFileWatcher, ContentManager contentManager)
+internal sealed class PracticeLogic(PopupManager popupManager, UserSettings userSettings, SurvivalFileWatcher survivalFileWatcher, ContentManager contentManager, ILogger logger)
 {
 	public const int SpawnVersion = 6;
 
@@ -53,7 +53,7 @@ internal sealed class PracticeLogic(PopupManager popupManager, UserSettings user
 		catch (IOException ex)
 		{
 			const string message = "Could not write to the mods/survival file, probably because Devil Daggers is currently reading the file. Please try again.";
-			Log.Error(ex, message);
+			logger.Error(ex, message);
 			popupManager.ShowError(message, ex);
 		}
 	}

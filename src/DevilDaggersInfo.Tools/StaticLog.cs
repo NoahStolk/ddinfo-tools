@@ -4,14 +4,14 @@ using Serilog.Core;
 
 namespace DevilDaggersInfo.Tools;
 
+/// <summary>
+/// The one logger instance that exists before the DI container does, so that <see cref="Program"/> can log fatal
+/// exceptions thrown while constructing or disposing the container. Everything else takes an <see cref="ILogger"/>
+/// through the constructor; see <see cref="Container"/>.
+/// </summary>
 internal static class StaticLog
 {
 	public static readonly ILogger Log = CreateLogger();
-
-	public static void Initialize()
-	{
-		Serilog.Log.Logger = Log;
-	}
 
 	private static Logger CreateLogger()
 	{
