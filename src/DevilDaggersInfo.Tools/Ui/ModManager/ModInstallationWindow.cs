@@ -1,10 +1,8 @@
 using DevilDaggersInfo.Core.Asset;
-using DevilDaggersInfo.Core.Mod;
-using DevilDaggersInfo.Core.Mod.Exceptions;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
-using DevilDaggersInfo.Tools.User.Settings;
+using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
 using System.Numerics;
@@ -13,69 +11,6 @@ namespace DevilDaggersInfo.Tools.Ui.ModManager;
 
 internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogic, FontService fontService)
 {
-	private static Dictionary<string, List<EffectiveAsset>> _effectiveAssets = new();
-	private static int _activeAssets;
-	private static int _activeProhibitedAssets;
-
-	private static readonly List<string> _errors = [];
-
-	public static void LoadEffectiveAssets()
-	{
-		_effectiveAssets.Clear();
-		_errors.Clear();
-
-		string[] filePaths = Directory.GetFiles(UserSettings.ModsDirectory);
-		List<Mod> mods = [];
-		foreach (string filePath in filePaths)
-		{
-			string fileName = Path.GetFileName(filePath);
-			if (!fileName.StartsWith("audio") && !fileName.StartsWith("dd"))
-				continue;
-
-			try
-			{
-				using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read);
-				using BinaryReader reader = new(fs);
-				mods.Add(new Mod(ModBinaryToc.FromReader(reader), fileName));
-			}
-			catch (InvalidModBinaryException)
-			{
-				// Ignore.
-			}
-			catch (Exception ex)
-			{
-				_errors.Add($"Error loading file '{filePath}'.");
-				Root.Log.Error(ex, $"Error loading file '{filePath}'.");
-			}
-		}
-
-		List<EffectiveAsset> effectiveAssets = [];
-		foreach (Mod mod in mods.OrderBy(t => t.FileName))
-		{
-			foreach (ModBinaryTocEntry tocEntry in mod.Toc.Entries)
-			{
-				List<EffectiveAsset> existingAssets = effectiveAssets.Where(c => c.TocEntry.AssetType == tocEntry.AssetType && c.TocEntry.Name == tocEntry.Name).ToList();
-				foreach (EffectiveAsset existingAsset in existingAssets)
-					existingAsset.OverriddenByModFileName = mod.FileName;
-
-				effectiveAssets.Add(new EffectiveAsset(tocEntry, mod.FileName, null));
-			}
-		}
-
-		foreach (EffectiveAsset effectiveAsset in effectiveAssets.OrderBy(c => c.TocEntry.AssetType).ThenBy(c => c.TocEntry.Name))
-		{
-			if (!_effectiveAssets.ContainsKey(effectiveAsset.ContainingModFileName))
-				_effectiveAssets.Add(effectiveAsset.ContainingModFileName, []);
-
-			_effectiveAssets[effectiveAsset.ContainingModFileName].Add(effectiveAsset);
-		}
-
-		_effectiveAssets = _effectiveAssets.OrderByDescending(kvp => kvp.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-
-		_activeAssets = _effectiveAssets.Sum(kvp => kvp.Value.Count(c => c.OverriddenByModFileName == null && c.TocEntry.IsEnabled));
-		_activeProhibitedAssets = _effectiveAssets.Sum(kvp => kvp.Value.Count(c => c.OverriddenByModFileName == null && c.TocEntry.IsEnabled && AssetContainer.IsProhibited(c.TocEntry.AssetType, c.TocEntry.Name)));
-	}
-
 	public void Render()
 	{
 		ImGuiUtils.SetNextWindowMinSize(768, 384);
@@ -95,13 +30,13 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 					ImGui.TableSetupColumn("##right", ImGuiTableColumnFlags.WidthFixed, 48);
 
 					NextColumnText("Active mod files");
-					NextColumnText(Inline.Span(_effectiveAssets.Count));
+					NextColumnText(Inline.Span(modsDirectoryLogic.EffectiveAssets.Count));
 
 					NextColumnText("Active assets");
-					NextColumnText(Inline.Span(_activeAssets));
+					NextColumnText(Inline.Span(modsDirectoryLogic.ActiveAssets));
 
 					NextColumnText("Active prohibited assets");
-					NextColumnText(Inline.Span(_activeProhibitedAssets));
+					NextColumnText(Inline.Span(modsDirectoryLogic.ActiveProhibitedAssets));
 
 					ImGui.EndTable();
 				}
@@ -121,13 +56,13 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 				In the table below, mods listed at the top take precedence over mods listed at the bottom.
 				""");
 
-				if (_errors.Count > 0)
+				if (modsDirectoryLogic.Errors.Count > 0)
 				{
 					ImGui.Separator();
 					ImGui.TextColored(Color.Red, "Errors:");
-					for (int i = 0; i < _errors.Count; i++)
+					for (int i = 0; i < modsDirectoryLogic.Errors.Count; i++)
 					{
-						string error = _errors[i];
+						string error = modsDirectoryLogic.Errors[i];
 						ImGui.Text(error);
 					}
 				}
@@ -139,7 +74,7 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 		ImGui.End();
 	}
 
-	private static void RenderEffectiveAssetsTable()
+	private void RenderEffectiveAssetsTable()
 	{
 		if (ImGui.BeginTable("EffectiveAssetsModsTable", 2, ImGuiTableFlags.Borders))
 		{
@@ -147,7 +82,7 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 			ImGui.TableSetupColumn("Assets", ImGuiTableColumnFlags.WidthStretch);
 			ImGui.TableHeadersRow();
 
-			foreach (KeyValuePair<string, List<EffectiveAsset>> kvp in _effectiveAssets)
+			foreach (KeyValuePair<string, List<EffectiveAsset>> kvp in modsDirectoryLogic.EffectiveAssets)
 			{
 				ImGui.TableNextRow();
 
@@ -208,12 +143,5 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 	{
 		ImGui.TableNextColumn();
 		ImGui.Text(label);
-	}
-
-	private sealed record Mod(ModBinaryToc Toc, string FileName);
-
-	private sealed record EffectiveAsset(ModBinaryTocEntry TocEntry, string ContainingModFileName, string? OverriddenByModFileName)
-	{
-		public string? OverriddenByModFileName { get; set; } = OverriddenByModFileName;
 	}
 }

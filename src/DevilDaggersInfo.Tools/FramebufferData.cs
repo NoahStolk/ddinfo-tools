@@ -1,10 +1,11 @@
 using DevilDaggersInfo.Tools.Scenes;
 using DevilDaggersInfo.Tools.Scenes.Rendering;
+using Serilog;
 using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools;
 
-internal unsafe class FramebufferData(GL gl)
+internal unsafe class FramebufferData(GL gl, ILogger logger)
 {
 	public uint TextureHandle { get; private set; }
 	public uint Framebuffer { get; private set; }
@@ -20,7 +21,7 @@ internal unsafe class FramebufferData(GL gl)
 		// yields GL_INVALID_VALUE and an incomplete framebuffer, which renders as garbage rather than failing loudly.
 		if (width < 1 || height < 1)
 		{
-			Root.Log.Warning("Ignoring framebuffer resize to invalid size {Width}x{Height}.", width, height);
+			logger.Warning("Ignoring framebuffer resize to invalid size {Width}x{Height}.", width, height);
 			return;
 		}
 
@@ -62,7 +63,7 @@ internal unsafe class FramebufferData(GL gl)
 		gl.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, DepthRenderbuffer);
 
 		if (gl.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != GLEnum.FramebufferComplete)
-			Root.Log.Warning("Framebuffer is not complete.");
+			logger.Warning("Framebuffer is not complete.");
 
 		gl.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
 		gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);

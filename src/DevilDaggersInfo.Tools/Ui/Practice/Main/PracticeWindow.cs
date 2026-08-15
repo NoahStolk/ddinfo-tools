@@ -1,21 +1,28 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
+using DevilDaggersInfo.Tools.User.Settings;
 using ImGuiNET;
 using System.Diagnostics;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-internal sealed class PracticeWindow(ResourceManager resourceManager, PracticeLogic practiceLogic, FontService fontService)
+internal sealed class PracticeWindow(
+	ResourceManager resourceManager,
+	PracticeLogic practiceLogic,
+	FontService fontService,
+	UserSettings userSettings,
+	SurvivalFileWatcher survivalFileWatcher,
+	ContentManager contentManager)
 {
 	public const int TemplateDescriptionHeight = 48;
 
-	private readonly CurrentSpawnsetChild _currentSpawnsetChild = new(fontService);
-	private readonly CustomTemplatesChild _customTemplatesChild = new(resourceManager, practiceLogic);
-	private readonly EndLoopTemplatesChild _endLoopTemplatesChild = new(practiceLogic);
+	private readonly CurrentSpawnsetChild _currentSpawnsetChild = new(fontService, survivalFileWatcher);
+	private readonly CustomTemplatesChild _customTemplatesChild = new(resourceManager, practiceLogic, userSettings);
+	private readonly EndLoopTemplatesChild _endLoopTemplatesChild = new(practiceLogic, contentManager);
 	private readonly NoFarmTemplatesChild _noFarmTemplatesChild = new(practiceLogic);
-	private readonly InputValuesChild _inputValuesChild = new(resourceManager, practiceLogic);
+	private readonly InputValuesChild _inputValuesChild = new(resourceManager, practiceLogic, userSettings, survivalFileWatcher);
 
 	public void Render()
 	{

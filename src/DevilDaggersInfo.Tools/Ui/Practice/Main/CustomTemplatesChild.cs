@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-internal sealed class CustomTemplatesChild(ResourceManager resourceManager, PracticeLogic practiceLogic)
+internal sealed class CustomTemplatesChild(ResourceManager resourceManager, PracticeLogic practiceLogic, UserSettings userSettings)
 {
 	private int? _customTemplateIndexToReorder;
 
@@ -32,8 +32,8 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 			if (ImGui.BeginChild("CustomTemplateList", templateListSize))
 			{
 				RenderDragDropTarget(-1, templateWidth);
-				for (int i = 0; i < UserSettings.Model.PracticeTemplates.Count; i++)
-					RenderCustomTemplate(i, UserSettings.Model.PracticeTemplates[i], templateWidth);
+				for (int i = 0; i < userSettings.Model.PracticeTemplates.Count; i++)
+					RenderCustomTemplate(i, userSettings.Model.PracticeTemplates[i], templateWidth);
 
 				if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 					_customTemplateIndexToReorder = null;
@@ -72,7 +72,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 		PracticeWindow.GetGemsOrHomingText(customTemplate.HandLevel, customTemplate.AdditionalGems, gemsOrHomingText, out Color gemColor);
 		gemsOrHomingText = gemsOrHomingText.SliceUntilNull(bufferLength);
 
-		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(PracticeLogic.IsActive(customTemplate));
+		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(practiceLogic.IsActive(customTemplate));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
 		if (ImGui.BeginChild(buttonName, buttonSize, ImGuiChildFlags.Border)) // TODO: Borders in ImGui update.
@@ -120,16 +120,16 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 			ImGui.SetKeyboardFocusHere();
 			if (ImGui.InputText("##name", ref name, 24))
 			{
-				UserSettingsPracticeTemplate originalTemplate = UserSettings.Model.PracticeTemplates.First(pt => pt == customTemplate);
-				int index = UserSettings.Model.PracticeTemplates.IndexOf(originalTemplate);
+				UserSettingsPracticeTemplate originalTemplate = userSettings.Model.PracticeTemplates.First(pt => pt == customTemplate);
+				int index = userSettings.Model.PracticeTemplates.IndexOf(originalTemplate);
 
-				List<UserSettingsPracticeTemplate> newPracticeTemplates = UserSettings.Model.PracticeTemplates
+				List<UserSettingsPracticeTemplate> newPracticeTemplates = userSettings.Model.PracticeTemplates
 					.Where(pt => pt != originalTemplate)
 					.ToList();
 
 				newPracticeTemplates.Insert(index, originalTemplate with { Name = name });
 
-				UserSettings.Model = UserSettings.Model with
+				userSettings.Model = userSettings.Model with
 				{
 					PracticeTemplates = newPracticeTemplates,
 				};
@@ -181,9 +181,9 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(12));
 		if (ImGuiImage.ImageButton("CustomTemplateDeleteImageButton", resourceManager.InternalResources.BinTexture.Id, new Vector2(24)))
 		{
-			UserSettings.Model = UserSettings.Model with
+			userSettings.Model = userSettings.Model with
 			{
-				PracticeTemplates = UserSettings.Model.PracticeTemplates.Where(pt => customTemplate != pt).ToList(),
+				PracticeTemplates = userSettings.Model.PracticeTemplates.Where(pt => customTemplate != pt).ToList(),
 			};
 		}
 
@@ -219,9 +219,9 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 
 			if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 			{
-				UserSettingsPracticeTemplate originalTemplate = UserSettings.Model.PracticeTemplates[_customTemplateIndexToReorder.Value];
+				UserSettingsPracticeTemplate originalTemplate = userSettings.Model.PracticeTemplates[_customTemplateIndexToReorder.Value];
 
-				List<UserSettingsPracticeTemplate> newPracticeTemplates = UserSettings.Model.PracticeTemplates
+				List<UserSettingsPracticeTemplate> newPracticeTemplates = userSettings.Model.PracticeTemplates
 					.Where(pt => pt != originalTemplate)
 					.ToList();
 
@@ -230,7 +230,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 				else
 					newPracticeTemplates.Insert(i, originalTemplate);
 
-				UserSettings.Model = UserSettings.Model with
+				userSettings.Model = userSettings.Model with
 				{
 					PracticeTemplates = newPracticeTemplates,
 				};

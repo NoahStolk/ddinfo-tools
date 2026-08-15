@@ -3,38 +3,36 @@ using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
 using DevilDaggersInfo.Tools.User.Settings;
+using Serilog;
 using System.Net;
 using System.Security.Cryptography;
 
 namespace DevilDaggersInfo.Tools;
 
-// TODO: This should be an instance class implementing IDisposable.
-internal static class SurvivalFileWatcher
+internal sealed class SurvivalFileWatcher(UserSettings userSettings, ILogger logger) : IDisposable
 {
-#pragma warning disable S1450 // Cannot change this into a local. The events would not be raised.
-	private static FileSystemWatcher? _survivalFileWatcher;
-#pragma warning restore S1450
+	private FileSystemWatcher? _survivalFileWatcher;
 
-	public static bool Exists { get; private set; }
+	public bool Exists { get; private set; }
 
-	public static string? SpawnsetName { get; private set; }
+	public string? SpawnsetName { get; private set; }
 
-	public static HandLevel HandLevel { get; private set; } = HandLevel.Level1;
-	public static int AdditionalGems { get; private set; }
-	public static float TimerStart { get; private set; }
-	public static EffectivePlayerSettings EffectivePlayerSettings { get; private set; } = new(HandLevel.Level1, 0, HandLevel.Level1);
+	public HandLevel HandLevel { get; private set; } = HandLevel.Level1;
+	public int AdditionalGems { get; private set; }
+	public float TimerStart { get; private set; }
+	public EffectivePlayerSettings EffectivePlayerSettings { get; private set; } = new(HandLevel.Level1, 0, HandLevel.Level1);
 
-	public static void Initialize()
+	public void Initialize()
 	{
 		UpdateActiveSpawnsetBasedOnHash();
 
-		if (!Directory.Exists(UserSettings.ModsDirectory))
+		if (!Directory.Exists(userSettings.ModsDirectory))
 		{
-			Root.Log.Warning("Mods directory '{Path}' does not exist; survival file watcher disabled.", UserSettings.ModsDirectory);
+			logger.Warning("Mods directory '{Path}' does not exist; survival file watcher disabled.", userSettings.ModsDirectory);
 			return;
 		}
 
-		_survivalFileWatcher = new FileSystemWatcher(UserSettings.ModsDirectory, "survival");
+		_survivalFileWatcher = new FileSystemWatcher(userSettings.ModsDirectory, "survival");
 		_survivalFileWatcher.NotifyFilter = NotifyFilters.CreationTime
 			| NotifyFilters.DirectoryName
 			| NotifyFilters.FileName
@@ -50,7 +48,7 @@ internal static class SurvivalFileWatcher
 
 		void UpdateActiveSpawnsetBasedOnHash()
 		{
-			Exists = File.Exists(UserSettings.ModsSurvivalPath);
+			Exists = File.Exists(userSettings.ModsSurvivalPath);
 
 			if (!Exists)
 			{
@@ -62,12 +60,12 @@ internal static class SurvivalFileWatcher
 			byte[] fileHash;
 			try
 			{
-				fileContents = File.ReadAllBytes(UserSettings.ModsSurvivalPath);
+				fileContents = File.ReadAllBytes(userSettings.ModsSurvivalPath);
 				fileHash = MD5.HashData(fileContents);
 			}
 			catch (Exception ex) when (ex.IsFileIoException())
 			{
-				Root.Log.Warning(ex, "Failed to update active spawnset based on hash.");
+				logger.Warning(ex, "Failed to update active spawnset based on hash.");
 				return;
 			}
 
@@ -78,7 +76,7 @@ internal static class SurvivalFileWatcher
 					{
 						SpawnsetName = null;
 						if (apiError.Exception is not HttpRequestException { StatusCode: HttpStatusCode.NotFound })
-							Root.Log.Warning(apiError.Exception, "Failed to update active spawnset based on hash.");
+							logger.Warning(apiError.Exception, "Failed to update active spawnset based on hash.");
 					}),
 				() => FetchSpawnsetByHash.HandleAsync(fileHash));
 
@@ -90,5 +88,10 @@ internal static class SurvivalFileWatcher
 				EffectivePlayerSettings = spawnsetBinary.GetEffectivePlayerSettings();
 			}
 		}
+	}
+
+	public void Dispose()
+	{
+		_survivalFileWatcher?.Dispose();
 	}
 }

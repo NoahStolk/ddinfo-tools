@@ -10,17 +10,16 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-internal sealed class EndLoopTemplatesChild(PracticeLogic practiceLogic)
+internal sealed class EndLoopTemplatesChild(PracticeLogic practiceLogic, ContentManager contentManager)
 {
 	private List<float> EndLoopTimerStarts => field ??= CreateEndLoopTimerStarts();
 
-	// Inject ContentManager (no static).
 	private List<float> CreateEndLoopTimerStarts()
 	{
 		const int endLoopTemplateWaveCount = 60;
 
 		List<float> endLoopTimerStarts = [];
-		SpawnsView spawnsView = new(ContentManager.Content.DefaultSpawnset, GameVersion.V3_2, endLoopTemplateWaveCount);
+		SpawnsView spawnsView = new(contentManager.Content.DefaultSpawnset, GameVersion.V3_2, endLoopTemplateWaveCount);
 		for (int i = 0; i < endLoopTemplateWaveCount; i++)
 		{
 			float timerStart;
@@ -65,7 +64,7 @@ internal sealed class EndLoopTemplatesChild(PracticeLogic practiceLogic)
 	private void RenderEndLoopTemplate(int waveIndex, float timerStart, float templateWidth)
 	{
 		Vector2 buttonSize = new(templateWidth, 30);
-		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(PracticeLogic.IsActive(HandLevel.Level4, 0, timerStart));
+		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(practiceLogic.IsActive(HandLevel.Level4, 0, timerStart));
 		Color color = waveIndex % 3 == 2 ? EnemiesV3_2.Ghostpede.Color.ToEngineColor() : EnemiesV3_2.Gigapede.Color.ToEngineColor();
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);

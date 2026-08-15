@@ -16,7 +16,7 @@ namespace DevilDaggersInfo.Tools.Scenes.Rendering;
 /// A single instance is shared by every scene. That is safe because only one layout renders per frame and all rendering
 /// happens on the GL thread, but it means this type must not cache anything scene-specific between frames.
 /// </remarks>
-internal sealed class ArenaRenderer(GL gl, MeshCache meshCache, ResourceManager resourceManager)
+internal sealed class ArenaRenderer(GL gl, MeshCache meshCache, ResourceManager resourceManager, ContentManager contentManager)
 {
 	private ArenaMeshes? _meshes;
 
@@ -233,13 +233,13 @@ internal sealed class ArenaRenderer(GL gl, MeshCache meshCache, ResourceManager 
 	private ArenaMeshes GetMeshes()
 	{
 		return _meshes ??= new ArenaMeshes(
-			Tile: meshCache.GetOrCreate(ContentManager.Content.TileMesh),
-			Pillar: meshCache.GetOrCreate(ContentManager.Content.PillarMesh),
+			Tile: meshCache.GetOrCreate(contentManager.Content.TileMesh),
+			Pillar: meshCache.GetOrCreate(contentManager.Content.PillarMesh),
 			TileHitbox: meshCache.GetOrCreate(resourceManager.InternalResources.TileHitboxModel.MainMesh),
-			Dagger: meshCache.GetOrCreate(ContentManager.Content.DaggerMesh),
-			Hand: meshCache.GetOrCreate(ContentManager.Content.Hand4Mesh),
-			Skull4: meshCache.GetOrCreate(ContentManager.Content.Skull4Mesh),
-			Skull4Jaw: meshCache.GetOrCreate(ContentManager.Content.Skull4JawMesh));
+			Dagger: meshCache.GetOrCreate(contentManager.Content.DaggerMesh),
+			Hand: meshCache.GetOrCreate(contentManager.Content.Hand4Mesh),
+			Skull4: meshCache.GetOrCreate(contentManager.Content.Skull4Mesh),
+			Skull4Jaw: meshCache.GetOrCreate(contentManager.Content.Skull4JawMesh));
 	}
 
 	private sealed record ArenaMeshes(

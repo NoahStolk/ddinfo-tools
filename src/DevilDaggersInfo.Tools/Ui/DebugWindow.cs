@@ -8,6 +8,7 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.Utils;
 using ImGuiNET;
+using Serilog;
 using Silk.NET.GLFW;
 using System.Numerics;
 
@@ -19,7 +20,10 @@ internal sealed class DebugWindow(
 	INativeFileDialog nativeFileDialog,
 	IEncryptionService encryptionService,
 	PopupManager popupManager,
-	GameWindowService gameWindowService)
+	GameWindowService gameWindowService,
+	ILogger logger,
+	UserCache userCache,
+	SurvivalFileWatcher survivalFileWatcher)
 {
 	private readonly List<string> _debugMessages = [];
 	private readonly DateTime _startUpTime = DateTime.UtcNow;
@@ -52,11 +56,11 @@ internal sealed class DebugWindow(
 
 			if (ImGui.CollapsingHeader("Modded survival file"))
 			{
-				if (SurvivalFileWatcher.Exists)
+				if (survivalFileWatcher.Exists)
 				{
-					ImGui.Text(EnumUtils.HandLevelNames[SurvivalFileWatcher.HandLevel]);
-					ImGui.Text(Inline.Span(SurvivalFileWatcher.AdditionalGems));
-					ImGui.Text(Inline.Span(SurvivalFileWatcher.TimerStart, StringFormats.TimeFormat));
+					ImGui.Text(EnumUtils.HandLevelNames[survivalFileWatcher.HandLevel]);
+					ImGui.Text(Inline.Span(survivalFileWatcher.AdditionalGems));
+					ImGui.Text(Inline.Span(survivalFileWatcher.TimerStart, StringFormats.TimeFormat));
 				}
 				else
 				{
@@ -115,10 +119,10 @@ internal sealed class DebugWindow(
 				popupManager.ShowMessage("Message", "Test message!");
 
 			if (ImGui.Button("Warning log"))
-				Root.Log.Warning("Test warning! This should be logged as WARNING.");
+				logger.Warning("Test warning! This should be logged as WARNING.");
 
 			if (ImGui.Button("Error log"))
-				Root.Log.Error("Test error! This should be logged as ERROR.");
+				logger.Error("Test error! This should be logged as ERROR.");
 
 			ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 127 });
 			ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red);
@@ -246,14 +250,14 @@ internal sealed class DebugWindow(
 		AddText("Devil Daggers window position", Inline.Span(gameWindowService.GetWindowPosition()));
 	}
 
-	private static void RenderUserCache()
+	private void RenderUserCache()
 	{
-		AddText("Player id", Inline.Span(UserCache.Model.PlayerId));
+		AddText("Player id", Inline.Span(userCache.Model.PlayerId));
 
 		ImGui.SeparatorText("Window");
-		AddText("Maximized", UserCache.Model.WindowIsMaximized ? "True" : "False");
-		AddText("Width", Inline.Span(UserCache.Model.WindowWidth));
-		AddText("Height", Inline.Span(UserCache.Model.WindowHeight));
+		AddText("Maximized", userCache.Model.WindowIsMaximized ? "True" : "False");
+		AddText("Width", Inline.Span(userCache.Model.WindowWidth));
+		AddText("Height", Inline.Span(userCache.Model.WindowHeight));
 	}
 
 	private static void AddText(ReadOnlySpan<char> textLeft, ReadOnlySpan<char> textRight)

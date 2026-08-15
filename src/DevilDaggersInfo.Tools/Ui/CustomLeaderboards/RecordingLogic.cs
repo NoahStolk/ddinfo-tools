@@ -9,6 +9,7 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.Utils;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
+using Serilog;
 using System.Web;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
@@ -18,7 +19,9 @@ internal sealed class RecordingLogic(
 	IEncryptionService encryptionService,
 	PopupManager popupManager,
 	GameMemoryService gameMemoryService,
-	IPlatformSpecificValues platformSpecificValues)
+	IPlatformSpecificValues platformSpecificValues,
+	ILogger logger,
+	UserCache userCache)
 {
 	private readonly List<AddUploadRequestTimestamp> _timestamps = [];
 
@@ -62,9 +65,9 @@ internal sealed class RecordingLogic(
 
 		// Set current player ID when it has not been set yet.
 		// When the game starts up it will be set to -1, and then to the player ID.
-		if (mainBlock.PlayerId > 0 && UserCache.Model.PlayerId != mainBlock.PlayerId)
+		if (mainBlock.PlayerId > 0 && userCache.Model.PlayerId != mainBlock.PlayerId)
 		{
-			UserCache.Model = UserCache.Model with { PlayerId = mainBlock.PlayerId };
+			userCache.Model = userCache.Model with { PlayerId = mainBlock.PlayerId };
 		}
 
 		// Indicate recording status.
@@ -137,11 +140,11 @@ internal sealed class RecordingLogic(
 						if (leaderboardExists.Exists)
 							UploadRun(runToUpload);
 						else
-							Root.Log.Information("Skipping upload because leaderboard with hash '{Hash}' does not exist.", runToUpload.SurvivalHashMd5);
+							logger.Information("Skipping upload because leaderboard with hash '{Hash}' does not exist.", runToUpload.SurvivalHashMd5);
 					},
 					onError: apiError =>
 					{
-						Root.Log.Warning(apiError.Exception, "Failed to check if leaderboard exists. Attempting to upload run anyway.");
+						logger.Warning(apiError.Exception, "Failed to check if leaderboard exists. Attempting to upload run anyway.");
 						UploadRun(runToUpload);
 					});
 			},
@@ -264,7 +267,7 @@ internal sealed class RecordingLogic(
 			},
 			onError: apiError =>
 			{
-				Root.Log.Error(apiError.Exception, "Failed to upload run.");
+				logger.Error(apiError.Exception, "Failed to upload run.");
 				popupManager.ShowError("Failed to upload run.", apiError);
 			});
 	}

@@ -3,12 +3,21 @@ using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Scenes;
 using DevilDaggersInfo.Tools.Scenes.Rendering;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
+using DevilDaggersInfo.Tools.User.Settings;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools.Ui.Main;
 
-internal sealed unsafe class MainScene(Glfw glfw, GL gl, WindowHandle* window, GlfwInput glfwInput, ArenaRenderer arenaRenderer, FileStates fileStates, SpawnsetSaver spawnsetSaver)
+internal sealed unsafe class MainScene(
+	Glfw glfw,
+	GL gl,
+	WindowHandle* window,
+	GlfwInput glfwInput,
+	ArenaRenderer arenaRenderer,
+	FileStates fileStates,
+	SpawnsetSaver spawnsetSaver,
+	UserSettings userSettings)
 {
 	private readonly SpawnsetBinary _mainMenuSpawnset = SpawnsetBinary.CreateDefault();
 
@@ -16,7 +25,7 @@ internal sealed unsafe class MainScene(Glfw glfw, GL gl, WindowHandle* window, G
 
 	public void Initialize()
 	{
-		_mainMenuScene = new ArenaScene(glfw, window, glfwInput, () => _mainMenuSpawnset, true, false, fileStates, spawnsetSaver);
+		_mainMenuScene = new ArenaScene(glfw, window, glfwInput, () => _mainMenuSpawnset, true, false, fileStates, spawnsetSaver, userSettings);
 		_mainMenuScene.AddSkull4();
 	}
 

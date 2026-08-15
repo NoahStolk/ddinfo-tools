@@ -1,9 +1,10 @@
+using Serilog;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace DevilDaggersInfo.Tools.NativeInterface.Services.Linux;
 
-internal sealed partial class LinuxMemoryService : INativeMemoryService
+internal sealed partial class LinuxMemoryService(ILogger logger) : INativeMemoryService
 {
 	private bool _loggedReadFailure;
 
@@ -47,11 +48,11 @@ internal sealed partial class LinuxMemoryService : INativeMemoryService
 		if (bytesRead < 0)
 		{
 			int errno = Marshal.GetLastPInvokeError();
-			Root.Log.Error("Could not read game memory: process_vm_readv failed with errno {Errno} ({Message}). If this is EPERM (1), the kernel is likely blocking the read; see /proc/sys/kernel/yama/ptrace_scope.", errno, Marshal.GetPInvokeErrorMessage(errno));
+			logger.Error("Could not read game memory: process_vm_readv failed with errno {Errno} ({Message}). If this is EPERM (1), the kernel is likely blocking the read; see /proc/sys/kernel/yama/ptrace_scope.", errno, Marshal.GetPInvokeErrorMessage(errno));
 		}
 		else
 		{
-			Root.Log.Error("Could not read game memory: process_vm_readv read {BytesRead} of {Size} requested bytes.", bytesRead, size);
+			logger.Error("Could not read game memory: process_vm_readv read {BytesRead} of {Size} requested bytes.", bytesRead, size);
 		}
 	}
 

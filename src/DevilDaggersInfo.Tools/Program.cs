@@ -1,13 +1,34 @@
-using DevilDaggersInfo.Tools;
-using DevilDaggersInfo.Tools.User.Cache;
-using DevilDaggersInfo.Tools.User.Settings;
+using Serilog;
 using StrongInject;
 
-AppDomain.CurrentDomain.UnhandledException += (_, args) => Root.Log.Fatal("Unhandled exception: {Exception}", args.ExceptionObject);
+namespace DevilDaggersInfo.Tools;
 
-UserSettings.Load();
-UserCache.Load();
+internal static class Program
+{
+	private static int _fatalLogged;
 
-using Container container = new();
-using Owned<Application> app = container.Resolve();
-app.Value.Run();
+	public static void Main()
+	{
+		StaticLog.Initialize();
+
+		AppDomain.CurrentDomain.UnhandledException += (_, e) =>
+		{
+			if (Interlocked.Exchange(ref _fatalLogged, 1) == 0)
+				Log.Logger.Fatal(e.ExceptionObject as Exception, "Unhandled exception (outside main loop)");
+		};
+
+		try
+		{
+			using Container container = new();
+			using Owned<Application> app = container.Resolve();
+			app.Value.Run();
+		}
+		catch (Exception ex)
+		{
+			if (Interlocked.Exchange(ref _fatalLogged, 1) == 0)
+				Log.Logger.Fatal(ex, "Unhandled exception");
+
+			throw;
+		}
+	}
+}
