@@ -9,20 +9,13 @@ using System.Numerics;
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
 internal sealed class PracticeWindow(
-	ResourceManager resourceManager,
-	PracticeLogic practiceLogic,
-	FontService fontService,
-	UserSettings userSettings,
-	SurvivalFileWatcher survivalFileWatcher,
-	ContentManager contentManager)
+	CurrentSpawnsetChild currentSpawnsetChild,
+	CustomTemplatesChild customTemplatesChild,
+	EndLoopTemplatesChild endLoopTemplatesChild,
+	NoFarmTemplatesChild noFarmTemplatesChild,
+	InputValuesChild inputValuesChild)
 {
 	public const int TemplateDescriptionHeight = 48;
-
-	private readonly CurrentSpawnsetChild _currentSpawnsetChild = new(fontService, survivalFileWatcher);
-	private readonly CustomTemplatesChild _customTemplatesChild = new(resourceManager, practiceLogic, userSettings);
-	private readonly EndLoopTemplatesChild _endLoopTemplatesChild = new(practiceLogic, contentManager);
-	private readonly NoFarmTemplatesChild _noFarmTemplatesChild = new(practiceLogic);
-	private readonly InputValuesChild _inputValuesChild = new(resourceManager, practiceLogic, userSettings, survivalFileWatcher);
 
 	public void Render()
 	{
@@ -37,18 +30,18 @@ internal sealed class PracticeWindow(
 			ImGui.Text("Use these templates to practice specific sections of the game. Click on a template to install it.");
 			ImGui.Spacing();
 
-			_noFarmTemplatesChild.Render(templateContainerSize, templateListSize, templateWidth);
+			noFarmTemplatesChild.Render(templateContainerSize, templateListSize, templateWidth);
 
 			ImGui.SameLine();
-			_endLoopTemplatesChild.Render(templateContainerSize, templateListSize, templateWidth);
+			endLoopTemplatesChild.Render(templateContainerSize, templateListSize, templateWidth);
 
 			ImGui.SameLine();
-			_customTemplatesChild.Render(templateContainerSize, templateListSize, templateWidth);
+			customTemplatesChild.Render(templateContainerSize, templateListSize, templateWidth);
 
-			_inputValuesChild.Render();
+			inputValuesChild.Render();
 
 			ImGui.SameLine();
-			_currentSpawnsetChild.Render();
+			currentSpawnsetChild.Render();
 		}
 
 		ImGui.End();

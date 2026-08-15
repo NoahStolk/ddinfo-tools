@@ -104,6 +104,11 @@ namespace DevilDaggersInfo.Tools;
 // Practice
 [Register<PracticeWindow>(Scope.SingleInstance)]
 [Register<RunAnalysisWindow>(Scope.SingleInstance)]
+[Register<CurrentSpawnsetChild>(Scope.SingleInstance)]
+[Register<CustomTemplatesChild>(Scope.SingleInstance)]
+[Register<EndLoopTemplatesChild>(Scope.SingleInstance)]
+[Register<NoFarmTemplatesChild>(Scope.SingleInstance)]
+[Register<InputValuesChild>(Scope.SingleInstance)]
 
 [Register<PracticeLogic>(Scope.SingleInstance)]
 
