@@ -70,19 +70,19 @@
   </Choose>
 
   <ItemGroup Label="Internal dependencies">
-    <PackageReference Include="DevilDaggersInfo.Core" Version="0.14.2"/>
-    <PackageReference Include="DevilDaggersInfo.Web.ApiSpec.Tools" Version="1.1.0"/>
+    <PackageReference Include="DevilDaggersInfo.Core"/>
+    <PackageReference Include="DevilDaggersInfo.Web.ApiSpec.Tools"/>
     <ProjectReference Include="..\DevilDaggersInfo.Tools.Engine\DevilDaggersInfo.Tools.Engine.csproj"/>
   </ItemGroup>
 
   <ItemGroup Label="External dependencies">
-    <PackageReference Include="NativeFileDialogSharp" Version="0.5.0"/>
-    <PackageReference Include="NoahStolk.EnumGenerator" Version="0.6.0">
+    <PackageReference Include="NativeFileDialogSharp"/>
+    <PackageReference Include="NoahStolk.EnumGenerator">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0"/>
-    <PackageReference Include="StrongInject" Version="1.4.4"/>
+    <PackageReference Include="Serilog.Sinks.File"/>
+    <PackageReference Include="StrongInject"/>
   </ItemGroup>
 
   <ItemGroup Label="Fonts">
