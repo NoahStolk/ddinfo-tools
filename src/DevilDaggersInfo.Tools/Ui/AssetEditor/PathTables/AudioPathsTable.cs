@@ -3,7 +3,7 @@ using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
@@ -30,22 +30,22 @@ internal sealed class AudioPathsTable(FileStates fileStates, INativeFileDialog n
 
 		ImGui.TableNextColumn();
 		bool hasLoudness = path?.Loudness.HasValue ?? false;
-		if (ImGui.Checkbox(Inline.Span($"##CheckboxLoudness_{index}"), ref hasLoudness))
+		if (ImGui.Checkbox(Inline.Utf8($"##CheckboxLoudness_{index}"), ref hasLoudness))
 			SetLoudness(assetInfo, path, hasLoudness ? assetInfo.DefaultLoudness : null);
 		if (ImGui.IsItemHovered())
 			ImGui.SetTooltip("If checked, the loudness will be overridden by the specified value.");
 		ImGui.SameLine();
 		ImGui.BeginDisabled(!hasLoudness);
 		float loudness = path?.Loudness ?? assetInfo.DefaultLoudness;
-		if (ImGui.InputFloat(Inline.Span($"##Loudness_{index}"), ref loudness, 0.1f, 1f, "%.1f"))
+		if (ImGui.InputFloat(Inline.Utf8($"##Loudness_{index}"), ref loudness, 0.1f, 1f, "%.1f"))
 			SetLoudness(assetInfo, path, loudness);
 		ImGui.EndDisabled();
 
 		ImGui.TableNextColumn();
-		if (ImGui.Button(Inline.Span($"Browse##Audio_{index}")))
+		if (ImGui.Button(Inline.Utf8($"Browse##Audio_{index}")))
 			SetPath(assetInfo, path);
 		ImGui.SameLine();
-		if (ImGui.Button(Inline.Span($"Clear##Audio_{index}")) && path != null)
+		if (ImGui.Button(Inline.Utf8($"Clear##Audio_{index}")) && path != null)
 			path.SetPath(null);
 		ImGui.SameLine();
 		ImGui.Text(path?.AbsolutePath ?? "<none>");

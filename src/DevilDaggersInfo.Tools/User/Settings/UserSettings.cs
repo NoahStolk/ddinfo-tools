@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.JsonSerializerContexts;
 using DevilDaggersInfo.Tools.User.Settings.Model;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using Serilog;
 using System.Text.Json;
 
@@ -67,7 +67,7 @@ internal sealed class UserSettings(ILogger logger)
 
 	public void LoadImGuiIni()
 	{
-		if (!File.Exists(_filePath))
+		if (!File.Exists(_imguiIniFilePath))
 			return;
 
 		try
@@ -83,12 +83,13 @@ internal sealed class UserSettings(ILogger logger)
 		// DebugWindow.Add("Loaded imgui.ini");
 	}
 
-	public void SaveImGuiIni(ImGuiIOPtr io)
+	public unsafe void SaveImGuiIni(ImGuiIOPtr io)
 	{
 		Directory.CreateDirectory(_fileDirectory);
 
-		string iniContents = ImGui.SaveIniSettingsToMemory(out _);
-		File.WriteAllText(_imguiIniFilePath, iniContents);
+		nuint iniSize;
+		byte* iniContents = ImGui.SaveIniSettingsToMemory(&iniSize);
+		File.WriteAllBytes(_imguiIniFilePath, new ReadOnlySpan<byte>(iniContents, (int)iniSize));
 
 		// DebugWindow.Add("Saved imgui.ini");
 

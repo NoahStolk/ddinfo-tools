@@ -1,5 +1,5 @@
 using DevilDaggersInfo.Tools.EditorFileState;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
@@ -8,7 +8,7 @@ internal sealed class AssetEditorWindow(AssetPathsChild assetPathsChild, FileSta
 	public void Render()
 	{
 		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize);
-		if (ImGui.Begin(Inline.Span($"Asset Editor - {fileStates.Mod.FileName ?? FileStates.UntitledName}{(fileStates.Mod.IsModified && fileStates.Mod.FileName != null ? "*" : string.Empty)}###asset_editor"), ImGuiWindowFlags.NoCollapse))
+		if (ImGui.Begin(Inline.Utf8($"Asset Editor - {fileStates.Mod.FileName ?? FileStates.UntitledName}{(fileStates.Mod.IsModified && fileStates.Mod.FileName != null ? "*" : string.Empty)}###asset_editor"), ImGuiWindowFlags.NoCollapse))
 		{
 			assetPathsChild.Render();
 		}

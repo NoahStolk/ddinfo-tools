@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Tools.Platforms;
 using DevilDaggersInfo.Tools.Utils;
 using DevilDaggersInfo.Web.ApiSpec.Tools;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
@@ -15,7 +15,7 @@ internal sealed class UpdateWindow(IPlatformSpecificValues platformSpecificValue
 		if (!Show)
 			return;
 
-		Vector2 center = ImGui.GetMainViewport().GetCenter();
+		Vector2 center = ImGui.GetCenter(ImGui.GetMainViewport());
 		Vector2 windowSize = new(384, 384);
 		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new Vector2(0.5f, 0.5f));
 		ImGui.SetNextWindowSize(windowSize);
@@ -23,7 +23,7 @@ internal sealed class UpdateWindow(IPlatformSpecificValues platformSpecificValue
 		{
 			ImGui.PushTextWrapPos(windowSize.X - 16);
 
-			ImGui.Text(Inline.Span($"""
+			ImGui.Text(Inline.Utf8($"""
                 The current version is {AssemblyUtils.EntryAssemblyVersion}.
 
                 Unfortunately, since anti-virus software does not like the way automatic updates were implemented, the auto-update feature has been removed.
@@ -39,10 +39,10 @@ internal sealed class UpdateWindow(IPlatformSpecificValues platformSpecificValue
                 """));
 			ImGui.Spacing();
 
-			ImGuiExt.Hyperlink("https://github.com/NoahStolk/ddinfo-tools/releases", "Download from GitHub");
+			ImGuiExt.Hyperlink("https://github.com/NoahStolk/ddinfo-tools/releases"u8, "Download from GitHub"u8);
 			ImGui.Spacing();
 
-			ImGuiExt.Hyperlink("https://github.com/NoahStolk/ddinfo-tools/blob/main/CHANGELOG.md", "View the full changelog");
+			ImGuiExt.Hyperlink("https://github.com/NoahStolk/ddinfo-tools/blob/main/CHANGELOG.md"u8, "View the full changelog"u8);
 			ImGui.Spacing();
 
 			ImGui.PopTextWrapPos();

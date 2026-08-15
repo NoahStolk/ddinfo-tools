@@ -1,6 +1,6 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
@@ -13,7 +13,7 @@ internal static class Transmute
 		const float rightColumnWidth = 160;
 		const float tableWidth = leftColumnWidth + rightColumnWidth;
 
-		if (ImGui.BeginChild(Inline.Span($"TransmuteEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
+		if (ImGui.BeginChild(Inline.Utf8($"TransmuteEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
 		{
 			if (ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new Vector2(tableWidth, 0)))
 			{
@@ -25,27 +25,27 @@ internal static class Transmute
 				ImGui.TableNextColumn();
 				ImGui.Text("Entity Id");
 				ImGui.TableNextColumn();
-				UtilsRendering.EditableEntityId(uniqueId, nameof(TransmuteEventData.EntityId), replay, ref e.EntityId);
+				UtilsRendering.EditableEntityId(uniqueId, "EntityId"u8, replay, ref e.EntityId);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("?");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputInt16Vec3(uniqueId, nameof(TransmuteEventData.A), ref e.A);
+				UtilsRendering.InputInt16Vec3(uniqueId, "A"u8, ref e.A);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("?");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputInt16Vec3(uniqueId, nameof(TransmuteEventData.B), ref e.B);
+				UtilsRendering.InputInt16Vec3(uniqueId, "B"u8, ref e.B);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("?");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputInt16Vec3(uniqueId, nameof(TransmuteEventData.C), ref e.C);
+				UtilsRendering.InputInt16Vec3(uniqueId, "C"u8, ref e.C);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("?");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputInt16Vec3(uniqueId, nameof(TransmuteEventData.D), ref e.D);
+				UtilsRendering.InputInt16Vec3(uniqueId, "D"u8, ref e.D);
 
 				ImGui.EndTable();
 			}

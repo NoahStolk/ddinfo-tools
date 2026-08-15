@@ -8,7 +8,7 @@ using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
@@ -45,7 +45,7 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 				ImGui.PushStyleColor(ImGuiCol.ChildBg, new Engine.Maths.Numerics.Color(127, 0, 0, 255));
 				if (ImGui.BeginChild("Warning", new Vector2(0, 56)))
 				{
-					ImGui.TextWrapped(Inline.Span($"(!) The end loop is only {endLoopLength.Value} seconds long, which will probably result in severe lag or a crash. If you intend to have no end loop, make sure to add an empty spawn at the end of the spawns list."));
+					ImGui.TextWrapped(Inline.Utf8($"(!) The end loop is only {endLoopLength.Value} seconds long, which will probably result in severe lag or a crash. If you intend to have no end loop, make sure to add an empty spawn at the end of the spawns list."));
 				}
 
 				ImGui.EndChild();
@@ -146,14 +146,14 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 		if (sameLine)
 			ImGui.SameLine();
 
-		if (ImGui.Button(Inline.Span(enemyType), new Vector2(80, 20)))
+		if (ImGui.Button(Inline.Utf8Formattable(enemyType), new Vector2(80, 20)))
 			_selectedEnemyType = enemyType;
 
 		ImGui.PopStyleColor(5);
 		ImGui.PopStyleVar();
 	}
 
-	private void RenderSpawnsTable()
+	private unsafe void RenderSpawnsTable()
 	{
 		const int columnCount = 6;
 
@@ -168,10 +168,10 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 
 			if (_windowIsFocused)
 			{
-				if (io.KeyCtrl && io.IsKeyDown(ImGuiKey.A))
+				if (io.KeyCtrl && ImGui.IsKeyDown(ImGuiKey.A))
 					Array.Fill(_selected, true);
 
-				if (io.IsKeyDown(ImGuiKey.Delete) && Array.Exists(_selected, b => b))
+				if (ImGui.IsKeyDown(ImGuiKey.Delete) && Array.Exists(_selected, b => b))
 				{
 					fileStates.Spawnset.Update(fileStates.Spawnset.Object with { Spawns = [..fileStates.Spawnset.Object.Spawns.Where((_, i) => !_selected[i])] });
 					Array.Fill(_selected, false);
@@ -223,7 +223,7 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 					_scrollToIndex = null;
 				}
 
-				if (ImGui.Selectable(Inline.Span(spawn.Index), ref _selected[spawn.Index], ImGuiSelectableFlags.SpanAllColumns))
+				if (ImGui.Selectable(Inline.Utf8(spawn.Index), ref _selected[spawn.Index], ImGuiSelectableFlags.SpanAllColumns))
 				{
 					if (!io.KeyCtrl)
 					{
@@ -249,16 +249,16 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 				ImGui.TextColored(spawn.EnemyType.GetColor(GameConstants.CurrentVersion), EnumUtils.EnemyTypeNames[spawn.EnemyType]);
 				ImGui.TableNextColumn();
 
-				ImGui.Text(Inline.Span(spawn.Seconds, StringFormats.TimeFormat));
+				ImGui.Text(Inline.Utf8(spawn.Seconds, StringFormats.TimeFormat));
 				ImGui.TableNextColumn();
 
-				ImGui.Text(Inline.Span(spawn.Delay, StringFormats.TimeFormat));
+				ImGui.Text(Inline.Utf8(spawn.Delay, StringFormats.TimeFormat));
 				ImGui.TableNextColumn();
 
-				ImGui.Text(spawn.NoFarmGems == 0 ? "-" : Inline.Span(spawn.NoFarmGems, "+0"));
+				ImGui.Text(spawn.NoFarmGems == 0 ? "-"u8 : Inline.Utf8(spawn.NoFarmGems, "+0"));
 				ImGui.TableNextColumn();
 
-				ImGui.TextColored(spawn.GemState.HandLevel.GetColor(), Inline.Span(spawn.GemState.Value));
+				ImGui.TextColored(spawn.GemState.HandLevel.GetColor(), Inline.Utf8(spawn.GemState.Value));
 				ImGui.TableNextColumn();
 			}
 
@@ -272,12 +272,12 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 	private void EditContextItem(SpawnUiEntry spawn)
 	{
 		bool saved = false;
-		if (ImGui.BeginPopupContextItem(Inline.Span(spawn.Index)))
+		if (ImGui.BeginPopupContextItem(Inline.Utf8(spawn.Index)))
 		{
 			if (!_delayEdited)
 				_editDelay = (float)spawn.Delay;
 
-			ImGui.Text(Inline.Span($"Edit #{spawn.Index} ({EnumUtils.EnemyTypeNames[spawn.EnemyType]} at {spawn.Seconds:0.0000})"));
+			ImGui.Text(Inline.Utf8($"Edit #{spawn.Index} ({EnumUtils.EnemyTypeNames[spawn.EnemyType]} at {spawn.Seconds:0.0000})"));
 
 			for (int i = 0; i < EnumUtils.EnemyTypes.Count; i++)
 			{

@@ -3,7 +3,7 @@ using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
@@ -28,10 +28,10 @@ internal sealed class MeshPathsTable(FileStates fileStates, INativeFileDialog na
 		PathTableUtils.RenderDefaultColumns(assetInfo);
 
 		ImGui.TableNextColumn();
-		if (ImGui.Button(Inline.Span($"Browse##Mesh_{index}")))
+		if (ImGui.Button(Inline.Utf8($"Browse##Mesh_{index}")))
 			SetPath(assetInfo, path);
 		ImGui.SameLine();
-		if (ImGui.Button(Inline.Span($"Clear##Mesh_{index}")) && path != null)
+		if (ImGui.Button(Inline.Utf8($"Clear##Mesh_{index}")) && path != null)
 			path.SetPath(null);
 		ImGui.SameLine();
 		ImGui.Text(path?.AbsolutePath ?? "<none>");

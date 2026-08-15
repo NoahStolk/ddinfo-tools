@@ -2,7 +2,7 @@ using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Main;
@@ -25,7 +25,7 @@ internal sealed class MainWindow(
 
 	public void Render()
 	{
-		Vector2 center = ImGui.GetMainViewport().GetCenter();
+		Vector2 center = ImGui.GetCenter(ImGui.GetMainViewport());
 		Vector2 windowSize = new(683, 768);
 		Vector2 mainButtonsSize = new(208, 512);
 		Vector2 previewSize = new(windowSize.X - mainButtonsSize.X - 16, 512);
@@ -35,7 +35,7 @@ internal sealed class MainWindow(
 
 		if (ImGui.Begin("Main Menu", ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoDocking))
 		{
-			ImGui.PushFont(fontService.GoetheBold60);
+			ImGuiExt.PushFont(fontService.GoetheBold60);
 			const string title = "ddinfo tools";
 			ImGui.TextColored(Colors.TitleColor(frameCounter.TotalTime), title);
 			float textWidth = ImGui.CalcTextSize(title).X;
@@ -46,28 +46,28 @@ internal sealed class MainWindow(
 			ImGui.Text("Developed by Noah Stolk");
 
 			ImGui.SetCursorPos(new Vector2(windowSize.X - 208, 8));
-			AppButton(resourceManager.InternalResources.DownloadTexture, "Updates", () => updateWindow.Show = true);
+			AppButton(resourceManager.InternalResources.DownloadTexture, "Updates"u8, () => updateWindow.Show = true);
 
 			ImGui.SameLine();
-			AppButton(resourceManager.InternalResources.ConfigurationTexture, "Configuration", () => uiLayoutManager.Layout = LayoutType.Config);
+			AppButton(resourceManager.InternalResources.ConfigurationTexture, "Configuration"u8, () => uiLayoutManager.Layout = LayoutType.Config);
 
 			ImGui.SameLine();
-			AppButton(resourceManager.InternalResources.InfoTexture, "About", () => aboutWindow.Show = true);
+			AppButton(resourceManager.InternalResources.InfoTexture, "About"u8, () => aboutWindow.Show = true);
 
 			ImGui.SameLine();
-			AppButton(resourceManager.InternalResources.CloseTexture, "Exit application", () => ShouldClose = true);
+			AppButton(resourceManager.InternalResources.CloseTexture, "Exit application"u8, () => ShouldClose = true);
 
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 40);
 			if (ImGui.BeginChild("ToolButtons", mainButtonsSize))
 			{
-				ToolButton(GetColor(Colors.SpawnsetEditor.Primary), "Spawnset Editor", GoToSpawnsetEditor, ref _hoveredButtonAction, RenderSpawnsetEditorPreview);
-				ToolButton(GetColor(Colors.AssetEditor.Primary), "Asset Editor", GoToAssetEditor, ref _hoveredButtonAction, RenderAssetEditorPreview);
-				ToolButton(GetColor(Colors.ReplayEditor.Primary), "Replay Editor", GoToReplayEditor, ref _hoveredButtonAction, RenderReplayEditorPreview);
+				ToolButton(GetColor(Colors.SpawnsetEditor.Primary), "Spawnset Editor"u8, GoToSpawnsetEditor, ref _hoveredButtonAction, RenderSpawnsetEditorPreview);
+				ToolButton(GetColor(Colors.AssetEditor.Primary), "Asset Editor"u8, GoToAssetEditor, ref _hoveredButtonAction, RenderAssetEditorPreview);
+				ToolButton(GetColor(Colors.ReplayEditor.Primary), "Replay Editor"u8, GoToReplayEditor, ref _hoveredButtonAction, RenderReplayEditorPreview);
 
 				ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 16);
-				ToolButton(GetColor(Colors.CustomLeaderboards.Primary), "Custom Leaderboards", GoToCustomLeaderboards, ref _hoveredButtonAction, RenderCustomLeaderboardsPreview);
-				ToolButton(GetColor(Colors.Practice.Primary), "Practice", GoToPractice, ref _hoveredButtonAction, RenderPracticePreview);
-				ToolButton(GetColor(Colors.ModManager.Primary), "Mod Manager", GoToModManager, ref _hoveredButtonAction, RenderModManagerPreview);
+				ToolButton(GetColor(Colors.CustomLeaderboards.Primary), "Custom Leaderboards"u8, GoToCustomLeaderboards, ref _hoveredButtonAction, RenderCustomLeaderboardsPreview);
+				ToolButton(GetColor(Colors.Practice.Primary), "Practice"u8, GoToPractice, ref _hoveredButtonAction, RenderPracticePreview);
+				ToolButton(GetColor(Colors.ModManager.Primary), "Mod Manager"u8, GoToModManager, ref _hoveredButtonAction, RenderModManagerPreview);
 
 				static Color GetColor(Color primary)
 				{
@@ -128,7 +128,7 @@ internal sealed class MainWindow(
 		ImGui.End();
 	}
 
-	private static void AppButton(Texture icon, ReadOnlySpan<char> tooltip, Action action)
+	private static void AppButton(Texture icon, ReadOnlySpan<byte> tooltip, Action action)
 	{
 		Vector2 iconSize = new(36);
 		if (ImGuiImage.ImageButton(tooltip, icon.Id, iconSize))
@@ -138,7 +138,7 @@ internal sealed class MainWindow(
 			ImGui.SetTooltip(tooltip);
 	}
 
-	private void ToolButton(Color color, ReadOnlySpan<char> text, Action action, ref Action? hoveredAction, Action onHover)
+	private void ToolButton(Color color, ReadOnlySpan<byte> text, Action action, ref Action? hoveredAction, Action onHover)
 	{
 		ImGui.PushStyleColor(ImGuiCol.Button, color);
 		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color + new Vector4(0, 0, 0, 0.2f));
@@ -146,7 +146,7 @@ internal sealed class MainWindow(
 		ImGui.PushStyleColor(ImGuiCol.Border, color with { A = 255 });
 		ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, 2);
 
-		ImGui.PushFont(fontService.GoetheBold20);
+		ImGuiExt.PushFont(fontService.GoetheBold20);
 		bool clicked = ImGui.Button(text, new Vector2(198, 48));
 		ImGui.PopFont();
 
@@ -164,7 +164,7 @@ internal sealed class MainWindow(
 
 	private void RenderSpawnsetEditorPreview()
 	{
-		ImGuiExt.Title("Spawnset Editor", fontService.GoetheBold30);
+		ImGuiExt.Title("Spawnset Editor"u8, fontService.GoetheBold30);
 		ImGui.Text("""
 			WORK IN PROGRESS
 
@@ -188,7 +188,7 @@ internal sealed class MainWindow(
 
 	private void RenderAssetEditorPreview()
 	{
-		ImGuiExt.Title("Asset Editor", fontService.GoetheBold30);
+		ImGuiExt.Title("Asset Editor"u8, fontService.GoetheBold30);
 		ImGui.Text("""
 			WORK IN PROGRESS
 
@@ -207,7 +207,7 @@ internal sealed class MainWindow(
 
 	private void RenderReplayEditorPreview()
 	{
-		ImGuiExt.Title("Replay Editor", fontService.GoetheBold30);
+		ImGuiExt.Title("Replay Editor"u8, fontService.GoetheBold30);
 		ImGui.Text("""
 			WORK IN PROGRESS
 
@@ -226,7 +226,7 @@ internal sealed class MainWindow(
 
 	private void RenderCustomLeaderboardsPreview()
 	{
-		ImGuiExt.Title("Custom Leaderboards", fontService.GoetheBold30);
+		ImGuiExt.Title("Custom Leaderboards"u8, fontService.GoetheBold30);
 		ImGui.Text("""
 			WINDOWS ONLY (FOR NOW)
 
@@ -262,7 +262,7 @@ internal sealed class MainWindow(
 
 	private void RenderPracticePreview()
 	{
-		ImGuiExt.Title("Practice", fontService.GoetheBold30);
+		ImGuiExt.Title("Practice"u8, fontService.GoetheBold30);
 		ImGui.Text("""
 			Practice the main game by starting at any point in time with any hand upgrade and amount of gems/homing, using custom spawnsets that are automatically generated.
 
@@ -281,7 +281,7 @@ internal sealed class MainWindow(
 
 	private void RenderModManagerPreview()
 	{
-		ImGuiExt.Title("Mod Manager", fontService.GoetheBold30);
+		ImGuiExt.Title("Mod Manager"u8, fontService.GoetheBold30);
 		ImGui.Text("""
 			WORK IN PROGRESS
 

@@ -9,7 +9,7 @@ using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Utils;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 using System.Text;
 
@@ -34,7 +34,7 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 				int start = leaderboardListChild.PageIndex * LeaderboardListChild.PageSize + 1;
 				int end = Math.Min((leaderboardListChild.PageIndex + 1) * LeaderboardListChild.PageSize, totalEntries);
 
-				ImGui.Text(Inline.Span($"Page {page} of {totalPages} ({start}-{end} of {totalEntries})"));
+				ImGui.Text(Inline.Utf8($"Page {page} of {totalPages} ({start}-{end} of {totalEntries})"));
 
 				RenderTable();
 			}
@@ -50,20 +50,20 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 		ImGui.PushStyleVar(ImGuiStyleVar.CellPadding, new Vector2(4, 1));
 		if (ImGui.BeginTable("LeaderboardListTable", 10, flags))
 		{
-			ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.DefaultSort, 0, (int)LeaderboardListSorting.Name);
-			ImGui.TableSetupColumn("Author", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Author);
+			ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.DefaultSort | ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.Name);
+			ImGui.TableSetupColumn("Author", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.Author);
 			ImGui.TableSetupColumn("Criteria", ImGuiTableColumnFlags.NoSort);
-			ImGui.TableSetupColumn("Score", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Score);
-			ImGui.TableSetupColumn("Next dagger", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.NextDagger);
-			ImGui.TableSetupColumn("Rank", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Rank);
-			ImGui.TableSetupColumn("Players", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Players);
-			ImGui.TableSetupColumn("World record", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.WorldRecord);
-			ImGui.TableSetupColumn("Date created", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.DateCreated);
-			ImGui.TableSetupColumn("Date last played", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.DateLastPlayed);
+			ImGui.TableSetupColumn("Score", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.Score);
+			ImGui.TableSetupColumn("Next dagger", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.NextDagger);
+			ImGui.TableSetupColumn("Rank", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.Rank);
+			ImGui.TableSetupColumn("Players", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.Players);
+			ImGui.TableSetupColumn("World record", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.WorldRecord);
+			ImGui.TableSetupColumn("Date created", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.DateCreated);
+			ImGui.TableSetupColumn("Date last played", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardListSorting.DateLastPlayed);
 			ImGui.TableHeadersRow();
 
 			ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
-			if (sortsSpecs.NativePtr != (void*)0 && sortsSpecs.SpecsDirty)
+			if (sortsSpecs.Handle != null && sortsSpecs.SpecsDirty)
 			{
 				leaderboardListChild.Sorting = (LeaderboardListSorting)sortsSpecs.Specs.ColumnUserID;
 				leaderboardListChild.SortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
@@ -112,28 +112,28 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 					_ => "0",
 				};
 
-				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.SelectedPlayerStats?.Dagger), clOverview.SelectedPlayerStats == null ? "-" : Inline.Span(clOverview.SelectedPlayerStats.HighscoreValue, valueFormat));
+				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.SelectedPlayerStats?.Dagger), clOverview.SelectedPlayerStats == null ? "-"u8 : Inline.Utf8(clOverview.SelectedPlayerStats.HighscoreValue, valueFormat));
 				ImGui.TableNextColumn();
 
 				bool completed = clOverview.SelectedPlayerStats?.Dagger == CustomLeaderboardDagger.Leviathan;
 				Color color = CustomLeaderboardDaggerUtils.GetColor(completed ? CustomLeaderboardDagger.Leviathan : clOverview.SelectedPlayerStats?.NextDagger?.Dagger);
-				ImGui.TextColored(color, completed ? "COMPLETED" : clOverview.SelectedPlayerStats?.NextDagger == null ? "N/A" : Inline.Span(clOverview.SelectedPlayerStats.NextDagger.DaggerValue, valueFormat));
+				ImGui.TextColored(color, completed ? "COMPLETED"u8 : clOverview.SelectedPlayerStats?.NextDagger == null ? "N/A"u8 : Inline.Utf8(clOverview.SelectedPlayerStats.NextDagger.DaggerValue, valueFormat));
 				ImGui.TableNextColumn();
 
-				ImGui.Text(clOverview.SelectedPlayerStats == null ? "-" : Inline.Span(clOverview.SelectedPlayerStats.Rank));
+				ImGui.Text(clOverview.SelectedPlayerStats == null ? "-"u8 : Inline.Utf8(clOverview.SelectedPlayerStats.Rank));
 				ImGui.TableNextColumn();
 
-				ImGui.Text(Inline.Span(clOverview.PlayerCount));
+				ImGui.Text(Inline.Utf8(clOverview.PlayerCount));
 				ImGui.TableNextColumn();
 
-				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.WorldRecord?.Dagger), clOverview.WorldRecord == null ? "-" : Inline.Span(clOverview.WorldRecord.WorldRecordValue, valueFormat));
+				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.WorldRecord?.Dagger), clOverview.WorldRecord == null ? "-"u8 : Inline.Utf8(clOverview.WorldRecord.WorldRecordValue, valueFormat));
 				ImGui.TableNextColumn();
 
-				// TODO: Use ReadOnlySpan<char>.
+				// TODO: Use ReadOnlySpan<byte>.
 				ImGui.Text(clOverview.DateCreated.ToString(StringFormats.DateTimeFormat));
 				ImGui.TableNextColumn();
 
-				// TODO: Use ReadOnlySpan<char>.
+				// TODO: Use ReadOnlySpan<byte>.
 				ImGui.Text(DateTimeUtils.FormatTimeAgo(clOverview.DateLastPlayed == null ? null : DateTime.SpecifyKind(clOverview.DateLastPlayed.Value, DateTimeKind.Utc)));
 				ImGui.TableNextColumn();
 			}

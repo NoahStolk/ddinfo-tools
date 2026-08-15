@@ -1,6 +1,6 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
@@ -13,7 +13,7 @@ internal static class EntityTarget
 		const float rightColumnWidth = 160;
 		const float tableWidth = leftColumnWidth + rightColumnWidth;
 
-		if (ImGui.BeginChild(Inline.Span($"EntityTargetEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
+		if (ImGui.BeginChild(Inline.Utf8($"EntityTargetEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
 		{
 			if (ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new Vector2(tableWidth, 0)))
 			{
@@ -25,12 +25,12 @@ internal static class EntityTarget
 				ImGui.TableNextColumn();
 				ImGui.Text("Entity Id");
 				ImGui.TableNextColumn();
-				UtilsRendering.EditableEntityId(uniqueId, nameof(EntityTargetEventData.EntityId), replay, ref e.EntityId);
+				UtilsRendering.EditableEntityId(uniqueId, "EntityId"u8, replay, ref e.EntityId);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Target Position");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputInt16Vec3(uniqueId, nameof(EntityTargetEventData.TargetPosition), ref e.TargetPosition);
+				UtilsRendering.InputInt16Vec3(uniqueId, "TargetPosition"u8, ref e.TargetPosition);
 
 				ImGui.EndTable();
 			}

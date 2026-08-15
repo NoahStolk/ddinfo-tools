@@ -1,4 +1,6 @@
+using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace DevilDaggersInfo.Tools;
 
@@ -7,33 +9,51 @@ namespace DevilDaggersInfo.Tools;
 [InterpolatedStringHandler]
 internal ref struct InlineInterpolatedStringHandler
 {
-	private int _charsWritten;
+	private int _bytesWritten;
 
 	public InlineInterpolatedStringHandler(int literalLength, int formattedCount)
 	{
 	}
 
-	public static implicit operator ReadOnlySpan<char>(InlineInterpolatedStringHandler handler)
+	public static implicit operator ReadOnlySpan<byte>(InlineInterpolatedStringHandler handler)
 	{
-		return Inline.Buffer.AsSpan()[..handler._charsWritten];
+		return Inline.Terminate(handler._bytesWritten);
 	}
 
 	public void AppendLiteral(string s)
 	{
-		if (s.TryCopyTo(Inline.Buffer.AsSpan()[_charsWritten..]))
-			_charsWritten += s.Length;
+		AppendFormatted(s.AsSpan());
 	}
 
 	public void AppendFormatted(ReadOnlySpan<char> s)
 	{
-		if (s.TryCopyTo(Inline.Buffer.AsSpan()[_charsWritten..]))
-			_charsWritten += s.Length;
+		_bytesWritten += Encoding.UTF8.GetBytes(s, Inline.Buffer[_bytesWritten..]);
+	}
+
+	public void AppendFormatted(ReadOnlySpan<byte> s)
+	{
+		Inline.Write(ref _bytesWritten, s);
 	}
 
 	public void AppendFormatted<T>(T t, ReadOnlySpan<char> format = default, IFormatProvider? provider = null)
-		where T : ISpanFormattable
+		where T : IUtf8SpanFormattable
 	{
-		t.TryFormat(Inline.Buffer.AsSpan()[_charsWritten..], out int charsWritten, format, provider);
-		_charsWritten += charsWritten;
+		Inline.Write(ref _bytesWritten, t, format, provider);
+	}
+
+	public void AppendFormatted(Vector2 value, ReadOnlySpan<char> format = default, IFormatProvider? provider = null)
+	{
+		Inline.Write(ref _bytesWritten, value.X, format, provider);
+		Inline.Write(ref _bytesWritten, Inline.NumericSeparator);
+		Inline.Write(ref _bytesWritten, value.Y, format, provider);
+	}
+
+	public void AppendFormatted(Vector3 value, ReadOnlySpan<char> format = default, IFormatProvider? provider = null)
+	{
+		Inline.Write(ref _bytesWritten, value.X, format, provider);
+		Inline.Write(ref _bytesWritten, Inline.NumericSeparator);
+		Inline.Write(ref _bytesWritten, value.Y, format, provider);
+		Inline.Write(ref _bytesWritten, Inline.NumericSeparator);
+		Inline.Write(ref _bytesWritten, value.Z, format, provider);
 	}
 }

@@ -3,7 +3,7 @@ using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorStates;
@@ -63,12 +63,12 @@ internal sealed class ArenaEllipseState(ArenaWindow arenaWindow, FileStates file
 
 		ArenaEditingUtils.AlignedEllipse ellipse = GetEllipse(_session.Value.StartPosition, mousePosition);
 
-		drawList.AddEllipse(origin + ellipse.Center, ellipse.Radius, ImGui.GetColorU32(Color.HalfTransparentWhite), 40, 1);
+		drawList.AddEllipse(origin + ellipse.Center, ellipse.Radius, ImGui.GetColorU32(Color.HalfTransparentWhite), 0f, 40);
 
 		if (!EllipseChild.Filled)
 		{
 			ArenaEditingUtils.AlignedEllipse innerEllipse = GetEllipse(_session.Value.StartPosition, mousePosition, (EllipseChild.Thickness - 1) * ArenaWindow.TileSize);
-			drawList.AddEllipse(origin + innerEllipse.Center, innerEllipse.Radius, ImGui.GetColorU32(Color.White), 40, 1);
+			drawList.AddEllipse(origin + innerEllipse.Center, innerEllipse.Radius, ImGui.GetColorU32(Color.White), 0f, 40);
 		}
 	}
 

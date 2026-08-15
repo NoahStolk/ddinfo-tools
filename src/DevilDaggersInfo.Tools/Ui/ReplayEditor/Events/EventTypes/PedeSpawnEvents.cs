@@ -1,6 +1,6 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
@@ -14,7 +14,7 @@ internal sealed class PedeSpawnEvents : IEventTypeRenderer<PedeSpawnEventData>
 		ImGui.TableSetupColumn("?", ImGuiTableColumnFlags.WidthFixed, 32);
 		ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 128);
 		ImGui.TableSetupColumn("?", ImGuiTableColumnFlags.WidthFixed, 80);
-		ImGui.TableSetupColumn("Orientation", ImGuiTableColumnFlags.None, 128);
+		ImGui.TableSetupColumn("Orientation", ImGuiTableColumnFlags.WidthFixed, 128);
 	}
 
 	public static void Render(PedeSpawnEventData e, EditorReplayModel replay)

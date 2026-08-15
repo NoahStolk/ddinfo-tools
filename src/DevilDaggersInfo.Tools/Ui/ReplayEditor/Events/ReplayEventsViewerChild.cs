@@ -5,7 +5,7 @@ using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Diagnostics;
 using System.Numerics;
 
@@ -55,16 +55,16 @@ internal sealed class ReplayEventsViewerChild
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
 
 				Vector2 iconSize = new(16);
-				if (ImGuiImage.ImageButton("Start", _resourceManager.InternalResources.ArrowStartTexture.Id, iconSize))
+				if (ImGuiImage.ImageButton("Start"u8, _resourceManager.InternalResources.ArrowStartTexture.Id, iconSize))
 					_startIndex = 0;
 				ImGui.SameLine();
-				if (ImGuiImage.ImageButton("Back", _resourceManager.InternalResources.ArrowLeftTexture.Id, iconSize))
+				if (ImGuiImage.ImageButton("Back"u8, _resourceManager.InternalResources.ArrowLeftTexture.Id, iconSize))
 					_startIndex = Math.Max(0, _startIndex - maxEvents);
 				ImGui.SameLine();
-				if (ImGuiImage.ImageButton("Forward", _resourceManager.InternalResources.ArrowRightTexture.Id, iconSize))
+				if (ImGuiImage.ImageButton("Forward"u8, _resourceManager.InternalResources.ArrowRightTexture.Id, iconSize))
 					_startIndex = Math.Min(replay.Cache.Events.Count - maxEvents, _startIndex + maxEvents);
 				ImGui.SameLine();
-				if (ImGuiImage.ImageButton("End", _resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
+				if (ImGuiImage.ImageButton("End"u8, _resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
 					_startIndex = replay.Cache.Events.Count - maxEvents;
 
 				ImGui.SameLine();
@@ -84,7 +84,7 @@ internal sealed class ReplayEventsViewerChild
 				int endIndex = Math.Min(_startIndex + maxEvents - 1, replay.Cache.Events.Count);
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
-				ImGui.Text(Inline.Span($"Showing {_startIndex} - {endIndex} of {replay.Cache.Events.Count} events"));
+				ImGui.Text(Inline.Utf8($"Showing {_startIndex} - {endIndex} of {replay.Cache.Events.Count} events"));
 			}
 
 			ImGui.EndChild(); // TickNavigation
@@ -97,7 +97,7 @@ internal sealed class ReplayEventsViewerChild
 				int rows = (int)Math.Ceiling((float)EnumUtils.EventTypes.Count / checkboxesPerRow);
 				for (int i = 0; i < rows; i++)
 				{
-					if (ImGui.BeginChild(Inline.Span($"EventTypeFiltering{i}"), new Vector2(256, filteringHeight)))
+					if (ImGui.BeginChild(Inline.Utf8($"EventTypeFiltering{i}"), new Vector2(256, filteringHeight)))
 					{
 						int start = i * checkboxesPerRow;
 						for (int j = start; j < Math.Min(EnumUtils.EventTypes.Count, start + checkboxesPerRow); j++)
@@ -149,7 +149,7 @@ internal sealed class ReplayEventsViewerChild
 		ImGui.TableSetupColumn("Index", ImGuiTableColumnFlags.WidthFixed, 128);
 		ImGui.TableSetupColumn("Entity Id", ImGuiTableColumnFlags.WidthFixed, 128);
 		ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 192);
-		ImGui.TableSetupColumn("Data", ImGuiTableColumnFlags.None, 384);
+		ImGui.TableSetupColumn("Data", ImGuiTableColumnFlags.WidthFixed, 384);
 		ImGui.TableHeadersRow();
 
 		for (int i = _startIndex; i < Math.Min(_startIndex + maxTicks, replay.Cache.Events.Count); i++)
@@ -162,7 +162,7 @@ internal sealed class ReplayEventsViewerChild
 			ImGui.TableNextRow();
 
 			ImGui.TableNextColumn();
-			ImGui.Text(Inline.Span(i));
+			ImGui.Text(Inline.Utf8(i));
 
 			if (replayEvent.Data is ISpawnEventData)
 			{

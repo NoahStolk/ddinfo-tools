@@ -6,7 +6,7 @@ using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using Serilog;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;

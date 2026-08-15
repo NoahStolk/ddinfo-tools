@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Core.Asset;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
@@ -29,11 +29,11 @@ internal sealed class AssetPathsChild(
 		{
 			if (ImGui.BeginTabBar("Asset Browser Tabs"))
 			{
-				RenderAssets(audioPathsTable, "Audio", _audioColor);
-				RenderAssets(meshPathsTable, "Meshes", _meshColor);
-				RenderAssets(objectBindingPathsTable, "Object Bindings", _objectBindingColor);
-				RenderAssets(shaderPathsTable, "Shaders", _shaderColor);
-				RenderAssets(texturePathsTable, "Textures", _textureColor);
+				RenderAssets(audioPathsTable, "Audio"u8, _audioColor);
+				RenderAssets(meshPathsTable, "Meshes"u8, _meshColor);
+				RenderAssets(objectBindingPathsTable, "Object Bindings"u8, _objectBindingColor);
+				RenderAssets(shaderPathsTable, "Shaders"u8, _shaderColor);
+				RenderAssets(texturePathsTable, "Textures"u8, _textureColor);
 
 				ImGui.EndTabBar();
 			}
@@ -42,19 +42,19 @@ internal sealed class AssetPathsChild(
 		ImGui.EndChild();
 	}
 
-	private static unsafe void RenderAssets(IPathTable pathTable, ReadOnlySpan<char> id, uint backgroundColor)
+	private static unsafe void RenderAssets(IPathTable pathTable, ReadOnlySpan<byte> id, uint backgroundColor)
 	{
 		const ImGuiTableFlags tableFlags = ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable | ImGuiTableFlags.Sortable | ImGuiTableFlags.Hideable | ImGuiTableFlags.Reorderable | ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.ScrollY;
-		if (ImGui.BeginTabItem(Inline.Span($"{id}##Tab")))
+		if (ImGui.BeginTabItem(Inline.Utf8($"{id}##Tab")))
 		{
-			if (ImGui.BeginTable(Inline.Span($"{id}_PathsTable"), pathTable.ColumnCount, tableFlags))
+			if (ImGui.BeginTable(Inline.Utf8($"{id}_PathsTable"), pathTable.ColumnCount, tableFlags))
 			{
 				ImGui.TableSetupScrollFreeze(0, 1); // Make top row always visible
 				pathTable.SetupColumns();
 				ImGui.TableHeadersRow();
 
 				ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
-				if (sortsSpecs.NativePtr != (void*)0 && sortsSpecs.SpecsDirty)
+				if (sortsSpecs.Handle != null && sortsSpecs.SpecsDirty)
 				{
 					uint sorting = sortsSpecs.Specs.ColumnUserID;
 					bool sortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
@@ -64,7 +64,7 @@ internal sealed class AssetPathsChild(
 					sortsSpecs.SpecsDirty = false;
 				}
 
-				ImGuiListClipperPtr clipper = new(ImGuiNative.ImGuiListClipper_ImGuiListClipper());
+				ImGuiListClipperPtr clipper = ImGui.ImGuiListClipper();
 				clipper.Begin(pathTable.PathCount);
 				while (clipper.Step())
 				{

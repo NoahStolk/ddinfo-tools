@@ -7,7 +7,7 @@ using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Diagnostics;
 using System.Numerics;
 
@@ -68,8 +68,8 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 		{
 			if (_selectedTickIndex.HasValue)
 			{
-				ImGui.PushFont(fontService.GoetheBold20);
-				ImGui.Text(Inline.Span($"Tick {_selectedTickIndex.Value} selected"));
+				ImGuiExt.PushFont(fontService.GoetheBold20);
+				ImGui.Text(Inline.Utf8($"Tick {_selectedTickIndex.Value} selected"));
 				ImGui.PopFont();
 
 				replayTimelineSelectedEventsChild.Render(replay, _selectedEvents, _selectedTickIndex.Value, SelectEvents);
@@ -128,11 +128,13 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 			int startTickIndex = (int)Math.Floor(ImGui.GetScrollX() / _markerSize);
 			int endTickIndex = Math.Min((int)Math.Ceiling((ImGui.GetScrollX() + ImGui.GetWindowWidth()) / _markerSize), replay.TickCount);
 
-			// Always render these invisible buttons so the scroll bar is always visible.
+			// Always reserve space at both ends of the timeline so the scroll bar is always visible. Dummy is used
+			// rather than InvisibleButton because these are never interacted with, and ImGui asserts on a zero-sized
+			// InvisibleButton.
 			ImGui.SetCursorScreenPos(origin);
-			ImGui.InvisibleButton("InvisibleStartMarker", default); // TODO: Fix. This is not allowed by ImGui.
+			ImGui.Dummy(Vector2.One);
 			ImGui.SetCursorScreenPos(origin + new Vector2((replay.TickCount - 1) * _markerSize, 0));
-			ImGui.InvisibleButton("InvisibleEndMarker", default); // TODO: Fix. This is not allowed by ImGui.
+			ImGui.Dummy(Vector2.One);
 
 			for (int i = Math.Max(startTickIndex, 0); i < Math.Min(endTickIndex, replay.TickCount); i++)
 			{
@@ -155,9 +157,9 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 				{
 					Color textColor = i % 60 == 0 ? Color.Yellow : ImGuiUtils.GetColorU32(ImGuiCol.Text);
 					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, _shownEventTypes.Count * _markerSize + 5));
-					ImGui.TextColored(textColor, Inline.Span(TimeUtils.TickToTime(i, replay.StartTime), StringFormats.TimeFormat));
+					ImGui.TextColored(textColor, Inline.Utf8(TimeUtils.TickToTime(i, replay.StartTime), StringFormats.TimeFormat));
 					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, _shownEventTypes.Count * _markerSize + 21));
-					ImGui.TextColored(textColor, Inline.Span(i));
+					ImGui.TextColored(textColor, Inline.Utf8(i));
 				}
 			}
 
@@ -190,27 +192,27 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 		drawList.AddRectFilled(rectOrigin, rectOrigin + markerSizeVec, ImGui.GetColorU32(eventType.GetColor() with { W = isHovering ? 0.7f : 0.4f }));
 
 		float xOffset = eventCount < 10 ? 9 : 5;
-		drawList.AddText(rectOrigin + new Vector2(xOffset, 5), 0xffffffff, eventCount > 99 ? Inline.Span("XX") : Inline.Span($"{eventCount}"));
+		drawList.AddText(rectOrigin + new Vector2(xOffset, 5), 0xffffffff, eventCount > 99 ? Inline.Utf8("XX") : Inline.Utf8($"{eventCount}"));
 
 		if (isHovering)
 		{
 			ImGui.BeginTooltip();
 			ImGui.TextColored(eventType.GetColor(), EnumUtils.EventTypeFriendlyNames[eventType]);
-			if (ImGui.BeginTable(Inline.Span($"MarkerTooltipTable_{tickIndex}_{EnumUtils.EventTypeNames[eventType]}"), 2, ImGuiTableFlags.Borders))
+			if (ImGui.BeginTable(Inline.Utf8($"MarkerTooltipTable_{tickIndex}_{EnumUtils.EventTypeNames[eventType]}"), 2, ImGuiTableFlags.Borders))
 			{
 				ImGui.TableNextColumn();
 				ImGui.Text("Event count");
 
 				ImGui.TableNextColumn();
-				ImGui.Text(Inline.Span(eventCount));
+				ImGui.Text(Inline.Utf8(eventCount));
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Time");
 
 				ImGui.TableNextColumn();
-				ImGui.Text(Inline.Span(TimeUtils.TickToTime(tickIndex, startTime), StringFormats.TimeFormat));
+				ImGui.Text(Inline.Utf8(TimeUtils.TickToTime(tickIndex, startTime), StringFormats.TimeFormat));
 				ImGui.SameLine();
-				ImGui.Text(Inline.Span($"({tickIndex})"));
+				ImGui.Text(Inline.Utf8($"({tickIndex})"));
 
 				ImGui.EndTable();
 			}
@@ -249,8 +251,8 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 			return;
 
 		ImGuiIOPtr io = ImGui.GetIO();
-		bool left = io.IsKeyDown(ImGuiKey.LeftArrow);
-		bool right = io.IsKeyDown(ImGuiKey.RightArrow);
+		bool left = ImGui.IsKeyDown(ImGuiKey.LeftArrow);
+		bool right = ImGui.IsKeyDown(ImGuiKey.RightArrow);
 		if (left ^ right)
 		{
 			float increment = (io.KeyShift ? 3200 : 1200) * io.DeltaTime * (left ? -1 : 1);

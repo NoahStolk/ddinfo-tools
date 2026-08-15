@@ -4,7 +4,7 @@ using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager;
@@ -22,28 +22,28 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 			}
 			else
 			{
-				Title("Summary");
+				Title("Summary"u8);
 
 				if (ImGui.BeginTable("Mod installation summary", 2, ImGuiTableFlags.Borders, new Vector2(256, 0)))
 				{
 					ImGui.TableSetupColumn("##left", ImGuiTableColumnFlags.WidthStretch);
 					ImGui.TableSetupColumn("##right", ImGuiTableColumnFlags.WidthFixed, 48);
 
-					NextColumnText("Active mod files");
-					NextColumnText(Inline.Span(modsDirectoryLogic.EffectiveAssets.Count));
+					NextColumnText("Active mod files"u8);
+					NextColumnText(Inline.Utf8(modsDirectoryLogic.EffectiveAssets.Count));
 
-					NextColumnText("Active assets");
-					NextColumnText(Inline.Span(modsDirectoryLogic.ActiveAssets));
+					NextColumnText("Active assets"u8);
+					NextColumnText(Inline.Utf8(modsDirectoryLogic.ActiveAssets));
 
-					NextColumnText("Active prohibited assets");
-					NextColumnText(Inline.Span(modsDirectoryLogic.ActiveProhibitedAssets));
+					NextColumnText("Active prohibited assets"u8);
+					NextColumnText(Inline.Utf8(modsDirectoryLogic.ActiveProhibitedAssets));
 
 					ImGui.EndTable();
 				}
 
 				ImGui.Spacing();
 				ImGui.Spacing();
-				Title("Effective Assets");
+				Title("Effective Assets"u8);
 
 				ImGui.TextWrapped(
 				"""
@@ -115,7 +115,7 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 
 						ImGui.TableNextColumn();
 						if (isOverridden)
-							ImGui.TextColored(new Vector4(1, 0.2f, 0.4f, 1), Inline.Span($"Overridden by {effectiveAsset.OverriddenByModFileName}"));
+							ImGui.TextColored(new Vector4(1, 0.2f, 0.4f, 1), Inline.Utf8($"Overridden by {effectiveAsset.OverriddenByModFileName}"));
 						else if (AssetContainer.IsProhibited(effectiveAsset.TocEntry.AssetType, effectiveAsset.TocEntry.Name))
 							ImGui.TextColored(Color.Orange, "Prohibited");
 						else if (!effectiveAsset.TocEntry.IsEnabled)
@@ -134,12 +134,12 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 		}
 	}
 
-	private void Title(ReadOnlySpan<char> label)
+	private void Title(ReadOnlySpan<byte> label)
 	{
 		ImGuiExt.Title(label, fontService.GoetheBold20);
 	}
 
-	private static void NextColumnText(ReadOnlySpan<char> label)
+	private static void NextColumnText(ReadOnlySpan<byte> label)
 	{
 		ImGui.TableNextColumn();
 		ImGui.Text(label);

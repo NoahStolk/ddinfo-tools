@@ -1,6 +1,6 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
 
@@ -23,10 +23,10 @@ internal sealed class InputsEvents : IEventTypeRenderer<InputsEventData>
 
 	public static void Render(InputsEventData e, EditorReplayModel replay)
 	{
-		EventTypeRendererUtils.NextColumnBool(e.Left, "On", "Off");
-		EventTypeRendererUtils.NextColumnBool(e.Right, "On", "Off");
-		EventTypeRendererUtils.NextColumnBool(e.Forward, "On", "Off");
-		EventTypeRendererUtils.NextColumnBool(e.Backward, "On", "Off");
+		EventTypeRendererUtils.NextColumnBool(e.Left, "On"u8, "Off"u8);
+		EventTypeRendererUtils.NextColumnBool(e.Right, "On"u8, "Off"u8);
+		EventTypeRendererUtils.NextColumnBool(e.Forward, "On"u8, "Off"u8);
+		EventTypeRendererUtils.NextColumnBool(e.Backward, "On"u8, "Off"u8);
 		EventTypeRendererUtils.NextColumn(e.Jump);
 		EventTypeRendererUtils.NextColumn(e.Shoot);
 		EventTypeRendererUtils.NextColumn(e.ShootHoming);

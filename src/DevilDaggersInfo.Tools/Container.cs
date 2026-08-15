@@ -30,7 +30,7 @@ using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using Serilog;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
@@ -245,11 +245,8 @@ internal sealed partial class Container : IContainer<Application>
 		ImGuiIOPtr io = ImGui.GetIO();
 
 		// Load imgui.ini.
-		io.NativePtr->IniFilename = null;
+		io.Handle->IniFilename = null;
 		userSettings.LoadImGuiIni();
-
-		// Add the default font first so it is actually used by default.
-		io.Fonts.AddFontDefault();
 
 		// Determine DPI scale from framebuffer/window ratio (e.g. 3.0 on Wayland with 300% scaling at 4K).
 		glfw.GetFramebufferSize(window, out int fbWidth, out _);
@@ -257,8 +254,6 @@ internal sealed partial class Container : IContainer<Application>
 		float dpiScale = winWidth > 0 ? (float)fbWidth / winWidth : 1f;
 
 		fontService.Load(dpiScale);
-
-		imGuiController.CreateDefaultFont();
 
 		// Configure style.
 		ImGuiStylePtr style = ImGui.GetStyle();

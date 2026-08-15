@@ -6,7 +6,7 @@ using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Utils;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Diagnostics;
 using System.Numerics;
 
@@ -85,11 +85,11 @@ internal sealed class UploadResult
 		{
 			ConfigureColumns(2);
 
-			Add("Rank", Inline.Span(firstScore.Rank));
-			Add("Time", Inline.Span(firstScore.Time, StringFormats.TimeFormat));
-			Add("Level 2", Inline.Span(firstScore.LevelUpTime2, StringFormats.TimeFormat));
-			Add("Level 3", Inline.Span(firstScore.LevelUpTime3, StringFormats.TimeFormat));
-			Add("Level 4", Inline.Span(firstScore.LevelUpTime4, StringFormats.TimeFormat));
+			Add("Rank", Inline.Utf8(firstScore.Rank));
+			Add("Time", Inline.Utf8(firstScore.Time, StringFormats.TimeFormat));
+			Add("Level 2", Inline.Utf8(firstScore.LevelUpTime2, StringFormats.TimeFormat));
+			Add("Level 3", Inline.Utf8(firstScore.LevelUpTime3, StringFormats.TimeFormat));
+			Add("Level 4", Inline.Utf8(firstScore.LevelUpTime4, StringFormats.TimeFormat));
 			AddDeath(_death);
 
 			ImGui.EndTable();
@@ -102,10 +102,10 @@ internal sealed class UploadResult
 		{
 			ConfigureColumns(2);
 
-			Add("Gems collected", Inline.Span(firstScore.GemsCollected));
-			Add("Gems despawned", Inline.Span(firstScore.GemsDespawned));
-			Add("Gems eaten", Inline.Span(firstScore.GemsEaten));
-			Add("Gems total", Inline.Span(firstScore.GemsTotal));
+			Add("Gems collected", Inline.Utf8(firstScore.GemsCollected));
+			Add("Gems despawned", Inline.Utf8(firstScore.GemsDespawned));
+			Add("Gems eaten", Inline.Utf8(firstScore.GemsEaten));
+			Add("Gems total", Inline.Utf8(firstScore.GemsTotal));
 
 			ImGui.EndTable();
 		}
@@ -117,8 +117,8 @@ internal sealed class UploadResult
 		{
 			ConfigureColumns(2);
 
-			Add("Homing stored", Inline.Span(firstScore.HomingStored));
-			Add("Homing eaten", Inline.Span(firstScore.HomingEaten));
+			Add("Homing stored", Inline.Utf8(firstScore.HomingStored));
+			Add("Homing eaten", Inline.Utf8(firstScore.HomingEaten));
 
 			ImGui.EndTable();
 		}
@@ -130,11 +130,11 @@ internal sealed class UploadResult
 		{
 			ConfigureColumns(2);
 
-			Add("Daggers fired", Inline.Span(firstScore.DaggersFired));
-			Add("Daggers hit", Inline.Span(firstScore.DaggersHit));
+			Add("Daggers fired", Inline.Utf8(firstScore.DaggersFired));
+			Add("Daggers hit", Inline.Utf8(firstScore.DaggersHit));
 
 			double accuracy = firstScore.DaggersFired == 0 ? 0 : firstScore.DaggersHit / (double)firstScore.DaggersFired;
-			Add("Accuracy", Inline.Span(accuracy, StringFormats.AccuracyFormat));
+			Add("Accuracy", Inline.Utf8(accuracy, StringFormats.AccuracyFormat));
 
 			ImGui.EndTable();
 		}
@@ -146,15 +146,15 @@ internal sealed class UploadResult
 		{
 			ConfigureColumns(2);
 
-			Add("Enemies killed", Inline.Span(firstScore.EnemiesKilled));
-			Add("Enemies alive", Inline.Span(firstScore.EnemiesAlive));
+			Add("Enemies killed", Inline.Utf8(firstScore.EnemiesKilled));
+			Add("Enemies alive", Inline.Utf8(firstScore.EnemiesAlive));
 
 			ImGui.EndTable();
 		}
 
 		ImGui.Indent(-_indentation);
 
-		static void Add(string label, ReadOnlySpan<char> value)
+		static void Add(string label, ReadOnlySpan<byte> value)
 		{
 			ImGui.TableNextColumn();
 			ImGui.Text(label);
@@ -226,8 +226,8 @@ internal sealed class UploadResult
 		ImGui.Indent(_indentation);
 
 		ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + _headerWidth);
-		ImGui.Text(Inline.Span($"Run was rejected because the {criteriaRejection.CriteriaName} value was {criteriaRejection.ActualValue}."));
-		ImGui.Text(Inline.Span($"It must be {criteriaRejection.CriteriaOperator.ToCore().Display()} {criteriaRejection.ExpectedValue} in order to submit to this leaderboard."));
+		ImGui.Text(Inline.Utf8($"Run was rejected because the {criteriaRejection.CriteriaName} value was {criteriaRejection.ActualValue}."));
+		ImGui.Text(Inline.Utf8($"It must be {criteriaRejection.CriteriaOperator.ToCore().Display()} {criteriaRejection.ExpectedValue} in order to submit to this leaderboard."));
 		ImGui.PopTextWrapPos();
 
 		ImGui.Indent(-_indentation);
@@ -237,7 +237,7 @@ internal sealed class UploadResult
 	{
 		ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = 32 });
 
-		if (ImGui.BeginChild(Inline.Span($"{SubmittedAt.Ticks}{_spawnsetName}"), new Vector2(_headerWidth, 48), ImGuiChildFlags.Border)) // TODO: Borders in ImGui update.
+		if (ImGui.BeginChild(Inline.Utf8($"{SubmittedAt.Ticks}{_spawnsetName}"), new Vector2(_headerWidth, 48), ImGuiChildFlags.Borders)) // TODO: Borders in ImGui update.
 		{
 			bool hover = ImGui.IsWindowHovered();
 			if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
@@ -245,7 +245,7 @@ internal sealed class UploadResult
 
 			ImGui.TextColored(color, _spawnsetName);
 
-			// TODO: Use ReadOnlySpan<char>.
+			// TODO: Use ReadOnlySpan<byte>.
 			string text = DateTimeUtils.FormatTimeAgo(SubmittedAt);
 			ImGui.SameLine(ImGui.GetWindowWidth() - ImGui.CalcTextSize(text).X - 8);
 			ImGui.Text(text);
@@ -288,11 +288,11 @@ internal sealed class UploadResult
 			ConfigureColumns(3);
 
 			if (rankState.HasValue)
-				AddScoreState("Rank", rankState.Value, "0", "+0;-0;+0");
-			AddScoreState("Time", timeState, StringFormats.TimeFormat, "+0.0000;-0.0000;+0.0000", !isAscending);
-			AddLevelUpScoreState("Level 2", levelUpTime2State);
-			AddLevelUpScoreState("Level 3", levelUpTime3State);
-			AddLevelUpScoreState("Level 4", levelUpTime4State);
+				AddScoreState("Rank"u8, rankState.Value, "0", "+0;-0;+0");
+			AddScoreState("Time"u8, timeState, StringFormats.TimeFormat, "+0.0000;-0.0000;+0.0000", !isAscending);
+			AddLevelUpScoreState("Level 2"u8, levelUpTime2State);
+			AddLevelUpScoreState("Level 3"u8, levelUpTime3State);
+			AddLevelUpScoreState("Level 4"u8, levelUpTime4State);
 			AddDeath(death);
 
 			ImGui.EndTable();
@@ -305,10 +305,10 @@ internal sealed class UploadResult
 		{
 			ConfigureColumns(3);
 
-			AddScoreState("Gems collected", gemsCollectedState, "0", "+0;-0;+0");
-			AddScoreState("Gems despawned", gemsDespawnedState, "0", "+0;-0;+0", false);
-			AddScoreState("Gems eaten", gemsEatenState, "0", "+0;-0;+0", false);
-			AddScoreState("Gems total", gemsTotalState, "0", "+0;-0;+0");
+			AddScoreState("Gems collected"u8, gemsCollectedState, "0", "+0;-0;+0");
+			AddScoreState("Gems despawned"u8, gemsDespawnedState, "0", "+0;-0;+0", false);
+			AddScoreState("Gems eaten"u8, gemsEatenState, "0", "+0;-0;+0", false);
+			AddScoreState("Gems total"u8, gemsTotalState, "0", "+0;-0;+0");
 
 			ImGui.EndTable();
 		}
@@ -320,8 +320,8 @@ internal sealed class UploadResult
 		{
 			ConfigureColumns(3);
 
-			AddScoreState("Homing stored", homingStoredState, "0", "+0;-0;+0");
-			AddScoreState("Homing eaten", homingEatenState, "0", "+0;-0;+0", false);
+			AddScoreState("Homing stored"u8, homingStoredState, "0", "+0;-0;+0");
+			AddScoreState("Homing eaten"u8, homingEatenState, "0", "+0;-0;+0", false);
 
 			ImGui.EndTable();
 		}
@@ -333,8 +333,8 @@ internal sealed class UploadResult
 		{
 			ConfigureColumns(3);
 
-			AddScoreState("Daggers fired", daggersFiredState, "0", "+0;-0;+0");
-			AddScoreState("Daggers hit", daggersHitState, "0", "+0;-0;+0");
+			AddScoreState("Daggers fired"u8, daggersFiredState, "0", "+0;-0;+0");
+			AddScoreState("Daggers hit"u8, daggersHitState, "0", "+0;-0;+0");
 
 			double accuracy = GetAccuracy(daggersFiredState.Value, daggersHitState.Value);
 			double oldAccuracy = GetAccuracy(daggersFiredState.Value - daggersFiredState.ValueDifference, daggersHitState.Value - daggersHitState.ValueDifference);
@@ -343,7 +343,7 @@ internal sealed class UploadResult
 				Value = accuracy,
 				ValueDifference = accuracy - oldAccuracy,
 			};
-			AddScoreState("Accuracy", accuracyState, StringFormats.AccuracyFormat, "+0.00%;-0.00%;+0.00%");
+			AddScoreState("Accuracy"u8, accuracyState, StringFormats.AccuracyFormat, "+0.00%;-0.00%;+0.00%");
 
 			ImGui.EndTable();
 		}
@@ -355,14 +355,14 @@ internal sealed class UploadResult
 		{
 			ConfigureColumns(3);
 
-			AddScoreState("Enemies killed", enemiesKilledState, "0", "+0;-0;+0");
-			AddScoreState("Enemies alive", enemiesAliveState, "0", "+0;-0;+0");
+			AddScoreState("Enemies killed"u8, enemiesKilledState, "0", "+0;-0;+0");
+			AddScoreState("Enemies alive"u8, enemiesAliveState, "0", "+0;-0;+0");
 
 			ImGui.EndTable();
 		}
 	}
 
-	private static void AddScoreState<T>(ReadOnlySpan<char> label, GetScoreState<T> scoreState, ReadOnlySpan<char> format, ReadOnlySpan<char> formatDifference, bool higherIsBetter = true)
+	private static void AddScoreState<T>(ReadOnlySpan<byte> label, GetScoreState<T> scoreState, ReadOnlySpan<char> format, ReadOnlySpan<char> formatDifference, bool higherIsBetter = true)
 		where T : struct, INumber<T>
 	{
 		int comparison = scoreState.ValueDifference.CompareTo(T.Zero);
@@ -380,15 +380,15 @@ internal sealed class UploadResult
 		ImGui.Text(label);
 
 		ImGui.TableNextColumn();
-		ImGui.TextUnformatted(Inline.Span(scoreState.Value, format));
+		ImGui.TextUnformatted(Inline.Utf8(scoreState.Value, format));
 
 		ImGui.TableNextColumn();
 		ImGui.PushStyleColor(ImGuiCol.Text, color);
-		ImGui.TextUnformatted(Inline.Span(scoreState.ValueDifference, formatDifference));
+		ImGui.TextUnformatted(Inline.Utf8(scoreState.ValueDifference, formatDifference));
 		ImGui.PopStyleColor();
 	}
 
-	private static void AddLevelUpScoreState(ReadOnlySpan<char> label, GetScoreState<double> scoreState)
+	private static void AddLevelUpScoreState(ReadOnlySpan<byte> label, GetScoreState<double> scoreState)
 	{
 		int comparison = -scoreState.ValueDifference.CompareTo(0);
 		Color color = comparison switch
@@ -411,10 +411,10 @@ internal sealed class UploadResult
 		ImGui.Text(label);
 
 		ImGui.TableNextColumn();
-		ImGui.Text(levelWasNotAchieved ? "N/A" : Inline.Span(scoreState.Value, StringFormats.TimeFormat));
+		ImGui.Text(levelWasNotAchieved ? "N/A"u8 : Inline.Utf8(scoreState.Value, StringFormats.TimeFormat));
 
 		ImGui.TableNextColumn();
-		ImGui.TextColored(hideDifference ? Color.White : color, hideDifference ? "N/A" : Inline.Span(scoreState.ValueDifference, "+0.0000;-0.0000;+0.0000"));
+		ImGui.TextColored(hideDifference ? Color.White : color, hideDifference ? "N/A"u8 : Inline.Utf8(scoreState.ValueDifference, "+0.0000;-0.0000;+0.0000"));
 	}
 
 	private static void AddDeath(Death? death)
@@ -429,7 +429,7 @@ internal sealed class UploadResult
 	private static void ConfigureColumns(int count)
 	{
 		for (int i = 0; i < count; i++)
-			ImGui.TableSetupColumn(null, ImGuiTableColumnFlags.WidthFixed | ImGuiTableColumnFlags.NoHeaderLabel, _columnWidth);
+			ImGui.TableSetupColumn(""u8, ImGuiTableColumnFlags.WidthFixed | ImGuiTableColumnFlags.NoHeaderLabel, _columnWidth);
 	}
 
 	private static double GetAccuracy(int daggersFired, int daggersHit)

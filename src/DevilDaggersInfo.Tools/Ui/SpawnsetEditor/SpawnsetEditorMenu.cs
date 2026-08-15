@@ -4,7 +4,7 @@ using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Tools.User.Settings;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using Serilog;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;

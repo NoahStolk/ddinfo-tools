@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
@@ -16,7 +16,7 @@ internal sealed class HistoryWindow(SpawnsWindow spawnsWindow, FileStates fileSt
 		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(8, 1));
 		if (ImGui.Begin("History"))
 		{
-			ImGui.Text(Inline.Span($"{fileStates.Spawnset.FileName ?? FileStates.UntitledName}{(fileStates.Spawnset.IsModified && fileStates.Spawnset.FileName != null ? "*" : string.Empty)}"));
+			ImGui.Text(Inline.Utf8($"{fileStates.Spawnset.FileName ?? FileStates.UntitledName}{(fileStates.Spawnset.IsModified && fileStates.Spawnset.FileName != null ? "*" : string.Empty)}"));
 			ImGui.Separator();
 
 			float buttonWidth = ImGui.GetContentRegionAvail().X;
@@ -41,7 +41,7 @@ internal sealed class HistoryWindow(SpawnsWindow spawnsWindow, FileStates fileSt
 				ImGui.PushStyleColor(ImGuiCol.ButtonActive, color + new Vector4(0.5f, 0.5f, 0.5f, 0));
 				ImGui.PushStyleColor(ImGuiCol.Border, i == fileStates.Spawnset.CurrentHistoryIndex ? Color.White : Color.Black);
 
-				ImGui.PushID(Inline.Span($"HistoryButton{i}"));
+				ImGui.PushID(Inline.Utf8($"HistoryButton{i}"));
 				if (ImGui.Button(history.EditType.GetChange(), new Vector2(buttonWidth, 20)))
 					SetHistoryIndex(i);
 

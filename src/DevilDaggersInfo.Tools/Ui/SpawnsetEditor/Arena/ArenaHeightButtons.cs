@@ -1,6 +1,6 @@
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
@@ -53,7 +53,7 @@ internal sealed class ArenaHeightButtons
 			ImGui.PushStyleColor(ImGuiCol.Border, Math.Abs(_arenaWindow.SelectedHeight - height) < 0.001f ? Color.Invert(heightColor) : Color.Lerp(heightColor, Color.Black, 0.2f));
 
 			ImGui.SetCursorPos(new Vector2(offsetX + borderSize * 2, offsetY + borderSize));
-			if (ImGui.Button(Inline.Span(height), new Vector2(width - 1, _arenaButtonSize - 1)))
+			if (ImGui.Button(Inline.Utf8(height), new Vector2(width - 1, _arenaButtonSize - 1)))
 				_arenaWindow.SelectedHeight = height;
 
 			ImGui.PopStyleColor(5);

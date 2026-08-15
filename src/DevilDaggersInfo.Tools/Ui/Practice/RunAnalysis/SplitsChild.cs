@@ -1,6 +1,6 @@
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis.Data;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
@@ -13,13 +13,13 @@ internal sealed class SplitsChild(FontService fontService)
 
 		if (ImGui.BeginChild("Splits", new Vector2(192, 256)))
 		{
-			ImGuiExt.Title("Splits", fontService.GoetheBold20);
+			ImGuiExt.Title("Splits"u8, fontService.GoetheBold20);
 
 			if (ImGui.BeginTable("LeaderboardTable", 3, ImGuiTableFlags.None))
 			{
-				ImGui.TableSetupColumn("Split", ImGuiTableColumnFlags.None, 40);
-				ImGui.TableSetupColumn("Homing", ImGuiTableColumnFlags.None, 40);
-				ImGui.TableSetupColumn("Delta", ImGuiTableColumnFlags.None, 40);
+				ImGui.TableSetupColumn("Split", ImGuiTableColumnFlags.WidthFixed, 40);
+				ImGui.TableSetupColumn("Homing", ImGuiTableColumnFlags.WidthFixed, 40);
+				ImGui.TableSetupColumn("Delta", ImGuiTableColumnFlags.WidthFixed, 40);
 				ImGui.TableHeadersRow();
 
 				for (int i = 0; i < data.Count; i++)
@@ -40,10 +40,10 @@ internal sealed class SplitsChild(FontService fontService)
 					ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, backgroundColor);
 
 					ImGui.TableNextColumn();
-					ImGui.TextColored(textColor, Inline.Span(displayTimer));
+					ImGui.TextColored(textColor, Inline.Utf8(displayTimer));
 
 					ImGui.TableNextColumn();
-					ImGui.TextColored(textColor, homing.HasValue ? Inline.Span(homing.Value) : "-");
+					ImGui.TextColored(textColor, homing.HasValue ? Inline.Utf8(homing.Value) : "-"u8);
 
 					ImGui.TableNextColumn();
 					int? delta = homing.HasValue && homingPrevious.HasValue ? homing.Value - homingPrevious.Value : null;
@@ -54,9 +54,7 @@ internal sealed class SplitsChild(FontService fontService)
 						null => Color.Gray(0.5f),
 						_ => Color.White,
 					};
-					ImGui.TextColored(color, delta.HasValue ? Inline.Span(delta.Value, "+0;-0;+0") : "-");
-
-					ImGui.PopStyleColor(); // TODO: Remove?
+					ImGui.TextColored(color, delta.HasValue ? Inline.Utf8(delta.Value, "+0;-0;+0") : "-"u8);
 				}
 
 				ImGui.EndTable();

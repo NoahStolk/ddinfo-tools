@@ -7,7 +7,7 @@ using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
@@ -22,7 +22,7 @@ internal static class HitEventExplanation
 			ImGui.SameLine();
 			ImGui.Text("-");
 			ImGui.SameLine();
-			ImGui.TextColored(death?.Color.ToEngineColor() ?? Color.White, Inline.Span($"{death?.Name ?? "Unknown death type"}"));
+			ImGui.TextColored(death?.Color.ToEngineColor() ?? Color.White, Inline.Utf8($"{death?.Name ?? "Unknown death type"}"));
 			return;
 		}
 
@@ -93,7 +93,7 @@ internal static class HitEventExplanation
 
 			if (damageablePartCount == 0)
 			{
-				ImGui.Text(Inline.Span($"Took {damage} damage"));
+				ImGui.Text(Inline.Utf8($"Took {damage} damage"));
 				return;
 			}
 
@@ -107,19 +107,23 @@ internal static class HitEventExplanation
 
 			if (damageablePartCount == 1)
 			{
-				ImGui.Text(Inline.Span($"Took {damage} damage"));
+				ImGui.Text(Inline.Utf8($"Took {damage} damage"));
 				return;
 			}
 
-			ReadOnlySpan<char> number = e.UserData switch
+			// The ordinal cannot be built with Inline here, because it would be interpolated into a second Inline call
+			// below and the shared buffer would already have been overwritten by then.
+			ReadOnlySpan<byte> number = e.UserData switch
 			{
-				0 => "1st",
-				1 => "2nd",
-				2 => "3rd",
-				_ => $"{e.UserData + 1}th",
+				0 => "1st"u8,
+				1 => "2nd"u8,
+				2 => "3rd"u8,
+				_ => default,
 			};
 
-			ImGui.Text(Inline.Span($"{number} gem took {damage} damage"));
+			ImGui.Text(number.IsEmpty
+				? Inline.Utf8($"{e.UserData + 1}th gem took {damage} damage")
+				: Inline.Utf8($"{number} gem took {damage} damage"));
 			return;
 		}
 
@@ -127,9 +131,9 @@ internal static class HitEventExplanation
 
 		static void TextEntityType(EntityType entityType, int entityId)
 		{
-			ImGui.TextColored(entityType.GetColor(), Inline.Span($"{EnumUtils.EntityTypeShortNames[entityType]}"));
+			ImGui.TextColored(entityType.GetColor(), Inline.Utf8($"{EnumUtils.EntityTypeShortNames[entityType]}"));
 			ImGui.SameLine();
-			ImGui.TextColored(Color.Gray(0.5f), Inline.Span($"(id {Math.Abs(entityId)})"));
+			ImGui.TextColored(Color.Gray(0.5f), Inline.Utf8($"(id {Math.Abs(entityId)})"));
 		}
 	}
 }

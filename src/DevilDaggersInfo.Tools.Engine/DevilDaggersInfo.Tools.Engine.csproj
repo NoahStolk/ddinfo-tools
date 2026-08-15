@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup Label="Dependencies">
-    <PackageReference Include="ImGui.NET"/>
     <PackageReference Include="Silk.NET.GLFW"/>
     <PackageReference Include="Silk.NET.OpenGL"/>
   </ItemGroup>

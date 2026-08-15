@@ -5,7 +5,7 @@ using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
@@ -45,9 +45,9 @@ internal sealed class CompileModWindow(INativeFileDialog nativeFileDialog, Popup
 			{
 				ImGui.Text("The following files will be created:");
 				if (CreateAudio)
-					ImGui.BulletText(Inline.Span($"audio{_outputFileName}"));
+					ImGui.BulletText(Inline.Utf8($"audio{_outputFileName}"));
 				if (CreateDd)
-					ImGui.BulletText(Inline.Span($"dd{_outputFileName}"));
+					ImGui.BulletText(Inline.Utf8($"dd{_outputFileName}"));
 
 				ImGui.BeginDisabled(_isCompiling);
 				if (ImGui.Button("Compile"))
@@ -63,7 +63,7 @@ internal sealed class CompileModWindow(INativeFileDialog nativeFileDialog, Popup
 				{
 					if (_lastStartTime.HasValue && _lastEndTime.HasValue)
 					{
-						ImGui.Text(Inline.Span($"Compiled in {(_lastEndTime.Value - _lastStartTime.Value).TotalSeconds:0.000} seconds ({DateTimeUtils.FormatTimeAgo(_lastEndTime.Value)})."));
+						ImGui.Text(Inline.Utf8($"Compiled in {(_lastEndTime.Value - _lastStartTime.Value).TotalSeconds:0.000} seconds ({DateTimeUtils.FormatTimeAgo(_lastEndTime.Value)})."));
 					}
 				}
 			}

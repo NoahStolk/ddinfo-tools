@@ -4,7 +4,7 @@ using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager;
@@ -56,20 +56,20 @@ internal sealed class ModPreviewWindow(ModManagerState modManagerState, ModsDire
 			ImGui.TableSetupColumn("##left", ImGuiTableColumnFlags.WidthStretch);
 			ImGui.TableSetupColumn("##right", ImGuiTableColumnFlags.WidthFixed, 256);
 
-			NextColumnText("File name");
-			NextColumnText(modManagerState.SelectedFileName);
+			NextColumnText("File name"u8);
+			NextColumnText(Inline.Utf8(modManagerState.SelectedFileName));
 
-			NextColumnText("Binary type");
-			NextColumnText(EnumUtils.ModBinaryTypeNames[modBinaryType]);
+			NextColumnText("Binary type"u8);
+			NextColumnText(Inline.Utf8(EnumUtils.ModBinaryTypeNames[modBinaryType]));
 
-			NextColumnText("File size");
+			NextColumnText("File size"u8);
 			NextColumnText(FileSizeUtils.Format(modManagerState.ModFileSize ?? 0));
 
-			NextColumnText("Asset count");
-			NextColumnText(Inline.Span(modManagerState.AssetCount));
+			NextColumnText("Asset count"u8);
+			NextColumnText(Inline.Utf8(modManagerState.AssetCount));
 
-			NextColumnText("Prohibited asset count");
-			NextColumnText(Inline.Span(modManagerState.ProhibitedAssetCount));
+			NextColumnText("Prohibited asset count"u8);
+			NextColumnText(Inline.Utf8(modManagerState.ProhibitedAssetCount));
 
 			ImGui.EndTable();
 		}
@@ -79,14 +79,14 @@ internal sealed class ModPreviewWindow(ModManagerState modManagerState, ModsDire
 	{
 		if (ImGui.BeginTable("ModPreviewTocEntriesTable", 4, ImGuiTableFlags.Resizable | ImGuiTableFlags.Sortable))
 		{
-			ImGui.TableSetupColumn("Asset name", ImGuiTableColumnFlags.DefaultSort, 256, 0);
-			ImGui.TableSetupColumn("Asset type", ImGuiTableColumnFlags.None, 128, 1);
-			ImGui.TableSetupColumn("Prohibited", ImGuiTableColumnFlags.None, 72, 2);
-			ImGui.TableSetupColumn("Raw size", ImGuiTableColumnFlags.None, 64, 3);
+			ImGui.TableSetupColumn("Asset name", ImGuiTableColumnFlags.DefaultSort | ImGuiTableColumnFlags.WidthFixed, 256, 0);
+			ImGui.TableSetupColumn("Asset type", ImGuiTableColumnFlags.WidthFixed, 128, 1);
+			ImGui.TableSetupColumn("Prohibited", ImGuiTableColumnFlags.WidthFixed, 72, 2);
+			ImGui.TableSetupColumn("Raw size", ImGuiTableColumnFlags.WidthFixed, 64, 3);
 			ImGui.TableHeadersRow();
 
 			ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
-			if (sortsSpecs.NativePtr != (void*)0 && sortsSpecs.SpecsDirty)
+			if (sortsSpecs.Handle != null && sortsSpecs.SpecsDirty)
 			{
 				uint sorting = sortsSpecs.Specs.ColumnUserID;
 				bool sortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
@@ -108,7 +108,7 @@ internal sealed class ModPreviewWindow(ModManagerState modManagerState, ModsDire
 				ModBinaryTocEntry tocEntry = modManagerState.DisplayedTocEntries[i];
 
 				ImGui.TableNextColumn();
-				if (ImGui.SmallButton(Inline.Span($"Toggle##{i}")))
+				if (ImGui.SmallButton(Inline.Utf8($"Toggle##{i}")))
 				{
 					modsDirectoryLogic.ToggleAssets(selectedFileName, toc =>
 					{
@@ -137,13 +137,13 @@ internal sealed class ModPreviewWindow(ModManagerState modManagerState, ModsDire
 		}
 	}
 
-	private static void ColumnTextRight(ReadOnlySpan<char> label)
+	private static void ColumnTextRight(ReadOnlySpan<byte> label)
 	{
 		ImGui.SetCursorPosX(ImGui.GetCursorPosX() + ImGui.GetColumnWidth() - ImGui.CalcTextSize(label).X - ImGui.GetScrollX());
 		ImGui.Text(label);
 	}
 
-	private static void NextColumnText(ReadOnlySpan<char> label)
+	private static void NextColumnText(ReadOnlySpan<byte> label)
 	{
 		ImGui.TableNextColumn();
 		ImGui.Text(label);

@@ -1,6 +1,6 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
@@ -15,7 +15,7 @@ internal static class PedeSpawn
 		const float rightColumnWidth = 160;
 		const float tableWidth = leftColumnWidth + rightColumnWidth;
 
-		if (ImGui.BeginChild(Inline.Span($"PedeSpawnEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
+		if (ImGui.BeginChild(Inline.Utf8($"PedeSpawnEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
 		{
 			if (ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new Vector2(tableWidth, 0)))
 			{
@@ -27,17 +27,17 @@ internal static class PedeSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("Type");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputByteEnum(uniqueId, nameof(PedeSpawnEventData.PedeType), ref e.PedeType, EnumUtils.PedeTypes, _pedeTypeNamesArray);
+				UtilsRendering.InputByteEnum(uniqueId, "PedeType"u8, ref e.PedeType, EnumUtils.PedeTypes, _pedeTypeNamesArray);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("?");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputInt(uniqueId, nameof(PedeSpawnEventData.A), ref e.A);
+				UtilsRendering.InputInt(uniqueId, "A"u8, ref e.A);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("?");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputVector3(uniqueId, nameof(PedeSpawnEventData.B), ref e.B, "%.0f");
+				UtilsRendering.InputVector3(uniqueId, "B"u8, ref e.B, "%.0f"u8);
 
 				ImGui.EndTable();
 			}
@@ -54,12 +54,12 @@ internal static class PedeSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("Position");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputVector3(uniqueId, nameof(PedeSpawnEventData.Position), ref e.Position, "%.2f");
+				UtilsRendering.InputVector3(uniqueId, "Position"u8, ref e.Position, "%.2f"u8);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Orientation");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputMatrix3x3Square(uniqueId, nameof(PedeSpawnEventData.Orientation), ref e.Orientation, "%.2f");
+				UtilsRendering.InputMatrix3x3Square(uniqueId, "Orientation"u8, ref e.Orientation, "%.2f"u8);
 
 				ImGui.EndTable();
 			}

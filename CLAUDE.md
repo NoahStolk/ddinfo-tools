@@ -45,10 +45,10 @@ scripts/build-release.sh
 Three projects, all under `src/`:
 
 - **`DevilDaggersInfo.Tools`** — the application. Entry point `Program.cs` constructs a `Container` (StrongInject) and runs `Application`. Output assembly name `ddinfo-tools`.
-- **`DevilDaggersInfo.Tools.Engine`** — thin rendering/input layer over Silk.NET (GLFW + OpenGL) and ImGui.NET (`Shader`, `Texture`, loaders, math helpers, intersections).
+- **`DevilDaggersInfo.Tools.Engine`** — thin rendering/input layer over Silk.NET (GLFW + OpenGL) (`Shader`, `Texture`, loaders, math helpers, intersections). Does not reference ImGui; the binding lives on `DevilDaggersInfo.Tools`.
 - **`DevilDaggersInfo.Tools.Engine.Content`** — asset/content types (`MeshContent`, `ModelContent`, `ShaderContent`, `TextureContent`, parsers). Empty `.csproj` — picks up everything from `Directory.Build.props`.
 
-External NuGet dependencies of note: `DevilDaggersInfo.Core` (spawnset/mod/replay parsers, AES encryption), `DevilDaggersInfo.Web.ApiSpec.Tools` (server contracts), `Silk.NET.{GLFW,OpenGL}`, `ImGui.NET`, `StrongInject`, `Serilog.Sinks.File`, `NativeFileDialogSharp`, `SixLabors.ImageSharp`.
+External NuGet dependencies of note: `DevilDaggersInfo.Core` (spawnset/mod/replay parsers, AES encryption), `DevilDaggersInfo.Web.ApiSpec.Tools` (server contracts), `Silk.NET.{GLFW,OpenGL}`, `Hexa.NET.ImGui`, `StrongInject`, `Serilog.Sinks.File`, `NativeFileDialogSharp`, `SixLabors.ImageSharp`.
 
 ## Architecture you need to know before editing
 
@@ -76,6 +76,7 @@ External NuGet dependencies of note: `DevilDaggersInfo.Core` (spawnset/mod/repla
 
 ## Conventions
 
+- **UI text is UTF-8.** `Hexa.NET.ImGui` takes `ReadOnlySpan<byte>` (or `string`), never `ReadOnlySpan<char>`. Pass static text as a `u8` literal (`ImGui.Text("Gems"u8)`) and dynamic text through `Inline.Utf8($"...")`. `Inline` writes into one shared static buffer, so only one `Inline` result may be alive at a time — never hold one across another `Inline` call, and never interpolate one into another (a `Debug.Assert` catches the latter). Types that only implement `ISpanFormattable` (enums, `DevilDaggersInfo.Core` numerics) go through `Inline.Utf8Formattable`. Format strings stay `ReadOnlySpan<char>` — they feed `TryFormat`, not ImGui.
 - `Directory.Build.props` is the source of truth for `TargetFramework`, language version, nullable, analyzers, and `RuntimeIdentifiers`. Don't redefine these per project.
 - Tab indentation in `.cs`. Match existing brace and using-order style — StyleCop will flag you otherwise.
 - `[Obsolete]` markers (e.g. `Root`) are intentional — don't clear them by suppression; migrate callers off instead.

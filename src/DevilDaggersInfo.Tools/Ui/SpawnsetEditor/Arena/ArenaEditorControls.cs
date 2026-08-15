@@ -2,7 +2,7 @@ using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Diagnostics;
 using System.Numerics;
 
@@ -22,7 +22,7 @@ internal sealed class ArenaEditorControls(ResourceManager resourceManager, Arena
 			for (int i = 0; i < ArenaToolGen.Values.Count; i++)
 			{
 				ArenaTool arenaTool = ArenaToolGen.Values[i];
-				ReadOnlySpan<char> arenaToolText = arenaTool.ToStringFast();
+				ReadOnlySpan<byte> arenaToolText = Inline.Utf8(arenaTool.ToStringFast());
 
 				bool isDagger = arenaTool == ArenaTool.Dagger;
 				bool isCurrent = arenaTool == arenaWindow.ArenaTool;

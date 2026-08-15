@@ -3,7 +3,7 @@ using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
@@ -29,19 +29,19 @@ internal sealed class ShaderPathsTable(FileStates fileStates, INativeFileDialog 
 		PathTableUtils.RenderDefaultColumns(assetInfo);
 
 		ImGui.TableNextColumn();
-		if (ImGui.Button(Inline.Span($"Browse##ShaderVertex_{index}")))
+		if (ImGui.Button(Inline.Utf8($"Browse##ShaderVertex_{index}")))
 			SetVertexPath(assetInfo, path);
 		ImGui.SameLine();
-		if (ImGui.Button(Inline.Span($"Clear##ShaderVertex_{index}")) && path != null)
+		if (ImGui.Button(Inline.Utf8($"Clear##ShaderVertex_{index}")) && path != null)
 			path.SetVertexPath(null);
 		ImGui.SameLine();
 		ImGui.Text(path?.AbsoluteVertexPath ?? "<none>");
 
 		ImGui.TableNextColumn();
-		if (ImGui.Button(Inline.Span($"Browse##ShaderFragment_{index}")))
+		if (ImGui.Button(Inline.Utf8($"Browse##ShaderFragment_{index}")))
 			SetFragmentPath(assetInfo, path);
 		ImGui.SameLine();
-		if (ImGui.Button(Inline.Span($"Clear##ShaderFragment_{index}")) && path != null)
+		if (ImGui.Button(Inline.Utf8($"Clear##ShaderFragment_{index}")) && path != null)
 			path.SetFragmentPath(null);
 		ImGui.SameLine();
 		ImGui.Text(path?.AbsoluteFragmentPath ?? "<none>");

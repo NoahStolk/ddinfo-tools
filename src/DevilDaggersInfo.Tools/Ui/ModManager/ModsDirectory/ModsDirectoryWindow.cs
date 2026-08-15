@@ -3,7 +3,7 @@ using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
@@ -23,7 +23,7 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 		ImGuiUtils.SetNextWindowMinSize(1280, 768);
 		if (ImGui.Begin("Mod Manager", ImGuiWindowFlags.NoCollapse))
 		{
-			ImGui.Text(Inline.Span($"""
+			ImGui.Text(Inline.Utf8($"""
 				These are all files in mods directory. In order to make managing mods easier, the program displays which files will be loaded by the game.
 
 				Folders are not displayed as they are always ignored by the game.
@@ -38,11 +38,11 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 
 			ImGui.Separator();
 
-			CheckboxColored("Enabled mods", GetColor(ModFileType.EnabledMod), ref _showEnabledMods, "To enable a mod, it must start with 'audio' or 'dd' for the game to load it.");
-			CheckboxColored("Disabled mods", GetColor(ModFileType.DisabledMod), ref _showDisabledMods, "In order to easily disable a mod, the program renames the mod file to start with an underscore, so these files not loaded by the game.");
-			CheckboxColored("Mods with invalid prefix", GetColor(ModFileType.ModWithInvalidPrefix), ref _showModsWithInvalidPrefix, "These are valid mod files with an invalid file name, meaning they are not loaded by the game.");
-			CheckboxColored("Other files", GetColor(ModFileType.Other), ref _showOtherFiles, "These are files that are not valid mod files. Spawnsets are not considered mods by the Mod Manager.");
-			CheckboxColored("Error loading file", GetColor(ModFileType.Error), ref _showErrors, "These are files that could not be loaded by the program. This could be because the program does not have the required permissions to read the file.");
+			CheckboxColored("Enabled mods"u8, GetColor(ModFileType.EnabledMod), ref _showEnabledMods, "To enable a mod, it must start with 'audio' or 'dd' for the game to load it."u8);
+			CheckboxColored("Disabled mods"u8, GetColor(ModFileType.DisabledMod), ref _showDisabledMods, "In order to easily disable a mod, the program renames the mod file to start with an underscore, so these files not loaded by the game."u8);
+			CheckboxColored("Mods with invalid prefix"u8, GetColor(ModFileType.ModWithInvalidPrefix), ref _showModsWithInvalidPrefix, "These are valid mod files with an invalid file name, meaning they are not loaded by the game."u8);
+			CheckboxColored("Other files"u8, GetColor(ModFileType.Other), ref _showOtherFiles, "These are files that are not valid mod files. Spawnsets are not considered mods by the Mod Manager."u8);
+			CheckboxColored("Error loading file"u8, GetColor(ModFileType.Error), ref _showErrors, "These are files that could not be loaded by the program. This could be because the program does not have the required permissions to read the file."u8);
 
 			if (ImGui.BeginChild("table_child"))
 			{
@@ -54,7 +54,7 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 
 			ImGui.EndChild();
 
-			static void CheckboxColored(ReadOnlySpan<char> label, Vector4 color, ref bool value, ReadOnlySpan<char> tooltip)
+			static void CheckboxColored(ReadOnlySpan<byte> label, Vector4 color, ref bool value, ReadOnlySpan<byte> tooltip)
 			{
 				ImGui.PushStyleColor(ImGuiCol.Text, color);
 				ImGui.Checkbox(label, ref value);
@@ -75,10 +75,10 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 		const int columnCount = 4;
 		if (ImGui.BeginTable("mod_file_table", columnCount, ImGuiTableFlags.Resizable | ImGuiTableFlags.Sortable))
 		{
-			ImGui.TableSetupColumn("File name", ImGuiTableColumnFlags.DefaultSort, 256, 0);
-			ImGui.TableSetupColumn("Mod type", ImGuiTableColumnFlags.None, 128, 1);
-			ImGui.TableSetupColumn("Prohibited", ImGuiTableColumnFlags.None, 64, 2);
-			ImGui.TableSetupColumn("File size", ImGuiTableColumnFlags.None, 64, 3);
+			ImGui.TableSetupColumn("File name", ImGuiTableColumnFlags.DefaultSort | ImGuiTableColumnFlags.WidthFixed, 256, 0);
+			ImGui.TableSetupColumn("Mod type", ImGuiTableColumnFlags.WidthFixed, 128, 1);
+			ImGui.TableSetupColumn("Prohibited", ImGuiTableColumnFlags.WidthFixed, 64, 2);
+			ImGui.TableSetupColumn("File size", ImGuiTableColumnFlags.WidthFixed, 64, 3);
 			ImGui.TableHeadersRow();
 
 			for (int i = 0; i < columnCount; i++)
@@ -108,7 +108,7 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 			}
 
 			ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
-			if (sortsSpecs.NativePtr != (void*)0 && sortsSpecs.SpecsDirty)
+			if (sortsSpecs.Handle != null && sortsSpecs.SpecsDirty)
 			{
 				uint sorting = sortsSpecs.Specs.ColumnUserID;
 				bool sortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
@@ -136,15 +136,15 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 				ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, modFile.FileName == modManagerState.SelectedFileName ? 0x4400ffffU : modFile.FileType == ModFileType.EnabledMod ? 0x4400ff00U : 0x00000000U);
 
 				bool setFocus = false;
-				if (ImGui.SmallButton(Inline.Span($"Rename##{i}")))
+				if (ImGui.SmallButton(Inline.Utf8($"Rename##{i}")))
 				{
-					ImGui.OpenPopup(Inline.Span($"Rename##rename_mod_file_{i}"));
+					ImGui.OpenPopup(Inline.Utf8($"Rename##rename_mod_file_{i}"));
 					modsDirectoryLogic.InitializeRename(modFile.FileName);
 					setFocus = true;
 				}
 
 				ImGui.SetNextWindowSize(new Vector2(512, 128), ImGuiCond.Appearing);
-				if (ImGui.BeginPopupModal(Inline.Span($"Rename##rename_mod_file_{i}")))
+				if (ImGui.BeginPopupModal(Inline.Utf8($"Rename##rename_mod_file_{i}")))
 				{
 					if (setFocus)
 						ImGui.SetKeyboardFocusHere(0);
@@ -165,7 +165,7 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 				}
 
 				ImGui.SameLine();
-				if (ImGui.SmallButton(Inline.Span($"Delete##{i}")))
+				if (ImGui.SmallButton(Inline.Utf8($"Delete##{i}")))
 				{
 					// Only capture the fileName variable when needed.
 					// If we use modFile.FileName directly in the onConfirm lambda, it will capture the variable every frame, which allocates a couple kilobytes of memory per frame.
@@ -179,7 +179,7 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 
 				ImGui.SameLine();
 				ImGui.BeginDisabled(modFile.FileType is not ModFileType.EnabledMod and not ModFileType.DisabledMod);
-				if (ImGui.SmallButton(Inline.Span($"Toggle##{i}")))
+				if (ImGui.SmallButton(Inline.Utf8($"Toggle##{i}")))
 					modsDirectoryLogic.ToggleModFile(modFile.FileName);
 				ImGui.EndDisabled();
 
@@ -198,12 +198,12 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 				if (modFile is { AssetCount: not null, ProhibitedAssetCount: not null })
 				{
 					if (modFile.ProhibitedAssetCount.Value > 0)
-						ImGui.TextColored(Color.Orange, Inline.Span($"Prohibited ({modFile.ProhibitedAssetCount.Value} of {modFile.AssetCount.Value})"));
+						ImGui.TextColored(Color.Orange, Inline.Utf8($"Prohibited ({modFile.ProhibitedAssetCount.Value} of {modFile.AssetCount.Value})"));
 					else
 						ImGui.TextColored(Color.Green, "OK");
 
 					if (ImGui.IsItemHovered())
-						ImGui.SetTooltip(Inline.Span($"{modFile.ProhibitedAssetCount.Value} out of {modFile.AssetCount.Value} assets prohibited"));
+						ImGui.SetTooltip(Inline.Utf8($"{modFile.ProhibitedAssetCount.Value} out of {modFile.AssetCount.Value} assets prohibited"));
 				}
 
 				ImGui.TableNextColumn();
@@ -214,7 +214,7 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 			ImGui.EndTable();
 		}
 
-		static void ColumnTextRight(ReadOnlySpan<char> span, Vector4? color = null)
+		static void ColumnTextRight(ReadOnlySpan<byte> span, Vector4? color = null)
 		{
 			ImGui.SetCursorPosX(ImGui.GetCursorPosX() + ImGui.GetColumnWidth() - ImGui.CalcTextSize(span).X - ImGui.GetScrollX());
 			if (color.HasValue)

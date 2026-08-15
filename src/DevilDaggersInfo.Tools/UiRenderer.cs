@@ -58,7 +58,7 @@ internal sealed class UiRenderer(
 	public void Render(float delta)
 	{
 		if (debugWindow.ShowDemoWindow)
-			ImGuiNET.ImGui.ShowDemoWindow(ref debugWindow.ShowDemoWindow);
+			Hexa.NET.ImGui.ImGui.ShowDemoWindow(ref debugWindow.ShowDemoWindow);
 
 		switch (uiLayoutManager.Layout)
 		{

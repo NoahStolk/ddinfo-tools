@@ -1,7 +1,7 @@
 using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.User.Settings.Model;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Config;
@@ -26,7 +26,7 @@ internal sealed class ConfigLayout(GameInstallationValidator gameInstallationVal
 			Example: {examplePath}
 			""";
 
-		Vector2 center = ImGui.GetMainViewport().GetCenter();
+		Vector2 center = ImGui.GetCenter(ImGui.GetMainViewport());
 		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new Vector2(0.5f, 0.5f));
 		ImGui.SetNextWindowSize(new Vector2(768, 512));
 		const ImGuiWindowFlags flags = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoNavFocus | ImGuiWindowFlags.NoDocking;
@@ -88,7 +88,7 @@ internal sealed class ConfigLayout(GameInstallationValidator gameInstallationVal
 
 			ImGui.EndChild();
 
-			ImGui.PushFont(fontService.GoetheBold30);
+			ImGuiExt.PushFont(fontService.GoetheBold30);
 			if (ImGui.Button("Save and continue", new Vector2(752, 64)))
 			{
 				userSettings.Model = userSettings.Model with

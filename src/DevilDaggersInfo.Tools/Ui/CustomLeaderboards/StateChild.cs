@@ -1,5 +1,5 @@
 using DevilDaggersInfo.Tools.Utils;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
@@ -10,12 +10,12 @@ internal sealed class StateChild(RecordingLogic recordingLogic, GameMemoryServic
 	{
 		if (ImGui.BeginTable("StateTable", 2, ImGuiTableFlags.None, new Vector2(288, 80)))
 		{
-			ImGui.TableSetupColumn(null, ImGuiTableColumnFlags.WidthFixed | ImGuiTableColumnFlags.NoHeaderLabel, 112);
+			ImGui.TableSetupColumn(""u8, ImGuiTableColumnFlags.WidthFixed | ImGuiTableColumnFlags.NoHeaderLabel, 112);
 
 			ImGui.TableNextColumn();
 			ImGui.Text("Memory");
 			ImGui.TableNextColumn();
-			ImGui.Text(gameMemoryServiceWrapper.Marker.HasValue ? Inline.Span($"0x{gameMemoryServiceWrapper.Marker.Value:X}") : "Waiting...");
+			ImGui.Text(gameMemoryServiceWrapper.Marker.HasValue ? Inline.Utf8($"0x{gameMemoryServiceWrapper.Marker.Value:X}") : "Waiting..."u8);
 			ImGui.TableNextRow();
 
 			ImGui.TableNextColumn();

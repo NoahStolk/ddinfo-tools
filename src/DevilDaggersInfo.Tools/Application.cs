@@ -3,7 +3,7 @@ using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 using System.Runtime.InteropServices;
@@ -155,7 +155,7 @@ internal sealed unsafe class Application
 
 		_imGuiController.Update(deltaF);
 
-		ImGui.DockSpaceOverViewport(0, null, ImGuiDockNodeFlags.PassthruCentralNode);
+		ImGui.DockSpaceOverViewport(ImGuiDockNodeFlags.PassthruCentralNode);
 
 		_gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 

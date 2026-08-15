@@ -12,7 +12,7 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using Serilog;
 using System.Diagnostics;
 using System.Numerics;
@@ -75,12 +75,12 @@ internal sealed class LeaderboardChild(
 
 			ImGui.SameLine();
 
-			if (ImGui.Button(Inline.Span($"View {_selectedCustomEntry.PlayerName}'s replay in game")))
+			if (ImGui.Button(Inline.Utf8($"View {_selectedCustomEntry.PlayerName}'s replay in game")))
 				WatchInGame(_selectedCustomEntry.Id);
 
 			ImGui.SameLine();
 
-			if (ImGui.Button(Inline.Span($"View {_selectedCustomEntry.PlayerName}'s replay in replay viewer")))
+			if (ImGui.Button(Inline.Utf8($"View {_selectedCustomEntry.PlayerName}'s replay in replay viewer")))
 				WatchInReplayViewer(_selectedCustomEntry.Id);
 
 			ImGui.EndDisabled();
@@ -111,26 +111,26 @@ internal sealed class LeaderboardChild(
 		ImGui.PushStyleVar(ImGuiStyleVar.CellPadding, new Vector2(4, 1));
 		if (ImGui.BeginTable("LeaderboardTable", 16, flags))
 		{
-			ImGui.TableSetupColumn("Rank", ImGuiTableColumnFlags.DefaultSort, 0, (int)LeaderboardSorting.Rank);
-			ImGui.TableSetupColumn("Player", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.PlayerName);
-			ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.Time);
-			ImGui.TableSetupColumn("Enemies alive", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.EnemiesAlive);
-			ImGui.TableSetupColumn("Enemies killed", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.EnemiesKilled);
-			ImGui.TableSetupColumn("Gems collected", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.GemsCollected);
-			ImGui.TableSetupColumn("Gems despawned", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.GemsDespawned);
-			ImGui.TableSetupColumn("Gems eaten", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.GemsEaten);
-			ImGui.TableSetupColumn("Accuracy", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.Accuracy);
-			ImGui.TableSetupColumn("Death type", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.DeathType);
-			ImGui.TableSetupColumn("Homing stored", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.HomingStored);
-			ImGui.TableSetupColumn("Homing eaten", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.HomingEaten);
-			ImGui.TableSetupColumn("Level 2", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.LevelUpTime2);
-			ImGui.TableSetupColumn("Level 3", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.LevelUpTime3);
-			ImGui.TableSetupColumn("Level 4", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.LevelUpTime4);
-			ImGui.TableSetupColumn("Submit date", ImGuiTableColumnFlags.None, 0, (int)LeaderboardSorting.SubmitDate);
+			ImGui.TableSetupColumn("Rank", ImGuiTableColumnFlags.DefaultSort | ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.Rank);
+			ImGui.TableSetupColumn("Player", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.PlayerName);
+			ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.Time);
+			ImGui.TableSetupColumn("Enemies alive", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.EnemiesAlive);
+			ImGui.TableSetupColumn("Enemies killed", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.EnemiesKilled);
+			ImGui.TableSetupColumn("Gems collected", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.GemsCollected);
+			ImGui.TableSetupColumn("Gems despawned", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.GemsDespawned);
+			ImGui.TableSetupColumn("Gems eaten", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.GemsEaten);
+			ImGui.TableSetupColumn("Accuracy", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.Accuracy);
+			ImGui.TableSetupColumn("Death type", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.DeathType);
+			ImGui.TableSetupColumn("Homing stored", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.HomingStored);
+			ImGui.TableSetupColumn("Homing eaten", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.HomingEaten);
+			ImGui.TableSetupColumn("Level 2", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.LevelUpTime2);
+			ImGui.TableSetupColumn("Level 3", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.LevelUpTime3);
+			ImGui.TableSetupColumn("Level 4", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.LevelUpTime4);
+			ImGui.TableSetupColumn("Submit date", ImGuiTableColumnFlags.WidthFixed, 0, (int)LeaderboardSorting.SubmitDate);
 			ImGui.TableHeadersRow();
 
 			ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
-			if (sortsSpecs.NativePtr != (void*)0 && sortsSpecs.SpecsDirty)
+			if (sortsSpecs.Handle != null && sortsSpecs.SpecsDirty)
 			{
 				Sort(sortsSpecs);
 				sortsSpecs.SpecsDirty = false;
@@ -156,7 +156,7 @@ internal sealed class LeaderboardChild(
 		ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.CustomLeaderboards.Primary with { A = 64 });
 		ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.CustomLeaderboards.Primary with { A = 96 });
 		bool temp = true;
-		if (ImGui.Selectable(Inline.Span(ce.Rank, "00"), ref temp, ImGuiSelectableFlags.SpanAllColumns))
+		if (ImGui.Selectable(Inline.Utf8(ce.Rank, "00"), ref temp, ImGuiSelectableFlags.SpanAllColumns))
 			_selectedCustomEntry = ce;
 
 		ImGui.PopStyleColor(3);
@@ -168,50 +168,50 @@ internal sealed class LeaderboardChild(
 
 		Color daggerColor = CustomLeaderboardDaggerUtils.GetColor(ce.CustomLeaderboardDagger);
 
-		TextDaggerColored(Inline.Span(ce.TimeInSeconds, StringFormats.TimeFormat), static rs => rs is CustomLeaderboardRankSorting.TimeAsc or CustomLeaderboardRankSorting.TimeDesc);
+		TextDaggerColored(Inline.Utf8(ce.TimeInSeconds, StringFormats.TimeFormat), static rs => rs is CustomLeaderboardRankSorting.TimeAsc or CustomLeaderboardRankSorting.TimeDesc);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(Inline.Span(ce.EnemiesAlive), static rs => rs is CustomLeaderboardRankSorting.EnemiesAliveAsc or CustomLeaderboardRankSorting.EnemiesAliveDesc);
+		TextDaggerColored(Inline.Utf8(ce.EnemiesAlive), static rs => rs is CustomLeaderboardRankSorting.EnemiesAliveAsc or CustomLeaderboardRankSorting.EnemiesAliveDesc);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(Inline.Span(ce.EnemiesKilled), static rs => rs is CustomLeaderboardRankSorting.EnemiesKilledAsc or CustomLeaderboardRankSorting.EnemiesKilledDesc);
+		TextDaggerColored(Inline.Utf8(ce.EnemiesKilled), static rs => rs is CustomLeaderboardRankSorting.EnemiesKilledAsc or CustomLeaderboardRankSorting.EnemiesKilledDesc);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(Inline.Span(ce.GemsCollected), static rs => rs is CustomLeaderboardRankSorting.GemsCollectedAsc or CustomLeaderboardRankSorting.GemsCollectedDesc);
+		TextDaggerColored(Inline.Utf8(ce.GemsCollected), static rs => rs is CustomLeaderboardRankSorting.GemsCollectedAsc or CustomLeaderboardRankSorting.GemsCollectedDesc);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(ce.GemsDespawned.HasValue ? Inline.Span(ce.GemsDespawned.Value) : "-", static rs => rs is CustomLeaderboardRankSorting.GemsDespawnedAsc or CustomLeaderboardRankSorting.GemsDespawnedDesc);
+		TextDaggerColored(ce.GemsDespawned.HasValue ? Inline.Utf8(ce.GemsDespawned.Value) : "-"u8, static rs => rs is CustomLeaderboardRankSorting.GemsDespawnedAsc or CustomLeaderboardRankSorting.GemsDespawnedDesc);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(ce.GemsEaten.HasValue ? Inline.Span(ce.GemsEaten.Value) : "-", static rs => rs is CustomLeaderboardRankSorting.GemsEatenAsc or CustomLeaderboardRankSorting.GemsEatenDesc);
+		TextDaggerColored(ce.GemsEaten.HasValue ? Inline.Utf8(ce.GemsEaten.Value) : "-"u8, static rs => rs is CustomLeaderboardRankSorting.GemsEatenAsc or CustomLeaderboardRankSorting.GemsEatenDesc);
 		ImGui.TableNextColumn();
 
-		ImGui.TextUnformatted(Inline.Span(GetAccuracy(ce), StringFormats.AccuracyFormat));
+		ImGui.TextUnformatted(Inline.Utf8(GetAccuracy(ce), StringFormats.AccuracyFormat));
 		ImGui.TableNextColumn();
 
 		Death? death = Deaths.GetDeathByType(GameConstants.CurrentVersion, ce.DeathType);
 		ImGui.TextColored(death?.Color.ToEngineColor() ?? Color.White, death?.Name ?? "Unknown");
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(Inline.Span(ce.HomingStored), static rs => rs is CustomLeaderboardRankSorting.HomingStoredAsc or CustomLeaderboardRankSorting.HomingStoredDesc);
+		TextDaggerColored(Inline.Utf8(ce.HomingStored), static rs => rs is CustomLeaderboardRankSorting.HomingStoredAsc or CustomLeaderboardRankSorting.HomingStoredDesc);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(ce.HomingEaten.HasValue ? Inline.Span(ce.HomingEaten.Value) : "-", static rs => rs is CustomLeaderboardRankSorting.HomingEatenAsc or CustomLeaderboardRankSorting.HomingEatenDesc);
+		TextDaggerColored(ce.HomingEaten.HasValue ? Inline.Utf8(ce.HomingEaten.Value) : "-"u8, static rs => rs is CustomLeaderboardRankSorting.HomingEatenAsc or CustomLeaderboardRankSorting.HomingEatenDesc);
 		ImGui.TableNextColumn();
 
-		ImGui.Text(ce.LevelUpTime2InSeconds == 0 ? "-" : Inline.Span(ce.LevelUpTime2InSeconds, StringFormats.TimeFormat));
+		ImGui.Text(ce.LevelUpTime2InSeconds == 0 ? "-"u8 : Inline.Utf8(ce.LevelUpTime2InSeconds, StringFormats.TimeFormat));
 		ImGui.TableNextColumn();
 
-		ImGui.Text(ce.LevelUpTime3InSeconds == 0 ? "-" : Inline.Span(ce.LevelUpTime3InSeconds, StringFormats.TimeFormat));
+		ImGui.Text(ce.LevelUpTime3InSeconds == 0 ? "-"u8 : Inline.Utf8(ce.LevelUpTime3InSeconds, StringFormats.TimeFormat));
 		ImGui.TableNextColumn();
 
-		ImGui.Text(ce.LevelUpTime4InSeconds == 0 ? "-" : Inline.Span(ce.LevelUpTime4InSeconds, StringFormats.TimeFormat));
+		ImGui.Text(ce.LevelUpTime4InSeconds == 0 ? "-"u8 : Inline.Utf8(ce.LevelUpTime4InSeconds, StringFormats.TimeFormat));
 		ImGui.TableNextColumn();
 
-		ImGui.Text(Inline.Span(ce.SubmitDate, StringFormats.DateTimeFormat));
+		ImGui.Text(Inline.Utf8(ce.SubmitDate, StringFormats.DateTimeFormat));
 		ImGui.TableNextColumn();
 
-		void TextDaggerColored(ReadOnlySpan<char> text, Func<CustomLeaderboardRankSorting, bool> isRankSortingApplicable)
+		void TextDaggerColored(ReadOnlySpan<byte> text, Func<CustomLeaderboardRankSorting, bool> isRankSortingApplicable)
 		{
 			if (isRankSortingApplicable(rankSorting))
 				ImGui.TextColored(daggerColor, text);
