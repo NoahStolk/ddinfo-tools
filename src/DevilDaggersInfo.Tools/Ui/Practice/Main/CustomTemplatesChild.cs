@@ -67,10 +67,8 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 
 		Color color = Color.White;
 
-		const int bufferLength = 32;
-		Span<char> gemsOrHomingText = stackalloc char[bufferLength];
-		PracticeWindow.GetGemsOrHomingText(customTemplate.HandLevel, customTemplate.AdditionalGems, gemsOrHomingText, out Color gemColor);
-		gemsOrHomingText = gemsOrHomingText.SliceUntilNull(bufferLength);
+		Span<byte> gemsOrHomingBuffer = stackalloc byte[32];
+		ReadOnlySpan<byte> gemsOrHomingText = PracticeWindow.GetGemsOrHomingText(customTemplate.HandLevel, customTemplate.AdditionalGems, gemsOrHomingBuffer, out Color gemColor);
 
 		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(practiceLogic.IsActive(customTemplate));
 
@@ -80,7 +78,9 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 			bool hover = ImGui.IsWindowHovered();
 			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
 
-			if (ImGui.BeginChild(Inline.Utf8($"{buttonName}Child"), buttonSize, ImGuiChildFlags.None, ImGuiWindowFlags.NoInputs))
+			// The id is scoped to the enclosing child window, which is already unique per template, so a constant is
+			// enough. Deriving it from buttonName would interpolate a slice of the Inline buffer back into itself.
+			if (ImGui.BeginChild("Child"u8, buttonSize, ImGuiChildFlags.None, ImGuiWindowFlags.NoInputs))
 			{
 				if (hover && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 				{
@@ -101,8 +101,8 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 0));
 
 				ImGui.TextColored(customTemplate.HandLevel.GetColor() with { A = textAlpha }, EnumUtils.HandLevelNames[customTemplate.HandLevel]);
-				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(Inline.Utf8(gemsOrHomingText)).X - 8);
-				ImGui.TextColored(gemColor with { A = textAlpha }, Inline.Utf8(gemsOrHomingText));
+				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(gemsOrHomingText).X - 8);
+				ImGui.TextColored(gemColor with { A = textAlpha }, gemsOrHomingText);
 			}
 
 			ImGui.EndChild();
@@ -114,7 +114,10 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 
 		ImGui.EndChild();
 
-		if (ImGui.BeginPopupContextItem(Inline.Utf8($"{buttonName} rename"), ImGuiPopupFlags.MouseButtonRight))
+		// Built from the template values rather than from buttonName, which is a slice of the Inline buffer and cannot be
+		// interpolated back into it. The templates are siblings in one window, so the id has to stay unique per template.
+		ReadOnlySpan<byte> renameName = Inline.Utf8($"rename {(int)customTemplate.HandLevel}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart}");
+		if (ImGui.BeginPopupContextItem(renameName, ImGuiPopupFlags.MouseButtonRight))
 		{
 			string name = customTemplate.Name ?? string.Empty;
 			ImGui.SetKeyboardFocusHere();

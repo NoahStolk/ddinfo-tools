@@ -57,10 +57,8 @@ internal sealed class NoFarmTemplatesChild(PracticeLogic practiceLogic)
 	{
 		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(practiceLogic.IsActive(noFarmTemplate));
 
-		const int bufferLength = 32;
-		Span<char> gemsOrHomingText = stackalloc char[bufferLength];
-		PracticeWindow.GetGemsOrHomingText(noFarmTemplate.HandLevel, noFarmTemplate.AdditionalGems, gemsOrHomingText, out Color gemColor);
-		gemsOrHomingText = gemsOrHomingText.SliceUntilNull(bufferLength);
+		Span<byte> gemsOrHomingBuffer = stackalloc byte[32];
+		ReadOnlySpan<byte> gemsOrHomingText = PracticeWindow.GetGemsOrHomingText(noFarmTemplate.HandLevel, noFarmTemplate.AdditionalGems, gemsOrHomingBuffer, out Color gemColor);
 
 		Vector2 buttonSize = new(templateWidth, 48);
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
@@ -88,8 +86,8 @@ internal sealed class NoFarmTemplatesChild(PracticeLogic practiceLogic)
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 0));
 
 				ImGui.TextColored(noFarmTemplate.HandLevel.GetColor() with { A = textAlpha }, EnumUtils.HandLevelNames[noFarmTemplate.HandLevel]);
-				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(Inline.Utf8(gemsOrHomingText)).X - 8);
-				ImGui.TextColored(gemColor with { A = textAlpha }, Inline.Utf8(gemsOrHomingText));
+				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(gemsOrHomingText).X - 8);
+				ImGui.TextColored(gemColor with { A = textAlpha }, gemsOrHomingText);
 			}
 
 			ImGui.EndChild();

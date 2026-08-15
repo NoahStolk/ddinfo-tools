@@ -22,7 +22,7 @@ internal sealed class ArenaEditorControls(ResourceManager resourceManager, Arena
 			for (int i = 0; i < ArenaToolGen.Values.Count; i++)
 			{
 				ArenaTool arenaTool = ArenaToolGen.Values[i];
-				ReadOnlySpan<byte> arenaToolText = Inline.Utf8(arenaTool.ToStringFast());
+				ReadOnlySpan<byte> arenaToolText = arenaTool.AsUtf8Span();
 
 				bool isDagger = arenaTool == ArenaTool.Dagger;
 				bool isCurrent = arenaTool == arenaWindow.ArenaTool;
