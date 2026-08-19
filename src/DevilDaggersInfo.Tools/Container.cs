@@ -208,6 +208,12 @@ internal sealed partial class Container : IContainer<Application>
 		gl.DebugMessageCallback(
 			callback: (source, type, _, severity, length, message, _) => LogGlDebugMessage(logger, source, type, severity, length, message),
 			userParam: null);
+
+		// Notification-severity messages carry no diagnostic value here, but the driver emits two of them per draw list
+		// per frame (one for each glBufferData call in ImGuiController), and marshalling those strings allocated around
+		// 3 KB per frame. Muting them at the source keeps the render loop allocation-free in Debug builds; spec
+		// violations and performance warnings still come through at the higher severities.
+		gl.DebugMessageControl(GLEnum.DontCare, GLEnum.DontCare, GLEnum.DebugSeverityNotification, 0, (uint*)null, false);
 #endif
 
 		return gl;
