@@ -1,4 +1,3 @@
-using DevilDaggersInfo.Core.Common.Extensions;
 using DevilDaggersInfo.Tools.Encryption;
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.Networking;
@@ -165,7 +164,7 @@ internal sealed class RecordingLogic(
 #else
 			runToUpload.PlayerId,
 #endif
-			timeAsBytes.ByteArrayToHexString(),
+			Convert.ToHexString(timeAsBytes),
 			runToUpload.GemsCollected,
 			runToUpload.GemsDespawned,
 			runToUpload.GemsEaten,
@@ -183,10 +182,10 @@ internal sealed class RecordingLogic(
 #else
 			runToUpload.Status,
 #endif
-			runToUpload.SurvivalHashMd5.ByteArrayToHexString(),
-			levelUpTime2AsBytes.ByteArrayToHexString(),
-			levelUpTime3AsBytes.ByteArrayToHexString(),
-			levelUpTime4AsBytes.ByteArrayToHexString(),
+			Convert.ToHexString(runToUpload.SurvivalHashMd5),
+			Convert.ToHexString(levelUpTime2AsBytes),
+			Convert.ToHexString(levelUpTime3AsBytes),
+			Convert.ToHexString(levelUpTime4AsBytes),
 			runToUpload.GameMode,
 			runToUpload.TimeAttackOrRaceFinished,
 			runToUpload.ProhibitedMods);
