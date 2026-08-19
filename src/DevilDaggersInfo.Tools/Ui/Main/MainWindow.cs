@@ -17,9 +17,37 @@ internal sealed class MainWindow(
 	ModsDirectoryLogic modsDirectoryLogic,
 	FontService fontService)
 {
+	// App buttons
+	private readonly Action _showUpdatesWindow = () => updateWindow.Show = true;
+
+	private readonly Action _goToConfiguration = () => uiLayoutManager.Layout = LayoutType.Config;
+
+	private readonly Action _showAboutWindow = () => aboutWindow.Show = true;
+
+	// Tool buttons
+	private readonly Action _goToSpawnsetEditor = () => uiLayoutManager.Layout = LayoutType.SpawnsetEditor;
+
+	private readonly Action _goToAssetEditor = () => uiLayoutManager.Layout = LayoutType.AssetEditor;
+
+	private readonly Action _goToReplayEditor = () => uiLayoutManager.Layout = LayoutType.ReplayEditor;
+
+	private readonly Action _goToCustomLeaderboards = () =>
+	{
+		uiLayoutManager.Layout = LayoutType.CustomLeaderboards;
+		leaderboardListChild.LoadAll();
+	};
+
+	private readonly Action _goToPractice = () => uiLayoutManager.Layout = LayoutType.Practice;
+
+	private readonly Action _goToModManager = () =>
+	{
+		uiLayoutManager.Layout = LayoutType.ModManager;
+		modsDirectoryLogic.LoadModsDirectory();
+	};
+
 	private readonly string _version = $"{AssemblyUtils.EntryAssemblyVersionString} (ALPHA)";
 
-	private Action? _hoveredButtonAction;
+	private HoverText? _hoverText;
 
 	public bool ShouldClose { get; private set; }
 
@@ -46,13 +74,13 @@ internal sealed class MainWindow(
 			ImGui.Text("Developed by Noah Stolk");
 
 			ImGui.SetCursorPos(new Vector2(windowSize.X - 208, 8));
-			AppButton(resourceManager.InternalResources.DownloadTexture, "Updates"u8, () => updateWindow.Show = true);
+			AppButton(resourceManager.InternalResources.DownloadTexture, "Updates"u8, _showUpdatesWindow);
 
 			ImGui.SameLine();
-			AppButton(resourceManager.InternalResources.ConfigurationTexture, "Configuration"u8, () => uiLayoutManager.Layout = LayoutType.Config);
+			AppButton(resourceManager.InternalResources.ConfigurationTexture, "Configuration"u8, _goToConfiguration);
 
 			ImGui.SameLine();
-			AppButton(resourceManager.InternalResources.InfoTexture, "About"u8, () => aboutWindow.Show = true);
+			AppButton(resourceManager.InternalResources.InfoTexture, "About"u8, _showAboutWindow);
 
 			ImGui.SameLine();
 			AppButton(resourceManager.InternalResources.CloseTexture, "Exit application"u8, () => ShouldClose = true);
@@ -60,64 +88,33 @@ internal sealed class MainWindow(
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 40);
 			if (ImGui.BeginChild("ToolButtons", mainButtonsSize))
 			{
-				ToolButton(GetColor(Colors.SpawnsetEditor.Primary), "Spawnset Editor"u8, GoToSpawnsetEditor, ref _hoveredButtonAction, RenderSpawnsetEditorPreview);
-				ToolButton(GetColor(Colors.AssetEditor.Primary), "Asset Editor"u8, GoToAssetEditor, ref _hoveredButtonAction, RenderAssetEditorPreview);
-				ToolButton(GetColor(Colors.ReplayEditor.Primary), "Replay Editor"u8, GoToReplayEditor, ref _hoveredButtonAction, RenderReplayEditorPreview);
+				ToolButton(GetColor(Colors.SpawnsetEditor), "Spawnset Editor", _goToSpawnsetEditor, StringResources.DescriptionSpawnsetEditor);
+				ToolButton(GetColor(Colors.AssetEditor), "Asset Editor", _goToAssetEditor, StringResources.DescriptionAssetEditor);
+				ToolButton(GetColor(Colors.ReplayEditor), "Replay Editor", _goToReplayEditor, StringResources.DescriptionReplayEditor);
 
 				ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 16);
-				ToolButton(GetColor(Colors.CustomLeaderboards.Primary), "Custom Leaderboards"u8, GoToCustomLeaderboards, ref _hoveredButtonAction, RenderCustomLeaderboardsPreview);
-				ToolButton(GetColor(Colors.Practice.Primary), "Practice"u8, GoToPractice, ref _hoveredButtonAction, RenderPracticePreview);
-				ToolButton(GetColor(Colors.ModManager.Primary), "Mod Manager"u8, GoToModManager, ref _hoveredButtonAction, RenderModManagerPreview);
+				ToolButton(GetColor(Colors.CustomLeaderboards), "Custom Leaderboards", _goToCustomLeaderboards, StringResources.DescriptionCustomLeaderboards);
+				ToolButton(GetColor(Colors.Practice), "Practice", _goToPractice, StringResources.DescriptionPractice);
+				ToolButton(GetColor(Colors.ModManager), "Mod Manager", _goToModManager, StringResources.DescriptionModManager);
 
-				static Color GetColor(Color primary)
+				static Color GetColor(ColorConfiguration colorConfiguration)
 				{
 					const byte buttonAlpha = 127;
 					const float buttonColorDesaturation = 0.3f;
-					return primary.Desaturate(buttonColorDesaturation).Darken(0.2f) with { A = buttonAlpha };
-				}
-
-				void GoToSpawnsetEditor()
-				{
-					uiLayoutManager.Layout = LayoutType.SpawnsetEditor;
-				}
-
-				void GoToAssetEditor()
-				{
-					uiLayoutManager.Layout = LayoutType.AssetEditor;
-				}
-
-				void GoToReplayEditor()
-				{
-					uiLayoutManager.Layout = LayoutType.ReplayEditor;
-				}
-
-				void GoToCustomLeaderboards()
-				{
-					uiLayoutManager.Layout = LayoutType.CustomLeaderboards;
-					leaderboardListChild.LoadAll();
-				}
-
-				void GoToPractice()
-				{
-					uiLayoutManager.Layout = LayoutType.Practice;
-				}
-
-				void GoToModManager()
-				{
-					uiLayoutManager.Layout = LayoutType.ModManager;
-					modsDirectoryLogic.LoadModsDirectory();
+					return colorConfiguration.Primary.Desaturate(buttonColorDesaturation).Darken(0.2f) with { A = buttonAlpha };
 				}
 			}
 
 			ImGui.EndChild();
 
-			if (_hoveredButtonAction != null)
+			if (_hoverText is { } hoverText)
 			{
 				ImGui.SameLine();
 				if (ImGui.BeginChild("Preview", previewSize))
 				{
 					ImGui.PushTextWrapPos(previewSize.X - 16);
-					_hoveredButtonAction.Invoke();
+					ImGuiExt.Title(hoverText.Title, fontService.GoetheBold30);
+					ImGui.Text(hoverText.Description);
 					ImGui.PopTextWrapPos();
 				}
 
@@ -138,7 +135,7 @@ internal sealed class MainWindow(
 			ImGui.SetTooltip(tooltip);
 	}
 
-	private void ToolButton(Color color, ReadOnlySpan<byte> text, Action action, ref Action? hoveredAction, Action onHover)
+	private void ToolButton(Color color, string text, Action action, string description)
 	{
 		ImGui.PushStyleColor(ImGuiCol.Button, color);
 		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color + new Vector4(0, 0, 0, 0.2f));
@@ -154,7 +151,7 @@ internal sealed class MainWindow(
 		ImGui.PopStyleVar();
 
 		if (ImGui.IsItemHovered())
-			hoveredAction = onHover;
+			_hoverText = new HoverText(text, description);
 
 		if (clicked)
 			action.Invoke();
@@ -162,140 +159,5 @@ internal sealed class MainWindow(
 		ImGui.Spacing();
 	}
 
-	private void RenderSpawnsetEditorPreview()
-	{
-		ImGuiExt.Title("Spawnset Editor"u8, fontService.GoetheBold30);
-		ImGui.Text("""
-			WORK IN PROGRESS
-
-			Create and edit custom spawnsets (levels) for Devil Daggers.
-
-			Some things you can do:
-			- Create your own set of enemy spawns.
-			- Create a custom arena.
-			- Start with any hand upgrade.
-			- Give yourself 10,000 homing daggers.
-			- Use the Time Attack game mode, where the goal is to kill all enemies as fast as possible.
-			- Use the Race game mode, where the goal is to reach the dagger as fast as possible.
-
-			Be sure to check out the custom leaderboards to see what's possible.
-
-			Note that using custom spawnsets will not submit your score to the official leaderboards.
-
-			Spawnsets can only be used to practice the main game and play custom levels. They cannot be used to cheat and are completely safe to use.
-			""");
-	}
-
-	private void RenderAssetEditorPreview()
-	{
-		ImGuiExt.Title("Asset Editor"u8, fontService.GoetheBold30);
-		ImGui.Text("""
-			WORK IN PROGRESS
-
-			Create and edit mods for Devil Daggers.
-
-			The following assets can be changed:
-			- Audio
-			- Meshes
-			- Object bindings
-			- Shaders
-			- Textures
-
-			Some mods are prohibited, meaning that you cannot submit scores over 1000 seconds with them.
-			""");
-	}
-
-	private void RenderReplayEditorPreview()
-	{
-		ImGuiExt.Title("Replay Editor"u8, fontService.GoetheBold30);
-		ImGui.Text("""
-			WORK IN PROGRESS
-
-			Create, analyze, and edit replays for Devil Daggers.
-
-			You can download replays from the official leaderboards and save them as a local replay.
-
-			This tool will likely not be useful for most players; it is mostly intended to figure out how some things in the game work.
-
-			It could be used to:
-			- Figure out how homing daggers, gems, or certain enemies behave under certain conditions, since their behavior is implicit and cannot reliably be modified using replays.
-			- Figure out how certain movement techniques work in more detail (for optimizing race spawnsets).
-			- Detect cheated replays (for example, shotgun tech intervals could be analyzed to detect if a player is using a macro).
-			""");
-	}
-
-	private void RenderCustomLeaderboardsPreview()
-	{
-		ImGuiExt.Title("Custom Leaderboards"u8, fontService.GoetheBold30);
-		ImGui.Text("""
-			WINDOWS ONLY (FOR NOW)
-
-			Custom leaderboards are leaderboards for custom spawnsets.
-
-			All game modes are supported:
-			- Survival
-			- Time Attack
-			- Race
-
-			Leaderboards can be sorted by:
-			- Time
-			- Gems collected
-			- Gems despawned
-			- Gems eaten
-			- Enemies killed
-			- Enemies alive
-			- Homing stored
-			- Homing eaten
-
-			Criteria can also be set for custom leaderboards, meaning that in order to submit a score, it has to meet all the criteria.
-
-			This applies to almost every stat in the game, including specific enemy kill counts.
-
-			Examples:
-			- Gems eaten must be less than 30
-			- Squid I kills must be equal to 0
-			- Skull II kills must be greater than or equal to 3
-			- Daggers fired must be less than gems collected + 2
-			- Skull III kills must be greater than Skull I kills + Skull II kills
-			""");
-	}
-
-	private void RenderPracticePreview()
-	{
-		ImGuiExt.Title("Practice"u8, fontService.GoetheBold30);
-		ImGui.Text("""
-			Practice the main game by starting at any point in time with any hand upgrade and amount of gems/homing, using custom spawnsets that are automatically generated.
-
-			Save templates to quickly load your desired practice settings.
-
-			View live data from the current run:
-			- Splits
-			- Homing usage
-			- Gem collection
-
-			Note that using practice will not submit your score to the official leaderboards.
-
-			Spawnsets can only be used to practice the main game and play custom levels. They cannot be used to cheat and are completely safe to use.
-			""");
-	}
-
-	private void RenderModManagerPreview()
-	{
-		ImGuiExt.Title("Mod Manager"u8, fontService.GoetheBold30);
-		ImGui.Text("""
-			WORK IN PROGRESS
-
-			View all currently installed mods.
-
-			Enable/disable mods and change their load order to further customize the game.
-
-			Browse and find new mods to install directly from the devildaggers.info website.
-
-			View which assets are contained in each mod, and which ones are prohibited for 1000+ scores.
-
-			Enable/disable prohibited assets for each mod.
-
-			View all effective game assets and their source mod, including whether they're being overridden by another mod.
-			""");
-	}
+	private readonly record struct HoverText(string Title, string Description);
 }
