@@ -17,34 +17,6 @@ internal sealed class MainWindow(
 	ModsDirectoryLogic modsDirectoryLogic,
 	FontService fontService)
 {
-	// App buttons
-	private readonly Action _showUpdatesWindow = () => updateWindow.Show = true;
-
-	private readonly Action _goToConfiguration = () => uiLayoutManager.Layout = LayoutType.Config;
-
-	private readonly Action _showAboutWindow = () => aboutWindow.Show = true;
-
-	// Tool buttons
-	private readonly Action _goToSpawnsetEditor = () => uiLayoutManager.Layout = LayoutType.SpawnsetEditor;
-
-	private readonly Action _goToAssetEditor = () => uiLayoutManager.Layout = LayoutType.AssetEditor;
-
-	private readonly Action _goToReplayEditor = () => uiLayoutManager.Layout = LayoutType.ReplayEditor;
-
-	private readonly Action _goToCustomLeaderboards = () =>
-	{
-		uiLayoutManager.Layout = LayoutType.CustomLeaderboards;
-		leaderboardListChild.LoadAll();
-	};
-
-	private readonly Action _goToPractice = () => uiLayoutManager.Layout = LayoutType.Practice;
-
-	private readonly Action _goToModManager = () =>
-	{
-		uiLayoutManager.Layout = LayoutType.ModManager;
-		modsDirectoryLogic.LoadModsDirectory();
-	};
-
 	private readonly string _version = $"{AssemblyUtils.EntryAssemblyVersionString} (ALPHA)";
 
 	private HoverText? _hoverText;
@@ -74,28 +46,46 @@ internal sealed class MainWindow(
 			ImGui.Text("Developed by Noah Stolk");
 
 			ImGui.SetCursorPos(new Vector2(windowSize.X - 208, 8));
-			AppButton(resourceManager.InternalResources.DownloadTexture, "Updates"u8, _showUpdatesWindow);
+			if (AppButton(resourceManager.InternalResources.DownloadTexture, "Updates"u8))
+				updateWindow.Show = true;
 
 			ImGui.SameLine();
-			AppButton(resourceManager.InternalResources.ConfigurationTexture, "Configuration"u8, _goToConfiguration);
+			if (AppButton(resourceManager.InternalResources.ConfigurationTexture, "Configuration"u8))
+				uiLayoutManager.Layout = LayoutType.Config;
 
 			ImGui.SameLine();
-			AppButton(resourceManager.InternalResources.InfoTexture, "About"u8, _showAboutWindow);
+			if (AppButton(resourceManager.InternalResources.InfoTexture, "About"u8))
+				aboutWindow.Show = true;
 
 			ImGui.SameLine();
-			AppButton(resourceManager.InternalResources.CloseTexture, "Exit application"u8, () => ShouldClose = true);
+			if (AppButton(resourceManager.InternalResources.CloseTexture, "Exit application"u8))
+				ShouldClose = true;
 
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 40);
 			if (ImGui.BeginChild("ToolButtons", mainButtonsSize))
 			{
-				ToolButton(GetColor(Colors.SpawnsetEditor), "Spawnset Editor", _goToSpawnsetEditor, StringResources.DescriptionSpawnsetEditor);
-				ToolButton(GetColor(Colors.AssetEditor), "Asset Editor", _goToAssetEditor, StringResources.DescriptionAssetEditor);
-				ToolButton(GetColor(Colors.ReplayEditor), "Replay Editor", _goToReplayEditor, StringResources.DescriptionReplayEditor);
+				if (ToolButton(GetColor(Colors.SpawnsetEditor), "Spawnset Editor", StringResources.DescriptionSpawnsetEditor))
+					uiLayoutManager.Layout = LayoutType.SpawnsetEditor;
+				if (ToolButton(GetColor(Colors.AssetEditor), "Asset Editor", StringResources.DescriptionAssetEditor))
+					uiLayoutManager.Layout = LayoutType.AssetEditor;
+				if (ToolButton(GetColor(Colors.ReplayEditor), "Replay Editor", StringResources.DescriptionReplayEditor))
+					uiLayoutManager.Layout = LayoutType.ReplayEditor;
 
 				ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 16);
-				ToolButton(GetColor(Colors.CustomLeaderboards), "Custom Leaderboards", _goToCustomLeaderboards, StringResources.DescriptionCustomLeaderboards);
-				ToolButton(GetColor(Colors.Practice), "Practice", _goToPractice, StringResources.DescriptionPractice);
-				ToolButton(GetColor(Colors.ModManager), "Mod Manager", _goToModManager, StringResources.DescriptionModManager);
+				if (ToolButton(GetColor(Colors.CustomLeaderboards), "Custom Leaderboards", StringResources.DescriptionCustomLeaderboards))
+				{
+					uiLayoutManager.Layout = LayoutType.CustomLeaderboards;
+					leaderboardListChild.LoadAll();
+				}
+
+				if (ToolButton(GetColor(Colors.Practice), "Practice", StringResources.DescriptionPractice))
+					uiLayoutManager.Layout = LayoutType.Practice;
+
+				if (ToolButton(GetColor(Colors.ModManager), "Mod Manager", StringResources.DescriptionModManager))
+				{
+					uiLayoutManager.Layout = LayoutType.ModManager;
+					modsDirectoryLogic.LoadModsDirectory();
+				}
 
 				static Color GetColor(ColorConfiguration colorConfiguration)
 				{
@@ -125,17 +115,21 @@ internal sealed class MainWindow(
 		ImGui.End();
 	}
 
-	private static void AppButton(Texture icon, ReadOnlySpan<byte> tooltip, Action action)
+	private static bool AppButton(Texture icon, ReadOnlySpan<byte> tooltip)
 	{
+		bool returnValue = false;
+
 		Vector2 iconSize = new(36);
 		if (ImGuiImage.ImageButton(tooltip, icon.Id, iconSize))
-			action();
+			returnValue = true;
 
 		if (ImGui.IsItemHovered())
 			ImGui.SetTooltip(tooltip);
+
+		return returnValue;
 	}
 
-	private void ToolButton(Color color, string text, Action action, string description)
+	private bool ToolButton(Color color, string title, string description)
 	{
 		ImGui.PushStyleColor(ImGuiCol.Button, color);
 		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color + new Vector4(0, 0, 0, 0.2f));
@@ -144,19 +138,18 @@ internal sealed class MainWindow(
 		ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, 2);
 
 		ImGuiExt.PushFont(fontService.GoetheBold20);
-		bool clicked = ImGui.Button(text, new Vector2(198, 48));
+		bool returnValue = ImGui.Button(title, new Vector2(198, 48));
 		ImGui.PopFont();
 
 		ImGui.PopStyleColor(4);
 		ImGui.PopStyleVar();
 
 		if (ImGui.IsItemHovered())
-			_hoverText = new HoverText(text, description);
-
-		if (clicked)
-			action.Invoke();
+			_hoverText = new HoverText(title, description);
 
 		ImGui.Spacing();
+
+		return returnValue;
 	}
 
 	private readonly record struct HoverText(string Title, string Description);
