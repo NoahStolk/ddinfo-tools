@@ -5,7 +5,7 @@ using Silk.NET.OpenGL;
 
 namespace DevilDaggersInfo.Tools;
 
-internal unsafe class FramebufferData(GL gl, ILogger logger)
+internal sealed unsafe class FramebufferData(GL gl, ILogger logger)
 {
 	public uint TextureHandle { get; private set; }
 	public uint Framebuffer { get; private set; }

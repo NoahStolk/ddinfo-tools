@@ -3,7 +3,7 @@ using DevilDaggersInfo.Tools.Engine.Content;
 
 namespace DevilDaggersInfo.Tools;
 
-internal record ContentContainer(
+internal sealed record ContentContainer(
 	SpawnsetBinary DefaultSpawnset,
 	TextureContent IconMaskCrosshairTexture,
 	TextureContent IconMaskDaggerTexture,

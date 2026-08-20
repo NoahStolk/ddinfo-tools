@@ -1,6 +1,6 @@
 namespace DevilDaggersInfo.Tools.Networking;
 
-internal record ApiResult<TResult>
+internal sealed record ApiResult<TResult>
 	where TResult : class
 {
 	private readonly bool _success;
