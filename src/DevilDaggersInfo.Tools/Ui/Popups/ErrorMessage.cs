@@ -3,25 +3,15 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
-internal sealed class ErrorMessage : Popup
+internal sealed class ErrorMessage(string id, string errorText, string? technicalDetails = null) : Popup(id)
 {
-	private readonly string _errorText;
-	private readonly string? _technicalDetails;
-
-	public ErrorMessage(string id, string errorText, string? technicalDetails = null)
-		: base(id)
-	{
-		_errorText = errorText;
-		_technicalDetails = technicalDetails;
-	}
-
 	public override bool Render()
 	{
-		ImGui.TextWrapped(_errorText);
+		ImGui.TextWrapped(errorText);
 
-		if (_technicalDetails != null && ImGui.CollapsingHeader("Technical details"))
+		if (technicalDetails != null && ImGui.CollapsingHeader("Technical details"))
 		{
-			ImGui.TextWrapped(_technicalDetails);
+			ImGui.TextWrapped(technicalDetails);
 		}
 
 		ImGui.Spacing();

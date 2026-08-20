@@ -4,18 +4,11 @@ using System.Runtime.InteropServices;
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main.Data;
 
 [StructLayout(LayoutKind.Sequential)]
-internal record struct PracticeState
+internal record struct PracticeState(HandLevel HandLevel, int AdditionalGems, float TimerStart)
 {
-	public HandLevel HandLevel;
-	public int AdditionalGems;
-	public float TimerStart;
-
-	public PracticeState(HandLevel handLevel, int additionalGems, float timerStart)
-	{
-		HandLevel = handLevel;
-		AdditionalGems = additionalGems;
-		TimerStart = timerStart;
-	}
+	public HandLevel HandLevel = HandLevel;
+	public int AdditionalGems = AdditionalGems;
+	public float TimerStart = TimerStart;
 
 	public static PracticeState Default => new(HandLevel.Level1, 0, 0);
 }

@@ -1,17 +1,9 @@
 namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis.Data;
 
-internal record struct SplitDataEntry
+internal record struct SplitDataEntry(int DisplayTimer, SplitDataEntryKind Kind, int? Homing, int? HomingPrevious)
 {
-	public int DisplayTimer;
-	public SplitDataEntryKind Kind;
-	public int? Homing;
-	public int? HomingPrevious;
-
-	public SplitDataEntry(int displayTimer, SplitDataEntryKind kind, int? homing, int? homingPrevious)
-	{
-		DisplayTimer = displayTimer;
-		Kind = kind;
-		Homing = homing;
-		HomingPrevious = homingPrevious;
-	}
+	public int DisplayTimer = DisplayTimer;
+	public SplitDataEntryKind Kind = Kind;
+	public int? Homing = Homing;
+	public int? HomingPrevious = HomingPrevious;
 }

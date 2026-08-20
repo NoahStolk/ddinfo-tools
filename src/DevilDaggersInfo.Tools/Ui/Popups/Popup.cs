@@ -1,13 +1,8 @@
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
-internal abstract class Popup
+internal abstract class Popup(string id)
 {
-	protected Popup(string id)
-	{
-		Id = $"{id}##{Guid.NewGuid()}";
-	}
-
-	public string Id { get; }
+	public string Id { get; } = $"{id}##{Guid.NewGuid()}";
 
 	public bool HasOpened { get; set; }
 

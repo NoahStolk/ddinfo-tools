@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.GameMemory;
 
-internal sealed class GameMemoryService
+internal sealed class GameMemoryService(INativeMemoryService nativeMemoryService)
 {
 	public const int StatsBufferSize = 112;
 
@@ -17,13 +17,6 @@ internal sealed class GameMemoryService
 	private long _memoryBlockAddress;
 	private Process? _process;
 
-	private readonly INativeMemoryService _nativeMemoryService;
-
-	public GameMemoryService(INativeMemoryService nativeMemoryService)
-	{
-		_nativeMemoryService = nativeMemoryService;
-	}
-
 	public MainBlock MainBlockPrevious { get; private set; }
 	public MainBlock MainBlock { get; private set; }
 
@@ -31,7 +24,7 @@ internal sealed class GameMemoryService
 
 	public void Initialize(long ddstatsMarkerOffset)
 	{
-		_process = _nativeMemoryService.GetDevilDaggersProcess();
+		_process = nativeMemoryService.GetDevilDaggersProcess();
 		if (_process?.MainModule == null)
 		{
 			IsInitialized = false;
@@ -39,7 +32,7 @@ internal sealed class GameMemoryService
 		else
 		{
 			_pointerBuffer.AsSpan().Clear();
-			_nativeMemoryService.ReadMemory(_process, _process.MainModule.BaseAddress.ToInt64() + ddstatsMarkerOffset, _pointerBuffer, 0, sizeof(long));
+			nativeMemoryService.ReadMemory(_process, _process.MainModule.BaseAddress.ToInt64() + ddstatsMarkerOffset, _pointerBuffer, 0, sizeof(long));
 			_memoryBlockAddress = BitConverter.ToInt64(_pointerBuffer);
 			IsInitialized = true;
 		}
@@ -50,7 +43,7 @@ internal sealed class GameMemoryService
 		if (_process == null)
 			return;
 
-		_nativeMemoryService.ReadMemory(_process, _memoryBlockAddress, _mainBuffer, 0, _mainBufferSize);
+		nativeMemoryService.ReadMemory(_process, _memoryBlockAddress, _mainBuffer, 0, _mainBufferSize);
 
 		MainBlockPrevious = MainBlock;
 		MainBlock = new MainBlock(_mainBuffer);
@@ -68,7 +61,7 @@ internal sealed class GameMemoryService
 		if (_process == null)
 			throw new InvalidOperationException("Cannot get stats buffer while the process is unavailable.");
 
-		_nativeMemoryService.ReadMemory(_process, MainBlock.StatsBase, buffer, 0, buffer.Length);
+		nativeMemoryService.ReadMemory(_process, MainBlock.StatsBase, buffer, 0, buffer.Length);
 	}
 
 	public bool IsReplayValid()
@@ -77,7 +70,7 @@ internal sealed class GameMemoryService
 			return false;
 
 		_replayIdentifierBuffer.AsSpan().Clear();
-		_nativeMemoryService.ReadMemory(_process, MainBlock.ReplayBase, _replayIdentifierBuffer, 0, _replayIdentifierBuffer.Length);
+		nativeMemoryService.ReadMemory(_process, MainBlock.ReplayBase, _replayIdentifierBuffer, 0, _replayIdentifierBuffer.Length);
 		return LocalReplayBinaryHeader.IdentifierIsValid(_replayIdentifierBuffer, out _);
 	}
 
@@ -87,7 +80,7 @@ internal sealed class GameMemoryService
 			return [];
 
 		byte[] buffer = new byte[MainBlock.ReplayLength];
-		_nativeMemoryService.ReadMemory(_process, MainBlock.ReplayBase, buffer, 0, buffer.Length);
+		nativeMemoryService.ReadMemory(_process, MainBlock.ReplayBase, buffer, 0, buffer.Length);
 
 		return buffer;
 	}
@@ -97,8 +90,8 @@ internal sealed class GameMemoryService
 		if (_process == null)
 			return;
 
-		_nativeMemoryService.WriteMemory(_process, MainBlock.ReplayBase, replay, 0, replay.Length);
-		_nativeMemoryService.WriteMemory(_process, _memoryBlockAddress + 312, BitConverter.GetBytes(replay.Length), 0, sizeof(int));
-		_nativeMemoryService.WriteMemory(_process, _memoryBlockAddress + 316, [1], 0, 1);
+		nativeMemoryService.WriteMemory(_process, MainBlock.ReplayBase, replay, 0, replay.Length);
+		nativeMemoryService.WriteMemory(_process, _memoryBlockAddress + 312, BitConverter.GetBytes(replay.Length), 0, sizeof(int));
+		nativeMemoryService.WriteMemory(_process, _memoryBlockAddress + 316, [1], 0, 1);
 	}
 }

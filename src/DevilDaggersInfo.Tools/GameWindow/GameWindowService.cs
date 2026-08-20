@@ -3,17 +3,10 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.GameWindow;
 
-internal sealed class GameWindowService
+internal sealed class GameWindowService(INativeWindowingService windowingService)
 {
-	private readonly INativeWindowingService _windowingService;
-
-	public GameWindowService(INativeWindowingService windowingService)
-	{
-		_windowingService = windowingService;
-	}
-
 	public Vector2 GetWindowPosition()
 	{
-		return _windowingService.GetWindowPosition();
+		return windowingService.GetWindowPosition();
 	}
 }

@@ -3,30 +3,21 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
-internal sealed class MessageWithHideOption : Popup
+internal sealed class MessageWithHideOption(string id, string text, Action<bool> setDoNotShowAgain, bool doNotShowAgain)
+	: Popup(id)
 {
-	private readonly string _text;
-	private readonly Action<bool> _setDoNotShowAgain;
-	private bool _doNotShowAgain;
-
-	public MessageWithHideOption(string id, string text, Action<bool> setDoNotShowAgain, bool doNotShowAgain)
-		: base(id)
-	{
-		_text = text;
-		_setDoNotShowAgain = setDoNotShowAgain;
-		_doNotShowAgain = doNotShowAgain;
-	}
+	private bool _doNotShowAgain = doNotShowAgain;
 
 	public override bool Render()
 	{
-		ImGui.TextWrapped(_text);
+		ImGui.TextWrapped(text);
 
 		ImGui.Spacing();
 		ImGui.Separator();
 		ImGui.Spacing();
 
 		if (ImGui.Checkbox("Do not show again", ref _doNotShowAgain))
-			_setDoNotShowAgain(_doNotShowAgain);
+			setDoNotShowAgain(_doNotShowAgain);
 
 		return ImGui.Button("OK", new Vector2(120, 0)) || ImGuiUtils.IsEnterPressed();
 	}

@@ -2,16 +2,7 @@ using DevilDaggersInfo.Core.Replay.Events.Data;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 
-internal record EditorEvent
+internal sealed record EditorEvent(int TickIndex, int? EntityId, IEventData Data)
 {
-	public EditorEvent(int tickIndex, int? entityId, IEventData data)
-	{
-		TickIndex = tickIndex;
-		EntityId = entityId;
-		Data = data;
-	}
-
-	public int TickIndex { get; }
-	public int? EntityId { get; set; }
-	public IEventData Data { get; }
+	public int? EntityId { get; set; } = EntityId;
 }

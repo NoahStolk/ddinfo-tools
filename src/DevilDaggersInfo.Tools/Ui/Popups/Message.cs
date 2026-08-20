@@ -3,19 +3,11 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
-internal sealed class Message : Popup
+internal sealed class Message(string id, string text) : Popup(id)
 {
-	private readonly string _text;
-
-	public Message(string id, string text)
-		: base(id)
-	{
-		_text = text;
-	}
-
 	public override bool Render()
 	{
-		ImGui.Text(_text);
+		ImGui.Text(text);
 
 		ImGui.Spacing();
 		ImGui.Separator();

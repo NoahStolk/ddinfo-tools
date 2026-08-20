@@ -3,23 +3,12 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
-internal sealed class Question : Popup
+internal sealed class Question(string id, string text, Action onConfirm, Action onDeny)
+	: Popup(id)
 {
-	private readonly string _text;
-	private readonly Action _onConfirm;
-	private readonly Action _onDeny;
-
-	public Question(string id, string text, Action onConfirm, Action onDeny)
-		: base(id)
-	{
-		_text = text;
-		_onConfirm = onConfirm;
-		_onDeny = onDeny;
-	}
-
 	public override bool Render()
 	{
-		ImGui.Text(_text);
+		ImGui.Text(text);
 
 		ImGui.Spacing();
 		ImGui.Separator();
@@ -29,7 +18,7 @@ internal sealed class Question : Popup
 
 		if (ImGui.Button("Yes", new Vector2(120, 0)))
 		{
-			_onConfirm();
+			onConfirm();
 			shouldExit = true;
 		}
 
@@ -37,7 +26,7 @@ internal sealed class Question : Popup
 
 		if (ImGui.Button("No", new Vector2(120, 0)))
 		{
-			_onDeny();
+			onDeny();
 			shouldExit = true;
 		}
 

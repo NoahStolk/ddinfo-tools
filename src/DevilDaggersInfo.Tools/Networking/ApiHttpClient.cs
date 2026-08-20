@@ -10,15 +10,8 @@ using System.Text.Json.Serialization.Metadata;
 
 namespace DevilDaggersInfo.Tools.Networking;
 
-internal sealed class ApiHttpClient
+internal sealed class ApiHttpClient(HttpClient client)
 {
-	private readonly HttpClient _client;
-
-	public ApiHttpClient(HttpClient client)
-	{
-		_client = client;
-	}
-
 	private async Task<HttpResponseMessage> SendRequest(HttpMethod httpMethod, string url, JsonContent? body = null)
 	{
 		using HttpRequestMessage request = new();
@@ -26,7 +19,7 @@ internal sealed class ApiHttpClient
 		request.Method = httpMethod;
 		request.Content = body;
 
-		return await _client.SendAsync(request);
+		return await client.SendAsync(request);
 	}
 
 	private async Task<T> SendGetRequest<T>(string url, JsonTypeInfo<T> jsonTypeInfo)
