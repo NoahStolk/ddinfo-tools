@@ -212,10 +212,12 @@ internal sealed class ImGuiController
 
 		_gl.BindTexture(TextureTarget.Texture2D, textureId);
 
-		_gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)GLEnum.Repeat);
-		_gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)GLEnum.Repeat);
-		_gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)GLEnum.Linear);
-		_gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)GLEnum.Linear);
+		int repeat = (int)GLEnum.Repeat;
+		int linear = (int)GLEnum.Linear;
+		_gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, in repeat);
+		_gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, in repeat);
+		_gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, in linear);
+		_gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, in linear);
 
 		(InternalFormat internalFormat, GLEnum sourceFormat) = GetTextureFormats(tex.Format);
 

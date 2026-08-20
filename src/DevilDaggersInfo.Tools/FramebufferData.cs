@@ -49,8 +49,10 @@ internal unsafe class FramebufferData(GL gl, ILogger logger)
 		TextureHandle = gl.GenTexture();
 		gl.BindTexture(TextureTarget.Texture2D, TextureHandle);
 		gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgb, (uint)Width, (uint)Height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, null);
-		gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)GLEnum.Linear);
-		gl.TexParameterI(TextureTarget.Texture2D, GLEnum.TextureMagFilter, (int)GLEnum.Linear);
+
+		int linear = (int)GLEnum.Linear;
+		gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, in linear);
+		gl.TexParameterI(TextureTarget.Texture2D, GLEnum.TextureMagFilter, in linear);
 		gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, TextureHandle, 0);
 
 		// The handle is kept so this renderbuffer can be deleted on the next resize. Deleting it here while it is attached
