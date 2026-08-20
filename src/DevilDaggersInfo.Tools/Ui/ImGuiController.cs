@@ -267,7 +267,7 @@ internal sealed class ImGuiController
 		};
 	}
 
-	private unsafe void SetUpRenderState(ImDrawDataPtr drawDataPtr)
+	private void SetUpRenderState(ImDrawDataPtr drawDataPtr)
 	{
 		// TODO: Will probably need to back up the GL state here so we can properly restore it after rendering.
 		// Set up render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled, polygon fill.

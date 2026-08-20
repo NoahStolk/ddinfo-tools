@@ -6,7 +6,6 @@ using DevilDaggersInfo.Core.Wiki.Objects;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;

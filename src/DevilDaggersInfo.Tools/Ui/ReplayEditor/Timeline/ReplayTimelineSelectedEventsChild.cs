@@ -5,7 +5,6 @@ using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
-using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
