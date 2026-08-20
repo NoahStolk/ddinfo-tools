@@ -11,12 +11,18 @@ public sealed class TextureLoader(GL gl)
 
 		gl.BindTexture(TextureTarget.Texture2D, textureId);
 
-		gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)GLEnum.ClampToEdge);
-		gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)GLEnum.ClampToEdge);
-		gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)GLEnum.LinearMipmapLinear);
-		gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)GLEnum.Linear);
-		gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
-		gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 8);
+		int textureWrapS = (int)GLEnum.ClampToEdge;
+		int textureWrapT = (int)GLEnum.ClampToEdge;
+		int textureMinFilter = (int)GLEnum.LinearMipmapLinear;
+		int textureMagFilter = (int)GLEnum.Linear;
+		int textureBaseLevel = 0;
+		int textureMaxLevel = 8;
+		gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, in textureWrapS);
+		gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, in textureWrapT);
+		gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, in textureMinFilter);
+		gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, in textureMagFilter);
+		gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, in textureBaseLevel);
+		gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, in textureMaxLevel);
 
 		fixed (byte* b = texture.Pixels)
 			gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgba, (uint)texture.Width, (uint)texture.Height, 0, GLEnum.Rgba, PixelType.UnsignedByte, b);

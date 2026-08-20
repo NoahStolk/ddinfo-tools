@@ -8,35 +8,35 @@ internal sealed class StateChild(RecordingLogic recordingLogic, GameMemoryServic
 {
 	public void Render()
 	{
-		if (ImGui.BeginTable("StateTable", 2, ImGuiTableFlags.None, new Vector2(288, 80)))
-		{
-			ImGui.TableSetupColumn(""u8, ImGuiTableColumnFlags.WidthFixed | ImGuiTableColumnFlags.NoHeaderLabel, 112);
+		if (!ImGui.BeginTable("StateTable", 2, ImGuiTableFlags.None, new Vector2(288, 80)))
+			return;
 
-			ImGui.TableNextColumn();
-			ImGui.Text("Memory");
-			ImGui.TableNextColumn();
-			ImGui.Text(gameMemoryServiceWrapper.Marker.HasValue ? Inline.Utf8($"0x{gameMemoryServiceWrapper.Marker.Value:X}") : "Waiting..."u8);
-			ImGui.TableNextRow();
+		ImGui.TableSetupColumn(""u8, ImGuiTableColumnFlags.WidthFixed | ImGuiTableColumnFlags.NoHeaderLabel, 112);
 
-			ImGui.TableNextColumn();
-			ImGui.Text("State");
-			ImGui.TableNextColumn();
-			ImGui.Text(recordingLogic.RecordingStateType.ToDisplayString());
-			ImGui.TableNextRow();
+		ImGui.TableNextColumn();
+		ImGui.Text("Memory");
+		ImGui.TableNextColumn();
+		ImGui.Text(gameMemoryServiceWrapper.Marker.HasValue ? Inline.Utf8($"0x{gameMemoryServiceWrapper.Marker.Value:X}") : "Waiting..."u8);
+		ImGui.TableNextRow();
 
-			ImGui.TableNextColumn();
-			ImGui.Text("Spawnset");
-			ImGui.TableNextColumn();
-			ImGui.Text(survivalFileWatcher.SpawnsetName ?? "(unknown)");
-			ImGui.TableNextRow();
+		ImGui.TableNextColumn();
+		ImGui.Text("State");
+		ImGui.TableNextColumn();
+		ImGui.Text(recordingLogic.RecordingStateType.ToDisplayString());
+		ImGui.TableNextRow();
 
-			ImGui.TableNextColumn();
-			ImGui.Text("Last upload");
-			ImGui.TableNextColumn();
-			ImGui.Text(DateTimeUtils.FormatTimeAgo(recordingLogic.LastSubmission));
-			ImGui.TableNextRow();
+		ImGui.TableNextColumn();
+		ImGui.Text("Spawnset");
+		ImGui.TableNextColumn();
+		ImGui.Text(survivalFileWatcher.SpawnsetName ?? "(unknown)");
+		ImGui.TableNextRow();
 
-			ImGui.EndTable();
-		}
+		ImGui.TableNextColumn();
+		ImGui.Text("Last upload");
+		ImGui.TableNextColumn();
+		ImGui.Text(DateTimeUtils.FormatTimeAgo(recordingLogic.LastSubmission));
+		ImGui.TableNextRow();
+
+		ImGui.EndTable();
 	}
 }
