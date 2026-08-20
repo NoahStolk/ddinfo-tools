@@ -4,7 +4,6 @@ using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Practice.Main.Data;
-using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -85,7 +84,7 @@ internal sealed class NoFarmTemplatesChild(PracticeLogic practiceLogic)
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 0));
 
-				ImGui.TextColored(noFarmTemplate.HandLevel.GetColor() with { A = textAlpha }, EnumUtils.HandLevelNames[noFarmTemplate.HandLevel]);
+				ImGui.TextColored(noFarmTemplate.HandLevel.GetColor() with { A = textAlpha }, noFarmTemplate.HandLevel.AsUtf8Span());
 				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(gemsOrHomingText).X - 8);
 				ImGui.TextColored(gemColor with { A = textAlpha }, gemsOrHomingText);
 			}

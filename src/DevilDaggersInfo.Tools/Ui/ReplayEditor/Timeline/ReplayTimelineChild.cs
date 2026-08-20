@@ -93,10 +93,9 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 			for (int i = 0; i < _shownEventTypes.Count; i++)
 			{
 				EventType eventType = _shownEventTypes[i];
-				string name = EnumUtils.EventTypeFriendlyNames[eventType];
 
 				ImGui.SetCursorScreenPos(origin + new Vector2(5, i * _markerSize + 5));
-				ImGui.TextColored(eventType.GetColor(), name);
+				ImGui.TextColored(eventType.GetColor(), eventType.AsUtf8DisplaySpan());
 
 				AddHorizontalLine(drawList, origin, i * _markerSize, legendWidth, _lineColorDefault);
 			}
@@ -197,8 +196,8 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 		if (isHovering)
 		{
 			ImGui.BeginTooltip();
-			ImGui.TextColored(eventType.GetColor(), EnumUtils.EventTypeFriendlyNames[eventType]);
-			if (ImGui.BeginTable(Inline.Utf8($"MarkerTooltipTable_{tickIndex}_{EnumUtils.EventTypeNames[eventType]}"), 2, ImGuiTableFlags.Borders))
+			ImGui.TextColored(eventType.GetColor(), eventType.AsUtf8DisplaySpan());
+			if (ImGui.BeginTable(Inline.Utf8($"MarkerTooltipTable_{tickIndex}_{eventType.AsUtf8Span()}"), 2, ImGuiTableFlags.Borders))
 			{
 				ImGui.TableNextColumn();
 				ImGui.Text("Event count");

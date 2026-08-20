@@ -3,7 +3,6 @@ using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.User.Settings.Model;
-using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
 using System.Diagnostics;
 using System.Numerics;
@@ -23,7 +22,7 @@ internal sealed class InputValuesChild(ResourceManager resourceManager, Practice
 			ImGui.Spacing();
 			ImGuiImage.Image(resourceManager.InternalResources.IconHandTexture.Id, new Vector2(16), practiceLogic.State.HandLevel.GetColor());
 			ImGui.SameLine();
-			foreach (HandLevel level in EnumUtils.HandLevels)
+			foreach (HandLevel level in HandLevelGen.Values)
 			{
 				if (ImGui.RadioButton(Inline.Utf8($"Lvl {(int)level}"), level == practiceLogic.State.HandLevel) && practiceLogic.State.HandLevel != level)
 					practiceLogic.State.HandLevel = level;

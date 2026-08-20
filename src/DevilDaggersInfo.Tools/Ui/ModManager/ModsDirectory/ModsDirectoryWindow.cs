@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Settings;
@@ -192,7 +193,7 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 
 				ImGui.TableNextColumn();
 				if (modFile.BinaryType.HasValue)
-					ImGui.Text(EnumUtils.ModBinaryTypeNames[modFile.BinaryType.Value]);
+					ImGui.Text(modFile.BinaryType.Value.AsUtf8LowerCaseSpan());
 
 				ImGui.TableNextColumn();
 				if (modFile is { AssetCount: not null, ProhibitedAssetCount: not null })

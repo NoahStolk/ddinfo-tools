@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Tools.Engine.Intersections;
-using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.User.Settings;
 using Hexa.NET.ImGui;

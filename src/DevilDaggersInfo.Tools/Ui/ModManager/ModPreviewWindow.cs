@@ -60,7 +60,7 @@ internal sealed class ModPreviewWindow(ModManagerState modManagerState, ModsDire
 			NextColumnText(Inline.Utf8(modManagerState.SelectedFileName));
 
 			NextColumnText("Binary type"u8);
-			NextColumnText(Inline.Utf8(EnumUtils.ModBinaryTypeNames[modBinaryType]));
+			NextColumnText(modBinaryType.AsUtf8LowerCaseSpan());
 
 			NextColumnText("File size"u8);
 			NextColumnText(FileSizeUtils.Format(modManagerState.ModFileSize ?? 0));
@@ -121,7 +121,7 @@ internal sealed class ModPreviewWindow(ModManagerState modManagerState, ModsDire
 				ImGui.Text(tocEntry.Name);
 
 				ImGui.TableNextColumn();
-				ImGui.TextColored(tocEntry.AssetType.GetColor(), EnumUtils.AssetTypeNames[tocEntry.AssetType]);
+				ImGui.TextColored(tocEntry.AssetType.GetColor(), tocEntry.AssetType.AsUtf8Span());
 
 				ImGui.TableNextColumn();
 				if (AssetContainer.IsProhibited(tocEntry.AssetType, tocEntry.Name))

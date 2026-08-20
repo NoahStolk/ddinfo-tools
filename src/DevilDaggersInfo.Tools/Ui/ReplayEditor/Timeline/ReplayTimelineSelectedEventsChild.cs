@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Events.Data;
+using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
@@ -11,9 +12,6 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 
 internal sealed class ReplayTimelineSelectedEventsChild
 {
-	private static readonly string[] _jumpTypeNamesArray = EnumUtils.JumpTypeNames.Values.ToArray();
-	private static readonly string[] _shootTypeNamesArray = EnumUtils.ShootTypeNames.Values.ToArray();
-
 	private readonly List<EditorEvent> _checkedEvents = [];
 
 	public void Render(EditorReplayModel replay, List<EditorEvent> selectedEvents, int selectedTick, Action<EditorReplayModel, int> selectEvents)
@@ -45,11 +43,11 @@ internal sealed class ReplayTimelineSelectedEventsChild
 			ImGui.TableNextColumn();
 			UtilsRendering.Checkbox(selectedTick, "Backward"u8, ref e.Backward, "On"u8, "Off"u8);
 			ImGui.TableNextColumn();
-			UtilsRendering.InputByteEnum(selectedTick, "Jump"u8, ref e.Jump, EnumUtils.JumpTypes, _jumpTypeNamesArray);
+			UtilsRendering.InputByteEnum(selectedTick, "Jump"u8, ref e.Jump, JumpTypeGen.Values, JumpTypeGen.NullTerminatedMemberNames);
 			ImGui.TableNextColumn();
-			UtilsRendering.InputByteEnum(selectedTick, "Shoot"u8, ref e.Shoot, EnumUtils.ShootTypes, _shootTypeNamesArray);
+			UtilsRendering.InputByteEnum(selectedTick, "Shoot"u8, ref e.Shoot, ShootTypeGen.Values, ShootTypeGen.NullTerminatedMemberNames);
 			ImGui.TableNextColumn();
-			UtilsRendering.InputByteEnum(selectedTick, "ShootHoming"u8, ref e.ShootHoming, EnumUtils.ShootTypes, _shootTypeNamesArray);
+			UtilsRendering.InputByteEnum(selectedTick, "ShootHoming"u8, ref e.ShootHoming, ShootTypeGen.Values, ShootTypeGen.NullTerminatedMemberNames);
 			ImGui.TableNextColumn();
 			UtilsRendering.InputShort(selectedTick, "MouseX"u8, ref e.MouseX);
 			ImGui.TableNextColumn();
@@ -127,7 +125,7 @@ internal sealed class ReplayTimelineSelectedEventsChild
 
 				bool temp = _checkedEvents.Contains(replayEvent);
 				ImGui.PushStyleColor(ImGuiCol.Text, eventType.GetColor());
-				if (ImGui.Checkbox(Inline.Utf8($"{EnumUtils.EventTypeFriendlyNames[eventType]}##EventCheckbox{i}"), ref temp))
+				if (ImGui.Checkbox(Inline.Utf8($"{eventType.AsUtf8DisplaySpan()}##EventCheckbox{i}"), ref temp))
 				{
 					if (temp)
 						_checkedEvents.Add(replayEvent);

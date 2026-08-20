@@ -1,5 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
-using DevilDaggersInfo.Tools.Utils;
+using DevilDaggersInfo.Core.Replay.Events.Enums;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -7,8 +7,6 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 
 internal static class SpiderSpawn
 {
-	private static readonly string[] _spiderTypeNamesArray = EnumUtils.SpiderTypeNames.Values.ToArray();
-
 	public static void RenderEdit(int uniqueId, SpiderSpawnEventData e)
 	{
 		const float leftColumnWidth = 120;
@@ -27,7 +25,7 @@ internal static class SpiderSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("Type");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputByteEnum(uniqueId, "SpiderType"u8, ref e.SpiderType, EnumUtils.SpiderTypes, _spiderTypeNamesArray);
+				UtilsRendering.InputByteEnum(uniqueId, "SpiderType"u8, ref e.SpiderType, SpiderTypeGen.Values, SpiderTypeGen.NullTerminatedMemberNames);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Position");

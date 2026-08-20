@@ -11,7 +11,7 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 
 internal static class UtilsRendering
 {
-	public static unsafe void InputByteEnum<TEnum>(int uniqueId, ReadOnlySpan<byte> fieldName, ref TEnum value, IReadOnlyList<TEnum> values, string[] names)
+	public static unsafe void InputByteEnum<TEnum>(int uniqueId, ReadOnlySpan<byte> fieldName, ref TEnum value, IReadOnlyList<TEnum> values, ReadOnlySpan<byte> nullTerminatedMemberNames)
 		where TEnum : Enum
 	{
 		ImGui.PushItemWidth(-1);
@@ -29,7 +29,7 @@ internal static class UtilsRendering
 
 		fixed (byte* label = EditLabel(fieldName, uniqueId))
 		{
-			if (ImGui.Combo(label, ref index, names, values.Count))
+			if (ImGui.Combo(label, ref index, nullTerminatedMemberNames, values.Count))
 				value = values[index];
 		}
 
@@ -110,7 +110,7 @@ internal static class UtilsRendering
 		ImGui.Text(" (");
 		ImGui.SameLine();
 		EntityType? entityType = replay.GetEntityTypeIncludingNegated(entityId);
-		ImGui.TextColored(entityType.GetColor(), entityType.HasValue ? EnumUtils.EntityTypeShortNames[entityType.Value] : "???");
+		ImGui.TextColored(entityType.GetColor(), entityType.HasValue ? entityType.Value.AsUtf8ShortSpan() : "???"u8);
 		ImGui.SameLine();
 		ImGui.Text(")");
 

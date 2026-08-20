@@ -2,7 +2,6 @@ using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
-using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -36,9 +35,9 @@ internal sealed class CurrentSpawnsetChild(FontService fontService, SurvivalFile
 					ImGui.TableNextColumn();
 					Color handColor = survivalFileWatcher.EffectivePlayerSettings.HandLevel.GetColor();
 					if (survivalFileWatcher.EffectivePlayerSettings.HandLevel != survivalFileWatcher.EffectivePlayerSettings.HandMesh)
-						ImGui.TextColored(handColor, Inline.Utf8($"{EnumUtils.HandLevelNames[survivalFileWatcher.EffectivePlayerSettings.HandLevel]} ({EnumUtils.HandLevelNames[survivalFileWatcher.EffectivePlayerSettings.HandMesh]} hand mesh)"));
+						ImGui.TextColored(handColor, Inline.Utf8($"{survivalFileWatcher.EffectivePlayerSettings.HandLevel.AsUtf8Span()} ({survivalFileWatcher.EffectivePlayerSettings.HandMesh.AsUtf8Span()} hand mesh)"));
 					else
-						ImGui.TextColored(handColor, EnumUtils.HandLevelNames[survivalFileWatcher.EffectivePlayerSettings.HandLevel]);
+						ImGui.TextColored(handColor, survivalFileWatcher.EffectivePlayerSettings.HandLevel.AsUtf8Span());
 
 					ImGui.TableNextColumn();
 					ImGui.Text("Gems/Homing");

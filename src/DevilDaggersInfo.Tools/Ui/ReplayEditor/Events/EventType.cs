@@ -1,5 +1,8 @@
+using EnumGenerator;
+
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 
+[GenerateEnumUtilities]
 internal enum EventType
 {
 	BoidSpawn,

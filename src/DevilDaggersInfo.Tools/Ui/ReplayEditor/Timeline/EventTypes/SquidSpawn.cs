@@ -1,5 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
-using DevilDaggersInfo.Tools.Utils;
+using DevilDaggersInfo.Core.Replay.Events.Enums;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -7,8 +7,6 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 
 internal static class SquidSpawn
 {
-	private static readonly string[] _squidTypeNamesArray = EnumUtils.SquidTypeNames.Values.ToArray();
-
 	public static void RenderEdit(int uniqueId, SquidSpawnEventData e)
 	{
 		const float leftColumnWidth = 120;
@@ -27,7 +25,7 @@ internal static class SquidSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("Type");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputByteEnum(uniqueId, "SquidType"u8, ref e.SquidType, EnumUtils.SquidTypes, _squidTypeNamesArray);
+				UtilsRendering.InputByteEnum(uniqueId, "SquidType"u8, ref e.SquidType, SquidTypeGen.Values, SquidTypeGen.NullTerminatedMemberNames);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("?");

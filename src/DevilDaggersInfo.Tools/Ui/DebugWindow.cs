@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Common;
+using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.Encryption;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
@@ -6,7 +7,6 @@ using DevilDaggersInfo.Tools.GameWindow;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
-using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
 using Serilog;
 using Silk.NET.GLFW;
@@ -60,7 +60,7 @@ internal sealed class DebugWindow(
 			{
 				if (survivalFileWatcher.Exists)
 				{
-					ImGui.Text(EnumUtils.HandLevelNames[survivalFileWatcher.HandLevel]);
+					ImGui.Text(survivalFileWatcher.HandLevel.AsUtf8Span());
 					ImGui.Text(Inline.Utf8(survivalFileWatcher.AdditionalGems));
 					ImGui.Text(Inline.Utf8(survivalFileWatcher.TimerStart, StringFormats.TimeFormat));
 				}
@@ -212,12 +212,12 @@ internal sealed class DebugWindow(
 		if (ImGui.BeginTable("GLFW keys", 8))
 		{
 			ImGui.TableNextRow();
-			for (int i = 0; i < EnumUtils.KeyNames.Count; i++)
+			for (int i = 0; i < KeysGen.Values.Count; i++)
 			{
-				Keys key = EnumUtils.Keys[i];
+				Keys key = KeysGen.Values[i];
 				bool isDown = glfwInput.IsKeyDown(key);
 				ImGui.TableNextColumn();
-				ImGui.TextColored(isDown ? Color.White : Color.Gray(0.4f), EnumUtils.KeyNames[key]);
+				ImGui.TextColored(isDown ? Color.White : Color.Gray(0.4f), key.AsUtf8Span());
 			}
 
 			ImGui.EndTable();

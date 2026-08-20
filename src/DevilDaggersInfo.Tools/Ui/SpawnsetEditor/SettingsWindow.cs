@@ -1,8 +1,8 @@
 using DevilDaggersInfo.Core.Spawnset;
+using DevilDaggersInfo.Core.Spawnset.Extensions;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
-using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
 using System.Diagnostics;
 using System.Numerics;
@@ -83,7 +83,7 @@ internal sealed class SettingsWindow(FileStates fileStates, SpawnsetSaver spawns
 		ImGui.Text("Supported in game version:");
 
 		SpawnsetSupportedGameVersion supportedGameVersion = fileStates.Spawnset.Object.GetSupportedGameVersion();
-		ImGui.Text(EnumUtils.SpawnsetSupportedGameVersionNames[supportedGameVersion]);
+		ImGui.Text(supportedGameVersion.ToDisplayString());
 	}
 
 	private void RenderGameMode()
@@ -94,7 +94,7 @@ internal sealed class SettingsWindow(FileStates fileStates, SpawnsetSaver spawns
 		ImGui.Separator();
 		ImGui.Indent(8);
 
-		foreach (GameMode gameMode in EnumUtils.GameModes)
+		foreach (GameMode gameMode in GameModeGen.Values)
 		{
 			ReadOnlySpan<byte> displayGameMode = gameMode switch
 			{
@@ -181,9 +181,9 @@ internal sealed class SettingsWindow(FileStates fileStates, SpawnsetSaver spawns
 		ImGui.Separator();
 		ImGui.Indent(8);
 
-		for (int i = 0; i < EnumUtils.HandLevels.Count; i++)
+		for (int i = 0; i < HandLevelGen.Values.Count; i++)
 		{
-			HandLevel level = EnumUtils.HandLevels[i];
+			HandLevel level = HandLevelGen.Values[i];
 			if (ImGui.RadioButton(Inline.Utf8($"Lvl {(int)level}"), level == fileStates.Spawnset.Object.HandLevel) && fileStates.Spawnset.Object.HandLevel != level)
 			{
 				fileStates.Spawnset.Update(fileStates.Spawnset.Object with { HandLevel = level });

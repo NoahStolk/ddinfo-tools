@@ -1,10 +1,10 @@
 using DevilDaggersInfo.Core.Common;
+using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Practice.Main.Data;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.User.Settings.Model;
-using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -63,7 +63,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 	private void RenderTemplateButton(UserSettingsPracticeTemplate customTemplate, float templateWidth)
 	{
 		Vector2 buttonSize = new(templateWidth - 96, 48);
-		ReadOnlySpan<byte> buttonName = Inline.Utf8($"{EnumUtils.HandLevelNames[customTemplate.HandLevel]}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart}");
+		ReadOnlySpan<byte> buttonName = Inline.Utf8($"{customTemplate.HandLevel.AsUtf8Span()}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart}");
 
 		Color color = Color.White;
 
@@ -100,7 +100,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 0));
 
-				ImGui.TextColored(customTemplate.HandLevel.GetColor() with { A = textAlpha }, EnumUtils.HandLevelNames[customTemplate.HandLevel]);
+				ImGui.TextColored(customTemplate.HandLevel.GetColor() with { A = textAlpha }, customTemplate.HandLevel.AsUtf8Span());
 				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(gemsOrHomingText).X - 8);
 				ImGui.TextColored(gemColor with { A = textAlpha }, gemsOrHomingText);
 			}

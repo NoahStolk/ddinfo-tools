@@ -131,7 +131,7 @@ internal static class HitEventExplanation
 
 		static void TextEntityType(EntityType entityType, int entityId)
 		{
-			ImGui.TextColored(entityType.GetColor(), Inline.Utf8($"{EnumUtils.EntityTypeShortNames[entityType]}"));
+			ImGui.TextColored(entityType.GetColor(), entityType.AsUtf8ShortSpan());
 			ImGui.SameLine();
 			ImGui.TextColored(Color.Gray(0.5f), Inline.Utf8($"(id {Math.Abs(entityId)})"));
 		}

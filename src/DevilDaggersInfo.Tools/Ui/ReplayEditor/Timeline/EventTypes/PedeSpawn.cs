@@ -1,5 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
-using DevilDaggersInfo.Tools.Utils;
+using DevilDaggersInfo.Core.Replay.Events.Enums;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -7,8 +7,6 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 
 internal static class PedeSpawn
 {
-	private static readonly string[] _pedeTypeNamesArray = EnumUtils.PedeTypeNames.Values.ToArray();
-
 	public static void RenderEdit(int uniqueId, PedeSpawnEventData e)
 	{
 		const float leftColumnWidth = 120;
@@ -27,7 +25,7 @@ internal static class PedeSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("Type");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputByteEnum(uniqueId, "PedeType"u8, ref e.PedeType, EnumUtils.PedeTypes, _pedeTypeNamesArray);
+				UtilsRendering.InputByteEnum(uniqueId, "PedeType"u8, ref e.PedeType, PedeTypeGen.Values, PedeTypeGen.NullTerminatedMemberNames);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("?");

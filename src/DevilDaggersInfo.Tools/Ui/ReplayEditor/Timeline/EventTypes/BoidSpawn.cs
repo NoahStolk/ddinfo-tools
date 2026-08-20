@@ -1,6 +1,6 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
+using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
-using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -8,8 +8,6 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 
 internal static class BoidSpawn
 {
-	private static readonly string[] _boidTypeNamesArray = EnumUtils.BoidTypeNames.Values.ToArray();
-
 	public static void RenderEdit(int uniqueId, BoidSpawnEventData e, EditorReplayModel replay)
 	{
 		const float leftColumnWidth = 120;
@@ -33,7 +31,7 @@ internal static class BoidSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("Type");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputByteEnum(uniqueId, "BoidType"u8, ref e.BoidType, EnumUtils.BoidTypes, _boidTypeNamesArray);
+				UtilsRendering.InputByteEnum(uniqueId, "BoidType"u8, ref e.BoidType, BoidTypeGen.Values, BoidTypeGen.NullTerminatedMemberNames);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("Position");

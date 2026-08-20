@@ -89,7 +89,7 @@ internal static class EventTypeRendererUtils
 
 		ImGui.Text(" (");
 		ImGui.SameLine();
-		ImGui.TextColored(entityType.GetColor(), entityType.HasValue ? EnumUtils.EntityTypeShortNames[entityType.Value] : "???");
+		ImGui.TextColored(entityType.GetColor(), entityType.HasValue ? entityType.Value.AsUtf8ShortSpan() : "???"u8);
 		ImGui.SameLine();
 		ImGui.Text(")");
 

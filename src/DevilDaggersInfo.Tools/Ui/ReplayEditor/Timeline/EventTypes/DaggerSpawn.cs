@@ -1,4 +1,6 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
+using DevilDaggersInfo.Core.Replay.Events.Enums;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
 using System.Numerics;
@@ -7,17 +9,6 @@ namespace DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline.EventTypes;
 
 internal static class DaggerSpawn
 {
-	private static readonly string[] _daggerTypeNamesArray =
-	[
-		"Lvl1",
-		"Lvl2",
-		"Lvl3",
-		"Lvl3 Homing",
-		"Lvl4",
-		"Lvl4 Homing",
-		"Lvl4 Splash",
-	];
-
 	public static void RenderEdit(int uniqueId, DaggerSpawnEventData e)
 	{
 		const float leftColumnWidth = 120;
@@ -36,7 +27,7 @@ internal static class DaggerSpawn
 				ImGui.TableNextColumn();
 				ImGui.Text("Type");
 				ImGui.TableNextColumn();
-				UtilsRendering.InputByteEnum(uniqueId, "DaggerType"u8, ref e.DaggerType, EnumUtils.DaggerTypes, _daggerTypeNamesArray);
+				UtilsRendering.InputByteEnum(uniqueId, "DaggerType"u8, ref e.DaggerType, DaggerTypeGen.Values, DaggerType.DaggerTypeNullTerminatedDisplayNames);
 
 				ImGui.TableNextColumn();
 				ImGui.Text("?");

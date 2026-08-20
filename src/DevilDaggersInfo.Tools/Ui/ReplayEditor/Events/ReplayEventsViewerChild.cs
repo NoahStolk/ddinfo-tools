@@ -33,9 +33,9 @@ internal sealed class ReplayEventsViewerChild
 
 	private void ToggleAll(bool enabled)
 	{
-		for (int i = 0; i < EnumUtils.EventTypes.Count; i++)
+		for (int i = 0; i < EventTypeGen.Values.Count; i++)
 		{
-			EventType eventType = EnumUtils.EventTypes[i];
+			EventType eventType = EventTypeGen.Values[i];
 			_eventTypeEnabled[eventType] = enabled;
 		}
 	}
@@ -94,15 +94,15 @@ internal sealed class ReplayEventsViewerChild
 			if (ImGui.BeginChild("EventTypeFiltering", new Vector2(0, height)))
 			{
 				const int checkboxesPerRow = 7;
-				int rows = (int)Math.Ceiling((float)EnumUtils.EventTypes.Count / checkboxesPerRow);
+				int rows = (int)Math.Ceiling((float)EventTypeGen.Values.Count / checkboxesPerRow);
 				for (int i = 0; i < rows; i++)
 				{
 					if (ImGui.BeginChild(Inline.Utf8($"EventTypeFiltering{i}"), new Vector2(256, filteringHeight)))
 					{
 						int start = i * checkboxesPerRow;
-						for (int j = start; j < Math.Min(EnumUtils.EventTypes.Count, start + checkboxesPerRow); j++)
+						for (int j = start; j < Math.Min(EventTypeGen.Values.Count, start + checkboxesPerRow); j++)
 						{
-							EventType eventType = EnumUtils.EventTypes[j];
+							EventType eventType = EventTypeGen.Values[j];
 							bool temp = _eventTypeEnabled[eventType];
 							if (ImGui.Checkbox(EventTypeRendererUtils.EventTypeNames[eventType], ref temp))
 								_eventTypeEnabled[eventType] = temp;
@@ -175,7 +175,7 @@ internal sealed class ReplayEventsViewerChild
 			}
 
 			ImGui.TableNextColumn();
-			ImGui.TextColored(eventType.GetColor(), EnumUtils.EventTypeFriendlyNames[eventType]);
+			ImGui.TextColored(eventType.GetColor(), eventType.AsUtf8DisplaySpan());
 
 			ImGui.TableNextColumn();
 			switch (replayEvent.Data)

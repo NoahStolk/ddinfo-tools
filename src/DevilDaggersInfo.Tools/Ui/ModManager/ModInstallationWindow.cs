@@ -3,7 +3,6 @@ using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
-using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -111,7 +110,7 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 						ImGui.TextColored(isDisabled ? disabledColor : Color.White, effectiveAsset.TocEntry.Name);
 
 						ImGui.TableNextColumn();
-						ImGui.TextColored(isDisabled ? disabledColor : effectiveAsset.TocEntry.AssetType.GetColor(), EnumUtils.AssetTypeNames[effectiveAsset.TocEntry.AssetType]);
+						ImGui.TextColored(isDisabled ? disabledColor : effectiveAsset.TocEntry.AssetType.GetColor(), effectiveAsset.TocEntry.AssetType.AsUtf8Span());
 
 						ImGui.TableNextColumn();
 						if (isOverridden)

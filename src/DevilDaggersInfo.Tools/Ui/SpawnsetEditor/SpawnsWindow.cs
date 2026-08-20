@@ -7,7 +7,6 @@ using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
-using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -246,7 +245,7 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 
 				ImGui.TableNextColumn();
 
-				ImGui.TextColored(spawn.EnemyType.GetColor(GameConstants.CurrentVersion), EnumUtils.EnemyTypeNames[spawn.EnemyType]);
+				ImGui.TextColored(spawn.EnemyType.GetColor(GameConstants.CurrentVersion), spawn.EnemyType.AsUtf8Span());
 				ImGui.TableNextColumn();
 
 				ImGui.Text(Inline.Utf8(spawn.Seconds, StringFormats.TimeFormat));
@@ -277,18 +276,18 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 			if (!_delayEdited)
 				_editDelay = (float)spawn.Delay;
 
-			ImGui.Text(Inline.Utf8($"Edit #{spawn.Index} ({EnumUtils.EnemyTypeNames[spawn.EnemyType]} at {spawn.Seconds:0.0000})"));
+			ImGui.Text(Inline.Utf8($"Edit #{spawn.Index} ({spawn.EnemyType.AsUtf8Span()} at {spawn.Seconds:0.0000})"));
 
-			for (int i = 0; i < EnumUtils.EnemyTypes.Count; i++)
+			for (int i = 0; i < EnemyTypeGen.Values.Count; i++)
 			{
-				EnemyType enemyType = EnumUtils.EnemyTypes[i];
+				EnemyType enemyType = EnemyTypeGen.Values[i];
 				Color color = enemyType.GetColor(GameConstants.CurrentVersion);
 				ImGui.PushStyleColor(ImGuiCol.Text, color.ToEngineColor().ReadableColorForBrightness());
 				ImGui.PushStyleColor(ImGuiCol.Button, color);
 				ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color + new Vector4(0.3f, 0.3f, 0.3f, 0));
 				ImGui.PushStyleColor(ImGuiCol.ButtonActive, color + new Vector4(0.5f, 0.5f, 0.5f, 0));
 
-				if (ImGui.Button(EnumUtils.EnemyTypeNames[enemyType], new Vector2(96, 18)))
+				if (ImGui.Button(enemyType.AsUtf8Span(), new Vector2(96, 18)))
 				{
 					SaveEditedSpawn(spawn.Index, enemyType, _editDelay);
 					saved = true;

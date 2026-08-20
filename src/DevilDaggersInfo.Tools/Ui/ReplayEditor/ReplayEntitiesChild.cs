@@ -77,7 +77,7 @@ internal sealed class ReplayEntitiesChild(ResourceManager resourceManager)
 							_enemyHitLog = EnemyHitLogBuilder.Build(replay.Cache.Events, i);
 
 						ImGui.TableNextColumn();
-						ImGui.TextColored(entityType.GetColor(), EnumUtils.EntityTypeShortNames[entityType.Value]);
+						ImGui.TextColored(entityType.GetColor(), entityType.Value.AsUtf8ShortSpan());
 					}
 
 					ImGui.EndTable();
@@ -107,7 +107,7 @@ internal sealed class ReplayEntitiesChild(ResourceManager resourceManager)
 		{
 			ImGui.Text("NOTE: This feature is a work in progress and not entirely accurate for some enemy types.");
 
-			ImGui.Text(Inline.Utf8($"Enemy hit log for {EnumUtils.EntityTypeShortNames[_enemyHitLog.EntityType]} (id {_enemyHitLog.EntityId}):"));
+			ImGui.Text(Inline.Utf8($"Enemy hit log for {_enemyHitLog.EntityType.AsUtf8ShortSpan()} (id {_enemyHitLog.EntityId}):"));
 
 			int initialHp = _enemyHitLog.EntityType.GetInitialHp();
 			if (ImGui.BeginTable("EnemyHitLog", 5, ImGuiTableFlags.SizingStretchSame))
@@ -143,7 +143,7 @@ internal sealed class ReplayEntitiesChild(ResourceManager resourceManager)
 					ImGui.TableNextColumn();
 					ImGui.TextColored(hit.Damage > 0 ? Color.Red : Color.White, Inline.Utf8(hit.Damage));
 					ImGui.TableNextColumn();
-					ImGui.Text(EnumUtils.DaggerTypeNames[hit.DaggerType]);
+					ImGui.Text(hit.DaggerType.AsUtf8Span());
 					ImGui.TableNextColumn();
 					ImGui.Text(Inline.Utf8(hit.UserData));
 				}
