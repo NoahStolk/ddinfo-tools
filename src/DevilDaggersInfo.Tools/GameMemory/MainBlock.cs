@@ -199,6 +199,7 @@ internal readonly record struct MainBlock
 
 		ProhibitedMods = br.ReadBoolean();
 
+		// Not available on Linux?
 		br.BaseStream.Seek(3, SeekOrigin.Current);
 
 		ReplayBase = br.ReadInt64();

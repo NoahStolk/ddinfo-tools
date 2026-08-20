@@ -7,10 +7,44 @@ namespace DevilDaggersInfo.Tools.NativeInterface.Services.Linux;
 internal sealed partial class LinuxMemoryService(ILogger logger) : INativeMemoryService
 {
 	private bool _loggedReadFailure;
+	private bool _loggedWriteFailure;
 
 	public void WriteMemory(Process process, long address, byte[] bytes, int offset, int size)
 	{
-		// TODO: Implement.
+		// Mirror ReadMemory in not turning an empty request into a pointer into an empty array.
+		if (size <= 0)
+			return;
+
+		nint bytesWritten;
+		unsafe
+		{
+			fixed (byte* localBase = &bytes[offset])
+			{
+				IoVec local = new() { Base = localBase, Len = (nuint)size };
+				IoVec remote = new() { Base = (byte*)address, Len = (nuint)size };
+				bytesWritten = ProcessVmWritev(process.Id, &local, 1, &remote, 1, 0);
+			}
+		}
+
+		if (bytesWritten == size)
+		{
+			_loggedWriteFailure = false;
+			return;
+		}
+
+		if (_loggedWriteFailure)
+			return;
+
+		_loggedWriteFailure = true;
+		if (bytesWritten < 0)
+		{
+			int errno = Marshal.GetLastPInvokeError();
+			logger.Error("Could not write game memory: process_vm_writev failed with errno {Errno} ({Message}). If this is EPERM (1), the kernel is likely blocking the write; see /proc/sys/kernel/yama/ptrace_scope.", errno, Marshal.GetPInvokeErrorMessage(errno));
+		}
+		else
+		{
+			logger.Error("Could not write game memory: process_vm_writev wrote {BytesWritten} of {Size} requested bytes.", bytesWritten, size);
+		}
 	}
 
 	public void ReadMemory(Process process, long address, byte[] bytes, int offset, int size)
@@ -65,6 +99,16 @@ internal sealed partial class LinuxMemoryService(ILogger logger) : INativeMemory
 	[LibraryImport("libc", EntryPoint = "process_vm_readv", SetLastError = true)]
 	[DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
 	private static unsafe partial nint ProcessVmReadv(
+		int pid,
+		IoVec* localIov,
+		nuint liovcnt,
+		IoVec* remoteIov,
+		nuint riovcnt,
+		nuint flags);
+
+	[LibraryImport("libc", EntryPoint = "process_vm_writev", SetLastError = true)]
+	[DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
+	private static unsafe partial nint ProcessVmWritev(
 		int pid,
 		IoVec* localIov,
 		nuint liovcnt,

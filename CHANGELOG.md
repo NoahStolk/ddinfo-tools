@@ -5,6 +5,7 @@
 ### Added
 
 - Added support for reading game memory on Linux, which enables live run data (splits, homing usage, gem collection) in the practice tool.
+- Added support for writing game memory on Linux, which enables replay playback from the replay editor and the custom leaderboards.
 
 ### Fixed
 
