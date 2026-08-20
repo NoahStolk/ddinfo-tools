@@ -152,6 +152,12 @@ internal sealed class RecordingLogic(
 
 	private void UploadRun(MainBlock runToUpload)
 	{
+		if (!encryptionService.IsAvailable)
+		{
+			logger.Warning("Encryption is not available. Skipping upload...");
+			return;
+		}
+
 		byte[] timeAsBytes = BitConverter.GetBytes(runToUpload.Time);
 		byte[] levelUpTime2AsBytes = BitConverter.GetBytes(runToUpload.LevelUpTime2);
 		byte[] levelUpTime3AsBytes = BitConverter.GetBytes(runToUpload.LevelUpTime3);
