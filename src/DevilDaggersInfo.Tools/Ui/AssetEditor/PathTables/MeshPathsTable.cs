@@ -45,7 +45,7 @@ internal sealed class MeshPathsTable(FileStates fileStates, INativeFileDialog na
 			fileStates.Mod.Object.Meshes.Add(path);
 		}
 
-		nativeFileDialog.CreateOpenFileDialog(path.SetPath, PathUtils.GetFileFilter(path.AssetType));
+		nativeFileDialog.CreateOpenFileDialog(path.SetPath, PathUtils.GetFileFilter(AssetType.Mesh));
 	}
 
 	public void Sort(uint sorting, bool sortAscending)

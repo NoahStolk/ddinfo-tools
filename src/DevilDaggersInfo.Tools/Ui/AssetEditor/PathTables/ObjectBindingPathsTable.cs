@@ -45,7 +45,7 @@ internal sealed class ObjectBindingPathsTable(FileStates fileStates, INativeFile
 			fileStates.Mod.Object.ObjectBindings.Add(path);
 		}
 
-		nativeFileDialog.CreateOpenFileDialog(path.SetPath, PathUtils.GetFileFilter(path.AssetType));
+		nativeFileDialog.CreateOpenFileDialog(path.SetPath, PathUtils.GetFileFilter(AssetType.ObjectBinding));
 	}
 
 	public void Sort(uint sorting, bool sortAscending)

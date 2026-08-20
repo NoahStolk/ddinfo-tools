@@ -1,13 +1,7 @@
-using DevilDaggersInfo.Core.Asset;
-using System.Text.Json.Serialization;
-
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 
-internal record ShaderAssetPath(string AssetName, string? AbsoluteVertexPath, string? AbsoluteFragmentPath) : IAssetPath
+internal sealed record ShaderAssetPath(string AssetName, string? AbsoluteVertexPath, string? AbsoluteFragmentPath) : IAssetPath
 {
-	[JsonIgnore]
-	public AssetType AssetType => AssetType.Shader;
-
 	public string? AbsoluteVertexPath { get; private set; } = AbsoluteVertexPath;
 
 	public string? AbsoluteFragmentPath { get; private set; } = AbsoluteFragmentPath;

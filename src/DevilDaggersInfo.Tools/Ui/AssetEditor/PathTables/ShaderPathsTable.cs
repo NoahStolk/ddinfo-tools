@@ -55,7 +55,7 @@ internal sealed class ShaderPathsTable(FileStates fileStates, INativeFileDialog 
 			fileStates.Mod.Object.Shaders.Add(path);
 		}
 
-		nativeFileDialog.CreateOpenFileDialog(path.SetVertexPath, PathUtils.GetFileFilter(path.AssetType));
+		nativeFileDialog.CreateOpenFileDialog(path.SetVertexPath, PathUtils.GetFileFilter(AssetType.Shader));
 	}
 
 	private void SetFragmentPath(ShaderAssetInfo assetInfo, ShaderAssetPath? path)
@@ -66,7 +66,7 @@ internal sealed class ShaderPathsTable(FileStates fileStates, INativeFileDialog 
 			fileStates.Mod.Object.Shaders.Add(path);
 		}
 
-		nativeFileDialog.CreateOpenFileDialog(path.SetFragmentPath, PathUtils.GetFileFilter(path.AssetType));
+		nativeFileDialog.CreateOpenFileDialog(path.SetFragmentPath, PathUtils.GetFileFilter(AssetType.Shader));
 	}
 
 	public void Sort(uint sorting, bool sortAscending)

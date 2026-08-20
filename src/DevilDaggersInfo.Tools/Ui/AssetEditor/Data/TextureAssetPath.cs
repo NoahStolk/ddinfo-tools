@@ -1,13 +1,7 @@
-using DevilDaggersInfo.Core.Asset;
-using System.Text.Json.Serialization;
-
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 
-internal record TextureAssetPath(string AssetName, string? AbsolutePath) : IAssetPath
+internal sealed record TextureAssetPath(string AssetName, string? AbsolutePath) : IAssetPath
 {
-	[JsonIgnore]
-	public AssetType AssetType => AssetType.Texture;
-
 	public string? AbsolutePath { get; private set; } = AbsolutePath;
 
 	public void SetPath(string? path)

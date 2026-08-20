@@ -45,7 +45,7 @@ internal sealed class TexturePathsTable(FileStates fileStates, INativeFileDialog
 			fileStates.Mod.Object.Textures.Add(path);
 		}
 
-		nativeFileDialog.CreateOpenFileDialog(path.SetPath, PathUtils.GetFileFilter(path.AssetType));
+		nativeFileDialog.CreateOpenFileDialog(path.SetPath, PathUtils.GetFileFilter(AssetType.Texture));
 	}
 
 	public void Sort(uint sorting, bool sortAscending)

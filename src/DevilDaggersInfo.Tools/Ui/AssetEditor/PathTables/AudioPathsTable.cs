@@ -59,7 +59,7 @@ internal sealed class AudioPathsTable(FileStates fileStates, INativeFileDialog n
 			fileStates.Mod.Object.Audio.Add(path);
 		}
 
-		nativeFileDialog.CreateOpenFileDialog(path.SetPath, PathUtils.GetFileFilter(path.AssetType));
+		nativeFileDialog.CreateOpenFileDialog(path.SetPath, PathUtils.GetFileFilter(AssetType.Audio));
 	}
 
 	private void SetLoudness(AudioAssetInfo assetInfo, AudioAssetPath? path, float? loudness)

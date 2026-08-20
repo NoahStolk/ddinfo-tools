@@ -1,13 +1,7 @@
-using DevilDaggersInfo.Core.Asset;
-using System.Text.Json.Serialization;
-
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 
-internal record AudioAssetPath(string AssetName, string? AbsolutePath, float? Loudness) : IAssetPath
+internal sealed record AudioAssetPath(string AssetName, string? AbsolutePath, float? Loudness) : IAssetPath
 {
-	[JsonIgnore]
-	public AssetType AssetType => AssetType.Audio;
-
 	public string? AbsolutePath { get; private set; } = AbsolutePath;
 	public float? Loudness { get; private set; } = Loudness;
 
