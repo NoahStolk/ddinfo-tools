@@ -240,12 +240,15 @@ internal sealed class GraphsChild(FontService fontService)
 		float posX = ImGui.GetCursorPosX();
 
 		ImGui.TextColored(textColor, textLeft);
-		ImGui.SameLine();
 
 		float textWidth = ImGui.CalcTextSize(textRight).X;
 
-		ImGui.SetCursorPosX(posX + 160 - textWidth);
+		// Right-align through SameLine's offset rather than SetCursorPosX. The previous form ended on a bare
+		// SetCursorPosX with no item submitted after it, and Dear ImGui 1.92 asserts on exactly that inside
+		// EndTooltip: it cannot tell whether the tooltip should grow to cover a position nothing was drawn at.
+		// The assert calls abort(), so hovering a Run Analysis graph killed the process outright.
+		// The trailing reset was redundant - Text() already returns the cursor to the start of the next line.
+		ImGui.SameLine(posX + 160 - textWidth);
 		ImGui.Text(textRight);
-		ImGui.SetCursorPosX(posX);
 	}
 }
