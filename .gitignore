@@ -267,3 +267,6 @@ __pycache__/
 appsettings.json
 appsettings.Development.json
 encryption.ini
+
+# macOS Finder metadata
+.DS_Store

@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.GameMemory;
+using DevilDaggersInfo.Tools.NativeInterface.Services;
 using DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis.Data;
 using Hexa.NET.ImGui;
 
@@ -32,8 +33,18 @@ internal sealed class RunAnalysisWindow(GameMemoryServiceWrapper gameMemoryServi
 		ImGuiUtils.SetNextWindowMinSize(512, 1024);
 		if (ImGui.Begin("Run Analysis"))
 		{
-			_splitsChild.Render(StatsData);
-			_graphsChild.Render(StatsData);
+			// Windows and Linux only ever resolve to Unresolved or Resolved, so this only ever substitutes the
+			// splits/graphs children for a status message on macOS - their "game not running" screen (Unresolved,
+			// same as before this branch existed) is untouched.
+			if (gameMemoryService.BlockAddressStatus is BlockAddressStatus.MemoryUnreadable or BlockAddressStatus.BlockNotFound)
+			{
+				ImGui.TextWrapped(Inline.Utf8(gameMemoryServiceWrapper.DescribeUnavailability()));
+			}
+			else
+			{
+				_splitsChild.Render(StatsData);
+				_graphsChild.Render(StatsData);
+			}
 		}
 
 		ImGui.End();

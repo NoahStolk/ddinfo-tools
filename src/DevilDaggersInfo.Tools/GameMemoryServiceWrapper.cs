@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.GameMemory;
+using DevilDaggersInfo.Tools.NativeInterface.Services;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
 using DevilDaggersInfo.Tools.Platforms;
@@ -19,12 +20,14 @@ internal sealed class GameMemoryServiceWrapper(
 	public long? Marker { get; private set; }
 
 	/// <summary>
-	/// Scans game memory. If the marker is not known, fires the call to retrieve it, then returns false because memory can't be scanned until the HTTP call has returned successfully.
+	/// Scans game memory. On platforms that need the marker offset from the API, and where it is not known yet, fires the call to retrieve it and then returns false, because memory can't be scanned until the HTTP call has returned successfully.
 	/// </summary>
-	/// <returns>Whether the marker is known.</returns>
+	/// <returns>Whether memory could be scanned. Always true on platforms that have no marker offset to wait for; use <see cref="GameMemory.GameMemoryService.BlockAddressStatus" /> to find out how the scan itself went.</returns>
 	public bool Scan()
 	{
-		if (!Marker.HasValue)
+		// Not every platform locates the block by reading a pointer at an offset the API supplies; the ones that search
+		// the game's memory for it have nothing to download and nothing to wait for, and leave Marker null forever.
+		if (gameMemoryService.RequiresMarkerOffset && !Marker.HasValue)
 		{
 			if (!_tryDownloadMarker)
 				return false;
@@ -34,10 +37,27 @@ internal sealed class GameMemoryServiceWrapper(
 		}
 
 		// Always initialize the process, so we detach properly when the game exits.
-		gameMemoryService.Initialize(Marker.Value);
+		gameMemoryService.Initialize(Marker);
 		gameMemoryService.Scan();
 
 		return true;
+	}
+
+	/// <summary>
+	/// Explains why the ddstats block is not available, so that a refusal to read the game's memory - which on macOS
+	/// almost always means the app was not launched under sudo - is never presented to the user the same way as the
+	/// game simply not running.
+	/// </summary>
+	public string DescribeUnavailability()
+	{
+		return gameMemoryService.BlockAddressStatus switch
+		{
+			BlockAddressStatus.MemoryUnreadable =>
+				"The game's memory could not be read. On macOS, reading another program's memory requires administrator rights: quit ddinfo-tools and start it again with sudo. This only affects practice mode's live stats - the spawnset editor, asset editor, replay editor, mod manager, and custom leaderboards do not need it.",
+			BlockAddressStatus.BlockNotFound =>
+				"The game's memory was read, but holds no stats block yet. Start a run, or check that the game is a version this app knows.",
+			_ => "Devil Daggers is not running.",
+		};
 	}
 
 	private void InitializeMarker()

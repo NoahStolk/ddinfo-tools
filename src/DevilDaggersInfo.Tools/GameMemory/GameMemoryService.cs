@@ -8,10 +8,7 @@ internal sealed class GameMemoryService(INativeMemoryService nativeMemoryService
 {
 	public const int StatsBufferSize = 112;
 
-	private const int _mainBufferSize = 319;
-
-	private readonly byte[] _pointerBuffer = new byte[sizeof(long)];
-	private readonly byte[] _mainBuffer = new byte[_mainBufferSize];
+	private readonly byte[] _mainBuffer = new byte[MainBlock.Size];
 	private readonly byte[] _replayIdentifierBuffer = new byte[LocalReplayBinaryHeader.IdentifierLength];
 
 	private long _memoryBlockAddress;
@@ -22,20 +19,38 @@ internal sealed class GameMemoryService(INativeMemoryService nativeMemoryService
 
 	public bool IsInitialized { get; private set; }
 
-	public void Initialize(long ddstatsMarkerOffset)
+	/// <summary>
+	/// Whether <see cref="Initialize" /> needs the ddstats marker offset from the API on this platform.
+	/// </summary>
+	public bool RequiresMarkerOffset => nativeMemoryService.RequiresMarkerOffset;
+
+	/// <summary>
+	/// Why the address of the ddstats block is or is not known, so a game whose memory is off limits can be told apart
+	/// from a game that simply has no block to read.
+	/// </summary>
+	public BlockAddressStatus BlockAddressStatus { get; private set; }
+
+	/// <summary>
+	/// The address of the ddstats block; only meaningful while <see cref="BlockAddressStatus" /> is
+	/// <see cref="BlockAddressStatus.Resolved" />.
+	/// </summary>
+	public long BlockAddress => _memoryBlockAddress;
+
+	public void Initialize(long? ddstatsMarkerOffset)
 	{
 		_process = nativeMemoryService.GetDevilDaggersProcess();
-		if (_process?.MainModule == null)
+		if (_process == null)
 		{
+			BlockAddressStatus = BlockAddressStatus.Unresolved;
 			IsInitialized = false;
+			return;
 		}
-		else
-		{
-			_pointerBuffer.AsSpan().Clear();
-			nativeMemoryService.ReadMemory(_process, _process.MainModule.BaseAddress.ToInt64() + ddstatsMarkerOffset, _pointerBuffer, 0, sizeof(long));
-			_memoryBlockAddress = BitConverter.ToInt64(_pointerBuffer);
-			IsInitialized = true;
-		}
+
+		BlockAddressResult blockAddressResult = nativeMemoryService.ResolveBlockAddress(_process, ddstatsMarkerOffset);
+		BlockAddressStatus = blockAddressResult.Status;
+		IsInitialized = blockAddressResult.Status == BlockAddressStatus.Resolved;
+		if (IsInitialized)
+			_memoryBlockAddress = blockAddressResult.Address;
 	}
 
 	public void Scan()
@@ -43,7 +58,7 @@ internal sealed class GameMemoryService(INativeMemoryService nativeMemoryService
 		if (_process == null)
 			return;
 
-		nativeMemoryService.ReadMemory(_process, _memoryBlockAddress, _mainBuffer, 0, _mainBufferSize);
+		nativeMemoryService.ReadMemory(_process, _memoryBlockAddress, _mainBuffer, 0, MainBlock.Size);
 
 		MainBlockPrevious = MainBlock;
 		MainBlock = new MainBlock(_mainBuffer);
