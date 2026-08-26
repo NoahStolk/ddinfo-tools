@@ -1,11 +1,22 @@
 #pragma warning disable IDE1006 // Naming Styles
 
+using System.Buffers.Binary;
 using System.Text;
 
 namespace DevilDaggersInfo.Tools.GameMemory;
 
 internal readonly record struct MainBlock
 {
+	/// <summary>
+	/// The size of the whole block, in bytes.
+	/// </summary>
+	public const int Size = 319;
+
+	private const int _formatVersionOffset = 12;
+	private const int _playerNameOffset = 20;
+	private const int _replayPlayerNameOffset = 176;
+	private const int _nameFieldSize = 32;
+
 	public readonly string Marker = string.Empty;
 	public readonly int FormatVersion;
 
@@ -208,6 +219,38 @@ internal readonly record struct MainBlock
 		PlayReplayFromMemory = br.ReadBoolean();
 		GameMode = br.ReadByte();
 		TimeAttackOrRaceFinished = br.ReadBoolean();
+	}
+
+	/// <summary>
+	/// The bytes the game writes at the start of the block. Platforms with no marker offset to fetch find the block by
+	/// searching the game's memory for these.
+	/// </summary>
+	public static ReadOnlySpan<byte> MarkerBytes => "__ddstats__"u8;
+
+	/// <summary>
+	/// Whether <paramref name="buffer" /> holds a ddstats block, rather than one of the other copies of the marker
+	/// bytes lying around in the process - the game's own string literal, for one.
+	/// </summary>
+	/// <remarks>
+	/// This is only needed by platforms that find the block by searching for it; reading a pointer at the marker offset
+	/// cannot land on the wrong candidate. It also guarantees the constructor can parse the buffer: the name fields are
+	/// read up to their null terminator, and a buffer without one would throw.
+	/// </remarks>
+	public static bool IsValid(ReadOnlySpan<byte> buffer)
+	{
+		if (buffer.Length < Size)
+			return false;
+
+		if (!buffer[..MarkerBytes.Length].SequenceEqual(MarkerBytes) || buffer[MarkerBytes.Length] != 0)
+			return false;
+
+		// Every build whose layout is known writes 1 here. Allow a bump so a future one is not rejected out of hand,
+		// but not the arbitrary bytes that follow a stray copy of the marker.
+		int formatVersion = BinaryPrimitives.ReadInt32LittleEndian(buffer[_formatVersionOffset..]);
+		if (formatVersion is < 1 or > 1000)
+			return false;
+
+		return buffer.Slice(_playerNameOffset, _nameFieldSize).Contains((byte)0) && buffer.Slice(_replayPlayerNameOffset, _nameFieldSize).Contains((byte)0);
 	}
 
 	private static string Utf8StringFromBytes(byte[] bytes)

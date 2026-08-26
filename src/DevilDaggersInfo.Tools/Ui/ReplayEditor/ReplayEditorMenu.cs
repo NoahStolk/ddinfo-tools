@@ -3,6 +3,7 @@ using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.GameMemory;
+using DevilDaggersInfo.Tools.NativeInterface.Services;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Utils;
@@ -120,7 +121,7 @@ internal sealed class ReplayEditorMenu(
 	{
 		if (!gameMemoryServiceWrapper.Scan() || !gameMemoryService.IsInitialized)
 		{
-			popupManager.ShowError("Could not read replay from game memory. Make sure the game is running.");
+			popupManager.ShowError(DescribeGameMemoryUnavailable("Could not read replay from game memory."));
 			return;
 		}
 
@@ -160,11 +161,23 @@ internal sealed class ReplayEditorMenu(
 	{
 		if (!gameMemoryServiceWrapper.Scan() || !gameMemoryService.IsInitialized)
 		{
-			popupManager.ShowError("Could not inject replay into game memory. Make sure the game is running.");
+			popupManager.ShowError(DescribeGameMemoryUnavailable("Could not inject replay into game memory."));
 			return;
 		}
 
 		gameMemoryService.WriteReplayToMemory(fileStates.Replay.Object.ToLocalReplay().Compile());
+	}
+
+	/// <summary>
+	/// Combines an action-specific prefix with why game memory is unavailable. On macOS, a refusal to read the game's
+	/// memory is not the same problem as the game not running, and telling the user to "make sure the game is running"
+	/// when it is running and the app just was not launched under sudo would send them looking in the wrong place.
+	/// </summary>
+	private string DescribeGameMemoryUnavailable(string actionPrefix)
+	{
+		return gameMemoryService.BlockAddressStatus == BlockAddressStatus.MemoryUnreadable
+			? $"{actionPrefix} {gameMemoryServiceWrapper.DescribeUnavailability()}"
+			: $"{actionPrefix} Make sure the game is running.";
 	}
 
 	public void Close()

@@ -26,6 +26,12 @@
             <OutputType>Exe</OutputType>
           </PropertyGroup>
         </When>
+        <When Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">
+          <PropertyGroup>
+            <DefineConstants>$(DefineConstants);OSX</DefineConstants>
+            <OutputType>Exe</OutputType>
+          </PropertyGroup>
+        </When>
       </Choose>
     </When>
     <When Condition="'$(Configuration)' == 'Release'">
@@ -40,6 +46,12 @@
         <When Condition="'$(RuntimeIdentifier)' == 'linux-x64' Or '$(CI)' == 'true'">
           <PropertyGroup>
             <DefineConstants>$(DefineConstants);LINUX</DefineConstants>
+            <OutputType>Exe</OutputType>
+          </PropertyGroup>
+        </When>
+        <When Condition="'$(RuntimeIdentifier)' == 'osx-arm64'">
+          <PropertyGroup>
+            <DefineConstants>$(DefineConstants);OSX</DefineConstants>
             <OutputType>Exe</OutputType>
           </PropertyGroup>
         </When>

@@ -15,6 +15,11 @@ internal sealed class ConfigLayout(GameInstallationValidator gameInstallationVal
 		const string examplePath = "/home/{USERNAME}/.local/share/Steam/steamapps/common/devildaggers/";
 #elif WINDOWS
 		const string examplePath = """C:\Program Files (x86)\Steam\steamapps\common\devildaggers""";
+#elif OSX
+		// The Mac build ships as an .app bundle, so dd/, res/ and mods/ live inside Contents/Resources rather than
+		// beside the executable as they do on Windows and Linux. Pointing at the bundle's parent fails validation
+		// with "File 'dd/survival' does not exist."
+		const string examplePath = "/Users/{USERNAME}/Library/Application Support/Steam/steamapps/common/devildaggers/Devil Daggers.app/Contents/Resources";
 #endif
 #pragma warning restore S1075
 

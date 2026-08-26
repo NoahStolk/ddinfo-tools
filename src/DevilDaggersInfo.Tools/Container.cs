@@ -178,9 +178,16 @@ internal sealed partial class Container : IContainer<Application>
 		glfw.WindowHint(WindowHintInt.ContextVersionMajor, 3);
 		glfw.WindowHint(WindowHintInt.ContextVersionMinor, 3);
 		glfw.WindowHint(WindowHintOpenGlProfile.OpenGlProfile, OpenGlProfile.Core);
+#if OSX
+		// macOS refuses to create a Core-profile context that is not also forward-compatible; without this hint,
+		// glfwCreateWindow silently returns null instead of a window.
+		glfw.WindowHint(WindowHintBool.OpenGLForwardCompat, true);
+#endif
 		glfw.WindowHint(WindowHintBool.Focused, true);
 		glfw.WindowHint(WindowHintBool.Resizable, true);
-#if DEBUG
+#if DEBUG && !OSX
+		// Not on macOS: debug output is glDebugMessageCallback, which is OpenGL 4.3 / KHR_debug. macOS caps at 4.1 and
+		// never exposed that extension, so requesting a debug context here only sets up a symbol lookup that fails.
 		glfw.WindowHint(WindowHintBool.OpenGLDebugContext, true);
 #endif
 		glfw.CheckError();
@@ -200,7 +207,7 @@ internal sealed partial class Container : IContainer<Application>
 
 		GL gl = GL.GetApi(glfw.GetProcAddress);
 
-#if DEBUG
+#if DEBUG && !OSX
 		// A debug context is requested in GetGlfw. Without a callback installed, the driver's diagnostics are discarded,
 		// which is how spec violations end up only being noticed as visual glitches on stricter drivers.
 		gl.Enable(EnableCap.DebugOutput);
@@ -219,7 +226,7 @@ internal sealed partial class Container : IContainer<Application>
 		return gl;
 	}
 
-#if DEBUG
+#if DEBUG && !OSX
 	private static void LogGlDebugMessage(ILogger logger, GLEnum source, GLEnum type, GLEnum severity, int length, nint message)
 	{
 		string text = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(message, length);
@@ -270,12 +277,15 @@ internal sealed partial class Container : IContainer<Application>
 	}
 
 	[Factory(Scope.SingleInstance)]
-	private static unsafe WindowHandle* CreateWindow(Glfw glfw, GlfwInput glfwInput, UserCache userCache)
+	private static unsafe WindowHandle* CreateWindow(Glfw glfw, GlfwInput glfwInput, UserCache userCache, ILogger logger)
 	{
 		WindowHandle* window = glfw.CreateWindow(userCache.Model.WindowWidth, userCache.Model.WindowHeight, $"ddinfo tools {AssemblyUtils.EntryAssemblyVersionString}", null, null);
 		glfw.CheckError();
 		if (window == null)
+		{
+			logger.Error("Could not create window. Window pointer was null. On macOS this usually means the requested OpenGL Core-profile context was not also marked forward-compatible (WindowHintBool.OpenGLForwardCompat); see GetGlfw.");
 			throw new InvalidOperationException("Could not create window. Window pointer was null.");
+		}
 
 		glfw.SetCursorPosCallback(window, (_, x, y) => glfwInput.CursorPosCallback(x, y));
 		glfw.SetScrollCallback(window, (_, _, y) => glfwInput.MouseWheelCallback(y));
@@ -346,6 +356,8 @@ internal sealed partial class Container : IContainer<Application>
 		return new GameMemoryService(new NativeInterface.Services.Windows.WindowsMemoryService());
 #elif LINUX
 		return new GameMemoryService(new NativeInterface.Services.Linux.LinuxMemoryService(logger));
+#elif OSX
+		return new GameMemoryService(new NativeInterface.Services.OSX.OSXMemoryService(logger));
 #endif
 	}
 
@@ -356,6 +368,8 @@ internal sealed partial class Container : IContainer<Application>
 		return new GameWindowService(new NativeInterface.Services.Windows.WindowsWindowingService());
 #elif LINUX
 		return new GameWindowService(new NativeInterface.Services.Linux.LinuxWindowingService());
+#elif OSX
+		return new GameWindowService(new NativeInterface.Services.OSX.OSXWindowingService());
 #endif
 	}
 
@@ -368,6 +382,8 @@ internal sealed partial class Container : IContainer<Application>
 		return new WindowsValues();
 #elif LINUX
 		return new LinuxValues();
+#elif OSX
+		return new OSXValues();
 #endif
 	}
 }
