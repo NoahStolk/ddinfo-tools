@@ -23,7 +23,8 @@ internal sealed class DebugWindow(
 	ILogger logger,
 #endif
 	UserCache userCache,
-	SurvivalFileWatcher survivalFileWatcher)
+	SurvivalFileWatcher survivalFileWatcher,
+	MainBlockChild mainBlockChild)
 {
 	private readonly List<string> _debugMessages = [];
 	private readonly DateTime _startUpTime = DateTime.UtcNow;
@@ -66,6 +67,11 @@ internal sealed class DebugWindow(
 				{
 					ImGui.Text("<No modded survival file>");
 				}
+			}
+
+			if (ImGui.CollapsingHeader("Game memory"))
+			{
+				mainBlockChild.Render();
 			}
 
 			if (ImGui.CollapsingHeader("Keyboard input"))

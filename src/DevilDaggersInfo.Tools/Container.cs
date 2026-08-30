@@ -77,6 +77,7 @@ namespace DevilDaggersInfo.Tools;
 // Windows
 [Register<AboutWindow>(Scope.SingleInstance)]
 [Register<DebugWindow>(Scope.SingleInstance)]
+[Register<MainBlockChild>(Scope.SingleInstance)]
 [Register<MainWindow>(Scope.SingleInstance)]
 [Register<UpdateWindow>(Scope.SingleInstance)]
 

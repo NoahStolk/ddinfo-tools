@@ -5,6 +5,11 @@ namespace DevilDaggersInfo.Tools.GameMemory;
 internal readonly record struct MainBlock
 {
 	public readonly string Marker = string.Empty;
+
+	// As of August 30th 2026:
+	// - 1 on Linux
+	// - Likely 1 on Mac
+	// - Probably 2 on Windows
 	public readonly int FormatVersion;
 
 	public readonly int PlayerId;
@@ -97,6 +102,8 @@ internal readonly record struct MainBlock
 	public readonly int ReplayLength;
 
 	public readonly bool PlayReplayFromMemory;
+
+	// These are not available on format version 1.
 	public readonly byte GameMode;
 	public readonly bool TimeAttackOrRaceFinished;
 
@@ -197,13 +204,13 @@ internal readonly record struct MainBlock
 
 		ProhibitedMods = br.ReadBoolean();
 
-		// Not available on Linux?
 		br.BaseStream.Seek(3, SeekOrigin.Current);
 
 		ReplayBase = br.ReadInt64();
 		ReplayLength = br.ReadInt32();
 
 		PlayReplayFromMemory = br.ReadBoolean();
+
 		GameMode = br.ReadByte();
 		TimeAttackOrRaceFinished = br.ReadBoolean();
 	}

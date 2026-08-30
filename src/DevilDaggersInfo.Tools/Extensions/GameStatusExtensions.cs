@@ -18,7 +18,7 @@ internal static class GameStatusExtensions
 			GameStatus.OwnReplayFromLeaderboard => "Own replay from leaderboard",
 			GameStatus.OtherPlayersReplayFromLeaderboard => "Other player's replay from leaderboard",
 			GameStatus.LocalReplay => "Local replay",
-			_ => throw new UnreachableException(),
+			_ => $"Invalid ({(int)gameStatus})",
 		};
 	}
 }
