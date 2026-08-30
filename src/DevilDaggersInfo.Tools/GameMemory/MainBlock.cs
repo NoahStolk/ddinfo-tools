@@ -6,11 +6,7 @@ internal readonly record struct MainBlock
 {
 	public readonly string Marker = string.Empty;
 
-	// As of August 30th 2026:
-	// - 1 on Linux
-	// - Likely 1 on Mac
-	// - Probably 2 on Windows
-	public readonly int FormatVersion;
+	public readonly int FormatVersion; // This is always 1.
 
 	public readonly int PlayerId;
 	public readonly string PlayerName = string.Empty;
@@ -103,7 +99,8 @@ internal readonly record struct MainBlock
 
 	public readonly bool PlayReplayFromMemory;
 
-	// These are not available on format version 1.
+	// These are not available on the latest Linux and Mac builds,
+	// despite FormatVersion being 1 on every build (including Windows).
 	public readonly byte GameMode;
 	public readonly bool TimeAttackOrRaceFinished;
 
