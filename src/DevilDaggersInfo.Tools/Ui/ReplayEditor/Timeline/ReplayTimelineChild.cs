@@ -192,9 +192,8 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 		float xOffset = eventCount < 10 ? 9 : 5;
 		drawList.AddText(rectOrigin + new Vector2(xOffset, 5), 0xffffffff, eventCount > 99 ? Inline.Utf8("XX") : Inline.Utf8($"{eventCount}"));
 
-		if (isHovering)
+		if (isHovering && ImGui.BeginTooltip())
 		{
-			ImGui.BeginTooltip();
 			ImGui.TextColored(eventType.GetColor(), eventType.AsUtf8DisplaySpan());
 			if (ImGui.BeginTable(Inline.Utf8($"MarkerTooltipTable_{tickIndex}_{eventType.AsUtf8Span()}"), 2, ImGuiTableFlags.Borders))
 			{

@@ -138,15 +138,16 @@ internal sealed class GraphsChild(FontService fontService)
 				int gemsEaten = _gemsEaten[index];
 				int gemsTotal = _gemsTotal[index];
 
-				ImGui.BeginTooltip();
+				if (ImGui.BeginTooltip())
+				{
+					AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Color.White);
+					AddTooltipText("Gems Collected"u8, Inline.Utf8(gemsCollected), Color.Red);
+					AddTooltipText("Gems Despawned"u8, Inline.Utf8(gemsDespawned), Color.Gray(0.5f));
+					AddTooltipText("Gems Eaten"u8, Inline.Utf8(gemsEaten), Color.Green);
+					AddTooltipText("Gems Total"u8, Inline.Utf8(gemsTotal), new Color(127, 0, 0, 255));
 
-				AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Color.White);
-				AddTooltipText("Gems Collected"u8, Inline.Utf8(gemsCollected), Color.Red);
-				AddTooltipText("Gems Despawned"u8, Inline.Utf8(gemsDespawned), Color.Gray(0.5f));
-				AddTooltipText("Gems Eaten"u8, Inline.Utf8(gemsEaten), Color.Green);
-				AddTooltipText("Gems Total"u8, Inline.Utf8(gemsTotal), new Color(127, 0, 0, 255));
-
-				ImGui.EndTooltip();
+					ImGui.EndTooltip();
+				}
 			}
 		}
 
@@ -171,13 +172,14 @@ internal sealed class GraphsChild(FontService fontService)
 				int homingStored = _homingStored[index];
 				int homingEaten = _homingEaten[index];
 
-				ImGui.BeginTooltip();
+				if (ImGui.BeginTooltip())
+				{
+					AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Color.White);
+					AddTooltipText("Homing Stored"u8, Inline.Utf8(homingStored), UpgradeColors.Level4.ToEngineColor());
+					AddTooltipText("Homing Eaten"u8, Inline.Utf8(homingEaten), Color.Red);
 
-				AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Color.White);
-				AddTooltipText("Homing Stored"u8, Inline.Utf8(homingStored), UpgradeColors.Level4.ToEngineColor());
-				AddTooltipText("Homing Eaten"u8, Inline.Utf8(homingEaten), Color.Red);
-
-				ImGui.EndTooltip();
+					ImGui.EndTooltip();
+				}
 			}
 		}
 
@@ -240,12 +242,10 @@ internal sealed class GraphsChild(FontService fontService)
 		float posX = ImGui.GetCursorPosX();
 
 		ImGui.TextColored(textColor, textLeft);
-		ImGui.SameLine();
 
 		float textWidth = ImGui.CalcTextSize(textRight).X;
 
-		ImGui.SetCursorPosX(posX + 160 - textWidth);
+		ImGui.SameLine(posX + 160 - textWidth);
 		ImGui.Text(textRight);
-		ImGui.SetCursorPosX(posX);
 	}
 }
