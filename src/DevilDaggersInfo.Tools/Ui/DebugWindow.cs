@@ -3,7 +3,6 @@ using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.Encryption;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
-using DevilDaggersInfo.Tools.GameWindow;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
@@ -20,7 +19,6 @@ internal sealed class DebugWindow(
 	INativeFileDialog nativeFileDialog,
 	IEncryptionService encryptionService,
 	PopupManager popupManager,
-	GameWindowService gameWindowService,
 #if DEBUG
 	ILogger logger,
 #endif
@@ -249,7 +247,6 @@ internal sealed class DebugWindow(
 		AddText("Gen 2 GCs"u8, Inline.Utf8(GC.CollectionCount(2)));
 		AddText("Total GC pause duration"u8, Inline.Utf8(GC.GetTotalPauseDuration()));
 		AddText("Total app time"u8, Inline.Utf8(DateTime.UtcNow - _startUpTime));
-		AddText("Devil Daggers window position"u8, Inline.Utf8(gameWindowService.GetWindowPosition()));
 	}
 
 	private void RenderUserCache()

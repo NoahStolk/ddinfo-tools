@@ -5,7 +5,6 @@ using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Engine.Extensions;
 using DevilDaggersInfo.Tools.Engine.Loaders;
 using DevilDaggersInfo.Tools.GameMemory;
-using DevilDaggersInfo.Tools.GameWindow;
 using DevilDaggersInfo.Tools.Platforms;
 using DevilDaggersInfo.Tools.Scenes.Rendering;
 using DevilDaggersInfo.Tools.Ui;
@@ -346,16 +345,6 @@ internal sealed partial class Container : IContainer<Application>
 		return new GameMemoryService(new NativeInterface.Services.Windows.WindowsMemoryService());
 #elif LINUX
 		return new GameMemoryService(new NativeInterface.Services.Linux.LinuxMemoryService(logger));
-#endif
-	}
-
-	[Factory(Scope.SingleInstance)]
-	private static GameWindowService CreateGameWindowService()
-	{
-#if WINDOWS
-		return new GameWindowService(new NativeInterface.Services.Windows.WindowsWindowingService());
-#elif LINUX
-		return new GameWindowService(new NativeInterface.Services.Linux.LinuxWindowingService());
 #endif
 	}
 
