@@ -1,11 +1,14 @@
 using DevilDaggersInfo.Core.Replay;
+using DevilDaggersInfo.Core.Replay.Exceptions;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using Hexa.NET.ImGui;
 using Serilog;
+using System.Globalization;
 using System.Numerics;
+using System.Text;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
@@ -14,6 +17,11 @@ internal sealed class LeaderboardReplayBrowser(PopupManager popupManager, FileSt
 	private bool _showWindow;
 	private bool _isDownloading;
 	private int _selectedPlayerId;
+
+	/// <summary>
+	/// The response body returned by the leaderboard servers when there is no replay for the requested player ID (for example, when using an ID like -1).
+	/// </summary>
+	private static ReadOnlySpan<byte> ReplayNotFoundResponse => "DF_RPL0Replay not found."u8;
 
 	public void Show()
 	{
@@ -51,6 +59,14 @@ internal sealed class LeaderboardReplayBrowser(PopupManager popupManager, FileSt
 		responseResult.Match(
 			onSuccess: response =>
 			{
+				if (response.Data.AsSpan().StartsWith(ReplayNotFoundResponse))
+				{
+					logger.Warning("No replay was found for player ID {PlayerId}.", response.PlayerId);
+					popupManager.ShowError($"No replay was found for player ID {response.PlayerId}.");
+					_isDownloading = false;
+					return;
+				}
+
 				ReplayBinary<LeaderboardReplayBinaryHeader>? leaderboardReplay;
 
 				try
@@ -59,11 +75,14 @@ internal sealed class LeaderboardReplayBrowser(PopupManager popupManager, FileSt
 				}
 				catch (Exception ex)
 				{
-					// When using an id like -1, this gives us the following data:
-					// DF_RPL0Replay not found.
-					// We could parse this, but it's not worth the effort.
-					logger.Warning(ex, "The replay could not be parsed.");
-					popupManager.ShowError("The replay could not be parsed.", ex);
+					string diagnostics = GetReplayDiagnostics(response.Data);
+					logger.Warning(ex, "The replay for player ID {PlayerId} could not be parsed.\n{Diagnostics}", response.PlayerId, diagnostics);
+					popupManager.ShowError(
+						$"""
+						The replay for player ID {response.PlayerId} could not be parsed.
+						{diagnostics}
+						""",
+						ex);
 					_isDownloading = false;
 					return;
 				}
@@ -79,6 +98,36 @@ internal sealed class LeaderboardReplayBrowser(PopupManager popupManager, FileSt
 				popupManager.ShowError("The Devil Daggers leaderboard servers did not return a successful response.", apiError);
 				_isDownloading = false;
 			});
+	}
+
+	private static string GetReplayDiagnostics(byte[] data)
+	{
+		StringBuilder sb = new();
+		sb.Append(CultureInfo.InvariantCulture, $"- Total size: {data.Length} bytes");
+
+		try
+		{
+			using MemoryStream ms = new(data);
+			using BinaryReader br = new(ms);
+			LeaderboardReplayBinaryHeader header = LeaderboardReplayBinaryHeader.CreateFromBinaryReader(br);
+
+			// BinaryReader.ReadBytes does not throw when the stream ends early, so a truncated header can still "parse" with a shortened username or buffer.
+			sb.AppendLine();
+			sb.Append(CultureInfo.InvariantCulture, $"- Username: {header.Username}");
+			sb.AppendLine();
+			sb.Append(CultureInfo.InvariantCulture, $"- Unknown buffer ({header.UnknownBuffer.Length} bytes): {Convert.ToHexString(header.UnknownBuffer)}");
+			sb.AppendLine();
+			sb.Append(CultureInfo.InvariantCulture, $"- Header size: {ms.Position} bytes");
+			sb.AppendLine();
+			sb.Append(CultureInfo.InvariantCulture, $"- Compressed events size: {data.Length - ms.Position} bytes");
+		}
+		catch (Exception ex) when (ex is EndOfStreamException or InvalidReplayBinaryException or ArgumentOutOfRangeException)
+		{
+			sb.AppendLine();
+			sb.Append(CultureInfo.InvariantCulture, $"- Header could not be parsed: {ex.Message}");
+		}
+
+		return sb.ToString();
 	}
 
 	private static async Task<Response> DownloadReplayAsync(int id)

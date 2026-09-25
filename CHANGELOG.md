@@ -6,6 +6,8 @@
 
 - Added support for reading game memory on Linux, which enables live run data (splits, homing usage, gem collection) in the practice tool.
 - Added support for writing game memory on Linux, which enables replay playback from the replay editor and the custom leaderboards.
+- Added replay size and header details (username, header size, compressed events size) to the error shown when a leaderboard replay cannot be parsed in the replay editor.
+- The leaderboard replay browser now shows a clear error when no replay exists for the requested player ID.
 
 ### Fixed
 
