@@ -63,7 +63,8 @@ internal sealed class PracticeLogic(PopupManager popupManager, UserSettings user
 		if (File.Exists(userSettings.ModsSurvivalPath))
 			File.Delete(userSettings.ModsSurvivalPath);
 
-		const string messageText = """
+		const string messageText =
+			"""
 			The default game has been restored!
 
 			Make sure to press the restart button in-game, or grab the dagger in the lobby, to apply the change.
@@ -76,6 +77,26 @@ internal sealed class PracticeLogic(PopupManager popupManager, UserSettings user
 			messageText,
 			userSettings.Model.DoNotShowAgainPracticeSpawnsetDeleted,
 			b => userSettings.Model = userSettings.Model with { DoNotShowAgainPracticeSpawnsetDeleted = b });
+	}
+
+	public void ShowWarning()
+	{
+		const string messageText =
+			"""
+			Read this is you're practicing for 500!
+
+			The game has an anti-cheat mechanic where you need at least 36,000 seconds (10 hours) of real in-game time before you can submit 500+ runs.
+
+			This is counted by the game itself (not Steam hours).
+
+			Using practice (or any spawnset) does not count time towards your total time, and you may end up hitting 500 before hitting the required total time.
+			""";
+
+		popupManager.ShowMessageWithHideOption(
+			"Warning",
+			messageText,
+			userSettings.Model.DoNotShowAgainPracticeWarning,
+			b => userSettings.Model = userSettings.Model with { DoNotShowAgainPracticeWarning = b });
 	}
 
 	public bool IsActive(UserSettingsPracticeTemplate customTemplate)

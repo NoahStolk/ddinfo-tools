@@ -85,6 +85,11 @@ internal sealed class ConfigLayout(GameInstallationValidator gameInstallationVal
 				ImGui.Checkbox("Do not show message again when deleting practice spawnset", ref doNotShowAgainPracticeSpawnsetDeleted);
 				if (userSettings.Model.DoNotShowAgainPracticeSpawnsetDeleted != doNotShowAgainPracticeSpawnsetDeleted)
 					userSettings.Model = userSettings.Model with { DoNotShowAgainPracticeSpawnsetDeleted = doNotShowAgainPracticeSpawnsetDeleted };
+
+				bool doNotShowAgainPracticeWarning = userSettings.Model.DoNotShowAgainPracticeWarning;
+				ImGui.Checkbox("Do not show practice warning", ref doNotShowAgainPracticeWarning);
+				if (userSettings.Model.DoNotShowAgainPracticeWarning != doNotShowAgainPracticeWarning)
+					userSettings.Model = userSettings.Model with { DoNotShowAgainPracticeWarning = doNotShowAgainPracticeWarning };
 			}
 
 			ImGui.EndChild();
