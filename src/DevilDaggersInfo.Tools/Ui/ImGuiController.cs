@@ -4,6 +4,8 @@ using Hexa.NET.ImGui;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
@@ -43,6 +45,12 @@ internal sealed class ImGuiController
 		}
 		""";
 
+	// ImGui's clipboard callbacks are plain C function pointers without a way to capture state, so the GLFW entry points
+	// they forward to live here. They are resolved from the GLFW library itself rather than going through Silk.NET's
+	// string marshalling, so the UTF-8 text is passed through as-is and GLFW keeps ownership of the returned buffer.
+	private static unsafe delegate* unmanaged[Cdecl]<WindowHandle*, byte*> _glfwGetClipboardString;
+	private static unsafe delegate* unmanaged[Cdecl]<WindowHandle*, byte*, void> _glfwSetClipboardString;
+
 	private readonly uint _vbo;
 	private readonly uint _ebo;
 	private readonly uint _vao;
@@ -60,7 +68,7 @@ internal sealed class ImGuiController
 	private int _framebufferWidth;
 	private int _framebufferHeight;
 
-	public unsafe ImGuiController(GL gl, GlfwInput glfwInput, ShaderLoader shaderLoader, int windowWidth, int windowHeight)
+	public unsafe ImGuiController(Glfw glfw, WindowHandle* window, GL gl, GlfwInput glfwInput, ShaderLoader shaderLoader, int windowWidth, int windowHeight)
 	{
 		_gl = gl;
 		_glfwInput = glfwInput;
@@ -77,6 +85,8 @@ internal sealed class ImGuiController
 		io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
 		io.BackendFlags |= ImGuiBackendFlags.RendererHasTextures;
 		io.ConfigFlags |= ImGuiConfigFlags.DockingEnable;
+
+		InitializeClipboard(glfw, window);
 
 		_vbo = _gl.GenBuffer();
 		_ebo = _gl.GenBuffer();
@@ -149,6 +159,39 @@ internal sealed class ImGuiController
 
 		ImGui.NewFrame();
 	}
+
+	#region Clipboard
+
+	/// <summary>
+	/// Hooks ImGui's clipboard up to the system clipboard through GLFW. Without this, ImGui falls back to its built-in
+	/// handler, which on Linux is only a buffer local to the process, so text can't be copied to or pasted from other
+	/// applications.
+	/// </summary>
+	private static unsafe void InitializeClipboard(Glfw glfw, WindowHandle* window)
+	{
+		_glfwGetClipboardString = (delegate* unmanaged[Cdecl]<WindowHandle*, byte*>)glfw.Context.GetProcAddress("glfwGetClipboardString");
+		_glfwSetClipboardString = (delegate* unmanaged[Cdecl]<WindowHandle*, byte*, void>)glfw.Context.GetProcAddress("glfwSetClipboardString");
+
+		ImGuiPlatformIOPtr platformIo = ImGui.GetPlatformIO();
+		platformIo.PlatformClipboardUserData = window;
+		platformIo.PlatformGetClipboardTextFn = (delegate* unmanaged[Cdecl]<ImGuiContext*, byte*>)&GetClipboardText;
+		platformIo.PlatformSetClipboardTextFn = (delegate* unmanaged[Cdecl]<ImGuiContext*, byte*, void>)&SetClipboardText;
+	}
+
+	[UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
+	private static unsafe byte* GetClipboardText(ImGuiContext* context)
+	{
+		// GLFW returns null when the clipboard is empty or holds something other than text, which ImGui handles.
+		return _glfwGetClipboardString((WindowHandle*)ImGui.GetPlatformIO().PlatformClipboardUserData);
+	}
+
+	[UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
+	private static unsafe void SetClipboardText(ImGuiContext* context, byte* text)
+	{
+		_glfwSetClipboardString((WindowHandle*)ImGui.GetPlatformIO().PlatformClipboardUserData, text);
+	}
+
+	#endregion Clipboard
 
 	#region Input
 

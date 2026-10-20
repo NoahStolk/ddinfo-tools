@@ -15,6 +15,7 @@
 - Fixed 3D meshes and textures not being reloaded when the Devil Daggers installation directory changes, which could render the dagger, skull and hand using data from the previously loaded installation.
 - Fixed tile hitboxes hiding each other instead of blending, in the 3D views.
 - Fixed the 3D views breaking when their window is made very small.
+- Fixed copying and pasting text between the app and other applications (Linux).
 
 ### Miscellaneous
 

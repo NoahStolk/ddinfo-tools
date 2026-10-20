@@ -244,7 +244,7 @@ internal sealed partial class Container : IContainer<Application>
 		UserSettings userSettings,
 		UserCache userCache)
 	{
-		ImGuiController imGuiController = new(gl, glfwInput, shaderLoader, userCache.Model.WindowWidth, userCache.Model.WindowHeight);
+		ImGuiController imGuiController = new(glfw, window, gl, glfwInput, shaderLoader, userCache.Model.WindowWidth, userCache.Model.WindowHeight);
 
 		Colors.SetColors(Colors.Main);
 
