@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
+using DevilDaggersInfo.Tools.Ui.Practice.Main;
 using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
 using System.Numerics;
@@ -15,7 +16,8 @@ internal sealed class MainWindow(
 	AboutWindow aboutWindow,
 	UpdateWindow updateWindow,
 	ModsDirectoryLogic modsDirectoryLogic,
-	FontService fontService)
+	FontService fontService,
+	PracticeLogic practiceLogic)
 {
 	private readonly string _version = $"{AssemblyUtils.EntryAssemblyVersionString} (ALPHA)";
 
@@ -79,7 +81,10 @@ internal sealed class MainWindow(
 				}
 
 				if (ToolButton(GetColor(Colors.Practice), "Practice", StringResources.DescriptionPractice))
+				{
 					uiLayoutManager.Layout = LayoutType.Practice;
+					practiceLogic.ShowWarning();
+				}
 
 				if (ToolButton(GetColor(Colors.ModManager), "Mod Manager", StringResources.DescriptionModManager))
 				{
