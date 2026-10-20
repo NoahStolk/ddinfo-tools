@@ -11,6 +11,7 @@ internal sealed record UserSettingsModel
 	public IReadOnlyList<UserSettingsPracticeTemplate> PracticeTemplates { get; init; } = new List<UserSettingsPracticeTemplate>();
 	public bool DoNotShowAgainPracticeSpawnsetApplied { get; init; }
 	public bool DoNotShowAgainPracticeSpawnsetDeleted { get; init; }
+	public bool DoNotShowAgainPracticeWarning { get; init; }
 
 	public static UserSettingsModel Default { get; } = new()
 	{
@@ -21,6 +22,7 @@ internal sealed record UserSettingsModel
 		PracticeTemplates = new List<UserSettingsPracticeTemplate>(),
 		DoNotShowAgainPracticeSpawnsetApplied = false,
 		DoNotShowAgainPracticeSpawnsetDeleted = false,
+		DoNotShowAgainPracticeWarning = false,
 	};
 
 	public static float LookSpeedMin => 1;
