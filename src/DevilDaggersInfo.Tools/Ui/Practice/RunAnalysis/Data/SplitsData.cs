@@ -41,7 +41,11 @@ internal sealed class SplitsData
 			{
 				int? lastHomingStored = statsData.Statistics.Count > 0 ? statsData.Statistics[^1].HomingStored : null;
 				addedTimerEnd = true;
-				_homingSplitData[homingSplitDataIndex] = new SplitDataEntry((int)statsData.TimerEnd, SplitDataEntryKind.End, lastHomingStored, homingSplitDataIndex == 0 ? null : _homingSplitData[homingSplitDataIndex - 1].Homing);
+				_homingSplitData[homingSplitDataIndex] = new SplitDataEntry(
+					DisplayTimer: (int)statsData.TimerEnd,
+					Kind: SplitDataEntryKind.End,
+					Homing: lastHomingStored,
+					HomingPrevious: homingSplitDataIndex == 0 ? null : _homingSplitData[homingSplitDataIndex - 1].Homing);
 				homingSplitDataIndex++;
 			}
 
