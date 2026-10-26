@@ -10,6 +10,7 @@ internal static class CustomLeaderboardCriteriaTypeExtensions
 {
 	extension(CustomLeaderboardCriteriaType type)
 	{
+		// ReSharper disable RedundantSwitchExpressionArms
 		public Color GetColor()
 		{
 			return type switch
@@ -66,6 +67,7 @@ internal static class CustomLeaderboardCriteriaTypeExtensions
 			};
 		}
 
+		// ReSharper restore RedundantSwitchExpressionArms
 		public DevilDaggersInfo.Core.CriteriaExpression.CustomLeaderboardCriteriaType ToCore()
 		{
 			return type switch

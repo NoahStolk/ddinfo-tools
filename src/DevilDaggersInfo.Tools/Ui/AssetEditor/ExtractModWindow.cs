@@ -117,8 +117,8 @@ internal sealed class ExtractModWindow(INativeFileDialog nativeFileDialog, Popup
 	{
 		if (!extractionResult.Success)
 		{
-			Debug.Assert(extractionResult.Error != null, "extractionResult.Error != null");
-			Debug.Assert(extractionResult.Exception != null, "extractionResult.Exception != null");
+			Debug.Assert(extractionResult.Error != null, "Error field must contain a value when Success is false.");
+			Debug.Assert(extractionResult.Exception != null, "Exception field must contain a value when Success is false.");
 			popupManager.ShowError($"Extraction failed: {extractionResult.Error}", extractionResult.Exception.Message);
 		}
 

@@ -62,23 +62,6 @@ internal static class ArenaEditingUtils
 		public int Y2 { get; }
 	}
 
-	internal readonly record struct LineSegment
-	{
-		public LineSegment(Vector2 start, Vector2 end)
-		{
-			Start = start;
-			End = end;
-
-			float deltaX = End.X - Start.X;
-			float deltaY = End.Y - Start.Y;
-			Normal = Vector2.Normalize(new Vector2(-deltaY, deltaX));
-		}
-
-		public Vector2 Start { get; }
-		public Vector2 End { get; }
-		public Vector2 Normal { get; }
-	}
-
 	internal readonly record struct Stadium
 	{
 		public Stadium(Vector2 start, Vector2 end, float radius)
@@ -117,20 +100,7 @@ internal static class ArenaEditingUtils
 			return new Square(center - halfSize, center + halfSize);
 		}
 
-		public bool IntersectsLineSegment(LineSegment lineSegment)
-		{
-			// Calculate booleans for all 4 points; return true immediately when any of the booleans do not hold the same value.
-			bool tlBehind = PointIsBehindPlane(lineSegment.Start, lineSegment.Normal, TopLeft);
-			if (PointIsBehindPlane(lineSegment.Start, lineSegment.Normal, TopRight) != tlBehind)
-				return true;
-
-			if (PointIsBehindPlane(lineSegment.Start, lineSegment.Normal, BottomLeft) != tlBehind)
-				return true;
-
-			return PointIsBehindPlane(lineSegment.Start, lineSegment.Normal, BottomRight) != tlBehind;
-		}
-
-		public bool Contains(Vector2 point)
+		private bool Contains(Vector2 point)
 		{
 			return point.X >= Min.X && point.X <= Max.X && point.Y >= Min.Y && point.Y <= Max.Y;
 		}
@@ -196,7 +166,7 @@ internal static class ArenaEditingUtils
 
 	internal readonly record struct AlignedEllipse(Vector2 Center, Vector2 Radius)
 	{
-		public bool Contains(Vector2 point)
+		private bool Contains(Vector2 point)
 		{
 			float deltaX = point.X - Center.X;
 			float deltaY = point.Y - Center.Y;

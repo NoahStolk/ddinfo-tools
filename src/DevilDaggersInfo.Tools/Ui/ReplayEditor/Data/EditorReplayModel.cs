@@ -28,7 +28,19 @@ internal sealed record EditorReplayModel
 	private readonly List<EditorEvent> _thornSpawnEvents = [];
 	private readonly List<EditorEvent> _transmuteEvents = [];
 
-	private EditorReplayModel(int version, long timestampSinceGameRelease, float time, float startTime, int daggersFired, int deathType, int gems, int daggersHit, int kills, int playerId, string username, SpawnsetBinary spawnset)
+	private EditorReplayModel(
+		int version,
+		long timestampSinceGameRelease,
+		float time,
+		float startTime,
+		int daggersFired,
+		int deathType,
+		int gems,
+		int daggersHit,
+		int kills,
+		int playerId,
+		string username,
+		SpawnsetBinary spawnset)
 	{
 		Version = version;
 		TimestampSinceGameRelease = timestampSinceGameRelease;
@@ -63,7 +75,6 @@ internal sealed record EditorReplayModel
 	// Embedded inputs data.
 	public float LookSpeed { get; set; }
 
-	// TODO: Use IReadOnlyList<> instead of List<>.
 	public List<InputsEventData> InputsEvents { get; } = [];
 
 	// All other events.

@@ -9,9 +9,9 @@ internal sealed class RunAnalysisWindow(GameMemoryServiceWrapper gameMemoryServi
 	private readonly GraphsChild _graphsChild = new(fontService);
 	private readonly SplitsChild _splitsChild = new(fontService);
 
-	private float _recordingTimer;
+	private readonly PracticeStatsData _statsData = new();
 
-	public PracticeStatsData StatsData { get; } = new();
+	private float _recordingTimer;
 
 	public void Update(float delta)
 	{
@@ -23,8 +23,8 @@ internal sealed class RunAnalysisWindow(GameMemoryServiceWrapper gameMemoryServi
 		if (!gameMemoryServiceWrapper.Scan() || !gameMemoryService.IsInitialized)
 			return;
 
-		StatsData.Populate(gameMemoryService);
-		_graphsChild.Update(StatsData.Statistics);
+		_statsData.Populate(gameMemoryService);
+		_graphsChild.Update(_statsData.Statistics);
 	}
 
 	public void Render()
@@ -32,8 +32,8 @@ internal sealed class RunAnalysisWindow(GameMemoryServiceWrapper gameMemoryServi
 		ImGuiUtils.SetNextWindowMinSize(512, 1024);
 		if (ImGui.Begin("Run Analysis"))
 		{
-			_splitsChild.Render(StatsData);
-			_graphsChild.Render(StatsData);
+			_splitsChild.Render(_statsData);
+			_graphsChild.Render(_statsData);
 		}
 
 		ImGui.End();

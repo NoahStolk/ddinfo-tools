@@ -7,8 +7,9 @@ namespace DevilDaggersInfo.Tools;
 
 internal sealed unsafe class FramebufferData(GL gl, ILogger logger)
 {
+	private uint _framebuffer;
+
 	public uint TextureHandle { get; private set; }
-	public uint Framebuffer { get; private set; }
 	public int Width { get; private set; }
 	public int Height { get; private set; }
 
@@ -33,8 +34,8 @@ internal sealed unsafe class FramebufferData(GL gl, ILogger logger)
 
 		// Delete previous data. The framebuffer goes first so that deleting its attachments below releases their storage
 		// straight away rather than leaving it held by a container that is about to be destroyed anyway.
-		if (Framebuffer != 0)
-			gl.DeleteFramebuffer(Framebuffer);
+		if (_framebuffer != 0)
+			gl.DeleteFramebuffer(_framebuffer);
 
 		if (TextureHandle != 0)
 			gl.DeleteTexture(TextureHandle);
@@ -43,8 +44,8 @@ internal sealed unsafe class FramebufferData(GL gl, ILogger logger)
 			gl.DeleteRenderbuffer(DepthRenderbuffer);
 
 		// Create new data.
-		Framebuffer = gl.GenFramebuffer();
-		gl.BindFramebuffer(FramebufferTarget.Framebuffer, Framebuffer);
+		_framebuffer = gl.GenFramebuffer();
+		gl.BindFramebuffer(FramebufferTarget.Framebuffer, _framebuffer);
 
 		TextureHandle = gl.GenTexture();
 		gl.BindTexture(TextureTarget.Texture2D, TextureHandle);
@@ -80,7 +81,7 @@ internal sealed unsafe class FramebufferData(GL gl, ILogger logger)
 
 		arenaScene.Update(activateMouse, activateKeyboard, delta, Width, Height);
 
-		gl.BindFramebuffer(FramebufferTarget.Framebuffer, Framebuffer);
+		gl.BindFramebuffer(FramebufferTarget.Framebuffer, _framebuffer);
 
 		int framebufferWidth = Width;
 		int framebufferHeight = Height;

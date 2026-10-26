@@ -145,8 +145,8 @@ internal sealed class CompileModWindow(INativeFileDialog nativeFileDialog, Popup
 	{
 		if (!compilationResult.Success)
 		{
-			Debug.Assert(compilationResult.Error != null, "compilationResult.Error != null");
-			Debug.Assert(compilationResult.Exception != null, "compilationResult.Exception != null");
+			Debug.Assert(compilationResult.Error != null, "Error field must contain a value when Success is false.");
+			Debug.Assert(compilationResult.Exception != null, "Exception field must contain a value when Success is false.");
 			popupManager.ShowError($"Compilation failed: {compilationResult.Error}", compilationResult.Exception.Message);
 		}
 
