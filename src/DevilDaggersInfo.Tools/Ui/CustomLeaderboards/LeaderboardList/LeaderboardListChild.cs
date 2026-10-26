@@ -193,39 +193,46 @@ internal sealed class LeaderboardListChild(ResourceManager resourceManager, Popu
 	{
 		IEnumerable<GetCustomLeaderboardForOverview> sorted = Sorting switch
 		{
-			LeaderboardListSorting.Name => SortAscending ? _customLeaderboards.OrderBy(cl => cl.SpawnsetName.ToLower()) : _customLeaderboards.OrderByDescending(cl => cl.SpawnsetName.ToLower()),
-			LeaderboardListSorting.Author => SortAscending ? _customLeaderboards.OrderBy(cl => cl.SpawnsetAuthorName.ToLower()) : _customLeaderboards.OrderByDescending(cl => cl.SpawnsetAuthorName.ToLower()),
-			LeaderboardListSorting.Score => SortAscending ? _customLeaderboards.OrderBy(cl => cl.SelectedPlayerStats?.HighscoreValue) : _customLeaderboards.OrderByDescending(cl => cl.SelectedPlayerStats?.HighscoreValue),
-			LeaderboardListSorting.NextDagger => SortAscending ? _customLeaderboards.OrderBy(GetNextDaggerSortingKey) : _customLeaderboards.OrderByDescending(GetNextDaggerSortingKey),
-			LeaderboardListSorting.Rank => SortAscending ? _customLeaderboards.OrderBy(GetRankSortingKey) : _customLeaderboards.OrderByDescending(GetRankSortingKey),
-			LeaderboardListSorting.Players => SortAscending ? _customLeaderboards.OrderBy(cl => cl.PlayerCount) : _customLeaderboards.OrderByDescending(cl => cl.PlayerCount),
-			LeaderboardListSorting.WorldRecord => SortAscending ? _customLeaderboards.OrderBy(cl => cl.WorldRecord?.WorldRecordValue) : _customLeaderboards.OrderByDescending(cl => cl.WorldRecord?.WorldRecordValue),
-			LeaderboardListSorting.DateCreated => SortAscending ? _customLeaderboards.OrderBy(cl => cl.DateCreated) : _customLeaderboards.OrderByDescending(cl => cl.DateCreated),
-			LeaderboardListSorting.DateLastPlayed => SortAscending ? _customLeaderboards.OrderBy(cl => cl.DateLastPlayed ?? DateTime.UtcNow) : _customLeaderboards.OrderByDescending(cl => cl.DateLastPlayed ?? DateTime.UtcNow),
+			LeaderboardListSorting.Name => Sort(cl => cl.SpawnsetName.ToLower()),
+			LeaderboardListSorting.Author => Sort(cl => cl.SpawnsetAuthorName.ToLower()),
+			LeaderboardListSorting.Score => Sort(cl => cl.SelectedPlayerStats?.HighscoreValue),
+			LeaderboardListSorting.NextDagger => Sort(GetNextDaggerSortingKey),
+			LeaderboardListSorting.Rank => Sort(GetRankSortingKey),
+			LeaderboardListSorting.Players => Sort(cl => cl.PlayerCount),
+			LeaderboardListSorting.WorldRecord => Sort(cl => cl.WorldRecord?.WorldRecordValue),
+			LeaderboardListSorting.DateCreated => Sort(cl => cl.DateCreated),
+			LeaderboardListSorting.DateLastPlayed => Sort(cl => cl.DateLastPlayed ?? DateTime.UtcNow),
 			_ => throw new UnreachableException(),
 		};
 
 		// Clamp the page index before doing any filtering.
 		ClampPageIndex();
 
-		PagedCustomLeaderboards = sorted
-			.Where(ApplyOverviewFilter)
-			.Skip(PageIndex * PageSize)
-			.Take(PageSize)
-			.ToList();
+		PagedCustomLeaderboards =
+		[
+			.. sorted
+				.Where(ApplyOverviewFilter)
+				.Skip(PageIndex * PageSize)
+				.Take(PageSize),
+		];
+	}
 
-		static int GetRankSortingKey(GetCustomLeaderboardForOverview customLeaderboard)
-		{
-			return customLeaderboard.SelectedPlayerStats?.Rank ?? int.MaxValue;
-		}
+	private IOrderedEnumerable<GetCustomLeaderboardForOverview> Sort<T>(Func<GetCustomLeaderboardForOverview, T> keySelector)
+	{
+		return SortAscending ? _customLeaderboards.OrderBy(keySelector) : _customLeaderboards.OrderByDescending(keySelector);
+	}
 
-		static double GetNextDaggerSortingKey(GetCustomLeaderboardForOverview customLeaderboard)
-		{
-			if (customLeaderboard.Daggers == null || customLeaderboard.SelectedPlayerStats == null)
-				return double.MinValue;
+	private static int GetRankSortingKey(GetCustomLeaderboardForOverview customLeaderboard)
+	{
+		return customLeaderboard.SelectedPlayerStats?.Rank ?? int.MaxValue;
+	}
 
-			return customLeaderboard.SelectedPlayerStats.NextDagger?.DaggerValue ?? double.MaxValue;
-		}
+	private static double GetNextDaggerSortingKey(GetCustomLeaderboardForOverview customLeaderboard)
+	{
+		if (customLeaderboard.Daggers == null || customLeaderboard.SelectedPlayerStats == null)
+			return double.MinValue;
+
+		return customLeaderboard.SelectedPlayerStats.NextDagger?.DaggerValue ?? double.MaxValue;
 	}
 
 	private int GetCount()

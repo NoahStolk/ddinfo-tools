@@ -28,6 +28,15 @@ internal sealed class LeaderboardChild(
 	UserCache userCache,
 	SurvivalFileWatcher survivalFileWatcher)
 {
+	private readonly Func<CustomLeaderboardRankSorting, bool> _isTime = static rs => rs is CustomLeaderboardRankSorting.TimeAsc or CustomLeaderboardRankSorting.TimeDesc;
+	private readonly Func<CustomLeaderboardRankSorting, bool> _isEnemiesAlive = static rs => rs is CustomLeaderboardRankSorting.EnemiesAliveAsc or CustomLeaderboardRankSorting.EnemiesAliveDesc;
+	private readonly Func<CustomLeaderboardRankSorting, bool> _isEnemiesKilled = static rs => rs is CustomLeaderboardRankSorting.EnemiesKilledAsc or CustomLeaderboardRankSorting.EnemiesKilledDesc;
+	private readonly Func<CustomLeaderboardRankSorting, bool> _isGemsCollected = static rs => rs is CustomLeaderboardRankSorting.GemsCollectedAsc or CustomLeaderboardRankSorting.GemsCollectedDesc;
+	private readonly Func<CustomLeaderboardRankSorting, bool> _isGemsDespawned = static rs => rs is CustomLeaderboardRankSorting.GemsDespawnedAsc or CustomLeaderboardRankSorting.GemsDespawnedDesc;
+	private readonly Func<CustomLeaderboardRankSorting, bool> _isGemsEaten = static rs => rs is CustomLeaderboardRankSorting.GemsEatenAsc or CustomLeaderboardRankSorting.GemsEatenDesc;
+	private readonly Func<CustomLeaderboardRankSorting, bool> _isHomingStored = static rs => rs is CustomLeaderboardRankSorting.HomingStoredAsc or CustomLeaderboardRankSorting.HomingStoredDesc;
+	private readonly Func<CustomLeaderboardRankSorting, bool> _isHomingEaten = static rs => rs is CustomLeaderboardRankSorting.HomingEatenAsc or CustomLeaderboardRankSorting.HomingEatenDesc;
+
 	private GetCustomEntry? _selectedCustomEntry;
 
 	private List<GetCustomEntry> _sortedEntries = [];
@@ -176,22 +185,22 @@ internal sealed class LeaderboardChild(
 
 		Color daggerColor = CustomLeaderboardDaggerUtils.GetColor(ce.CustomLeaderboardDagger);
 
-		TextDaggerColored(Inline.Utf8(ce.TimeInSeconds, StringFormats.TimeFormat), static rs => rs is CustomLeaderboardRankSorting.TimeAsc or CustomLeaderboardRankSorting.TimeDesc);
+		TextDaggerColored(Inline.Utf8(ce.TimeInSeconds, StringFormats.TimeFormat), _isTime);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(Inline.Utf8(ce.EnemiesAlive), static rs => rs is CustomLeaderboardRankSorting.EnemiesAliveAsc or CustomLeaderboardRankSorting.EnemiesAliveDesc);
+		TextDaggerColored(Inline.Utf8(ce.EnemiesAlive), _isEnemiesAlive);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(Inline.Utf8(ce.EnemiesKilled), static rs => rs is CustomLeaderboardRankSorting.EnemiesKilledAsc or CustomLeaderboardRankSorting.EnemiesKilledDesc);
+		TextDaggerColored(Inline.Utf8(ce.EnemiesKilled), _isEnemiesKilled);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(Inline.Utf8(ce.GemsCollected), static rs => rs is CustomLeaderboardRankSorting.GemsCollectedAsc or CustomLeaderboardRankSorting.GemsCollectedDesc);
+		TextDaggerColored(Inline.Utf8(ce.GemsCollected), _isGemsCollected);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(ce.GemsDespawned.HasValue ? Inline.Utf8(ce.GemsDespawned.Value) : "-"u8, static rs => rs is CustomLeaderboardRankSorting.GemsDespawnedAsc or CustomLeaderboardRankSorting.GemsDespawnedDesc);
+		TextDaggerColored(ce.GemsDespawned.HasValue ? Inline.Utf8(ce.GemsDespawned.Value) : "-"u8, _isGemsDespawned);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(ce.GemsEaten.HasValue ? Inline.Utf8(ce.GemsEaten.Value) : "-"u8, static rs => rs is CustomLeaderboardRankSorting.GemsEatenAsc or CustomLeaderboardRankSorting.GemsEatenDesc);
+		TextDaggerColored(ce.GemsEaten.HasValue ? Inline.Utf8(ce.GemsEaten.Value) : "-"u8, _isGemsEaten);
 		ImGui.TableNextColumn();
 
 		ImGui.TextUnformatted(Inline.Utf8(GetAccuracy(ce), StringFormats.AccuracyFormat));
@@ -201,10 +210,10 @@ internal sealed class LeaderboardChild(
 		ImGui.TextColored(death?.Color.ToEngineColor() ?? Color.White, death?.Name ?? "Unknown");
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(Inline.Utf8(ce.HomingStored), static rs => rs is CustomLeaderboardRankSorting.HomingStoredAsc or CustomLeaderboardRankSorting.HomingStoredDesc);
+		TextDaggerColored(Inline.Utf8(ce.HomingStored), _isHomingStored);
 		ImGui.TableNextColumn();
 
-		TextDaggerColored(ce.HomingEaten.HasValue ? Inline.Utf8(ce.HomingEaten.Value) : "-"u8, static rs => rs is CustomLeaderboardRankSorting.HomingEatenAsc or CustomLeaderboardRankSorting.HomingEatenDesc);
+		TextDaggerColored(ce.HomingEaten.HasValue ? Inline.Utf8(ce.HomingEaten.Value) : "-"u8, _isHomingEaten);
 		ImGui.TableNextColumn();
 
 		ImGui.Text(ce.LevelUpTime2InSeconds == 0 ? "-"u8 : Inline.Utf8(ce.LevelUpTime2InSeconds, StringFormats.TimeFormat));

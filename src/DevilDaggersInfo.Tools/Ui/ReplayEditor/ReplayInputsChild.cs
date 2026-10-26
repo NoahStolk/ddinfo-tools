@@ -40,7 +40,11 @@ internal sealed class ReplayInputsChild(ResourceManager resourceManager)
 			_endTick = Math.Min(_startTick + maxTicks - 1, replay.TickCount);
 
 			ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
-			ImGui.Text(Inline.Utf8($"Showing {_startTick} - {_endTick} of {replay.TickCount} ticks\n{TimeUtils.TickToTime(_startTick, replay.StartTime):0.0000} - {TimeUtils.TickToTime(_endTick, replay.StartTime):0.0000}"));
+			ImGui.Text(Inline.Utf8(
+				$"""
+				Showing {_startTick} - {_endTick} of {replay.TickCount} ticks
+				{TimeUtils.TickToTime(_startTick, replay.StartTime):0.0000} - {TimeUtils.TickToTime(_endTick, replay.StartTime):0.0000}
+				"""));
 		}
 
 		ImGui.EndChild(); // TickNavigation
