@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Tools.NativeInterface.Services;
+using DevilDaggersInfo.Web.ApiSpec.Tools;
 using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.GameMemory;
@@ -22,17 +23,31 @@ internal sealed class GameMemoryService(INativeMemoryService nativeMemoryService
 
 	public bool IsInitialized { get; private set; }
 
-	public void Initialize(long ddstatsMarkerOffset)
+	/// <summary>
+	/// The build of the game the current process is running, or <see langword="null"/> when no process was found. Determines which marker to pass to <see cref="Initialize"/>.
+	/// </summary>
+	public AppOperatingSystem? GameOperatingSystem { get; private set; }
+
+	public void FindProcess()
 	{
 		_process = nativeMemoryService.GetDevilDaggersProcess();
-		if (_process?.MainModule == null)
+		GameOperatingSystem = _process == null ? null : nativeMemoryService.GetGameOperatingSystem(_process);
+	}
+
+	/// <summary>
+	/// Initializes the process found by the last call to <see cref="FindProcess"/>.
+	/// </summary>
+	public void Initialize(long ddstatsMarkerOffset)
+	{
+		long? baseAddress = _process == null ? null : nativeMemoryService.GetGameBaseAddress(_process);
+		if (_process == null || !baseAddress.HasValue)
 		{
 			IsInitialized = false;
 		}
 		else
 		{
 			_pointerBuffer.AsSpan().Clear();
-			nativeMemoryService.ReadMemory(_process, _process.MainModule.BaseAddress.ToInt64() + ddstatsMarkerOffset, _pointerBuffer, 0, sizeof(long));
+			nativeMemoryService.ReadMemory(_process, baseAddress.Value + ddstatsMarkerOffset, _pointerBuffer, 0, sizeof(long));
 			_memoryBlockAddress = BitConverter.ToInt64(_pointerBuffer);
 			IsInitialized = true;
 		}

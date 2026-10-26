@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Web.ApiSpec.Tools;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -9,6 +10,16 @@ internal sealed class WindowsMemoryService : INativeMemoryService
 	{
 		Process[] ddProcesses = Process.GetProcessesByName("dd");
 		return Array.Find(ddProcesses, p => p.MainWindowTitle == "Devil Daggers");
+	}
+
+	public long? GetGameBaseAddress(Process process)
+	{
+		return process.MainModule?.BaseAddress.ToInt64();
+	}
+
+	public AppOperatingSystem GetGameOperatingSystem(Process process)
+	{
+		return AppOperatingSystem.Windows;
 	}
 
 	public void ReadMemory(Process process, long address, byte[] bytes, int offset, int size)

@@ -1,5 +1,7 @@
+using DevilDaggersInfo.Web.ApiSpec.Tools;
 using Serilog;
 using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace DevilDaggersInfo.Tools.NativeInterface.Services.Linux;
@@ -98,7 +100,46 @@ internal sealed partial class LinuxMemoryService(ILogger logger) : INativeMemory
 
 	public Process? GetDevilDaggersProcess()
 	{
-		return Array.Find(Process.GetProcesses(), p => p.ProcessName.StartsWith("devildaggers"));
+		// The native build uses the name "devildaggers", while the Proton build uses the Windows name.
+		return Array.Find(Process.GetProcesses(), p => p.ProcessName.StartsWith("devildaggers") || IsProton(p));
+	}
+
+	public long? GetGameBaseAddress(Process process)
+	{
+		if (!IsProton(process))
+			return process.MainModule?.BaseAddress.ToInt64();
+
+		// Under Proton the process executable is Wine's preloader, so MainModule points at the preloader rather than the game.
+		// The game executable is mapped by Wine and is not listed in Process.Modules either, so look it up in the memory maps.
+		// Each line has the format "start-end perms offset dev inode path", and the first mapping of the file is its base.
+		try
+		{
+			foreach (string line in File.ReadLines($"/proc/{process.Id}/maps"))
+			{
+				if (!line.EndsWith("/dd.exe", StringComparison.OrdinalIgnoreCase))
+					continue;
+
+				int dashIndex = line.IndexOf('-', StringComparison.Ordinal);
+				if (dashIndex > 0 && long.TryParse(line.AsSpan(0, dashIndex), NumberStyles.AllowHexSpecifier, CultureInfo.InvariantCulture, out long baseAddress))
+					return baseAddress;
+			}
+		}
+		catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+		{
+			// The process exited or its maps cannot be read.
+		}
+
+		return null;
+	}
+
+	public AppOperatingSystem GetGameOperatingSystem(Process process)
+	{
+		return IsProton(process) ? AppOperatingSystem.Windows : AppOperatingSystem.Linux;
+	}
+
+	private static bool IsProton(Process process)
+	{
+		return process.ProcessName.StartsWith("dd.exe", StringComparison.Ordinal);
 	}
 
 	// Read memory using linux syscall, this seems to have best cross distro support without having to tinker with OS settings

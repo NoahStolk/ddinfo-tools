@@ -3,8 +3,10 @@ using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
 using DevilDaggersInfo.Tools.Platforms;
 using DevilDaggersInfo.Tools.Ui.Popups;
+using DevilDaggersInfo.Web.ApiSpec.Tools;
 using DevilDaggersInfo.Web.ApiSpec.Tools.ProcessMemory;
 using Serilog;
+using System.Collections.Concurrent;
 
 namespace DevilDaggersInfo.Tools;
 
@@ -14,6 +16,9 @@ internal sealed class GameMemoryServiceWrapper(
 	IPlatformSpecificValues platformSpecificValues,
 	ILogger logger)
 {
+	// Written from the HTTP callback thread.
+	private readonly ConcurrentDictionary<AppOperatingSystem, long> _markers = new();
+
 	private bool _tryDownloadMarker = true;
 
 	public long? Marker { get; private set; }
@@ -24,34 +29,40 @@ internal sealed class GameMemoryServiceWrapper(
 	/// <returns>Whether the marker is known.</returns>
 	public bool Scan()
 	{
-		if (!Marker.HasValue)
-		{
-			if (!_tryDownloadMarker)
-				return false;
+		// Always find the process, so we detach properly when the game exits.
+		gameMemoryService.FindProcess();
 
-			InitializeMarker();
+		// The marker depends on the build of the game rather than the OS the app runs on, since the Windows build can run on Linux through Proton.
+		// Without a process, fall back to the app's OS so the marker is usually known by the time the game is started.
+		AppOperatingSystem markerOperatingSystem = gameMemoryService.GameOperatingSystem ?? platformSpecificValues.AppOperatingSystem;
+		if (!_markers.TryGetValue(markerOperatingSystem, out long marker))
+		{
+			Marker = null;
+			if (_tryDownloadMarker)
+				InitializeMarker(markerOperatingSystem);
+
 			return false;
 		}
 
-		// Always initialize the process, so we detach properly when the game exits.
-		gameMemoryService.Initialize(Marker.Value);
+		Marker = marker;
+		gameMemoryService.Initialize(marker);
 		gameMemoryService.Scan();
 
 		return true;
 	}
 
-	private void InitializeMarker()
+	private void InitializeMarker(AppOperatingSystem appOperatingSystem)
 	{
 		// Workaround to prevent multiple popups from appearing during continuous retry.
 		if (popupManager.IsAnyOpen)
 			return;
 
-		AsyncHandler.Run(SetMarker, () => FetchMarker.HandleAsync(platformSpecificValues.AppOperatingSystem));
+		AsyncHandler.Run(SetMarker, () => FetchMarker.HandleAsync(appOperatingSystem));
 
 		void SetMarker(ApiResult<GetMarker> getMarkerResult)
 		{
 			getMarkerResult.Match(
-				onSuccess: getMarker => Marker = getMarker.Value,
+				onSuccess: getMarker => _markers[appOperatingSystem] = getMarker.Value,
 				onError: apiError =>
 				{
 					logger.Error(apiError.Exception, "API error: {Message}", apiError.Message);
