@@ -10,4 +10,4 @@ namespace DevilDaggersInfo.Tools.JsonSerializerContexts;
 	GenerationMode = JsonSourceGenerationMode.Default)]
 [JsonSerializable(typeof(UserCacheModel))]
 [JsonSerializable(typeof(UserSettingsModel))]
-internal partial class UserJsonModelsContext : JsonSerializerContext;
+internal sealed partial class UserJsonModelsContext : JsonSerializerContext;

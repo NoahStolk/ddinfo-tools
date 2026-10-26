@@ -18,4 +18,4 @@ namespace DevilDaggersInfo.Tools.JsonSerializerContexts;
 [JsonSerializable(typeof(GetUploadResponse))]
 [JsonSerializable(typeof(List<GetCustomLeaderboardAllowedCategory>))]
 [JsonSerializable(typeof(List<GetCustomLeaderboardForOverview>))]
-internal partial class ApiModelsContext : JsonSerializerContext;
+internal sealed partial class ApiModelsContext : JsonSerializerContext;

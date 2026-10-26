@@ -2,9 +2,9 @@ using DevilDaggersInfo.Core.Spawnset;
 
 namespace DevilDaggersInfo.Tools.User.Settings.Model;
 
-internal record UserSettingsPracticeTemplate(string? Name, HandLevel HandLevel, int AdditionalGems, float TimerStart)
+internal sealed record UserSettingsPracticeTemplate(string? Name, HandLevel HandLevel, int AdditionalGems, float TimerStart)
 {
-	public virtual bool Equals(UserSettingsPracticeTemplate? other)
+	public bool Equals(UserSettingsPracticeTemplate? other)
 	{
 		if (other == null)
 			return false;
