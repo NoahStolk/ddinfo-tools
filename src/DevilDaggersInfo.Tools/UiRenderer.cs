@@ -13,6 +13,7 @@ using DevilDaggersInfo.Tools.Ui.ReplayEditor;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 using DevilDaggersInfo.Tools.User.Settings;
+using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools;
 
@@ -107,6 +108,8 @@ internal sealed class UiRenderer(
 				modPreviewWindow.Render();
 				modInstallationWindow.Render();
 				break;
+			default:
+				throw new UnreachableException($"Invalid layout type: {uiLayoutManager.Layout}");
 		}
 
 		if (userSettings.Model.ShowDebug)
