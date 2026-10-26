@@ -259,7 +259,7 @@ dotnet_diagnostic.S103.severity                                               = 
 # Diagnostics: Suggestion #
 ###########################
 
-# Complete the task associated to this 'TODO' comment.
+# Complete the task associated to this to-do comment.
 dotnet_diagnostic.S1135.severity                                              = suggestion
 
 #####################
@@ -275,11 +275,17 @@ dotnet_diagnostic.CA1002.severity                                             = 
 # Do not declare visible instance fields.
 dotnet_diagnostic.CA1051.severity                                             = none
 
+# URI properties should not be strings.
+dotnet_diagnostic.CA1056.severity                                             = none
+
 # Validate arguments of public methods.
 dotnet_diagnostic.CA1062.severity                                             = none
 
 # Normalize strings to uppercase.
 dotnet_diagnostic.CA1308.severity                                             = none
+
+# Properties should not return arrays.
+dotnet_diagnostic.CA1819.severity                                             = none
 
 # Do not directly await a Task.
 dotnet_diagnostic.CA2007.severity                                             = none
@@ -335,7 +341,7 @@ dotnet_diagnostic.S4581.severity                                              = 
 # Allowing unsafe code is security-sensitive.
 dotnet_diagnostic.S6640.severity                                              = none
 
-# Enable XML documentation output.
+# XML comment analysis is disabled due to project configuration.
 dotnet_diagnostic.SA0001.severity                                             = none
 
 # The keyword 'new' should be followed by a space. (C# 9)
