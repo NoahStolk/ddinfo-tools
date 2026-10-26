@@ -19,7 +19,7 @@ internal static class CompileLogic
 
 		if (createDd)
 		{
-			byte[] ddBinary = await BuildDdBinaryAsync(mod.Meshes.Cast<IAssetPath>().Concat(mod.ObjectBindings).Concat(mod.Shaders).Concat(mod.Textures).ToList());
+			byte[] ddBinary = await BuildDdBinaryAsync([.. mod.Meshes, .. mod.ObjectBindings, .. mod.Shaders, .. mod.Textures]);
 			await File.WriteAllBytesAsync(Path.Combine(outputDirectory, $"dd{outputFileName}"), ddBinary);
 		}
 	}

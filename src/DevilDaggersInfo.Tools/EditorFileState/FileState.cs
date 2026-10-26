@@ -120,8 +120,8 @@ internal sealed class FileState<TObject, TEditType>
 			HistoryEntry<TObject, TEditType> historyEntry = new(copy, hash, editType);
 
 			// Clear any newer history.
-			List<HistoryEntry<TObject, TEditType>> newHistory = History.ToList();
-			newHistory = newHistory.Take(CurrentHistoryIndex + 1).Append(historyEntry).ToList();
+			List<HistoryEntry<TObject, TEditType>> newHistory = [.. History];
+			newHistory = [.. newHistory.Take(CurrentHistoryIndex + 1), historyEntry];
 
 			// Remove history if there are too many entries.
 			int newCurrentIndex = CurrentHistoryIndex + 1;

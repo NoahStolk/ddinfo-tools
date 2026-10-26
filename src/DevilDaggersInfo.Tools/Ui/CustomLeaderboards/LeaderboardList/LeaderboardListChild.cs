@@ -108,7 +108,7 @@ internal sealed class LeaderboardListChild(ResourceManager resourceManager, Popu
 					{
 						_categories.Clear();
 						_categories.AddRange(getCategories);
-						_categoryNames = getCategories.Select(ToDisplayString).ToArray();
+						_categoryNames = [.. getCategories.Select(ToDisplayString)];
 
 						static string ToDisplayString(GetCustomLeaderboardAllowedCategory allowedCategory)
 						{
