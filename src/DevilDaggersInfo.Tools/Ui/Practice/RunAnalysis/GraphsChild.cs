@@ -12,6 +12,11 @@ namespace DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis;
 
 internal sealed class GraphsChild(FontService fontService)
 {
+	private const float _graphHeight = 256;
+
+	// Allow up to an hour of data (roughly 3600 seconds in game).
+	private const int _dataLength = 60 * 60;
+
 	private readonly List<int> _gemsCollected = [];
 	private readonly List<int> _gemsDespawned = [];
 	private readonly List<int> _gemsEaten = [];
@@ -19,13 +24,12 @@ internal sealed class GraphsChild(FontService fontService)
 	private readonly List<int> _homingStored = [];
 	private readonly List<int> _homingEaten = [];
 
-	// Allow up to an hour of data (roughly 3600 seconds in game).
-	private readonly Vector2[] _gemsCollectedPoints = new Vector2[60 * 60];
-	private readonly Vector2[] _gemsDespawnedPoints = new Vector2[60 * 60];
-	private readonly Vector2[] _gemsEatenPoints = new Vector2[60 * 60];
-	private readonly Vector2[] _gemsTotalPoints = new Vector2[60 * 60];
-	private readonly Vector2[] _homingStoredPoints = new Vector2[60 * 60];
-	private readonly Vector2[] _homingEatenPoints = new Vector2[60 * 60];
+	private readonly Vector2[] _gemsCollectedPoints = new Vector2[_dataLength];
+	private readonly Vector2[] _gemsDespawnedPoints = new Vector2[_dataLength];
+	private readonly Vector2[] _gemsEatenPoints = new Vector2[_dataLength];
+	private readonly Vector2[] _gemsTotalPoints = new Vector2[_dataLength];
+	private readonly Vector2[] _homingStoredPoints = new Vector2[_dataLength];
+	private readonly Vector2[] _homingEatenPoints = new Vector2[_dataLength];
 
 	private int _maxGemsCollected;
 	private int _maxGemsDespawned;
@@ -68,7 +72,7 @@ internal sealed class GraphsChild(FontService fontService)
 		_maxHomingEaten = _homingEaten.Count > 0 ? _homingEaten.Max() : 0;
 	}
 
-	public unsafe void Render(PracticeStatsData statsData)
+	public void Render(PracticeStatsData statsData)
 	{
 		Debug.Assert(_gemsCollected.Count == _gemsDespawned.Count, "All lists should have the same length.");
 		Debug.Assert(_gemsCollected.Count == _gemsEaten.Count, "All lists should have the same length.");
@@ -80,7 +84,6 @@ internal sealed class GraphsChild(FontService fontService)
 		if (count == 0)
 			return;
 
-		const float graphHeight = 256;
 		if (ImGui.BeginChild("Graphs"))
 		{
 			ImDrawListPtr drawListPtr = ImGui.GetWindowDrawList();
@@ -95,140 +98,140 @@ internal sealed class GraphsChild(FontService fontService)
 			ImGui.Checkbox("Gems Eaten", ref _showGemsEaten);
 			ImGui.SameLine();
 			ImGui.Checkbox("Gems Total", ref _showGemsTotal);
-			RenderGemsGraph(drawListPtr, mousePos);
+			RenderGemsGraph(statsData, drawListPtr, count, mousePos);
 
-			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + graphHeight + 8);
+			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + _graphHeight + 8);
 
 			ImGuiExt.Title("Homing"u8, fontService.GoetheBold20);
 
 			ImGui.Checkbox("Homing Stored", ref _showHomingStored);
 			ImGui.SameLine();
 			ImGui.Checkbox("Homing Eaten", ref _showHomingEaten);
-			RenderHomingGraph(drawListPtr, mousePos);
+			RenderHomingGraph(statsData, drawListPtr, count, mousePos);
 		}
 
 		ImGui.EndChild();
+	}
 
-		void RenderGemsGraph(ImDrawListPtr drawListPtr, Vector2 mousePos)
+	private void RenderGemsGraph(PracticeStatsData statsData, ImDrawListPtr drawListPtr, int count, Vector2 mousePos)
+	{
+		RenderGraphBackground(drawListPtr, out Vector2 pos, out Vector2 size);
+
+		ReadOnlySpan<int> maxValues = [_showGemsCollected ? _maxGemsCollected : 0, _showGemsDespawned ? _maxGemsDespawned : 0, _showGemsEaten ? _maxGemsEaten : 0, _showGemsTotal ? _maxGemsTotal : 0];
+		int max = MathUtils.Max(maxValues);
+		RenderGraphScales(statsData, drawListPtr, pos, size, max);
+		RenderGraphSplits(statsData, drawListPtr, pos, size);
+
+		if (_showGemsCollected)
+			RenderGraphLine(drawListPtr, _gemsCollected, max, _gemsCollectedPoints, 0xff0000ff, pos, size);
+
+		if (_showGemsDespawned)
+			RenderGraphLine(drawListPtr, _gemsDespawned, max, _gemsDespawnedPoints, 0xff888888, pos, size);
+
+		if (_showGemsEaten)
+			RenderGraphLine(drawListPtr, _gemsEaten, max, _gemsEatenPoints, 0xff00ff00, pos, size);
+
+		if (_showGemsTotal)
+			RenderGraphLine(drawListPtr, _gemsTotal, max, _gemsTotalPoints, 0xff000066, pos, size);
+
+		if (mousePos.X >= pos.X && mousePos.X <= pos.X + size.X && mousePos.Y >= pos.Y && mousePos.Y <= pos.Y + size.Y)
 		{
-			RenderGraphBackground(drawListPtr, out Vector2 pos, out Vector2 size);
+			int index = Math.Clamp((int)((mousePos.X - pos.X) / size.X * count), 0, count - 1);
+			int gemsCollected = _gemsCollected[index];
+			int gemsDespawned = _gemsDespawned[index];
+			int gemsEaten = _gemsEaten[index];
+			int gemsTotal = _gemsTotal[index];
 
-			ReadOnlySpan<int> maxValues = [_showGemsCollected ? _maxGemsCollected : 0, _showGemsDespawned ? _maxGemsDespawned : 0, _showGemsEaten ? _maxGemsEaten : 0, _showGemsTotal ? _maxGemsTotal : 0];
-			int max = MathUtils.Max(maxValues);
-			RenderGraphScales(drawListPtr, pos, size, max);
-			RenderGraphSplits(drawListPtr, pos, size);
-
-			if (_showGemsCollected)
-				RenderGraphLine(drawListPtr, _gemsCollected, max, _gemsCollectedPoints, 0xff0000ff, pos, size);
-
-			if (_showGemsDespawned)
-				RenderGraphLine(drawListPtr, _gemsDespawned, max, _gemsDespawnedPoints, 0xff888888, pos, size);
-
-			if (_showGemsEaten)
-				RenderGraphLine(drawListPtr, _gemsEaten, max, _gemsEatenPoints, 0xff00ff00, pos, size);
-
-			if (_showGemsTotal)
-				RenderGraphLine(drawListPtr, _gemsTotal, max, _gemsTotalPoints, 0xff000066, pos, size);
-
-			if (mousePos.X >= pos.X && mousePos.X <= pos.X + size.X && mousePos.Y >= pos.Y && mousePos.Y <= pos.Y + size.Y)
+			if (ImGui.BeginTooltip())
 			{
-				int index = Math.Clamp((int)((mousePos.X - pos.X) / size.X * count), 0, count - 1);
-				int gemsCollected = _gemsCollected[index];
-				int gemsDespawned = _gemsDespawned[index];
-				int gemsEaten = _gemsEaten[index];
-				int gemsTotal = _gemsTotal[index];
+				AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Color.White);
+				AddTooltipText("Gems Collected"u8, Inline.Utf8(gemsCollected), Color.Red);
+				AddTooltipText("Gems Despawned"u8, Inline.Utf8(gemsDespawned), Color.Gray(0.5f));
+				AddTooltipText("Gems Eaten"u8, Inline.Utf8(gemsEaten), Color.Green);
+				AddTooltipText("Gems Total"u8, Inline.Utf8(gemsTotal), new Color(127, 0, 0, 255));
 
-				if (ImGui.BeginTooltip())
-				{
-					AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Color.White);
-					AddTooltipText("Gems Collected"u8, Inline.Utf8(gemsCollected), Color.Red);
-					AddTooltipText("Gems Despawned"u8, Inline.Utf8(gemsDespawned), Color.Gray(0.5f));
-					AddTooltipText("Gems Eaten"u8, Inline.Utf8(gemsEaten), Color.Green);
-					AddTooltipText("Gems Total"u8, Inline.Utf8(gemsTotal), new Color(127, 0, 0, 255));
-
-					ImGui.EndTooltip();
-				}
+				ImGui.EndTooltip();
 			}
 		}
+	}
 
-		void RenderHomingGraph(ImDrawListPtr drawListPtr, Vector2 mousePos)
+	private void RenderHomingGraph(PracticeStatsData statsData, ImDrawListPtr drawListPtr, int count, Vector2 mousePos)
+	{
+		RenderGraphBackground(drawListPtr, out Vector2 pos, out Vector2 size);
+
+		ReadOnlySpan<int> maxValues = [_showHomingStored ? _maxHomingStored : 0, _showHomingEaten ? _maxHomingEaten : 0];
+		int max = MathUtils.Max(maxValues);
+		RenderGraphScales(statsData, drawListPtr, pos, size, max);
+		RenderGraphSplits(statsData, drawListPtr, pos, size);
+
+		if (_showHomingStored)
+			RenderGraphLine(drawListPtr, _homingStored, max, _homingStoredPoints, ImGui.GetColorU32(UpgradeColors.Level4.ToEngineColor()), pos, size);
+
+		if (_showHomingEaten)
+			RenderGraphLine(drawListPtr, _homingEaten, max, _homingEatenPoints, 0xff0000ff, pos, size);
+
+		if (mousePos.X >= pos.X && mousePos.X <= pos.X + size.X && mousePos.Y >= pos.Y && mousePos.Y <= pos.Y + size.Y)
 		{
-			RenderGraphBackground(drawListPtr, out Vector2 pos, out Vector2 size);
+			int index = Math.Clamp((int)((mousePos.X - pos.X) / size.X * count), 0, count - 1);
+			int homingStored = _homingStored[index];
+			int homingEaten = _homingEaten[index];
 
-			ReadOnlySpan<int> maxValues = [_showHomingStored ? _maxHomingStored : 0, _showHomingEaten ? _maxHomingEaten : 0];
-			int max = MathUtils.Max(maxValues);
-			RenderGraphScales(drawListPtr, pos, size, max);
-			RenderGraphSplits(drawListPtr, pos, size);
-
-			if (_showHomingStored)
-				RenderGraphLine(drawListPtr, _homingStored, max, _homingStoredPoints, ImGui.GetColorU32(UpgradeColors.Level4.ToEngineColor()), pos, size);
-
-			if (_showHomingEaten)
-				RenderGraphLine(drawListPtr, _homingEaten, max, _homingEatenPoints, 0xff0000ff, pos, size);
-
-			if (mousePos.X >= pos.X && mousePos.X <= pos.X + size.X && mousePos.Y >= pos.Y && mousePos.Y <= pos.Y + size.Y)
+			if (ImGui.BeginTooltip())
 			{
-				int index = Math.Clamp((int)((mousePos.X - pos.X) / size.X * count), 0, count - 1);
-				int homingStored = _homingStored[index];
-				int homingEaten = _homingEaten[index];
+				AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Color.White);
+				AddTooltipText("Homing Stored"u8, Inline.Utf8(homingStored), UpgradeColors.Level4.ToEngineColor());
+				AddTooltipText("Homing Eaten"u8, Inline.Utf8(homingEaten), Color.Red);
 
-				if (ImGui.BeginTooltip())
-				{
-					AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Color.White);
-					AddTooltipText("Homing Stored"u8, Inline.Utf8(homingStored), UpgradeColors.Level4.ToEngineColor());
-					AddTooltipText("Homing Eaten"u8, Inline.Utf8(homingEaten), Color.Red);
-
-					ImGui.EndTooltip();
-				}
+				ImGui.EndTooltip();
 			}
 		}
+	}
 
-		void RenderGraphBackground(ImDrawListPtr drawListPtr, out Vector2 pos, out Vector2 size)
+	private static void RenderGraphBackground(ImDrawListPtr drawListPtr, out Vector2 pos, out Vector2 size)
+	{
+		pos = ImGui.GetCursorScreenPos();
+		size = new Vector2(ImGui.GetWindowWidth(), _graphHeight);
+		drawListPtr.AddRectFilled(pos, pos + size, 0xff080808);
+	}
+
+	private static void RenderGraphScales(PracticeStatsData statsData, ImDrawListPtr drawListPtr, Vector2 pos, Vector2 size, int maxY)
+	{
+		Vector2 timerEndTextSize = ImGui.CalcTextSize(Inline.Utf8(statsData.TimerEnd, StringFormats.TimeFormat));
+
+		drawListPtr.AddText(pos, 0xffffffff, Inline.Utf8(maxY));
+		drawListPtr.AddText(pos + new Vector2(0, size.Y - timerEndTextSize.Y), 0xffffffff, Inline.Utf8(statsData.TimerStart, StringFormats.TimeFormat));
+		drawListPtr.AddText(pos + size - timerEndTextSize, 0xffffffff, Inline.Utf8(statsData.TimerEnd, StringFormats.TimeFormat));
+	}
+
+	private static unsafe void RenderGraphLine(ImDrawListPtr drawListPtr, List<int> data, int maxDataEntry, Vector2[] pointsArray, uint color, Vector2 cursorScreenPos, Vector2 graphSize)
+	{
+		pointsArray.AsSpan().Clear();
+		for (int i = 0; i < data.Count; i++)
 		{
-			pos = ImGui.GetCursorScreenPos();
-			size = new Vector2(ImGui.GetWindowWidth(), graphHeight);
-			drawListPtr.AddRectFilled(pos, pos + size, 0xff080808);
+			float normalizedX = i / (float)(data.Count - 1);
+			float normalizedY = data[i] / (float)maxDataEntry;
+			pointsArray[i] = new Vector2(cursorScreenPos.X + normalizedX * graphSize.X, cursorScreenPos.Y + _graphHeight - normalizedY * graphSize.Y);
 		}
 
-		void RenderGraphScales(ImDrawListPtr drawListPtr, Vector2 pos, Vector2 size, int maxY)
+		fixed (Vector2* p = pointsArray)
+			drawListPtr.AddPolyline(ref p[0], data.Count, color, ImDrawFlags.None, 1);
+	}
+
+	private static void RenderGraphSplits(PracticeStatsData statsData, ImDrawListPtr drawListPtr, Vector2 pos, Vector2 size)
+	{
+		float timerStart = statsData.TimerStart;
+		float timerEnd = statsData.TimerEnd;
+
+		for (int i = 0; i < SplitsData.SplitData.Count; i++)
 		{
-			Vector2 timerEndTextSize = ImGui.CalcTextSize(Inline.Utf8(statsData.TimerEnd, StringFormats.TimeFormat));
+			int time = SplitsData.SplitData[i].Seconds;
+			if (time < timerStart || time > timerEnd)
+				continue;
 
-			drawListPtr.AddText(pos, 0xffffffff, Inline.Utf8(maxY));
-			drawListPtr.AddText(pos + new Vector2(0, size.Y - timerEndTextSize.Y), 0xffffffff, Inline.Utf8(statsData.TimerStart, StringFormats.TimeFormat));
-			drawListPtr.AddText(pos + size - timerEndTextSize, 0xffffffff, Inline.Utf8(statsData.TimerEnd, StringFormats.TimeFormat));
-		}
+			float normalizedX = (time - timerStart) / (timerEnd - timerStart);
+			float posX = pos.X + normalizedX * ImGui.GetWindowWidth();
 
-		void RenderGraphLine(ImDrawListPtr drawListPtr, IReadOnlyList<int> data, int maxDataEntry, Vector2[] pointsArray, uint color, Vector2 cursorScreenPos, Vector2 graphSize)
-		{
-			pointsArray.AsSpan().Clear();
-			for (int i = 0; i < data.Count; i++)
-			{
-				float normalizedX = i / (float)(data.Count - 1);
-				float normalizedY = data[i] / (float)maxDataEntry;
-				pointsArray[i] = new Vector2(cursorScreenPos.X + normalizedX * graphSize.X, cursorScreenPos.Y + graphHeight - normalizedY * graphSize.Y);
-			}
-
-			fixed (Vector2* p = pointsArray)
-				drawListPtr.AddPolyline(ref p[0], data.Count, color, ImDrawFlags.None, 1);
-		}
-
-		void RenderGraphSplits(ImDrawListPtr drawListPtr, Vector2 pos, Vector2 size)
-		{
-			float timerStart = statsData.TimerStart;
-			float timerEnd = statsData.TimerEnd;
-
-			for (int i = 0; i < SplitsData.SplitData.Count; i++)
-			{
-				int time = SplitsData.SplitData[i].Seconds;
-				if (time < timerStart || time > timerEnd)
-					continue;
-
-				float normalizedX = (time - timerStart) / (timerEnd - timerStart);
-				float posX = pos.X + normalizedX * ImGui.GetWindowWidth();
-
-				drawListPtr.AddLine(new Vector2(posX, pos.Y), new Vector2(posX, pos.Y + size.Y), 0xff404040);
-			}
+			drawListPtr.AddLine(new Vector2(posX, pos.Y), new Vector2(posX, pos.Y + size.Y), 0xff404040);
 		}
 	}
 
