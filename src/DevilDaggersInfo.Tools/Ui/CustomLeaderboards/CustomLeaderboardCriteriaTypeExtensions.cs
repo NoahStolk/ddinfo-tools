@@ -8,64 +8,6 @@ namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
 internal static class CustomLeaderboardCriteriaTypeExtensions
 {
-	public static Texture GetTexture(this ResourceManager resourceManager, CustomLeaderboardCriteriaType type)
-	{
-		Debug.Assert(resourceManager.GameResources != null, $"{nameof(resourceManager.GameResources)} is null, which should never happen in this UI.");
-
-		return type switch
-		{
-			CustomLeaderboardCriteriaType.GemsCollected => resourceManager.GameResources.IconMaskGemTexture,
-			CustomLeaderboardCriteriaType.GemsDespawned => resourceManager.GameResources.IconMaskGemTexture,
-			CustomLeaderboardCriteriaType.GemsEaten => resourceManager.GameResources.IconMaskGemTexture,
-			CustomLeaderboardCriteriaType.EnemiesKilled => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.DaggersFired => resourceManager.GameResources.IconMaskDaggerTexture,
-			CustomLeaderboardCriteriaType.DaggersHit => resourceManager.GameResources.IconMaskCrosshairTexture,
-			CustomLeaderboardCriteriaType.HomingStored => resourceManager.GameResources.IconMaskHomingTexture,
-			CustomLeaderboardCriteriaType.HomingEaten => resourceManager.InternalResources.IconHomingMaskTexture,
-			CustomLeaderboardCriteriaType.Skull1Kills => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.Skull2Kills => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.Skull3Kills => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.Skull4Kills => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.SpiderlingKills => resourceManager.InternalResources.IconSpiderTexture,
-			CustomLeaderboardCriteriaType.SpiderEggKills => resourceManager.InternalResources.IconEggTexture,
-			CustomLeaderboardCriteriaType.Squid1Kills => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.Squid2Kills => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.Squid3Kills => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.CentipedeKills => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.GigapedeKills => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.GhostpedeKills => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.Spider1Kills => resourceManager.InternalResources.IconSpiderTexture,
-			CustomLeaderboardCriteriaType.Spider2Kills => resourceManager.InternalResources.IconSpiderTexture,
-			CustomLeaderboardCriteriaType.LeviathanKills => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.OrbKills => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.ThornKills => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.Skull1sAlive => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.Skull2sAlive => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.Skull3sAlive => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.Skull4sAlive => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.SpiderlingsAlive => resourceManager.InternalResources.IconSpiderTexture,
-			CustomLeaderboardCriteriaType.SpiderEggsAlive => resourceManager.InternalResources.IconEggTexture,
-			CustomLeaderboardCriteriaType.Squid1sAlive => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.Squid2sAlive => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.Squid3sAlive => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.CentipedesAlive => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.GigapedesAlive => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.GhostpedesAlive => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.Spider1sAlive => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.Spider2sAlive => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.LeviathansAlive => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.OrbsAlive => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.ThornsAlive => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.DeathType => resourceManager.GameResources.IconMaskSkullTexture,
-			CustomLeaderboardCriteriaType.Time => resourceManager.GameResources.IconMaskStopwatchTexture,
-			CustomLeaderboardCriteriaType.LevelUpTime2 => resourceManager.GameResources.IconMaskStopwatchTexture,
-			CustomLeaderboardCriteriaType.LevelUpTime3 => resourceManager.GameResources.IconMaskStopwatchTexture,
-			CustomLeaderboardCriteriaType.LevelUpTime4 => resourceManager.GameResources.IconMaskStopwatchTexture,
-			CustomLeaderboardCriteriaType.EnemiesAlive => resourceManager.GameResources.IconMaskSkullTexture,
-			_ => resourceManager.InternalResources.IconEyeTexture,
-		};
-	}
-
 	public static Color GetColor(this CustomLeaderboardCriteriaType type)
 	{
 		return type switch

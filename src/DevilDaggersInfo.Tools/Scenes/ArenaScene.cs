@@ -1,4 +1,3 @@
-// ReSharper disable ForCanBeConvertedToForeach
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
@@ -9,6 +8,7 @@ using DevilDaggersInfo.Tools.User.Settings;
 using Silk.NET.GLFW;
 using System.Numerics;
 
+// ReSharper disable ForCanBeConvertedToForeach
 namespace DevilDaggersInfo.Tools.Scenes;
 
 /// <summary>
@@ -25,10 +25,7 @@ internal sealed class ArenaScene
 	private readonly Tile[] _hitboxTiles = new Tile[SpawnsetBinary.ArenaDimensionMax * SpawnsetBinary.ArenaDimensionMax];
 	private readonly float[] _hitboxSquaredDistances = new float[SpawnsetBinary.ArenaDimensionMax * SpawnsetBinary.ArenaDimensionMax];
 
-	private readonly RaceDagger _raceDagger = new();
 	private readonly List<LightObject> _lights = [];
-
-	private Player? _player;
 
 	public unsafe ArenaScene(
 		Glfw glfw,
@@ -57,8 +54,10 @@ internal sealed class ArenaScene
 	public ReplaySimulation? ReplaySimulation { get; private set; }
 
 	public ArenaEditorContext? EditorContext { get; }
-	public RaceDagger RaceDagger => _raceDagger;
-	public Player? Player => _player;
+	public RaceDagger RaceDagger { get; } = new();
+
+	public Player? Player { get; private set; }
+
 	public IReadOnlyList<LightObject> Lights => _lights;
 	public bool ShowSkull4 { get; private set; }
 
@@ -87,11 +86,11 @@ internal sealed class ArenaScene
 	{
 		ReplaySimulation = replaySimulation;
 
-		if (_player != null)
-			_lights.Remove(_player.Light);
+		if (Player != null)
+			_lights.Remove(Player.Light);
 
-		_player = new Player(ReplaySimulation);
-		_lights.Add(_player.Light);
+		Player = new Player(ReplaySimulation);
+		_lights.Add(Player.Light);
 	}
 
 	/// <summary>
@@ -108,8 +107,8 @@ internal sealed class ArenaScene
 		// matrices from the rotation Camera.Update just set, and is the only thing that gives the camera its viewport size.
 		Camera.PreRender(viewportWidth, viewportHeight);
 
-		_raceDagger.Update(spawnset, CurrentTick);
-		_player?.Update(CurrentTick);
+		RaceDagger.Update(spawnset, CurrentTick);
+		Player?.Update(CurrentTick);
 
 		for (int i = 0; i < Tiles.GetLength(0); i++)
 		{

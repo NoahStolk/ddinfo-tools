@@ -10,8 +10,10 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Utils;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using Hexa.NET.ImGui;
+using System.Diagnostics;
 using System.Numerics;
 using System.Text;
+using CustomLeaderboardCriteriaType = DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards.CustomLeaderboardCriteriaType;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 
@@ -45,7 +47,15 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 
 	private unsafe void RenderTable()
 	{
-		const ImGuiTableFlags flags = ImGuiTableFlags.Resizable | ImGuiTableFlags.Reorderable | ImGuiTableFlags.Hideable | ImGuiTableFlags.Sortable | ImGuiTableFlags.SortMulti | ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersV | ImGuiTableFlags.NoBordersInBody;
+		const ImGuiTableFlags flags =
+			ImGuiTableFlags.Resizable |
+			ImGuiTableFlags.Reorderable |
+			ImGuiTableFlags.Hideable |
+			ImGuiTableFlags.Sortable |
+			ImGuiTableFlags.SortMulti |
+			ImGuiTableFlags.RowBg |
+			ImGuiTableFlags.BordersV |
+			ImGuiTableFlags.NoBordersInBody;
 
 		ImGui.PushStyleVar(ImGuiStyleVar.CellPadding, new Vector2(4, 1));
 		if (ImGui.BeginTable("LeaderboardListTable", 10, flags))
@@ -94,7 +104,7 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 				for (int j = 0; j < clOverview.Criteria.Count; j++)
 				{
 					GetCustomLeaderboardCriteria criteria = clOverview.Criteria[j];
-					ImGuiImage.Image(resourceManager.GetTexture(criteria.Type).Id, new Vector2(16), criteria.Type.GetColor());
+					ImGuiImage.Image(GetTexture(resourceManager, criteria.Type).Id, new Vector2(16), criteria.Type.GetColor());
 					if (ImGui.IsItemHovered())
 					{
 						// TODO: May need to improve performance here by caching the text, or perhaps return the text from the API.
@@ -112,12 +122,16 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 					_ => "0",
 				};
 
-				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.SelectedPlayerStats?.Dagger), clOverview.SelectedPlayerStats == null ? "-"u8 : Inline.Utf8(clOverview.SelectedPlayerStats.HighscoreValue, valueFormat));
+				ImGui.TextColored(
+					CustomLeaderboardDaggerUtils.GetColor(clOverview.SelectedPlayerStats?.Dagger),
+					clOverview.SelectedPlayerStats == null ? "-"u8 : Inline.Utf8(clOverview.SelectedPlayerStats.HighscoreValue, valueFormat));
 				ImGui.TableNextColumn();
 
 				bool completed = clOverview.SelectedPlayerStats?.Dagger == CustomLeaderboardDagger.Leviathan;
 				Color color = CustomLeaderboardDaggerUtils.GetColor(completed ? CustomLeaderboardDagger.Leviathan : clOverview.SelectedPlayerStats?.NextDagger?.Dagger);
-				ImGui.TextColored(color, completed ? "COMPLETED"u8 : clOverview.SelectedPlayerStats?.NextDagger == null ? "N/A"u8 : Inline.Utf8(clOverview.SelectedPlayerStats.NextDagger.DaggerValue, valueFormat));
+				ImGui.TextColored(
+					color,
+					completed ? "COMPLETED"u8 : clOverview.SelectedPlayerStats?.NextDagger == null ? "N/A"u8 : Inline.Utf8(clOverview.SelectedPlayerStats.NextDagger.DaggerValue, valueFormat));
 				ImGui.TableNextColumn();
 
 				ImGui.Text(clOverview.SelectedPlayerStats == null ? "-"u8 : Inline.Utf8(clOverview.SelectedPlayerStats.Rank));
@@ -126,7 +140,9 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 				ImGui.Text(Inline.Utf8(clOverview.PlayerCount));
 				ImGui.TableNextColumn();
 
-				ImGui.TextColored(CustomLeaderboardDaggerUtils.GetColor(clOverview.WorldRecord?.Dagger), clOverview.WorldRecord == null ? "-"u8 : Inline.Utf8(clOverview.WorldRecord.WorldRecordValue, valueFormat));
+				ImGui.TextColored(
+					CustomLeaderboardDaggerUtils.GetColor(clOverview.WorldRecord?.Dagger),
+					clOverview.WorldRecord == null ? "-"u8 : Inline.Utf8(clOverview.WorldRecord.WorldRecordValue, valueFormat));
 				ImGui.TableNextColumn();
 
 				// TODO: Use ReadOnlySpan<byte>.
@@ -196,5 +212,63 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 		}
 
 		return sb.ToString().Trim();
+	}
+
+	private static Texture GetTexture(ResourceManager resourceManager, CustomLeaderboardCriteriaType type)
+	{
+		Debug.Assert(resourceManager.GameResources != null, $"{nameof(resourceManager.GameResources)} is null, which should never happen in this UI.");
+
+		return type switch
+		{
+			CustomLeaderboardCriteriaType.GemsCollected => resourceManager.GameResources.IconMaskGemTexture,
+			CustomLeaderboardCriteriaType.GemsDespawned => resourceManager.GameResources.IconMaskGemTexture,
+			CustomLeaderboardCriteriaType.GemsEaten => resourceManager.GameResources.IconMaskGemTexture,
+			CustomLeaderboardCriteriaType.EnemiesKilled => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.DaggersFired => resourceManager.GameResources.IconMaskDaggerTexture,
+			CustomLeaderboardCriteriaType.DaggersHit => resourceManager.GameResources.IconMaskCrosshairTexture,
+			CustomLeaderboardCriteriaType.HomingStored => resourceManager.GameResources.IconMaskHomingTexture,
+			CustomLeaderboardCriteriaType.HomingEaten => resourceManager.InternalResources.IconHomingMaskTexture,
+			CustomLeaderboardCriteriaType.Skull1Kills => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.Skull2Kills => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.Skull3Kills => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.Skull4Kills => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.SpiderlingKills => resourceManager.InternalResources.IconSpiderTexture,
+			CustomLeaderboardCriteriaType.SpiderEggKills => resourceManager.InternalResources.IconEggTexture,
+			CustomLeaderboardCriteriaType.Squid1Kills => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.Squid2Kills => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.Squid3Kills => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.CentipedeKills => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.GigapedeKills => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.GhostpedeKills => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.Spider1Kills => resourceManager.InternalResources.IconSpiderTexture,
+			CustomLeaderboardCriteriaType.Spider2Kills => resourceManager.InternalResources.IconSpiderTexture,
+			CustomLeaderboardCriteriaType.LeviathanKills => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.OrbKills => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.ThornKills => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.Skull1sAlive => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.Skull2sAlive => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.Skull3sAlive => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.Skull4sAlive => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.SpiderlingsAlive => resourceManager.InternalResources.IconSpiderTexture,
+			CustomLeaderboardCriteriaType.SpiderEggsAlive => resourceManager.InternalResources.IconEggTexture,
+			CustomLeaderboardCriteriaType.Squid1sAlive => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.Squid2sAlive => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.Squid3sAlive => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.CentipedesAlive => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.GigapedesAlive => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.GhostpedesAlive => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.Spider1sAlive => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.Spider2sAlive => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.LeviathansAlive => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.OrbsAlive => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.ThornsAlive => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.DeathType => resourceManager.GameResources.IconMaskSkullTexture,
+			CustomLeaderboardCriteriaType.Time => resourceManager.GameResources.IconMaskStopwatchTexture,
+			CustomLeaderboardCriteriaType.LevelUpTime2 => resourceManager.GameResources.IconMaskStopwatchTexture,
+			CustomLeaderboardCriteriaType.LevelUpTime3 => resourceManager.GameResources.IconMaskStopwatchTexture,
+			CustomLeaderboardCriteriaType.LevelUpTime4 => resourceManager.GameResources.IconMaskStopwatchTexture,
+			CustomLeaderboardCriteriaType.EnemiesAlive => resourceManager.GameResources.IconMaskSkullTexture,
+			_ => resourceManager.InternalResources.IconEyeTexture,
+		};
 	}
 }
