@@ -245,30 +245,35 @@ internal sealed class LeaderboardChild(
 		[
 			.. sorting switch
 			{
-				LeaderboardSorting.Rank => sortAscending ? _sortedEntries.OrderBy(ce => ce.Rank) : _sortedEntries.OrderByDescending(ce => ce.Rank),
-				LeaderboardSorting.PlayerName => sortAscending ? _sortedEntries.OrderBy(ce => ce.PlayerName.ToLower()) : _sortedEntries.OrderByDescending(ce => ce.PlayerName.ToLower()),
-				LeaderboardSorting.Time => sortAscending ? _sortedEntries.OrderBy(ce => ce.TimeInSeconds) : _sortedEntries.OrderByDescending(ce => ce.TimeInSeconds),
-				LeaderboardSorting.EnemiesAlive => sortAscending ? _sortedEntries.OrderBy(ce => ce.EnemiesAlive) : _sortedEntries.OrderByDescending(ce => ce.EnemiesAlive),
-				LeaderboardSorting.EnemiesKilled => sortAscending ? _sortedEntries.OrderBy(ce => ce.EnemiesKilled) : _sortedEntries.OrderByDescending(ce => ce.EnemiesKilled),
-				LeaderboardSorting.GemsCollected => sortAscending ? _sortedEntries.OrderBy(ce => ce.GemsCollected) : _sortedEntries.OrderByDescending(ce => ce.GemsCollected),
-				LeaderboardSorting.GemsDespawned => sortAscending ? _sortedEntries.OrderBy(ce => ce.GemsDespawned) : _sortedEntries.OrderByDescending(ce => ce.GemsDespawned),
-				LeaderboardSorting.GemsEaten => sortAscending ? _sortedEntries.OrderBy(ce => ce.GemsEaten) : _sortedEntries.OrderByDescending(ce => ce.GemsEaten),
-				LeaderboardSorting.Accuracy => sortAscending ? _sortedEntries.OrderBy(GetAccuracy) : _sortedEntries.OrderByDescending(GetAccuracy),
-				LeaderboardSorting.DeathType => sortAscending ? _sortedEntries.OrderBy(DeathSort) : _sortedEntries.OrderByDescending(DeathSort),
-				LeaderboardSorting.HomingStored => sortAscending ? _sortedEntries.OrderBy(ce => ce.HomingStored) : _sortedEntries.OrderByDescending(ce => ce.HomingStored),
-				LeaderboardSorting.HomingEaten => sortAscending ? _sortedEntries.OrderBy(ce => ce.HomingEaten) : _sortedEntries.OrderByDescending(ce => ce.HomingEaten),
-				LeaderboardSorting.LevelUpTime2 => sortAscending ? _sortedEntries.OrderBy(ce => ce.LevelUpTime2InSeconds) : _sortedEntries.OrderByDescending(ce => ce.LevelUpTime2InSeconds),
-				LeaderboardSorting.LevelUpTime3 => sortAscending ? _sortedEntries.OrderBy(ce => ce.LevelUpTime3InSeconds) : _sortedEntries.OrderByDescending(ce => ce.LevelUpTime3InSeconds),
-				LeaderboardSorting.LevelUpTime4 => sortAscending ? _sortedEntries.OrderBy(ce => ce.LevelUpTime4InSeconds) : _sortedEntries.OrderByDescending(ce => ce.LevelUpTime4InSeconds),
-				LeaderboardSorting.SubmitDate => sortAscending ? _sortedEntries.OrderBy(ce => ce.SubmitDate) : _sortedEntries.OrderByDescending(ce => ce.SubmitDate),
+				LeaderboardSorting.Rank => Sort(sortAscending, ce => ce.Rank),
+				LeaderboardSorting.PlayerName => Sort(sortAscending, ce => ce.PlayerName.ToLower()),
+				LeaderboardSorting.Time => Sort(sortAscending, ce => ce.TimeInSeconds),
+				LeaderboardSorting.EnemiesAlive => Sort(sortAscending, ce => ce.EnemiesAlive),
+				LeaderboardSorting.EnemiesKilled => Sort(sortAscending, ce => ce.EnemiesKilled),
+				LeaderboardSorting.GemsCollected => Sort(sortAscending, ce => ce.GemsCollected),
+				LeaderboardSorting.GemsDespawned => Sort(sortAscending, ce => ce.GemsDespawned),
+				LeaderboardSorting.GemsEaten => Sort(sortAscending, ce => ce.GemsEaten),
+				LeaderboardSorting.Accuracy => Sort(sortAscending, GetAccuracy),
+				LeaderboardSorting.DeathType => Sort(sortAscending, GetDeathSortingValue),
+				LeaderboardSorting.HomingStored => Sort(sortAscending, ce => ce.HomingStored),
+				LeaderboardSorting.HomingEaten => Sort(sortAscending, ce => ce.HomingEaten),
+				LeaderboardSorting.LevelUpTime2 => Sort(sortAscending, ce => ce.LevelUpTime2InSeconds),
+				LeaderboardSorting.LevelUpTime3 => Sort(sortAscending, ce => ce.LevelUpTime3InSeconds),
+				LeaderboardSorting.LevelUpTime4 => Sort(sortAscending, ce => ce.LevelUpTime4InSeconds),
+				LeaderboardSorting.SubmitDate => Sort(sortAscending, ce => ce.SubmitDate),
 				_ => throw new UnreachableException($"Unknown sorting: {sorting}"),
 			},
 		];
+	}
 
-		static string? DeathSort(GetCustomEntry ce)
-		{
-			return Deaths.GetDeathByType(GameConstants.CurrentVersion, ce.DeathType)?.Name;
-		}
+	private IOrderedEnumerable<GetCustomEntry> Sort<T>(bool sortAscending, Func<GetCustomEntry, T> keySelector)
+	{
+		return sortAscending ? _sortedEntries.OrderBy(keySelector) : _sortedEntries.OrderByDescending(keySelector);
+	}
+
+	private static string? GetDeathSortingValue(GetCustomEntry ce)
+	{
+		return Deaths.GetDeathByType(GameConstants.CurrentVersion, ce.DeathType)?.Name;
 	}
 
 	private static float GetAccuracy(GetCustomEntry ce)

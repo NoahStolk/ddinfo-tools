@@ -62,7 +62,7 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 		{
 			ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.DefaultSort, 0, (int)LeaderboardListSorting.Name);
 			ImGui.TableSetupColumn("Author", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Author);
-			ImGui.TableSetupColumn("Criteria", ImGuiTableColumnFlags.NoSort);
+			ImGui.TableSetupColumn("Criteria", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Criteria);
 			ImGui.TableSetupColumn("Score", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Score);
 			ImGui.TableSetupColumn("Next dagger", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.NextDagger);
 			ImGui.TableSetupColumn("Rank", ImGuiTableColumnFlags.None, 0, (int)LeaderboardListSorting.Rank);

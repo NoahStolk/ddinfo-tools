@@ -195,6 +195,7 @@ internal sealed class LeaderboardListChild(ResourceManager resourceManager, Popu
 		{
 			LeaderboardListSorting.Name => Sort(cl => cl.SpawnsetName.ToLower()),
 			LeaderboardListSorting.Author => Sort(cl => cl.SpawnsetAuthorName.ToLower()),
+			LeaderboardListSorting.Criteria => Sort(cl => cl.Criteria.Count),
 			LeaderboardListSorting.Score => Sort(cl => cl.SelectedPlayerStats?.HighscoreValue),
 			LeaderboardListSorting.NextDagger => Sort(GetNextDaggerSortingKey),
 			LeaderboardListSorting.Rank => Sort(GetRankSortingKey),

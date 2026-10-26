@@ -4,6 +4,7 @@ internal enum LeaderboardListSorting
 {
 	Name,
 	Author,
+	Criteria,
 	Score,
 	NextDagger,
 	Rank,
