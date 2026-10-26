@@ -7,11 +7,8 @@ public sealed class ModelContent
 		if (meshes.Count == 0)
 			throw new InvalidOperationException("Model must have meshes.");
 
-		Meshes = meshes;
 		MainMesh = meshes.Keys.First();
 	}
-
-	public Dictionary<MeshContent, TextureContent> Meshes { get; }
 
 	public MeshContent MainMesh { get; }
 }
