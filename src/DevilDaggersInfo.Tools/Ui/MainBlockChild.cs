@@ -202,8 +202,10 @@ internal sealed class MainBlockChild(GameMemoryServiceWrapper gameMemoryServiceW
 		ImGui.TableNextColumn();
 		ImGui.TextColored(Color.Gray(0.5f), type);
 
+		// Values can be empty (for example ReplayPlayerName outside of replays), and Text pins an empty span to a null format
+		// string, which crashes inside ImGui. TextUnformatted accepts empty text, and also doesn't treat '%' as a format specifier.
 		ImGui.TableNextColumn();
-		ImGui.Text(value);
+		ImGui.TextUnformatted(value);
 	}
 
 	private static void Row<T>(ReadOnlySpan<byte> name, ReadOnlySpan<byte> type, T value)
