@@ -126,9 +126,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 				UserSettingsPracticeTemplate originalTemplate = userSettings.Model.PracticeTemplates.First(pt => pt == customTemplate);
 				int index = userSettings.Model.PracticeTemplates.IndexOf(originalTemplate);
 
-				List<UserSettingsPracticeTemplate> newPracticeTemplates = userSettings.Model.PracticeTemplates
-					.Where(pt => pt != originalTemplate)
-					.ToList();
+				List<UserSettingsPracticeTemplate> newPracticeTemplates = [.. userSettings.Model.PracticeTemplates.Where(pt => pt != originalTemplate)];
 
 				newPracticeTemplates.Insert(index, originalTemplate with { Name = name });
 
@@ -228,24 +226,26 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 
 			if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
 			{
-				UserSettingsPracticeTemplate originalTemplate = userSettings.Model.PracticeTemplates[_customTemplateIndexToReorder.Value];
-
-				List<UserSettingsPracticeTemplate> newPracticeTemplates = userSettings.Model.PracticeTemplates
-					.Where(pt => pt != originalTemplate)
-					.ToList();
-
-				if (i < _customTemplateIndexToReorder)
-					newPracticeTemplates.Insert(i + 1, originalTemplate);
-				else
-					newPracticeTemplates.Insert(i, originalTemplate);
-
-				userSettings.Model = userSettings.Model with
-				{
-					PracticeTemplates = newPracticeTemplates,
-				};
-
+				InsertTemplate(i, _customTemplateIndexToReorder.Value);
 				_customTemplateIndexToReorder = null;
 			}
 		}
+	}
+
+	private void InsertTemplate(int i, int customTemplateIndexToReorder)
+	{
+		UserSettingsPracticeTemplate originalTemplate = userSettings.Model.PracticeTemplates[customTemplateIndexToReorder];
+
+		List<UserSettingsPracticeTemplate> newPracticeTemplates = [.. userSettings.Model.PracticeTemplates.Where(pt => pt != originalTemplate)];
+
+		if (i < customTemplateIndexToReorder)
+			newPracticeTemplates.Insert(i + 1, originalTemplate);
+		else
+			newPracticeTemplates.Insert(i, originalTemplate);
+
+		userSettings.Model = userSettings.Model with
+		{
+			PracticeTemplates = newPracticeTemplates,
+		};
 	}
 }

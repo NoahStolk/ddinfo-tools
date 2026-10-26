@@ -51,90 +51,90 @@ internal sealed class ModPreviewWindow(ModManagerState modManagerState, ModsDire
 
 	private void RenderFileInfoTable(ModBinaryType modBinaryType)
 	{
-		if (ImGui.BeginTable("File info", 2, ImGuiTableFlags.Borders, new Vector2(512, 0)))
-		{
-			ImGui.TableSetupColumn("##left", ImGuiTableColumnFlags.WidthStretch);
-			ImGui.TableSetupColumn("##right", ImGuiTableColumnFlags.WidthFixed, 256);
+		if (!ImGui.BeginTable("File info", 2, ImGuiTableFlags.Borders, new Vector2(512, 0)))
+			return;
 
-			NextColumnText("File name"u8);
-			NextColumnText(Inline.Utf8(modManagerState.SelectedFileName));
+		ImGui.TableSetupColumn("##left", ImGuiTableColumnFlags.WidthStretch);
+		ImGui.TableSetupColumn("##right", ImGuiTableColumnFlags.WidthFixed, 256);
 
-			NextColumnText("Binary type"u8);
-			NextColumnText(modBinaryType.AsUtf8LowerCaseSpan());
+		NextColumnText("File name"u8);
+		NextColumnText(Inline.Utf8(modManagerState.SelectedFileName));
 
-			NextColumnText("File size"u8);
-			NextColumnText(FileSizeUtils.Format(modManagerState.ModFileSize ?? 0));
+		NextColumnText("Binary type"u8);
+		NextColumnText(modBinaryType.AsUtf8LowerCaseSpan());
 
-			NextColumnText("Asset count"u8);
-			NextColumnText(Inline.Utf8(modManagerState.AssetCount));
+		NextColumnText("File size"u8);
+		NextColumnText(FileSizeUtils.Format(modManagerState.ModFileSize ?? 0));
 
-			NextColumnText("Prohibited asset count"u8);
-			NextColumnText(Inline.Utf8(modManagerState.ProhibitedAssetCount));
+		NextColumnText("Asset count"u8);
+		NextColumnText(Inline.Utf8(modManagerState.AssetCount));
 
-			ImGui.EndTable();
-		}
+		NextColumnText("Prohibited asset count"u8);
+		NextColumnText(Inline.Utf8(modManagerState.ProhibitedAssetCount));
+
+		ImGui.EndTable();
 	}
 
 	private unsafe void RenderTocEntriesTable(string selectedFileName)
 	{
-		if (ImGui.BeginTable("ModPreviewTocEntriesTable", 4, ImGuiTableFlags.Resizable | ImGuiTableFlags.Sortable | ImGuiTableFlags.SizingStretchSame))
+		if (!ImGui.BeginTable("ModPreviewTocEntriesTable", 4, ImGuiTableFlags.Resizable | ImGuiTableFlags.Sortable | ImGuiTableFlags.SizingStretchSame))
+			return;
+
+		ImGui.TableSetupColumn("Asset name", ImGuiTableColumnFlags.DefaultSort, 256, 0);
+		ImGui.TableSetupColumn("Asset type", ImGuiTableColumnFlags.None, 128, 1);
+		ImGui.TableSetupColumn("Prohibited", ImGuiTableColumnFlags.None, 72, 2);
+		ImGui.TableSetupColumn("Raw size", ImGuiTableColumnFlags.None, 64, 3);
+		ImGui.TableHeadersRow();
+
+		ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
+		if (sortsSpecs.Handle != null && sortsSpecs.SpecsDirty)
 		{
-			ImGui.TableSetupColumn("Asset name", ImGuiTableColumnFlags.DefaultSort, 256, 0);
-			ImGui.TableSetupColumn("Asset type", ImGuiTableColumnFlags.None, 128, 1);
-			ImGui.TableSetupColumn("Prohibited", ImGuiTableColumnFlags.None, 72, 2);
-			ImGui.TableSetupColumn("Raw size", ImGuiTableColumnFlags.None, 64, 3);
-			ImGui.TableHeadersRow();
+			uint sorting = sortsSpecs.Specs.ColumnUserID;
+			bool sortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
 
-			ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
-			if (sortsSpecs.Handle != null && sortsSpecs.SpecsDirty)
+			modManagerState.DisplayedTocEntries = sorting switch
 			{
-				uint sorting = sortsSpecs.Specs.ColumnUserID;
-				bool sortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
+				0 => sortAscending ? modManagerState.DisplayedTocEntries.OrderBy(c => c.Name.ToLower()).ToList() : modManagerState.DisplayedTocEntries.OrderByDescending(c => c.Name.ToLower()).ToList(),
+				1 => sortAscending ? modManagerState.DisplayedTocEntries.OrderBy(c => c.AssetType).ToList() : modManagerState.DisplayedTocEntries.OrderByDescending(c => c.AssetType).ToList(),
+				2 => sortAscending ? modManagerState.DisplayedTocEntries.OrderBy(c => AssetContainer.IsProhibited(c.AssetType, c.Name)).ToList() : modManagerState.DisplayedTocEntries.OrderByDescending(c => AssetContainer.IsProhibited(c.AssetType, c.Name)).ToList(),
+				3 => sortAscending ? modManagerState.DisplayedTocEntries.OrderBy(c => c.Size).ToList() : modManagerState.DisplayedTocEntries.OrderByDescending(c => c.Size).ToList(),
+				_ => throw new InvalidOperationException($"Invalid sorting column '{sorting}'."),
+			};
 
-				modManagerState.DisplayedTocEntries = sorting switch
-				{
-					0 => sortAscending ? modManagerState.DisplayedTocEntries.OrderBy(c => c.Name.ToLower()).ToList() : modManagerState.DisplayedTocEntries.OrderByDescending(c => c.Name.ToLower()).ToList(),
-					1 => sortAscending ? modManagerState.DisplayedTocEntries.OrderBy(c => c.AssetType).ToList() : modManagerState.DisplayedTocEntries.OrderByDescending(c => c.AssetType).ToList(),
-					2 => sortAscending ? modManagerState.DisplayedTocEntries.OrderBy(c => AssetContainer.IsProhibited(c.AssetType, c.Name)).ToList() : modManagerState.DisplayedTocEntries.OrderByDescending(c => AssetContainer.IsProhibited(c.AssetType, c.Name)).ToList(),
-					3 => sortAscending ? modManagerState.DisplayedTocEntries.OrderBy(c => c.Size).ToList() : modManagerState.DisplayedTocEntries.OrderByDescending(c => c.Size).ToList(),
-					_ => throw new InvalidOperationException($"Invalid sorting column '{sorting}'."),
-				};
-
-				sortsSpecs.SpecsDirty = false;
-			}
-
-			for (int i = 0; i < modManagerState.DisplayedTocEntries.Count; i++)
-			{
-				ModBinaryTocEntry tocEntry = modManagerState.DisplayedTocEntries[i];
-
-				ImGui.TableNextColumn();
-				if (ImGui.SmallButton(Inline.Utf8($"Toggle##{i}")))
-				{
-					modsDirectoryLogic.ToggleAssets(selectedFileName, toc =>
-					{
-						AssetKey key = new(tocEntry.AssetType, tocEntry.Name);
-						return tocEntry.IsEnabled ? ModBinaryToc.DisableAsset(toc, key) : ModBinaryToc.EnableAsset(toc, key);
-					});
-				}
-
-				ImGui.SameLine();
-				ImGui.Text(tocEntry.Name);
-
-				ImGui.TableNextColumn();
-				ImGui.TextColored(tocEntry.AssetType.GetColor(), tocEntry.AssetType.AsUtf8Span());
-
-				ImGui.TableNextColumn();
-				if (AssetContainer.IsProhibited(tocEntry.AssetType, tocEntry.Name))
-					ImGui.TextColored(Color.Orange, "Prohibited");
-				else
-					ImGui.TextColored(Color.Green, "OK");
-
-				ImGui.TableNextColumn();
-				ColumnTextRight(FileSizeUtils.Format(tocEntry.Size));
-			}
-
-			ImGui.EndTable();
+			sortsSpecs.SpecsDirty = false;
 		}
+
+		for (int i = 0; i < modManagerState.DisplayedTocEntries.Count; i++)
+		{
+			ModBinaryTocEntry tocEntry = modManagerState.DisplayedTocEntries[i];
+
+			ImGui.TableNextColumn();
+			if (ImGui.SmallButton(Inline.Utf8($"Toggle##{i}")))
+			{
+				modsDirectoryLogic.ToggleAssets(selectedFileName, toc =>
+				{
+					AssetKey key = new(tocEntry.AssetType, tocEntry.Name);
+					return tocEntry.IsEnabled ? ModBinaryToc.DisableAsset(toc, key) : ModBinaryToc.EnableAsset(toc, key);
+				});
+			}
+
+			ImGui.SameLine();
+			ImGui.Text(tocEntry.Name);
+
+			ImGui.TableNextColumn();
+			ImGui.TextColored(tocEntry.AssetType.GetColor(), tocEntry.AssetType.AsUtf8Span());
+
+			ImGui.TableNextColumn();
+			if (AssetContainer.IsProhibited(tocEntry.AssetType, tocEntry.Name))
+				ImGui.TextColored(Color.Orange, "Prohibited");
+			else
+				ImGui.TextColored(Color.Green, "OK");
+
+			ImGui.TableNextColumn();
+			ColumnTextRight(FileSizeUtils.Format(tocEntry.Size));
+		}
+
+		ImGui.EndTable();
 	}
 
 	private static void ColumnTextRight(ReadOnlySpan<byte> label)

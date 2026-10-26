@@ -96,15 +96,15 @@ internal sealed class PopupManager
 		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new Vector2(0.5f, 0.5f));
 
 		ImGui.SetNextWindowSizeConstraints(new Vector2(192, 128), new Vector2(float.MaxValue, float.MaxValue));
-		if (ImGui.BeginPopupModal(popup.Id))
-		{
-			if (popup.Render())
-			{
-				ImGui.CloseCurrentPopup();
-				_popups.Remove(popup);
-			}
+		if (!ImGui.BeginPopupModal(popup.Id))
+			return;
 
-			ImGui.EndPopup();
+		if (popup.Render())
+		{
+			ImGui.CloseCurrentPopup();
+			_popups.Remove(popup);
 		}
+
+		ImGui.EndPopup();
 	}
 }
