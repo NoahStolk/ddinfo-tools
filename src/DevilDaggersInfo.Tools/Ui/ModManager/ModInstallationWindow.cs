@@ -75,62 +75,62 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 
 	private void RenderEffectiveAssetsTable()
 	{
-		if (ImGui.BeginTable("EffectiveAssetsModsTable", 2, ImGuiTableFlags.Borders))
+		if (!ImGui.BeginTable("EffectiveAssetsModsTable", 2, ImGuiTableFlags.Borders))
+			return;
+
+		ImGui.TableSetupColumn("Mod file", ImGuiTableColumnFlags.WidthFixed, 192);
+		ImGui.TableSetupColumn("Assets", ImGuiTableColumnFlags.WidthStretch);
+		ImGui.TableHeadersRow();
+
+		foreach (KeyValuePair<string, List<EffectiveAsset>> kvp in modsDirectoryLogic.EffectiveAssets)
 		{
-			ImGui.TableSetupColumn("Mod file", ImGuiTableColumnFlags.WidthFixed, 192);
-			ImGui.TableSetupColumn("Assets", ImGuiTableColumnFlags.WidthStretch);
-			ImGui.TableHeadersRow();
+			ImGui.TableNextRow();
 
-			foreach (KeyValuePair<string, List<EffectiveAsset>> kvp in modsDirectoryLogic.EffectiveAssets)
+			ImGui.TableNextColumn();
+			ImGui.Text(kvp.Key);
+
+			ImGui.TableNextColumn();
+			if (ImGui.BeginTable("TocEntriesTable", 3, ImGuiTableFlags.None))
 			{
-				ImGui.TableNextRow();
+				ImGui.TableSetupColumn("Asset name", ImGuiTableColumnFlags.WidthFixed, 128);
+				ImGui.TableSetupColumn("Asset type", ImGuiTableColumnFlags.WidthFixed, 96);
+				ImGui.TableSetupColumn("Status", ImGuiTableColumnFlags.WidthStretch);
 
-				ImGui.TableNextColumn();
-				ImGui.Text(kvp.Key);
-
-				ImGui.TableNextColumn();
-				if (ImGui.BeginTable("TocEntriesTable", 3, ImGuiTableFlags.None))
+				for (int i = 0; i < kvp.Value.Count; i++)
 				{
-					ImGui.TableSetupColumn("Asset name", ImGuiTableColumnFlags.WidthFixed, 128);
-					ImGui.TableSetupColumn("Asset type", ImGuiTableColumnFlags.WidthFixed, 96);
-					ImGui.TableSetupColumn("Status", ImGuiTableColumnFlags.WidthStretch);
+					ImGui.PushStyleColor(ImGuiCol.Border, i % 2 == 0 ? Color.Invisible : Color.White);
 
-					for (int i = 0; i < kvp.Value.Count; i++)
-					{
-						ImGui.PushStyleColor(ImGuiCol.Border, i % 2 == 0 ? Color.Invisible : Color.White);
+					ImGui.TableNextRow();
 
-						ImGui.TableNextRow();
+					EffectiveAsset effectiveAsset = kvp.Value[i];
+					bool isOverridden = effectiveAsset.OverriddenByModFileName != null;
+					bool isDisabled = isOverridden || !effectiveAsset.TocEntry.IsEnabled;
+					Vector4 disabledColor = Color.Gray(0.4f);
 
-						EffectiveAsset effectiveAsset = kvp.Value[i];
-						bool isOverridden = effectiveAsset.OverriddenByModFileName != null;
-						bool isDisabled = isOverridden || !effectiveAsset.TocEntry.IsEnabled;
-						Vector4 disabledColor = Color.Gray(0.4f);
+					ImGui.TableNextColumn();
+					ImGui.TextColored(isDisabled ? disabledColor : Color.White, effectiveAsset.TocEntry.Name);
 
-						ImGui.TableNextColumn();
-						ImGui.TextColored(isDisabled ? disabledColor : Color.White, effectiveAsset.TocEntry.Name);
+					ImGui.TableNextColumn();
+					ImGui.TextColored(isDisabled ? disabledColor : effectiveAsset.TocEntry.AssetType.GetColor(), effectiveAsset.TocEntry.AssetType.AsUtf8Span());
 
-						ImGui.TableNextColumn();
-						ImGui.TextColored(isDisabled ? disabledColor : effectiveAsset.TocEntry.AssetType.GetColor(), effectiveAsset.TocEntry.AssetType.AsUtf8Span());
+					ImGui.TableNextColumn();
+					if (isOverridden)
+						ImGui.TextColored(new Vector4(1, 0.2f, 0.4f, 1), Inline.Utf8($"Overridden by {effectiveAsset.OverriddenByModFileName}"));
+					else if (AssetContainer.IsProhibited(effectiveAsset.TocEntry.AssetType, effectiveAsset.TocEntry.Name))
+						ImGui.TextColored(Color.Orange, "Prohibited");
+					else if (!effectiveAsset.TocEntry.IsEnabled)
+						ImGui.TextColored(Color.Gray(0.4f), "Disabled");
+					else
+						ImGui.TextColored(Color.Green, "OK");
 
-						ImGui.TableNextColumn();
-						if (isOverridden)
-							ImGui.TextColored(new Vector4(1, 0.2f, 0.4f, 1), Inline.Utf8($"Overridden by {effectiveAsset.OverriddenByModFileName}"));
-						else if (AssetContainer.IsProhibited(effectiveAsset.TocEntry.AssetType, effectiveAsset.TocEntry.Name))
-							ImGui.TextColored(Color.Orange, "Prohibited");
-						else if (!effectiveAsset.TocEntry.IsEnabled)
-							ImGui.TextColored(Color.Gray(0.4f), "Disabled");
-						else
-							ImGui.TextColored(Color.Green, "OK");
-
-						ImGui.PopStyleColor();
-					}
+					ImGui.PopStyleColor();
 				}
-
-				ImGui.EndTable();
 			}
 
 			ImGui.EndTable();
 		}
+
+		ImGui.EndTable();
 	}
 
 	private void Title(ReadOnlySpan<byte> label)

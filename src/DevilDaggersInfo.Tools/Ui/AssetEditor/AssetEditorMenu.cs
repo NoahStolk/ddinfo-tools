@@ -15,16 +15,16 @@ internal sealed class AssetEditorMenu(UiLayoutManager uiLayoutManager, INativeFi
 {
 	public void Render()
 	{
-		if (ImGui.BeginMainMenuBar())
-		{
-			if (ImGui.BeginMenu("File"))
-			{
-				RenderFileMenu();
-				ImGui.EndMenu();
-			}
+		if (!ImGui.BeginMainMenuBar())
+			return;
 
-			ImGui.EndMainMenuBar();
+		if (ImGui.BeginMenu("File"))
+		{
+			RenderFileMenu();
+			ImGui.EndMenu();
 		}
+
+		ImGui.EndMainMenuBar();
 	}
 
 	private void RenderFileMenu()

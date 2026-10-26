@@ -113,10 +113,7 @@ internal sealed class ResourceManager
 	private static TextureContent GetTextureContent(InternalContent content, string name)
 	{
 		content.Textures.TryGetValue(name, out TextureContent? textureContent);
-		if (textureContent == null)
-			throw new InvalidOperationException($"Could not find texture '{name}'.");
-
-		return textureContent;
+		return textureContent ?? throw new InvalidOperationException($"Could not find texture '{name}'.");
 	}
 
 	private Texture GetTexture(InternalContent content, string name)
@@ -129,9 +126,6 @@ internal sealed class ResourceManager
 	private static ModelContent GetModelContent(InternalContent content, string name)
 	{
 		content.Models.TryGetValue(name, out ModelContent? modelContent);
-		if (modelContent == null)
-			throw new InvalidOperationException($"Could not find model '{name}'.");
-
-		return modelContent;
+		return modelContent ?? throw new InvalidOperationException($"Could not find model '{name}'.");
 	}
 }

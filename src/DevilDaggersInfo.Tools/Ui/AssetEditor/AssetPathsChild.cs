@@ -25,18 +25,15 @@ internal sealed class AssetPathsChild(
 
 	public void Render()
 	{
-		if (ImGui.BeginChild("Asset Paths"))
+		if (ImGui.BeginChild("Asset Paths") && ImGui.BeginTabBar("Asset Browser Tabs"))
 		{
-			if (ImGui.BeginTabBar("Asset Browser Tabs"))
-			{
-				RenderAssets(audioPathsTable, "Audio"u8, _audioColor);
-				RenderAssets(meshPathsTable, "Meshes"u8, _meshColor);
-				RenderAssets(objectBindingPathsTable, "Object Bindings"u8, _objectBindingColor);
-				RenderAssets(shaderPathsTable, "Shaders"u8, _shaderColor);
-				RenderAssets(texturePathsTable, "Textures"u8, _textureColor);
+			RenderAssets(audioPathsTable, "Audio"u8, _audioColor);
+			RenderAssets(meshPathsTable, "Meshes"u8, _meshColor);
+			RenderAssets(objectBindingPathsTable, "Object Bindings"u8, _objectBindingColor);
+			RenderAssets(shaderPathsTable, "Shaders"u8, _shaderColor);
+			RenderAssets(texturePathsTable, "Textures"u8, _textureColor);
 
-				ImGui.EndTabBar();
-			}
+			ImGui.EndTabBar();
 		}
 
 		ImGui.EndChild();
@@ -44,45 +41,52 @@ internal sealed class AssetPathsChild(
 
 	private static unsafe void RenderAssets(IPathTable pathTable, ReadOnlySpan<byte> id, uint backgroundColor)
 	{
-		const ImGuiTableFlags tableFlags = ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable | ImGuiTableFlags.Sortable | ImGuiTableFlags.Hideable | ImGuiTableFlags.Reorderable | ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.ScrollY;
-		if (ImGui.BeginTabItem(Inline.Utf8($"{id}##Tab")))
+		const ImGuiTableFlags tableFlags =
+			ImGuiTableFlags.Borders |
+			ImGuiTableFlags.Resizable |
+			ImGuiTableFlags.Sortable |
+			ImGuiTableFlags.Hideable |
+			ImGuiTableFlags.Reorderable |
+			ImGuiTableFlags.SizingFixedFit |
+			ImGuiTableFlags.ScrollY;
+		if (!ImGui.BeginTabItem(Inline.Utf8($"{id}##Tab")))
+			return;
+
+		if (ImGui.BeginTable(Inline.Utf8($"{id}_PathsTable"), pathTable.ColumnCount, tableFlags))
 		{
-			if (ImGui.BeginTable(Inline.Utf8($"{id}_PathsTable"), pathTable.ColumnCount, tableFlags))
+			ImGui.TableSetupScrollFreeze(0, 1); // Make top row always visible
+			pathTable.SetupColumns();
+			ImGui.TableHeadersRow();
+
+			ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
+			if (sortsSpecs.Handle != null && sortsSpecs.SpecsDirty)
 			{
-				ImGui.TableSetupScrollFreeze(0, 1); // Make top row always visible
-				pathTable.SetupColumns();
-				ImGui.TableHeadersRow();
+				uint sorting = sortsSpecs.Specs.ColumnUserID;
+				bool sortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
 
-				ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
-				if (sortsSpecs.Handle != null && sortsSpecs.SpecsDirty)
-				{
-					uint sorting = sortsSpecs.Specs.ColumnUserID;
-					bool sortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
+				pathTable.Sort(sorting, sortAscending);
 
-					pathTable.Sort(sorting, sortAscending);
-
-					sortsSpecs.SpecsDirty = false;
-				}
-
-				ImGuiListClipperPtr clipper = ImGui.ImGuiListClipper();
-				clipper.Begin(pathTable.PathCount);
-				while (clipper.Step())
-				{
-					for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
-					{
-						ImGui.TableNextRow();
-						ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, backgroundColor);
-
-						pathTable.RenderPath(i);
-					}
-				}
-
-				clipper.End();
-
-				ImGui.EndTable();
+				sortsSpecs.SpecsDirty = false;
 			}
 
-			ImGui.EndTabItem();
+			ImGuiListClipperPtr clipper = ImGui.ImGuiListClipper();
+			clipper.Begin(pathTable.PathCount);
+			while (clipper.Step())
+			{
+				for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
+				{
+					ImGui.TableNextRow();
+					ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, backgroundColor);
+
+					pathTable.RenderPath(i);
+				}
+			}
+
+			clipper.End();
+
+			ImGui.EndTable();
 		}
+
+		ImGui.EndTabItem();
 	}
 }

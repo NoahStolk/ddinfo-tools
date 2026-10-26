@@ -16,19 +16,19 @@ internal static class DateTimeUtils
 			return "just now";
 
 		if (diff < TimeSpan.FromMinutes(1))
-			return $"{diff.Seconds} second{S(diff.Seconds)} ago";
+			return $"{diff.Seconds} second{FormatValue(diff.Seconds)} ago";
 
 		if (diff < TimeSpan.FromHours(1))
-			return $"{diff.Minutes} minute{S(diff.Minutes)} ago";
+			return $"{diff.Minutes} minute{FormatValue(diff.Minutes)} ago";
 
 		if (diff < TimeSpan.FromDays(1))
-			return $"{diff.Hours} hour{S(diff.Hours)} ago";
+			return $"{diff.Hours} hour{FormatValue(diff.Hours)} ago";
 
-		return $"{diff.Days} day{S(diff.Days)} ago";
+		return $"{diff.Days} day{FormatValue(diff.Days)} ago";
+	}
 
-		static string S(int value)
-		{
-			return value == 1 ? string.Empty : "s";
-		}
+	private static string FormatValue(int value)
+	{
+		return value == 1 ? string.Empty : "s";
 	}
 }
