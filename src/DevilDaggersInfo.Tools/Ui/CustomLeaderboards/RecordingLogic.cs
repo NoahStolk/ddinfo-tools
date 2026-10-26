@@ -63,7 +63,8 @@ internal sealed class RecordingLogic(
 		}
 
 		// Set current player ID when it has not been set yet.
-		// When the game starts up it will be set to -1, and then to the player ID.
+		// When the game starts up, it will be set to -1 initially, then to the player ID once logged in.
+		// 0 is not a valid ID.
 		if (mainBlock.PlayerId > 0 && userCache.Model.PlayerId != mainBlock.PlayerId)
 		{
 			userCache.Model = userCache.Model with { PlayerId = mainBlock.PlayerId };

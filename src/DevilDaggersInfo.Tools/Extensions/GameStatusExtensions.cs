@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Tools.GameMemory;
-using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Extensions;
 

@@ -188,6 +188,9 @@ internal sealed partial class Container : IContainer<Application>
 		return glfw;
 	}
 
+	/// <summary>
+	/// Constructs an instance of <see cref="GL"/>.
+	/// </summary>
 	/// <remarks>
 	/// The <paramref name="window"/> parameter is unused, but it forces the window (and therefore the current GL context)
 	/// to exist before the entry points are resolved. <c>glfwGetProcAddress</c> is only guaranteed to work with a current
@@ -210,10 +213,10 @@ internal sealed partial class Container : IContainer<Application>
 			userParam: null);
 
 		// Notification-severity messages carry no diagnostic value here, but the driver emits two of them per draw list
-		// per frame (one for each glBufferData call in ImGuiController), and marshalling those strings allocated around
+		// per frame (one for each glBufferData call in ImGuiController), and marshaling those strings allocated around
 		// 3 KB per frame. Muting them at the source keeps the render loop allocation-free in Debug builds; spec
 		// violations and performance warnings still come through at the higher severities.
-		gl.DebugMessageControl(GLEnum.DontCare, GLEnum.DontCare, GLEnum.DebugSeverityNotification, 0, (uint*)null, false);
+		gl.DebugMessageControl(GLEnum.DontCare, GLEnum.DontCare, GLEnum.DebugSeverityNotification, 0, null, false);
 #endif
 
 		return gl;

@@ -143,8 +143,8 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 
 	public void Render()
 	{
-		bool renderRecordingValues = gameMemoryService.IsInitialized && !recordingLogic.ShowUploadResponse && (GameStatus)gameMemoryService.MainBlock.Status is not (GameStatus.Title or GameStatus.Menu or GameStatus.Lobby);
-		if (renderRecordingValues)
+		bool isInGameStatus = (GameStatus)gameMemoryService.MainBlock.Status is not (GameStatus.Title or GameStatus.Menu or GameStatus.Lobby);
+		if (gameMemoryService.IsInitialized && !recordingLogic.ShowUploadResponse && isInGameStatus)
 		{
 			RenderRecordingValues();
 		}
