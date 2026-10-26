@@ -167,7 +167,6 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 
 			ImGui.Spacing();
 
-			// TODO: Use spans here.
 			ImGuiImage.Image(resourceManager.InternalResources.IconEyeTexture.Id, iconSize, Color.Orange);
 			RenderValue("Player"u8, Inline.Utf8(GetPlayerText(b)), Color.White, _playerIntensity);
 			RenderValue("Time"u8, Inline.Utf8(b.Time, StringFormats.TimeFormat), Color.White, _timeIntensity);

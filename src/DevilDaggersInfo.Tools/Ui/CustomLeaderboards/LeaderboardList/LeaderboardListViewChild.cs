@@ -149,7 +149,6 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 				ImGui.Text(clOverview.DateCreated.ToString(StringFormats.DateTimeFormat));
 				ImGui.TableNextColumn();
 
-				// TODO: Use ReadOnlySpan<byte>.
 				ImGui.Text(DateTimeUtils.FormatTimeAgo(clOverview.DateLastPlayed == null ? null : DateTime.SpecifyKind(clOverview.DateLastPlayed.Value, DateTimeKind.Utc)));
 				ImGui.TableNextColumn();
 			}

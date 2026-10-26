@@ -20,7 +20,8 @@ internal sealed class RecordingLogic(
 	GameMemoryService gameMemoryService,
 	IPlatformSpecificValues platformSpecificValues,
 	ILogger logger,
-	UserCache userCache)
+	UserCache userCache,
+	CustomLeaderboardsResultState customLeaderboardsResultState)
 {
 	private readonly List<AddUploadRequestTimestamp> _timestamps = [];
 
@@ -29,7 +30,6 @@ internal sealed class RecordingLogic(
 	public RecordingStateType RecordingStateType { get; private set; }
 	public DateTime? LastSubmission { get; private set; }
 
-	// TODO: Flip values and rename to ShowRecording.
 	public bool ShowUploadResponse { get; private set; }
 
 	public IEnumerable<AddUploadRequestTimestamp> Timestamps => _timestamps;
@@ -269,7 +269,7 @@ internal sealed class RecordingLogic(
 				LastSubmission = DateTime.UtcNow;
 
 				UploadResult uploadResult = new(resourceManager, getUploadResponse, getUploadResponse.IsAscending, getUploadResponse.SpawnsetName, uploadRequest.DeathType, DateTime.UtcNow);
-				CustomLeaderboardResultsWindow.AddResult(uploadResult);
+				customLeaderboardsResultState.AddResult(uploadResult);
 			},
 			onError: apiError =>
 			{

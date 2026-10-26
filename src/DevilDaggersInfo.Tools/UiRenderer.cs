@@ -38,6 +38,7 @@ internal sealed class UiRenderer(
 	RunAnalysisWindow runAnalysisWindow,
 
 	CustomLeaderboardsWindow customLeaderboardsWindow,
+	CustomLeaderboardsResultsWindow customLeaderboardsResultsWindow,
 	CustomLeaderboards3DWindow customLeaderboards3DWindow,
 
 	ReplayEditorMenu replayEditorMenu,
@@ -95,7 +96,7 @@ internal sealed class UiRenderer(
 			case LayoutType.CustomLeaderboards:
 				customLeaderboardsWindow.Update(delta);
 				customLeaderboardsWindow.Render();
-				CustomLeaderboardResultsWindow.Render();
+				customLeaderboardsResultsWindow.Render();
 				customLeaderboards3DWindow.Render(delta);
 				break;
 			case LayoutType.Practice:

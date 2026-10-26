@@ -14,6 +14,7 @@ using DevilDaggersInfo.Tools.Ui.Config;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
+using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.Ui.ModManager;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
@@ -115,6 +116,8 @@ namespace DevilDaggersInfo.Tools;
 // Custom Leaderboards
 [Register<CustomLeaderboardsWindow>(Scope.SingleInstance)]
 [Register<CustomLeaderboards3DWindow>(Scope.SingleInstance)]
+[Register<CustomLeaderboardsResultState>(Scope.SingleInstance)]
+[Register<CustomLeaderboardsResultsWindow>(Scope.SingleInstance)]
 [Register<LeaderboardListChild>(Scope.SingleInstance)]
 [Register<LeaderboardListViewChild>(Scope.SingleInstance)]
 [Register<RecordingChild>(Scope.SingleInstance)]
