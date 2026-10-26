@@ -81,8 +81,7 @@ internal sealed class ArenaCanvas(ResourceManager resourceManager, ArenaWindow a
 		if (shrinkStartRadius is > 0 and < 300)
 			drawList.AddCircle(arenaCenter, shrinkStartRadius, ImGui.GetColorU32(Color.Blue));
 
-		float shrinkEndTime = fileStates.Spawnset.Object.GetShrinkEndTime();
-		float shrinkRadius = shrinkEndTime == 0 ? fileStates.Spawnset.Object.ShrinkStart : Math.Max(fileStates.Spawnset.Object.ShrinkStart - arenaWindow.CurrentSecond / shrinkEndTime * (fileStates.Spawnset.Object.ShrinkStart - fileStates.Spawnset.Object.ShrinkEnd), fileStates.Spawnset.Object.ShrinkEnd);
+		float shrinkRadius = GetShrinkRadius();
 		float shrinkCurrentRadius = shrinkRadius / tileUnit * ArenaWindow.TileSize;
 		if (shrinkCurrentRadius is > 0 and < 300)
 			drawList.AddCircle(arenaCenter, shrinkCurrentRadius, ImGui.GetColorU32(Color.Purple));
@@ -90,5 +89,17 @@ internal sealed class ArenaCanvas(ResourceManager resourceManager, ArenaWindow a
 		float shrinkEndRadius = fileStates.Spawnset.Object.ShrinkEnd / tileUnit * ArenaWindow.TileSize;
 		if (shrinkEndRadius is > 0 and < 300)
 			drawList.AddCircle(arenaCenter, shrinkEndRadius, ImGui.GetColorU32(Color.Red));
+	}
+
+	private float GetShrinkRadius()
+	{
+		float shrinkStart = fileStates.Spawnset.Object.ShrinkStart;
+
+		float shrinkEndTime = fileStates.Spawnset.Object.GetShrinkEndTime();
+		if (shrinkEndTime == 0)
+			return shrinkStart;
+
+		float shrinkEnd = fileStates.Spawnset.Object.ShrinkEnd;
+		return Math.Max(shrinkStart - arenaWindow.CurrentSecond / shrinkEndTime * (shrinkStart - shrinkEnd), shrinkEnd);
 	}
 }
