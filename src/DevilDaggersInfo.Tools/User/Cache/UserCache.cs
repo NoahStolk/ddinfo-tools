@@ -25,18 +25,18 @@ internal sealed class UserCache(ILogger logger)
 
 	public void Load()
 	{
-		if (File.Exists(_filePath))
+		if (!File.Exists(_filePath))
+			return;
+
+		try
 		{
-			try
-			{
-				UserCacheModel? deserializedModel = JsonSerializer.Deserialize(File.ReadAllText(_filePath), UserJsonModelsContext.Default.UserCacheModel);
-				if (deserializedModel != null)
-					_model = deserializedModel.Sanitize();
-			}
-			catch (Exception ex)
-			{
-				logger.Error(ex, "Failed to load user cache.");
-			}
+			UserCacheModel? deserializedModel = JsonSerializer.Deserialize(File.ReadAllText(_filePath), UserJsonModelsContext.Default.UserCacheModel);
+			if (deserializedModel != null)
+				_model = deserializedModel.Sanitize();
+		}
+		catch (Exception ex)
+		{
+			logger.Error(ex, "Failed to load user cache.");
 		}
 	}
 

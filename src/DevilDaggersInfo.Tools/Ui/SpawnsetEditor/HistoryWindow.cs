@@ -16,7 +16,7 @@ internal sealed class HistoryWindow(SpawnsWindow spawnsWindow, FileStates fileSt
 		ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(8, 1));
 		if (ImGui.Begin("History"))
 		{
-			ImGui.Text(Inline.Utf8($"{fileStates.Spawnset.FileName ?? FileStates.UntitledName}{(fileStates.Spawnset.IsModified && fileStates.Spawnset.FileName != null ? "*" : string.Empty)}"));
+			ImGui.Text(Inline.Utf8($"{fileStates.Spawnset.FileName ?? FileStates.UntitledName}{(fileStates.Spawnset is { IsModified: true, FileName: not null } ? "*" : string.Empty)}"));
 			ImGui.Separator();
 
 			float buttonWidth = ImGui.GetContentRegionAvail().X;

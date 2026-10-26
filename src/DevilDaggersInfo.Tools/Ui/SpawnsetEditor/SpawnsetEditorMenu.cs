@@ -23,22 +23,22 @@ internal sealed class SpawnsetEditorMenu(
 {
 	public void Render()
 	{
-		if (ImGui.BeginMainMenuBar())
+		if (!ImGui.BeginMainMenuBar())
+			return;
+
+		if (ImGui.BeginMenu("File"))
 		{
-			if (ImGui.BeginMenu("File"))
-			{
-				RenderFileMenu();
-				ImGui.EndMenu();
-			}
-
-			if (ImGui.BeginMenu("Edit"))
-			{
-				RenderEditMenu();
-				ImGui.EndMenu();
-			}
-
-			ImGui.EndMainMenuBar();
+			RenderFileMenu();
+			ImGui.EndMenu();
 		}
+
+		if (ImGui.BeginMenu("Edit"))
+		{
+			RenderEditMenu();
+			ImGui.EndMenu();
+		}
+
+		ImGui.EndMainMenuBar();
 	}
 
 	private void RenderFileMenu()

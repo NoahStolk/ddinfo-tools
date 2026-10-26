@@ -13,12 +13,12 @@ internal sealed class SettingsWindow(FileStates fileStates, SpawnsetSaver spawns
 {
 	private static void InfoTooltipWhenDisabled(bool disabled, string tooltipText)
 	{
-		if (disabled)
-		{
-			ImGui.EndDisabled();
-			InfoTooltip(tooltipText);
-			ImGui.BeginDisabled(disabled);
-		}
+		if (!disabled)
+			return;
+
+		ImGui.EndDisabled();
+		InfoTooltip(tooltipText);
+		ImGui.BeginDisabled(disabled);
 	}
 
 	private static void InfoTooltip(string tooltipText)

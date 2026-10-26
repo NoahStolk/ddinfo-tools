@@ -210,19 +210,19 @@ internal sealed class DebugWindow(
 		ImGui.TextColored(io.KeySuper ? Color.White : Color.Gray(0.4f), "SUPER");
 
 		ImGui.Separator();
-		if (ImGui.BeginTable("GLFW keys", 8))
-		{
-			ImGui.TableNextRow();
-			for (int i = 0; i < KeysGen.Values.Count; i++)
-			{
-				Keys key = KeysGen.Values[i];
-				bool isDown = glfwInput.IsKeyDown(key);
-				ImGui.TableNextColumn();
-				ImGui.TextColored(isDown ? Color.White : Color.Gray(0.4f), key.AsUtf8Span());
-			}
+		if (!ImGui.BeginTable("GLFW keys", 8))
+			return;
 
-			ImGui.EndTable();
+		ImGui.TableNextRow();
+		for (int i = 0; i < KeysGen.Values.Count; i++)
+		{
+			Keys key = KeysGen.Values[i];
+			bool isDown = glfwInput.IsKeyDown(key);
+			ImGui.TableNextColumn();
+			ImGui.TextColored(isDown ? Color.White : Color.Gray(0.4f), key.AsUtf8Span());
 		}
+
+		ImGui.EndTable();
 	}
 
 	private void RenderMetrics()

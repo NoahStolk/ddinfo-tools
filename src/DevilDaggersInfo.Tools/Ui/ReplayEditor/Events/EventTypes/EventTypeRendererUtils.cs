@@ -37,17 +37,17 @@ internal static class EventTypeRendererUtils
 		where TEvent : IEventData
 		where TRenderer : IEventTypeRenderer<TEvent>
 	{
-		if (ImGui.BeginTable(EventTypeNames[eventType], TRenderer.ColumnCount, EventTableFlags))
-		{
-			TRenderer.SetupColumns();
+		if (!ImGui.BeginTable(EventTypeNames[eventType], TRenderer.ColumnCount, EventTableFlags))
+			return;
 
-			ImGui.TableHeadersRow();
+		TRenderer.SetupColumns();
 
-			ImGui.TableNextRow();
-			TRenderer.Render(@event, replay);
+		ImGui.TableHeadersRow();
 
-			ImGui.EndTable();
-		}
+		ImGui.TableNextRow();
+		TRenderer.Render(@event, replay);
+
+		ImGui.EndTable();
 	}
 
 	public static void NextColumnEnum<TEnum>(TEnum value)

@@ -105,76 +105,76 @@ internal sealed class ReplayTimelineSelectedEventsChild
 
 	private void RenderEventsTable(EditorReplayModel replay, List<EditorEvent> selectedEvents)
 	{
-		if (ImGui.BeginTable("EventsTable", 2, ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX))
+		if (!ImGui.BeginTable("EventsTable", 2, ImGuiTableFlags.Borders | ImGuiTableFlags.NoPadOuterX))
+			return;
+
+		ImGui.TableSetupColumn("EventsTableColumnEventType", ImGuiTableColumnFlags.WidthFixed, 160);
+
+		int index = 0;
+		for (int i = 0; i < selectedEvents.Count; i++)
 		{
-			ImGui.TableSetupColumn("EventsTableColumnEventType", ImGuiTableColumnFlags.WidthFixed, 160);
+			EditorEvent replayEvent = selectedEvents[i];
+			EventType eventType = replayEvent.GetEventType();
+			if (eventType is EventType.InitialInputs or EventType.Inputs or EventType.End)
+				continue;
 
-			int index = 0;
-			for (int i = 0; i < selectedEvents.Count; i++)
+			ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, index++ % 2 == 0 ? 0xff0f0f0fU : 0x00000000U);
+
+			ImGui.TableNextRow();
+			ImGui.TableNextColumn();
+
+			bool temp = _checkedEvents.Contains(replayEvent);
+			ImGui.PushStyleColor(ImGuiCol.Text, eventType.GetColor());
+			if (ImGui.Checkbox(Inline.Utf8($"{eventType.AsUtf8DisplaySpan()}##EventCheckbox{i}"), ref temp))
 			{
-				EditorEvent replayEvent = selectedEvents[i];
-				EventType eventType = replayEvent.GetEventType();
-				if (eventType is EventType.InitialInputs or EventType.Inputs or EventType.End)
-					continue;
-
-				ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, index++ % 2 == 0 ? 0xff0f0f0fU : 0x00000000U);
-
-				ImGui.TableNextRow();
-				ImGui.TableNextColumn();
-
-				bool temp = _checkedEvents.Contains(replayEvent);
-				ImGui.PushStyleColor(ImGuiCol.Text, eventType.GetColor());
-				if (ImGui.Checkbox(Inline.Utf8($"{eventType.AsUtf8DisplaySpan()}##EventCheckbox{i}"), ref temp))
-				{
-					if (temp)
-						_checkedEvents.Add(replayEvent);
-					else
-						_checkedEvents.Remove(replayEvent);
-				}
-
-				ImGui.PopStyleColor();
-				ImGui.TableNextColumn();
-
-				if (eventType is EventType.Gem)
-				{
-					ImGui.Text("No data");
-				}
-				else if (ImGui.CollapsingHeader(Inline.Utf8($"Event data##{i}")))
-				{
-					if (replayEvent.EntityId.HasValue)
-						ImGui.Text(Inline.Utf8($"Entity Id: {replayEvent.EntityId.Value}"));
-
-					if (replayEvent.Data is BoidSpawnEventData boidSpawn)
-						BoidSpawn.RenderEdit(i, boidSpawn, replay);
-					else if (replayEvent.Data is DaggerSpawnEventData daggerSpawn)
-						DaggerSpawn.RenderEdit(i, daggerSpawn);
-					else if (replayEvent.Data is EntityOrientationEventData entityOrientation)
-						EntityOrientation.RenderEdit(i, entityOrientation, replay);
-					else if (replayEvent.Data is EntityPositionEventData entityPosition)
-						EntityPosition.RenderEdit(i, entityPosition, replay);
-					else if (replayEvent.Data is EntityTargetEventData entityTarget)
-						EntityTarget.RenderEdit(i, entityTarget, replay);
-					else if (replayEvent.Data is HitEventData hitEvent)
-						Hit.RenderEdit(i, hitEvent, replay);
-					else if (replayEvent.Data is LeviathanSpawnEventData leviathanSpawn)
-						LeviathanSpawn.RenderEdit(i, leviathanSpawn, replay);
-					else if (replayEvent.Data is PedeSpawnEventData pedeSpawn)
-						PedeSpawn.RenderEdit(i, pedeSpawn);
-					else if (replayEvent.Data is SpiderEggSpawnEventData spiderEggSpawn)
-						SpiderEggSpawn.RenderEdit(i, spiderEggSpawn, replay);
-					else if (replayEvent.Data is SpiderSpawnEventData spiderSpawn)
-						SpiderSpawn.RenderEdit(i, spiderSpawn);
-					else if (replayEvent.Data is SquidSpawnEventData squidSpawn)
-						SquidSpawn.RenderEdit(i, squidSpawn);
-					else if (replayEvent.Data is ThornSpawnEventData thornSpawn)
-						ThornSpawn.RenderEdit(i, thornSpawn);
-					else if (replayEvent.Data is TransmuteEventData transmute)
-						Transmute.RenderEdit(i, transmute, replay);
-				}
+				if (temp)
+					_checkedEvents.Add(replayEvent);
+				else
+					_checkedEvents.Remove(replayEvent);
 			}
 
-			ImGui.EndTable();
+			ImGui.PopStyleColor();
+			ImGui.TableNextColumn();
+
+			if (eventType is EventType.Gem)
+			{
+				ImGui.Text("No data");
+			}
+			else if (ImGui.CollapsingHeader(Inline.Utf8($"Event data##{i}")))
+			{
+				if (replayEvent.EntityId.HasValue)
+					ImGui.Text(Inline.Utf8($"Entity Id: {replayEvent.EntityId.Value}"));
+
+				if (replayEvent.Data is BoidSpawnEventData boidSpawn)
+					BoidSpawn.RenderEdit(i, boidSpawn, replay);
+				else if (replayEvent.Data is DaggerSpawnEventData daggerSpawn)
+					DaggerSpawn.RenderEdit(i, daggerSpawn);
+				else if (replayEvent.Data is EntityOrientationEventData entityOrientation)
+					EntityOrientation.RenderEdit(i, entityOrientation, replay);
+				else if (replayEvent.Data is EntityPositionEventData entityPosition)
+					EntityPosition.RenderEdit(i, entityPosition, replay);
+				else if (replayEvent.Data is EntityTargetEventData entityTarget)
+					EntityTarget.RenderEdit(i, entityTarget, replay);
+				else if (replayEvent.Data is HitEventData hitEvent)
+					Hit.RenderEdit(i, hitEvent, replay);
+				else if (replayEvent.Data is LeviathanSpawnEventData leviathanSpawn)
+					LeviathanSpawn.RenderEdit(i, leviathanSpawn, replay);
+				else if (replayEvent.Data is PedeSpawnEventData pedeSpawn)
+					PedeSpawn.RenderEdit(i, pedeSpawn);
+				else if (replayEvent.Data is SpiderEggSpawnEventData spiderEggSpawn)
+					SpiderEggSpawn.RenderEdit(i, spiderEggSpawn, replay);
+				else if (replayEvent.Data is SpiderSpawnEventData spiderSpawn)
+					SpiderSpawn.RenderEdit(i, spiderSpawn);
+				else if (replayEvent.Data is SquidSpawnEventData squidSpawn)
+					SquidSpawn.RenderEdit(i, squidSpawn);
+				else if (replayEvent.Data is ThornSpawnEventData thornSpawn)
+					ThornSpawn.RenderEdit(i, thornSpawn);
+				else if (replayEvent.Data is TransmuteEventData transmute)
+					Transmute.RenderEdit(i, transmute, replay);
+			}
 		}
+
+		ImGui.EndTable();
 	}
 
 	private void DuplicateSelectedEvents(EditorReplayModel replay, Action<EditorReplayModel, int> selectEvents)
