@@ -62,8 +62,6 @@ dotnet_naming_style.type_parameter_style.required_prefix                      = 
 # Symbols #
 ###########
 
-# TODO: Add event, delegate.
-
 dotnet_naming_symbols.namespace_symbol.applicable_kinds                       = namespace
 
 dotnet_naming_symbols.type_parameter_symbol.applicable_kinds                  = type_parameter
@@ -81,6 +79,10 @@ dotnet_naming_symbols.method_symbol.applicable_kinds                          = 
 dotnet_naming_symbols.local_function_symbol.applicable_kinds                  = local_function
 
 dotnet_naming_symbols.property_symbol.applicable_kinds                        = property
+
+dotnet_naming_symbols.event_symbol.applicable_kinds                           = event
+
+dotnet_naming_symbols.delegate_symbol.applicable_kinds                        = delegate
 
 dotnet_naming_symbols.parameter_symbol.applicable_kinds                       = parameter
 
@@ -131,6 +133,14 @@ dotnet_naming_rule.local_function_rule.style                                  = 
 dotnet_naming_rule.property_rule.severity                                     = warning
 dotnet_naming_rule.property_rule.symbols                                      = property_symbol
 dotnet_naming_rule.property_rule.style                                        = pascal_case_style
+
+dotnet_naming_rule.event_rule.severity                                        = warning
+dotnet_naming_rule.event_rule.symbols                                         = event_symbol
+dotnet_naming_rule.event_rule.style                                           = pascal_case_style
+
+dotnet_naming_rule.delegate_rule.severity                                     = warning
+dotnet_naming_rule.delegate_rule.symbols                                      = delegate_symbol
+dotnet_naming_rule.delegate_rule.style                                        = pascal_case_style
 
 dotnet_naming_rule.parameter_rule.severity                                    = warning
 dotnet_naming_rule.parameter_rule.symbols                                     = parameter_symbol
@@ -227,6 +237,9 @@ dotnet_diagnostic.IL2026.severity                                             = 
 dotnet_diagnostic.NX0001.severity                                             = error
 
 # Null-forgiving operator without justification
+dotnet_diagnostic.NX0002.severity                                             = error
+
+# Null-forgiving operator without justification
 dotnet_diagnostic.NX0003.severity                                             = error
 
 # The symbol is banned in this project.
@@ -234,6 +247,13 @@ dotnet_diagnostic.RS0030.severity                                             = 
 
 # Add a way to break out of this method/property's recursion.
 dotnet_diagnostic.S2190.severity                                              = error
+
+########################
+# Diagnostics: Warning #
+########################
+
+# Lines should not be too long. (Default maximumLineLength is 200.)
+dotnet_diagnostic.S103.severity                                               = warning
 
 ###########################
 # Diagnostics: Suggestion #
