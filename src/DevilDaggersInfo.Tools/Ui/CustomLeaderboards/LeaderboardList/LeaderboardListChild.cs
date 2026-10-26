@@ -62,37 +62,27 @@ internal sealed class LeaderboardListChild(ResourceManager resourceManager, Popu
 			if (ImGuiImage.ImageButton("End"u8, resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
 				SetPageIndex(TotalPages - 1);
 
-			ImGui.SameLine();
-			if (ImGui.BeginChild("ComboCategory", new Vector2(360, 20)))
+			if (_categoryNames.Length > 0)
 			{
-				if (_categoryNames.Length > 0 && ImGui.Combo("Category", ref _categoryIndex, _categoryNames, _categoryNames.Length, 20))
+				ImGui.SameLine();
+				ImGui.SetNextItemWidth(234);
+				if (ImGui.Combo("Category", ref _categoryIndex, _categoryNames, _categoryNames.Length, 20))
 					UpdatePagedCustomLeaderboards();
 			}
-
-			ImGui.EndChild();
 
 			ImGui.SameLine();
 			if (ImGui.Checkbox("Featured", ref _featuredOnly))
 				UpdatePagedCustomLeaderboards();
 
-			// TODO: Tab doesn't work because of children.
 			ImGui.SameLine();
-			if (ImGui.BeginChild("InputSpawnset", new Vector2(150, 20)))
-			{
-				if (ImGui.InputText("Name", ref _spawnsetFilter, 32))
-					UpdatePagedCustomLeaderboards();
-			}
-
-			ImGui.EndChild();
+			ImGui.SetNextItemWidth(97);
+			if (ImGui.InputText("Name", ref _spawnsetFilter, 32))
+				UpdatePagedCustomLeaderboards();
 
 			ImGui.SameLine();
-			if (ImGui.BeginChild("InputAuthor", new Vector2(150, 20)))
-			{
-				if (ImGui.InputText("Author", ref _authorFilter, 32))
-					UpdatePagedCustomLeaderboards();
-			}
-
-			ImGui.EndChild();
+			ImGui.SetNextItemWidth(97);
+			if (ImGui.InputText("Author", ref _authorFilter, 32))
+				UpdatePagedCustomLeaderboards();
 		}
 
 		ImGui.EndChild();

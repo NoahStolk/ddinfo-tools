@@ -17,6 +17,7 @@
 - Fixed tile hitboxes hiding each other instead of blending, in the 3D views.
 - Fixed the 3D views breaking when their window is made very small.
 - Fixed copying and pasting text between the app and other applications (Linux).
+- Fixed tab navigation not working between the custom leaderboard filter inputs.
 
 ### Miscellaneous
 
