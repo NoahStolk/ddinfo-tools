@@ -2,33 +2,12 @@ namespace DevilDaggersInfo.Tools.Utils;
 
 internal static class DateTimeUtils
 {
-	// TODO: Implement ReadOnlySpan<byte> variant.
-	public static string FormatTimeAgo(DateTime? utcDateTime)
+	/// <summary>
+	/// Formats a UTC date time relative to now into the <see cref="Inline" /> buffer.
+	/// To include the value in another <see cref="Inline" /> interpolated string, interpolate a <see cref="TimeAgo" /> instead.
+	/// </summary>
+	public static ReadOnlySpan<byte> FormatTimeAgo(DateTime? utcDateTime)
 	{
-		if (!utcDateTime.HasValue)
-			return "Never";
-
-		if (utcDateTime.Value.Kind != DateTimeKind.Utc)
-			throw new ArgumentException($"DateTime must be in UTC. Kind was {utcDateTime.Value.Kind}.", nameof(utcDateTime));
-
-		TimeSpan diff = DateTime.UtcNow - utcDateTime.Value;
-		if (diff < TimeSpan.FromSeconds(5))
-			return "just now";
-
-		if (diff < TimeSpan.FromMinutes(1))
-			return $"{diff.Seconds} second{FormatValue(diff.Seconds)} ago";
-
-		if (diff < TimeSpan.FromHours(1))
-			return $"{diff.Minutes} minute{FormatValue(diff.Minutes)} ago";
-
-		if (diff < TimeSpan.FromDays(1))
-			return $"{diff.Hours} hour{FormatValue(diff.Hours)} ago";
-
-		return $"{diff.Days} day{FormatValue(diff.Days)} ago";
-	}
-
-	private static string FormatValue(int value)
-	{
-		return value == 1 ? string.Empty : "s";
+		return Inline.Utf8(new TimeAgo(utcDateTime));
 	}
 }

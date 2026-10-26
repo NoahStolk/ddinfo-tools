@@ -67,7 +67,7 @@ internal sealed class CompileModWindow(INativeFileDialog nativeFileDialog, Popup
 				{
 					if (_lastStartTime.HasValue && _lastEndTime.HasValue)
 					{
-						ImGui.Text(Inline.Utf8($"Compiled in {(_lastEndTime.Value - _lastStartTime.Value).TotalSeconds:0.000} seconds ({DateTimeUtils.FormatTimeAgo(_lastEndTime.Value)})."));
+						ImGui.Text(Inline.Utf8($"Compiled in {(_lastEndTime.Value - _lastStartTime.Value).TotalSeconds:0.000} seconds ({new TimeAgo(_lastEndTime.Value)})."));
 					}
 				}
 			}
