@@ -253,8 +253,8 @@ internal sealed class LeaderboardListChild(ResourceManager resourceManager, Popu
 		return
 			cl.RankSorting == RankSorting &&
 			cl.SpawnsetGameMode == GameMode &&
-			(string.IsNullOrEmpty(_spawnsetFilter) || cl.SpawnsetName.Contains(_spawnsetFilter, StringComparison.OrdinalIgnoreCase)) && // TODO: Trim filters?
-			(string.IsNullOrEmpty(_authorFilter) || cl.SpawnsetAuthorName.Contains(_authorFilter, StringComparison.OrdinalIgnoreCase)) &&
+			(string.IsNullOrEmpty(_spawnsetFilter) || cl.SpawnsetName.Contains(_spawnsetFilter.Trim(), StringComparison.OrdinalIgnoreCase)) &&
+			(string.IsNullOrEmpty(_authorFilter) || cl.SpawnsetAuthorName.Contains(_authorFilter.Trim(), StringComparison.OrdinalIgnoreCase)) &&
 			(!_featuredOnly || cl.Daggers != null);
 	}
 }
