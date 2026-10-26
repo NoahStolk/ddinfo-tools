@@ -307,7 +307,7 @@ internal sealed partial class Container : IContainer<Application>
 		// Turn VSync on. There's really no need to turn it off for this application.
 		glfw.SwapInterval(1);
 
-		glfw.SetWindowSizeLimits(window, (int)Constants.MinWindowSize.X, (int)Constants.MinWindowSize.Y, -1, -1);
+		glfw.SetWindowSizeLimits(window, (int)UiConstants.MinWindowSize.X, (int)UiConstants.MinWindowSize.Y, -1, -1);
 
 		return window;
 	}

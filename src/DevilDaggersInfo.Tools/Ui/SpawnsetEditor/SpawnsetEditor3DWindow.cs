@@ -36,7 +36,7 @@ internal sealed unsafe class SpawnsetEditor3DWindow(
 
 	public void Render(float delta)
 	{
-		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize / 2);
+		ImGuiUtils.SetNextWindowMinSize(UiConstants.MinWindowSize / 2);
 		if (ImGui.Begin("3D Arena Editor"))
 		{
 			if (ImGui.IsMouseDown(ImGuiMouseButton.Right) && ImGui.IsWindowHovered())

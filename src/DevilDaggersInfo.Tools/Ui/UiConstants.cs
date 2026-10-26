@@ -2,8 +2,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-// TODO: Rename this class.
-internal static class Constants
+internal static class UiConstants
 {
 	public static Vector2 MinWindowSize { get; } = new(1366, 768);
 }

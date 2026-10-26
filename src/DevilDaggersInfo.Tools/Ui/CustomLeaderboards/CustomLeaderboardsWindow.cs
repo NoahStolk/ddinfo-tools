@@ -47,7 +47,7 @@ internal sealed class CustomLeaderboardsWindow(
 		ImGui.End();
 #endif
 
-		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize);
+		ImGuiUtils.SetNextWindowMinSize(UiConstants.MinWindowSize);
 		if (ImGui.Begin("Custom Leaderboards", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollWithMouse))
 		{
 			if (ImGui.BeginChild("LeftRow", new Vector2(288, 464)))

@@ -7,7 +7,7 @@ internal sealed class AssetEditorWindow(AssetPathsChild assetPathsChild, FileSta
 {
 	public void Render()
 	{
-		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize);
+		ImGuiUtils.SetNextWindowMinSize(UiConstants.MinWindowSize);
 		bool isModified = fileStates.Mod is { IsModified: true, FileName: not null };
 		if (ImGui.Begin(Inline.Utf8($"Asset Editor - {fileStates.Mod.FileName ?? FileStates.UntitledName}{(isModified ? "*" : string.Empty)}###asset_editor"), ImGuiWindowFlags.NoCollapse))
 		{

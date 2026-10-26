@@ -38,7 +38,7 @@ internal sealed class ReplayEditorWindow(
 
 	public void Render()
 	{
-		ImGuiUtils.SetNextWindowMinSize(Constants.MinWindowSize);
+		ImGuiUtils.SetNextWindowMinSize(UiConstants.MinWindowSize);
 		if (ImGui.Begin("Replay Editor", ImGuiWindowFlags.NoCollapse))
 		{
 			ReplayFileInfo.Render(fileStates.Replay.Object);
