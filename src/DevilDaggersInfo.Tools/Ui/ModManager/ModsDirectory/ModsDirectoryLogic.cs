@@ -83,7 +83,12 @@ internal sealed class ModsDirectoryLogic(
 		EffectiveAssets = EffectiveAssets.OrderByDescending(kvp => kvp.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
 		ActiveAssets = EffectiveAssets.Sum(kvp => kvp.Value.Count(c => c.OverriddenByModFileName == null && c.TocEntry.IsEnabled));
-		ActiveProhibitedAssets = EffectiveAssets.Sum(kvp => kvp.Value.Count(c => c.OverriddenByModFileName == null && c.TocEntry.IsEnabled && AssetContainer.IsProhibited(c.TocEntry.AssetType, c.TocEntry.Name)));
+		ActiveProhibitedAssets = EffectiveAssets
+			.Sum(kvp => kvp.Value
+				.Count(c =>
+					c.OverriddenByModFileName == null &&
+					c.TocEntry.IsEnabled &&
+					AssetContainer.IsProhibited(c.TocEntry.AssetType, c.TocEntry.Name)));
 	}
 
 	public void InitializeRename(string fileName)

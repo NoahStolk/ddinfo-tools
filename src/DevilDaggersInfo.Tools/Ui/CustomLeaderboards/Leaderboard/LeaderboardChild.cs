@@ -106,7 +106,15 @@ internal sealed class LeaderboardChild(
 
 	private unsafe void RenderTable(CustomLeaderboardRankSorting rankSorting)
 	{
-		const ImGuiTableFlags flags = ImGuiTableFlags.Resizable | ImGuiTableFlags.Reorderable | ImGuiTableFlags.Hideable | ImGuiTableFlags.Sortable | ImGuiTableFlags.SortMulti | ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersV | ImGuiTableFlags.NoBordersInBody;
+		const ImGuiTableFlags flags =
+			ImGuiTableFlags.Resizable |
+			ImGuiTableFlags.Reorderable |
+			ImGuiTableFlags.Hideable |
+			ImGuiTableFlags.Sortable |
+			ImGuiTableFlags.SortMulti |
+			ImGuiTableFlags.RowBg |
+			ImGuiTableFlags.BordersV |
+			ImGuiTableFlags.NoBordersInBody;
 
 		ImGui.PushStyleVar(ImGuiStyleVar.CellPadding, new Vector2(4, 1));
 		if (ImGui.BeginTable("LeaderboardTable", 16, flags))

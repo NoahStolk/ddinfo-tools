@@ -353,7 +353,7 @@ internal sealed partial class Container : IContainer<Application>
 	}
 
 	[Factory(Scope.SingleInstance)]
-#pragma warning disable CA1859 // Change return type of method 'CreatePlatformSpecificValues' from 'DevilDaggersInfo.Tools.Platforms.IPlatformSpecificValues' to 'DevilDaggersInfo.Tools.Platforms.LinuxValues' for improved performance.
+#pragma warning disable CA1859 // False positive: Change return type of method for improved performance.
 	private static IPlatformSpecificValues CreatePlatformSpecificValues()
 #pragma warning restore CA1859
 	{

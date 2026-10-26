@@ -154,7 +154,11 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 		ImGui.PushID(Inline.Utf8($"drag indicator {i}"));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-		ImGuiImage.ImageButton("CustomTemplateReorderImageButton"u8, resourceManager.InternalResources.DragIndicatorTexture.Id, new Vector2(32, 48), _customTemplateIndexToReorder == i ? Color.Gray(0.7f) : gray);
+		ImGuiImage.ImageButton(
+			strId: "CustomTemplateReorderImageButton"u8,
+			imageId: resourceManager.InternalResources.DragIndicatorTexture.Id,
+			size: new Vector2(32, 48),
+			backgroundColor: _customTemplateIndexToReorder == i ? Color.Gray(0.7f) : gray);
 		ImGui.PopStyleVar();
 
 		if (ImGui.IsItemHovered())
@@ -165,7 +169,9 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 			_customTemplateIndexToReorder = i;
 
 			ImGui.SetDragDropPayload("CustomTemplateReorder"u8, null, 0);
-			string templateDragName = customTemplate.Name != null ? $"\"{customTemplate.Name}\"" : $"{customTemplate.HandLevel} (+{customTemplate.AdditionalGems}) {customTemplate.TimerStart.ToString(StringFormats.TimeFormat)}";
+			string templateDragName = customTemplate.Name != null
+				? $"\"{customTemplate.Name}\""
+				: $"{customTemplate.HandLevel} (+{customTemplate.AdditionalGems}) {customTemplate.TimerStart.ToString(StringFormats.TimeFormat)}";
 			ImGui.Text($"Reorder {templateDragName}");
 			ImGui.EndDragDropSource();
 		}

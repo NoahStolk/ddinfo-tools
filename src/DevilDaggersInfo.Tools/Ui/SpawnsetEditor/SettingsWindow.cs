@@ -48,7 +48,13 @@ internal sealed class SettingsWindow(FileStates fileStates, SpawnsetSaver spawns
 	private void RenderFormat()
 	{
 		ImGui.Text("Format");
-		InfoTooltip("There is generally no reason to change the spawnset format,\nunless you want to play spawnsets in an old version of the game.\n\nThese options are mainly here for backwards compatibility.");
+		InfoTooltip(
+			"""
+			There is generally no reason to change the spawnset format,
+			unless you want to play spawnsets in an old version of the game.
+
+			These options are mainly here for backwards compatibility.
+			""");
 		ImGui.Separator();
 		ImGui.Indent(8);
 
@@ -122,7 +128,9 @@ internal sealed class SettingsWindow(FileStates fileStates, SpawnsetSaver spawns
 		ImGui.Spacing();
 		ImGui.Indent(-8);
 		ImGui.Text("Race dagger");
-		InfoTooltipWhenDisabled(fileStates.Spawnset.Object.GameMode != GameMode.Race, "Changing the race dagger values doesn't do anything useful if the game mode is not set to Race.\nSet the game mode to Race to enable these inputs.");
+		InfoTooltipWhenDisabled(
+			fileStates.Spawnset.Object.GameMode != GameMode.Race,
+			"Changing the race dagger values doesn't do anything useful if the game mode is not set to Race.\nSet the game mode to Race to enable these inputs.");
 		ImGui.Separator();
 		ImGui.Indent(8);
 

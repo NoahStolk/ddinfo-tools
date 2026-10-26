@@ -117,7 +117,10 @@ internal sealed class ContentManager(UserSettings userSettings)
 		const int headerSize = 10;
 
 		if (ddMeshBuffer.Length < headerSize)
-			throw new InvalidGameInstallationException($"Invalid data for mesh '{meshName}'. Length was {ddMeshBuffer.Length} but should be at least {headerSize}. Make sure your game files are not corrupted.");
+		{
+			throw new InvalidGameInstallationException(
+				$"Invalid data for mesh '{meshName}'. Length was {ddMeshBuffer.Length} but should be at least {headerSize}. Make sure your game files are not corrupted.");
+		}
 
 		using MemoryStream ms = new(ddMeshBuffer);
 		using BinaryReader br = new(ms);
@@ -129,7 +132,10 @@ internal sealed class ContentManager(UserSettings userSettings)
 		const int vertexSize = sizeof(float) * 8;
 		int minimumSize = indexCount * sizeof(uint) + vertexCount * vertexSize + headerSize;
 		if (ddMeshBuffer.Length < minimumSize)
-			throw new InvalidGameInstallationException($"Invalid data for mesh '{meshName}'. Not enough data for complete mesh ({ddMeshBuffer.Length:N0} / {minimumSize:N0}). Make sure your game files are not corrupted.");
+		{
+			throw new InvalidGameInstallationException(
+				$"Invalid data for mesh '{meshName}'. Not enough data for complete mesh ({ddMeshBuffer.Length:N0} / {minimumSize:N0}). Make sure your game files are not corrupted.");
+		}
 
 		DevilDaggersInfo.Core.Mod.Structs.Vertex[] ddVertices = new DevilDaggersInfo.Core.Mod.Structs.Vertex[vertexCount];
 		for (int i = 0; i < ddVertices.Length; i++)
@@ -155,24 +161,36 @@ internal sealed class ContentManager(UserSettings userSettings)
 		const int headerSize = 11;
 
 		if (ddTextureBuffer.Length < headerSize)
-			throw new InvalidGameInstallationException($"Invalid data for texture '{textureName}'. Length was {ddTextureBuffer.Length} but should be at least {headerSize}. Make sure your game files are not corrupted.");
+		{
+			throw new InvalidGameInstallationException(
+				$"Invalid data for texture '{textureName}'. Length was {ddTextureBuffer.Length} but should be at least {headerSize}. Make sure your game files are not corrupted.");
+		}
 
 		using MemoryStream ms = new(ddTextureBuffer);
 		using BinaryReader br = new(ms);
 		ushort header = br.ReadUInt16();
 		if (header != expectedHeader)
-			throw new InvalidGameInstallationException($"Invalid header for texture '{textureName}'. Should be {expectedHeader} but got {header}. Make sure your game files are not corrupted.");
+		{
+			throw new InvalidGameInstallationException(
+				$"Invalid header for texture '{textureName}'. Should be {expectedHeader} but got {header}. Make sure your game files are not corrupted.");
+		}
 
 		int width = br.ReadInt32();
 		int height = br.ReadInt32();
 		if (width < 0 || height < 0)
-			throw new InvalidGameInstallationException($"Dimensions for texture '{textureName}' cannot be negative ({width}x{height}). Make sure your game files are not corrupted.");
+		{
+			throw new InvalidGameInstallationException(
+				$"Dimensions for texture '{textureName}' cannot be negative ({width}x{height}). Make sure your game files are not corrupted.");
+		}
 
 		_ = br.ReadByte(); // Mipmap count
 
 		int minimumSize = width * height * 4 + headerSize;
 		if (ddTextureBuffer.Length < minimumSize)
-			throw new InvalidGameInstallationException($"Invalid data for texture '{textureName}'. Not enough pixel data for complete texture ({ddTextureBuffer.Length:N0} / {minimumSize:N0}). Make sure your game files are not corrupted.");
+		{
+			throw new InvalidGameInstallationException(
+				$"Invalid data for texture '{textureName}'. Not enough pixel data for complete texture ({ddTextureBuffer.Length:N0} / {minimumSize:N0}). Make sure your game files are not corrupted.");
+		}
 
 		byte[] pixelData = new byte[width * height * 4];
 		for (int y = 0; y < height; y++)

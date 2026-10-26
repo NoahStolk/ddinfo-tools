@@ -19,7 +19,11 @@ internal sealed class CompileModWindow(INativeFileDialog nativeFileDialog, Popup
 	private DateTime? _lastEndTime;
 
 	private bool CreateAudio => fileStates.Mod.Object.Audio.Count > 0;
-	private bool CreateDd => fileStates.Mod.Object.Meshes.Count > 0 || fileStates.Mod.Object.ObjectBindings.Count > 0 || fileStates.Mod.Object.Shaders.Count > 0 || fileStates.Mod.Object.Textures.Count > 0;
+	private bool CreateDd =>
+		fileStates.Mod.Object.Meshes.Count > 0 ||
+		fileStates.Mod.Object.ObjectBindings.Count > 0 ||
+		fileStates.Mod.Object.Shaders.Count > 0 ||
+		fileStates.Mod.Object.Textures.Count > 0;
 
 	public void Render()
 	{
