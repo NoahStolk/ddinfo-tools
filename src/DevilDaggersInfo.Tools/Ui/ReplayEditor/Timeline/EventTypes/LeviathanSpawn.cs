@@ -15,22 +15,27 @@ internal static class LeviathanSpawn
 
 		if (ImGui.BeginChild(Inline.Utf8($"LeviathanSpawnEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
 		{
-			if (ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new Vector2(tableWidth, 0)))
-			{
-				ImGui.TableSetupColumn("LeftText", ImGuiTableColumnFlags.WidthFixed, leftColumnWidth);
-				ImGui.TableSetupColumn("LeftInput", ImGuiTableColumnFlags.None, rightColumnWidth);
-
-				ImGui.TableNextRow();
-
-				ImGui.TableNextColumn();
-				ImGui.Text("?");
-				ImGui.TableNextColumn();
-				UtilsRendering.EditableEntityId(uniqueId, "EntityId"u8, replay, ref e.A);
-
-				ImGui.EndTable();
-			}
+			RenderTable(uniqueId, e, replay, tableWidth, leftColumnWidth, rightColumnWidth);
 		}
 
 		ImGui.EndChild();
+	}
+
+	private static void RenderTable(int uniqueId, LeviathanSpawnEventData e, EditorReplayModel replay, float tableWidth, float leftColumnWidth, float rightColumnWidth)
+	{
+		if (!ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new Vector2(tableWidth, 0)))
+			return;
+
+		ImGui.TableSetupColumn("LeftText", ImGuiTableColumnFlags.WidthFixed, leftColumnWidth);
+		ImGui.TableSetupColumn("LeftInput", ImGuiTableColumnFlags.None, rightColumnWidth);
+
+		ImGui.TableNextRow();
+
+		ImGui.TableNextColumn();
+		ImGui.Text("?");
+		ImGui.TableNextColumn();
+		UtilsRendering.EditableEntityId(uniqueId, "EntityId"u8, replay, ref e.A);
+
+		ImGui.EndTable();
 	}
 }

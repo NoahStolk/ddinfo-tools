@@ -69,6 +69,7 @@ internal static class Inline
 	/// <see cref="ISpanFormattable" /> but not <see cref="IUtf8SpanFormattable" />, so they cannot go through
 	/// <see cref="Utf8{T}" />, which formats directly to UTF-8 and should be used for everything that can.
 	/// </summary>
+	/// <typeparam name="TEnum">Type of the enum.</typeparam>
 	public static ReadOnlySpan<byte> Utf8Formattable<TEnum>(TEnum value, ReadOnlySpan<char> format = default)
 		where TEnum : struct, Enum
 	{

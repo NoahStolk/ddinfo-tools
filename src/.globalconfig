@@ -284,6 +284,9 @@ dotnet_diagnostic.CA1062.severity                                             = 
 # Normalize strings to uppercase.
 dotnet_diagnostic.CA1308.severity                                             = none
 
+# Prefer jagged arrays over multidimensional.
+dotnet_diagnostic.CA1814.severity                                             = none
+
 # Properties should not return arrays.
 dotnet_diagnostic.CA1819.severity                                             = none
 
@@ -403,6 +406,9 @@ dotnet_diagnostic.SA1310.severity                                             = 
 
 # Static readonly fields should begin with upper-case letter.
 dotnet_diagnostic.SA1311.severity                                             = none
+
+# Fields should be private.
+dotnet_diagnostic.SA1401.severity                                             = none
 
 # Arithmetic expressions should declare precedence.
 dotnet_diagnostic.SA1407.severity                                             = none

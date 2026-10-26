@@ -101,16 +101,10 @@ internal sealed class ArenaRectangleState(ArenaWindow arenaWindow, FileStates fi
 		}
 	}
 
-	private struct Session
+	private readonly struct Session(Vector2D<int> startPosition, float[,] newArena)
 	{
-		public Session(Vector2D<int> startPosition, float[,] newArena)
-		{
-			StartPosition = startPosition;
-			NewArena = newArena;
-		}
+		public Vector2D<int> StartPosition { get; } = startPosition;
 
-		public Vector2D<int> StartPosition { get; }
-
-		public float[,] NewArena { get; }
+		public float[,] NewArena { get; } = newArena;
 	}
 }

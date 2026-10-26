@@ -15,27 +15,32 @@ internal static class EntityPosition
 
 		if (ImGui.BeginChild(Inline.Utf8($"EntityPositionEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
 		{
-			if (ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new Vector2(tableWidth, 0)))
-			{
-				ImGui.TableSetupColumn("LeftText", ImGuiTableColumnFlags.WidthFixed, leftColumnWidth);
-				ImGui.TableSetupColumn("LeftInput", ImGuiTableColumnFlags.None, rightColumnWidth);
-
-				ImGui.TableNextRow();
-
-				ImGui.TableNextColumn();
-				ImGui.Text("Entity Id");
-				ImGui.TableNextColumn();
-				UtilsRendering.EditableEntityId(uniqueId, "EntityId"u8, replay, ref e.EntityId);
-
-				ImGui.TableNextColumn();
-				ImGui.Text("Position");
-				ImGui.TableNextColumn();
-				UtilsRendering.InputInt16Vec3(uniqueId, "Position"u8, ref e.Position);
-
-				ImGui.EndTable();
-			}
+			RenderTable(uniqueId, e, replay, tableWidth, leftColumnWidth, rightColumnWidth);
 		}
 
 		ImGui.EndChild();
+	}
+
+	private static void RenderTable(int uniqueId, EntityPositionEventData e, EditorReplayModel replay, float tableWidth, float leftColumnWidth, float rightColumnWidth)
+	{
+		if (!ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new Vector2(tableWidth, 0)))
+			return;
+
+		ImGui.TableSetupColumn("LeftText", ImGuiTableColumnFlags.WidthFixed, leftColumnWidth);
+		ImGui.TableSetupColumn("LeftInput", ImGuiTableColumnFlags.None, rightColumnWidth);
+
+		ImGui.TableNextRow();
+
+		ImGui.TableNextColumn();
+		ImGui.Text("Entity Id");
+		ImGui.TableNextColumn();
+		UtilsRendering.EditableEntityId(uniqueId, "EntityId"u8, replay, ref e.EntityId);
+
+		ImGui.TableNextColumn();
+		ImGui.Text("Position");
+		ImGui.TableNextColumn();
+		UtilsRendering.InputInt16Vec3(uniqueId, "Position"u8, ref e.Position);
+
+		ImGui.EndTable();
 	}
 }

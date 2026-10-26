@@ -14,32 +14,37 @@ internal static class ThornSpawn
 
 		if (ImGui.BeginChild(Inline.Utf8($"ThornSpawnEdit{uniqueId}"), default, ImGuiChildFlags.AutoResizeY))
 		{
-			if (ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new Vector2(tableWidth, 0)))
-			{
-				ImGui.TableSetupColumn("LeftText", ImGuiTableColumnFlags.WidthFixed, leftColumnWidth);
-				ImGui.TableSetupColumn("LeftInput", ImGuiTableColumnFlags.None, rightColumnWidth);
-
-				ImGui.TableNextRow();
-
-				ImGui.TableNextColumn();
-				ImGui.Text("Position");
-				ImGui.TableNextColumn();
-				UtilsRendering.InputVector3(uniqueId, "Position"u8, ref e.Position, "%.2f"u8);
-
-				ImGui.TableNextColumn();
-				ImGui.Text("Rotation");
-				ImGui.TableNextColumn();
-				UtilsRendering.InputFloat(uniqueId, "RotationInRadians"u8, ref e.RotationInRadians, "%.2f"u8);
-
-				ImGui.TableNextColumn();
-				ImGui.Text("?");
-				ImGui.TableNextColumn();
-				UtilsRendering.InputInt(uniqueId, "A"u8, ref e.A);
-
-				ImGui.EndTable();
-			}
+			RenderTable(uniqueId, e, tableWidth, leftColumnWidth, rightColumnWidth);
 		}
 
 		ImGui.EndChild();
+	}
+
+	private static void RenderTable(int uniqueId, ThornSpawnEventData e, float tableWidth, float leftColumnWidth, float rightColumnWidth)
+	{
+		if (!ImGui.BeginTable("Left", 2, ImGuiTableFlags.None, new Vector2(tableWidth, 0)))
+			return;
+
+		ImGui.TableSetupColumn("LeftText", ImGuiTableColumnFlags.WidthFixed, leftColumnWidth);
+		ImGui.TableSetupColumn("LeftInput", ImGuiTableColumnFlags.None, rightColumnWidth);
+
+		ImGui.TableNextRow();
+
+		ImGui.TableNextColumn();
+		ImGui.Text("Position");
+		ImGui.TableNextColumn();
+		UtilsRendering.InputVector3(uniqueId, "Position"u8, ref e.Position, "%.2f"u8);
+
+		ImGui.TableNextColumn();
+		ImGui.Text("Rotation");
+		ImGui.TableNextColumn();
+		UtilsRendering.InputFloat(uniqueId, "RotationInRadians"u8, ref e.RotationInRadians, "%.2f"u8);
+
+		ImGui.TableNextColumn();
+		ImGui.Text("?");
+		ImGui.TableNextColumn();
+		UtilsRendering.InputInt(uniqueId, "A"u8, ref e.A);
+
+		ImGui.EndTable();
 	}
 }

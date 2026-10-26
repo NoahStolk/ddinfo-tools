@@ -30,13 +30,17 @@ internal sealed class AboutWindow(FrameCounter frameCounter, FontService fontSer
 			ImGui.Text($"""
 				The tools are currently in alpha. If you have any feature requests, or encounter any issues, please report them on Discord or GitHub.
 
-				If the app crashes, please send me the ddinfo-{AssemblyUtils.EntryAssemblyVersionString}.log file. This file holds information about the crash. It can be found in the same folder as the executable.
+				If the app crashes, please send me the ddinfo-{AssemblyUtils.EntryAssemblyVersionString}.log file.
+
+				This file holds information about the crash. It can be found in the same folder as the executable.
 
 				Thank you for testing!
 				""");
 
 			ImGui.SeparatorText("Open source");
 			ImGui.Text("The source code is available on GitHub:");
+
+#pragma warning disable S1075
 			RenderLibrary("https://github.com/NoahStolk/ddinfo-tools"u8, "ddinfo-tools"u8, "Main repository for the tools (this app)"u8);
 			RenderLibrary("https://github.com/NoahStolk/ddinfo-core"u8, "ddinfo-core"u8, "Core libraries for DevilDaggers.info projects"u8);
 			RenderLibrary("https://github.com/NoahStolk/ddinfo-web"u8, "ddinfo-web"u8, "DevilDaggers.info website and web server"u8);
@@ -51,6 +55,8 @@ internal sealed class AboutWindow(FrameCounter frameCounter, FontService fontSer
 			RenderLibrary("https://github.com/SixLabors/ImageSharp"u8, "ImageSharp"u8, "Image processing"u8);
 			RenderLibrary("https://github.com/HexaEngine/Hexa.NET.ImGui"u8, "Hexa.NET.ImGui"u8, "C# wrapper for Dear ImGui"u8);
 			RenderLibrary("https://github.com/milleniumbug/NativeFileDialogSharp"u8, "NativeFileDialogSharp"u8, "C# wrapper for NativeFileDialog"u8);
+#pragma warning restore S1075
+
 			RenderFooter();
 
 			ImGui.PopTextWrapPos();
