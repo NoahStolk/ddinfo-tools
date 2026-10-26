@@ -40,22 +40,20 @@ internal sealed class AboutWindow(FrameCounter frameCounter, FontService fontSer
 			ImGui.SeparatorText("Open source");
 			ImGui.Text("The source code is available on GitHub:");
 
-#pragma warning disable S1075
-			RenderLibrary("https://github.com/NoahStolk/ddinfo-tools"u8, "ddinfo-tools"u8, "Main repository for the tools (this app)"u8);
-			RenderLibrary("https://github.com/NoahStolk/ddinfo-core"u8, "ddinfo-core"u8, "Core libraries for DevilDaggers.info projects"u8);
-			RenderLibrary("https://github.com/NoahStolk/ddinfo-web"u8, "ddinfo-web"u8, "DevilDaggers.info website and web server"u8);
+			RenderLibrary(Urls.DdinfoTools, "ddinfo-tools"u8, "Main repository for the tools (this app)"u8);
+			RenderLibrary(Urls.DdinfoCore, "ddinfo-core"u8, "Core libraries for DevilDaggers.info projects"u8);
+			RenderLibrary(Urls.DdinfoWeb, "ddinfo-web"u8, "DevilDaggers.info website and web server"u8);
 
 			ImGui.SeparatorText("Third-party libraries");
 			ImGui.Text("The app uses the following third-party libraries:");
 
-			RenderLibrary("https://github.com/ocornut/imgui"u8, "Dear ImGui"u8, "Cross-platform UI framework"u8);
-			RenderLibrary("https://github.com/mlabbe/nativefiledialog"u8, "NativeFileDialog"u8, "Cross-platform file dialogs"u8);
-			RenderLibrary("https://github.com/dotnet/Silk.NET"u8, "Silk.NET"u8, "OpenGL, OpenAL, and GLFW bindings for C#"u8);
-			RenderLibrary("https://github.com/serilog/serilog"u8, "Serilog"u8, "Logging"u8);
-			RenderLibrary("https://github.com/SixLabors/ImageSharp"u8, "ImageSharp"u8, "Image processing"u8);
-			RenderLibrary("https://github.com/HexaEngine/Hexa.NET.ImGui"u8, "Hexa.NET.ImGui"u8, "C# wrapper for Dear ImGui"u8);
-			RenderLibrary("https://github.com/milleniumbug/NativeFileDialogSharp"u8, "NativeFileDialogSharp"u8, "C# wrapper for NativeFileDialog"u8);
-#pragma warning restore S1075
+			RenderLibrary(Urls.DearImGui, "Dear ImGui"u8, "Cross-platform UI framework"u8);
+			RenderLibrary(Urls.NativeFileDialog, "NativeFileDialog"u8, "Cross-platform file dialogs"u8);
+			RenderLibrary(Urls.Silk, "Silk.NET"u8, "OpenGL, OpenAL, and GLFW bindings for C#"u8);
+			RenderLibrary(Urls.Serilog, "Serilog"u8, "Logging"u8);
+			RenderLibrary(Urls.ImageSharp, "ImageSharp"u8, "Image processing"u8);
+			RenderLibrary(Urls.Hexa, "Hexa.NET.ImGui"u8, "C# wrapper for Dear ImGui"u8);
+			RenderLibrary(Urls.NativeFileDialogSharp, "NativeFileDialogSharp"u8, "C# wrapper for NativeFileDialog"u8);
 
 			RenderFooter();
 

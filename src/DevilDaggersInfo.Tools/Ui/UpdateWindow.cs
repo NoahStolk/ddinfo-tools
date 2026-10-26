@@ -39,10 +39,10 @@ internal sealed class UpdateWindow(IPlatformSpecificValues platformSpecificValue
                 """));
 			ImGui.Spacing();
 
-			ImGuiExt.Hyperlink("https://github.com/NoahStolk/ddinfo-tools/releases"u8, "Download from GitHub"u8);
+			ImGuiExt.Hyperlink(Urls.GitHubReleases, "Download from GitHub"u8);
 			ImGui.Spacing();
 
-			ImGuiExt.Hyperlink("https://github.com/NoahStolk/ddinfo-tools/blob/main/CHANGELOG.md"u8, "View the full changelog"u8);
+			ImGuiExt.Hyperlink(Urls.GitHubChangelog, "View the full changelog"u8);
 			ImGui.Spacing();
 
 			ImGui.PopTextWrapPos();

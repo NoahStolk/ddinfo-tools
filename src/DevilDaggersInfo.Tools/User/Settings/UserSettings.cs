@@ -79,8 +79,6 @@ internal sealed class UserSettings(ILogger logger)
 		{
 			logger.Error(ex, "Could not load imgui.ini.");
 		}
-
-		// DebugWindow.Add("Loaded imgui.ini");
 	}
 
 	public unsafe void SaveImGuiIni(ImGuiIOPtr io)
@@ -90,8 +88,6 @@ internal sealed class UserSettings(ILogger logger)
 		nuint iniSize;
 		byte* iniContents = ImGui.SaveIniSettingsToMemory(&iniSize);
 		File.WriteAllBytes(_imguiIniFilePath, new ReadOnlySpan<byte>(iniContents, (int)iniSize));
-
-		// DebugWindow.Add("Saved imgui.ini");
 
 		io.WantSaveIniSettings = false;
 	}
