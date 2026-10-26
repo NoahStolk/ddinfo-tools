@@ -27,35 +27,7 @@ internal sealed class CurrentSpawnsetChild(FontService fontService, SurvivalFile
 				ImGui.Text("The current practice spawnset is enabled:");
 				ImGui.Spacing();
 
-				if (ImGui.BeginTable("CurrentSpawnsetTable", 2, ImGuiTableFlags.Borders, new Vector2(320, 0)))
-				{
-					ImGui.TableNextColumn();
-					ImGui.Text("Hand");
-
-					ImGui.TableNextColumn();
-					Color handColor = survivalFileWatcher.EffectivePlayerSettings.HandLevel.GetColor();
-					if (survivalFileWatcher.EffectivePlayerSettings.HandLevel != survivalFileWatcher.EffectivePlayerSettings.HandMesh)
-						ImGui.TextColored(handColor, Inline.Utf8($"{survivalFileWatcher.EffectivePlayerSettings.HandLevel.AsUtf8Span()} ({survivalFileWatcher.EffectivePlayerSettings.HandMesh.AsUtf8Span()} hand mesh)"));
-					else
-						ImGui.TextColored(handColor, survivalFileWatcher.EffectivePlayerSettings.HandLevel.AsUtf8Span());
-
-					ImGui.TableNextColumn();
-					ImGui.Text("Gems/Homing");
-
-					ImGui.TableNextColumn();
-					if (survivalFileWatcher.EffectivePlayerSettings.HandLevel is HandLevel.Level3 or HandLevel.Level4)
-						ImGui.TextColored(handColor, Inline.Utf8($"{survivalFileWatcher.EffectivePlayerSettings.GemsOrHoming} homing"));
-					else
-						ImGui.TextColored(Color.Red, Inline.Utf8($"{survivalFileWatcher.EffectivePlayerSettings.GemsOrHoming} gems"));
-
-					ImGui.TableNextColumn();
-					ImGui.Text("Starts at");
-
-					ImGui.TableNextColumn();
-					ImGui.Text(Inline.Utf8(survivalFileWatcher.TimerStart, StringFormats.TimeFormat));
-
-					ImGui.EndTable();
-				}
+				RenderCurrentSpawnsetTable();
 			}
 			else
 			{
@@ -67,5 +39,44 @@ internal sealed class CurrentSpawnsetChild(FontService fontService, SurvivalFile
 		}
 
 		ImGui.EndChild();
+	}
+
+	private void RenderCurrentSpawnsetTable()
+	{
+		if (!ImGui.BeginTable("CurrentSpawnsetTable", 2, ImGuiTableFlags.Borders, new Vector2(320, 0)))
+			return;
+
+		EffectivePlayerSettings settings = survivalFileWatcher.EffectivePlayerSettings;
+
+		ImGui.TableNextColumn();
+		ImGui.Text("Hand");
+
+		ImGui.TableNextColumn();
+		Color handColor = settings.HandLevel.GetColor();
+		ImGui.TextColored(handColor, FormatHandText(settings));
+
+		ImGui.TableNextColumn();
+		ImGui.Text("Gems/Homing");
+
+		ImGui.TableNextColumn();
+		if (settings.HandLevel is HandLevel.Level3 or HandLevel.Level4)
+			ImGui.TextColored(handColor, Inline.Utf8($"{settings.GemsOrHoming} homing"));
+		else
+			ImGui.TextColored(Color.Red, Inline.Utf8($"{settings.GemsOrHoming} gems"));
+
+		ImGui.TableNextColumn();
+		ImGui.Text("Starts at");
+
+		ImGui.TableNextColumn();
+		ImGui.Text(Inline.Utf8(survivalFileWatcher.TimerStart, StringFormats.TimeFormat));
+
+		ImGui.EndTable();
+	}
+
+	private static ReadOnlySpan<byte> FormatHandText(EffectivePlayerSettings settings)
+	{
+		return settings.HandLevel != settings.HandMesh
+			? Inline.Utf8($"{settings.HandLevel.AsUtf8Span()} ({settings.HandMesh.AsUtf8Span()} hand mesh)")
+			: settings.HandLevel.AsUtf8Span();
 	}
 }

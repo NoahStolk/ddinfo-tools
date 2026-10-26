@@ -115,14 +115,9 @@ internal sealed class ArenaPencilState(ArenaWindow arenaWindow, FileStates fileS
 	}
 
 	// Must be a class so we can modify the properties.
-	private sealed class Session
+	private sealed class Session(Vector2 startPosition)
 	{
-		public Session(Vector2 startPosition)
-		{
-			StartPosition = startPosition;
-		}
-
-		public Vector2 StartPosition { get; set; }
+		public Vector2 StartPosition { get; set; } = startPosition;
 
 		public HashSet<Vector2D<int>> ModifiedCoords { get; } = [];
 	}

@@ -83,7 +83,7 @@ public static class InternalResourceReader
 		stream.CopyTo(ms);
 
 		ModelData modelData = ObjParser.Parse(ms.ToArray());
-		return new ModelContext(modelData.Meshes.Select(m => (m.MaterialName, GetMesh(modelData, m))).ToList());
+		return new ModelContext([.. modelData.Meshes.Select(m => (m.MaterialName, GetMesh(modelData, m)))]);
 
 		static MeshContent GetMesh(ModelData modelData, MeshData meshData)
 		{
