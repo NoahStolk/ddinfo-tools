@@ -1,5 +1,6 @@
 namespace DevilDaggersInfo.Tools.Engine.Content.Parsers.Model;
 
+// ReSharper disable UnusedMember.Global
 public sealed class ObjParseException : Exception
 {
 	public ObjParseException()

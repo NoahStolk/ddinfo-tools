@@ -19,11 +19,6 @@ internal static class ImGuiImage
 			drawListPtr.AddImage(GetTextureRef(framebufferData.TextureHandle), pMin, pMax, Vector2.UnitY, Vector2.UnitX, ImGui.GetColorU32(color));
 		}
 
-		public void AddImage(uint imageId, Vector2 pMin, Vector2 pMax)
-		{
-			drawListPtr.AddImage(imageId, pMin, pMax, Color.White);
-		}
-
 		public void AddImage(uint imageId, Vector2 pMin, Vector2 pMax, Color color)
 		{
 			drawListPtr.AddImage(GetTextureRef(imageId), pMin, pMax, Vector2.Zero, Vector2.One, ImGui.GetColorU32(color));
@@ -37,7 +32,7 @@ internal static class ImGuiImage
 
 	public static void Image(uint imageId, Vector2 size, Color color)
 	{
-		// Dear ImGui 1.92 dropped the tint colour from ImGui.Image, so the tinted variant goes through the draw list.
+		// Dear ImGui 1.92 dropped the tint color from ImGui.Image, so the tinted variant goes through the draw list.
 		// Dummy reserves the same layout space ImGui.Image would have.
 		Vector2 position = ImGui.GetCursorScreenPos();
 		ImGui.GetWindowDrawList().AddImage(GetTextureRef(imageId), position, position + size, Vector2.Zero, Vector2.One, ImGui.GetColorU32(color));

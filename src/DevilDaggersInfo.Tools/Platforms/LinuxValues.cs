@@ -5,6 +5,4 @@ namespace DevilDaggersInfo.Tools.Platforms;
 internal sealed class LinuxValues : IPlatformSpecificValues
 {
 	public AppOperatingSystem AppOperatingSystem => AppOperatingSystem.Linux;
-
-	public string DefaultInstallationPath => string.Empty;
 }

@@ -1,5 +1,6 @@
 namespace DevilDaggersInfo.Tools.Engine.Content.Parsers.Texture;
 
+// ReSharper disable UnusedMember.Global
 public sealed class TgaParseException : Exception
 {
 	public TgaParseException()
