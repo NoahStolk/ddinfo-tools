@@ -81,17 +81,17 @@ internal sealed class AboutWindow(FrameCounter frameCounter, FontService fontSer
 
 		ImGui.TextColored(Colors.TitleColor(frameCounter.TotalTime), "© DevilDaggers.info 2017-2026");
 
-		ImGuiExt.Hyperlink("https://devildaggers.com/"u8, "Devil Daggers"u8);
+		ImGuiExt.Hyperlink(Urls.DevilDaggers, "Devil Daggers"u8);
 		ImGui.SameLine();
 		ImGui.Text("is created by");
 		ImGui.SameLine();
-		ImGuiExt.Hyperlink("https://sorath.com/"u8, "Sorath"u8);
+		ImGuiExt.Hyperlink(Urls.Sorath, "Sorath"u8);
 
-		ImGuiExt.Hyperlink("https://devildaggers.info/"u8, "DevilDaggers.info"u8);
+		ImGuiExt.Hyperlink(Urls.DevilDaggersInfo, "DevilDaggers.info"u8);
 		ImGui.SameLine();
 		ImGui.Text("is created by");
 		ImGui.SameLine();
-		ImGuiExt.Hyperlink("https://noahstolk.com/"u8, "Noah Stolk"u8);
+		ImGuiExt.Hyperlink(Urls.NoahStolk, "Noah Stolk"u8);
 
 		ImGui.TextColored(Color.Gray(0.6f), _versionInfo);
 	}

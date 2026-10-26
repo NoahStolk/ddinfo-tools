@@ -16,4 +16,9 @@ internal static class Urls
 	public static ReadOnlySpan<byte> ImageSharp => "https://github.com/SixLabors/ImageSharp"u8;
 	public static ReadOnlySpan<byte> Hexa => "https://github.com/HexaEngine/Hexa.NET.ImGui"u8;
 	public static ReadOnlySpan<byte> NativeFileDialogSharp => "https://github.com/milleniumbug/NativeFileDialogSharp"u8;
+
+	public static ReadOnlySpan<byte> DevilDaggers => "https://devildaggers.com/"u8;
+	public static ReadOnlySpan<byte> Sorath => "https://sorath.com/"u8;
+	public static ReadOnlySpan<byte> DevilDaggersInfo => "https://devildaggers.info/"u8;
+	public static ReadOnlySpan<byte> NoahStolk => "https://noahstolk.com/"u8;
 }
