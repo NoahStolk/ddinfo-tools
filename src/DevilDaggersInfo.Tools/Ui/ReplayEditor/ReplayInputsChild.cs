@@ -47,41 +47,46 @@ internal sealed class ReplayInputsChild(ResourceManager resourceManager)
 
 		if (ImGui.BeginChild("ReplayInputsChild", new Vector2(0, 0)))
 		{
-			if (ImGui.BeginTable("ReplayInputsTable", 2, ImGuiTableFlags.BordersInnerH | ImGuiTableFlags.SizingStretchSame))
-			{
-				ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 128);
-				ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.None, 384);
-				ImGui.TableHeadersRow();
-
-				ImGui.TextColored(Color.White, Inline.Utf8($"Look Speed: {replay.LookSpeed}"));
-
-				int i = 0;
-				foreach (InputsEventData inputs in replay.InputsEvents)
-				{
-					if (i < _startTick)
-					{
-						i++;
-						continue;
-					}
-
-					ImGui.TableNextRow();
-
-					ImGui.TableNextColumn();
-					ImGui.Text(Inline.Utf8($"{TimeUtils.TickToTime(i, replay.StartTime):0.0000} ({i})"));
-
-					ImGui.TableNextColumn();
-					RenderInputsEvent(inputs.Left, inputs.Right, inputs.Forward, inputs.Backward, inputs.Jump, inputs.Shoot, inputs.ShootHoming, inputs.MouseX, inputs.MouseY);
-
-					i++;
-					if (i > _endTick)
-						break;
-				}
-
-				ImGui.EndTable();
-			}
+			RenderReplayInputsTable(replay);
 		}
 
-		ImGui.EndChild(); // ReplayInputsChild
+		ImGui.EndChild();
+	}
+
+	private void RenderReplayInputsTable(EditorReplayModel replay)
+	{
+		if (!ImGui.BeginTable("ReplayInputsTable", 2, ImGuiTableFlags.BordersInnerH | ImGuiTableFlags.SizingStretchSame))
+			return;
+
+		ImGui.TableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 128);
+		ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.None, 384);
+		ImGui.TableHeadersRow();
+
+		ImGui.TextColored(Color.White, Inline.Utf8($"Look Speed: {replay.LookSpeed}"));
+
+		int i = 0;
+		foreach (InputsEventData inputs in replay.InputsEvents)
+		{
+			if (i < _startTick)
+			{
+				i++;
+				continue;
+			}
+
+			ImGui.TableNextRow();
+
+			ImGui.TableNextColumn();
+			ImGui.Text(Inline.Utf8($"{TimeUtils.TickToTime(i, replay.StartTime):0.0000} ({i})"));
+
+			ImGui.TableNextColumn();
+			RenderInputsEvent(inputs.Left, inputs.Right, inputs.Forward, inputs.Backward, inputs.Jump, inputs.Shoot, inputs.ShootHoming, inputs.MouseX, inputs.MouseY);
+
+			i++;
+			if (i > _endTick)
+				break;
+		}
+
+		ImGui.EndTable();
 	}
 
 	private static void RenderInputsEvent(

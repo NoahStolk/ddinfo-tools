@@ -29,6 +29,9 @@ internal sealed class FontService
 		private set;
 	}
 
+	/// <summary>
+	/// Loads the default font and all the configured fonts.
+	/// </summary>
 	/// <param name="dpiScale">The framebuffer/window ratio (e.g. 3.0 on Wayland with 300% scaling at 4K).</param>
 	public unsafe void Load(float dpiScale)
 	{

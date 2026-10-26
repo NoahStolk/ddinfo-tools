@@ -3,6 +3,7 @@ using DevilDaggersInfo.Tools.Extensions;
 using Hexa.NET.ImGui;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -179,6 +180,7 @@ internal sealed class ImGuiController
 	}
 
 	[UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
+	[SuppressMessage("Roslynator", "RCS1163:Unused parameter", Justification = "Unmanaged call")]
 	private static unsafe byte* GetClipboardText(ImGuiContext* context)
 	{
 		// GLFW returns null when the clipboard is empty or holds something other than text, which ImGui handles.
@@ -186,6 +188,7 @@ internal sealed class ImGuiController
 	}
 
 	[UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
+	[SuppressMessage("Roslynator", "RCS1163:Unused parameter", Justification = "Unmanaged call")]
 	private static unsafe void SetClipboardText(ImGuiContext* context, byte* text)
 	{
 		_glfwSetClipboardString((WindowHandle*)ImGui.GetPlatformIO().PlatformClipboardUserData, text);

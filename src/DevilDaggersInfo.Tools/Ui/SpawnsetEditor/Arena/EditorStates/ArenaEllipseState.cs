@@ -160,16 +160,10 @@ internal sealed class ArenaEllipseState(ArenaWindow arenaWindow, FileStates file
 		return ArenaEditingUtils.Snap(position, ArenaWindow.TileSize) + ArenaWindow.HalfTileSizeAsVector2;
 	}
 
-	private struct Session
+	private readonly struct Session(Vector2 startPosition, float[,] newArena)
 	{
-		public Session(Vector2 startPosition, float[,] newArena)
-		{
-			StartPosition = startPosition;
-			NewArena = newArena;
-		}
+		public Vector2 StartPosition { get; } = startPosition;
 
-		public Vector2 StartPosition { get; }
-
-		public float[,] NewArena { get; }
+		public float[,] NewArena { get; } = newArena;
 	}
 }
