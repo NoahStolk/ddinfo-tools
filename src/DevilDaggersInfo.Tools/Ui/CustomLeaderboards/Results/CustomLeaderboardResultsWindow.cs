@@ -18,7 +18,7 @@ internal static class CustomLeaderboardResultsWindow
 			result.IsExpanded = false;
 
 		_results.Add(newResult);
-		_results = _results.OrderByDescending(ur => ur.SubmittedAt).ToList();
+		_results = [.. _results.OrderByDescending(ur => ur.SubmittedAt)];
 	}
 
 	public static void Render()

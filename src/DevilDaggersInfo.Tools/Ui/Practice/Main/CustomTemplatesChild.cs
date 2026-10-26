@@ -186,7 +186,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 		{
 			userSettings.Model = userSettings.Model with
 			{
-				PracticeTemplates = userSettings.Model.PracticeTemplates.Where(pt => customTemplate != pt).ToList(),
+				PracticeTemplates = [.. userSettings.Model.PracticeTemplates.Where(pt => customTemplate != pt)],
 			};
 		}
 

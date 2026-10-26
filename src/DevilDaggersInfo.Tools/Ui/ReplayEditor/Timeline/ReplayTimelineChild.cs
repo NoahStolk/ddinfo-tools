@@ -16,7 +16,7 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 {
 	private const float _markerSize = 24;
 
-	private readonly List<EventType> _shownEventTypes = Enum.GetValues<EventType>().Where(et => et is not EventType.End and not EventType.InitialInputs and not EventType.Inputs).ToList();
+	private readonly List<EventType> _shownEventTypes = [.. EventTypeGen.Values.Where(et => et is not EventType.End and not EventType.InitialInputs and not EventType.Inputs)];
 
 	private readonly Dictionary<EventType, int> _eventTypeRowIndices = [];
 	private readonly Color _lineColorDefault = Color.Gray(0.4f);
@@ -192,50 +192,52 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 		float xOffset = eventCount < 10 ? 9 : 5;
 		drawList.AddText(rectOrigin + new Vector2(xOffset, 5), 0xffffffff, eventCount > 99 ? Inline.Utf8("XX") : Inline.Utf8($"{eventCount}"));
 
-		if (isHovering && ImGui.BeginTooltip())
+		if (!isHovering || !ImGui.BeginTooltip())
+			return;
+
+		ImGui.TextColored(eventType.GetColor(), eventType.AsUtf8DisplaySpan());
+		if (ImGui.BeginTable(Inline.Utf8($"MarkerTooltipTable_{tickIndex}_{eventType.AsUtf8Span()}"), 2, ImGuiTableFlags.Borders))
 		{
-			ImGui.TextColored(eventType.GetColor(), eventType.AsUtf8DisplaySpan());
-			if (ImGui.BeginTable(Inline.Utf8($"MarkerTooltipTable_{tickIndex}_{eventType.AsUtf8Span()}"), 2, ImGuiTableFlags.Borders))
-			{
-				ImGui.TableNextColumn();
-				ImGui.Text("Event count");
+			ImGui.TableNextColumn();
+			ImGui.Text("Event count");
 
-				ImGui.TableNextColumn();
-				ImGui.Text(Inline.Utf8(eventCount));
+			ImGui.TableNextColumn();
+			ImGui.Text(Inline.Utf8(eventCount));
 
-				ImGui.TableNextColumn();
-				ImGui.Text("Time");
+			ImGui.TableNextColumn();
+			ImGui.Text("Time");
 
-				ImGui.TableNextColumn();
-				ImGui.Text(Inline.Utf8(TimeUtils.TickToTime(tickIndex, startTime), StringFormats.TimeFormat));
-				ImGui.SameLine();
-				ImGui.Text(Inline.Utf8($"({tickIndex})"));
+			ImGui.TableNextColumn();
+			ImGui.Text(Inline.Utf8(TimeUtils.TickToTime(tickIndex, startTime), StringFormats.TimeFormat));
+			ImGui.SameLine();
+			ImGui.Text(Inline.Utf8($"({tickIndex})"));
 
-				ImGui.EndTable();
-			}
-
-			ImGui.EndTooltip();
+			ImGui.EndTable();
 		}
+
+		ImGui.EndTooltip();
 	}
 
 	private void SelectEvents(EditorReplayModel replay, int tickIndex)
 	{
-		List<EditorEvent> replayEvents = replay.BoidSpawnEvents
-			.Concat(replay.LeviathanSpawnEvents)
-			.Concat(replay.PedeSpawnEvents)
-			.Concat(replay.SpiderEggSpawnEvents)
-			.Concat(replay.SpiderSpawnEvents)
-			.Concat(replay.SquidSpawnEvents)
-			.Concat(replay.ThornSpawnEvents)
-			.Concat(replay.DaggerSpawnEvents)
-			.Concat(replay.EntityOrientationEvents)
-			.Concat(replay.EntityPositionEvents)
-			.Concat(replay.EntityTargetEvents)
-			.Concat(replay.GemEvents)
-			.Concat(replay.HitEvents)
-			.Concat(replay.TransmuteEvents)
-			.Where(e => e.TickIndex == tickIndex)
-			.ToList();
+		List<EditorEvent> replayEvents =
+		[
+			.. replay.BoidSpawnEvents
+				.Concat(replay.LeviathanSpawnEvents)
+				.Concat(replay.PedeSpawnEvents)
+				.Concat(replay.SpiderEggSpawnEvents)
+				.Concat(replay.SpiderSpawnEvents)
+				.Concat(replay.SquidSpawnEvents)
+				.Concat(replay.ThornSpawnEvents)
+				.Concat(replay.DaggerSpawnEvents)
+				.Concat(replay.EntityOrientationEvents)
+				.Concat(replay.EntityPositionEvents)
+				.Concat(replay.EntityTargetEvents)
+				.Concat(replay.GemEvents)
+				.Concat(replay.HitEvents)
+				.Concat(replay.TransmuteEvents)
+				.Where(e => e.TickIndex == tickIndex),
+		];
 
 		_selectedEvents.Clear();
 		_selectedEvents.AddRange(replayEvents);

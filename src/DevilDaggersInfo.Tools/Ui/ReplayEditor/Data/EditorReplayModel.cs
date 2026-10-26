@@ -274,9 +274,24 @@ internal sealed record EditorReplayModel
 
 				InputsEventData inputsEvent = InputsEvents[currentTickIndex];
 				if (currentTickIndex == 0)
-					replayEvents.Add(new ReplayEvent(new InitialInputsEventData(inputsEvent.Left, inputsEvent.Right, inputsEvent.Forward, inputsEvent.Backward, inputsEvent.Jump, inputsEvent.Shoot, inputsEvent.ShootHoming, inputsEvent.MouseX, inputsEvent.MouseY, LookSpeed)));
+				{
+					InitialInputsEventData initialInputsEventData = new(
+						Left: inputsEvent.Left,
+						Right: inputsEvent.Right,
+						Forward: inputsEvent.Forward,
+						Backward: inputsEvent.Backward,
+						Jump: inputsEvent.Jump,
+						Shoot: inputsEvent.Shoot,
+						ShootHoming: inputsEvent.ShootHoming,
+						MouseX: inputsEvent.MouseX,
+						MouseY: inputsEvent.MouseY,
+						LookSpeed: LookSpeed);
+					replayEvents.Add(new ReplayEvent(initialInputsEventData));
+				}
 				else
+				{
 					replayEvents.Add(new ReplayEvent(inputsEvent));
+				}
 
 				currentTickIndex++;
 			}
@@ -414,21 +429,23 @@ internal sealed record EditorReplayModel
 
 		List<EditorEvent> GetAllEvents()
 		{
-			return BoidSpawnEvents
-				.Concat(DaggerSpawnEvents)
-				.Concat(EntityOrientationEvents)
-				.Concat(EntityPositionEvents)
-				.Concat(EntityTargetEvents)
-				.Concat(GemEvents)
-				.Concat(HitEvents)
-				.Concat(LeviathanSpawnEvents)
-				.Concat(PedeSpawnEvents)
-				.Concat(SpiderEggSpawnEvents)
-				.Concat(SpiderSpawnEvents)
-				.Concat(SquidSpawnEvents)
-				.Concat(ThornSpawnEvents)
-				.Concat(TransmuteEvents)
-				.ToList();
+			return
+			[
+				.. BoidSpawnEvents,
+				.. DaggerSpawnEvents,
+				.. EntityOrientationEvents,
+				.. EntityPositionEvents,
+				.. EntityTargetEvents,
+				.. GemEvents,
+				.. HitEvents,
+				.. LeviathanSpawnEvents,
+				.. PedeSpawnEvents,
+				.. SpiderEggSpawnEvents,
+				.. SpiderSpawnEvents,
+				.. SquidSpawnEvents,
+				.. ThornSpawnEvents,
+				.. TransmuteEvents,
+			];
 		}
 	}
 
@@ -475,10 +492,23 @@ internal sealed record EditorReplayModel
 			.ToList();
 	}
 
+	private static bool IsSpawnEvent(EventType eventType)
+	{
+		return eventType is
+			EventType.BoidSpawn or
+			EventType.LeviathanSpawn or
+			EventType.PedeSpawn or
+			EventType.SpiderEggSpawn or
+			EventType.SpiderSpawn or
+			EventType.SquidSpawn or
+			EventType.ThornSpawn or
+			EventType.DaggerSpawn;
+	}
+
 	private int? GetNextEntityId(int tickIndex, EventType eventType)
 	{
 		// In case of enemy and dagger spawns, we need to determine the entity id of the new event.
-		if (eventType is not (EventType.BoidSpawn or EventType.LeviathanSpawn or EventType.PedeSpawn or EventType.SpiderEggSpawn or EventType.SpiderSpawn or EventType.SquidSpawn or EventType.ThornSpawn or EventType.DaggerSpawn))
+		if (!IsSpawnEvent(eventType))
 			return null;
 
 		int entityId = 1;

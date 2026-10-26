@@ -31,7 +31,9 @@ internal sealed class InputValuesChild(ResourceManager resourceManager, Practice
 					ImGui.SameLine();
 			}
 
-			(Texture gemOrHomingTexture, Color tintColor) = practiceLogic.State.HandLevel is HandLevel.Level3 or HandLevel.Level4 ? (resourceManager.GameResources.IconMaskHomingTexture, Color.White) : (resourceManager.GameResources.IconMaskGemTexture, Color.Red);
+			(Texture gemOrHomingTexture, Color tintColor) = practiceLogic.State.HandLevel is HandLevel.Level3 or HandLevel.Level4
+				? (resourceManager.GameResources.IconMaskHomingTexture, Color.White)
+				: (resourceManager.GameResources.IconMaskGemTexture, Color.Red);
 			ImGui.Spacing();
 			ImGuiImage.Image(gemOrHomingTexture.Id, new Vector2(16), tintColor);
 			ImGui.SameLine();
@@ -56,9 +58,11 @@ internal sealed class InputValuesChild(ResourceManager resourceManager, Practice
 				{
 					userSettings.Model = userSettings.Model with
 					{
-						PracticeTemplates = userSettings.Model.PracticeTemplates
-							.Append(newTemplate)
-							.ToList(),
+						PracticeTemplates =
+						[
+							.. userSettings.Model.PracticeTemplates,
+							newTemplate,
+						],
 					};
 				}
 			}

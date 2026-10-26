@@ -64,7 +64,7 @@ internal sealed class ModsDirectoryLogic(
 		{
 			foreach (ModBinaryTocEntry tocEntry in mod.Toc.Entries)
 			{
-				List<EffectiveAsset> existingAssets = effectiveAssets.Where(c => c.TocEntry.AssetType == tocEntry.AssetType && c.TocEntry.Name == tocEntry.Name).ToList();
+				List<EffectiveAsset> existingAssets = [.. effectiveAssets.Where(c => c.TocEntry.AssetType == tocEntry.AssetType && c.TocEntry.Name == tocEntry.Name)];
 				foreach (EffectiveAsset existingAsset in existingAssets)
 					existingAsset.OverriddenByModFileName = mod.FileName;
 
