@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.Dialogs;
+using DevilDaggersInfo.Tools.Engine.Content;
 using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.User.Cache;
@@ -28,7 +29,7 @@ internal sealed unsafe class Application
 	private readonly UserSettings _userSettings;
 	private readonly UserCache _userCache;
 
-	private readonly IntPtr _iconPtr;
+	private IntPtr _iconPtr;
 
 	private double _currentTime;
 	private double _frameTime;
@@ -66,18 +67,7 @@ internal sealed unsafe class Application
 
 		gameInstallationValidator.ValidateInstallation();
 
-		int iconWidth = resourceManager.InternalResources.ApplicationIconTexture.Width;
-		int iconHeight = resourceManager.InternalResources.ApplicationIconTexture.Height;
-
-		_iconPtr = Marshal.AllocHGlobal(iconWidth * iconHeight * 4);
-		Marshal.Copy(resourceManager.InternalResources.ApplicationIconTexture.Pixels, 0, _iconPtr, iconWidth * iconHeight * 4);
-		Image image = new()
-		{
-			Width = iconWidth,
-			Height = iconHeight,
-			Pixels = (byte*)_iconPtr,
-		};
-		_glfw.SetWindowIcon(_window, 1, &image);
+		SetIcon(resourceManager.InternalResources.ApplicationIconTexture);
 
 		glfw.SetFramebufferSizeCallback(window, (_, w, h) =>
 		{
@@ -95,6 +85,23 @@ internal sealed unsafe class Application
 		ResizeWindow(_glfw, _window, _imGuiController, windowWidth, windowHeight);
 
 		gl.ClearColor(0, 0, 0, 1);
+	}
+
+	private void SetIcon(TextureContent iconTexture)
+	{
+		int iconWidth = iconTexture.Width;
+		int iconHeight = iconTexture.Height;
+		int size = iconWidth * iconHeight * 4;
+
+		_iconPtr = Marshal.AllocHGlobal(size);
+		Marshal.Copy(iconTexture.Pixels, 0, _iconPtr, size);
+		Image image = new()
+		{
+			Width = iconWidth,
+			Height = iconHeight,
+			Pixels = (byte*)_iconPtr,
+		};
+		_glfw.SetWindowIcon(_window, 1, &image);
 	}
 
 	private void ResizeWindow(Glfw glfw, WindowHandle* window, ImGuiController imGuiController, int w, int h)
