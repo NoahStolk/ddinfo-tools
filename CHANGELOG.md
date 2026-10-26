@@ -22,6 +22,8 @@
 
 - Switched the UI library from ImGui.NET to Hexa.NET.ImGui, which updates Dear ImGui from 1.91 to 1.92. This adds validation of incorrect UI API usage, which uncovered the color bug listed above.
 - Rewrote the 3D rendering internals so that all rendering happens in one place, separate from the scene it draws.
+- Small UI improvements.
+- Large amounts of refactoring.
 
 ## [0.13.7.1] - 2026-05-04
 

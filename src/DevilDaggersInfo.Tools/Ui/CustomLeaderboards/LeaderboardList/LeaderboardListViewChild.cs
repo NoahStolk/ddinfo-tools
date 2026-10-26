@@ -87,9 +87,13 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 				ImGui.TableNextRow();
 				ImGui.TableNextColumn();
 
-				ImGui.PushStyleColor(ImGuiCol.Header, Colors.CustomLeaderboards.Primary with { A = 24 });
+				bool isCurrentLeaderboard = leaderboardChild.Data != null && clOverview.SpawnsetName == leaderboardChild.Data.Leaderboard.SpawnsetName;
+
+				int headerAlpha = isCurrentLeaderboard ? 40 : 16;
+				ImGui.PushStyleColor(ImGuiCol.Header, Colors.CustomLeaderboards.Primary with { A = (byte)headerAlpha });
 				ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.CustomLeaderboards.Primary with { A = 64 });
 				ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.CustomLeaderboards.Primary with { A = 96 });
+
 				bool temp = true;
 				if (ImGui.Selectable(clOverview.SpawnsetName, ref temp, ImGuiSelectableFlags.SpanAllColumns, new Vector2(0, 16)))
 					SelectLeaderboard(clOverview);

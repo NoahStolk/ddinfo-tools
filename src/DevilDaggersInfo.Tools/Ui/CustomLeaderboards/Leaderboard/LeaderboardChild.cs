@@ -169,9 +169,13 @@ internal sealed class LeaderboardChild(
 	{
 		ImGui.TableNextColumn();
 
-		ImGui.PushStyleColor(ImGuiCol.Header, Colors.CustomLeaderboards.Primary with { A = 24 });
+		bool isCurrentPlayer = ce.PlayerId == userCache.Model.PlayerId;
+
+		int headerAlpha = isCurrentPlayer ? 40 : 16;
+		ImGui.PushStyleColor(ImGuiCol.Header, Colors.CustomLeaderboards.Primary with { A = (byte)headerAlpha });
 		ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.CustomLeaderboards.Primary with { A = 64 });
 		ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.CustomLeaderboards.Primary with { A = 96 });
+
 		bool temp = true;
 		if (ImGui.Selectable(Inline.Utf8(ce.Rank, "00"), ref temp, ImGuiSelectableFlags.SpanAllColumns))
 			_selectedCustomEntry = ce;
@@ -180,7 +184,7 @@ internal sealed class LeaderboardChild(
 
 		ImGui.TableNextColumn();
 
-		ImGui.TextColored(ce.PlayerId == userCache.Model.PlayerId ? Color.Green : Color.White, ce.PlayerName);
+		ImGui.TextColored(isCurrentPlayer ? Color.Green : Color.White, ce.PlayerName);
 		ImGui.TableNextColumn();
 
 		Color daggerColor = CustomLeaderboardDaggerUtils.GetColor(ce.CustomLeaderboardDagger);
