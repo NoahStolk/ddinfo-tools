@@ -39,7 +39,10 @@ internal sealed partial class LinuxMemoryService(ILogger logger) : INativeMemory
 		if (bytesWritten < 0)
 		{
 			int errno = Marshal.GetLastPInvokeError();
-			logger.Error("Could not write game memory: process_vm_writev failed with errno {Errno} ({Message}). If this is EPERM (1), the kernel is likely blocking the write; see /proc/sys/kernel/yama/ptrace_scope.", errno, Marshal.GetPInvokeErrorMessage(errno));
+			logger.Error(
+				"Could not write game memory: process_vm_writev failed with errno {Errno} ({Message}). If this is EPERM (1), the kernel is likely blocking the write; see /proc/sys/kernel/yama/ptrace_scope.",
+				errno,
+				Marshal.GetPInvokeErrorMessage(errno));
 		}
 		else
 		{
@@ -82,7 +85,10 @@ internal sealed partial class LinuxMemoryService(ILogger logger) : INativeMemory
 		if (bytesRead < 0)
 		{
 			int errno = Marshal.GetLastPInvokeError();
-			logger.Error("Could not read game memory: process_vm_readv failed with errno {Errno} ({Message}). If this is EPERM (1), the kernel is likely blocking the read; see /proc/sys/kernel/yama/ptrace_scope.", errno, Marshal.GetPInvokeErrorMessage(errno));
+			logger.Error(
+				"Could not read game memory: process_vm_readv failed with errno {Errno} ({Message}). If this is EPERM (1), the kernel is likely blocking the read; see /proc/sys/kernel/yama/ptrace_scope.",
+				errno,
+				Marshal.GetPInvokeErrorMessage(errno));
 		}
 		else
 		{
