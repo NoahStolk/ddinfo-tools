@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using Hexa.NET.ImGui;
@@ -55,7 +54,7 @@ internal sealed class ArenaEllipseState(ArenaStateManager arenaStateManager, Fil
 		Loop(mousePosition, (i, j) =>
 		{
 			Vector2 topLeft = origin + new Vector2(i, j) * ArenaWindow.TileSize;
-			drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));
+			drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(new Vector4(1, 1, 1, 0.5f)));
 		});
 
 		if (!_session.HasValue)
@@ -63,12 +62,12 @@ internal sealed class ArenaEllipseState(ArenaStateManager arenaStateManager, Fil
 
 		ArenaEditingUtils.AlignedEllipse ellipse = GetEllipse(_session.Value.StartPosition, mousePosition);
 
-		drawList.AddEllipse(origin + ellipse.Center, ellipse.Radius, ImGui.GetColorU32(Color.HalfTransparentWhite), 0f, 40);
+		drawList.AddEllipse(origin + ellipse.Center, ellipse.Radius, ImGui.GetColorU32(new Vector4(1, 1, 1, 0.5f)), 0f, 40);
 
 		if (!EllipseChild.Filled)
 		{
 			ArenaEditingUtils.AlignedEllipse innerEllipse = GetEllipse(_session.Value.StartPosition, mousePosition, (EllipseChild.Thickness - 1) * ArenaWindow.TileSize);
-			drawList.AddEllipse(origin + innerEllipse.Center, innerEllipse.Radius, ImGui.GetColorU32(Color.White), 0f, 40);
+			drawList.AddEllipse(origin + innerEllipse.Center, innerEllipse.Radius, ImGui.GetColorU32(Vector4.One), 0f, 40);
 		}
 	}
 

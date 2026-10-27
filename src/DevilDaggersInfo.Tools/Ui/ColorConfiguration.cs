@@ -1,11 +1,11 @@
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
 internal record struct ColorConfiguration
 {
-	public required Color Primary { get; init; }
-	public required Color Secondary { get; init; }
-	public required Color Tertiary { get; init; }
-	public required Color Quaternary { get; init; }
+	public required Vector4 Primary { get; init; }
+	public required Vector4 Secondary { get; init; }
+	public required Vector4 Tertiary { get; init; }
+	public required Vector4 Quaternary { get; init; }
 }

@@ -1,4 +1,3 @@
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
@@ -94,6 +93,6 @@ internal sealed class AboutWindow(FrameCounter frameCounter, FontService fontSer
 		ImGui.SameLine();
 		ImGui.Hyperlink(Urls.NoahStolk, "Noah Stolk"u8);
 
-		ImGui.TextColored(Color.Gray(0.6f), _versionInfo);
+		ImGui.TextColored(new Vector4(0.6f, 0.6f, 0.6f, 1), _versionInfo);
 	}
 }

@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
@@ -67,7 +66,7 @@ internal sealed class ReplayInputsChild(ResourceManager resourceManager)
 		ImGui.TableSetupColumn("Inputs", ImGuiTableColumnFlags.None, 384);
 		ImGui.TableHeadersRow();
 
-		ImGui.TextColored(Color.White, Inline.Utf8($"Look Speed: {replay.LookSpeed}"));
+		ImGui.TextColored(Vector4.One, Inline.Utf8($"Look Speed: {replay.LookSpeed}"));
 
 		int i = 0;
 		foreach (InputsEventData inputs in replay.InputsEvents)
@@ -105,13 +104,13 @@ internal sealed class ReplayInputsChild(ResourceManager resourceManager)
 		short mouseX,
 		short mouseY)
 	{
-		ImGui.TextColored(forward ? Color.Red : Color.White, "W");
+		ImGui.TextColored(forward ? new Vector4(1, 0, 0, 1) : Vector4.One, "W");
 		ImGui.SameLine();
-		ImGui.TextColored(left ? Color.Red : Color.White, "A");
+		ImGui.TextColored(left ? new Vector4(1, 0, 0, 1) : Vector4.One, "A");
 		ImGui.SameLine();
-		ImGui.TextColored(backward ? Color.Red : Color.White, "S");
+		ImGui.TextColored(backward ? new Vector4(1, 0, 0, 1) : Vector4.One, "S");
 		ImGui.SameLine();
-		ImGui.TextColored(right ? Color.Red : Color.White, "D");
+		ImGui.TextColored(right ? new Vector4(1, 0, 0, 1) : Vector4.One, "D");
 		ImGui.SameLine();
 		ImGui.TextColored(GetJumpTypeColor(jump), "[Space]");
 		ImGui.SameLine();
@@ -119,22 +118,22 @@ internal sealed class ReplayInputsChild(ResourceManager resourceManager)
 		ImGui.SameLine();
 		ImGui.TextColored(GetShootTypeColor(shootHoming), "[RMB]");
 		ImGui.SameLine();
-		ImGui.TextColored(mouseX == 0 ? Color.White : Color.Red, Inline.Utf8($"X:{mouseX}"));
+		ImGui.TextColored(mouseX == 0 ? Vector4.One : new Vector4(1, 0, 0, 1), Inline.Utf8($"X:{mouseX}"));
 		ImGui.SameLine();
-		ImGui.TextColored(mouseY == 0 ? Color.White : Color.Red, Inline.Utf8($"Y:{mouseY}"));
+		ImGui.TextColored(mouseY == 0 ? Vector4.One : new Vector4(1, 0, 0, 1), Inline.Utf8($"Y:{mouseY}"));
 
-		static Color GetJumpTypeColor(JumpType jumpType) => jumpType switch
+		static Vector4 GetJumpTypeColor(JumpType jumpType) => jumpType switch
 		{
-			JumpType.Hold => Color.Orange,
-			JumpType.StartedPress => Color.Red,
-			_ => Color.White,
+			JumpType.Hold => new Vector4(1, 0.5f, 0, 1),
+			JumpType.StartedPress => new Vector4(1, 0, 0, 1),
+			_ => Vector4.One,
 		};
 
-		static Color GetShootTypeColor(ShootType shootType) => shootType switch
+		static Vector4 GetShootTypeColor(ShootType shootType) => shootType switch
 		{
-			ShootType.Hold => Color.Orange,
-			ShootType.Release => Color.Red,
-			_ => Color.White,
+			ShootType.Hold => new Vector4(1, 0.5f, 0, 1),
+			ShootType.Release => new Vector4(1, 0, 0, 1),
+			_ => Vector4.One,
 		};
 	}
 }

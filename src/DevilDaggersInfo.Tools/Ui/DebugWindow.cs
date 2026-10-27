@@ -2,7 +2,6 @@ using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.Encryption;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
@@ -47,8 +46,8 @@ internal sealed class DebugWindow(
 	{
 		if (ImGui.Begin("Debug"))
 		{
-			ImGui.TextColored(nativeFileDialog.DialogOpen ? Color.White : Color.Gray(0.4f), nativeFileDialog.DialogOpen ? "Native dialog open" : "Native dialog closed");
-			ImGui.TextColored(encryptionService.IsAvailable ? Color.Green : Color.Red, encryptionService.IsAvailable ? "Encryption available" : "Encryption unavailable");
+			ImGui.TextColored(nativeFileDialog.DialogOpen ? Vector4.One : new Vector4(0.4f, 0.4f, 0.4f, 1), nativeFileDialog.DialogOpen ? "Native dialog open" : "Native dialog closed");
+			ImGui.TextColored(encryptionService.IsAvailable ? new Vector4(0, 1, 0, 1) : new Vector4(1, 0, 0, 1), encryptionService.IsAvailable ? "Encryption available" : "Encryption unavailable");
 
 			if (ImGui.CollapsingHeader("Popup debug info"))
 			{
@@ -130,8 +129,8 @@ internal sealed class DebugWindow(
 			if (ImGui.Button("Error log"))
 				logger.Error("Test error! This should be logged as ERROR.");
 
-			ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 127 });
-			ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red);
+			ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(1, 0, 0, 0.5f));
+			ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(1, 0, 0, 1));
 			if (ImGui.Button("FATAL CRASH"))
 				throw new InvalidOperationException("Test crash! This should be logged as FATAL.");
 			ImGui.PopStyleColor(2);
@@ -165,7 +164,7 @@ internal sealed class DebugWindow(
 
 	private void RenderPopupDebugInfo()
 	{
-		ImGui.TextColored(popupManager.IsAnyOpen ? Color.White : Color.Gray(0.4f), popupManager.Popups.Count > 0 ? Inline.Utf8($"{popupManager.Popups.Count} popup(s) active") : "No popups active"u8);
+		ImGui.TextColored(popupManager.IsAnyOpen ? Vector4.One : new Vector4(0.4f, 0.4f, 0.4f, 1), popupManager.Popups.Count > 0 ? Inline.Utf8($"{popupManager.Popups.Count} popup(s) active") : "No popups active"u8);
 
 		if (ImGui.BeginChild("PopupTableWrapper", new Vector2(0, 512)) && ImGui.BeginTable("PopupTable", 3, ImGuiTableFlags.ScrollY))
 		{
@@ -201,13 +200,13 @@ internal sealed class DebugWindow(
 	private void RenderKeyboardInput()
 	{
 		ImGuiIOPtr io = ImGui.GetIO();
-		ImGui.TextColored(io.KeyCtrl ? Color.White : Color.Gray(0.4f), "CTRL");
+		ImGui.TextColored(io.KeyCtrl ? Vector4.One : new Vector4(0.4f, 0.4f, 0.4f, 1), "CTRL");
 		ImGui.SameLine();
-		ImGui.TextColored(io.KeyShift ? Color.White : Color.Gray(0.4f), "SHIFT");
+		ImGui.TextColored(io.KeyShift ? Vector4.One : new Vector4(0.4f, 0.4f, 0.4f, 1), "SHIFT");
 		ImGui.SameLine();
-		ImGui.TextColored(io.KeyAlt ? Color.White : Color.Gray(0.4f), "ALT");
+		ImGui.TextColored(io.KeyAlt ? Vector4.One : new Vector4(0.4f, 0.4f, 0.4f, 1), "ALT");
 		ImGui.SameLine();
-		ImGui.TextColored(io.KeySuper ? Color.White : Color.Gray(0.4f), "SUPER");
+		ImGui.TextColored(io.KeySuper ? Vector4.One : new Vector4(0.4f, 0.4f, 0.4f, 1), "SUPER");
 
 		ImGui.Separator();
 		if (!ImGui.BeginTable("GLFW keys", 8))
@@ -219,7 +218,7 @@ internal sealed class DebugWindow(
 			Keys key = KeysGen.Values[i];
 			bool isDown = glfwInput.IsKeyDown(key);
 			ImGui.TableNextColumn();
-			ImGui.TextColored(isDown ? Color.White : Color.Gray(0.4f), key.AsUtf8Span());
+			ImGui.TextColored(isDown ? Vector4.One : new Vector4(0.4f, 0.4f, 0.4f, 1), key.AsUtf8Span());
 		}
 
 		ImGui.EndTable();
@@ -234,13 +233,13 @@ internal sealed class DebugWindow(
 		AddText("Total managed heap alloc in bytes"u8, Inline.Utf8(allocatedBytes));
 
 		long allocatedBytesDiff = allocatedBytes - _previousAllocatedBytes;
-		Color color = allocatedBytesDiff switch
+		Vector4 color = allocatedBytesDiff switch
 		{
-			> 10_000 => Color.Red,
-			> 1_000 => Color.Orange,
-			> 500 => Color.Yellow,
-			> 0 => new Color(255, 255, 127, 255),
-			_ => Color.Green,
+			> 10_000 => new Vector4(1, 0, 0, 1),
+			> 1_000 => new Vector4(1, 0.5f, 0, 1),
+			> 500 => new Vector4(1, 1, 0, 1),
+			> 0 => new Vector4(1, 1, 0.5f, 1),
+			_ => new Vector4(0, 1, 0, 1),
 		};
 		AddText("Heap alloc bytes since last frame"u8, Inline.Utf8(allocatedBytesDiff), color);
 		_previousAllocatedBytes = allocatedBytes;
@@ -264,10 +263,10 @@ internal sealed class DebugWindow(
 
 	private static void AddText(ReadOnlySpan<byte> textLeft, ReadOnlySpan<byte> textRight)
 	{
-		AddText(textLeft, textRight, Color.White);
+		AddText(textLeft, textRight, Vector4.One);
 	}
 
-	private static void AddText(ReadOnlySpan<byte> textLeft, ReadOnlySpan<byte> textRight, Color textColor)
+	private static void AddText(ReadOnlySpan<byte> textLeft, ReadOnlySpan<byte> textRight, Vector4 textColor)
 	{
 		ImGui.TextColored(textColor, textLeft);
 		ImGui.SameLine(256);

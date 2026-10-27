@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Spawnset.Extensions;
 using DevilDaggersInfo.Tools.EditorFileState;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using Hexa.NET.ImGui;
 using System.Diagnostics;
@@ -24,7 +23,7 @@ internal sealed class SettingsWindow(FileStates fileStates, SpawnsetSaver spawns
 	private static void InfoTooltip(string tooltipText)
 	{
 		ImGui.SameLine();
-		ImGui.TextColored(Color.Gray(0.7f), "(?)");
+		ImGui.TextColored(new Vector4(0.7f, 0.7f, 0.7f, 1), "(?)");
 		if (ImGui.IsItemHovered())
 			ImGui.SetTooltip(tooltipText);
 	}

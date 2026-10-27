@@ -1,4 +1,3 @@
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
 using DevilDaggersInfo.Tools.Ui.Popups;
@@ -159,7 +158,7 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 					ImGui.InputText("##rename", ref modsDirectoryLogic.NewFileName, 128);
 
 					if (_renameErrorMessage != null)
-						ImGui.TextColored(Color.Red, _renameErrorMessage);
+						ImGui.TextColored(new Vector4(1, 0, 0, 1), _renameErrorMessage);
 
 					if (ImGui.Button("OK", new Vector2(128, 0)) || ImGui.IsEnterPressed())
 					{
@@ -205,9 +204,9 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 				if (modFile is { AssetCount: not null, ProhibitedAssetCount: not null })
 				{
 					if (modFile.ProhibitedAssetCount.Value > 0)
-						ImGui.TextColored(Color.Orange, Inline.Utf8($"Prohibited ({modFile.ProhibitedAssetCount.Value} of {modFile.AssetCount.Value})"));
+						ImGui.TextColored(new Vector4(1, 0.5f, 0, 1), Inline.Utf8($"Prohibited ({modFile.ProhibitedAssetCount.Value} of {modFile.AssetCount.Value})"));
 					else
-						ImGui.TextColored(Color.Green, "OK");
+						ImGui.TextColored(new Vector4(0, 1, 0, 1), "OK");
 
 					if (ImGui.IsItemHovered())
 						ImGui.SetTooltip(Inline.Utf8($"{modFile.ProhibitedAssetCount.Value} out of {modFile.AssetCount.Value} assets prohibited"));

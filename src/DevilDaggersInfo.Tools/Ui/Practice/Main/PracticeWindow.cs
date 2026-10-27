@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Core.Spawnset;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using Hexa.NET.ImGui;
 using System.Diagnostics;
@@ -51,7 +50,7 @@ internal sealed class PracticeWindow(
 	/// the terminator. The buffer is caller-owned rather than <see cref="Inline" />'s shared one, because callers keep
 	/// the result alive across other <see cref="Inline" /> calls.
 	/// </summary>
-	public static ReadOnlySpan<byte> GetGemsOrHomingText(HandLevel handLevel, int additionalGems, Span<byte> buffer, out Color textColor)
+	public static ReadOnlySpan<byte> GetGemsOrHomingText(HandLevel handLevel, int additionalGems, Span<byte> buffer, out Vector4 textColor)
 	{
 		EffectivePlayerSettings effectivePlayerSettings = SpawnsetBinary.GetEffectivePlayerSettings(PracticeLogic.SpawnVersion, handLevel, additionalGems);
 
@@ -73,15 +72,15 @@ internal sealed class PracticeWindow(
 
 		textColor = effectivePlayerSettings.HandLevel switch
 		{
-			HandLevel.Level1 or HandLevel.Level2 => Color.Red,
+			HandLevel.Level1 or HandLevel.Level2 => new Vector4(1, 0, 0, 1),
 			_ => effectivePlayerSettings.HandLevel.GetColor(),
 		};
 
 		return buffer[..bytesWritten];
 	}
 
-	public static (byte BackgroundAlpha, byte TextAlpha) GetAlpha(bool isActive)
+	public static (float BackgroundAlpha, float TextAlpha) GetAlpha(bool isActive)
 	{
-		return isActive ? ((byte)48, (byte)255) : ((byte)16, (byte)191);
+		return isActive ? (0.1875f, 1) : (0.0625f, 0.75f);
 	}
 }

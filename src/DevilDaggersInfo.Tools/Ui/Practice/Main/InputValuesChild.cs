@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Core.Spawnset;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.User.Settings.Model;
@@ -31,9 +30,9 @@ internal sealed class InputValuesChild(ResourceManager resourceManager, Practice
 					ImGui.SameLine();
 			}
 
-			(Texture gemOrHomingTexture, Color tintColor) = practiceLogic.State.HandLevel is HandLevel.Level3 or HandLevel.Level4
-				? (resourceManager.GameResources.IconMaskHomingTexture, Color.White)
-				: (resourceManager.GameResources.IconMaskGemTexture, Color.Red);
+			(Texture gemOrHomingTexture, Vector4 tintColor) = practiceLogic.State.HandLevel is HandLevel.Level3 or HandLevel.Level4
+				? (resourceManager.GameResources.IconMaskHomingTexture, Vector4.One)
+				: (resourceManager.GameResources.IconMaskGemTexture, new Vector4(1, 0, 0, 1));
 			ImGui.Spacing();
 			ImGui.Image(gemOrHomingTexture.Id, new Vector2(16), tintColor);
 			ImGui.SameLine();

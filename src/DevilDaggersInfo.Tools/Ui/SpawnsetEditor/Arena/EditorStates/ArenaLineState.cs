@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using Hexa.NET.ImGui;
@@ -55,27 +54,27 @@ internal sealed class ArenaLineState(ArenaStateManager arenaStateManager, FileSt
 		Loop(mousePosition, (i, j) =>
 		{
 			Vector2 topLeft = origin + new Vector2(i, j) * ArenaWindow.TileSize;
-			drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));
+			drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(new Vector4(1, 1, 1, 0.5f)));
 		});
 
 		if (_session.HasValue)
 		{
 			ArenaEditingUtils.Stadium stadium = GetStadium(_session.Value.StartPosition, mousePosition);
 
-			drawList.AddCircle(origin + stadium.Start, 2, ImGui.GetColorU32(Color.White));
-			drawList.AddCircle(origin + stadium.End, 2, ImGui.GetColorU32(Color.White));
+			drawList.AddCircle(origin + stadium.Start, 2, ImGui.GetColorU32(Vector4.One));
+			drawList.AddCircle(origin + stadium.End, 2, ImGui.GetColorU32(Vector4.One));
 
-			drawList.AddCircle(origin + stadium.Start, stadium.Radius, ImGui.GetColorU32(Color.White));
-			drawList.AddCircle(origin + stadium.End, stadium.Radius, ImGui.GetColorU32(Color.White));
+			drawList.AddCircle(origin + stadium.Start, stadium.Radius, ImGui.GetColorU32(Vector4.One));
+			drawList.AddCircle(origin + stadium.End, stadium.Radius, ImGui.GetColorU32(Vector4.One));
 
 			Vector2 delta = stadium.End - stadium.Start;
-			drawList.AddLine(origin + stadium.Start, origin + stadium.End, ImGui.GetColorU32(Color.White));
-			drawList.AddLine(origin + stadium.Edge1Point, origin + (stadium.Edge1Point + delta), ImGui.GetColorU32(Color.White));
-			drawList.AddLine(origin + stadium.Edge2Point, origin + (stadium.Edge2Point + delta), ImGui.GetColorU32(Color.White));
+			drawList.AddLine(origin + stadium.Start, origin + stadium.End, ImGui.GetColorU32(Vector4.One));
+			drawList.AddLine(origin + stadium.Edge1Point, origin + (stadium.Edge1Point + delta), ImGui.GetColorU32(Vector4.One));
+			drawList.AddLine(origin + stadium.Edge2Point, origin + (stadium.Edge2Point + delta), ImGui.GetColorU32(Vector4.One));
 		}
 		else
 		{
-			drawList.AddCircle(origin + GetSnappedPosition(mousePosition.Real), GetDisplayRadius(), ImGui.GetColorU32(Color.HalfTransparentWhite));
+			drawList.AddCircle(origin + GetSnappedPosition(mousePosition.Real), GetDisplayRadius(), ImGui.GetColorU32(new Vector4(1, 1, 1, 0.5f)));
 		}
 	}
 

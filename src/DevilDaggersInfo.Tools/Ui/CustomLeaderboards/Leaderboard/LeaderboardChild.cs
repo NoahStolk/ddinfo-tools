@@ -2,8 +2,6 @@ using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
-using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
@@ -75,7 +73,7 @@ internal sealed class LeaderboardChild(
 		if (survivalFileWatcher.SpawnsetName == data.Leaderboard.SpawnsetName)
 		{
 			ImGui.SameLine();
-			ImGui.TextColored(Color.Green, "Current spawnset");
+			ImGui.TextColored(new Vector4(0, 1, 0, 1), "Current spawnset");
 		}
 
 		if (_selectedCustomEntry != null)
@@ -171,10 +169,10 @@ internal sealed class LeaderboardChild(
 
 		bool isCurrentPlayer = ce.PlayerId == userCache.Model.PlayerId;
 
-		int headerAlpha = isCurrentPlayer ? 40 : 16;
-		ImGui.PushStyleColor(ImGuiCol.Header, Colors.CustomLeaderboards.Primary with { A = (byte)headerAlpha });
-		ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.CustomLeaderboards.Primary with { A = 64 });
-		ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.CustomLeaderboards.Primary with { A = 96 });
+		float headerAlpha = (isCurrentPlayer ? 40 : 16) / 255f;
+		ImGui.PushStyleColor(ImGuiCol.Header, Colors.CustomLeaderboards.Primary with { W = headerAlpha });
+		ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.CustomLeaderboards.Primary with { W = 0.25f });
+		ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.CustomLeaderboards.Primary with { W = 0.375f });
 
 		bool temp = true;
 		if (ImGui.Selectable(Inline.Utf8(ce.Rank, "00"), ref temp, ImGuiSelectableFlags.SpanAllColumns))
@@ -184,10 +182,10 @@ internal sealed class LeaderboardChild(
 
 		ImGui.TableNextColumn();
 
-		ImGui.TextColored(isCurrentPlayer ? Color.Green : Color.White, ce.PlayerName);
+		ImGui.TextColored(isCurrentPlayer ? new Vector4(0, 1, 0, 1) : Vector4.One, ce.PlayerName);
 		ImGui.TableNextColumn();
 
-		Color daggerColor = CustomLeaderboardDaggerUtils.GetColor(ce.CustomLeaderboardDagger);
+		Vector4 daggerColor = CustomLeaderboardDaggerUtils.GetColor(ce.CustomLeaderboardDagger);
 
 		TextDaggerColored(Inline.Utf8(ce.TimeInSeconds, StringFormats.TimeFormat), _isTime);
 		ImGui.TableNextColumn();
@@ -211,7 +209,7 @@ internal sealed class LeaderboardChild(
 		ImGui.TableNextColumn();
 
 		Death? death = Deaths.GetDeathByType(GameConstants.CurrentVersion, ce.DeathType);
-		ImGui.TextColored(death?.Color.ToEngineColor() ?? Color.White, death?.Name ?? "Unknown");
+		ImGui.TextColored(death?.Color ?? Vector4.One, death?.Name ?? "Unknown");
 		ImGui.TableNextColumn();
 
 		TextDaggerColored(Inline.Utf8(ce.HomingStored), _isHomingStored);

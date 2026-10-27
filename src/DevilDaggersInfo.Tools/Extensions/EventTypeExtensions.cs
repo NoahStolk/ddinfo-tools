@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Core.Wiki;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 using System.Numerics;
 
@@ -14,10 +13,10 @@ internal static class EventTypeExtensions
 			return eventType switch
 			{
 				EventType.BoidSpawn => EnemiesV3_2.Skull4.Color,
-				EventType.DaggerSpawn => Color.Purple,
-				EventType.End or EventType.Gem => Color.Red,
-				EventType.EntityOrientation or EventType.EntityPosition or EventType.EntityTarget => Color.Yellow,
-				EventType.Hit => Color.Orange,
+				EventType.DaggerSpawn => new Vector4(1, 0, 1, 1),
+				EventType.End or EventType.Gem => new Vector4(1, 0, 0, 1),
+				EventType.EntityOrientation or EventType.EntityPosition or EventType.EntityTarget => new Vector4(1, 1, 0, 1),
+				EventType.Hit => new Vector4(1, 0.5f, 0, 1),
 				EventType.LeviathanSpawn => EnemiesV3_2.Leviathan.Color,
 				EventType.PedeSpawn => EnemiesV3_2.Gigapede.Color,
 				EventType.SpiderEggSpawn => EnemiesV3_2.SpiderEgg1.Color,
@@ -25,7 +24,7 @@ internal static class EventTypeExtensions
 				EventType.SquidSpawn => EnemiesV3_2.Squid3.Color,
 				EventType.ThornSpawn => EnemiesV3_2.Thorn.Color,
 				EventType.Transmute => new Vector4(0.75f, 0, 0, 1),
-				_ => Color.White,
+				_ => Vector4.One,
 			};
 		}
 

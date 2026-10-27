@@ -1,19 +1,19 @@
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.EditorFileState;
 
 internal static class SpawnsetEditTypeExtensions
 {
-	private const int _colorValue = 63;
+	private const float _colorValue = 0.25f;
 
-	private static readonly Color _colorShrink = new(0, _colorValue, 0, 255);
-	private static readonly Color _colorBrightness = new(_colorValue, _colorValue, 0, 255);
-	private static readonly Color _colorRaceDagger = new(_colorValue * 2, _colorValue, 0, 255);
-	private static readonly Color _colorArena = new(_colorValue, 0, 0, 255);
-	private static readonly Color _colorMisc = new(0, 0, _colorValue, 255);
-	private static readonly Color _colorPractice = new(0, _colorValue, _colorValue, 255);
-	private static readonly Color _colorSpawn = new(_colorValue, 0, _colorValue, 255);
+	private static readonly Vector4 _colorShrink = new(0, _colorValue, 0, 1);
+	private static readonly Vector4 _colorBrightness = new(_colorValue, _colorValue, 0, 1);
+	private static readonly Vector4 _colorRaceDagger = new(_colorValue * 2, _colorValue, 0, 1);
+	private static readonly Vector4 _colorArena = new(_colorValue, 0, 0, 1);
+	private static readonly Vector4 _colorMisc = new(0, 0, _colorValue, 1);
+	private static readonly Vector4 _colorPractice = new(0, _colorValue, _colorValue, 1);
+	private static readonly Vector4 _colorSpawn = new(_colorValue, 0, _colorValue, 1);
 
 	extension(SpawnsetEditType spawnsetEditType)
 	{
@@ -47,7 +47,7 @@ internal static class SpawnsetEditTypeExtensions
 			};
 		}
 
-		public Color GetColor()
+		public Vector4 GetColor()
 		{
 			return spawnsetEditType switch
 			{

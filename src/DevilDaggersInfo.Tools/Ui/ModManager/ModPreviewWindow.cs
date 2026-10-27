@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Asset;
 using DevilDaggersInfo.Core.Mod;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 using DevilDaggersInfo.Tools.Utils;
@@ -126,9 +125,9 @@ internal sealed class ModPreviewWindow(ModManagerState modManagerState, ModsDire
 
 			ImGui.TableNextColumn();
 			if (AssetContainer.IsProhibited(tocEntry.AssetType, tocEntry.Name))
-				ImGui.TextColored(Color.Orange, "Prohibited");
+				ImGui.TextColored(new Vector4(1, 0.5f, 0, 1), "Prohibited");
 			else
-				ImGui.TextColored(Color.Green, "OK");
+				ImGui.TextColored(new Vector4(0, 1, 0, 1), "OK");
 
 			ImGui.TableNextColumn();
 			ColumnTextRight(FileSizeUtils.Format(tocEntry.Size));

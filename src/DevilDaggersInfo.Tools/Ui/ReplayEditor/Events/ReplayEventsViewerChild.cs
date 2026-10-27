@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events;
 using DevilDaggersInfo.Core.Replay.Events.Data;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events.EventTypes;
@@ -38,7 +37,7 @@ internal sealed class ReplayEventsViewerChild(ResourceManager resourceManager)
 		const int height = 216;
 		const int filteringHeight = 160;
 
-		ImGui.PushStyleColor(ImGuiCol.ChildBg, Color.Gray(0.13f));
+		ImGui.PushStyleColor(ImGuiCol.ChildBg, new Vector4(0.13f, 0.13f, 0.13f, 1));
 		if (ImGui.BeginChild("NavigationAndFilteringWrapper", new Vector2(0, height)))
 		{
 			if (ImGui.BeginChild("TickNavigation", new Vector2(448 + 8, height)))

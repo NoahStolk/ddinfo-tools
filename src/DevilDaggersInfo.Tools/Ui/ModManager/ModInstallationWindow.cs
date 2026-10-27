@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Core.Asset;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
@@ -58,7 +57,7 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 				if (modsDirectoryLogic.Errors.Count > 0)
 				{
 					ImGui.Separator();
-					ImGui.TextColored(Color.Red, "Errors:");
+					ImGui.TextColored(new Vector4(1, 0, 0, 1), "Errors:");
 					for (int i = 0; i < modsDirectoryLogic.Errors.Count; i++)
 					{
 						string error = modsDirectoryLogic.Errors[i];
@@ -98,17 +97,17 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 
 				for (int i = 0; i < kvp.Value.Count; i++)
 				{
-					ImGui.PushStyleColor(ImGuiCol.Border, i % 2 == 0 ? Color.Invisible : Color.White);
+					ImGui.PushStyleColor(ImGuiCol.Border, i % 2 == 0 ? Vector4.Zero : Vector4.One);
 
 					ImGui.TableNextRow();
 
 					EffectiveAsset effectiveAsset = kvp.Value[i];
 					bool isOverridden = effectiveAsset.OverriddenByModFileName != null;
 					bool isDisabled = isOverridden || !effectiveAsset.TocEntry.IsEnabled;
-					Vector4 disabledColor = Color.Gray(0.4f);
+					Vector4 disabledColor = new Vector4(0.4f, 0.4f, 0.4f, 1);
 
 					ImGui.TableNextColumn();
-					ImGui.TextColored(isDisabled ? disabledColor : Color.White, effectiveAsset.TocEntry.Name);
+					ImGui.TextColored(isDisabled ? disabledColor : Vector4.One, effectiveAsset.TocEntry.Name);
 
 					ImGui.TableNextColumn();
 					ImGui.TextColored(isDisabled ? disabledColor : effectiveAsset.TocEntry.AssetType.GetColor(), effectiveAsset.TocEntry.AssetType.AsUtf8Span());
@@ -117,11 +116,11 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 					if (isOverridden)
 						ImGui.TextColored(new Vector4(1, 0.2f, 0.4f, 1), Inline.Utf8($"Overridden by {effectiveAsset.OverriddenByModFileName}"));
 					else if (AssetContainer.IsProhibited(effectiveAsset.TocEntry.AssetType, effectiveAsset.TocEntry.Name))
-						ImGui.TextColored(Color.Orange, "Prohibited");
+						ImGui.TextColored(new Vector4(1, 0.5f, 0, 1), "Prohibited");
 					else if (!effectiveAsset.TocEntry.IsEnabled)
-						ImGui.TextColored(Color.Gray(0.4f), "Disabled");
+						ImGui.TextColored(new Vector4(0.4f, 0.4f, 0.4f, 1), "Disabled");
 					else
-						ImGui.TextColored(Color.Green, "OK");
+						ImGui.TextColored(new Vector4(0, 1, 0, 1), "OK");
 
 					ImGui.PopStyleColor();
 				}

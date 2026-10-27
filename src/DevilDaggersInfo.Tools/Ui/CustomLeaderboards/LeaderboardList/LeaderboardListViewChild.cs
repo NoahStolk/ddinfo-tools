@@ -2,7 +2,6 @@ using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.CriteriaExpression;
 using DevilDaggersInfo.Core.CriteriaExpression.Extensions;
 using DevilDaggersInfo.Core.CriteriaExpression.Parts;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
@@ -26,7 +25,7 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 		{
 			if (leaderboardListChild.IsLoading)
 			{
-				ImGui.TextColored(Color.Yellow, "Loading...");
+				ImGui.TextColored(new Vector4(1, 1, 0, 1), "Loading...");
 			}
 			else
 			{
@@ -90,10 +89,10 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 
 				bool isCurrentLeaderboard = leaderboardChild.Data != null && clOverview.SpawnsetName == leaderboardChild.Data.Leaderboard.SpawnsetName;
 
-				int headerAlpha = isCurrentLeaderboard ? 40 : 16;
-				ImGui.PushStyleColor(ImGuiCol.Header, Colors.CustomLeaderboards.Primary with { A = (byte)headerAlpha });
-				ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.CustomLeaderboards.Primary with { A = 64 });
-				ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.CustomLeaderboards.Primary with { A = 96 });
+				float headerAlpha = (isCurrentLeaderboard ? 40 : 16) / 255f;
+				ImGui.PushStyleColor(ImGuiCol.Header, Colors.CustomLeaderboards.Primary with { W = headerAlpha });
+				ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.CustomLeaderboards.Primary with { W = 0.25f });
+				ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.CustomLeaderboards.Primary with { W = 0.375f });
 
 				bool temp = true;
 				if (ImGui.Selectable(clOverview.SpawnsetName, ref temp, ImGuiSelectableFlags.SpanAllColumns, new Vector2(0, 16)))
@@ -133,7 +132,7 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 				ImGui.TableNextColumn();
 
 				bool completed = clOverview.SelectedPlayerStats?.Dagger == CustomLeaderboardDagger.Leviathan;
-				Color color = CustomLeaderboardDaggerUtils.GetColor(completed ? CustomLeaderboardDagger.Leviathan : clOverview.SelectedPlayerStats?.NextDagger?.Dagger);
+				Vector4 color = CustomLeaderboardDaggerUtils.GetColor(completed ? CustomLeaderboardDagger.Leviathan : clOverview.SelectedPlayerStats?.NextDagger?.Dagger);
 				ImGui.TextColored(
 					color,
 					completed ? "COMPLETED"u8 : clOverview.SelectedPlayerStats?.NextDagger == null ? "N/A"u8 : Inline.Utf8(clOverview.SelectedPlayerStats.NextDagger.DaggerValue, valueFormat));

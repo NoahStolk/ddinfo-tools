@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
@@ -70,6 +69,6 @@ internal sealed class ArenaDaggerState(ResourceManager resourceManager, FileStat
 		ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 		Vector2 origin = ImGui.GetCursorScreenPos();
 		Vector2 center = origin + _position.Value + ArenaWindow.HalfTileSizeAsVector2;
-		drawList.AddImage(resourceManager.GameResources.IconMaskDaggerTexture.Id, center - new Vector2(8), center + new Vector2(8), Color.HalfTransparentWhite);
+		drawList.AddImage(resourceManager.GameResources.IconMaskDaggerTexture.Id, center - new Vector2(8), center + new Vector2(8), new Vector4(1, 1, 1, 0.5f));
 	}
 }

@@ -3,10 +3,10 @@ using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Extensions;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using Hexa.NET.ImGui;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.ReplayEditor;
 
@@ -17,25 +17,25 @@ internal static class HitEventExplanation
 		if (e.EntityIdA == 0)
 		{
 			Death? death = e.EntityIdB < 0 ? null : Deaths.GetDeathByType(GameConstants.CurrentVersion, (byte)e.EntityIdB);
-			ImGui.TextColored(Color.Red, "Player died");
+			ImGui.TextColored(new Vector4(1, 0, 0, 1), "Player died");
 			ImGui.SameLine();
 			ImGui.Text("-");
 			ImGui.SameLine();
-			ImGui.TextColored(death?.Color.ToEngineColor() ?? Color.White, Inline.Utf8($"{death?.Name ?? "Unknown death type"}"));
+			ImGui.TextColored(death?.Color ?? Vector4.One, Inline.Utf8($"{death?.Name ?? "Unknown death type"}"));
 			return;
 		}
 
 		EntityType? entityTypeA = replay.GetEntityTypeIncludingNegated(e.EntityIdA);
 		if (!entityTypeA.HasValue)
 		{
-			ImGui.TextColored(Color.Red, "Entity Id A out of bounds");
+			ImGui.TextColored(new Vector4(1, 0, 0, 1), "Entity Id A out of bounds");
 			return;
 		}
 
 		EntityType? entityTypeB = replay.GetEntityTypeIncludingNegated(e.EntityIdB);
 		if (!entityTypeB.HasValue)
 		{
-			ImGui.TextColored(Color.Red, "Entity Id B out of bounds");
+			ImGui.TextColored(new Vector4(1, 0, 0, 1), "Entity Id B out of bounds");
 			return;
 		}
 
@@ -68,7 +68,7 @@ internal static class HitEventExplanation
 			ImGui.Text("-");
 			ImGui.SameLine();
 
-			Color noDamageColor = Color.Gray(0.5f);
+			Vector4 noDamageColor = new(0.5f, 0.5f, 0.5f, 1);
 
 			// Negative entity IDs are used for dead pede segments.
 			if (e.EntityIdA < 0)
@@ -126,13 +126,13 @@ internal static class HitEventExplanation
 			return;
 		}
 
-		ImGui.TextColored(Color.Red, "Hit event data not understood");
+		ImGui.TextColored(new Vector4(1, 0, 0, 1), "Hit event data not understood");
 
 		static void TextEntityType(EntityType entityType, int entityId)
 		{
 			ImGui.TextColored(entityType.GetColor(), entityType.AsUtf8ShortSpan());
 			ImGui.SameLine();
-			ImGui.TextColored(Color.Gray(0.5f), Inline.Utf8($"(id {Math.Abs(entityId)})"));
+			ImGui.TextColored(new Vector4(0.5f, 0.5f, 0.5f, 1), Inline.Utf8($"(id {Math.Abs(entityId)})"));
 		}
 	}
 }

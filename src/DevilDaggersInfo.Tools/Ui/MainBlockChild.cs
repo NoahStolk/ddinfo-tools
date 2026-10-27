@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Core.Spawnset;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.Utils;
@@ -33,16 +32,16 @@ internal sealed class MainBlockChild(GameMemoryServiceWrapper gameMemoryServiceW
 		switch (_scanResult)
 		{
 			case ScanResult.NotScanned:
-				ImGui.TextColored(Color.Gray(0.4f), "Not scanned"u8);
+				ImGui.TextColored(new Vector4(0.4f, 0.4f, 0.4f, 1), "Not scanned"u8);
 				return;
 			case ScanResult.MarkerUnavailable:
-				ImGui.TextColored(Color.Orange, "The marker is not available yet; try again in a moment"u8);
+				ImGui.TextColored(new Vector4(1, 0.5f, 0, 1), "The marker is not available yet; try again in a moment"u8);
 				return;
 			case ScanResult.GameNotRunning:
-				ImGui.TextColored(Color.Red, "Devil Daggers is not running"u8);
+				ImGui.TextColored(new Vector4(1, 0, 0, 1), "Devil Daggers is not running"u8);
 				return;
 			default:
-				ImGui.TextColored(Color.Green, "Scanned"u8);
+				ImGui.TextColored(new Vector4(0, 1, 0, 1), "Scanned"u8);
 				break;
 		}
 
@@ -189,7 +188,7 @@ internal sealed class MainBlockChild(GameMemoryServiceWrapper gameMemoryServiceW
 	{
 		ImGui.TableNextRow();
 		ImGui.TableNextColumn();
-		ImGui.TextColored(Color.Aqua, name);
+		ImGui.TextColored(new Vector4(0, 1, 1, 1), name);
 	}
 
 	private static void Row(ReadOnlySpan<byte> name, ReadOnlySpan<byte> type, ReadOnlySpan<byte> value)
@@ -200,7 +199,7 @@ internal sealed class MainBlockChild(GameMemoryServiceWrapper gameMemoryServiceW
 		ImGui.Text(name);
 
 		ImGui.TableNextColumn();
-		ImGui.TextColored(Color.Gray(0.5f), type);
+		ImGui.TextColored(new Vector4(0.5f, 0.5f, 0.5f, 1), type);
 
 		// Values can be empty (for example ReplayPlayerName outside of replays), and Text pins an empty span to a null format
 		// string, which crashes inside ImGui. TextUnformatted accepts empty text, and also doesn't treat '%' as a format specifier.

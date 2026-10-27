@@ -2,8 +2,6 @@ using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Spawnset.View;
 using DevilDaggersInfo.Core.Wiki;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
-using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Practice.Main.Data;
 using Hexa.NET.ImGui;
 using System.Numerics;
@@ -64,14 +62,14 @@ internal sealed class EndLoopTemplatesChild(PracticeLogic practiceLogic, Content
 	private void RenderEndLoopTemplate(int waveIndex, float timerStart, float templateWidth)
 	{
 		Vector2 buttonSize = new(templateWidth, 30);
-		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(practiceLogic.IsActive(HandLevel.Level4, 0, timerStart));
-		Color color = waveIndex % 3 == 2 ? EnemiesV3_2.Ghostpede.Color.ToEngineColor() : EnemiesV3_2.Gigapede.Color.ToEngineColor();
+		(float backgroundAlpha, float textAlpha) = PracticeWindow.GetAlpha(practiceLogic.IsActive(HandLevel.Level4, 0, timerStart));
+		Vector4 color = waveIndex % 3 == 2 ? EnemiesV3_2.Ghostpede.Color : EnemiesV3_2.Gigapede.Color;
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
 		if (ImGui.BeginChild(Inline.Utf8($"Wave{waveIndex + 1}"), buttonSize, ImGuiChildFlags.Borders))
 		{
 			bool hover = ImGui.IsWindowHovered();
-			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
+			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { W = hover ? backgroundAlpha + 0.0625f : backgroundAlpha });
 
 			if (ImGui.BeginChild(Inline.Utf8($"WaveChild{waveIndex + 1}"), buttonSize, ImGuiChildFlags.None, ImGuiWindowFlags.NoInputs))
 			{
@@ -83,9 +81,9 @@ internal sealed class EndLoopTemplatesChild(PracticeLogic practiceLogic, Content
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 8));
 
-				ImGui.TextColored(color with { A = textAlpha }, Inline.Utf8($"Wave {waveIndex + 1}"));
+				ImGui.TextColored(color with { W = textAlpha }, Inline.Utf8($"Wave {waveIndex + 1}"));
 				ImGui.SameLine(ImGui.GetWindowWidth() - ImGui.CalcTextSize(Inline.Utf8(timerStart, StringFormats.TimeFormat)).X - 8);
-				ImGui.TextColored(Color.White with { A = textAlpha }, Inline.Utf8(timerStart, StringFormats.TimeFormat));
+				ImGui.TextColored(Vector4.One with { W = textAlpha }, Inline.Utf8(timerStart, StringFormats.TimeFormat));
 			}
 
 			ImGui.EndChild();

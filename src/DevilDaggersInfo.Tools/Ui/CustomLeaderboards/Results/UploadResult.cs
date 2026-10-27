@@ -2,7 +2,6 @@ using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.CriteriaExpression.Extensions;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Utils;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
@@ -73,13 +72,13 @@ internal sealed class UploadResult
 	{
 		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen in this UI.");
 
-		if (!RenderHeader(Color.Aqua, "First score!"))
+		if (!RenderHeader(new Vector4(0, 1, 1, 1), "First score!"))
 			return;
 
 		ImGui.Indent(_indentation);
 
 		ImGui.Spacing();
-		ImGui.Image(_resourceManager.InternalResources.IconEyeTexture.Id, _iconSize, Color.Orange);
+		ImGui.Image(_resourceManager.InternalResources.IconEyeTexture.Id, _iconSize, new Vector4(1, 0.5f, 0, 1));
 
 		if (ImGui.BeginTable("Player", 2))
 		{
@@ -96,7 +95,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGui.Image(_resourceManager.GameResources.IconMaskGemTexture.Id, _iconSize, Color.Red);
+		ImGui.Image(_resourceManager.GameResources.IconMaskGemTexture.Id, _iconSize, new Vector4(1, 0, 0, 1));
 
 		if (ImGui.BeginTable("Gems", 2))
 		{
@@ -124,7 +123,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGui.Image(_resourceManager.GameResources.IconMaskCrosshairTexture.Id, _iconSize, Color.Green);
+		ImGui.Image(_resourceManager.GameResources.IconMaskCrosshairTexture.Id, _iconSize, new Vector4(0, 1, 0, 1));
 
 		if (ImGui.BeginTable("Daggers", 2))
 		{
@@ -140,7 +139,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGui.Image(_resourceManager.GameResources.IconMaskSkullTexture.Id, _iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
+		ImGui.Image(_resourceManager.GameResources.IconMaskSkullTexture.Id, _iconSize, EnemiesV3_2.Skull4.Color);
 
 		if (ImGui.BeginTable("Enemies", 2))
 		{
@@ -166,7 +165,7 @@ internal sealed class UploadResult
 
 	private void RenderHighscore(GetUploadResponseHighscore highscore)
 	{
-		if (!RenderHeader(Color.Green, "NEW HIGHSCORE!"))
+		if (!RenderHeader(new Vector4(0, 1, 0, 1), "NEW HIGHSCORE!"))
 			return;
 
 		ImGui.Indent(_indentation);
@@ -193,7 +192,7 @@ internal sealed class UploadResult
 
 	private void RenderNoHighscore(GetUploadResponseNoHighscore noHighscore)
 	{
-		if (!RenderHeader(Color.White, "No new highscore."))
+		if (!RenderHeader(Vector4.One, "No new highscore."))
 			return;
 
 		ImGui.Indent(_indentation);
@@ -220,7 +219,7 @@ internal sealed class UploadResult
 
 	private void RenderCriteriaRejection(GetUploadResponseCriteriaRejection criteriaRejection)
 	{
-		if (!RenderHeader(Color.Red, "Rejected score."))
+		if (!RenderHeader(new Vector4(1, 0, 0, 1), "Rejected score."))
 			return;
 
 		ImGui.Indent(_indentation);
@@ -233,9 +232,9 @@ internal sealed class UploadResult
 		ImGui.Indent(-_indentation);
 	}
 
-	private bool RenderHeader(Color color, string title)
+	private bool RenderHeader(Vector4 color, string title)
 	{
-		ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = 32 });
+		ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { W = 32 / 255f });
 
 		if (ImGui.BeginChild(Inline.Utf8($"{SubmittedAt.Ticks}{_spawnsetName}"), new Vector2(_headerWidth, 48), ImGuiChildFlags.Borders))
 		{
@@ -280,7 +279,7 @@ internal sealed class UploadResult
 		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen in this UI.");
 
 		ImGui.Spacing();
-		ImGui.Image(_resourceManager.InternalResources.IconEyeTexture.Id, _iconSize, Color.Orange);
+		ImGui.Image(_resourceManager.InternalResources.IconEyeTexture.Id, _iconSize, new Vector4(1, 0.5f, 0, 1));
 
 		if (ImGui.BeginTable("Player", 3))
 		{
@@ -298,7 +297,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGui.Image(_resourceManager.GameResources.IconMaskGemTexture.Id, _iconSize, Color.Red);
+		ImGui.Image(_resourceManager.GameResources.IconMaskGemTexture.Id, _iconSize, new Vector4(1, 0, 0, 1));
 
 		if (ImGui.BeginTable("Gems", 3))
 		{
@@ -326,7 +325,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGui.Image(_resourceManager.GameResources.IconMaskCrosshairTexture.Id, _iconSize, Color.Green);
+		ImGui.Image(_resourceManager.GameResources.IconMaskCrosshairTexture.Id, _iconSize, new Vector4(0, 1, 0, 1));
 
 		if (ImGui.BeginTable("Daggers", 3))
 		{
@@ -348,7 +347,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGui.Image(_resourceManager.GameResources.IconMaskSkullTexture.Id, _iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
+		ImGui.Image(_resourceManager.GameResources.IconMaskSkullTexture.Id, _iconSize, EnemiesV3_2.Skull4.Color);
 
 		if (ImGui.BeginTable("Enemies", 3))
 		{
@@ -367,11 +366,11 @@ internal sealed class UploadResult
 		int comparison = scoreState.ValueDifference.CompareTo(T.Zero);
 		if (!higherIsBetter)
 			comparison = -comparison;
-		Color color = comparison switch
+		Vector4 color = comparison switch
 		{
-			-1 => Color.Red,
-			0 => Color.White,
-			1 => Color.Green,
+			-1 => new Vector4(1, 0, 0, 1),
+			0 => Vector4.One,
+			1 => new Vector4(0, 1, 0, 1),
 			_ => throw new UnreachableException(),
 		};
 
@@ -390,11 +389,11 @@ internal sealed class UploadResult
 	private static void AddLevelUpScoreState(ReadOnlySpan<byte> label, GetScoreState<double> scoreState)
 	{
 		int comparison = -scoreState.ValueDifference.CompareTo(0);
-		Color color = comparison switch
+		Vector4 color = comparison switch
 		{
-			-1 => Color.Red,
-			0 => Color.White,
-			1 => Color.Green,
+			-1 => new Vector4(1, 0, 0, 1),
+			0 => Vector4.One,
+			1 => new Vector4(0, 1, 0, 1),
 			_ => throw new UnreachableException(),
 		};
 
@@ -413,7 +412,7 @@ internal sealed class UploadResult
 		ImGui.Text(levelWasNotAchieved ? "N/A"u8 : Inline.Utf8(scoreState.Value, StringFormats.TimeFormat));
 
 		ImGui.TableNextColumn();
-		ImGui.TextColored(hideDifference ? Color.White : color, hideDifference ? "N/A"u8 : Inline.Utf8(scoreState.ValueDifference, "+0.0000;-0.0000;+0.0000"));
+		ImGui.TextColored(hideDifference ? Vector4.One : color, hideDifference ? "N/A"u8 : Inline.Utf8(scoreState.ValueDifference, "+0.0000;-0.0000;+0.0000"));
 	}
 
 	private static void AddDeath(Death? death)
@@ -422,7 +421,7 @@ internal sealed class UploadResult
 		ImGui.Text("Death");
 
 		ImGui.TableNextColumn();
-		ImGui.TextColored(death?.Color.ToEngineColor() ?? Color.White, death?.Name ?? "Unknown");
+		ImGui.TextColored(death?.Color ?? Vector4.One, death?.Name ?? "Unknown");
 	}
 
 	private static void ConfigureColumns(int count)

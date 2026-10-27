@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Tools.Engine.Maths;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis.Data;
 using Hexa.NET.ImGui;
@@ -144,11 +143,11 @@ internal sealed class GraphsChild(FontService fontService)
 
 			if (ImGui.BeginTooltip())
 			{
-				AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Color.White);
-				AddTooltipText("Gems Collected"u8, Inline.Utf8(gemsCollected), Color.Red);
-				AddTooltipText("Gems Despawned"u8, Inline.Utf8(gemsDespawned), Color.Gray(0.5f));
-				AddTooltipText("Gems Eaten"u8, Inline.Utf8(gemsEaten), Color.Green);
-				AddTooltipText("Gems Total"u8, Inline.Utf8(gemsTotal), new Color(127, 0, 0, 255));
+				AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Vector4.One);
+				AddTooltipText("Gems Collected"u8, Inline.Utf8(gemsCollected), new Vector4(1, 0, 0, 1));
+				AddTooltipText("Gems Despawned"u8, Inline.Utf8(gemsDespawned), new Vector4(0.5f, 0.5f, 0.5f, 1));
+				AddTooltipText("Gems Eaten"u8, Inline.Utf8(gemsEaten), new Vector4(0, 1, 0, 1));
+				AddTooltipText("Gems Total"u8, Inline.Utf8(gemsTotal), new Vector4(0.5f, 0, 0, 1));
 
 				ImGui.EndTooltip();
 			}
@@ -165,7 +164,7 @@ internal sealed class GraphsChild(FontService fontService)
 		RenderGraphSplits(statsData, drawListPtr, pos, size);
 
 		if (_showHomingStored)
-			RenderGraphLine(drawListPtr, _homingStored, max, _homingStoredPoints, ImGui.GetColorU32(UpgradeColors.Level4.ToEngineColor()), pos, size);
+			RenderGraphLine(drawListPtr, _homingStored, max, _homingStoredPoints, ImGui.GetColorU32(UpgradeColors.Level4), pos, size);
 
 		if (_showHomingEaten)
 			RenderGraphLine(drawListPtr, _homingEaten, max, _homingEatenPoints, 0xff0000ff, pos, size);
@@ -178,9 +177,9 @@ internal sealed class GraphsChild(FontService fontService)
 
 			if (ImGui.BeginTooltip())
 			{
-				AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Color.White);
-				AddTooltipText("Homing Stored"u8, Inline.Utf8(homingStored), UpgradeColors.Level4.ToEngineColor());
-				AddTooltipText("Homing Eaten"u8, Inline.Utf8(homingEaten), Color.Red);
+				AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Vector4.One);
+				AddTooltipText("Homing Stored"u8, Inline.Utf8(homingStored), UpgradeColors.Level4);
+				AddTooltipText("Homing Eaten"u8, Inline.Utf8(homingEaten), new Vector4(1, 0, 0, 1));
 
 				ImGui.EndTooltip();
 			}
@@ -240,7 +239,7 @@ internal sealed class GraphsChild(FontService fontService)
 		return Math.Clamp((int)(index + statsData.TimerStart), statsData.TimerStart, statsData.TimerEnd);
 	}
 
-	private static void AddTooltipText(ReadOnlySpan<byte> textLeft, ReadOnlySpan<byte> textRight, Color textColor)
+	private static void AddTooltipText(ReadOnlySpan<byte> textLeft, ReadOnlySpan<byte> textRight, Vector4 textColor)
 	{
 		float posX = ImGui.GetCursorPosX();
 

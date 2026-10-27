@@ -1,4 +1,3 @@
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui;
 using Hexa.NET.ImGui;
 using System.Diagnostics;
@@ -52,10 +51,10 @@ internal static class ImGuiExtensions
 
 		public static void Image(uint imageId, Vector2 size)
 		{
-			ImGui.Image(imageId, size, Color.White);
+			ImGui.Image(imageId, size, Vector4.One);
 		}
 
-		public static void Image(uint imageId, Vector2 size, Color color)
+		public static void Image(uint imageId, Vector2 size, Vector4 color)
 		{
 			// Dear ImGui 1.92 dropped the tint color from ImGui.Image, so the tinted variant goes through the draw list.
 			// Dummy reserves the same layout space ImGui.Image would have.
@@ -64,7 +63,7 @@ internal static class ImGuiExtensions
 			ImGui.Dummy(size);
 		}
 
-		public static bool ImageButton(ReadOnlySpan<byte> strId, uint imageId, Vector2 size, Color backgroundColor = default)
+		public static bool ImageButton(ReadOnlySpan<byte> strId, uint imageId, Vector2 size, Vector4 backgroundColor = default)
 		{
 			return ImGui.ImageButton(strId, ImGui.GetTextureRef(imageId), size, Vector2.Zero, Vector2.One, backgroundColor);
 		}
@@ -93,14 +92,14 @@ internal static class ImGuiExtensions
 			ImGui.SetNextWindowSizeConstraints(minSize, new Vector2(float.MaxValue, float.MaxValue));
 		}
 
-		public static Color GetColor(ImGuiCol color)
+		public static Vector4 GetColor(ImGuiCol color)
 		{
 			uint i = ImGui.GetColorU32(color);
 			byte r = (byte)((i >> 00) & 0xFF);
 			byte g = (byte)((i >> 08) & 0xFF);
 			byte b = (byte)((i >> 16) & 0xFF);
 			byte a = (byte)((i >> 24) & 0xFF);
-			return new Color(r, g, b, a);
+			return new Vector4(r / 255f, g / 255f, b / 255f, a / 255f);
 		}
 	}
 }

@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using Hexa.NET.ImGui;
@@ -111,7 +110,7 @@ internal sealed class ArenaBucketState(ArenaStateManager arenaStateManager, File
 				if (_targetCoords.Contains(new Vector2D<int>(i, j)))
 				{
 					Vector2 topLeft = origin + new Vector2(i, j) * ArenaWindow.TileSize;
-					drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));
+					drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(new Vector4(1, 1, 1, 0.5f)));
 				}
 			}
 		}

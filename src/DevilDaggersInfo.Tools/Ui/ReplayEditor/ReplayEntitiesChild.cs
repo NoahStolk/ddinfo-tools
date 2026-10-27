@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Extensions;
 using DevilDaggersInfo.Core.Replay.PostProcessing.HitLog;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
@@ -132,13 +131,15 @@ internal sealed class ReplayEntitiesChild(ResourceManager resourceManager)
 		ImGui.TableNextColumn();
 		ImGui.Text(Inline.Utf8($"{TimeUtils.TickToTime(enemyHitLog.SpawnTick, startTime):0.0000} ({enemyHitLog.SpawnTick})"));
 		ImGui.TableNextColumn();
-		ImGui.TextColored(Color.Green, "Spawn");
+		ImGui.TextColored(new Vector4(0, 1, 0, 1), "Spawn");
 		ImGui.TableNextColumn();
 		ImGui.Text("-");
 		ImGui.TableNextColumn();
 		ImGui.Text("-");
 		ImGui.TableNextColumn();
 		ImGui.Text("-");
+
+		Vector4 red = new(1, 0, 0, 1);
 
 		for (int i = 0; i < enemyHitLog.Hits.Count; i++)
 		{
@@ -148,9 +149,9 @@ internal sealed class ReplayEntitiesChild(ResourceManager resourceManager)
 			ImGui.TableNextColumn();
 			ImGui.Text(Inline.Utf8($"{TimeUtils.TickToTime(hit.Tick, startTime):0.0000} ({hit.Tick})"));
 			ImGui.TableNextColumn();
-			ImGui.TextColored(hit.Hp < 0 ? Color.Red : Color.Lerp(Color.Red, Color.White, hit.Hp / (float)initialHp), hit.Hp <= 0 ? "Dead"u8 : Inline.Utf8($"{hit.Hp} / {initialHp}"));
+			ImGui.TextColored(hit.Hp < 0 ? red : Vector4.Lerp(red, Vector4.One, hit.Hp / (float)initialHp), hit.Hp <= 0 ? "Dead"u8 : Inline.Utf8($"{hit.Hp} / {initialHp}"));
 			ImGui.TableNextColumn();
-			ImGui.TextColored(hit.Damage > 0 ? Color.Red : Color.White, Inline.Utf8(hit.Damage));
+			ImGui.TextColored(hit.Damage > 0 ? red : Vector4.One, Inline.Utf8(hit.Damage));
 			ImGui.TableNextColumn();
 			ImGui.Text(hit.DaggerType.AsUtf8Span());
 			ImGui.TableNextColumn();

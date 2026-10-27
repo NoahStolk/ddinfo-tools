@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using Hexa.NET.ImGui;
@@ -86,7 +85,7 @@ internal sealed class ArenaPencilState(ArenaStateManager arenaStateManager, File
 		ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 
 		Vector2 origin = ImGui.GetCursorScreenPos();
-		drawList.AddCircleFilled(origin + GetSnappedPosition(mousePosition.Real), GetDisplayRadius(), ImGui.GetColorU32(_session != null ? Color.White : Color.HalfTransparentWhite));
+		drawList.AddCircleFilled(origin + GetSnappedPosition(mousePosition.Real), GetDisplayRadius(), ImGui.GetColorU32(_session != null ? Vector4.One : new Vector4(1, 1, 1, 0.5f)));
 
 		if (_session == null)
 			return;
@@ -98,7 +97,7 @@ internal sealed class ArenaPencilState(ArenaStateManager arenaStateManager, File
 				if (_session.ModifiedCoords.Contains(new Vector2D<int>(i, j)))
 				{
 					Vector2 topLeft = origin + new Vector2(i, j) * ArenaWindow.TileSize;
-					drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));
+					drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(new Vector4(1, 1, 1, 0.5f)));
 				}
 			}
 		}
