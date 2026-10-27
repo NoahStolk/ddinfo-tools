@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-internal static partial class ImGuiExt
+internal static class ImGuiExt
 {
 	public static void Hyperlink(ReadOnlySpan<byte> url, ReadOnlySpan<byte> text)
 	{
@@ -25,5 +25,24 @@ internal static partial class ImGuiExt
 
 		if (ImGui.IsItemHovered())
 			ImGui.SetTooltip(url);
+	}
+
+	public static void Title(string title, Font font)
+	{
+		PushFont(font);
+		ImGui.Text(title);
+		ImGui.PopFont();
+	}
+
+	public static void Title(ReadOnlySpan<byte> title, Font font)
+	{
+		PushFont(font);
+		ImGui.Text(title);
+		ImGui.PopFont();
+	}
+
+	public static void PushFont(Font font)
+	{
+		ImGui.PushFont(font.Ptr, font.Size);
 	}
 }
