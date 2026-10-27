@@ -163,18 +163,18 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 		if (ImGui.BeginChild("RecordingValues", new Vector2(288, 320)))
 		{
 			MainBlock b = gameMemoryService.MainBlock;
-			RenderValue("Status"u8, Inline.Utf8(((GameStatus)b.Status).ToDisplayString()), Color.White, _statusIntensity);
+			RenderValue("Status"u8, Inline.Utf8(((GameStatus)b.Status).ToDisplayString()), Vector4.One, _statusIntensity);
 
 			ImGui.Spacing();
 
 			ImGui.Image(resourceManager.InternalResources.IconEyeTexture.Id, iconSize, new Vector4(1, 0.5f, 0, 1));
-			RenderValue("Player"u8, Inline.Utf8(GetPlayerText(b)), Color.White, _playerIntensity);
-			RenderValue("Time"u8, Inline.Utf8(b.Time, StringFormats.TimeFormat), Color.White, _timeIntensity);
+			RenderValue("Player"u8, Inline.Utf8(GetPlayerText(b)), Vector4.One, _playerIntensity);
+			RenderValue("Time"u8, Inline.Utf8(b.Time, StringFormats.TimeFormat), Vector4.One, _timeIntensity);
 			RenderValue("Hand"u8, Inline.Utf8(GetUpgrade(b).Name), GetUpgrade(b).Color.ToEngineColor(), _handIntensity);
 			RenderValue("Level 2"u8, b.LevelUpTime2 == 0 ? "-"u8 : Inline.Utf8(b.LevelUpTime2, StringFormats.TimeFormat), UpgradesV3_2.Level2.Color.ToEngineColor(), _level2Intensity);
 			RenderValue("Level 3"u8, b.LevelUpTime3 == 0 ? "-"u8 : Inline.Utf8(b.LevelUpTime3, StringFormats.TimeFormat), UpgradesV3_2.Level3.Color.ToEngineColor(), _level3Intensity);
 			RenderValue("Level 4"u8, b.LevelUpTime4 == 0 ? "-"u8 : Inline.Utf8(b.LevelUpTime4, StringFormats.TimeFormat), UpgradesV3_2.Level4.Color.ToEngineColor(), _level4Intensity);
-			RenderValue("Death"u8, Inline.Utf8(b.IsPlayerAlive ? "-" : GetDeath(b)?.Name ?? "?"), GetDeath(b)?.Color.ToEngineColor() ?? Color.White, _deathIntensity);
+			RenderValue("Death"u8, Inline.Utf8(b.IsPlayerAlive ? "-" : GetDeath(b)?.Name ?? "?"), GetDeath(b)?.Color.ToEngineColor() ?? Vector4.One, _deathIntensity);
 
 			ImGui.Spacing();
 			ImGui.Image(resourceManager.GameResources.IconMaskGemTexture.Id, iconSize, new Vector4(1, 0, 0, 1));

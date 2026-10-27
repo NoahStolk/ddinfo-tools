@@ -144,7 +144,7 @@ internal sealed class GraphsChild(FontService fontService)
 
 			if (ImGui.BeginTooltip())
 			{
-				AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Color.White);
+				AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Vector4.One);
 				AddTooltipText("Gems Collected"u8, Inline.Utf8(gemsCollected), new Vector4(1, 0, 0, 1));
 				AddTooltipText("Gems Despawned"u8, Inline.Utf8(gemsDespawned), Color.Gray(0.5f));
 				AddTooltipText("Gems Eaten"u8, Inline.Utf8(gemsEaten), new Vector4(0, 1, 0, 1));
@@ -178,7 +178,7 @@ internal sealed class GraphsChild(FontService fontService)
 
 			if (ImGui.BeginTooltip())
 			{
-				AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Color.White);
+				AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Vector4.One);
 				AddTooltipText("Homing Stored"u8, Inline.Utf8(homingStored), UpgradeColors.Level4.ToEngineColor());
 				AddTooltipText("Homing Eaten"u8, Inline.Utf8(homingEaten), new Vector4(1, 0, 0, 1));
 

@@ -184,7 +184,7 @@ internal sealed class LeaderboardChild(
 
 		ImGui.TableNextColumn();
 
-		ImGui.TextColored(isCurrentPlayer ? new Vector4(0, 1, 0, 1) : Color.White, ce.PlayerName);
+		ImGui.TextColored(isCurrentPlayer ? new Vector4(0, 1, 0, 1) : Vector4.One, ce.PlayerName);
 		ImGui.TableNextColumn();
 
 		Color daggerColor = CustomLeaderboardDaggerUtils.GetColor(ce.CustomLeaderboardDagger);
@@ -211,7 +211,7 @@ internal sealed class LeaderboardChild(
 		ImGui.TableNextColumn();
 
 		Death? death = Deaths.GetDeathByType(GameConstants.CurrentVersion, ce.DeathType);
-		ImGui.TextColored(death?.Color.ToEngineColor() ?? Color.White, death?.Name ?? "Unknown");
+		ImGui.TextColored(death?.Color.ToEngineColor() ?? Vector4.One, death?.Name ?? "Unknown");
 		ImGui.TableNextColumn();
 
 		TextDaggerColored(Inline.Utf8(ce.HomingStored), _isHomingStored);

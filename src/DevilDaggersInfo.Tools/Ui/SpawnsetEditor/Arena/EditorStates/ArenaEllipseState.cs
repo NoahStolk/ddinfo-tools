@@ -68,7 +68,7 @@ internal sealed class ArenaEllipseState(ArenaStateManager arenaStateManager, Fil
 		if (!EllipseChild.Filled)
 		{
 			ArenaEditingUtils.AlignedEllipse innerEllipse = GetEllipse(_session.Value.StartPosition, mousePosition, (EllipseChild.Thickness - 1) * ArenaWindow.TileSize);
-			drawList.AddEllipse(origin + innerEllipse.Center, innerEllipse.Radius, ImGui.GetColorU32(Color.White), 0f, 40);
+			drawList.AddEllipse(origin + innerEllipse.Center, innerEllipse.Radius, ImGui.GetColorU32(Vector4.One), 0f, 40);
 		}
 	}
 

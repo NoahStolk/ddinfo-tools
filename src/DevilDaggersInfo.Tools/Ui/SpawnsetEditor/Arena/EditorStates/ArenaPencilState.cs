@@ -86,7 +86,7 @@ internal sealed class ArenaPencilState(ArenaStateManager arenaStateManager, File
 		ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 
 		Vector2 origin = ImGui.GetCursorScreenPos();
-		drawList.AddCircleFilled(origin + GetSnappedPosition(mousePosition.Real), GetDisplayRadius(), ImGui.GetColorU32(_session != null ? Color.White : new Vector4(1, 1, 1, 0.5f)));
+		drawList.AddCircleFilled(origin + GetSnappedPosition(mousePosition.Real), GetDisplayRadius(), ImGui.GetColorU32(_session != null ? Vector4.One : new Vector4(1, 1, 1, 0.5f)));
 
 		if (_session == null)
 			return;

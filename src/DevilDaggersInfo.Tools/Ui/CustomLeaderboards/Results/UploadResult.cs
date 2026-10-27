@@ -193,7 +193,7 @@ internal sealed class UploadResult
 
 	private void RenderNoHighscore(GetUploadResponseNoHighscore noHighscore)
 	{
-		if (!RenderHeader(Color.White, "No new highscore."))
+		if (!RenderHeader(Vector4.One, "No new highscore."))
 			return;
 
 		ImGui.Indent(_indentation);
@@ -370,7 +370,7 @@ internal sealed class UploadResult
 		Vector4 color = comparison switch
 		{
 			-1 => new Vector4(1, 0, 0, 1),
-			0 => Color.White,
+			0 => Vector4.One,
 			1 => new Vector4(0, 1, 0, 1),
 			_ => throw new UnreachableException(),
 		};
@@ -393,7 +393,7 @@ internal sealed class UploadResult
 		Vector4 color = comparison switch
 		{
 			-1 => new Vector4(1, 0, 0, 1),
-			0 => Color.White,
+			0 => Vector4.One,
 			1 => new Vector4(0, 1, 0, 1),
 			_ => throw new UnreachableException(),
 		};
@@ -413,7 +413,7 @@ internal sealed class UploadResult
 		ImGui.Text(levelWasNotAchieved ? "N/A"u8 : Inline.Utf8(scoreState.Value, StringFormats.TimeFormat));
 
 		ImGui.TableNextColumn();
-		ImGui.TextColored(hideDifference ? Color.White : color, hideDifference ? "N/A"u8 : Inline.Utf8(scoreState.ValueDifference, "+0.0000;-0.0000;+0.0000"));
+		ImGui.TextColored(hideDifference ? Vector4.One : color, hideDifference ? "N/A"u8 : Inline.Utf8(scoreState.ValueDifference, "+0.0000;-0.0000;+0.0000"));
 	}
 
 	private static void AddDeath(Death? death)
@@ -422,7 +422,7 @@ internal sealed class UploadResult
 		ImGui.Text("Death");
 
 		ImGui.TableNextColumn();
-		ImGui.TextColored(death?.Color.ToEngineColor() ?? Color.White, death?.Name ?? "Unknown");
+		ImGui.TextColored(death?.Color.ToEngineColor() ?? Vector4.One, death?.Name ?? "Unknown");
 	}
 
 	private static void ConfigureColumns(int count)

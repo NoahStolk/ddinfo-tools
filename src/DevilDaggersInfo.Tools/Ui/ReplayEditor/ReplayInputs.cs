@@ -42,7 +42,7 @@ internal static class ReplayInputs
 
 	private static void RenderInput(ImDrawListPtr drawList, Vector2 position, Vector2 size, bool used, ReadOnlySpan<byte> input)
 	{
-		uint color = ImGui.GetColorU32(used ? new Vector4(1, 0, 0, 1) : Color.White);
+		uint color = ImGui.GetColorU32(used ? new Vector4(1, 0, 0, 1) : Vector4.One);
 		drawList.AddRect(position, position + size, color);
 
 		Vector2 textSize = ImGui.CalcTextSize(input);

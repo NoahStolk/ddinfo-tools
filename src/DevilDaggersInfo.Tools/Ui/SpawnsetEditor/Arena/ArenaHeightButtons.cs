@@ -40,10 +40,10 @@ internal sealed class ArenaHeightButtons(ArenaStateManager arenaStateManager)
 
 			const int borderSize = 2;
 			ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, borderSize);
-			ImGui.PushStyleColor(ImGuiCol.Text, height < 2 ? Color.White : new Vector4(0, 0, 0, 1));
+			ImGui.PushStyleColor(ImGuiCol.Text, height < 2 ? Vector4.One : new Vector4(0, 0, 0, 1));
 			ImGui.PushStyleColor(ImGuiCol.Button, heightColor);
-			ImGui.PushStyleColor(ImGuiCol.ButtonActive, Vector4.Lerp(heightColor, Color.White, 0.75f));
-			ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Vector4.Lerp(heightColor, Color.White, 0.5f));
+			ImGui.PushStyleColor(ImGuiCol.ButtonActive, Vector4.Lerp(heightColor, Vector4.One, 0.75f));
+			ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Vector4.Lerp(heightColor, Vector4.One, 0.5f));
 			ImGui.PushStyleColor(ImGuiCol.Border, Math.Abs(arenaStateManager.SelectedHeight - height) < 0.001f ? Vector4.InvertColor(heightColor) : Vector4.Lerp(heightColor, new Vector4(0, 0, 0, 1), 0.2f));
 
 			ImGui.SetCursorPos(new Vector2(offsetX + borderSize * 2, offsetY + borderSize));

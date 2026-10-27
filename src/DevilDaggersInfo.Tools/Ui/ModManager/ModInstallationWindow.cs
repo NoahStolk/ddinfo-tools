@@ -108,7 +108,7 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 					Vector4 disabledColor = Color.Gray(0.4f);
 
 					ImGui.TableNextColumn();
-					ImGui.TextColored(isDisabled ? disabledColor : Color.White, effectiveAsset.TocEntry.Name);
+					ImGui.TextColored(isDisabled ? disabledColor : Vector4.One, effectiveAsset.TocEntry.Name);
 
 					ImGui.TableNextColumn();
 					ImGui.TextColored(isDisabled ? disabledColor : effectiveAsset.TocEntry.AssetType.GetColor(), effectiveAsset.TocEntry.AssetType.AsUtf8Span());
