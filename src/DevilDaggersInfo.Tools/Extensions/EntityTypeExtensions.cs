@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Wiki;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Extensions;

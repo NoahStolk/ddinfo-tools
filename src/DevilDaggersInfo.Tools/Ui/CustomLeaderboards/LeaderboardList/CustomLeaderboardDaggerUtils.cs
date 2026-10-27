@@ -1,6 +1,4 @@
 using DevilDaggersInfo.Core.Wiki;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
-using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using System.Diagnostics;
 using System.Numerics;

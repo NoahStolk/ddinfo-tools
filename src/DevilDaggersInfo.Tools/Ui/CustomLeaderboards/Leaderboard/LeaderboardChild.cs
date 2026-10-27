@@ -3,7 +3,6 @@ using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
-using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
@@ -187,7 +186,7 @@ internal sealed class LeaderboardChild(
 		ImGui.TextColored(isCurrentPlayer ? new Vector4(0, 1, 0, 1) : Vector4.One, ce.PlayerName);
 		ImGui.TableNextColumn();
 
-		Color daggerColor = CustomLeaderboardDaggerUtils.GetColor(ce.CustomLeaderboardDagger);
+		Vector4 daggerColor = CustomLeaderboardDaggerUtils.GetColor(ce.CustomLeaderboardDagger);
 
 		TextDaggerColored(Inline.Utf8(ce.TimeInSeconds, StringFormats.TimeFormat), _isTime);
 		ImGui.TableNextColumn();

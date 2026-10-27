@@ -10,16 +10,6 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 		return new Vector4(color.R / (float)byte.MaxValue, color.G / (float)byte.MaxValue, color.B / (float)byte.MaxValue, color.A / (float)byte.MaxValue);
 	}
 
-	public Vector4 ReadableColorForBrightness()
-	{
-		return GetPerceivedBrightness() < 140 ? Vector4.One : new Vector4(0, 0, 0, 1);
-	}
-
-	private int GetPerceivedBrightness()
-	{
-		return (int)Math.Sqrt(R * R * 0.299 + G * G * 0.587 + B * B * 0.114);
-	}
-
 	public Color Desaturate(float f)
 	{
 		float r = R / (float)byte.MaxValue;

@@ -2,7 +2,6 @@ using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Spawnset.Extensions;
 using DevilDaggersInfo.Core.Wiki;
-using DevilDaggersInfo.Core.Wiki.Structs;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Popups;
@@ -41,7 +40,7 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 
 			if (endLoopLength.HasValue && isEndLoopTooShort)
 			{
-				ImGui.PushStyleColor(ImGuiCol.ChildBg, new Engine.Maths.Numerics.Color(127, 0, 0, 255));
+				ImGui.PushStyleColor(ImGuiCol.ChildBg, new Vector4(0.5f, 0, 0, 1));
 				if (ImGui.BeginChild("Warning", new Vector2(0, 64)))
 				{
 					ImGui.TextWrapped(Inline.Utf8(
@@ -138,14 +137,15 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 	private void EnemyButton(EnemyType enemyType, bool sameLine)
 	{
 		bool isCurrent = _selectedEnemyType == enemyType;
-		Engine.Maths.Numerics.Color enemyColor = enemyType.GetColor(GameVersion.V3_2).ToEngineColor().Darken(isCurrent ? 0 : 0.8f);
+		float multiplier = isCurrent ? 1 : 0.2f;
+		Vector4 enemyColor = enemyType.GetColor(GameVersion.V3_2) * new Vector4(multiplier, multiplier, multiplier, 1);
 
-		ImGui.PushStyleColor(ImGuiCol.Text, isCurrent ? enemyColor.ReadableColorForBrightness() : new Vector4(0.5f, 0.5f, 0.5f, 1));
+		ImGui.PushStyleColor(ImGuiCol.Text, isCurrent ? Vector4.ReadableColorForBrightness(enemyColor) : new Vector4(0.5f, 0.5f, 0.5f, 1));
 		ImGui.PushStyleColor(ImGuiCol.Button, enemyColor);
 		ImGui.PushStyleColor(ImGuiCol.ButtonActive, Vector4.Lerp(enemyColor, Vector4.One, 0.25f));
 		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Vector4.Lerp(enemyColor, Vector4.One, 0.125f));
 		ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, isCurrent ? 1 : 0);
-		ImGui.PushStyleColor(ImGuiCol.Border, enemyColor.ReadableColorForBrightness());
+		ImGui.PushStyleColor(ImGuiCol.Border, Vector4.ReadableColorForBrightness(enemyColor));
 
 		if (sameLine)
 			ImGui.SameLine();
@@ -286,8 +286,8 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 			for (int i = 0; i < EnemyTypeGen.Values.Count; i++)
 			{
 				EnemyType enemyType = EnemyTypeGen.Values[i];
-				Color color = enemyType.GetColor(GameConstants.CurrentVersion);
-				ImGui.PushStyleColor(ImGuiCol.Text, color.ToEngineColor().ReadableColorForBrightness());
+				Vector4 color = enemyType.GetColor(GameConstants.CurrentVersion);
+				ImGui.PushStyleColor(ImGuiCol.Text, Vector4.ReadableColorForBrightness(color));
 				ImGui.PushStyleColor(ImGuiCol.Button, color);
 				ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color + new Vector4(0.3f, 0.3f, 0.3f, 0));
 				ImGui.PushStyleColor(ImGuiCol.ButtonActive, color + new Vector4(0.5f, 0.5f, 0.5f, 0));

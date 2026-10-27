@@ -2,7 +2,6 @@ using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Spawnset.View;
 using DevilDaggersInfo.Core.Wiki;
-using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Practice.Main.Data;
 using Hexa.NET.ImGui;
 using System.Numerics;
