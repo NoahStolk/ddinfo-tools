@@ -52,10 +52,10 @@ internal static class ImGuiExtensions
 
 		public static void Image(uint imageId, Vector2 size)
 		{
-			ImGui.Image(imageId, size, Color.White);
+			ImGui.Image(imageId, size, Vector4.One);
 		}
 
-		public static void Image(uint imageId, Vector2 size, Color color)
+		public static void Image(uint imageId, Vector2 size, Vector4 color)
 		{
 			// Dear ImGui 1.92 dropped the tint color from ImGui.Image, so the tinted variant goes through the draw list.
 			// Dummy reserves the same layout space ImGui.Image would have.
@@ -64,7 +64,7 @@ internal static class ImGuiExtensions
 			ImGui.Dummy(size);
 		}
 
-		public static bool ImageButton(ReadOnlySpan<byte> strId, uint imageId, Vector2 size, Color backgroundColor = default)
+		public static bool ImageButton(ReadOnlySpan<byte> strId, uint imageId, Vector2 size, Vector4 backgroundColor = default)
 		{
 			return ImGui.ImageButton(strId, ImGui.GetTextureRef(imageId), size, Vector2.Zero, Vector2.One, backgroundColor);
 		}
@@ -93,7 +93,7 @@ internal static class ImGuiExtensions
 			ImGui.SetNextWindowSizeConstraints(minSize, new Vector2(float.MaxValue, float.MaxValue));
 		}
 
-		public static Color GetColor(ImGuiCol color)
+		public static Vector4 GetColor(ImGuiCol color)
 		{
 			uint i = ImGui.GetColorU32(color);
 			byte r = (byte)((i >> 00) & 0xFF);

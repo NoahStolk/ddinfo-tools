@@ -26,7 +26,7 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 		{
 			if (leaderboardListChild.IsLoading)
 			{
-				ImGui.TextColored(Color.Yellow, "Loading...");
+				ImGui.TextColored(new Vector4(1, 1, 0, 1), "Loading...");
 			}
 			else
 			{

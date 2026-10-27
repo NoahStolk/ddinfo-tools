@@ -62,7 +62,7 @@ internal sealed unsafe class SpawnsetEditor3DWindow(
 			if (ArenaScene.CurrentTick != 0)
 			{
 				const int padding = 8;
-				drawList.AddText(ImGui.GetCursorScreenPos() + new Vector2(padding, padding), ImGui.GetColorU32(Color.Yellow), "(!) Editing is disabled because the shrink preview is active.");
+				drawList.AddText(ImGui.GetCursorScreenPos() + new Vector2(padding, padding), ImGui.GetColorU32(new Vector4(1, 1, 0, 1)), "(!) Editing is disabled because the shrink preview is active.");
 			}
 
 			// Prevent the window from being dragged when clicking on the 3D editor.

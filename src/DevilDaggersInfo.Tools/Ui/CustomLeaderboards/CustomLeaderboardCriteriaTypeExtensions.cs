@@ -3,6 +3,7 @@ using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards;
 
@@ -11,7 +12,7 @@ internal static class CustomLeaderboardCriteriaTypeExtensions
 	extension(CustomLeaderboardCriteriaType type)
 	{
 		// ReSharper disable RedundantSwitchExpressionArms
-		public Color GetColor()
+		public Vector4 GetColor()
 		{
 			return type switch
 			{
@@ -19,7 +20,7 @@ internal static class CustomLeaderboardCriteriaTypeExtensions
 				CustomLeaderboardCriteriaType.GemsDespawned => Color.Gray(0.3f),
 				CustomLeaderboardCriteriaType.GemsEaten => Color.Green,
 				CustomLeaderboardCriteriaType.EnemiesKilled => Color.Orange,
-				CustomLeaderboardCriteriaType.DaggersFired => Color.Yellow,
+				CustomLeaderboardCriteriaType.DaggersFired => new Vector4(1, 1, 0, 1),
 				CustomLeaderboardCriteriaType.DaggersHit => Color.Orange,
 				CustomLeaderboardCriteriaType.HomingStored => Color.White,
 				CustomLeaderboardCriteriaType.HomingEaten => Color.Red,

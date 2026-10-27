@@ -55,7 +55,7 @@ internal sealed class ArenaEllipseState(ArenaStateManager arenaStateManager, Fil
 		Loop(mousePosition, (i, j) =>
 		{
 			Vector2 topLeft = origin + new Vector2(i, j) * ArenaWindow.TileSize;
-			drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));
+			drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(new Vector4(1, 1, 1, 0.5f)));
 		});
 
 		if (!_session.HasValue)
@@ -63,7 +63,7 @@ internal sealed class ArenaEllipseState(ArenaStateManager arenaStateManager, Fil
 
 		ArenaEditingUtils.AlignedEllipse ellipse = GetEllipse(_session.Value.StartPosition, mousePosition);
 
-		drawList.AddEllipse(origin + ellipse.Center, ellipse.Radius, ImGui.GetColorU32(Color.HalfTransparentWhite), 0f, 40);
+		drawList.AddEllipse(origin + ellipse.Center, ellipse.Radius, ImGui.GetColorU32(new Vector4(1, 1, 1, 0.5f)), 0f, 40);
 
 		if (!EllipseChild.Filled)
 		{

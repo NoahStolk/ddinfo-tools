@@ -56,7 +56,7 @@ internal sealed class ArenaRectangleState(ArenaStateManager arenaStateManager, F
 		{
 			Vector2 origin = ImGui.GetCursorScreenPos();
 			Vector2 min = origin + new Vector2(i, j) * ArenaWindow.TileSize;
-			drawList.AddRectFilled(min, min + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));
+			drawList.AddRectFilled(min, min + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(new Vector4(1, 1, 1, 0.5f)));
 		});
 	}
 

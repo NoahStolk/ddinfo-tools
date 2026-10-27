@@ -190,14 +190,14 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 
 			ImGui.Spacing();
 			ImGui.Image(resourceManager.GameResources.IconMaskCrosshairTexture.Id, iconSize, Color.Green);
-			RenderValue("Daggers fired"u8, Inline.Utf8(b.DaggersFired), Color.Yellow, _daggersFiredIntensity);
+			RenderValue("Daggers fired"u8, Inline.Utf8(b.DaggersFired), new Vector4(1, 1, 0, 1), _daggersFiredIntensity);
 			RenderValue("Daggers hit"u8, Inline.Utf8(b.DaggersHit), Color.Red, _daggersHitIntensity);
 			RenderValue("Accuracy"u8, Inline.Utf8(GetAccuracy(b), "0.00%"), Color.Orange, _accuracyIntensity);
 
 			ImGui.Spacing();
 			ImGui.Image(resourceManager.GameResources.IconMaskSkullTexture.Id, iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
 			RenderValue("Enemies killed"u8, Inline.Utf8(b.EnemiesKilled), Color.Red, _enemiesKilledIntensity);
-			RenderValue("Enemies alive"u8, Inline.Utf8(b.EnemiesAlive), Color.Yellow, _enemiesAliveIntensity);
+			RenderValue("Enemies alive"u8, Inline.Utf8(b.EnemiesAlive), new Vector4(1, 1, 0, 1), _enemiesAliveIntensity);
 
 			ImGui.Spacing();
 			RenderValue("Skull Is killed"u8, Inline.Utf8(b.Skull1KillCount), EnemiesV3_2.Skull1.Color.ToEngineColor(), _skull1KillCountIntensity);

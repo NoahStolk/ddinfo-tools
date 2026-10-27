@@ -234,11 +234,11 @@ internal sealed class DebugWindow(
 		AddText("Total managed heap alloc in bytes"u8, Inline.Utf8(allocatedBytes));
 
 		long allocatedBytesDiff = allocatedBytes - _previousAllocatedBytes;
-		Color color = allocatedBytesDiff switch
+		Vector4 color = allocatedBytesDiff switch
 		{
 			> 10_000 => Color.Red,
 			> 1_000 => Color.Orange,
-			> 500 => Color.Yellow,
+			> 500 => new Vector4(1, 1, 0, 1),
 			> 0 => new Color(255, 255, 127, 255),
 			_ => Color.Green,
 		};
@@ -264,10 +264,10 @@ internal sealed class DebugWindow(
 
 	private static void AddText(ReadOnlySpan<byte> textLeft, ReadOnlySpan<byte> textRight)
 	{
-		AddText(textLeft, textRight, Color.White);
+		AddText(textLeft, textRight, Vector4.One);
 	}
 
-	private static void AddText(ReadOnlySpan<byte> textLeft, ReadOnlySpan<byte> textRight, Color textColor)
+	private static void AddText(ReadOnlySpan<byte> textLeft, ReadOnlySpan<byte> textRight, Vector4 textColor)
 	{
 		ImGui.TextColored(textColor, textLeft);
 		ImGui.SameLine(256);

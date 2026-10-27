@@ -19,8 +19,8 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 	private readonly List<EventType> _shownEventTypes = [.. EventTypeGen.Values.Where(et => et is not EventType.End and not EventType.InitialInputs and not EventType.Inputs)];
 
 	private readonly Dictionary<EventType, int> _eventTypeRowIndices = [];
-	private readonly Color _lineColorDefault = Color.Gray(0.4f);
-	private readonly Color _lineColorSub = Color.Gray(0.2f);
+	private readonly Vector4 _lineColorDefault = Color.Gray(0.4f);
+	private readonly Vector4 _lineColorSub = Color.Gray(0.2f);
 
 	private readonly List<EditorEvent> _selectedEvents = [];
 	private int? _selectedTickIndex;
@@ -143,14 +143,14 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 			{
 				bool showTimeText = i % 5 == 0;
 				float height = showTimeText ? _shownEventTypes.Count * _markerSize + 6 : _shownEventTypes.Count * _markerSize;
-				Color color = showTimeText ? _lineColorDefault : _lineColorSub;
+				Vector4 color = showTimeText ? _lineColorDefault : _lineColorSub;
 				AddVerticalLine(drawList, origin, i * _markerSize, height, color);
 				if (i == _selectedTickIndex)
 					drawList.AddRectFilled(origin + new Vector2(i * _markerSize, 0), origin + new Vector2((i + 1) * _markerSize, _shownEventTypes.Count * _markerSize), ImGui.GetColorU32(new Vector4(1, 1, 1, 0.2f)));
 
 				if (showTimeText)
 				{
-					Color textColor = i % 60 == 0 ? Color.Yellow : ImGui.GetColor(ImGuiCol.Text);
+					Vector4 textColor = i % 60 == 0 ? new Vector4(1, 1, 0, 1) : ImGui.GetColor(ImGuiCol.Text);
 					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, _shownEventTypes.Count * _markerSize + 5));
 					ImGui.TextColored(textColor, Inline.Utf8(TimeUtils.TickToTime(i, replay.StartTime), StringFormats.TimeFormat));
 					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, _shownEventTypes.Count * _markerSize + 21));
@@ -163,12 +163,12 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 
 		ImGui.EndChild();
 
-		static void AddHorizontalLine(ImDrawListPtr drawList, Vector2 origin, float offsetY, float width, Color color)
+		static void AddHorizontalLine(ImDrawListPtr drawList, Vector2 origin, float offsetY, float width, Vector4 color)
 		{
 			drawList.AddLine(origin + new Vector2(0, offsetY), origin + new Vector2(width, offsetY), ImGui.GetColorU32(color));
 		}
 
-		static void AddVerticalLine(ImDrawListPtr drawList, Vector2 origin, float offsetX, float height, Color color)
+		static void AddVerticalLine(ImDrawListPtr drawList, Vector2 origin, float offsetX, float height, Vector4 color)
 		{
 			drawList.AddLine(origin + new Vector2(offsetX, 0), origin + new Vector2(offsetX, height), ImGui.GetColorU32(color));
 		}

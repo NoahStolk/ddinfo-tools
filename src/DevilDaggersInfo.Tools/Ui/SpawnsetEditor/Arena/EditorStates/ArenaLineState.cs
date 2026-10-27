@@ -55,7 +55,7 @@ internal sealed class ArenaLineState(ArenaStateManager arenaStateManager, FileSt
 		Loop(mousePosition, (i, j) =>
 		{
 			Vector2 topLeft = origin + new Vector2(i, j) * ArenaWindow.TileSize;
-			drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(Color.HalfTransparentWhite));
+			drawList.AddRectFilled(topLeft, topLeft + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(new Vector4(1, 1, 1, 0.5f)));
 		});
 
 		if (_session.HasValue)
@@ -75,7 +75,7 @@ internal sealed class ArenaLineState(ArenaStateManager arenaStateManager, FileSt
 		}
 		else
 		{
-			drawList.AddCircle(origin + GetSnappedPosition(mousePosition.Real), GetDisplayRadius(), ImGui.GetColorU32(Color.HalfTransparentWhite));
+			drawList.AddCircle(origin + GetSnappedPosition(mousePosition.Real), GetDisplayRadius(), ImGui.GetColorU32(new Vector4(1, 1, 1, 0.5f)));
 		}
 	}
 

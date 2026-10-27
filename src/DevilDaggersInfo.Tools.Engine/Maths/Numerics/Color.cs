@@ -8,12 +8,8 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 	public static Color White { get; } = new(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
 	public static Color Black { get; } = new(byte.MinValue, byte.MinValue, byte.MinValue, byte.MaxValue);
 
-	public static Color HalfTransparentWhite { get; } = new(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue / 2);
-
 	public static Color Red { get; } = new(byte.MaxValue, byte.MinValue, byte.MinValue, byte.MaxValue);
 	public static Color Green { get; } = new(byte.MinValue, byte.MaxValue, byte.MinValue, byte.MaxValue);
-
-	public static Color Yellow { get; } = new(byte.MaxValue, byte.MaxValue, byte.MinValue, byte.MaxValue);
 
 	public static Color Orange { get; } = new(byte.MaxValue, byte.MaxValue / 2, byte.MinValue, byte.MaxValue);
 
