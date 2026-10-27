@@ -49,11 +49,10 @@ internal sealed unsafe class SpawnsetEditor3DWindow(
 			_framebufferData.ResizeIfNecessary((int)framebufferSize.X, (int)framebufferSize.Y);
 
 			Vector2 cursorScreenPos = ImGui.GetCursorScreenPos();
-			ArenaScene.Camera.FramebufferOffset = cursorScreenPos;
 
 			bool isWindowFocused = ImGui.IsWindowFocused();
 			bool isMouseOverFramebuffer = ImGui.IsMouseHoveringRect(cursorScreenPos, cursorScreenPos + framebufferSize);
-			_framebufferData.RenderArena(isWindowFocused && isMouseOverFramebuffer, isWindowFocused, delta, ArenaScene, arenaRenderer);
+			_framebufferData.RenderArena(isWindowFocused && isMouseOverFramebuffer, isWindowFocused, delta, ArenaScene, arenaRenderer, cursorScreenPos);
 
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 			drawList.AddFramebufferImage(

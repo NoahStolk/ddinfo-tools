@@ -6,6 +6,7 @@ using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Tools.User.Settings;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Main;
 
@@ -38,7 +39,9 @@ internal sealed unsafe class MainScene(
 		// Must be queried before Update, which needs the size to build the camera matrices.
 		glfw.GetFramebufferSize(window, out int framebufferWidth, out int framebufferHeight);
 
-		_mainMenuScene?.Update(false, false, delta, framebufferWidth, framebufferHeight);
+		Vector2 framebufferSize = new(framebufferWidth, framebufferHeight);
+
+		_mainMenuScene?.Update(false, false, delta, Vector2.Zero, framebufferSize);
 
 		// Keep track of the original viewport so we can restore it later.
 		Span<int> originalViewport = stackalloc int[4];
@@ -53,7 +56,7 @@ internal sealed unsafe class MainScene(
 		gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
 		if (_mainMenuScene != null)
-			arenaRenderer.Render(_mainMenuScene, false);
+			arenaRenderer.Render(_mainMenuScene, false, framebufferSize);
 
 		gl.Viewport(originalViewport[0], originalViewport[1], (uint)originalViewport[2], (uint)originalViewport[3]);
 		gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);

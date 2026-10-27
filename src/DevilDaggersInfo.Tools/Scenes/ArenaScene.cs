@@ -20,12 +20,15 @@ internal sealed class ArenaScene
 	public const float MinRenderTileHeight = -3;
 
 	private readonly Func<SpawnsetBinary> _getSpawnset;
+	private readonly bool _useMenuCamera;
 
 	// Scratch buffers for the transparent hitbox pass, reused every frame.
 	private readonly Tile[] _hitboxTiles = new Tile[SpawnsetBinary.ArenaDimensionMax * SpawnsetBinary.ArenaDimensionMax];
 	private readonly float[] _hitboxSquaredDistances = new float[SpawnsetBinary.ArenaDimensionMax * SpawnsetBinary.ArenaDimensionMax];
 
 	private readonly List<LightObject> _lights = [];
+
+	private float _totalTime;
 
 	public unsafe ArenaScene(
 		Glfw glfw,
@@ -39,13 +42,14 @@ internal sealed class ArenaScene
 		UserSettings userSettings)
 	{
 		_getSpawnset = getSpawnset;
+		_useMenuCamera = useMenuCamera;
 
-		Camera = new Camera(glfw, glfwInput, window, useMenuCamera, userSettings) { Position = new Vector3(0, 5, 0) };
+		Camera = new Camera(glfw, glfwInput, window) { Position = new Vector3(0, 5, 0) };
 
 		InitializeArena();
 
 		if (isEditor)
-			EditorContext = new ArenaEditorContext(this, glfwInput, fileStates, spawnsetSaver);
+			EditorContext = new ArenaEditorContext(this, glfwInput, fileStates, spawnsetSaver, userSettings);
 	}
 
 	public Camera Camera { get; }
@@ -93,19 +97,19 @@ internal sealed class ArenaScene
 		_lights.Add(Player.Light);
 	}
 
-	/// <summary>
-	/// Advances the scene. <paramref name="viewportWidth"/> and <paramref name="viewportHeight"/> are the size the scene
-	/// will be rendered at; the camera needs them to build its matrices, which tile picking then depends on.
-	/// </summary>
-	public void Update(bool activateMouse, bool activateKeyboard, float delta, int viewportWidth, int viewportHeight)
+	public void Update(bool activateMouse, bool activateKeyboard, float dt, Vector2 framebufferOffset, Vector2 canvasSize)
 	{
 		SpawnsetBinary spawnset = _getSpawnset();
 
-		Camera.Update(activateMouse, activateKeyboard, delta);
-
-		// Must run after Camera.Update and before the editor context picks a tile: it builds the view and projection
-		// matrices from the rotation Camera.Update just set, and is the only thing that gives the camera its viewport size.
-		Camera.PreRender(viewportWidth, viewportHeight);
+		if (_useMenuCamera)
+		{
+			_totalTime += dt;
+			Camera.SetMenuCamera(_totalTime);
+		}
+		else
+		{
+			Camera.Update(dt, activateMouse || activateKeyboard);
+		}
 
 		RaceDagger.Update(spawnset, CurrentTick);
 		Player?.Update(CurrentTick);
@@ -119,7 +123,7 @@ internal sealed class ArenaScene
 			}
 		}
 
-		EditorContext?.Update(activateMouse, CurrentTick);
+		EditorContext?.Update(activateMouse, CurrentTick, framebufferOffset, canvasSize);
 	}
 
 	/// <summary>

@@ -2,6 +2,7 @@ using DevilDaggersInfo.Tools.Scenes;
 using DevilDaggersInfo.Tools.Scenes.Rendering;
 using Serilog;
 using Silk.NET.OpenGL;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools;
 
@@ -14,6 +15,8 @@ internal sealed unsafe class FramebufferData(GL gl, ILogger logger)
 	public int Height { get; private set; }
 
 	private uint DepthRenderbuffer { get; set; }
+
+	public Vector2 Size => new(Width, Height);
 
 	public void ResizeIfNecessary(int width, int height)
 	{
@@ -72,14 +75,14 @@ internal sealed unsafe class FramebufferData(GL gl, ILogger logger)
 		gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 	}
 
-	public void RenderArena(bool activateMouse, bool activateKeyboard, float delta, ArenaScene arenaScene, ArenaRenderer arenaRenderer)
+	public void RenderArena(bool activateMouse, bool activateKeyboard, float delta, ArenaScene arenaScene, ArenaRenderer arenaRenderer, Vector2 framebufferOffset)
 	{
 		// No valid framebuffer yet, e.g. because the very first requested size was degenerate. Updating anyway would build
 		// camera matrices from a zero-sized viewport, giving a NaN aspect ratio and dividing by zero during tile picking.
 		if (Width < 1 || Height < 1)
 			return;
 
-		arenaScene.Update(activateMouse, activateKeyboard, delta, Width, Height);
+		arenaScene.Update(activateMouse, activateKeyboard, delta, framebufferOffset, Size);
 
 		gl.BindFramebuffer(FramebufferTarget.Framebuffer, _framebuffer);
 
@@ -98,7 +101,7 @@ internal sealed unsafe class FramebufferData(GL gl, ILogger logger)
 		gl.Enable(EnableCap.CullFace);
 		gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-		arenaRenderer.Render(arenaScene, activateMouse);
+		arenaRenderer.Render(arenaScene, activateMouse, Size);
 
 		gl.Viewport(originalViewport[0], originalViewport[1], (uint)originalViewport[2], (uint)originalViewport[3]);
 		gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);

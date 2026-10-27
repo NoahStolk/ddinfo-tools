@@ -1,4 +1,3 @@
-// ReSharper disable ForCanBeConvertedToForeach
 using DevilDaggersInfo.Tools.Engine;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Scenes.GameObjects;
@@ -6,6 +5,7 @@ using Silk.NET.OpenGL;
 using System.Diagnostics;
 using System.Numerics;
 
+// ReSharper disable ForCanBeConvertedToForeach
 namespace DevilDaggersInfo.Tools.Scenes.Rendering;
 
 /// <summary>
@@ -42,7 +42,7 @@ internal sealed class ArenaRenderer(GL gl, MeshCache meshCache, ResourceManager 
 	/// Draws the scene as it currently stands. This only reads scene state; advancing it, including camera matrices and
 	/// tile picking, is <see cref="ArenaScene.Update"/>'s job.
 	/// </summary>
-	public void Render(ArenaScene scene, bool isHovering)
+	public void Render(ArenaScene scene, bool isHovering, Vector2 canvasSize)
 	{
 		Debug.Assert(resourceManager.GameResources != null, $"{nameof(resourceManager.GameResources)} is null, which should never happen here.");
 
@@ -51,7 +51,7 @@ internal sealed class ArenaRenderer(GL gl, MeshCache meshCache, ResourceManager 
 		Shader shader = resourceManager.InternalResources.MeshShader;
 		gl.UseProgram(shader.Id);
 
-		SetFrameUniforms(scene, shader);
+		SetFrameUniforms(scene, shader, canvasSize);
 
 		resourceManager.GameResources.PostLut.Bind(TextureUnit.Texture1);
 
@@ -64,10 +64,14 @@ internal sealed class ArenaRenderer(GL gl, MeshCache meshCache, ResourceManager 
 		RenderTileHitboxes(scene, modelLocation, meshes);
 	}
 
-	private void SetFrameUniforms(ArenaScene scene, Shader shader)
+	private void SetFrameUniforms(ArenaScene scene, Shader shader, Vector2 canvasSize)
 	{
-		gl.UniformMatrix4x4(shader.GetUniformLocation("view"), scene.Camera.ViewMatrix);
-		gl.UniformMatrix4x4(shader.GetUniformLocation("projection"), scene.Camera.Projection);
+		float aspectRatio = canvasSize.X / canvasSize.Y;
+
+		(Matrix4x4 viewMatrix, Matrix4x4 projectionMatrix) = CameraUtils.CreatePerspective(scene.Camera.Position, scene.Camera.Target, scene.Camera.FieldOfView, aspectRatio);
+
+		gl.UniformMatrix4x4(shader.GetUniformLocation("view"), viewMatrix);
+		gl.UniformMatrix4x4(shader.GetUniformLocation("projection"), projectionMatrix);
 		gl.Uniform1(shader.GetUniformLocation("textureDiffuse"), 0);
 		gl.Uniform1(shader.GetUniformLocation("textureLut"), 1);
 

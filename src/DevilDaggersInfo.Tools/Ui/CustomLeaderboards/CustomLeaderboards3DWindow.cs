@@ -72,11 +72,10 @@ internal sealed unsafe class CustomLeaderboards3DWindow(
 			_framebufferData.ResizeIfNecessary((int)framebufferSize.X, (int)framebufferSize.Y);
 
 			Vector2 cursorScreenPos = ImGui.GetCursorScreenPos() + new Vector2(0, textHeight);
-			ArenaScene.Camera.FramebufferOffset = cursorScreenPos;
 
 			bool isWindowFocused = ImGui.IsWindowFocused();
 			bool isMouseOverFramebuffer = isWindowFocused && ImGui.IsWindowHovered() && ImGui.IsMouseHoveringRect(cursorScreenPos, cursorScreenPos + framebufferSize);
-			_framebufferData.RenderArena(isMouseOverFramebuffer, isWindowFocused, delta, ArenaScene, arenaRenderer);
+			_framebufferData.RenderArena(isMouseOverFramebuffer, isWindowFocused, delta, ArenaScene, arenaRenderer, cursorScreenPos);
 
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
 			drawList.AddFramebufferImage(_framebufferData, cursorScreenPos, cursorScreenPos + new Vector2(_framebufferData.Width, _framebufferData.Height));

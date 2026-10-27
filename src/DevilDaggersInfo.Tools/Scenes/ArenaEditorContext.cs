@@ -5,20 +5,21 @@ using DevilDaggersInfo.Tools.Engine.Intersections;
 using DevilDaggersInfo.Tools.Scenes.GameObjects;
 using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
+using DevilDaggersInfo.Tools.User.Settings;
 using Hexa.NET.ImGui;
 using Silk.NET.GLFW;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes;
 
-internal sealed class ArenaEditorContext(ArenaScene arenaScene, GlfwInput glfwInput, FileStates fileStates, SpawnsetSaver spawnsetSaver)
+internal sealed class ArenaEditorContext(ArenaScene arenaScene, GlfwInput glfwInput, FileStates fileStates, SpawnsetSaver spawnsetSaver, UserSettings userSettings)
 {
 	private readonly List<(Tile Tile, float Distance)> _hitTiles = [];
 	private readonly List<Tile> _selectedTiles = [];
 
 	private Tile? _closestHitTile;
 
-	public void Update(bool isActive, int currentTick)
+	public void Update(bool isActive, int currentTick, Vector2 framebufferOffset, Vector2 canvasSize)
 	{
 		if (!isActive || currentTick > 0)
 		{
@@ -27,7 +28,7 @@ internal sealed class ArenaEditorContext(ArenaScene arenaScene, GlfwInput glfwIn
 			return;
 		}
 
-		UpdateHoveredTile();
+		UpdateHoveredTile(framebufferOffset, canvasSize);
 
 		bool ctrl = glfwInput.IsKeyDown(Keys.ControlLeft) || glfwInput.IsKeyDown(Keys.ControlRight);
 		if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
@@ -75,10 +76,16 @@ internal sealed class ArenaEditorContext(ArenaScene arenaScene, GlfwInput glfwIn
 	/// <summary>
 	/// Raycasts the cursor against the tile hitboxes to determine which tile is under it.
 	/// </summary>
-	private void UpdateHoveredTile()
+	private void UpdateHoveredTile(Vector2 framebufferOffset, Vector2 canvasSize)
 	{
 		_hitTiles.Clear();
-		Ray ray = arenaScene.Camera.ScreenToWorldPoint();
+		Ray ray = CameraUtils.ScreenToWorldPoint(
+			cursorPosition: glfwInput.CursorPosition,
+			framebufferOffset: framebufferOffset,
+			canvasSize: canvasSize,
+			fieldOfView: userSettings.Model.FieldOfView,
+			position: arenaScene.Camera.Position,
+			rotation: arenaScene.Camera.Rotation);
 		for (int i = 0; i < arenaScene.Tiles.GetLength(0); i++)
 		{
 			for (int j = 0; j < arenaScene.Tiles.GetLength(1); j++)
@@ -96,7 +103,7 @@ internal sealed class ArenaEditorContext(ArenaScene arenaScene, GlfwInput glfwIn
 	}
 
 	/// <summary>
-	/// The additive colour the given tile should be tinted with, or <see cref="Vector3.Zero"/> for no tint.
+	/// The additive color the given tile should be tinted with, or <see cref="Vector3.Zero"/> for no tint.
 	/// </summary>
 	public Vector3 GetHighlightColor(Tile tile, bool isHovering)
 	{
