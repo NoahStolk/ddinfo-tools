@@ -150,8 +150,7 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 					clOverview.WorldRecord == null ? "-"u8 : Inline.Utf8(clOverview.WorldRecord.WorldRecordValue, valueFormat));
 				ImGui.TableNextColumn();
 
-				// TODO: Use ReadOnlySpan<byte>.
-				ImGui.Text(clOverview.DateCreated.ToString(StringFormats.DateTimeFormat));
+				ImGui.Text(Inline.Utf8(clOverview.DateCreated, StringFormats.DateTimeFormat));
 				ImGui.TableNextColumn();
 
 				ImGui.Text(DateTimeUtils.FormatTimeAgo(clOverview.DateLastPlayed == null ? null : DateTime.SpecifyKind(clOverview.DateLastPlayed.Value, DateTimeKind.Utc)));
