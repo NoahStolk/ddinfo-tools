@@ -1,4 +1,3 @@
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory.Data;
 using DevilDaggersInfo.Tools.Ui.Popups;

@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.PostProcessing.ReplaySimulation;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using Hexa.NET.ImGui;
 using System.Numerics;
 

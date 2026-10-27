@@ -2,7 +2,6 @@ using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.CriteriaExpression.Extensions;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Utils;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;

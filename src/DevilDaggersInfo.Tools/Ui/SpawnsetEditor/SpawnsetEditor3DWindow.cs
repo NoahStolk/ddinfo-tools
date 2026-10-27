@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Tools.EditorFileState;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Scenes;
 using DevilDaggersInfo.Tools.Scenes.Rendering;
@@ -57,7 +56,7 @@ internal sealed unsafe class SpawnsetEditor3DWindow(
 			_framebufferData.RenderArena(isWindowFocused && isMouseOverFramebuffer, isWindowFocused, delta, ArenaScene, arenaRenderer);
 
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
-			drawList.AddFramebufferImage(_framebufferData, cursorScreenPos, cursorScreenPos + new Vector2(_framebufferData.Width, _framebufferData.Height), isWindowFocused ? Vector4.One : Color.Gray(0.5f));
+			drawList.AddFramebufferImage(_framebufferData, cursorScreenPos, cursorScreenPos + new Vector2(_framebufferData.Width, _framebufferData.Height), isWindowFocused ? Vector4.One : new Vector4(0.5f, 0.5f, 0.5f, 1));
 
 			if (ArenaScene.CurrentTick != 0)
 			{

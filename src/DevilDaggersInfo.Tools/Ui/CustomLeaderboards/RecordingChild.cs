@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.GameMemory;
 using Hexa.NET.ImGui;
@@ -179,7 +178,7 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 			ImGui.Spacing();
 			ImGui.Image(resourceManager.GameResources.IconMaskGemTexture.Id, iconSize, new Vector4(1, 0, 0, 1));
 			RenderValue("Gems collected"u8, Inline.Utf8(b.GemsCollected), new Vector4(1, 0, 0, 1), _gemsCollectedIntensity);
-			RenderValue("Gems despawned"u8, Inline.Utf8(b.GemsDespawned), Color.Gray(0.6f), _gemsDespawnedIntensity);
+			RenderValue("Gems despawned"u8, Inline.Utf8(b.GemsDespawned), new Vector4(0.6f, 0.6f, 0.6f, 1), _gemsDespawnedIntensity);
 			RenderValue("Gems eaten"u8, Inline.Utf8(b.GemsEaten), new Vector4(0, 1, 0, 1), _gemsEatenIntensity);
 			RenderValue("Gems total"u8, Inline.Utf8(b.GemsTotal), new Vector4(1, 0, 0, 1), _gemsTotalIntensity);
 

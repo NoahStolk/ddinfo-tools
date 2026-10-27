@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Spawnset;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Practice.Main.Data;
 using DevilDaggersInfo.Tools.User.Settings;
@@ -145,10 +144,10 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 
 	private unsafe void RenderDragIndicator(int i, UserSettingsPracticeTemplate customTemplate)
 	{
-		Color gray = Color.Gray(0.3f);
-		ImGui.PushStyleColor(ImGuiCol.Button, gray with { A = 159 });
+		Vector4 gray = new(0.3f, 0.3f, 0.3f, 1);
+		ImGui.PushStyleColor(ImGuiCol.Button, gray with { W = 0.62f });
 		ImGui.PushStyleColor(ImGuiCol.ButtonActive, gray);
-		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, gray with { A = 223 });
+		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, gray with { W = 0.87f });
 		ImGui.PushID(Inline.Utf8($"drag indicator {i}"));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
@@ -156,7 +155,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 			strId: "CustomTemplateReorderImageButton"u8,
 			imageId: resourceManager.InternalResources.DragIndicatorTexture.Id,
 			size: new Vector2(32, 48),
-			backgroundColor: _customTemplateIndexToReorder == i ? Color.Gray(0.7f) : gray);
+			backgroundColor: _customTemplateIndexToReorder == i ? new Vector4(0.7f, 0.7f, 0.7f, 1) : gray);
 		ImGui.PopStyleVar();
 
 		if (ImGui.IsItemHovered())

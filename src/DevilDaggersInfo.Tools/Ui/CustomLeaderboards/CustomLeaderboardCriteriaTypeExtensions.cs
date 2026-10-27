@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Core.Wiki;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using System.Diagnostics;
@@ -17,7 +16,7 @@ internal static class CustomLeaderboardCriteriaTypeExtensions
 			return type switch
 			{
 				CustomLeaderboardCriteriaType.GemsCollected => new Vector4(1, 0, 0, 1),
-				CustomLeaderboardCriteriaType.GemsDespawned => Color.Gray(0.3f),
+				CustomLeaderboardCriteriaType.GemsDespawned => new Vector4(0.3f, 0.3f, 0.3f, 1),
 				CustomLeaderboardCriteriaType.GemsEaten => new Vector4(0, 1, 0, 1),
 				CustomLeaderboardCriteriaType.EnemiesKilled => new Vector4(1, 0.5f, 0, 1),
 				CustomLeaderboardCriteriaType.DaggersFired => new Vector4(1, 1, 0, 1),

@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Core.Spawnset;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.Utils;
@@ -33,7 +32,7 @@ internal sealed class MainBlockChild(GameMemoryServiceWrapper gameMemoryServiceW
 		switch (_scanResult)
 		{
 			case ScanResult.NotScanned:
-				ImGui.TextColored(Color.Gray(0.4f), "Not scanned"u8);
+				ImGui.TextColored(new Vector4(0.4f, 0.4f, 0.4f, 1), "Not scanned"u8);
 				return;
 			case ScanResult.MarkerUnavailable:
 				ImGui.TextColored(new Vector4(1, 0.5f, 0, 1), "The marker is not available yet; try again in a moment"u8);

@@ -146,7 +146,7 @@ internal sealed class GraphsChild(FontService fontService)
 			{
 				AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Vector4.One);
 				AddTooltipText("Gems Collected"u8, Inline.Utf8(gemsCollected), new Vector4(1, 0, 0, 1));
-				AddTooltipText("Gems Despawned"u8, Inline.Utf8(gemsDespawned), Color.Gray(0.5f));
+				AddTooltipText("Gems Despawned"u8, Inline.Utf8(gemsDespawned), new Vector4(0.5f, 0.5f, 0.5f, 1));
 				AddTooltipText("Gems Eaten"u8, Inline.Utf8(gemsEaten), new Vector4(0, 1, 0, 1));
 				AddTooltipText("Gems Total"u8, Inline.Utf8(gemsTotal), new Color(127, 0, 0, 255));
 

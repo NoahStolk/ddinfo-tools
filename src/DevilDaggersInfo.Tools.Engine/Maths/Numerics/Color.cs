@@ -39,15 +39,6 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 		return new Color((byte)(R * (1 - amount)), (byte)(G * (1 - amount)), (byte)(B * (1 - amount)), A);
 	}
 
-	public static Color Gray(float value)
-	{
-		if (value is < 0 or > 1)
-			throw new ArgumentOutOfRangeException(nameof(value));
-
-		byte component = (byte)(value * byte.MaxValue);
-		return new Color(component, component, component, byte.MaxValue);
-	}
-
 	public static Color FromHsv(float hue, float saturation, float value)
 	{
 		saturation = Math.Clamp(saturation, 0, 1);

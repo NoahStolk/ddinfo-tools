@@ -47,7 +47,7 @@ internal sealed class DebugWindow(
 	{
 		if (ImGui.Begin("Debug"))
 		{
-			ImGui.TextColored(nativeFileDialog.DialogOpen ? Vector4.One : Color.Gray(0.4f), nativeFileDialog.DialogOpen ? "Native dialog open" : "Native dialog closed");
+			ImGui.TextColored(nativeFileDialog.DialogOpen ? Vector4.One : new Vector4(0.4f, 0.4f, 0.4f, 1), nativeFileDialog.DialogOpen ? "Native dialog open" : "Native dialog closed");
 			ImGui.TextColored(encryptionService.IsAvailable ? new Vector4(0, 1, 0, 1) : new Vector4(1, 0, 0, 1), encryptionService.IsAvailable ? "Encryption available" : "Encryption unavailable");
 
 			if (ImGui.CollapsingHeader("Popup debug info"))
@@ -165,7 +165,7 @@ internal sealed class DebugWindow(
 
 	private void RenderPopupDebugInfo()
 	{
-		ImGui.TextColored(popupManager.IsAnyOpen ? Vector4.One : Color.Gray(0.4f), popupManager.Popups.Count > 0 ? Inline.Utf8($"{popupManager.Popups.Count} popup(s) active") : "No popups active"u8);
+		ImGui.TextColored(popupManager.IsAnyOpen ? Vector4.One : new Vector4(0.4f, 0.4f, 0.4f, 1), popupManager.Popups.Count > 0 ? Inline.Utf8($"{popupManager.Popups.Count} popup(s) active") : "No popups active"u8);
 
 		if (ImGui.BeginChild("PopupTableWrapper", new Vector2(0, 512)) && ImGui.BeginTable("PopupTable", 3, ImGuiTableFlags.ScrollY))
 		{
@@ -201,13 +201,13 @@ internal sealed class DebugWindow(
 	private void RenderKeyboardInput()
 	{
 		ImGuiIOPtr io = ImGui.GetIO();
-		ImGui.TextColored(io.KeyCtrl ? Vector4.One : Color.Gray(0.4f), "CTRL");
+		ImGui.TextColored(io.KeyCtrl ? Vector4.One : new Vector4(0.4f, 0.4f, 0.4f, 1), "CTRL");
 		ImGui.SameLine();
-		ImGui.TextColored(io.KeyShift ? Vector4.One : Color.Gray(0.4f), "SHIFT");
+		ImGui.TextColored(io.KeyShift ? Vector4.One : new Vector4(0.4f, 0.4f, 0.4f, 1), "SHIFT");
 		ImGui.SameLine();
-		ImGui.TextColored(io.KeyAlt ? Vector4.One : Color.Gray(0.4f), "ALT");
+		ImGui.TextColored(io.KeyAlt ? Vector4.One : new Vector4(0.4f, 0.4f, 0.4f, 1), "ALT");
 		ImGui.SameLine();
-		ImGui.TextColored(io.KeySuper ? Vector4.One : Color.Gray(0.4f), "SUPER");
+		ImGui.TextColored(io.KeySuper ? Vector4.One : new Vector4(0.4f, 0.4f, 0.4f, 1), "SUPER");
 
 		ImGui.Separator();
 		if (!ImGui.BeginTable("GLFW keys", 8))
@@ -219,7 +219,7 @@ internal sealed class DebugWindow(
 			Keys key = KeysGen.Values[i];
 			bool isDown = glfwInput.IsKeyDown(key);
 			ImGui.TableNextColumn();
-			ImGui.TextColored(isDown ? Vector4.One : Color.Gray(0.4f), key.AsUtf8Span());
+			ImGui.TextColored(isDown ? Vector4.One : new Vector4(0.4f, 0.4f, 0.4f, 1), key.AsUtf8Span());
 		}
 
 		ImGui.EndTable();

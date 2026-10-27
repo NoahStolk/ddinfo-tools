@@ -1,4 +1,3 @@
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis.Data;
 using Hexa.NET.ImGui;
@@ -29,7 +28,7 @@ internal sealed class SplitsChild(FontService fontService)
 					int? homing = data[i].Homing;
 					int? homingPrevious = data[i].HomingPrevious;
 
-					Vector4 textColor = homing.HasValue ? Vector4.One : Color.Gray(0.5f);
+					Vector4 textColor = homing.HasValue ? Vector4.One : new Vector4(0.5f, 0.5f, 0.5f, 1);
 					uint backgroundColor = data[i].Kind switch
 					{
 						SplitDataEntryKind.Start => 0x2200ff00,
@@ -52,7 +51,7 @@ internal sealed class SplitsChild(FontService fontService)
 					{
 						< 0 => new Vector4(1, 0, 0, 1),
 						> 0 => new Vector4(0, 1, 0, 1),
-						null => Color.Gray(0.5f),
+						null => new Vector4(0.5f, 0.5f, 0.5f, 1),
 						_ => Vector4.One,
 					};
 					ImGui.TextColored(color, delta.HasValue ? Inline.Utf8(delta.Value, "+0;-0;+0") : "-"u8);

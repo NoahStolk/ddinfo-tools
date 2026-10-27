@@ -3,7 +3,6 @@ using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Replay.Extensions;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using Hexa.NET.ImGui;
@@ -69,7 +68,7 @@ internal static class HitEventExplanation
 			ImGui.Text("-");
 			ImGui.SameLine();
 
-			Color noDamageColor = Color.Gray(0.5f);
+			Vector4 noDamageColor = new(0.5f, 0.5f, 0.5f, 1);
 
 			// Negative entity IDs are used for dead pede segments.
 			if (e.EntityIdA < 0)
@@ -133,7 +132,7 @@ internal static class HitEventExplanation
 		{
 			ImGui.TextColored(entityType.GetColor(), entityType.AsUtf8ShortSpan());
 			ImGui.SameLine();
-			ImGui.TextColored(Color.Gray(0.5f), Inline.Utf8($"(id {Math.Abs(entityId)})"));
+			ImGui.TextColored(new Vector4(0.5f, 0.5f, 0.5f, 1), Inline.Utf8($"(id {Math.Abs(entityId)})"));
 		}
 	}
 }

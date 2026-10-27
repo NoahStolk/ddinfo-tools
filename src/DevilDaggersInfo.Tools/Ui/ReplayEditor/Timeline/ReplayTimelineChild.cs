@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Tools.EditorFileState;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
@@ -19,8 +18,8 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 	private readonly List<EventType> _shownEventTypes = [.. EventTypeGen.Values.Where(et => et is not EventType.End and not EventType.InitialInputs and not EventType.Inputs)];
 
 	private readonly Dictionary<EventType, int> _eventTypeRowIndices = [];
-	private readonly Vector4 _lineColorDefault = Color.Gray(0.4f);
-	private readonly Vector4 _lineColorSub = Color.Gray(0.2f);
+	private readonly Vector4 _lineColorDefault = new(0.4f, 0.4f, 0.4f, 1);
+	private readonly Vector4 _lineColorSub = new(0.2f, 0.2f, 0.2f, 1);
 
 	private readonly List<EditorEvent> _selectedEvents = [];
 	private int? _selectedTickIndex;
@@ -61,7 +60,7 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 
 		ReplayTimelineActionsChild.Render(fileStates.Replay.Object);
 
-		ImGui.PushStyleColor(ImGuiCol.ChildBg, Color.Gray(0.08f));
+		ImGui.PushStyleColor(ImGuiCol.ChildBg, new Vector4(0.08f, 0.08f, 0.08f, 1));
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8));
 		if (ImGui.BeginChild("SelectedEventsChild", default, ImGuiChildFlags.AlwaysUseWindowPadding) && _selectedTickIndex.HasValue)
 		{
@@ -80,7 +79,7 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 
 	private void RenderTimeline(EditorReplayModel replay)
 	{
-		ImGui.PushStyleColor(ImGuiCol.ChildBg, Color.Gray(0.1f));
+		ImGui.PushStyleColor(ImGuiCol.ChildBg, new Vector4(0.1f, 0.1f, 0.1f, 1));
 		const float legendWidth = 160;
 		if (ImGui.BeginChild("LegendChild", new Vector2(legendWidth, 0)))
 		{
