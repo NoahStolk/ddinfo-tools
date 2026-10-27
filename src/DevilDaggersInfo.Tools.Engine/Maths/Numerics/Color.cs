@@ -10,20 +10,6 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 		return new Vector4(color.R / (float)byte.MaxValue, color.G / (float)byte.MaxValue, color.B / (float)byte.MaxValue, color.A / (float)byte.MaxValue);
 	}
 
-	public Color Desaturate(float f)
-	{
-		float r = R / (float)byte.MaxValue;
-		float g = G / (float)byte.MaxValue;
-		float b = B / (float)byte.MaxValue;
-
-		float l = 0.3f * r + 0.6f * g + 0.1f * b;
-		float newR = r + f * (l - r);
-		float newG = g + f * (l - g);
-		float newB = b + f * (l - b);
-
-		return new Color((byte)(newR * byte.MaxValue), (byte)(newG * byte.MaxValue), (byte)(newB * byte.MaxValue), A);
-	}
-
 	public static Color FromHsv(float hue, float saturation, float value)
 	{
 		saturation = Math.Clamp(saturation, 0, 1);

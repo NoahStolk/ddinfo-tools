@@ -162,9 +162,9 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 		const int columnCount = 6;
 
 		ImGui.PushStyleVar(ImGuiStyleVar.CellPadding, new Vector2(4, 1));
-		ImGui.PushStyleColor(ImGuiCol.Header, Colors.SpawnsetEditor.Primary with { A = 50 });
-		ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.SpawnsetEditor.Primary with { A = 75 });
-		ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.SpawnsetEditor.Primary with { A = 100 });
+		ImGui.PushStyleColor(ImGuiCol.Header, Colors.SpawnsetEditor.Primary with { W = 0.2f });
+		ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.SpawnsetEditor.Primary with { W = 0.3f });
+		ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.SpawnsetEditor.Primary with { W = 0.4f });
 
 		if (ImGui.BeginTable("SpawnsTable", columnCount, ImGuiTableFlags.ScrollY))
 		{

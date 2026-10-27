@@ -24,5 +24,19 @@ internal static class Vector4Extensions
 			int perceivedBrightness = (int)Math.Sqrt(r * r * 0.299 + g * g * 0.587 + b * b * 0.114);
 			return perceivedBrightness < 140 ? Vector4.One : new Vector4(0, 0, 0, 1);
 		}
+
+		public static Vector4 DesaturateColor(Vector4 color, float amount)
+		{
+			float r = color.X;
+			float g = color.Y;
+			float b = color.Z;
+
+			float l = 0.3f * r + 0.6f * g + 0.1f * b;
+			float newR = r + amount * (l - r);
+			float newG = g + amount * (l - g);
+			float newB = b + amount * (l - b);
+
+			return new Vector4(newR, newG, newB, color.W);
+		}
 	}
 }

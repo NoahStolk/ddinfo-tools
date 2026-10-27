@@ -6,16 +6,6 @@ namespace DevilDaggersInfo.Tools.Ui;
 
 internal static class Colors
 {
-	private const byte _alphaButton = 102;
-	private const byte _alphaButtonActive = 191;
-	private const byte _alphaHeader = 79;
-	private const byte _alphaHeaderHovered = 204;
-	private const byte _alphaFrameBackground = 138;
-	private const byte _alphaTitleBackgroundActive = 138;
-	private const byte _alphaFrameBackgroundHovered = 102;
-	private const byte _alphaFrameBackgroundActive = 171;
-	private const byte _alphaSeparatorHovered = 199;
-
 	public static ColorConfiguration Main { get; } = new()
 	{
 		Primary = new Color(250, 66, 66, 255),
@@ -79,21 +69,31 @@ internal static class Colors
 
 	public static void SetColors(ColorConfiguration colorConfiguration)
 	{
+		const float alphaButton = 102 / 255f;
+		const float alphaButtonActive = 191 / 255f;
+		const float alphaHeader = 79 / 255f;
+		const float alphaHeaderHovered = 204 / 255f;
+		const float alphaFrameBackground = 138 / 255f;
+		const float alphaTitleBackgroundActive = 138 / 255f;
+		const float alphaFrameBackgroundHovered = 102 / 255f;
+		const float alphaFrameBackgroundActive = 171 / 255f;
+		const float alphaSeparatorHovered = 199 / 255f;
+
 		ImGuiStylePtr style = ImGui.GetStyle();
 		style.Colors[(int)ImGuiCol.CheckMark] = colorConfiguration.Primary;
 		style.Colors[(int)ImGuiCol.SliderGrab] = colorConfiguration.Secondary;
 		style.Colors[(int)ImGuiCol.SliderGrabActive] = colorConfiguration.Primary;
-		style.Colors[(int)ImGuiCol.Button] = colorConfiguration.Primary with { A = _alphaButton };
+		style.Colors[(int)ImGuiCol.Button] = colorConfiguration.Primary with { W = alphaButton };
 		style.Colors[(int)ImGuiCol.ButtonHovered] = colorConfiguration.Primary;
-		style.Colors[(int)ImGuiCol.ButtonActive] = colorConfiguration.Primary with { B = _alphaButtonActive };
-		style.Colors[(int)ImGuiCol.Header] = colorConfiguration.Primary with { A = _alphaHeader };
-		style.Colors[(int)ImGuiCol.HeaderHovered] = colorConfiguration.Primary with { A = _alphaHeaderHovered };
+		style.Colors[(int)ImGuiCol.ButtonActive] = colorConfiguration.Primary with { W = alphaButtonActive };
+		style.Colors[(int)ImGuiCol.Header] = colorConfiguration.Primary with { W = alphaHeader };
+		style.Colors[(int)ImGuiCol.HeaderHovered] = colorConfiguration.Primary with { W = alphaHeaderHovered };
 		style.Colors[(int)ImGuiCol.HeaderActive] = colorConfiguration.Primary;
-		style.Colors[(int)ImGuiCol.FrameBg] = colorConfiguration.Tertiary with { A = _alphaFrameBackground };
-		style.Colors[(int)ImGuiCol.TitleBgActive] = colorConfiguration.Tertiary with { A = _alphaTitleBackgroundActive };
-		style.Colors[(int)ImGuiCol.FrameBgHovered] = colorConfiguration.Primary with { A = _alphaFrameBackgroundHovered };
-		style.Colors[(int)ImGuiCol.FrameBgActive] = colorConfiguration.Primary with { A = _alphaFrameBackgroundActive };
-		style.Colors[(int)ImGuiCol.SeparatorHovered] = colorConfiguration.Quaternary with { A = _alphaSeparatorHovered };
+		style.Colors[(int)ImGuiCol.FrameBg] = colorConfiguration.Tertiary with { W = alphaFrameBackground };
+		style.Colors[(int)ImGuiCol.TitleBgActive] = colorConfiguration.Tertiary with { W = alphaTitleBackgroundActive };
+		style.Colors[(int)ImGuiCol.FrameBgHovered] = colorConfiguration.Primary with { W = alphaFrameBackgroundHovered };
+		style.Colors[(int)ImGuiCol.FrameBgActive] = colorConfiguration.Primary with { W = alphaFrameBackgroundActive };
+		style.Colors[(int)ImGuiCol.SeparatorHovered] = colorConfiguration.Quaternary with { W = alphaSeparatorHovered };
 		style.Colors[(int)ImGuiCol.SeparatorActive] = colorConfiguration.Quaternary;
 		style.Colors[(int)ImGuiCol.Tab] = colorConfiguration.Tertiary;
 		style.Colors[(int)ImGuiCol.TabHovered] = colorConfiguration.Secondary;

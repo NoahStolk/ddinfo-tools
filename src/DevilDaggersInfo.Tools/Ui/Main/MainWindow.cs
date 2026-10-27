@@ -97,7 +97,7 @@ internal sealed class MainWindow(
 				static Vector4 GetColor(ColorConfiguration colorConfiguration)
 				{
 					const float buttonColorDesaturation = 0.3f;
-					return (colorConfiguration.Primary.Desaturate(buttonColorDesaturation) * new Vector4(0.8f, 0.8f, 0.8f, 1)) with { W = 0.5f };
+					return (Vector4.DesaturateColor(colorConfiguration.Primary, buttonColorDesaturation) * new Vector4(0.8f, 0.8f, 0.8f, 1)) with { W = 0.5f };
 				}
 			}
 

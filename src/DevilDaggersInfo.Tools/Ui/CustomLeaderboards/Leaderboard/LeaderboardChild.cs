@@ -169,10 +169,10 @@ internal sealed class LeaderboardChild(
 
 		bool isCurrentPlayer = ce.PlayerId == userCache.Model.PlayerId;
 
-		int headerAlpha = isCurrentPlayer ? 40 : 16;
-		ImGui.PushStyleColor(ImGuiCol.Header, Colors.CustomLeaderboards.Primary with { A = (byte)headerAlpha });
-		ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.CustomLeaderboards.Primary with { A = 64 });
-		ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.CustomLeaderboards.Primary with { A = 96 });
+		float headerAlpha = (isCurrentPlayer ? 40 : 16) / 255f;
+		ImGui.PushStyleColor(ImGuiCol.Header, Colors.CustomLeaderboards.Primary with { W = headerAlpha });
+		ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Colors.CustomLeaderboards.Primary with { W = 0.25f });
+		ImGui.PushStyleColor(ImGuiCol.HeaderActive, Colors.CustomLeaderboards.Primary with { W = 0.375f });
 
 		bool temp = true;
 		if (ImGui.Selectable(Inline.Utf8(ce.Rank, "00"), ref temp, ImGuiSelectableFlags.SpanAllColumns))
