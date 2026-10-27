@@ -177,26 +177,26 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 			RenderValue("Death"u8, Inline.Utf8(b.IsPlayerAlive ? "-" : GetDeath(b)?.Name ?? "?"), GetDeath(b)?.Color.ToEngineColor() ?? Color.White, _deathIntensity);
 
 			ImGui.Spacing();
-			ImGui.Image(resourceManager.GameResources.IconMaskGemTexture.Id, iconSize, Color.Red);
-			RenderValue("Gems collected"u8, Inline.Utf8(b.GemsCollected), Color.Red, _gemsCollectedIntensity);
+			ImGui.Image(resourceManager.GameResources.IconMaskGemTexture.Id, iconSize, new Vector4(1, 0, 0, 1));
+			RenderValue("Gems collected"u8, Inline.Utf8(b.GemsCollected), new Vector4(1, 0, 0, 1), _gemsCollectedIntensity);
 			RenderValue("Gems despawned"u8, Inline.Utf8(b.GemsDespawned), Color.Gray(0.6f), _gemsDespawnedIntensity);
 			RenderValue("Gems eaten"u8, Inline.Utf8(b.GemsEaten), new Vector4(0, 1, 0, 1), _gemsEatenIntensity);
-			RenderValue("Gems total"u8, Inline.Utf8(b.GemsTotal), Color.Red, _gemsTotalIntensity);
+			RenderValue("Gems total"u8, Inline.Utf8(b.GemsTotal), new Vector4(1, 0, 0, 1), _gemsTotalIntensity);
 
 			ImGui.Spacing();
 			ImGui.Image(resourceManager.GameResources.IconMaskHomingTexture.Id, iconSize);
 			RenderValue("Homing stored"u8, Inline.Utf8(b.HomingStored), new Vector4(1, 0, 1, 1), _homingStoredIntensity);
-			RenderValue("Homing eaten"u8, Inline.Utf8(b.HomingEaten), Color.Red, _homingEatenIntensity);
+			RenderValue("Homing eaten"u8, Inline.Utf8(b.HomingEaten), new Vector4(1, 0, 0, 1), _homingEatenIntensity);
 
 			ImGui.Spacing();
 			ImGui.Image(resourceManager.GameResources.IconMaskCrosshairTexture.Id, iconSize, new Vector4(0, 1, 0, 1));
 			RenderValue("Daggers fired"u8, Inline.Utf8(b.DaggersFired), new Vector4(1, 1, 0, 1), _daggersFiredIntensity);
-			RenderValue("Daggers hit"u8, Inline.Utf8(b.DaggersHit), Color.Red, _daggersHitIntensity);
+			RenderValue("Daggers hit"u8, Inline.Utf8(b.DaggersHit), new Vector4(1, 0, 0, 1), _daggersHitIntensity);
 			RenderValue("Accuracy"u8, Inline.Utf8(GetAccuracy(b), "0.00%"), new Vector4(1, 0.5f, 0, 1), _accuracyIntensity);
 
 			ImGui.Spacing();
 			ImGui.Image(resourceManager.GameResources.IconMaskSkullTexture.Id, iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
-			RenderValue("Enemies killed"u8, Inline.Utf8(b.EnemiesKilled), Color.Red, _enemiesKilledIntensity);
+			RenderValue("Enemies killed"u8, Inline.Utf8(b.EnemiesKilled), new Vector4(1, 0, 0, 1), _enemiesKilledIntensity);
 			RenderValue("Enemies alive"u8, Inline.Utf8(b.EnemiesAlive), new Vector4(1, 1, 0, 1), _enemiesAliveIntensity);
 
 			ImGui.Spacing();

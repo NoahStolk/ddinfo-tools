@@ -180,9 +180,9 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 
 	private void RenderDeleteButton(int i, UserSettingsPracticeTemplate customTemplate)
 	{
-		ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 159 });
-		ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red);
-		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red with { A = 223 });
+		ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(1, 0, 0, 0.62f));
+		ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(1, 0, 0, 1));
+		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(1, 0, 0, 0.87f));
 		ImGui.PushID(Inline.Utf8($"delete button {i}"));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(12));

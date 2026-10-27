@@ -58,7 +58,7 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 				if (modsDirectoryLogic.Errors.Count > 0)
 				{
 					ImGui.Separator();
-					ImGui.TextColored(Color.Red, "Errors:");
+					ImGui.TextColored(new Vector4(1, 0, 0, 1), "Errors:");
 					for (int i = 0; i < modsDirectoryLogic.Errors.Count; i++)
 					{
 						string error = modsDirectoryLogic.Errors[i];

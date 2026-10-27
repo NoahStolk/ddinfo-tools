@@ -50,7 +50,7 @@ internal sealed class SplitsChild(FontService fontService)
 					int? delta = homing.HasValue && homingPrevious.HasValue ? homing.Value - homingPrevious.Value : null;
 					Vector4 color = delta switch
 					{
-						< 0 => Color.Red,
+						< 0 => new Vector4(1, 0, 0, 1),
 						> 0 => new Vector4(0, 1, 0, 1),
 						null => Color.Gray(0.5f),
 						_ => Color.White,

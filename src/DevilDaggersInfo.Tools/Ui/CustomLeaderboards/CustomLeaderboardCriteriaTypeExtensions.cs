@@ -16,14 +16,14 @@ internal static class CustomLeaderboardCriteriaTypeExtensions
 		{
 			return type switch
 			{
-				CustomLeaderboardCriteriaType.GemsCollected => Color.Red,
+				CustomLeaderboardCriteriaType.GemsCollected => new Vector4(1, 0, 0, 1),
 				CustomLeaderboardCriteriaType.GemsDespawned => Color.Gray(0.3f),
 				CustomLeaderboardCriteriaType.GemsEaten => new Vector4(0, 1, 0, 1),
 				CustomLeaderboardCriteriaType.EnemiesKilled => new Vector4(1, 0.5f, 0, 1),
 				CustomLeaderboardCriteriaType.DaggersFired => new Vector4(1, 1, 0, 1),
 				CustomLeaderboardCriteriaType.DaggersHit => new Vector4(1, 0.5f, 0, 1),
 				CustomLeaderboardCriteriaType.HomingStored => Color.White,
-				CustomLeaderboardCriteriaType.HomingEaten => Color.Red,
+				CustomLeaderboardCriteriaType.HomingEaten => new Vector4(1, 0, 0, 1),
 				CustomLeaderboardCriteriaType.Skull1Kills => EnemiesV3_2.Skull1.Color.ToEngineColor(),
 				CustomLeaderboardCriteriaType.Skull2Kills => EnemiesV3_2.Skull2.Color.ToEngineColor(),
 				CustomLeaderboardCriteriaType.Skull3Kills => EnemiesV3_2.Skull3.Color.ToEngineColor(),

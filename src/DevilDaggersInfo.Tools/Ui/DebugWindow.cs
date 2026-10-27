@@ -48,7 +48,7 @@ internal sealed class DebugWindow(
 		if (ImGui.Begin("Debug"))
 		{
 			ImGui.TextColored(nativeFileDialog.DialogOpen ? Color.White : Color.Gray(0.4f), nativeFileDialog.DialogOpen ? "Native dialog open" : "Native dialog closed");
-			ImGui.TextColored(encryptionService.IsAvailable ? new Vector4(0, 1, 0, 1) : Color.Red, encryptionService.IsAvailable ? "Encryption available" : "Encryption unavailable");
+			ImGui.TextColored(encryptionService.IsAvailable ? new Vector4(0, 1, 0, 1) : new Vector4(1, 0, 0, 1), encryptionService.IsAvailable ? "Encryption available" : "Encryption unavailable");
 
 			if (ImGui.CollapsingHeader("Popup debug info"))
 			{
@@ -130,8 +130,8 @@ internal sealed class DebugWindow(
 			if (ImGui.Button("Error log"))
 				logger.Error("Test error! This should be logged as ERROR.");
 
-			ImGui.PushStyleColor(ImGuiCol.Button, Color.Red with { A = 127 });
-			ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red);
+			ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(1, 0, 0, 0.5f));
+			ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(1, 0, 0, 1));
 			if (ImGui.Button("FATAL CRASH"))
 				throw new InvalidOperationException("Test crash! This should be logged as FATAL.");
 			ImGui.PopStyleColor(2);
@@ -236,7 +236,7 @@ internal sealed class DebugWindow(
 		long allocatedBytesDiff = allocatedBytes - _previousAllocatedBytes;
 		Vector4 color = allocatedBytesDiff switch
 		{
-			> 10_000 => Color.Red,
+			> 10_000 => new Vector4(1, 0, 0, 1),
 			> 1_000 => new Vector4(1, 0.5f, 0, 1),
 			> 500 => new Vector4(1, 1, 0, 1),
 			> 0 => new Color(255, 255, 127, 255),

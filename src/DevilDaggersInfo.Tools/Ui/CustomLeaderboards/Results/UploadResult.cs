@@ -96,7 +96,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGui.Image(_resourceManager.GameResources.IconMaskGemTexture.Id, _iconSize, Color.Red);
+		ImGui.Image(_resourceManager.GameResources.IconMaskGemTexture.Id, _iconSize, new Vector4(1, 0, 0, 1));
 
 		if (ImGui.BeginTable("Gems", 2))
 		{
@@ -220,7 +220,7 @@ internal sealed class UploadResult
 
 	private void RenderCriteriaRejection(GetUploadResponseCriteriaRejection criteriaRejection)
 	{
-		if (!RenderHeader(Color.Red, "Rejected score."))
+		if (!RenderHeader(new Vector4(1, 0, 0, 1), "Rejected score."))
 			return;
 
 		ImGui.Indent(_indentation);
@@ -298,7 +298,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGui.Image(_resourceManager.GameResources.IconMaskGemTexture.Id, _iconSize, Color.Red);
+		ImGui.Image(_resourceManager.GameResources.IconMaskGemTexture.Id, _iconSize, new Vector4(1, 0, 0, 1));
 
 		if (ImGui.BeginTable("Gems", 3))
 		{
@@ -369,7 +369,7 @@ internal sealed class UploadResult
 			comparison = -comparison;
 		Vector4 color = comparison switch
 		{
-			-1 => Color.Red,
+			-1 => new Vector4(1, 0, 0, 1),
 			0 => Color.White,
 			1 => new Vector4(0, 1, 0, 1),
 			_ => throw new UnreachableException(),
@@ -392,7 +392,7 @@ internal sealed class UploadResult
 		int comparison = -scoreState.ValueDifference.CompareTo(0);
 		Vector4 color = comparison switch
 		{
-			-1 => Color.Red,
+			-1 => new Vector4(1, 0, 0, 1),
 			0 => Color.White,
 			1 => new Vector4(0, 1, 0, 1),
 			_ => throw new UnreachableException(),

@@ -62,7 +62,7 @@ internal sealed class CurrentSpawnsetChild(FontService fontService, SurvivalFile
 		if (settings.HandLevel is HandLevel.Level3 or HandLevel.Level4)
 			ImGui.TextColored(handColor, Inline.Utf8($"{settings.GemsOrHoming} homing"));
 		else
-			ImGui.TextColored(Color.Red, Inline.Utf8($"{settings.GemsOrHoming} gems"));
+			ImGui.TextColored(new Vector4(1, 0, 0, 1), Inline.Utf8($"{settings.GemsOrHoming} gems"));
 
 		ImGui.TableNextColumn();
 		ImGui.Text("Starts at");

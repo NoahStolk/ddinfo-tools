@@ -105,13 +105,13 @@ internal sealed class ReplayInputsChild(ResourceManager resourceManager)
 		short mouseX,
 		short mouseY)
 	{
-		ImGui.TextColored(forward ? Color.Red : Color.White, "W");
+		ImGui.TextColored(forward ? new Vector4(1, 0, 0, 1) : Color.White, "W");
 		ImGui.SameLine();
-		ImGui.TextColored(left ? Color.Red : Color.White, "A");
+		ImGui.TextColored(left ? new Vector4(1, 0, 0, 1) : Color.White, "A");
 		ImGui.SameLine();
-		ImGui.TextColored(backward ? Color.Red : Color.White, "S");
+		ImGui.TextColored(backward ? new Vector4(1, 0, 0, 1) : Color.White, "S");
 		ImGui.SameLine();
-		ImGui.TextColored(right ? Color.Red : Color.White, "D");
+		ImGui.TextColored(right ? new Vector4(1, 0, 0, 1) : Color.White, "D");
 		ImGui.SameLine();
 		ImGui.TextColored(GetJumpTypeColor(jump), "[Space]");
 		ImGui.SameLine();
@@ -119,21 +119,21 @@ internal sealed class ReplayInputsChild(ResourceManager resourceManager)
 		ImGui.SameLine();
 		ImGui.TextColored(GetShootTypeColor(shootHoming), "[RMB]");
 		ImGui.SameLine();
-		ImGui.TextColored(mouseX == 0 ? Color.White : Color.Red, Inline.Utf8($"X:{mouseX}"));
+		ImGui.TextColored(mouseX == 0 ? Color.White : new Vector4(1, 0, 0, 1), Inline.Utf8($"X:{mouseX}"));
 		ImGui.SameLine();
-		ImGui.TextColored(mouseY == 0 ? Color.White : Color.Red, Inline.Utf8($"Y:{mouseY}"));
+		ImGui.TextColored(mouseY == 0 ? Color.White : new Vector4(1, 0, 0, 1), Inline.Utf8($"Y:{mouseY}"));
 
 		static Vector4 GetJumpTypeColor(JumpType jumpType) => jumpType switch
 		{
 			JumpType.Hold => new Vector4(1, 0.5f, 0, 1),
-			JumpType.StartedPress => Color.Red,
+			JumpType.StartedPress => new Vector4(1, 0, 0, 1),
 			_ => Color.White,
 		};
 
 		static Vector4 GetShootTypeColor(ShootType shootType) => shootType switch
 		{
 			ShootType.Hold => new Vector4(1, 0.5f, 0, 1),
-			ShootType.Release => Color.Red,
+			ShootType.Release => new Vector4(1, 0, 0, 1),
 			_ => Color.White,
 		};
 	}

@@ -73,7 +73,7 @@ internal sealed class PracticeWindow(
 
 		textColor = effectivePlayerSettings.HandLevel switch
 		{
-			HandLevel.Level1 or HandLevel.Level2 => Color.Red,
+			HandLevel.Level1 or HandLevel.Level2 => new Vector4(1, 0, 0, 1),
 			_ => effectivePlayerSettings.HandLevel.GetColor(),
 		};
 

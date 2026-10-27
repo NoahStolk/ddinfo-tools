@@ -31,9 +31,9 @@ internal sealed class InputValuesChild(ResourceManager resourceManager, Practice
 					ImGui.SameLine();
 			}
 
-			(Texture gemOrHomingTexture, Color tintColor) = practiceLogic.State.HandLevel is HandLevel.Level3 or HandLevel.Level4
+			(Texture gemOrHomingTexture, Vector4 tintColor) = practiceLogic.State.HandLevel is HandLevel.Level3 or HandLevel.Level4
 				? (resourceManager.GameResources.IconMaskHomingTexture, Color.White)
-				: (resourceManager.GameResources.IconMaskGemTexture, Color.Red);
+				: (resourceManager.GameResources.IconMaskGemTexture, new Vector4(1, 0, 0, 1));
 			ImGui.Spacing();
 			ImGui.Image(gemOrHomingTexture.Id, new Vector2(16), tintColor);
 			ImGui.SameLine();

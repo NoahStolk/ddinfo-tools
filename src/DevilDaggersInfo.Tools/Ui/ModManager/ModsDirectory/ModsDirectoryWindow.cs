@@ -159,7 +159,7 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 					ImGui.InputText("##rename", ref modsDirectoryLogic.NewFileName, 128);
 
 					if (_renameErrorMessage != null)
-						ImGui.TextColored(Color.Red, _renameErrorMessage);
+						ImGui.TextColored(new Vector4(1, 0, 0, 1), _renameErrorMessage);
 
 					if (ImGui.Button("OK", new Vector2(128, 0)) || ImGui.IsEnterPressed())
 					{
