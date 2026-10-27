@@ -5,7 +5,9 @@ namespace DevilDaggersInfo.Tools.Utils;
 
 internal static class AssemblyUtils
 {
-	public static readonly Assembly EntryAssembly = Assembly.GetEntryAssembly() ?? throw new InvalidOperationException("Could not get entry assembly.");
+	public static readonly Assembly EntryAssembly =
+		Assembly.GetEntryAssembly()
+		?? throw new InvalidOperationException("Could not get entry assembly.");
 
 	public static readonly string EntryAssemblyVersionString = GetEntryAssemblyVersionString();
 
@@ -13,7 +15,9 @@ internal static class AssemblyUtils
 
 	public static readonly string EntryAssemblyBuildTime = EntryAssembly.GetCustomAttribute<BuildTimeAttribute>()?.BuildTime ?? "Unknown build time";
 
-	public static readonly string InstallationDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) ?? throw new InvalidOperationException("Could not get installation directory of the current executing assembly.");
+	public static readonly string InstallationDirectory =
+		Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName)
+		?? throw new InvalidOperationException("Could not get installation directory of the current executing assembly.");
 
 	private static string GetEntryAssemblyVersionString()
 	{

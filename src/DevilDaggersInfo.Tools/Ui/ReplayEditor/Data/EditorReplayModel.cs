@@ -256,23 +256,25 @@ internal sealed record EditorReplayModel
 		List<ReplayEvent> replayEvents = [];
 		List<EntityType> entityTypes = [];
 
-		List<EditorEvent> allEvents = _boidSpawnEvents
-			.Concat(_daggerSpawnEvents)
-			.Concat(_entityOrientationEvents)
-			.Concat(_entityPositionEvents)
-			.Concat(_entityTargetEvents)
-			.Concat(_gemEvents)
-			.Concat(_hitEvents)
-			.Concat(_leviathanSpawnEvents)
-			.Concat(_pedeSpawnEvents)
-			.Concat(_spiderEggSpawnEvents)
-			.Concat(_spiderSpawnEvents)
-			.Concat(_squidSpawnEvents)
-			.Concat(_thornSpawnEvents)
-			.Concat(_transmuteEvents)
-			.OrderBy(ee => ee.TickIndex)
-			.ThenBy(ee => ee.EntityId)
-			.ToList();
+		List<EditorEvent> allEvents =
+		[
+			.. _boidSpawnEvents
+				.Concat(_daggerSpawnEvents)
+				.Concat(_entityOrientationEvents)
+				.Concat(_entityPositionEvents)
+				.Concat(_entityTargetEvents)
+				.Concat(_gemEvents)
+				.Concat(_hitEvents)
+				.Concat(_leviathanSpawnEvents)
+				.Concat(_pedeSpawnEvents)
+				.Concat(_spiderEggSpawnEvents)
+				.Concat(_spiderSpawnEvents)
+				.Concat(_squidSpawnEvents)
+				.Concat(_thornSpawnEvents)
+				.Concat(_transmuteEvents)
+				.OrderBy(ee => ee.TickIndex)
+				.ThenBy(ee => ee.EntityId),
+		];
 
 		int currentTickIndex = 0;
 		foreach (EditorEvent editorEvent in allEvents)
@@ -485,22 +487,24 @@ internal sealed record EditorReplayModel
 	// TODO: Remove; this approach is too slow.
 	private List<EditorEvent> GetEventsAtTick(int tickIndex)
 	{
-		return BoidSpawnEvents
-			.Concat(DaggerSpawnEvents)
-			.Concat(EntityOrientationEvents)
-			.Concat(EntityPositionEvents)
-			.Concat(EntityTargetEvents)
-			.Concat(GemEvents)
-			.Concat(HitEvents)
-			.Concat(LeviathanSpawnEvents)
-			.Concat(PedeSpawnEvents)
-			.Concat(SpiderEggSpawnEvents)
-			.Concat(SpiderSpawnEvents)
-			.Concat(SquidSpawnEvents)
-			.Concat(ThornSpawnEvents)
-			.Concat(TransmuteEvents)
-			.Where(e => e.TickIndex == tickIndex)
-			.ToList();
+		return
+		[
+			.. BoidSpawnEvents
+				.Concat(DaggerSpawnEvents)
+				.Concat(EntityOrientationEvents)
+				.Concat(EntityPositionEvents)
+				.Concat(EntityTargetEvents)
+				.Concat(GemEvents)
+				.Concat(HitEvents)
+				.Concat(LeviathanSpawnEvents)
+				.Concat(PedeSpawnEvents)
+				.Concat(SpiderEggSpawnEvents)
+				.Concat(SpiderSpawnEvents)
+				.Concat(SquidSpawnEvents)
+				.Concat(ThornSpawnEvents)
+				.Concat(TransmuteEvents)
+				.Where(e => e.TickIndex == tickIndex),
+		];
 	}
 
 	private static bool IsSpawnEvent(EventType eventType)
