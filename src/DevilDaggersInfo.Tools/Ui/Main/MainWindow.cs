@@ -1,4 +1,3 @@
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
@@ -95,11 +94,10 @@ internal sealed class MainWindow(
 					modsDirectoryLogic.LoadModsDirectory();
 				}
 
-				static Color GetColor(ColorConfiguration colorConfiguration)
+				static Vector4 GetColor(ColorConfiguration colorConfiguration)
 				{
-					const byte buttonAlpha = 127;
 					const float buttonColorDesaturation = 0.3f;
-					return colorConfiguration.Primary.Desaturate(buttonColorDesaturation).Darken(0.2f) with { A = buttonAlpha };
+					return (colorConfiguration.Primary.Desaturate(buttonColorDesaturation) * new Vector4(0.8f, 0.8f, 0.8f, 1)) with { W = 0.5f };
 				}
 			}
 
@@ -137,12 +135,12 @@ internal sealed class MainWindow(
 		return returnValue;
 	}
 
-	private bool ToolButton(Color color, string title, string description)
+	private bool ToolButton(Vector4 color, string title, string description)
 	{
 		ImGui.PushStyleColor(ImGuiCol.Button, color);
 		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color + new Vector4(0, 0, 0, 0.2f));
 		ImGui.PushStyleColor(ImGuiCol.ButtonActive, color + new Vector4(0, 0, 0, 0.3f));
-		ImGui.PushStyleColor(ImGuiCol.Border, color with { A = 255 });
+		ImGui.PushStyleColor(ImGuiCol.Border, color with { W = 1 });
 		ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, 2);
 
 		ImGui.PushFont(fontService.GoetheBold20);

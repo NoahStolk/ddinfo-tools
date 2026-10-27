@@ -24,11 +24,6 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 		return new Color((byte)(newR * byte.MaxValue), (byte)(newG * byte.MaxValue), (byte)(newB * byte.MaxValue), A);
 	}
 
-	public Color Darken(float amount)
-	{
-		return new Color((byte)(R * (1 - amount)), (byte)(G * (1 - amount)), (byte)(B * (1 - amount)), A);
-	}
-
 	public static Color FromHsv(float hue, float saturation, float value)
 	{
 		saturation = Math.Clamp(saturation, 0, 1);
