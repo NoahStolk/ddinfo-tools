@@ -123,16 +123,16 @@ internal sealed class ReplayInputsChild(ResourceManager resourceManager)
 		ImGui.SameLine();
 		ImGui.TextColored(mouseY == 0 ? Color.White : Color.Red, Inline.Utf8($"Y:{mouseY}"));
 
-		static Color GetJumpTypeColor(JumpType jumpType) => jumpType switch
+		static Vector4 GetJumpTypeColor(JumpType jumpType) => jumpType switch
 		{
-			JumpType.Hold => Color.Orange,
+			JumpType.Hold => new Vector4(1, 0.5f, 0, 1),
 			JumpType.StartedPress => Color.Red,
 			_ => Color.White,
 		};
 
-		static Color GetShootTypeColor(ShootType shootType) => shootType switch
+		static Vector4 GetShootTypeColor(ShootType shootType) => shootType switch
 		{
-			ShootType.Hold => Color.Orange,
+			ShootType.Hold => new Vector4(1, 0.5f, 0, 1),
 			ShootType.Release => Color.Red,
 			_ => Color.White,
 		};

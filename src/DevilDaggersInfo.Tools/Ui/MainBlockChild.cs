@@ -36,7 +36,7 @@ internal sealed class MainBlockChild(GameMemoryServiceWrapper gameMemoryServiceW
 				ImGui.TextColored(Color.Gray(0.4f), "Not scanned"u8);
 				return;
 			case ScanResult.MarkerUnavailable:
-				ImGui.TextColored(Color.Orange, "The marker is not available yet; try again in a moment"u8);
+				ImGui.TextColored(new Vector4(1, 0.5f, 0, 1), "The marker is not available yet; try again in a moment"u8);
 				return;
 			case ScanResult.GameNotRunning:
 				ImGui.TextColored(Color.Red, "Devil Daggers is not running"u8);

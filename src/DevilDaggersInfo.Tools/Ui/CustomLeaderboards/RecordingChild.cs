@@ -167,7 +167,7 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 
 			ImGui.Spacing();
 
-			ImGui.Image(resourceManager.InternalResources.IconEyeTexture.Id, iconSize, Color.Orange);
+			ImGui.Image(resourceManager.InternalResources.IconEyeTexture.Id, iconSize, new Vector4(1, 0.5f, 0, 1));
 			RenderValue("Player"u8, Inline.Utf8(GetPlayerText(b)), Color.White, _playerIntensity);
 			RenderValue("Time"u8, Inline.Utf8(b.Time, StringFormats.TimeFormat), Color.White, _timeIntensity);
 			RenderValue("Hand"u8, Inline.Utf8(GetUpgrade(b).Name), GetUpgrade(b).Color.ToEngineColor(), _handIntensity);
@@ -192,7 +192,7 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 			ImGui.Image(resourceManager.GameResources.IconMaskCrosshairTexture.Id, iconSize, Color.Green);
 			RenderValue("Daggers fired"u8, Inline.Utf8(b.DaggersFired), new Vector4(1, 1, 0, 1), _daggersFiredIntensity);
 			RenderValue("Daggers hit"u8, Inline.Utf8(b.DaggersHit), Color.Red, _daggersHitIntensity);
-			RenderValue("Accuracy"u8, Inline.Utf8(GetAccuracy(b), "0.00%"), Color.Orange, _accuracyIntensity);
+			RenderValue("Accuracy"u8, Inline.Utf8(GetAccuracy(b), "0.00%"), new Vector4(1, 0.5f, 0, 1), _accuracyIntensity);
 
 			ImGui.Spacing();
 			ImGui.Image(resourceManager.GameResources.IconMaskSkullTexture.Id, iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());

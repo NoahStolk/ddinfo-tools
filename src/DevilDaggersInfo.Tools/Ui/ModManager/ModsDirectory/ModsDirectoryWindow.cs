@@ -205,7 +205,7 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 				if (modFile is { AssetCount: not null, ProhibitedAssetCount: not null })
 				{
 					if (modFile.ProhibitedAssetCount.Value > 0)
-						ImGui.TextColored(Color.Orange, Inline.Utf8($"Prohibited ({modFile.ProhibitedAssetCount.Value} of {modFile.AssetCount.Value})"));
+						ImGui.TextColored(new Vector4(1, 0.5f, 0, 1), Inline.Utf8($"Prohibited ({modFile.ProhibitedAssetCount.Value} of {modFile.AssetCount.Value})"));
 					else
 						ImGui.TextColored(Color.Green, "OK");
 

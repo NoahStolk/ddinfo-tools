@@ -2,6 +2,7 @@ using DevilDaggersInfo.Core.Asset;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using Hexa.NET.ImGui;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor.PathTables;
 
@@ -26,7 +27,7 @@ internal static class PathTableUtils
 
 		ImGui.TableNextColumn();
 		if (assetInfo.IsProhibited)
-			ImGui.TextColored(Color.Orange, "Prohibited");
+			ImGui.TextColored(new Vector4(1, 0.5f, 0, 1), "Prohibited");
 		else
 			ImGui.TextColored(Color.Green, "OK");
 	}

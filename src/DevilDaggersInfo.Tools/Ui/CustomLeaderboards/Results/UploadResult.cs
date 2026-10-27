@@ -79,7 +79,7 @@ internal sealed class UploadResult
 		ImGui.Indent(_indentation);
 
 		ImGui.Spacing();
-		ImGui.Image(_resourceManager.InternalResources.IconEyeTexture.Id, _iconSize, Color.Orange);
+		ImGui.Image(_resourceManager.InternalResources.IconEyeTexture.Id, _iconSize, new Vector4(1, 0.5f, 0, 1));
 
 		if (ImGui.BeginTable("Player", 2))
 		{
@@ -280,7 +280,7 @@ internal sealed class UploadResult
 		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen in this UI.");
 
 		ImGui.Spacing();
-		ImGui.Image(_resourceManager.InternalResources.IconEyeTexture.Id, _iconSize, Color.Orange);
+		ImGui.Image(_resourceManager.InternalResources.IconEyeTexture.Id, _iconSize, new Vector4(1, 0.5f, 0, 1));
 
 		if (ImGui.BeginTable("Player", 3))
 		{

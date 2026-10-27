@@ -237,7 +237,7 @@ internal sealed class DebugWindow(
 		Vector4 color = allocatedBytesDiff switch
 		{
 			> 10_000 => Color.Red,
-			> 1_000 => Color.Orange,
+			> 1_000 => new Vector4(1, 0.5f, 0, 1),
 			> 500 => new Vector4(1, 1, 0, 1),
 			> 0 => new Color(255, 255, 127, 255),
 			_ => Color.Green,

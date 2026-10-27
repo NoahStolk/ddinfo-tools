@@ -117,7 +117,7 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 					if (isOverridden)
 						ImGui.TextColored(new Vector4(1, 0.2f, 0.4f, 1), Inline.Utf8($"Overridden by {effectiveAsset.OverriddenByModFileName}"));
 					else if (AssetContainer.IsProhibited(effectiveAsset.TocEntry.AssetType, effectiveAsset.TocEntry.Name))
-						ImGui.TextColored(Color.Orange, "Prohibited");
+						ImGui.TextColored(new Vector4(1, 0.5f, 0, 1), "Prohibited");
 					else if (!effectiveAsset.TocEntry.IsEnabled)
 						ImGui.TextColored(Color.Gray(0.4f), "Disabled");
 					else
