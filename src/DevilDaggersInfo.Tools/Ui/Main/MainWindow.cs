@@ -33,7 +33,14 @@ internal sealed class MainWindow(
 		ImGui.SetNextWindowPos(center, ImGuiCond.Always, new Vector2(0.5f, 0.5f));
 		ImGui.SetNextWindowSize(windowSize);
 
-		if (ImGui.Begin("Main Menu", ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoDocking))
+		const ImGuiWindowFlags windowFlags =
+			ImGuiWindowFlags.NoResize |
+			ImGuiWindowFlags.NoMove |
+			ImGuiWindowFlags.NoCollapse |
+			ImGuiWindowFlags.NoTitleBar |
+			ImGuiWindowFlags.NoBringToFrontOnFocus |
+			ImGuiWindowFlags.NoDocking;
+		if (ImGui.Begin("Main Menu", windowFlags))
 		{
 			ImGuiExt.PushFont(fontService.GoetheBold60);
 			const string title = "ddinfo tools";

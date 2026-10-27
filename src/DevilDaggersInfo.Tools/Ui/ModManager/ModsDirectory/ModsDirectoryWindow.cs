@@ -39,11 +39,17 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 
 			ImGui.Separator();
 
-			CheckboxColored("Enabled mods"u8, GetColor(ModFileType.EnabledMod), ref _showEnabledMods, "To enable a mod, it must start with 'audio' or 'dd' for the game to load it."u8);
-			CheckboxColored("Disabled mods"u8, GetColor(ModFileType.DisabledMod), ref _showDisabledMods, "In order to easily disable a mod, the program renames the mod file to start with an underscore, so these files not loaded by the game."u8);
-			CheckboxColored("Mods with invalid prefix"u8, GetColor(ModFileType.ModWithInvalidPrefix), ref _showModsWithInvalidPrefix, "These are valid mod files with an invalid file name, meaning they are not loaded by the game."u8);
-			CheckboxColored("Other files"u8, GetColor(ModFileType.Other), ref _showOtherFiles, "These are files that are not valid mod files. Spawnsets are not considered mods by the Mod Manager."u8);
-			CheckboxColored("Error loading file"u8, GetColor(ModFileType.Error), ref _showErrors, "These are files that could not be loaded by the program. This could be because the program does not have the required permissions to read the file."u8);
+			ReadOnlySpan<byte> enabledModsDesc = "To enable a mod, it must start with 'audio' or 'dd' for the game to load it."u8;
+			ReadOnlySpan<byte> disabledModsDesc = "In order to easily disable a mod, the program renames the mod file to start with an underscore, so these files not loaded by the game."u8;
+			ReadOnlySpan<byte> invalidPrefixDesc = "These are valid mod files with an invalid file name, meaning they are not loaded by the game."u8;
+			ReadOnlySpan<byte> otherFilesDesc = "These are files that are not valid mod files. Spawnsets are not considered mods by the Mod Manager."u8;
+			ReadOnlySpan<byte> errorDesc = "These are files that could not be loaded by the program. This could be because the program does not have the required permissions to read the file."u8;
+
+			CheckboxColored("Enabled mods"u8, GetColor(ModFileType.EnabledMod), ref _showEnabledMods, enabledModsDesc);
+			CheckboxColored("Disabled mods"u8, GetColor(ModFileType.DisabledMod), ref _showDisabledMods, disabledModsDesc);
+			CheckboxColored("Mods with invalid prefix"u8, GetColor(ModFileType.ModWithInvalidPrefix), ref _showModsWithInvalidPrefix, invalidPrefixDesc);
+			CheckboxColored("Other files"u8, GetColor(ModFileType.Other), ref _showOtherFiles, otherFilesDesc);
+			CheckboxColored("Error loading file"u8, GetColor(ModFileType.Error), ref _showErrors, errorDesc);
 
 			if (ImGui.BeginChild("table_child"))
 			{

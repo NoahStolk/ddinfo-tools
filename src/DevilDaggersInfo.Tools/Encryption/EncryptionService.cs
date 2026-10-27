@@ -4,7 +4,8 @@ using DevilDaggersInfo.Tools.Utils;
 namespace DevilDaggersInfo.Tools.Encryption;
 
 /// <summary>
-/// Encrypts using the secrets in the embedded <c>encryption.ini</c> resource. That file is not in the repository; CI writes it before publishing, so local builds fall back to <see cref="DummyEncryptionService" />.
+/// Encrypts using the secrets in the embedded <c>encryption.ini</c> resource.
+/// That file is not in the repository; CI writes it before publishing, so local builds fall back to <see cref="DummyEncryptionService" />.
 /// </summary>
 internal sealed class EncryptionService : IEncryptionService
 {

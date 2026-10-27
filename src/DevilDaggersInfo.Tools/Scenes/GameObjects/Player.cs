@@ -5,7 +5,10 @@ namespace DevilDaggersInfo.Tools.Scenes.GameObjects;
 
 internal sealed class Player(ReplaySimulation movementTimeline)
 {
-	private static readonly Quaternion _rotationOffset = Quaternion.CreateFromAxisAngle(Vector3.UnitX, MathF.PI / 2) * Quaternion.CreateFromAxisAngle(Vector3.UnitY, MathF.PI) * Quaternion.CreateFromAxisAngle(Vector3.UnitZ, MathF.PI);
+	private static readonly Quaternion _rotationOffset =
+		Quaternion.CreateFromAxisAngle(Vector3.UnitX, MathF.PI / 2) *
+		Quaternion.CreateFromAxisAngle(Vector3.UnitY, MathF.PI) *
+		Quaternion.CreateFromAxisAngle(Vector3.UnitZ, MathF.PI);
 
 	public Quaternion Rotation { get; private set; }
 	public Vector3 Position { get; private set; }

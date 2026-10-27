@@ -93,6 +93,9 @@ internal sealed class PracticeLogic(PopupManager popupManager, UserSettings user
 		if (!survivalFileWatcher.Exists)
 			return false;
 
-		return handLevel == survivalFileWatcher.HandLevel && additionalGems == survivalFileWatcher.AdditionalGems && Math.Abs(timerStart - survivalFileWatcher.TimerStart) < PracticeDataConstants.TimerStartTolerance;
+		return
+			handLevel == survivalFileWatcher.HandLevel &&
+			additionalGems == survivalFileWatcher.AdditionalGems &&
+			Math.Abs(timerStart - survivalFileWatcher.TimerStart) < PracticeDataConstants.TimerStartTolerance;
 	}
 }

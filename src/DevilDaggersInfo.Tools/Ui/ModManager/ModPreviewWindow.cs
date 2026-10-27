@@ -94,10 +94,10 @@ internal sealed class ModPreviewWindow(ModManagerState modManagerState, ModsDire
 
 			modManagerState.DisplayedTocEntries = sorting switch
 			{
-				0 => sortAscending ? modManagerState.DisplayedTocEntries.OrderBy(c => c.Name.ToLower()).ToList() : modManagerState.DisplayedTocEntries.OrderByDescending(c => c.Name.ToLower()).ToList(),
-				1 => sortAscending ? modManagerState.DisplayedTocEntries.OrderBy(c => c.AssetType).ToList() : modManagerState.DisplayedTocEntries.OrderByDescending(c => c.AssetType).ToList(),
-				2 => sortAscending ? modManagerState.DisplayedTocEntries.OrderBy(c => AssetContainer.IsProhibited(c.AssetType, c.Name)).ToList() : modManagerState.DisplayedTocEntries.OrderByDescending(c => AssetContainer.IsProhibited(c.AssetType, c.Name)).ToList(),
-				3 => sortAscending ? modManagerState.DisplayedTocEntries.OrderBy(c => c.Size).ToList() : modManagerState.DisplayedTocEntries.OrderByDescending(c => c.Size).ToList(),
+				0 => Sort(sortAscending, c => c.Name.ToLower()),
+				1 => Sort(sortAscending, c => c.AssetType),
+				2 => Sort(sortAscending, c => AssetContainer.IsProhibited(c.AssetType, c.Name)),
+				3 => Sort(sortAscending, c => c.Size),
 				_ => throw new InvalidOperationException($"Invalid sorting column '{sorting}'."),
 			};
 
@@ -135,6 +135,13 @@ internal sealed class ModPreviewWindow(ModManagerState modManagerState, ModsDire
 		}
 
 		ImGui.EndTable();
+	}
+
+	private List<ModBinaryTocEntry> Sort<T>(bool sortAscending, Func<ModBinaryTocEntry, T> keySelector)
+	{
+		return sortAscending
+			? [.. modManagerState.DisplayedTocEntries.OrderBy(keySelector)]
+			: [.. modManagerState.DisplayedTocEntries.OrderByDescending(keySelector)];
 	}
 
 	private static void ColumnTextRight(ReadOnlySpan<byte> label)
