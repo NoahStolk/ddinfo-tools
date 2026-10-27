@@ -218,7 +218,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() - spacingY);
 
-			ImGui.PushStyleColor(ImGuiCol.Button, Color.Green with { A = 111 });
+			ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 1, 0, 0.43f));
 			ImGui.Button("##drop", new Vector2(templateWidth - 96, dropAreaHeight));
 			ImGui.PopStyleColor();
 

@@ -75,7 +75,7 @@ internal sealed class LeaderboardChild(
 		if (survivalFileWatcher.SpawnsetName == data.Leaderboard.SpawnsetName)
 		{
 			ImGui.SameLine();
-			ImGui.TextColored(Color.Green, "Current spawnset");
+			ImGui.TextColored(new Vector4(0, 1, 0, 1), "Current spawnset");
 		}
 
 		if (_selectedCustomEntry != null)
@@ -184,7 +184,7 @@ internal sealed class LeaderboardChild(
 
 		ImGui.TableNextColumn();
 
-		ImGui.TextColored(isCurrentPlayer ? Color.Green : Color.White, ce.PlayerName);
+		ImGui.TextColored(isCurrentPlayer ? new Vector4(0, 1, 0, 1) : Color.White, ce.PlayerName);
 		ImGui.TableNextColumn();
 
 		Color daggerColor = CustomLeaderboardDaggerUtils.GetColor(ce.CustomLeaderboardDagger);

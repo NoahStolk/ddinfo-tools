@@ -48,7 +48,7 @@ internal sealed class DebugWindow(
 		if (ImGui.Begin("Debug"))
 		{
 			ImGui.TextColored(nativeFileDialog.DialogOpen ? Color.White : Color.Gray(0.4f), nativeFileDialog.DialogOpen ? "Native dialog open" : "Native dialog closed");
-			ImGui.TextColored(encryptionService.IsAvailable ? Color.Green : Color.Red, encryptionService.IsAvailable ? "Encryption available" : "Encryption unavailable");
+			ImGui.TextColored(encryptionService.IsAvailable ? new Vector4(0, 1, 0, 1) : Color.Red, encryptionService.IsAvailable ? "Encryption available" : "Encryption unavailable");
 
 			if (ImGui.CollapsingHeader("Popup debug info"))
 			{
@@ -240,7 +240,7 @@ internal sealed class DebugWindow(
 			> 1_000 => new Vector4(1, 0.5f, 0, 1),
 			> 500 => new Vector4(1, 1, 0, 1),
 			> 0 => new Color(255, 255, 127, 255),
-			_ => Color.Green,
+			_ => new Vector4(0, 1, 0, 1),
 		};
 		AddText("Heap alloc bytes since last frame"u8, Inline.Utf8(allocatedBytesDiff), color);
 		_previousAllocatedBytes = allocatedBytes;

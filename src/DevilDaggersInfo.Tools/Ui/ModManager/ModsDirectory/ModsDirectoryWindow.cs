@@ -207,7 +207,7 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 					if (modFile.ProhibitedAssetCount.Value > 0)
 						ImGui.TextColored(new Vector4(1, 0.5f, 0, 1), Inline.Utf8($"Prohibited ({modFile.ProhibitedAssetCount.Value} of {modFile.AssetCount.Value})"));
 					else
-						ImGui.TextColored(Color.Green, "OK");
+						ImGui.TextColored(new Vector4(0, 1, 0, 1), "OK");
 
 					if (ImGui.IsItemHovered())
 						ImGui.SetTooltip(Inline.Utf8($"{modFile.ProhibitedAssetCount.Value} out of {modFile.AssetCount.Value} assets prohibited"));

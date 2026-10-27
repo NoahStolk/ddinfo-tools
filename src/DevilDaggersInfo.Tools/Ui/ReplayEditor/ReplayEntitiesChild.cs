@@ -132,7 +132,7 @@ internal sealed class ReplayEntitiesChild(ResourceManager resourceManager)
 		ImGui.TableNextColumn();
 		ImGui.Text(Inline.Utf8($"{TimeUtils.TickToTime(enemyHitLog.SpawnTick, startTime):0.0000} ({enemyHitLog.SpawnTick})"));
 		ImGui.TableNextColumn();
-		ImGui.TextColored(Color.Green, "Spawn");
+		ImGui.TextColored(new Vector4(0, 1, 0, 1), "Spawn");
 		ImGui.TableNextColumn();
 		ImGui.Text("-");
 		ImGui.TableNextColumn();

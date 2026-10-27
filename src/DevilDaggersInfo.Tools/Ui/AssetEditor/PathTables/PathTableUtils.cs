@@ -29,7 +29,7 @@ internal static class PathTableUtils
 		if (assetInfo.IsProhibited)
 			ImGui.TextColored(new Vector4(1, 0.5f, 0, 1), "Prohibited");
 		else
-			ImGui.TextColored(Color.Green, "OK");
+			ImGui.TextColored(new Vector4(0, 1, 0, 1), "OK");
 	}
 
 	public static T? Find<T>(List<T> list, string name)

@@ -180,7 +180,7 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 			ImGui.Image(resourceManager.GameResources.IconMaskGemTexture.Id, iconSize, Color.Red);
 			RenderValue("Gems collected"u8, Inline.Utf8(b.GemsCollected), Color.Red, _gemsCollectedIntensity);
 			RenderValue("Gems despawned"u8, Inline.Utf8(b.GemsDespawned), Color.Gray(0.6f), _gemsDespawnedIntensity);
-			RenderValue("Gems eaten"u8, Inline.Utf8(b.GemsEaten), Color.Green, _gemsEatenIntensity);
+			RenderValue("Gems eaten"u8, Inline.Utf8(b.GemsEaten), new Vector4(0, 1, 0, 1), _gemsEatenIntensity);
 			RenderValue("Gems total"u8, Inline.Utf8(b.GemsTotal), Color.Red, _gemsTotalIntensity);
 
 			ImGui.Spacing();
@@ -189,7 +189,7 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 			RenderValue("Homing eaten"u8, Inline.Utf8(b.HomingEaten), Color.Red, _homingEatenIntensity);
 
 			ImGui.Spacing();
-			ImGui.Image(resourceManager.GameResources.IconMaskCrosshairTexture.Id, iconSize, Color.Green);
+			ImGui.Image(resourceManager.GameResources.IconMaskCrosshairTexture.Id, iconSize, new Vector4(0, 1, 0, 1));
 			RenderValue("Daggers fired"u8, Inline.Utf8(b.DaggersFired), new Vector4(1, 1, 0, 1), _daggersFiredIntensity);
 			RenderValue("Daggers hit"u8, Inline.Utf8(b.DaggersHit), Color.Red, _daggersHitIntensity);
 			RenderValue("Accuracy"u8, Inline.Utf8(GetAccuracy(b), "0.00%"), new Vector4(1, 0.5f, 0, 1), _accuracyIntensity);

@@ -147,7 +147,7 @@ internal sealed class GraphsChild(FontService fontService)
 				AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Color.White);
 				AddTooltipText("Gems Collected"u8, Inline.Utf8(gemsCollected), Color.Red);
 				AddTooltipText("Gems Despawned"u8, Inline.Utf8(gemsDespawned), Color.Gray(0.5f));
-				AddTooltipText("Gems Eaten"u8, Inline.Utf8(gemsEaten), Color.Green);
+				AddTooltipText("Gems Eaten"u8, Inline.Utf8(gemsEaten), new Vector4(0, 1, 0, 1));
 				AddTooltipText("Gems Total"u8, Inline.Utf8(gemsTotal), new Color(127, 0, 0, 255));
 
 				ImGui.EndTooltip();
@@ -240,7 +240,7 @@ internal sealed class GraphsChild(FontService fontService)
 		return Math.Clamp((int)(index + statsData.TimerStart), statsData.TimerStart, statsData.TimerEnd);
 	}
 
-	private static void AddTooltipText(ReadOnlySpan<byte> textLeft, ReadOnlySpan<byte> textRight, Color textColor)
+	private static void AddTooltipText(ReadOnlySpan<byte> textLeft, ReadOnlySpan<byte> textRight, Vector4 textColor)
 	{
 		float posX = ImGui.GetCursorPosX();
 

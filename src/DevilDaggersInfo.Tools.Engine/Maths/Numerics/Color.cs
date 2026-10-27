@@ -8,7 +8,6 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 	public static Color White { get; } = new(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
 
 	public static Color Red { get; } = new(byte.MaxValue, byte.MinValue, byte.MinValue, byte.MaxValue);
-	public static Color Green { get; } = new(byte.MinValue, byte.MaxValue, byte.MinValue, byte.MaxValue);
 
 	public static implicit operator Vector3(Color color)
 	{

@@ -18,7 +18,7 @@ internal static class CustomLeaderboardCriteriaTypeExtensions
 			{
 				CustomLeaderboardCriteriaType.GemsCollected => Color.Red,
 				CustomLeaderboardCriteriaType.GemsDespawned => Color.Gray(0.3f),
-				CustomLeaderboardCriteriaType.GemsEaten => Color.Green,
+				CustomLeaderboardCriteriaType.GemsEaten => new Vector4(0, 1, 0, 1),
 				CustomLeaderboardCriteriaType.EnemiesKilled => new Vector4(1, 0.5f, 0, 1),
 				CustomLeaderboardCriteriaType.DaggersFired => new Vector4(1, 1, 0, 1),
 				CustomLeaderboardCriteriaType.DaggersHit => new Vector4(1, 0.5f, 0, 1),

@@ -124,7 +124,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGui.Image(_resourceManager.GameResources.IconMaskCrosshairTexture.Id, _iconSize, Color.Green);
+		ImGui.Image(_resourceManager.GameResources.IconMaskCrosshairTexture.Id, _iconSize, new Vector4(0, 1, 0, 1));
 
 		if (ImGui.BeginTable("Daggers", 2))
 		{
@@ -166,7 +166,7 @@ internal sealed class UploadResult
 
 	private void RenderHighscore(GetUploadResponseHighscore highscore)
 	{
-		if (!RenderHeader(Color.Green, "NEW HIGHSCORE!"))
+		if (!RenderHeader(new Vector4(0, 1, 0, 1), "NEW HIGHSCORE!"))
 			return;
 
 		ImGui.Indent(_indentation);
@@ -326,7 +326,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGui.Image(_resourceManager.GameResources.IconMaskCrosshairTexture.Id, _iconSize, Color.Green);
+		ImGui.Image(_resourceManager.GameResources.IconMaskCrosshairTexture.Id, _iconSize, new Vector4(0, 1, 0, 1));
 
 		if (ImGui.BeginTable("Daggers", 3))
 		{
@@ -367,11 +367,11 @@ internal sealed class UploadResult
 		int comparison = scoreState.ValueDifference.CompareTo(T.Zero);
 		if (!higherIsBetter)
 			comparison = -comparison;
-		Color color = comparison switch
+		Vector4 color = comparison switch
 		{
 			-1 => Color.Red,
 			0 => Color.White,
-			1 => Color.Green,
+			1 => new Vector4(0, 1, 0, 1),
 			_ => throw new UnreachableException(),
 		};
 
@@ -390,11 +390,11 @@ internal sealed class UploadResult
 	private static void AddLevelUpScoreState(ReadOnlySpan<byte> label, GetScoreState<double> scoreState)
 	{
 		int comparison = -scoreState.ValueDifference.CompareTo(0);
-		Color color = comparison switch
+		Vector4 color = comparison switch
 		{
 			-1 => Color.Red,
 			0 => Color.White,
-			1 => Color.Green,
+			1 => new Vector4(0, 1, 0, 1),
 			_ => throw new UnreachableException(),
 		};
 

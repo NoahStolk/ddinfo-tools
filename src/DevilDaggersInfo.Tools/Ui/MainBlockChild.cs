@@ -42,7 +42,7 @@ internal sealed class MainBlockChild(GameMemoryServiceWrapper gameMemoryServiceW
 				ImGui.TextColored(Color.Red, "Devil Daggers is not running"u8);
 				return;
 			default:
-				ImGui.TextColored(Color.Green, "Scanned"u8);
+				ImGui.TextColored(new Vector4(0, 1, 0, 1), "Scanned"u8);
 				break;
 		}
 

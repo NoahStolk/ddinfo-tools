@@ -128,7 +128,7 @@ internal sealed class ModPreviewWindow(ModManagerState modManagerState, ModsDire
 			if (AssetContainer.IsProhibited(tocEntry.AssetType, tocEntry.Name))
 				ImGui.TextColored(new Vector4(1, 0.5f, 0, 1), "Prohibited");
 			else
-				ImGui.TextColored(Color.Green, "OK");
+				ImGui.TextColored(new Vector4(0, 1, 0, 1), "OK");
 
 			ImGui.TableNextColumn();
 			ColumnTextRight(FileSizeUtils.Format(tocEntry.Size));

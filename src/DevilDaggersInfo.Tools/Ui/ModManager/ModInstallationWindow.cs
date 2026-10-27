@@ -121,7 +121,7 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 					else if (!effectiveAsset.TocEntry.IsEnabled)
 						ImGui.TextColored(Color.Gray(0.4f), "Disabled");
 					else
-						ImGui.TextColored(Color.Green, "OK");
+						ImGui.TextColored(new Vector4(0, 1, 0, 1), "OK");
 
 					ImGui.PopStyleColor();
 				}
