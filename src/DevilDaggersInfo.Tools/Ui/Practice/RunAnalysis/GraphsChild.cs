@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Tools.Engine.Maths;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis.Data;
 using Hexa.NET.ImGui;
@@ -148,7 +147,7 @@ internal sealed class GraphsChild(FontService fontService)
 				AddTooltipText("Gems Collected"u8, Inline.Utf8(gemsCollected), new Vector4(1, 0, 0, 1));
 				AddTooltipText("Gems Despawned"u8, Inline.Utf8(gemsDespawned), new Vector4(0.5f, 0.5f, 0.5f, 1));
 				AddTooltipText("Gems Eaten"u8, Inline.Utf8(gemsEaten), new Vector4(0, 1, 0, 1));
-				AddTooltipText("Gems Total"u8, Inline.Utf8(gemsTotal), new Color(127, 0, 0, 255));
+				AddTooltipText("Gems Total"u8, Inline.Utf8(gemsTotal), new Vector4(0.5f, 0, 0, 1));
 
 				ImGui.EndTooltip();
 			}

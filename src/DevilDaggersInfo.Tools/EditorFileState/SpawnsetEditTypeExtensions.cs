@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.EditorFileState;
 
@@ -47,7 +48,7 @@ internal static class SpawnsetEditTypeExtensions
 			};
 		}
 
-		public Color GetColor()
+		public Vector4 GetColor()
 		{
 			return spawnsetEditType switch
 			{

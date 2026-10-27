@@ -2,7 +2,6 @@ using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.Encryption;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
@@ -239,7 +238,7 @@ internal sealed class DebugWindow(
 			> 10_000 => new Vector4(1, 0, 0, 1),
 			> 1_000 => new Vector4(1, 0.5f, 0, 1),
 			> 500 => new Vector4(1, 1, 0, 1),
-			> 0 => new Color(255, 255, 127, 255),
+			> 0 => new Vector4(1, 1, 0.5f, 1),
 			_ => new Vector4(0, 1, 0, 1),
 		};
 		AddText("Heap alloc bytes since last frame"u8, Inline.Utf8(allocatedBytesDiff), color);
