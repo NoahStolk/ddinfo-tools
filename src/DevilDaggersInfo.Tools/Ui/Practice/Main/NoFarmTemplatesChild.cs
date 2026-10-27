@@ -63,7 +63,7 @@ internal sealed class NoFarmTemplatesChild(PracticeLogic practiceLogic)
 		if (ImGui.BeginChild(noFarmTemplate.Name, buttonSize, ImGuiChildFlags.Borders))
 		{
 			bool hover = ImGui.IsWindowHovered();
-			ImGui.PushStyleColor(ImGuiCol.ChildBg, noFarmTemplate.Color with { W = (byte)(hover ? backgroundAlpha + 0.0625f : backgroundAlpha) });
+			ImGui.PushStyleColor(ImGuiCol.ChildBg, noFarmTemplate.Color with { W = hover ? backgroundAlpha + 0.0625f : backgroundAlpha });
 
 			if (ImGui.BeginChild(Inline.Utf8($"{noFarmTemplate.Name}Child"), buttonSize, ImGuiChildFlags.None, ImGuiWindowFlags.NoInputs))
 			{

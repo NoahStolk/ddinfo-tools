@@ -75,7 +75,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 		if (ImGui.BeginChild(buttonName, buttonSize, ImGuiChildFlags.Borders))
 		{
 			bool hover = ImGui.IsWindowHovered();
-			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { W = (byte)(hover ? backgroundAlpha + 0.0625f : backgroundAlpha) });
+			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { W = hover ? backgroundAlpha + 0.0625f : backgroundAlpha });
 
 			// The id is scoped to the enclosing child window, which is already unique per template, so a constant is
 			// enough. Deriving it from buttonName would interpolate a slice of the Inline buffer back into itself.

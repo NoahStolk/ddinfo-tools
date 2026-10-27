@@ -69,7 +69,7 @@ internal sealed class EndLoopTemplatesChild(PracticeLogic practiceLogic, Content
 		if (ImGui.BeginChild(Inline.Utf8($"Wave{waveIndex + 1}"), buttonSize, ImGuiChildFlags.Borders))
 		{
 			bool hover = ImGui.IsWindowHovered();
-			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { W = (byte)(hover ? backgroundAlpha + 0.0625f : backgroundAlpha) });
+			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { W = hover ? backgroundAlpha + 0.0625f : backgroundAlpha });
 
 			if (ImGui.BeginChild(Inline.Utf8($"WaveChild{waveIndex + 1}"), buttonSize, ImGuiChildFlags.None, ImGuiWindowFlags.NoInputs))
 			{
