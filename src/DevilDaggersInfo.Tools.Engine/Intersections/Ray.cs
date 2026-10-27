@@ -10,8 +10,6 @@ public readonly record struct Ray(Vector3 Position, Vector3 Direction)
 
 		float? tMin = null, tMax = null;
 
-		Axis axis = Axis.X;
-
 		if (Math.Abs(Direction.X) < epsilon)
 		{
 			if (Position.X < aabbMin.X || Position.X > aabbMax.X)
@@ -43,10 +41,7 @@ public readonly record struct Ray(Vector3 Position, Vector3 Direction)
 				return null;
 
 			if (!tMin.HasValue || tMinY > tMin)
-			{
 				tMin = tMinY;
-				axis = Axis.Y;
-			}
 
 			if (!tMax.HasValue || tMaxY < tMax)
 				tMax = tMaxY;
@@ -69,10 +64,7 @@ public readonly record struct Ray(Vector3 Position, Vector3 Direction)
 				return null;
 
 			if (!tMin.HasValue || tMinZ > tMin)
-			{
 				tMin = tMinZ;
-				axis = Axis.Z;
-			}
 
 			if (!tMax.HasValue || tMaxZ < tMax)
 				tMax = tMaxZ;
@@ -82,12 +74,12 @@ public readonly record struct Ray(Vector3 Position, Vector3 Direction)
 		{
 			// Having a positive tMax and a negative tMin means the ray is inside the box.
 			// We expect the intersection distance to be 0 in that case.
-			< 0 when tMax > 0 => new RayVsAabbIntersection(0, axis),
+			< 0 when tMax > 0 => new RayVsAabbIntersection(0),
 
 			// A negative tMin means that the intersection point is behind the ray's origin.
 			// We discard these as not hitting the box.
 			< 0 => null,
-			_ => tMin.HasValue ? new RayVsAabbIntersection(tMin.Value, axis) : null,
+			_ => tMin.HasValue ? new RayVsAabbIntersection(tMin.Value) : null,
 		};
 	}
 }

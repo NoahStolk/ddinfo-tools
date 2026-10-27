@@ -54,7 +54,6 @@ public sealed class GpuMesh : IDisposable
 		gl.EnableVertexAttribArray(1);
 		gl.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, (uint)sizeof(Vertex), (void*)(3 * sizeof(float)));
 
-		// TODO: We don't do anything with normals here.
 		gl.EnableVertexAttribArray(2);
 		gl.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, (uint)sizeof(Vertex), (void*)(5 * sizeof(float)));
 
