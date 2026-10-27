@@ -15,15 +15,15 @@ internal static class EntityTypeExtensions
 	{
 		public Vector4 GetColor()
 		{
-			return entityType switch
+			Vector3 color = entityType switch
 			{
 				EntityType.Level1Dagger => UpgradesV3_2.Level1.Color,
 				EntityType.Level2Dagger => UpgradesV3_2.Level2.Color,
-				EntityType.Level3Dagger => new Core.Wiki.Structs.Color(0xFF, 0xDD, 0x00),
+				EntityType.Level3Dagger => new Vector3(1, 0xDD / 255f, 0),
 				EntityType.Level3HomingDagger => UpgradesV3_2.Level3.Color,
-				EntityType.Level4Dagger => new Core.Wiki.Structs.Color(0xBB, 0x00, 0x66),
+				EntityType.Level4Dagger => new Vector3(0xBB / 255f, 0, 0x66 / 255f),
 				EntityType.Level4HomingDagger => UpgradesV3_2.Level4.Color,
-				EntityType.Level4HomingSplash => new Core.Wiki.Structs.Color(0xFF, 0x77, 0xFF),
+				EntityType.Level4HomingSplash => new Vector3(1, 0x77 / 255f, 1),
 				EntityType.Squid1 => EnemiesV3_2.Squid1.Color,
 				EntityType.Squid2 => EnemiesV3_2.Squid2.Color,
 				EntityType.Squid3 => EnemiesV3_2.Squid3.Color,
@@ -40,8 +40,9 @@ internal static class EntityTypeExtensions
 				EntityType.SpiderEgg => EnemiesV3_2.SpiderEgg1.Color,
 				EntityType.Leviathan => EnemiesV3_2.Leviathan.Color,
 				EntityType.Thorn => EnemiesV3_2.Thorn.Color,
-				_ => new Core.Wiki.Structs.Color(191, 0, 255),
+				_ => new Vector3(191 / 255f, 0, 1),
 			};
+			return color.ToVector4();
 		}
 
 		public ReadOnlySpan<byte> AsUtf8ShortSpan()

@@ -12,13 +12,13 @@ internal sealed class NoFarmTemplatesChild(PracticeLogic practiceLogic)
 {
 	private readonly List<NoFarmTemplate> _noFarmTemplates =
 	[
-		new("First Spider I & Squid II", EnemiesV3_2.Squid2.Color, HandLevel.Level1, 8, 39),
-		new("First Centipede", EnemiesV3_2.Centipede.Color, HandLevel.Level2, 25, 114),
-		new("Centipede & first triple Spider Is", EnemiesV3_2.Spider1.Color, HandLevel.Level3, 11, 174),
-		new("Six Squid Is", EnemiesV3_2.Squid3.Color, HandLevel.Level3, 57, 229),
-		new("Triple Gigapedes", EnemiesV3_2.Gigapede.Color, HandLevel.Level3, 81, 259),
-		new("Leviathan", EnemiesV3_2.Leviathan.Color, HandLevel.Level4, 105, 350),
-		new("Post Orb", EnemiesV3_2.TheOrb.Color, HandLevel.Level4, 129, 397),
+		new("First Spider I & Squid II", EnemiesV3_2.Squid2.Color.ToVector4(), HandLevel.Level1, 8, 39),
+		new("First Centipede", EnemiesV3_2.Centipede.Color.ToVector4(), HandLevel.Level2, 25, 114),
+		new("Centipede & first triple Spider Is", EnemiesV3_2.Spider1.Color.ToVector4(), HandLevel.Level3, 11, 174),
+		new("Six Squid Is", EnemiesV3_2.Squid3.Color.ToVector4(), HandLevel.Level3, 57, 229),
+		new("Triple Gigapedes", EnemiesV3_2.Gigapede.Color.ToVector4(), HandLevel.Level3, 81, 259),
+		new("Leviathan", EnemiesV3_2.Leviathan.Color.ToVector4(), HandLevel.Level4, 105, 350),
+		new("Post Orb", EnemiesV3_2.TheOrb.Color.ToVector4(), HandLevel.Level4, 129, 397),
 	];
 
 	public void Render(Vector2 templateContainerSize, Vector2 templateListSize, float templateWidth)

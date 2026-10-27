@@ -2,6 +2,7 @@ using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
@@ -209,7 +210,7 @@ internal sealed class LeaderboardChild(
 		ImGui.TableNextColumn();
 
 		Death? death = Deaths.GetDeathByType(GameConstants.CurrentVersion, ce.DeathType);
-		ImGui.TextColored(death?.Color ?? Vector4.One, death?.Name ?? "Unknown");
+		ImGui.TextColored(death?.Color.ToVector4() ?? Vector4.One, death?.Name ?? "Unknown");
 		ImGui.TableNextColumn();
 
 		TextDaggerColored(Inline.Utf8(ce.HomingStored), _isHomingStored);

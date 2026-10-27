@@ -10,22 +10,23 @@ internal static class EventTypeExtensions
 	{
 		public Vector4 GetColor()
 		{
-			return eventType switch
+			Vector3 color = eventType switch
 			{
 				EventType.BoidSpawn => EnemiesV3_2.Skull4.Color,
-				EventType.DaggerSpawn => new Vector4(1, 0, 1, 1),
-				EventType.End or EventType.Gem => new Vector4(1, 0, 0, 1),
-				EventType.EntityOrientation or EventType.EntityPosition or EventType.EntityTarget => new Vector4(1, 1, 0, 1),
-				EventType.Hit => new Vector4(1, 0.5f, 0, 1),
+				EventType.DaggerSpawn => new Vector3(1, 0, 1),
+				EventType.End or EventType.Gem => new Vector3(1, 0, 0),
+				EventType.EntityOrientation or EventType.EntityPosition or EventType.EntityTarget => new Vector3(1, 1, 0),
+				EventType.Hit => new Vector3(1, 0.5f, 0),
 				EventType.LeviathanSpawn => EnemiesV3_2.Leviathan.Color,
 				EventType.PedeSpawn => EnemiesV3_2.Gigapede.Color,
 				EventType.SpiderEggSpawn => EnemiesV3_2.SpiderEgg1.Color,
 				EventType.SpiderSpawn => EnemiesV3_2.Spider2.Color,
 				EventType.SquidSpawn => EnemiesV3_2.Squid3.Color,
 				EventType.ThornSpawn => EnemiesV3_2.Thorn.Color,
-				EventType.Transmute => new Vector4(0.75f, 0, 0, 1),
-				_ => Vector4.One,
+				EventType.Transmute => new Vector3(0.75f, 0, 0),
+				_ => Vector3.One,
 			};
+			return color.ToVector4();
 		}
 
 		public ReadOnlySpan<byte> AsUtf8DisplaySpan()

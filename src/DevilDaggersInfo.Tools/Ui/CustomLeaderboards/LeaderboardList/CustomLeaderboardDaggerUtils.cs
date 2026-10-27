@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Core.Wiki;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using System.Diagnostics;
 using System.Numerics;
@@ -9,7 +10,7 @@ internal static class CustomLeaderboardDaggerUtils
 {
 	public static Vector4 GetColor(CustomLeaderboardDagger? customLeaderboardDagger)
 	{
-		return customLeaderboardDagger switch
+		Vector3 color = customLeaderboardDagger switch
 		{
 			CustomLeaderboardDagger.Default => DaggerColors.Default,
 			CustomLeaderboardDagger.Bronze => DaggerColors.Bronze,
@@ -17,8 +18,9 @@ internal static class CustomLeaderboardDaggerUtils
 			CustomLeaderboardDagger.Golden => DaggerColors.Golden,
 			CustomLeaderboardDagger.Devil => DaggerColors.Devil,
 			CustomLeaderboardDagger.Leviathan => DaggerColors.Leviathan,
-			null => new Core.Wiki.Structs.Color(127, 143, 127),
+			null => new Vector3(0.5f, 0.56f, 0.5f),
 			_ => throw new UnreachableException(),
 		};
+		return color.ToVector4();
 	}
 }

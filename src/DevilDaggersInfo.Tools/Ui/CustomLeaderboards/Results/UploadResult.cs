@@ -139,7 +139,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGui.Image(_resourceManager.GameResources.IconMaskSkullTexture.Id, _iconSize, EnemiesV3_2.Skull4.Color);
+		ImGui.Image(_resourceManager.GameResources.IconMaskSkullTexture.Id, _iconSize, EnemiesV3_2.Skull4.Color.ToVector4());
 
 		if (ImGui.BeginTable("Enemies", 2))
 		{
@@ -347,7 +347,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGui.Image(_resourceManager.GameResources.IconMaskSkullTexture.Id, _iconSize, EnemiesV3_2.Skull4.Color);
+		ImGui.Image(_resourceManager.GameResources.IconMaskSkullTexture.Id, _iconSize, EnemiesV3_2.Skull4.Color.ToVector4());
 
 		if (ImGui.BeginTable("Enemies", 3))
 		{
@@ -421,7 +421,7 @@ internal sealed class UploadResult
 		ImGui.Text("Death");
 
 		ImGui.TableNextColumn();
-		ImGui.TextColored(death?.Color ?? Vector4.One, death?.Name ?? "Unknown");
+		ImGui.TextColored(death?.Color.ToVector4() ?? Vector4.One, death?.Name ?? "Unknown");
 	}
 
 	private static void ConfigureColumns(int count)

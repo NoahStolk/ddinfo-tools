@@ -9,7 +9,7 @@ internal static class HandLevelExtensions
 {
 	public static Vector4 GetColor(this HandLevel handLevel)
 	{
-		return handLevel switch
+		Vector3 color = handLevel switch
 		{
 			HandLevel.Level1 => UpgradeColors.Level1,
 			HandLevel.Level2 => UpgradeColors.Level2,
@@ -17,5 +17,6 @@ internal static class HandLevelExtensions
 			HandLevel.Level4 => UpgradeColors.Level4,
 			_ => throw new UnreachableException(),
 		};
+		return color.ToVector4();
 	}
 }

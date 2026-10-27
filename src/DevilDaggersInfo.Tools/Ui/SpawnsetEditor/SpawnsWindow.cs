@@ -138,7 +138,7 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 	{
 		bool isCurrent = _selectedEnemyType == enemyType;
 		float multiplier = isCurrent ? 1 : 0.2f;
-		Vector4 enemyColor = enemyType.GetColor(GameVersion.V3_2) * new Vector4(multiplier, multiplier, multiplier, 1);
+		Vector4 enemyColor = (enemyType.GetColor(GameVersion.V3_2) * new Vector3(multiplier)).ToVector4();
 
 		ImGui.PushStyleColor(ImGuiCol.Text, isCurrent ? Vector4.ReadableColorForBrightness(enemyColor) : new Vector4(0.5f, 0.5f, 0.5f, 1));
 		ImGui.PushStyleColor(ImGuiCol.Button, enemyColor);
@@ -250,7 +250,7 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 
 				ImGui.TableNextColumn();
 
-				ImGui.TextColored(spawn.EnemyType.GetColor(GameConstants.CurrentVersion), spawn.EnemyType.AsUtf8Span());
+				ImGui.TextColored(spawn.EnemyType.GetColor(GameConstants.CurrentVersion).ToVector4(), spawn.EnemyType.AsUtf8Span());
 				ImGui.TableNextColumn();
 
 				ImGui.Text(Inline.Utf8(spawn.Seconds, StringFormats.TimeFormat));
@@ -286,7 +286,7 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 			for (int i = 0; i < EnemyTypeGen.Values.Count; i++)
 			{
 				EnemyType enemyType = EnemyTypeGen.Values[i];
-				Vector4 color = enemyType.GetColor(GameConstants.CurrentVersion);
+				Vector4 color = enemyType.GetColor(GameConstants.CurrentVersion).ToVector4();
 				ImGui.PushStyleColor(ImGuiCol.Text, Vector4.ReadableColorForBrightness(color));
 				ImGui.PushStyleColor(ImGuiCol.Button, color);
 				ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color + new Vector4(0.3f, 0.3f, 0.3f, 0));

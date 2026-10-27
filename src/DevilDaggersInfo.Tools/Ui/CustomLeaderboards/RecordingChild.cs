@@ -173,7 +173,7 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 			RenderValue("Level 2"u8, b.LevelUpTime2 == 0 ? "-"u8 : Inline.Utf8(b.LevelUpTime2, StringFormats.TimeFormat), UpgradesV3_2.Level2.Color, _level2Intensity);
 			RenderValue("Level 3"u8, b.LevelUpTime3 == 0 ? "-"u8 : Inline.Utf8(b.LevelUpTime3, StringFormats.TimeFormat), UpgradesV3_2.Level3.Color, _level3Intensity);
 			RenderValue("Level 4"u8, b.LevelUpTime4 == 0 ? "-"u8 : Inline.Utf8(b.LevelUpTime4, StringFormats.TimeFormat), UpgradesV3_2.Level4.Color, _level4Intensity);
-			RenderValue("Death"u8, Inline.Utf8(b.IsPlayerAlive ? "-" : GetDeath(b)?.Name ?? "?"), GetDeath(b)?.Color ?? Vector4.One, _deathIntensity);
+			RenderValue("Death"u8, Inline.Utf8(b.IsPlayerAlive ? "-" : GetDeath(b)?.Name ?? "?"), GetDeath(b)?.Color.ToVector4() ?? Vector4.One, _deathIntensity);
 
 			ImGui.Spacing();
 			ImGui.Image(resourceManager.GameResources.IconMaskGemTexture.Id, iconSize, new Vector4(1, 0, 0, 1));
@@ -194,7 +194,7 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 			RenderValue("Accuracy"u8, Inline.Utf8(GetAccuracy(b), "0.00%"), new Vector4(1, 0.5f, 0, 1), _accuracyIntensity);
 
 			ImGui.Spacing();
-			ImGui.Image(resourceManager.GameResources.IconMaskSkullTexture.Id, iconSize, EnemiesV3_2.Skull4.Color);
+			ImGui.Image(resourceManager.GameResources.IconMaskSkullTexture.Id, iconSize, EnemiesV3_2.Skull4.Color.ToVector4());
 			RenderValue("Enemies killed"u8, Inline.Utf8(b.EnemiesKilled), new Vector4(1, 0, 0, 1), _enemiesKilledIntensity);
 			RenderValue("Enemies alive"u8, Inline.Utf8(b.EnemiesAlive), new Vector4(1, 1, 0, 1), _enemiesAliveIntensity);
 
@@ -238,6 +238,11 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 		}
 
 		ImGui.EndChild();
+	}
+
+	private static void RenderValue(ReadOnlySpan<byte> label, ReadOnlySpan<byte> value, Vector3 color, float intensity)
+	{
+		RenderValue(label, value, color.ToVector4(), intensity);
 	}
 
 	private static void RenderValue(ReadOnlySpan<byte> label, ReadOnlySpan<byte> value, Vector4 color, float intensity)
