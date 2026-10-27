@@ -1,13 +1,13 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Wiki;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Extensions;
 
 internal static class HandLevelExtensions
 {
-	public static Color GetColor(this HandLevel handLevel)
+	public static Vector4 GetColor(this HandLevel handLevel)
 	{
 		return handLevel switch
 		{

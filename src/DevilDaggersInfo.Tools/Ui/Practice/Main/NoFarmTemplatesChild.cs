@@ -1,7 +1,6 @@
 using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Core.Wiki;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Practice.Main.Data;
 using Hexa.NET.ImGui;
@@ -54,17 +53,17 @@ internal sealed class NoFarmTemplatesChild(PracticeLogic practiceLogic)
 
 	private void RenderNoFarmTemplate(NoFarmTemplate noFarmTemplate, float templateWidth)
 	{
-		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(practiceLogic.IsActive(noFarmTemplate));
+		(float backgroundAlpha, float textAlpha) = PracticeWindow.GetAlpha(practiceLogic.IsActive(noFarmTemplate));
 
 		Span<byte> gemsOrHomingBuffer = stackalloc byte[32];
-		ReadOnlySpan<byte> gemsOrHomingText = PracticeWindow.GetGemsOrHomingText(noFarmTemplate.HandLevel, noFarmTemplate.AdditionalGems, gemsOrHomingBuffer, out Color gemColor);
+		ReadOnlySpan<byte> gemsOrHomingText = PracticeWindow.GetGemsOrHomingText(noFarmTemplate.HandLevel, noFarmTemplate.AdditionalGems, gemsOrHomingBuffer, out Vector4 gemColor);
 
 		Vector2 buttonSize = new(templateWidth, 48);
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
 		if (ImGui.BeginChild(noFarmTemplate.Name, buttonSize, ImGuiChildFlags.Borders))
 		{
 			bool hover = ImGui.IsWindowHovered();
-			ImGui.PushStyleColor(ImGuiCol.ChildBg, noFarmTemplate.Color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
+			ImGui.PushStyleColor(ImGuiCol.ChildBg, noFarmTemplate.Color with { W = (byte)(hover ? backgroundAlpha + 0.0625f : backgroundAlpha) });
 
 			if (ImGui.BeginChild(Inline.Utf8($"{noFarmTemplate.Name}Child"), buttonSize, ImGuiChildFlags.None, ImGuiWindowFlags.NoInputs))
 			{
@@ -78,15 +77,15 @@ internal sealed class NoFarmTemplatesChild(PracticeLogic practiceLogic)
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 8));
 
-				ImGui.TextColored(noFarmTemplate.Color with { A = textAlpha }, noFarmTemplate.Name);
+				ImGui.TextColored(noFarmTemplate.Color with { W = textAlpha }, noFarmTemplate.Name);
 				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(Inline.Utf8(noFarmTemplate.TimerStart, StringFormats.TimeFormat)).X - 8);
-				ImGui.TextColored(Color.White with { A = textAlpha }, Inline.Utf8(noFarmTemplate.TimerStart, StringFormats.TimeFormat));
+				ImGui.TextColored(Vector4.One with { W = textAlpha }, Inline.Utf8(noFarmTemplate.TimerStart, StringFormats.TimeFormat));
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 0));
 
-				ImGui.TextColored(noFarmTemplate.HandLevel.GetColor() with { A = textAlpha }, noFarmTemplate.HandLevel.AsUtf8Span());
+				ImGui.TextColored(noFarmTemplate.HandLevel.GetColor() with { W = textAlpha }, noFarmTemplate.HandLevel.AsUtf8Span());
 				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(gemsOrHomingText).X - 8);
-				ImGui.TextColored(gemColor with { A = textAlpha }, gemsOrHomingText);
+				ImGui.TextColored(gemColor with { W = textAlpha }, gemsOrHomingText);
 			}
 
 			ImGui.EndChild();

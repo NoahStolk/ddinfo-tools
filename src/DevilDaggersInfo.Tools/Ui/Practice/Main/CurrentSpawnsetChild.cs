@@ -52,7 +52,7 @@ internal sealed class CurrentSpawnsetChild(FontService fontService, SurvivalFile
 		ImGui.Text("Hand");
 
 		ImGui.TableNextColumn();
-		Color handColor = settings.HandLevel.GetColor();
+		Vector4 handColor = settings.HandLevel.GetColor();
 		ImGui.TextColored(handColor, FormatHandText(settings));
 
 		ImGui.TableNextColumn();

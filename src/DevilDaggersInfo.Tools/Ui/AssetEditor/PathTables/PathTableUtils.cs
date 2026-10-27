@@ -1,5 +1,4 @@
 using DevilDaggersInfo.Core.Asset;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Ui.AssetEditor.Data;
 using Hexa.NET.ImGui;
 using System.Numerics;

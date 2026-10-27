@@ -65,18 +65,18 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 		Vector2 buttonSize = new(templateWidth - 96, 48);
 		ReadOnlySpan<byte> buttonName = Inline.Utf8($"{customTemplate.HandLevel.AsUtf8Span()}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart}");
 
-		Color color = Color.White;
+		Vector4 color = Vector4.One;
 
 		Span<byte> gemsOrHomingBuffer = stackalloc byte[32];
-		ReadOnlySpan<byte> gemsOrHomingText = PracticeWindow.GetGemsOrHomingText(customTemplate.HandLevel, customTemplate.AdditionalGems, gemsOrHomingBuffer, out Color gemColor);
+		ReadOnlySpan<byte> gemsOrHomingText = PracticeWindow.GetGemsOrHomingText(customTemplate.HandLevel, customTemplate.AdditionalGems, gemsOrHomingBuffer, out Vector4 gemColor);
 
-		(byte backgroundAlpha, byte textAlpha) = PracticeWindow.GetAlpha(practiceLogic.IsActive(customTemplate));
+		(float backgroundAlpha, float textAlpha) = PracticeWindow.GetAlpha(practiceLogic.IsActive(customTemplate));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
 		if (ImGui.BeginChild(buttonName, buttonSize, ImGuiChildFlags.Borders))
 		{
 			bool hover = ImGui.IsWindowHovered();
-			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = (byte)(hover ? backgroundAlpha + 16 : backgroundAlpha) });
+			ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { W = (byte)(hover ? backgroundAlpha + 0.0625f : backgroundAlpha) });
 
 			// The id is scoped to the enclosing child window, which is already unique per template, so a constant is
 			// enough. Deriving it from buttonName would interpolate a slice of the Inline buffer back into itself.
@@ -92,17 +92,17 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 8));
 
-				ImGui.TextColored(color with { A = textAlpha }, string.IsNullOrWhiteSpace(customTemplate.Name) ? "<untitled>" : customTemplate.Name);
+				ImGui.TextColored(color with { W = textAlpha }, string.IsNullOrWhiteSpace(customTemplate.Name) ? "<untitled>" : customTemplate.Name);
 
 				ReadOnlySpan<byte> timerStartString = Inline.Utf8(customTemplate.TimerStart, StringFormats.TimeFormat);
 				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(timerStartString).X - 8);
-				ImGui.TextColored(Color.White with { A = textAlpha }, timerStartString);
+				ImGui.TextColored(Vector4.One with { W = textAlpha }, timerStartString);
 
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(8, 0));
 
-				ImGui.TextColored(customTemplate.HandLevel.GetColor() with { A = textAlpha }, customTemplate.HandLevel.AsUtf8Span());
+				ImGui.TextColored(customTemplate.HandLevel.GetColor() with { W = textAlpha }, customTemplate.HandLevel.AsUtf8Span());
 				ImGui.SameLine(windowWidth - ImGui.CalcTextSize(gemsOrHomingText).X - 8);
-				ImGui.TextColored(gemColor with { A = textAlpha }, gemsOrHomingText);
+				ImGui.TextColored(gemColor with { W = textAlpha }, gemsOrHomingText);
 			}
 
 			ImGui.EndChild();
