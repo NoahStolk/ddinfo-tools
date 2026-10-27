@@ -6,6 +6,7 @@ using DevilDaggersInfo.Tools.Scenes.GameObjects;
 using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Tools.User.Settings;
+using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
 using Silk.NET.GLFW;
 using System.Numerics;
@@ -19,7 +20,7 @@ internal sealed class ArenaEditorContext(ArenaScene arenaScene, GlfwInput glfwIn
 
 	private Tile? _closestHitTile;
 
-	public void Update(bool isActive, int currentTick, Vector2 framebufferOffset, Vector2 canvasSize)
+	public void Update(bool isActive, int currentTick, Rect canvasRect)
 	{
 		if (!isActive || currentTick > 0)
 		{
@@ -28,7 +29,7 @@ internal sealed class ArenaEditorContext(ArenaScene arenaScene, GlfwInput glfwIn
 			return;
 		}
 
-		UpdateHoveredTile(framebufferOffset, canvasSize);
+		UpdateHoveredTile(canvasRect);
 
 		bool ctrl = glfwInput.IsKeyDown(Keys.ControlLeft) || glfwInput.IsKeyDown(Keys.ControlRight);
 		if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
@@ -76,13 +77,12 @@ internal sealed class ArenaEditorContext(ArenaScene arenaScene, GlfwInput glfwIn
 	/// <summary>
 	/// Raycasts the cursor against the tile hitboxes to determine which tile is under it.
 	/// </summary>
-	private void UpdateHoveredTile(Vector2 framebufferOffset, Vector2 canvasSize)
+	private void UpdateHoveredTile(Rect canvasRect)
 	{
 		_hitTiles.Clear();
 		Ray ray = CameraUtils.ScreenToWorldPoint(
 			cursorPosition: glfwInput.CursorPosition,
-			framebufferOffset: framebufferOffset,
-			canvasSize: canvasSize,
+			canvasRect: canvasRect,
 			fieldOfView: userSettings.Model.FieldOfView,
 			position: arenaScene.Camera.Position,
 			rotation: arenaScene.Camera.Rotation);

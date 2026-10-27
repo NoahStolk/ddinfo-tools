@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Tools.Scenes;
 using DevilDaggersInfo.Tools.Scenes.Rendering;
+using DevilDaggersInfo.Tools.Utils;
 using Serilog;
 using Silk.NET.OpenGL;
 using System.Numerics;
@@ -82,7 +83,7 @@ internal sealed unsafe class FramebufferData(GL gl, ILogger logger)
 		if (Width < 1 || Height < 1)
 			return;
 
-		arenaScene.Update(activateMouse, activateKeyboard, delta, framebufferOffset, Size);
+		arenaScene.Update(activateMouse, activateKeyboard, delta, new Rect(framebufferOffset, Size));
 
 		gl.BindFramebuffer(FramebufferTarget.Framebuffer, _framebuffer);
 

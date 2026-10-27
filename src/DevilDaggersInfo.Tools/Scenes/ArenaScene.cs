@@ -5,6 +5,7 @@ using DevilDaggersInfo.Tools.Scenes.GameObjects;
 using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Tools.User.Settings;
+using DevilDaggersInfo.Tools.Utils;
 using Silk.NET.GLFW;
 using System.Numerics;
 
@@ -97,7 +98,7 @@ internal sealed class ArenaScene
 		_lights.Add(Player.Light);
 	}
 
-	public void Update(bool activateMouse, bool activateKeyboard, float dt, Vector2 framebufferOffset, Vector2 canvasSize)
+	public void Update(bool activateMouse, bool activateKeyboard, float dt, Rect canvasRect)
 	{
 		SpawnsetBinary spawnset = _getSpawnset();
 
@@ -123,7 +124,7 @@ internal sealed class ArenaScene
 			}
 		}
 
-		EditorContext?.Update(activateMouse, CurrentTick, framebufferOffset, canvasSize);
+		EditorContext?.Update(activateMouse, CurrentTick, canvasRect);
 	}
 
 	/// <summary>

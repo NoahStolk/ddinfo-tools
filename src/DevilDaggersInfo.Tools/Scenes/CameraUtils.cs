@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.Engine.Intersections;
+using DevilDaggersInfo.Tools.Utils;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Scenes;
@@ -15,13 +16,13 @@ internal static class CameraUtils
 		return (view, projection);
 	}
 
-	public static Ray ScreenToWorldPoint(Vector2 cursorPosition, Vector2 framebufferOffset, Vector2 canvasSize, float fieldOfView, Vector3 position, Quaternion rotation)
+	public static Ray ScreenToWorldPoint(Vector2 cursorPosition, Rect canvasRect, float fieldOfView, Vector3 position, Quaternion rotation)
 	{
-		float aspectRatio = canvasSize.X / canvasSize.Y;
+		float aspectRatio = canvasRect.W / canvasRect.H;
 
 		// Remap so (0, 0) is the center of the window and the edges are at -0.5 and +0.5.
-		Vector2 mousePosition = cursorPosition - framebufferOffset;
-		Vector2 relative = -new Vector2(mousePosition.X / canvasSize.X - 0.5f, mousePosition.Y / canvasSize.Y - 0.5f);
+		Vector2 mousePosition = cursorPosition - canvasRect.Origin;
+		Vector2 relative = -new Vector2(mousePosition.X / canvasRect.W - 0.5f, mousePosition.Y / canvasRect.H - 0.5f);
 
 		// Angle in radians from the view axis to the top plane of the view pyramid.
 		float verticalAngle = 0.5f * float.DegreesToRadians(fieldOfView);

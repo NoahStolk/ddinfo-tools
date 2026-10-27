@@ -4,6 +4,7 @@ using DevilDaggersInfo.Tools.Scenes;
 using DevilDaggersInfo.Tools.Scenes.Rendering;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Tools.User.Settings;
+using DevilDaggersInfo.Tools.Utils;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 using System.Numerics;
@@ -41,7 +42,7 @@ internal sealed unsafe class MainScene(
 
 		Vector2 framebufferSize = new(framebufferWidth, framebufferHeight);
 
-		_mainMenuScene?.Update(false, false, delta, Vector2.Zero, framebufferSize);
+		_mainMenuScene?.Update(false, false, delta, new Rect(Vector2.Zero, framebufferSize));
 
 		// Keep track of the original viewport so we can restore it later.
 		Span<int> originalViewport = stackalloc int[4];
