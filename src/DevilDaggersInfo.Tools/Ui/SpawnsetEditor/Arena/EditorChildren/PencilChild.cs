@@ -10,6 +10,6 @@ internal static class PencilChild
 
 	public static void Render()
 	{
-		ImGui.SliderFloat("Size", ref _size, 0, 10, "%.1f");
+		ImGui.SliderFloat("Pencil size", ref _size, 0, 10, "%.1f");
 	}
 }

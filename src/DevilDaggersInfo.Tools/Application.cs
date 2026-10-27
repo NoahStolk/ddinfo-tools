@@ -67,6 +67,7 @@ internal sealed unsafe class Application
 
 		gameInstallationValidator.ValidateInstallation();
 
+		// TODO: Use a larger icon.
 		SetIcon(resourceManager.InternalResources.ApplicationIconTexture);
 
 		glfw.SetFramebufferSizeCallback(window, (_, w, h) =>

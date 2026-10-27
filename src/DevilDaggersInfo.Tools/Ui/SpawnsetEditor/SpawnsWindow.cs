@@ -42,9 +42,14 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 			if (endLoopLength.HasValue && isEndLoopTooShort)
 			{
 				ImGui.PushStyleColor(ImGuiCol.ChildBg, new Engine.Maths.Numerics.Color(127, 0, 0, 255));
-				if (ImGui.BeginChild("Warning", new Vector2(0, 56)))
+				if (ImGui.BeginChild("Warning", new Vector2(0, 64)))
 				{
-					ImGui.TextWrapped(Inline.Utf8($"(!) The end loop is only {endLoopLength.Value} seconds long, which will probably result in severe lag or a crash. If you intend to have no end loop, make sure to add an empty spawn at the end of the spawns list."));
+					ImGui.TextWrapped(Inline.Utf8(
+						$"""
+						 (!) The end loop is only {endLoopLength.Value} seconds long, which will probably result in severe lag or a crash.
+
+						 If you intend to have no end loop, make sure to add an empty spawn at the end of the spawns list.
+						 """));
 				}
 
 				ImGui.EndChild();

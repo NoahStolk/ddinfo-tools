@@ -12,7 +12,7 @@ internal static class EllipseChild
 
 	public static void Render()
 	{
-		ImGui.SliderInt("Thickness", ref _thickness, 1, 10);
+		ImGui.SliderInt("Ellipse thickness", ref _thickness, 1, 10);
 		ImGui.Checkbox("Filled", ref _filled);
 	}
 }

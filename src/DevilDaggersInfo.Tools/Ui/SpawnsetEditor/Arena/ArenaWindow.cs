@@ -111,11 +111,14 @@ internal sealed class ArenaWindow
 
 			ImGui.EndChild();
 
+			ImGui.SeparatorText("Preview");
 			ImGui.SliderFloat("Time", ref _currentSecond, 0, _fileStates.Spawnset.Object.GetSliderMaxSeconds());
 
 			_spawnsetEditor3DWindow.ArenaScene.CurrentTick = (int)MathF.Round(_currentSecond * 60);
 
+			ImGui.SeparatorText("Editor controls");
 			_arenaEditorControls.Render();
+
 			_arenaHeightButtons.Render();
 		}
 

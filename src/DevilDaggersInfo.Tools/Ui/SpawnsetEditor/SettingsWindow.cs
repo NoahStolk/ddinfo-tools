@@ -203,7 +203,7 @@ internal sealed class SettingsWindow(FileStates fileStates, SpawnsetSaver spawns
 		}
 
 		int additionalGems = fileStates.Spawnset.Object.AdditionalGems;
-		ImGui.InputInt("Added gems", ref additionalGems, 1);
+		ImGui.InputInt("Added gems", ref additionalGems); // TODO: Remove + and - buttons.
 		if (ImGui.IsItemDeactivatedAfterEdit())
 		{
 			fileStates.Spawnset.Update(fileStates.Spawnset.Object with { AdditionalGems = additionalGems });
@@ -215,7 +215,7 @@ internal sealed class SettingsWindow(FileStates fileStates, SpawnsetSaver spawns
 		ImGui.BeginDisabled(fileStates.Spawnset.Object.SpawnVersion <= 5);
 
 		float timerStart = fileStates.Spawnset.Object.TimerStart;
-		ImGui.InputFloat("Timer start", ref timerStart, 1, 5, "%.4f");
+		ImGui.InputFloat("Timer start", ref timerStart, "%.4f");
 		if (ImGui.IsItemDeactivatedAfterEdit())
 		{
 			fileStates.Spawnset.Update(fileStates.Spawnset.Object with { TimerStart = timerStart });

@@ -10,6 +10,6 @@ internal static class LineChild
 
 	public static void Render()
 	{
-		ImGui.SliderFloat("Thickness", ref _thickness, 0, 10, "%.1f");
+		ImGui.SliderFloat("Line thickness", ref _thickness, 0, 10, "%.1f");
 	}
 }

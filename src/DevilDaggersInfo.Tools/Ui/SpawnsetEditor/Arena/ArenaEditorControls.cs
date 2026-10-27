@@ -52,7 +52,7 @@ internal sealed class ArenaEditorControls(ResourceManager resourceManager, Arena
 
 		ImGui.EndChild();
 
-		if (ImGui.BeginChild("ArenaToolControls", new Vector2(256, 112)))
+		if (ImGui.BeginChild("ArenaToolControls", new Vector2(384, 112)))
 		{
 			switch (arenaWindow.ArenaTool)
 			{
