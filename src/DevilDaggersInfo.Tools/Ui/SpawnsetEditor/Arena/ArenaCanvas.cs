@@ -1,6 +1,5 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using Hexa.NET.ImGui;
@@ -30,25 +29,25 @@ internal sealed class ArenaCanvas(ResourceManager resourceManager, ArenaWindow a
 
 				float actualHeight = fileStates.Spawnset.Object.GetActualTileHeight(i, j, arenaWindow.CurrentSecond);
 				float height = fileStates.Spawnset.Object.ArenaTiles[i, j];
-				Color colorCurrent = TileUtils.GetColorFromHeight(actualHeight);
-				Color colorValue = TileUtils.GetColorFromHeight(height);
+				Vector4 colorCurrent = TileUtils.GetColorFromHeight(actualHeight);
+				Vector4 colorValue = TileUtils.GetColorFromHeight(height);
 				Vector2 min = origin + new Vector2(x, y);
 
 				if (Math.Abs(actualHeight - height) < 0.001f)
 				{
-					if (Color.Black != colorValue)
+					if (new Vector4(0, 0, 0, 1) != colorValue)
 					{
 						drawList.AddRectFilled(min, min + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(colorValue));
 					}
 				}
 				else
 				{
-					if (Color.Black != colorCurrent)
+					if (new Vector4(0, 0, 0, 1) != colorCurrent)
 					{
 						drawList.AddRectFilled(min, min + new Vector2(ArenaWindow.TileSize), ImGui.GetColorU32(colorCurrent));
 					}
 
-					if (Color.Black != colorValue)
+					if (new Vector4(0, 0, 0, 1) != colorValue)
 					{
 						const int offset = 2;
 						const int size = ArenaWindow.TileSize - offset * 2;
@@ -67,9 +66,13 @@ internal sealed class ArenaCanvas(ResourceManager resourceManager, ArenaWindow a
 			const int halfSize = ArenaWindow.TileSize / 2;
 
 			float? actualHeight = fileStates.Spawnset.Object.GetActualRaceDaggerHeight(arenaWindow.CurrentSecond);
-			Color tileColor = actualHeight.HasValue ? TileUtils.GetColorFromHeight(actualHeight.Value) : Color.Black;
-			Color invertedTileColor = Color.Invert(tileColor);
-			Vector4 daggerColor = Vector4.Lerp(invertedTileColor, invertedTileColor.Intensify(96), MathF.Sin((float)ImGui.GetTime()) / 2 + 0.5f);
+			Vector4 tileColor = actualHeight.HasValue ? TileUtils.GetColorFromHeight(actualHeight.Value) : new Vector4(0, 0, 0, 1);
+			Vector4 invertedTileColor = Vector4.InvertColor(tileColor);
+
+			Vector4 daggerColor = Vector4.Lerp(
+				invertedTileColor,
+				invertedTileColor + new Vector4(0.375f, 0.375f, 0.375f, 0),
+				MathF.Sin((float)ImGui.GetTime()) / 2 + 0.5f);
 
 			Vector2 center = origin + new Vector2(realRaceX * ArenaWindow.TileSize + halfSize, realRaceZ * ArenaWindow.TileSize + halfSize);
 			drawList.AddImage(resourceManager.GameResources.IconMaskDaggerTexture.Id, center - new Vector2(8), center + new Vector2(8), daggerColor);

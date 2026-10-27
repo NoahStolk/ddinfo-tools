@@ -39,7 +39,7 @@ internal sealed class HistoryWindow(SpawnsWindow spawnsWindow, FileStates fileSt
 				ImGui.PushStyleColor(ImGuiCol.Button, color);
 				ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color + new Vector4(0.3f, 0.3f, 0.3f, 0));
 				ImGui.PushStyleColor(ImGuiCol.ButtonActive, color + new Vector4(0.5f, 0.5f, 0.5f, 0));
-				ImGui.PushStyleColor(ImGuiCol.Border, i == fileStates.Spawnset.CurrentHistoryIndex ? Color.White : Color.Black);
+				ImGui.PushStyleColor(ImGuiCol.Border, i == fileStates.Spawnset.CurrentHistoryIndex ? Color.White : new Vector4(0, 0, 0, 1));
 
 				ImGui.PushID(Inline.Utf8($"HistoryButton{i}"));
 				if (ImGui.Button(history.EditType.GetChange(), new Vector2(buttonWidth, 20)))

@@ -6,7 +6,6 @@ namespace DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 public readonly record struct Color(byte R, byte G, byte B, byte A)
 {
 	public static Color White { get; } = new(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
-	public static Color Black { get; } = new(byte.MinValue, byte.MinValue, byte.MinValue, byte.MaxValue);
 
 	public static Color Red { get; } = new(byte.MaxValue, byte.MinValue, byte.MinValue, byte.MaxValue);
 	public static Color Green { get; } = new(byte.MinValue, byte.MaxValue, byte.MinValue, byte.MaxValue);
@@ -23,23 +22,14 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 		return new Vector4(color.R / (float)byte.MaxValue, color.G / (float)byte.MaxValue, color.B / (float)byte.MaxValue, color.A / (float)byte.MaxValue);
 	}
 
-	public Color ReadableColorForBrightness()
+	public Vector4 ReadableColorForBrightness()
 	{
-		return GetPerceivedBrightness() < 140 ? White : Black;
+		return GetPerceivedBrightness() < 140 ? Vector4.One : new Vector4(0, 0, 0, 1);
 	}
 
 	private int GetPerceivedBrightness()
 	{
 		return (int)Math.Sqrt(R * R * 0.299 + G * G * 0.587 + B * B * 0.114);
-	}
-
-	public Color Intensify(byte component)
-	{
-		byte r = (byte)Math.Min(byte.MaxValue, R + component);
-		byte g = (byte)Math.Min(byte.MaxValue, G + component);
-		byte b = (byte)Math.Min(byte.MaxValue, B + component);
-		byte a = (byte)Math.Min(byte.MaxValue, A + component);
-		return new Color(r, g, b, a);
 	}
 
 	public Color Desaturate(float f)
@@ -68,11 +58,6 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 		float b = MathUtils.Lerp(value1.B, value2.B, amount);
 		float a = MathUtils.Lerp(value1.A, value2.A, amount);
 		return new Color((byte)r, (byte)g, (byte)b, (byte)a);
-	}
-
-	public static Color Invert(Color color)
-	{
-		return new Color((byte)(byte.MaxValue - color.R), (byte)(byte.MaxValue - color.G), (byte)(byte.MaxValue - color.B), color.A);
 	}
 
 	public static Color Gray(float value)
