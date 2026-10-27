@@ -9,8 +9,7 @@ using System.Numerics;
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 
 // TODO: Register this.
-// TODO: Don't inject other windows.
-internal sealed class ArenaEditorControls(ResourceManager resourceManager, ArenaWindow arenaWindow, FileStates fileStates)
+internal sealed class ArenaEditorControls(ResourceManager resourceManager, ArenaStateManager arenaStateManager, FileStates fileStates)
 {
 	public void Render()
 	{
@@ -25,7 +24,7 @@ internal sealed class ArenaEditorControls(ResourceManager resourceManager, Arena
 				ReadOnlySpan<byte> arenaToolText = arenaTool.AsUtf8Span();
 
 				bool isDagger = arenaTool == ArenaTool.Dagger;
-				bool isCurrent = arenaTool == arenaWindow.ArenaTool;
+				bool isCurrent = arenaTool == arenaStateManager.ArenaTool;
 				ImGui.SetCursorPos(new Vector2(offsetX + borderSize * 2, borderSize));
 
 				if (isDagger)
@@ -34,8 +33,8 @@ internal sealed class ArenaEditorControls(ResourceManager resourceManager, Arena
 				if (isCurrent)
 					ImGui.PushStyleColor(ImGuiCol.Button, ImGui.GetStyle().Colors[(int)ImGuiCol.ButtonHovered]);
 
-				if (ImGui.ImageButton(arenaToolText, GetTexture(arenaTool), new Vector2(size)) && arenaWindow.ArenaTool != arenaTool)
-					arenaWindow.ArenaTool = arenaTool;
+				if (ImGui.ImageButton(arenaToolText, GetTexture(arenaTool), new Vector2(size)) && arenaStateManager.ArenaTool != arenaTool)
+					arenaStateManager.ArenaTool = arenaTool;
 
 				if (isCurrent)
 					ImGui.PopStyleColor();
@@ -54,7 +53,7 @@ internal sealed class ArenaEditorControls(ResourceManager resourceManager, Arena
 
 		if (ImGui.BeginChild("ArenaToolControls", new Vector2(384, 112)))
 		{
-			switch (arenaWindow.ArenaTool)
+			switch (arenaStateManager.ArenaTool)
 			{
 				case ArenaTool.Pencil:
 					PencilChild.Render();

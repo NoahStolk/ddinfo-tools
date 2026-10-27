@@ -90,6 +90,7 @@ namespace DevilDaggersInfo.Tools;
 [Register<HistoryWindow>(Scope.SingleInstance)]
 [Register<SettingsWindow>(Scope.SingleInstance)]
 
+[Register<ArenaStateManager>(Scope.SingleInstance)]
 [Register<SpawnsetSaver>(Scope.SingleInstance)]
 
 // Mod Manager
@@ -116,14 +117,15 @@ namespace DevilDaggersInfo.Tools;
 // Custom Leaderboards
 [Register<CustomLeaderboardsWindow>(Scope.SingleInstance)]
 [Register<CustomLeaderboards3DWindow>(Scope.SingleInstance)]
-[Register<CustomLeaderboardsResultState>(Scope.SingleInstance)]
 [Register<CustomLeaderboardsResultsWindow>(Scope.SingleInstance)]
 [Register<LeaderboardListChild>(Scope.SingleInstance)]
 [Register<LeaderboardListViewChild>(Scope.SingleInstance)]
 [Register<RecordingChild>(Scope.SingleInstance)]
 [Register<LeaderboardChild>(Scope.SingleInstance)]
-[Register<RecordingLogic>(Scope.SingleInstance)]
 [Register<StateChild>(Scope.SingleInstance)]
+
+[Register<CustomLeaderboardsResultState>(Scope.SingleInstance)]
+[Register<RecordingLogic>(Scope.SingleInstance)]
 
 // Replay Editor
 [Register<ReplayEditorMenu>(Scope.SingleInstance)]

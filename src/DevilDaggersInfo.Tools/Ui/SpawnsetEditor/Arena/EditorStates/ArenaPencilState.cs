@@ -9,7 +9,7 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorStates;
 
-internal sealed class ArenaPencilState(ArenaWindow arenaWindow, FileStates fileStates, SpawnsetSaver spawnsetSaver) : IArenaState
+internal sealed class ArenaPencilState(ArenaStateManager arenaStateManager, FileStates fileStates, SpawnsetSaver spawnsetSaver) : IArenaState
 {
 	private Session? _session;
 
@@ -68,7 +68,7 @@ internal sealed class ArenaPencilState(ArenaWindow arenaWindow, FileStates fileS
 		float[,] newArena = fileStates.Spawnset.Object.ArenaTiles.GetMutableClone();
 
 		foreach (Vector2D<int> position in _session.ModifiedCoords)
-			newArena[position.X, position.Y] = arenaWindow.SelectedHeight;
+			newArena[position.X, position.Y] = arenaStateManager.SelectedHeight;
 
 		fileStates.Spawnset.Update(fileStates.Spawnset.Object with { ArenaTiles = new ImmutableArena(fileStates.Spawnset.Object.ArenaDimension, newArena) });
 		spawnsetSaver.Save(SpawnsetEditType.ArenaPencil);

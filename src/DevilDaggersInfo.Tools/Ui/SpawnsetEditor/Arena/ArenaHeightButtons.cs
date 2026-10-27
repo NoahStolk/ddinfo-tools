@@ -5,17 +5,10 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 
-internal sealed class ArenaHeightButtons
+internal sealed class ArenaHeightButtons(ArenaStateManager arenaStateManager)
 {
 	private const int _arenaButtonSize = 24;
 	private const int _arenaButtonSizeLarge = 48;
-
-	private readonly ArenaWindow _arenaWindow;
-
-	public ArenaHeightButtons(ArenaWindow arenaWindow)
-	{
-		_arenaWindow = arenaWindow;
-	}
 
 	public void Render()
 	{
@@ -50,11 +43,11 @@ internal sealed class ArenaHeightButtons
 			ImGui.PushStyleColor(ImGuiCol.Button, heightColor);
 			ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Lerp(heightColor, Color.White, 0.75f));
 			ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Lerp(heightColor, Color.White, 0.5f));
-			ImGui.PushStyleColor(ImGuiCol.Border, Math.Abs(_arenaWindow.SelectedHeight - height) < 0.001f ? Color.Invert(heightColor) : Color.Lerp(heightColor, Color.Black, 0.2f));
+			ImGui.PushStyleColor(ImGuiCol.Border, Math.Abs(arenaStateManager.SelectedHeight - height) < 0.001f ? Color.Invert(heightColor) : Color.Lerp(heightColor, Color.Black, 0.2f));
 
 			ImGui.SetCursorPos(new Vector2(offsetX + borderSize * 2, offsetY + borderSize));
 			if (ImGui.Button(Inline.Utf8(height), new Vector2(width - 1, _arenaButtonSize - 1)))
-				_arenaWindow.SelectedHeight = height;
+				arenaStateManager.SelectedHeight = height;
 
 			ImGui.PopStyleColor(5);
 			ImGui.PopStyleVar();
