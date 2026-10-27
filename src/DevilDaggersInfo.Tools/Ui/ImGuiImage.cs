@@ -6,25 +6,6 @@ namespace DevilDaggersInfo.Tools.Ui;
 
 internal static class ImGuiImage
 {
-	extension(ImDrawListPtr drawListPtr)
-	{
-		public void AddFramebufferImage(FramebufferData framebufferData, Vector2 pMin, Vector2 pMax)
-		{
-			drawListPtr.AddFramebufferImage(framebufferData, pMin, pMax, Color.White);
-		}
-
-		public void AddFramebufferImage(FramebufferData framebufferData, Vector2 pMin, Vector2 pMax, Color color)
-		{
-			// Framebuffers are flipped vertically, so we need to flip the UVs.
-			drawListPtr.AddImage(GetTextureRef(framebufferData.TextureHandle), pMin, pMax, Vector2.UnitY, Vector2.UnitX, ImGui.GetColorU32(color));
-		}
-
-		public void AddImage(uint imageId, Vector2 pMin, Vector2 pMax, Color color)
-		{
-			drawListPtr.AddImage(GetTextureRef(imageId), pMin, pMax, Vector2.Zero, Vector2.One, ImGui.GetColorU32(color));
-		}
-	}
-
 	public static void Image(uint imageId, Vector2 size)
 	{
 		Image(imageId, size, Color.White);
@@ -48,7 +29,7 @@ internal static class ImGuiImage
 	/// Wraps a raw OpenGL texture handle for ImGui. These textures are owned by the app, not by ImGui, so they are
 	/// referenced by id only and never go through the <see cref="ImTextureData" /> protocol in <see cref="ImGuiController" />.
 	/// </summary>
-	private static unsafe ImTextureRef GetTextureRef(uint imageId)
+	public static unsafe ImTextureRef GetTextureRef(uint imageId)
 	{
 		return new ImTextureRef(null, new ImTextureID(imageId));
 	}
