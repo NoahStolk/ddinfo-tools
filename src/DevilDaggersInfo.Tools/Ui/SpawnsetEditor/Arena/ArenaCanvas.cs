@@ -69,10 +69,10 @@ internal sealed class ArenaCanvas(ResourceManager resourceManager, ArenaWindow a
 			float? actualHeight = fileStates.Spawnset.Object.GetActualRaceDaggerHeight(arenaWindow.CurrentSecond);
 			Color tileColor = actualHeight.HasValue ? TileUtils.GetColorFromHeight(actualHeight.Value) : Color.Black;
 			Color invertedTileColor = Color.Invert(tileColor);
-			Vector3 daggerColor = Vector3.Lerp(invertedTileColor, invertedTileColor.Intensify(96), MathF.Sin((float)ImGui.GetTime()) / 2 + 0.5f);
+			Vector4 daggerColor = Vector4.Lerp(invertedTileColor, invertedTileColor.Intensify(96), MathF.Sin((float)ImGui.GetTime()) / 2 + 0.5f);
 
 			Vector2 center = origin + new Vector2(realRaceX * ArenaWindow.TileSize + halfSize, realRaceZ * ArenaWindow.TileSize + halfSize);
-			drawList.AddImage(resourceManager.GameResources.IconMaskDaggerTexture.Id, center - new Vector2(8), center + new Vector2(8), Color.FromVector3(daggerColor));
+			drawList.AddImage(resourceManager.GameResources.IconMaskDaggerTexture.Id, center - new Vector2(8), center + new Vector2(8), daggerColor);
 		}
 
 		const int tileUnit = 4;
@@ -80,16 +80,16 @@ internal sealed class ArenaCanvas(ResourceManager resourceManager, ArenaWindow a
 
 		float shrinkStartRadius = fileStates.Spawnset.Object.ShrinkStart / tileUnit * ArenaWindow.TileSize;
 		if (shrinkStartRadius is > 0 and < 300)
-			drawList.AddCircle(arenaCenter, shrinkStartRadius, ImGui.GetColorU32(Color.Blue));
+			drawList.AddCircle(arenaCenter, shrinkStartRadius, ImGui.GetColorU32(new Vector4(0, 0, 1, 1)));
 
 		float shrinkRadius = GetShrinkRadius();
 		float shrinkCurrentRadius = shrinkRadius / tileUnit * ArenaWindow.TileSize;
 		if (shrinkCurrentRadius is > 0 and < 300)
-			drawList.AddCircle(arenaCenter, shrinkCurrentRadius, ImGui.GetColorU32(Color.Purple));
+			drawList.AddCircle(arenaCenter, shrinkCurrentRadius, ImGui.GetColorU32(new Vector4(1, 0, 1, 1)));
 
 		float shrinkEndRadius = fileStates.Spawnset.Object.ShrinkEnd / tileUnit * ArenaWindow.TileSize;
 		if (shrinkEndRadius is > 0 and < 300)
-			drawList.AddCircle(arenaCenter, shrinkEndRadius, ImGui.GetColorU32(Color.Red));
+			drawList.AddCircle(arenaCenter, shrinkEndRadius, ImGui.GetColorU32(new Vector4(1, 0, 0, 1)));
 	}
 
 	private float GetShrinkRadius()

@@ -5,8 +5,6 @@ namespace DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 [Obsolete("Use Vector4 instead.")]
 public readonly record struct Color(byte R, byte G, byte B, byte A)
 {
-	public static Color Invisible { get; } = new(byte.MinValue, byte.MinValue, byte.MinValue, byte.MinValue);
-
 	public static Color White { get; } = new(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
 	public static Color Black { get; } = new(byte.MinValue, byte.MinValue, byte.MinValue, byte.MaxValue);
 
@@ -14,11 +12,8 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 
 	public static Color Red { get; } = new(byte.MaxValue, byte.MinValue, byte.MinValue, byte.MaxValue);
 	public static Color Green { get; } = new(byte.MinValue, byte.MaxValue, byte.MinValue, byte.MaxValue);
-	public static Color Blue { get; } = new(byte.MinValue, byte.MinValue, byte.MaxValue, byte.MaxValue);
 
 	public static Color Yellow { get; } = new(byte.MaxValue, byte.MaxValue, byte.MinValue, byte.MaxValue);
-	public static Color Aqua { get; } = new(byte.MinValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
-	public static Color Purple { get; } = new(byte.MaxValue, byte.MinValue, byte.MaxValue, byte.MaxValue);
 
 	public static Color Orange { get; } = new(byte.MaxValue, byte.MaxValue / 2, byte.MinValue, byte.MaxValue);
 
@@ -116,15 +111,5 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 			4 => new Color(t, p, v, byte.MaxValue),
 			_ => new Color(v, p, q, byte.MaxValue),
 		};
-	}
-
-	public static Color FromVector3(Vector3 vector)
-	{
-		return new Color((byte)(vector.X * byte.MaxValue), (byte)(vector.Y * byte.MaxValue), (byte)(vector.Z * byte.MaxValue), byte.MaxValue);
-	}
-
-	public static Color FromVector4(Vector4 vector)
-	{
-		return new Color((byte)(vector.X * byte.MaxValue), (byte)(vector.Y * byte.MaxValue), (byte)(vector.Z * byte.MaxValue), (byte)(vector.W * byte.MaxValue));
 	}
 }

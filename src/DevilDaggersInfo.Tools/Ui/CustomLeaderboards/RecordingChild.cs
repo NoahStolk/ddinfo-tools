@@ -185,7 +185,7 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 
 			ImGui.Spacing();
 			ImGui.Image(resourceManager.GameResources.IconMaskHomingTexture.Id, iconSize);
-			RenderValue("Homing stored"u8, Inline.Utf8(b.HomingStored), Color.Purple, _homingStoredIntensity);
+			RenderValue("Homing stored"u8, Inline.Utf8(b.HomingStored), new Vector4(1, 0, 1, 1), _homingStoredIntensity);
 			RenderValue("Homing eaten"u8, Inline.Utf8(b.HomingEaten), Color.Red, _homingEatenIntensity);
 
 			ImGui.Spacing();
@@ -241,11 +241,11 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 		ImGui.EndChild();
 	}
 
-	private static void RenderValue(ReadOnlySpan<byte> label, ReadOnlySpan<byte> value, Color color, float intensity)
+	private static void RenderValue(ReadOnlySpan<byte> label, ReadOnlySpan<byte> value, Vector4 color, float intensity)
 	{
 		ImGui.Text(label);
 		ImGui.SameLine(288 - 16 - ImGui.CalcTextSize(value).X);
-		ImGui.PushStyleColor(ImGuiCol.Text, Color.Lerp(Color.White, color, intensity));
+		ImGui.PushStyleColor(ImGuiCol.Text, Vector4.Lerp(Vector4.One, color, intensity));
 		ImGui.TextUnformatted(value);
 		ImGui.PopStyleColor();
 	}

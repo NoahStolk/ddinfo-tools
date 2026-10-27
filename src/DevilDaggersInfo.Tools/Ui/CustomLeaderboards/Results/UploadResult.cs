@@ -73,7 +73,7 @@ internal sealed class UploadResult
 	{
 		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen in this UI.");
 
-		if (!RenderHeader(Color.Aqua, "First score!"))
+		if (!RenderHeader(new Vector4(0, 1, 1, 1), "First score!"))
 			return;
 
 		ImGui.Indent(_indentation);
@@ -233,9 +233,9 @@ internal sealed class UploadResult
 		ImGui.Indent(-_indentation);
 	}
 
-	private bool RenderHeader(Color color, string title)
+	private bool RenderHeader(Vector4 color, string title)
 	{
-		ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { A = 32 });
+		ImGui.PushStyleColor(ImGuiCol.ChildBg, color with { W = 32 / 255f });
 
 		if (ImGui.BeginChild(Inline.Utf8($"{SubmittedAt.Ticks}{_spawnsetName}"), new Vector2(_headerWidth, 48), ImGuiChildFlags.Borders))
 		{

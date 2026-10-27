@@ -98,7 +98,7 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 
 				for (int i = 0; i < kvp.Value.Count; i++)
 				{
-					ImGui.PushStyleColor(ImGuiCol.Border, i % 2 == 0 ? Color.Invisible : Color.White);
+					ImGui.PushStyleColor(ImGuiCol.Border, i % 2 == 0 ? Vector4.Zero : Vector4.One);
 
 					ImGui.TableNextRow();
 
