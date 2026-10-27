@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.EditorFileState;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Events;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Timeline;
 using Hexa.NET.ImGui;
@@ -38,7 +39,7 @@ internal sealed class ReplayEditorWindow(
 
 	public void Render()
 	{
-		ImGuiUtils.SetNextWindowMinSize(UiConstants.MinWindowSize);
+		ImGui.SetNextWindowMinSize(UiConstants.MinWindowSize);
 		if (ImGui.Begin("Replay Editor", ImGuiWindowFlags.NoCollapse))
 		{
 			ReplayFileInfo.Render(fileStates.Replay.Object);

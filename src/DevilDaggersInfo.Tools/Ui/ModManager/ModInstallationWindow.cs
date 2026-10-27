@@ -12,7 +12,7 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 {
 	public void Render()
 	{
-		ImGuiUtils.SetNextWindowMinSize(768, 384);
+		ImGui.SetNextWindowMinSize(768, 384);
 		if (ImGui.Begin("Mod Installation", ImGuiWindowFlags.NoCollapse))
 		{
 			if (modsDirectoryLogic.IsLoading)
@@ -135,7 +135,7 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 
 	private void Title(ReadOnlySpan<byte> label)
 	{
-		ImGuiExt.Title(label, fontService.GoetheBold20);
+		ImGui.Title(label, fontService.GoetheBold20);
 	}
 
 	private static void NextColumnText(ReadOnlySpan<byte> label)

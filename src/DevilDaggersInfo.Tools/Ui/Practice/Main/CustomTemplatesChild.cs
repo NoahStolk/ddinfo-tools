@@ -136,7 +136,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 				};
 			}
 
-			if (ImGuiUtils.IsEnterPressed())
+			if (ImGui.IsEnterPressed())
 				ImGui.CloseCurrentPopup();
 
 			ImGui.EndPopup();
@@ -152,7 +152,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 		ImGui.PushID(Inline.Utf8($"drag indicator {i}"));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-		ImGuiImage.ImageButton(
+		ImGui.ImageButton(
 			strId: "CustomTemplateReorderImageButton"u8,
 			imageId: resourceManager.InternalResources.DragIndicatorTexture.Id,
 			size: new Vector2(32, 48),
@@ -186,7 +186,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 		ImGui.PushID(Inline.Utf8($"delete button {i}"));
 
 		ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(12));
-		if (ImGuiImage.ImageButton("CustomTemplateDeleteImageButton"u8, resourceManager.InternalResources.BinTexture.Id, new Vector2(24)))
+		if (ImGui.ImageButton("CustomTemplateDeleteImageButton"u8, resourceManager.InternalResources.BinTexture.Id, new Vector2(24)))
 		{
 			userSettings.Model = userSettings.Model with
 			{

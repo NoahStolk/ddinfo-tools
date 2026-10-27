@@ -31,7 +31,7 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 
 	public void Render()
 	{
-		ImGuiUtils.SetNextWindowMinSize(360, 400);
+		ImGui.SetNextWindowMinSize(360, 400);
 		if (ImGui.Begin("Spawns"))
 		{
 			_windowIsFocused = ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows);

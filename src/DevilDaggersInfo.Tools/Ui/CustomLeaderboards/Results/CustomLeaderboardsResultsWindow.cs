@@ -2,6 +2,7 @@
 #if TESTING
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 #endif
+using DevilDaggersInfo.Tools.Extensions;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -12,7 +13,7 @@ internal sealed class CustomLeaderboardsResultsWindow(ResourceManager resourceMa
 	public void Render()
 	{
 		ImGui.SetNextWindowSizeConstraints(new Vector2(388, 0), new Vector2(388, float.MaxValue));
-		ImGuiUtils.SetNextWindowMinSize(0, 320);
+		ImGui.SetNextWindowMinSize(0, 320);
 		if (ImGui.Begin("Custom Leaderboard Submissions (this session)"))
 		{
 #if TESTING

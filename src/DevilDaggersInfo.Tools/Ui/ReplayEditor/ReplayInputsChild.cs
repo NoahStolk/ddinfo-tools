@@ -1,6 +1,7 @@
 using DevilDaggersInfo.Core.Replay.Events.Data;
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Utils;
 using Hexa.NET.ImGui;
@@ -24,16 +25,16 @@ internal sealed class ReplayInputsChild(ResourceManager resourceManager)
 			ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
 
 			Vector2 iconSize = new(16);
-			if (ImGuiImage.ImageButton("Start"u8, resourceManager.InternalResources.ArrowStartTexture.Id, iconSize))
+			if (ImGui.ImageButton("Start"u8, resourceManager.InternalResources.ArrowStartTexture.Id, iconSize))
 				_startTick = 0;
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Back"u8, resourceManager.InternalResources.ArrowLeftTexture.Id, iconSize))
+			if (ImGui.ImageButton("Back"u8, resourceManager.InternalResources.ArrowLeftTexture.Id, iconSize))
 				_startTick = Math.Max(0, _startTick - maxTicks);
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Forward"u8, resourceManager.InternalResources.ArrowRightTexture.Id, iconSize))
+			if (ImGui.ImageButton("Forward"u8, resourceManager.InternalResources.ArrowRightTexture.Id, iconSize))
 				_startTick = Math.Min(replay.TickCount - maxTicks, _startTick + maxTicks);
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("End"u8, resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
+			if (ImGui.ImageButton("End"u8, resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
 				_startTick = replay.TickCount - maxTicks;
 
 			_startTick = Math.Max(0, Math.Min(_startTick, replay.TickCount - maxTicks));

@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Extensions;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -12,6 +13,6 @@ internal sealed class Message(string id, string text) : Popup(id)
 		ImGui.Spacing();
 		ImGui.Separator();
 		ImGui.Spacing();
-		return ImGui.Button("OK", new Vector2(120, 0)) || ImGuiUtils.IsEnterPressed();
+		return ImGui.Button("OK", new Vector2(120, 0)) || ImGui.IsEnterPressed();
 	}
 }

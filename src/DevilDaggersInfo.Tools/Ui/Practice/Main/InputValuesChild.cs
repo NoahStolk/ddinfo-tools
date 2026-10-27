@@ -20,7 +20,7 @@ internal sealed class InputValuesChild(ResourceManager resourceManager, Practice
 			ImGui.SeparatorText("Inputs");
 
 			ImGui.Spacing();
-			ImGuiImage.Image(resourceManager.InternalResources.IconHandTexture.Id, new Vector2(16), practiceLogic.State.HandLevel.GetColor());
+			ImGui.Image(resourceManager.InternalResources.IconHandTexture.Id, new Vector2(16), practiceLogic.State.HandLevel.GetColor());
 			ImGui.SameLine();
 			foreach (HandLevel level in HandLevelGen.Values)
 			{
@@ -35,12 +35,12 @@ internal sealed class InputValuesChild(ResourceManager resourceManager, Practice
 				? (resourceManager.GameResources.IconMaskHomingTexture, Color.White)
 				: (resourceManager.GameResources.IconMaskGemTexture, Color.Red);
 			ImGui.Spacing();
-			ImGuiImage.Image(gemOrHomingTexture.Id, new Vector2(16), tintColor);
+			ImGui.Image(gemOrHomingTexture.Id, new Vector2(16), tintColor);
 			ImGui.SameLine();
 			ImGui.InputInt("Added gems", ref practiceLogic.State.AdditionalGems, 1);
 
 			ImGui.Spacing();
-			ImGuiImage.Image(resourceManager.GameResources.IconMaskStopwatchTexture.Id, new Vector2(16));
+			ImGui.Image(resourceManager.GameResources.IconMaskStopwatchTexture.Id, new Vector2(16));
 			ImGui.SameLine();
 			ImGui.InputFloat("Timer start", ref practiceLogic.State.TimerStart, 1, 5, "%.4f");
 

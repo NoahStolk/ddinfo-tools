@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 using DevilDaggersInfo.Tools.Utils;
@@ -42,7 +43,7 @@ internal sealed class MainWindow(
 			ImGuiWindowFlags.NoDocking;
 		if (ImGui.Begin("Main Menu", windowFlags))
 		{
-			ImGuiExt.PushFont(fontService.GoetheBold60);
+			ImGui.PushFont(fontService.GoetheBold60);
 			const string title = "ddinfo tools";
 			ImGui.TextColored(Colors.TitleColor(frameCounter.TotalTime), title);
 			float textWidth = ImGui.CalcTextSize(title).X;
@@ -110,7 +111,7 @@ internal sealed class MainWindow(
 				if (ImGui.BeginChild("Preview", previewSize))
 				{
 					ImGui.PushTextWrapPos(previewSize.X - 16);
-					ImGuiExt.Title(hoverText.Title, fontService.GoetheBold30);
+					ImGui.Title(hoverText.Title, fontService.GoetheBold30);
 					ImGui.Text(hoverText.Description);
 					ImGui.PopTextWrapPos();
 				}
@@ -127,7 +128,7 @@ internal sealed class MainWindow(
 		bool returnValue = false;
 
 		Vector2 iconSize = new(36);
-		if (ImGuiImage.ImageButton(tooltip, icon.Id, iconSize))
+		if (ImGui.ImageButton(tooltip, icon.Id, iconSize))
 			returnValue = true;
 
 		if (ImGui.IsItemHovered())
@@ -144,7 +145,7 @@ internal sealed class MainWindow(
 		ImGui.PushStyleColor(ImGuiCol.Border, color with { A = 255 });
 		ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, 2);
 
-		ImGuiExt.PushFont(fontService.GoetheBold20);
+		ImGui.PushFont(fontService.GoetheBold20);
 		bool returnValue = ImGui.Button(title, new Vector2(198, 48));
 		ImGui.PopFont();
 

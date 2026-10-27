@@ -18,7 +18,7 @@ internal sealed class PracticeWindow(
 
 	public void Render()
 	{
-		ImGuiUtils.SetNextWindowMinSize(1208, 768);
+		ImGui.SetNextWindowMinSize(1208, 768);
 		if (ImGui.Begin("Practice", ImGuiWindowFlags.NoCollapse))
 		{
 			Vector2 windowSize = ImGui.GetWindowSize();

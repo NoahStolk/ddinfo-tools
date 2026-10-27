@@ -47,16 +47,16 @@ internal sealed class ReplayEventsViewerChild(ResourceManager resourceManager)
 				ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(padding));
 
 				Vector2 iconSize = new(16);
-				if (ImGuiImage.ImageButton("Start"u8, resourceManager.InternalResources.ArrowStartTexture.Id, iconSize))
+				if (ImGui.ImageButton("Start"u8, resourceManager.InternalResources.ArrowStartTexture.Id, iconSize))
 					_startIndex = 0;
 				ImGui.SameLine();
-				if (ImGuiImage.ImageButton("Back"u8, resourceManager.InternalResources.ArrowLeftTexture.Id, iconSize))
+				if (ImGui.ImageButton("Back"u8, resourceManager.InternalResources.ArrowLeftTexture.Id, iconSize))
 					_startIndex = Math.Max(0, _startIndex - maxEvents);
 				ImGui.SameLine();
-				if (ImGuiImage.ImageButton("Forward"u8, resourceManager.InternalResources.ArrowRightTexture.Id, iconSize))
+				if (ImGui.ImageButton("Forward"u8, resourceManager.InternalResources.ArrowRightTexture.Id, iconSize))
 					_startIndex = Math.Min(replay.Cache.Events.Count - maxEvents, _startIndex + maxEvents);
 				ImGui.SameLine();
-				if (ImGuiImage.ImageButton("End"u8, resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
+				if (ImGui.ImageButton("End"u8, resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
 					_startIndex = replay.Cache.Events.Count - maxEvents;
 
 				ImGui.SameLine();

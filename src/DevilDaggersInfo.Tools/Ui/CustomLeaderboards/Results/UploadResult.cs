@@ -79,7 +79,7 @@ internal sealed class UploadResult
 		ImGui.Indent(_indentation);
 
 		ImGui.Spacing();
-		ImGuiImage.Image(_resourceManager.InternalResources.IconEyeTexture.Id, _iconSize, Color.Orange);
+		ImGui.Image(_resourceManager.InternalResources.IconEyeTexture.Id, _iconSize, Color.Orange);
 
 		if (ImGui.BeginTable("Player", 2))
 		{
@@ -96,7 +96,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGuiImage.Image(_resourceManager.GameResources.IconMaskGemTexture.Id, _iconSize, Color.Red);
+		ImGui.Image(_resourceManager.GameResources.IconMaskGemTexture.Id, _iconSize, Color.Red);
 
 		if (ImGui.BeginTable("Gems", 2))
 		{
@@ -111,7 +111,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGuiImage.Image(_resourceManager.GameResources.IconMaskHomingTexture.Id, _iconSize);
+		ImGui.Image(_resourceManager.GameResources.IconMaskHomingTexture.Id, _iconSize);
 
 		if (ImGui.BeginTable("Homing", 2))
 		{
@@ -124,7 +124,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGuiImage.Image(_resourceManager.GameResources.IconMaskCrosshairTexture.Id, _iconSize, Color.Green);
+		ImGui.Image(_resourceManager.GameResources.IconMaskCrosshairTexture.Id, _iconSize, Color.Green);
 
 		if (ImGui.BeginTable("Daggers", 2))
 		{
@@ -140,7 +140,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGuiImage.Image(_resourceManager.GameResources.IconMaskSkullTexture.Id, _iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
+		ImGui.Image(_resourceManager.GameResources.IconMaskSkullTexture.Id, _iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
 
 		if (ImGui.BeginTable("Enemies", 2))
 		{
@@ -280,7 +280,7 @@ internal sealed class UploadResult
 		Debug.Assert(_resourceManager.GameResources != null, $"{nameof(_resourceManager.GameResources)} is null, which should never happen in this UI.");
 
 		ImGui.Spacing();
-		ImGuiImage.Image(_resourceManager.InternalResources.IconEyeTexture.Id, _iconSize, Color.Orange);
+		ImGui.Image(_resourceManager.InternalResources.IconEyeTexture.Id, _iconSize, Color.Orange);
 
 		if (ImGui.BeginTable("Player", 3))
 		{
@@ -298,7 +298,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGuiImage.Image(_resourceManager.GameResources.IconMaskGemTexture.Id, _iconSize, Color.Red);
+		ImGui.Image(_resourceManager.GameResources.IconMaskGemTexture.Id, _iconSize, Color.Red);
 
 		if (ImGui.BeginTable("Gems", 3))
 		{
@@ -313,7 +313,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGuiImage.Image(_resourceManager.GameResources.IconMaskHomingTexture.Id, _iconSize);
+		ImGui.Image(_resourceManager.GameResources.IconMaskHomingTexture.Id, _iconSize);
 
 		if (ImGui.BeginTable("Homing", 3))
 		{
@@ -326,7 +326,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGuiImage.Image(_resourceManager.GameResources.IconMaskCrosshairTexture.Id, _iconSize, Color.Green);
+		ImGui.Image(_resourceManager.GameResources.IconMaskCrosshairTexture.Id, _iconSize, Color.Green);
 
 		if (ImGui.BeginTable("Daggers", 3))
 		{
@@ -348,7 +348,7 @@ internal sealed class UploadResult
 		}
 
 		ImGui.Spacing();
-		ImGuiImage.Image(_resourceManager.GameResources.IconMaskSkullTexture.Id, _iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
+		ImGui.Image(_resourceManager.GameResources.IconMaskSkullTexture.Id, _iconSize, EnemiesV3_2.Skull4.Color.ToEngineColor());
 
 		if (ImGui.BeginTable("Enemies", 3))
 		{

@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
 using System.Numerics;
@@ -17,13 +18,13 @@ internal sealed class AboutWindow(FrameCounter frameCounter, FontService fontSer
 			return;
 
 		Vector2 windowSize = new(640, 640);
-		ImGuiUtils.SetNextWindowMinSize(windowSize);
+		ImGui.SetNextWindowMinSize(windowSize);
 		if (ImGui.Begin("About ddinfo tools", ref Show, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoDocking))
 		{
 			ImGui.PushStyleVar(ImGuiStyleVar.SeparatorTextPadding, new Vector2(20, 12));
 			ImGui.PushTextWrapPos(ImGui.GetWindowWidth() - 16);
 
-			ImGuiExt.Title("About"u8, fontService.GoetheBold30);
+			ImGui.Title("About"u8, fontService.GoetheBold30);
 			ImGui.Text("ddinfo tools is a collection of tools for Devil Daggers. The tools are part of the DevilDaggers.info project.");
 
 			ImGui.SeparatorText("Alpha notice");
@@ -67,7 +68,7 @@ internal sealed class AboutWindow(FrameCounter frameCounter, FontService fontSer
 	private static void RenderLibrary(ReadOnlySpan<byte> url, ReadOnlySpan<byte> name, ReadOnlySpan<byte> usage)
 	{
 		ImGui.Bullet();
-		ImGuiExt.Hyperlink(url, name);
+		ImGui.Hyperlink(url, name);
 		ImGui.SameLine();
 		ImGui.SetCursorPosX(192);
 		ImGui.Text("-");
@@ -81,17 +82,17 @@ internal sealed class AboutWindow(FrameCounter frameCounter, FontService fontSer
 
 		ImGui.TextColored(Colors.TitleColor(frameCounter.TotalTime), "© DevilDaggers.info 2017-2026");
 
-		ImGuiExt.Hyperlink(Urls.DevilDaggers, "Devil Daggers"u8);
+		ImGui.Hyperlink(Urls.DevilDaggers, "Devil Daggers"u8);
 		ImGui.SameLine();
 		ImGui.Text("is created by");
 		ImGui.SameLine();
-		ImGuiExt.Hyperlink(Urls.Sorath, "Sorath"u8);
+		ImGui.Hyperlink(Urls.Sorath, "Sorath"u8);
 
-		ImGuiExt.Hyperlink(Urls.DevilDaggersInfo, "DevilDaggers.info"u8);
+		ImGui.Hyperlink(Urls.DevilDaggersInfo, "DevilDaggers.info"u8);
 		ImGui.SameLine();
 		ImGui.Text("is created by");
 		ImGui.SameLine();
-		ImGuiExt.Hyperlink(Urls.NoahStolk, "Noah Stolk"u8);
+		ImGui.Hyperlink(Urls.NoahStolk, "Noah Stolk"u8);
 
 		ImGui.TextColored(Color.Gray(0.6f), _versionInfo);
 	}

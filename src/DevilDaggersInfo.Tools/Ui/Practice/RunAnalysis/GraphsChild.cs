@@ -89,7 +89,7 @@ internal sealed class GraphsChild(FontService fontService)
 			ImDrawListPtr drawListPtr = ImGui.GetWindowDrawList();
 			Vector2 mousePos = ImGui.GetMousePos();
 
-			ImGuiExt.Title("Gems"u8, fontService.GoetheBold20);
+			ImGui.Title("Gems"u8, fontService.GoetheBold20);
 
 			ImGui.Checkbox("Gems Collected", ref _showGemsCollected);
 			ImGui.SameLine();
@@ -102,7 +102,7 @@ internal sealed class GraphsChild(FontService fontService)
 
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + _graphHeight + 8);
 
-			ImGuiExt.Title("Homing"u8, fontService.GoetheBold20);
+			ImGui.Title("Homing"u8, fontService.GoetheBold20);
 
 			ImGui.Checkbox("Homing Stored", ref _showHomingStored);
 			ImGui.SameLine();

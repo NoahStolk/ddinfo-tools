@@ -65,7 +65,7 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8));
 		if (ImGui.BeginChild("SelectedEventsChild", default, ImGuiChildFlags.AlwaysUseWindowPadding) && _selectedTickIndex.HasValue)
 		{
-			ImGuiExt.PushFont(fontService.GoetheBold20);
+			ImGui.PushFont(fontService.GoetheBold20);
 			ImGui.Text(Inline.Utf8($"Tick {_selectedTickIndex.Value} selected"));
 			ImGui.PopFont();
 
@@ -150,7 +150,7 @@ internal sealed class ReplayTimelineChild(FileStates fileStates, ReplayTimelineS
 
 				if (showTimeText)
 				{
-					Color textColor = i % 60 == 0 ? Color.Yellow : ImGuiUtils.GetColorU32(ImGuiCol.Text);
+					Color textColor = i % 60 == 0 ? Color.Yellow : ImGui.GetColor(ImGuiCol.Text);
 					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, _shownEventTypes.Count * _markerSize + 5));
 					ImGui.TextColored(textColor, Inline.Utf8(TimeUtils.TickToTime(i, replay.StartTime), StringFormats.TimeFormat));
 					ImGui.SetCursorScreenPos(origin + new Vector2(i * _markerSize + 5, _shownEventTypes.Count * _markerSize + 21));

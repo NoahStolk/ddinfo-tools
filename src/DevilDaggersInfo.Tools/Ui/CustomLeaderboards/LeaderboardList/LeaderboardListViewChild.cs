@@ -3,6 +3,7 @@ using DevilDaggersInfo.Core.CriteriaExpression;
 using DevilDaggersInfo.Core.CriteriaExpression.Extensions;
 using DevilDaggersInfo.Core.CriteriaExpression.Parts;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
@@ -108,7 +109,7 @@ internal sealed class LeaderboardListViewChild(LeaderboardListChild leaderboardL
 				for (int j = 0; j < clOverview.Criteria.Count; j++)
 				{
 					GetCustomLeaderboardCriteria criteria = clOverview.Criteria[j];
-					ImGuiImage.Image(GetTexture(resourceManager, criteria.Type).Id, new Vector2(16), criteria.Type.GetColor());
+					ImGui.Image(GetTexture(resourceManager, criteria.Type).Id, new Vector2(16), criteria.Type.GetColor());
 					if (ImGui.IsItemHovered())
 					{
 						// TODO: May need to improve performance here by caching the text, or perhaps return the text from the API.

@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 using Hexa.NET.ImGui;
@@ -47,7 +48,7 @@ internal sealed class CustomLeaderboardsWindow(
 		ImGui.End();
 #endif
 
-		ImGuiUtils.SetNextWindowMinSize(UiConstants.MinWindowSize);
+		ImGui.SetNextWindowMinSize(UiConstants.MinWindowSize);
 		if (ImGui.Begin("Custom Leaderboards", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollWithMouse))
 		{
 			if (ImGui.BeginChild("LeftRow", new Vector2(288, 464)))

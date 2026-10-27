@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.Dialogs;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.User.Settings.Model;
 using Hexa.NET.ImGui;
@@ -88,7 +89,7 @@ internal sealed class ConfigLayout(GameInstallationValidator gameInstallationVal
 
 			ImGui.EndChild();
 
-			ImGuiExt.PushFont(fontService.GoetheBold30);
+			ImGui.PushFont(fontService.GoetheBold30);
 			if (ImGui.Button("Save and continue", new Vector2(752, 64)))
 			{
 				userSettings.Model = userSettings.Model with

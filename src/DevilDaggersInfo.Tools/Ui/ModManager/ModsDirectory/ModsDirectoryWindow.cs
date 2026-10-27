@@ -21,7 +21,7 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 
 	public void Render()
 	{
-		ImGuiUtils.SetNextWindowMinSize(1280, 768);
+		ImGui.SetNextWindowMinSize(1280, 768);
 		if (ImGui.Begin("Mod Manager", ImGuiWindowFlags.NoCollapse))
 		{
 			ImGui.Text(Inline.Utf8($"""
@@ -161,7 +161,7 @@ internal sealed class ModsDirectoryWindow(ModManagerState modManagerState, Popup
 					if (_renameErrorMessage != null)
 						ImGui.TextColored(Color.Red, _renameErrorMessage);
 
-					if (ImGui.Button("OK", new Vector2(128, 0)) || ImGuiUtils.IsEnterPressed())
+					if (ImGui.Button("OK", new Vector2(128, 0)) || ImGui.IsEnterPressed())
 					{
 						_renameErrorMessage = modsDirectoryLogic.RenameModFile();
 						if (_renameErrorMessage == null)

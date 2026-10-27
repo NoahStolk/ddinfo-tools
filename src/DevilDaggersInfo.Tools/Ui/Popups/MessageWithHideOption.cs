@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Extensions;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -19,6 +20,6 @@ internal sealed class MessageWithHideOption(string id, string text, Action<bool>
 		if (ImGui.Checkbox("Do not show again", ref _doNotShowAgain))
 			setDoNotShowAgain(_doNotShowAgain);
 
-		return ImGui.Button("OK", new Vector2(120, 0)) || ImGuiUtils.IsEnterPressed();
+		return ImGui.Button("OK", new Vector2(120, 0)) || ImGui.IsEnterPressed();
 	}
 }

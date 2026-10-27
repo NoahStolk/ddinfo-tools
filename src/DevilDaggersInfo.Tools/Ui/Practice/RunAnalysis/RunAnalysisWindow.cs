@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis.Data;
 using Hexa.NET.ImGui;
@@ -29,7 +30,7 @@ internal sealed class RunAnalysisWindow(GameMemoryServiceWrapper gameMemoryServi
 
 	public void Render()
 	{
-		ImGuiUtils.SetNextWindowMinSize(512, 1024);
+		ImGui.SetNextWindowMinSize(512, 1024);
 		if (ImGui.Begin("Run Analysis"))
 		{
 			_splitsChild.Render(_statsData);

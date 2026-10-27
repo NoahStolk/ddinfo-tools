@@ -1,4 +1,5 @@
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Practice.RunAnalysis.Data;
 using Hexa.NET.ImGui;
 using System.Numerics;
@@ -13,7 +14,7 @@ internal sealed class SplitsChild(FontService fontService)
 
 		if (ImGui.BeginChild("Splits", new Vector2(192, 256)))
 		{
-			ImGuiExt.Title("Splits"u8, fontService.GoetheBold20);
+			ImGui.Title("Splits"u8, fontService.GoetheBold20);
 
 			if (ImGui.BeginTable("LeaderboardTable", 3, ImGuiTableFlags.SizingStretchSame))
 			{

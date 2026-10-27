@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Networking;
 using DevilDaggersInfo.Tools.Networking.TaskHandlers;
 using DevilDaggersInfo.Tools.Ui.Popups;
@@ -43,23 +44,23 @@ internal sealed class LeaderboardListChild(ResourceManager resourceManager, Popu
 
 		if (ImGui.BeginChild("LeaderboardList"))
 		{
-			if (ImGuiImage.ImageButton("Reload"u8, resourceManager.InternalResources.ReloadTexture.Id, iconSize))
+			if (ImGui.ImageButton("Reload"u8, resourceManager.InternalResources.ReloadTexture.Id, iconSize))
 				LoadAll();
 
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Begin"u8, resourceManager.InternalResources.ArrowStartTexture.Id, iconSize))
+			if (ImGui.ImageButton("Begin"u8, resourceManager.InternalResources.ArrowStartTexture.Id, iconSize))
 				SetPageIndex(0);
 
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Previous"u8, resourceManager.InternalResources.ArrowLeftTexture.Id, iconSize))
+			if (ImGui.ImageButton("Previous"u8, resourceManager.InternalResources.ArrowLeftTexture.Id, iconSize))
 				SetPageIndex(PageIndex - 1);
 
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Next"u8, resourceManager.InternalResources.ArrowRightTexture.Id, iconSize))
+			if (ImGui.ImageButton("Next"u8, resourceManager.InternalResources.ArrowRightTexture.Id, iconSize))
 				SetPageIndex(PageIndex + 1);
 
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("End"u8, resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
+			if (ImGui.ImageButton("End"u8, resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
 				SetPageIndex(TotalPages - 1);
 
 			if (_categoryNames.Length > 0)

@@ -60,7 +60,7 @@ internal sealed unsafe class CustomLeaderboards3DWindow(
 
 	public void Render(float delta)
 	{
-		ImGuiUtils.SetNextWindowMinSize(UiConstants.MinWindowSize / 2);
+		ImGui.SetNextWindowMinSize(UiConstants.MinWindowSize / 2);
 		if (ImGui.Begin("3D Replay Viewer"))
 		{
 			if (ImGui.IsMouseDown(ImGuiMouseButton.Right) && ImGui.IsWindowHovered())

@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.EditorFileState;
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena.EditorChildren;
 using Hexa.NET.ImGui;
 using System.Diagnostics;
@@ -33,7 +34,7 @@ internal sealed class ArenaEditorControls(ResourceManager resourceManager, Arena
 				if (isCurrent)
 					ImGui.PushStyleColor(ImGuiCol.Button, ImGui.GetStyle().Colors[(int)ImGuiCol.ButtonHovered]);
 
-				if (ImGuiImage.ImageButton(arenaToolText, GetTexture(arenaTool), new Vector2(size)) && arenaWindow.ArenaTool != arenaTool)
+				if (ImGui.ImageButton(arenaToolText, GetTexture(arenaTool), new Vector2(size)) && arenaWindow.ArenaTool != arenaTool)
 					arenaWindow.ArenaTool = arenaTool;
 
 				if (isCurrent)

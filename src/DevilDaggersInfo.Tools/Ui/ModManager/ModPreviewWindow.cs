@@ -13,7 +13,7 @@ internal sealed class ModPreviewWindow(ModManagerState modManagerState, ModsDire
 {
 	public void Render()
 	{
-		ImGuiUtils.SetNextWindowMinSize(640, 360);
+		ImGui.SetNextWindowMinSize(640, 360);
 		if (ImGui.Begin("Mod Preview", ImGuiWindowFlags.NoCollapse))
 		{
 			if (modManagerState.SelectedFileName == null || modManagerState.BinaryType == null)

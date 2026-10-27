@@ -18,7 +18,7 @@ internal sealed class CurrentSpawnsetChild(FontService fontService, SurvivalFile
 
 			if (survivalFileWatcher.Exists)
 			{
-				ImGuiExt.PushFont(fontService.GoetheBold20);
+				ImGui.PushFont(fontService.GoetheBold20);
 				ImGui.Text("Practice is enabled!");
 				ImGui.PopFont();
 				ImGui.Spacing();
@@ -31,7 +31,7 @@ internal sealed class CurrentSpawnsetChild(FontService fontService, SurvivalFile
 			}
 			else
 			{
-				ImGuiExt.PushFont(fontService.GoetheBold20);
+				ImGui.PushFont(fontService.GoetheBold20);
 				ImGui.Text("Practice is disabled.");
 				ImGui.PopFont();
 				ImGui.Text("Click on a template to enable practice, then press the restart button in the game.");

@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Platforms;
 using DevilDaggersInfo.Tools.Utils;
 using DevilDaggersInfo.Web.ApiSpec.Tools;
@@ -39,10 +40,10 @@ internal sealed class UpdateWindow(IPlatformSpecificValues platformSpecificValue
                 """));
 			ImGui.Spacing();
 
-			ImGuiExt.Hyperlink(Urls.GitHubReleases, "Download from GitHub"u8);
+			ImGui.Hyperlink(Urls.GitHubReleases, "Download from GitHub"u8);
 			ImGui.Spacing();
 
-			ImGuiExt.Hyperlink(Urls.GitHubChangelog, "View the full changelog"u8);
+			ImGui.Hyperlink(Urls.GitHubChangelog, "View the full changelog"u8);
 			ImGui.Spacing();
 
 			ImGui.PopTextWrapPos();

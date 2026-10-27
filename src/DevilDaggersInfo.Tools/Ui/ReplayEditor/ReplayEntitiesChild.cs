@@ -29,16 +29,16 @@ internal sealed class ReplayEntitiesChild(ResourceManager resourceManager)
 			const int maxIds = 1000;
 
 			Vector2 iconSize = new(16);
-			if (ImGuiImage.ImageButton("Start"u8, resourceManager.InternalResources.ArrowStartTexture.Id, iconSize))
+			if (ImGui.ImageButton("Start"u8, resourceManager.InternalResources.ArrowStartTexture.Id, iconSize))
 				_startId = 0;
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Back"u8, resourceManager.InternalResources.ArrowLeftTexture.Id, iconSize))
+			if (ImGui.ImageButton("Back"u8, resourceManager.InternalResources.ArrowLeftTexture.Id, iconSize))
 				_startId = Math.Max(0, _startId - maxIds);
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("Forward"u8, resourceManager.InternalResources.ArrowRightTexture.Id, iconSize))
+			if (ImGui.ImageButton("Forward"u8, resourceManager.InternalResources.ArrowRightTexture.Id, iconSize))
 				_startId = Math.Min(replay.Cache.Entities.Count - maxIds, _startId + maxIds);
 			ImGui.SameLine();
-			if (ImGuiImage.ImageButton("End"u8, resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
+			if (ImGui.ImageButton("End"u8, resourceManager.InternalResources.ArrowEndTexture.Id, iconSize))
 				_startId = replay.Cache.Entities.Count - maxIds;
 
 			_startId = Math.Max(0, Math.Min(_startId, replay.Cache.Entities.Count - maxIds));
