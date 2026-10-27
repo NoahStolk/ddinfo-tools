@@ -1,65 +1,67 @@
-using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
+// TODO: Simplify color arithmetic.
 internal static class Colors
 {
+	private static readonly Vector4 _unit = new(255f);
+
 	public static ColorConfiguration Main { get; } = new()
 	{
-		Primary = new Color(250, 66, 66, 255),
-		Secondary = new Color(224, 61, 61, 255),
-		Tertiary = new Color(122, 41, 41, 255),
-		Quaternary = new Color(191, 26, 26, 255),
+		Primary = new Vector4(250, 66, 66, 255) / _unit,
+		Secondary = new Vector4(224, 61, 61, 255) / _unit,
+		Tertiary = new Vector4(122, 41, 41, 255) / _unit,
+		Quaternary = new Vector4(191, 26, 26, 255) / _unit,
 	};
 
 	public static ColorConfiguration SpawnsetEditor { get; } = new()
 	{
-		Primary = new Color(250, 66, 66, 255),
-		Secondary = new Color(224, 61, 61, 255),
-		Tertiary = new Color(122, 41, 41, 255),
-		Quaternary = new Color(191, 26, 26, 255),
+		Primary = new Vector4(250, 66, 66, 255) / _unit,
+		Secondary = new Vector4(224, 61, 61, 255) / _unit,
+		Tertiary = new Vector4(122, 41, 41, 255) / _unit,
+		Quaternary = new Vector4(191, 26, 26, 255) / _unit,
 	};
 
 	public static ColorConfiguration CustomLeaderboards { get; } = new()
 	{
-		Primary = new Color(150, 66, 250, 255),
-		Secondary = new Color(133, 61, 224, 255),
-		Tertiary = new Color(74, 41, 122, 255),
-		Quaternary = new Color(102, 26, 191, 255),
+		Primary = new Vector4(150, 66, 250, 255) / _unit,
+		Secondary = new Vector4(133, 61, 224, 255) / _unit,
+		Tertiary = new Vector4(74, 41, 122, 255) / _unit,
+		Quaternary = new Vector4(102, 26, 191, 255) / _unit,
 	};
 
 	public static ColorConfiguration ReplayEditor { get; } = new()
 	{
-		Primary = new Color(66, 66, 250, 255),
-		Secondary = new Color(61, 61, 224, 255),
-		Tertiary = new Color(41, 41, 122, 255),
-		Quaternary = new Color(26, 26, 191, 255),
+		Primary = new Vector4(66, 66, 250, 255) / _unit,
+		Secondary = new Vector4(61, 61, 224, 255) / _unit,
+		Tertiary = new Vector4(41, 41, 122, 255) / _unit,
+		Quaternary = new Vector4(26, 26, 191, 255) / _unit,
 	};
 
 	public static ColorConfiguration Practice { get; } = new()
 	{
-		Primary = new Color(250, 150, 66, 255),
-		Secondary = new Color(224, 133, 61, 255),
-		Tertiary = new Color(122, 74, 41, 255),
-		Quaternary = new Color(191, 102, 26, 255),
+		Primary = new Vector4(250, 150, 66, 255) / _unit,
+		Secondary = new Vector4(224, 133, 61, 255) / _unit,
+		Tertiary = new Vector4(122, 74, 41, 255) / _unit,
+		Quaternary = new Vector4(191, 102, 26, 255) / _unit,
 	};
 
 	public static ColorConfiguration AssetEditor { get; } = new()
 	{
-		Primary = new Color(66, (byte)(150 * 1.25f), 66, 255),
-		Secondary = new Color(61, (byte)(133 * 1.25f), 61, 255),
-		Tertiary = new Color(41, (byte)(74 * 1.25f), 41, 255),
-		Quaternary = new Color(26, (byte)(102 * 1.25f), 26, 255),
+		Primary = new Vector4(66, (byte)(150 * 1.25f), 66, 255) / _unit,
+		Secondary = new Vector4(61, (byte)(133 * 1.25f), 61, 255) / _unit,
+		Tertiary = new Vector4(41, (byte)(74 * 1.25f), 41, 255) / _unit,
+		Quaternary = new Vector4(26, (byte)(102 * 1.25f), 26, 255) / _unit,
 	};
 
 	public static ColorConfiguration ModManager { get; } = new()
 	{
-		Primary = new Color(150, 150, 66, 255),
-		Secondary = new Color(133, 133, 61, 255),
-		Tertiary = new Color(74, 74, 41, 255),
-		Quaternary = new Color(102, 102, 26, 255),
+		Primary = new Vector4(150, 150, 66, 255) / _unit,
+		Secondary = new Vector4(133, 133, 61, 255) / _unit,
+		Tertiary = new Vector4(74, 74, 41, 255) / _unit,
+		Quaternary = new Vector4(102, 102, 26, 255) / _unit,
 	};
 
 	public static Vector4 TitleColor(float totalTime)
