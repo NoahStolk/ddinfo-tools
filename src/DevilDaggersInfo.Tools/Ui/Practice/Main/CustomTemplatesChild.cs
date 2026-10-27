@@ -18,7 +18,7 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 	{
 		if (ImGui.BeginChild("CustomTemplates", templateContainerSize, ImGuiChildFlags.Borders))
 		{
-			ImGui.Text("Custom templates");
+			ImGui.SeparatorText("Custom templates");
 
 			if (ImGui.BeginChild("CustomTemplateDescription", templateListSize with { Y = PracticeWindow.TemplateDescriptionHeight }))
 			{

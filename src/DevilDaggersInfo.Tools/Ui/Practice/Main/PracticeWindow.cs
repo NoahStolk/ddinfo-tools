@@ -23,7 +23,7 @@ internal sealed class PracticeWindow(
 		{
 			Vector2 windowSize = ImGui.GetWindowSize();
 			Vector2 templateContainerSize = new(MathF.Ceiling(windowSize.X / 3 - 11), windowSize.Y - 260);
-			Vector2 templateListSize = new(templateContainerSize.X - 20, templateContainerSize.Y - 88);
+			Vector2 templateListSize = new(templateContainerSize.X - 20, templateContainerSize.Y - 92);
 			float templateWidth = templateListSize.X - 20;
 
 			ImGui.Text("Use these templates to practice specific sections of the game. Click on a template to install it.");

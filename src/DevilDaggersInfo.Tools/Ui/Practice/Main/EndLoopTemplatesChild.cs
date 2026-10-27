@@ -38,7 +38,7 @@ internal sealed class EndLoopTemplatesChild(PracticeLogic practiceLogic, Content
 	{
 		if (ImGui.BeginChild("EndLoopTemplates", templateContainerSize, ImGuiChildFlags.Borders))
 		{
-			ImGui.Text("End loop templates");
+			ImGui.SeparatorText("End loop templates");
 
 			if (ImGui.BeginChild("EndLoopTemplateDescription", templateListSize with { Y = PracticeWindow.TemplateDescriptionHeight }))
 			{

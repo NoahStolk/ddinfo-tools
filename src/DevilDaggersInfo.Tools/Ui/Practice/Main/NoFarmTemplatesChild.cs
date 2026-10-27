@@ -26,7 +26,7 @@ internal sealed class NoFarmTemplatesChild(PracticeLogic practiceLogic)
 	{
 		if (ImGui.BeginChild("NoFarmTemplates", templateContainerSize, ImGuiChildFlags.Borders))
 		{
-			ImGui.Text("No farm templates");
+			ImGui.SeparatorText("No farm templates");
 
 			if (ImGui.BeginChild("NoFarmTemplateDescription", templateListSize with { Y = PracticeWindow.TemplateDescriptionHeight }))
 			{
