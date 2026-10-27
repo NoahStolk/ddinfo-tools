@@ -1,21 +1,22 @@
 using DevilDaggersInfo.Core.Replay.Events.Enums;
 using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Extensions;
 
 internal static class EntityTypeExtensions
 {
-	public static Color GetColor(this EntityType? entityType)
+	public static Vector4 GetColor(this EntityType? entityType)
 	{
-		return entityType?.GetColor() ?? new Color(191, 0, 255, 255);
+		return entityType?.GetColor() ?? new Vector4(0.75f, 0, 1, 1);
 	}
 
 	extension(EntityType entityType)
 	{
-		public Color GetColor()
+		public Vector4 GetColor()
 		{
-			return (entityType switch
+			return entityType switch
 			{
 				EntityType.Level1Dagger => UpgradesV3_2.Level1.Color,
 				EntityType.Level2Dagger => UpgradesV3_2.Level2.Color,
@@ -41,7 +42,7 @@ internal static class EntityTypeExtensions
 				EntityType.Leviathan => EnemiesV3_2.Leviathan.Color,
 				EntityType.Thorn => EnemiesV3_2.Thorn.Color,
 				_ => new Core.Wiki.Structs.Color(191, 0, 255),
-			}).ToEngineColor();
+			};
 		}
 
 		public ReadOnlySpan<byte> AsUtf8ShortSpan()

@@ -21,7 +21,7 @@ internal static class HitEventExplanation
 			ImGui.SameLine();
 			ImGui.Text("-");
 			ImGui.SameLine();
-			ImGui.TextColored(death?.Color.ToEngineColor() ?? Vector4.One, Inline.Utf8($"{death?.Name ?? "Unknown death type"}"));
+			ImGui.TextColored(death?.Color ?? Vector4.One, Inline.Utf8($"{death?.Name ?? "Unknown death type"}"));
 			return;
 		}
 

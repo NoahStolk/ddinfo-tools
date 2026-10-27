@@ -64,7 +64,7 @@ internal sealed class EndLoopTemplatesChild(PracticeLogic practiceLogic, Content
 	{
 		Vector2 buttonSize = new(templateWidth, 30);
 		(float backgroundAlpha, float textAlpha) = PracticeWindow.GetAlpha(practiceLogic.IsActive(HandLevel.Level4, 0, timerStart));
-		Vector4 color = waveIndex % 3 == 2 ? EnemiesV3_2.Ghostpede.Color.ToEngineColor() : EnemiesV3_2.Gigapede.Color.ToEngineColor();
+		Vector4 color = waveIndex % 3 == 2 ? EnemiesV3_2.Ghostpede.Color : EnemiesV3_2.Gigapede.Color;
 
 		ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
 		if (ImGui.BeginChild(Inline.Utf8($"Wave{waveIndex + 1}"), buttonSize, ImGuiChildFlags.Borders))

@@ -211,7 +211,7 @@ internal sealed class LeaderboardChild(
 		ImGui.TableNextColumn();
 
 		Death? death = Deaths.GetDeathByType(GameConstants.CurrentVersion, ce.DeathType);
-		ImGui.TextColored(death?.Color.ToEngineColor() ?? Vector4.One, death?.Name ?? "Unknown");
+		ImGui.TextColored(death?.Color ?? Vector4.One, death?.Name ?? "Unknown");
 		ImGui.TableNextColumn();
 
 		TextDaggerColored(Inline.Utf8(ce.HomingStored), _isHomingStored);

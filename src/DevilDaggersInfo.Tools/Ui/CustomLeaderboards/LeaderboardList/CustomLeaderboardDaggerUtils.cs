@@ -3,14 +3,15 @@ using DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 
 internal static class CustomLeaderboardDaggerUtils
 {
-	public static Color GetColor(CustomLeaderboardDagger? customLeaderboardDagger)
+	public static Vector4 GetColor(CustomLeaderboardDagger? customLeaderboardDagger)
 	{
-		return (customLeaderboardDagger switch
+		return customLeaderboardDagger switch
 		{
 			CustomLeaderboardDagger.Default => DaggerColors.Default,
 			CustomLeaderboardDagger.Bronze => DaggerColors.Bronze,
@@ -20,6 +21,6 @@ internal static class CustomLeaderboardDaggerUtils
 			CustomLeaderboardDagger.Leviathan => DaggerColors.Leviathan,
 			null => new Core.Wiki.Structs.Color(127, 143, 127),
 			_ => throw new UnreachableException(),
-		}).ToEngineColor();
+		};
 	}
 }

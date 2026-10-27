@@ -11,10 +11,10 @@ internal static class HandLevelExtensions
 	{
 		return handLevel switch
 		{
-			HandLevel.Level1 => UpgradeColors.Level1.ToEngineColor(),
-			HandLevel.Level2 => UpgradeColors.Level2.ToEngineColor(),
-			HandLevel.Level3 => UpgradeColors.Level3.ToEngineColor(),
-			HandLevel.Level4 => UpgradeColors.Level4.ToEngineColor(),
+			HandLevel.Level1 => UpgradeColors.Level1,
+			HandLevel.Level2 => UpgradeColors.Level2,
+			HandLevel.Level3 => UpgradeColors.Level3,
+			HandLevel.Level4 => UpgradeColors.Level4,
 			_ => throw new UnreachableException(),
 		};
 	}

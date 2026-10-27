@@ -165,7 +165,7 @@ internal sealed class GraphsChild(FontService fontService)
 		RenderGraphSplits(statsData, drawListPtr, pos, size);
 
 		if (_showHomingStored)
-			RenderGraphLine(drawListPtr, _homingStored, max, _homingStoredPoints, ImGui.GetColorU32(UpgradeColors.Level4.ToEngineColor()), pos, size);
+			RenderGraphLine(drawListPtr, _homingStored, max, _homingStoredPoints, ImGui.GetColorU32(UpgradeColors.Level4), pos, size);
 
 		if (_showHomingEaten)
 			RenderGraphLine(drawListPtr, _homingEaten, max, _homingEatenPoints, 0xff0000ff, pos, size);
@@ -179,7 +179,7 @@ internal sealed class GraphsChild(FontService fontService)
 			if (ImGui.BeginTooltip())
 			{
 				AddTooltipText("Time"u8, Inline.Utf8(GetTimeFromIndex(statsData, index), StringFormats.TimeFormat), Vector4.One);
-				AddTooltipText("Homing Stored"u8, Inline.Utf8(homingStored), UpgradeColors.Level4.ToEngineColor());
+				AddTooltipText("Homing Stored"u8, Inline.Utf8(homingStored), UpgradeColors.Level4);
 				AddTooltipText("Homing Eaten"u8, Inline.Utf8(homingEaten), new Vector4(1, 0, 0, 1));
 
 				ImGui.EndTooltip();
