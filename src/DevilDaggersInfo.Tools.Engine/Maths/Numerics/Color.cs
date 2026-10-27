@@ -1,8 +1,8 @@
 using System.Numerics;
-using System.Runtime.CompilerServices;
 
 namespace DevilDaggersInfo.Tools.Engine.Maths.Numerics;
 
+[Obsolete("Use Vector4 instead.")]
 public readonly record struct Color(byte R, byte G, byte B, byte A)
 {
 	public static Color Invisible { get; } = new(byte.MinValue, byte.MinValue, byte.MinValue, byte.MinValue);
@@ -32,36 +32,12 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 		return new Vector4(color.R / (float)byte.MaxValue, color.G / (float)byte.MaxValue, color.B / (float)byte.MaxValue, color.A / (float)byte.MaxValue);
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Color operator +(Color left, Color right)
-	{
-		return new Color((byte)(left.R + right.R), (byte)(left.G + right.G), (byte)(left.B + right.B), (byte)(left.A + right.A));
-	}
-
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Color operator -(Color left, Color right)
-	{
-		return new Color((byte)(left.R - right.R), (byte)(left.G - right.G), (byte)(left.B - right.B), (byte)(left.A - right.A));
-	}
-
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Color operator *(Color left, Color right)
-	{
-		return new Color((byte)(left.R * right.R), (byte)(left.G * right.G), (byte)(left.B * right.B), (byte)(left.A * right.A));
-	}
-
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Color operator /(Color left, Color right)
-	{
-		return new Color((byte)(left.R / right.R), (byte)(left.G / right.G), (byte)(left.B / right.B), (byte)(left.A / right.A));
-	}
-
 	public Color ReadableColorForBrightness()
 	{
 		return GetPerceivedBrightness() < 140 ? White : Black;
 	}
 
-	public int GetPerceivedBrightness()
+	private int GetPerceivedBrightness()
 	{
 		return (int)Math.Sqrt(R * R * 0.299 + G * G * 0.587 + B * B * 0.114);
 	}
@@ -92,29 +68,6 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 	public Color Darken(float amount)
 	{
 		return new Color((byte)(R * (1 - amount)), (byte)(G * (1 - amount)), (byte)(B * (1 - amount)), A);
-	}
-
-	public int GetHue()
-	{
-		byte min = Math.Min(Math.Min(R, G), B);
-		byte max = Math.Max(Math.Max(R, G), B);
-
-		if (min == max)
-			return 0;
-
-		float hue;
-		if (max == R)
-			hue = (G - B) / (float)(max - min);
-		else if (max == G)
-			hue = 2f + (B - R) / (float)(max - min);
-		else
-			hue = 4f + (R - G) / (float)(max - min);
-
-		hue *= 60;
-		if (hue < 0)
-			hue += 360;
-
-		return (int)Math.Round(hue);
 	}
 
 	public static Color Lerp(Color value1, Color value2, float amount)
