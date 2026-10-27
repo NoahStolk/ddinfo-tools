@@ -9,11 +9,6 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 
 	public static Color Red { get; } = new(byte.MaxValue, byte.MinValue, byte.MinValue, byte.MaxValue);
 
-	public static implicit operator Vector3(Color color)
-	{
-		return new Vector3(color.R / (float)byte.MaxValue, color.G / (float)byte.MaxValue, color.B / (float)byte.MaxValue);
-	}
-
 	public static implicit operator Vector4(Color color)
 	{
 		return new Vector4(color.R / (float)byte.MaxValue, color.G / (float)byte.MaxValue, color.B / (float)byte.MaxValue, color.A / (float)byte.MaxValue);
