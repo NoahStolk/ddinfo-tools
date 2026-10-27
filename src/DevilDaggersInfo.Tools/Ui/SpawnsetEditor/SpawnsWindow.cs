@@ -140,10 +140,10 @@ internal sealed class SpawnsWindow(PopupManager popupManager, FileStates fileSta
 		bool isCurrent = _selectedEnemyType == enemyType;
 		Engine.Maths.Numerics.Color enemyColor = enemyType.GetColor(GameVersion.V3_2).ToEngineColor().Darken(isCurrent ? 0 : 0.8f);
 
-		ImGui.PushStyleColor(ImGuiCol.Text, isCurrent ? enemyColor.ReadableColorForBrightness() : Engine.Maths.Numerics.Color.Gray(0.5f));
+		ImGui.PushStyleColor(ImGuiCol.Text, isCurrent ? enemyColor.ReadableColorForBrightness() : new Vector4(0.5f, 0.5f, 0.5f, 1));
 		ImGui.PushStyleColor(ImGuiCol.Button, enemyColor);
-		ImGui.PushStyleColor(ImGuiCol.ButtonActive, Engine.Maths.Numerics.Color.Lerp(enemyColor, Engine.Maths.Numerics.Color.White, 0.25f));
-		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Engine.Maths.Numerics.Color.Lerp(enemyColor, Engine.Maths.Numerics.Color.White, 0.125f));
+		ImGui.PushStyleColor(ImGuiCol.ButtonActive, Vector4.Lerp(enemyColor, Vector4.One, 0.25f));
+		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Vector4.Lerp(enemyColor, Vector4.One, 0.125f));
 		ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, isCurrent ? 1 : 0);
 		ImGui.PushStyleColor(ImGuiCol.Border, enemyColor.ReadableColorForBrightness());
 

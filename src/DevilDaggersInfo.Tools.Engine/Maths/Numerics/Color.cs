@@ -51,15 +51,6 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 		return new Color((byte)(R * (1 - amount)), (byte)(G * (1 - amount)), (byte)(B * (1 - amount)), A);
 	}
 
-	public static Color Lerp(Color value1, Color value2, float amount)
-	{
-		float r = MathUtils.Lerp(value1.R, value2.R, amount);
-		float g = MathUtils.Lerp(value1.G, value2.G, amount);
-		float b = MathUtils.Lerp(value1.B, value2.B, amount);
-		float a = MathUtils.Lerp(value1.A, value2.A, amount);
-		return new Color((byte)r, (byte)g, (byte)b, (byte)a);
-	}
-
 	public static Color Gray(float value)
 	{
 		if (value is < 0 or > 1)
