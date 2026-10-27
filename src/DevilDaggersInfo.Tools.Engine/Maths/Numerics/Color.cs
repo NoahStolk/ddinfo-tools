@@ -9,29 +9,4 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 	{
 		return new Vector4(color.R / (float)byte.MaxValue, color.G / (float)byte.MaxValue, color.B / (float)byte.MaxValue, color.A / (float)byte.MaxValue);
 	}
-
-	public static Color FromHsv(float hue, float saturation, float value)
-	{
-		saturation = Math.Clamp(saturation, 0, 1);
-		value = Math.Clamp(value, 0, 1);
-
-		int hi = (int)MathF.Floor(hue / 60) % 6;
-		float f = hue / 60 - MathF.Floor(hue / 60);
-
-		value *= byte.MaxValue;
-		byte v = (byte)value;
-		byte p = (byte)(value * (1 - saturation));
-		byte q = (byte)(value * (1 - f * saturation));
-		byte t = (byte)(value * (1 - (1 - f) * saturation));
-
-		return hi switch
-		{
-			0 => new Color(v, t, p, byte.MaxValue),
-			1 => new Color(q, v, p, byte.MaxValue),
-			2 => new Color(p, v, t, byte.MaxValue),
-			3 => new Color(p, q, v, byte.MaxValue),
-			4 => new Color(t, p, v, byte.MaxValue),
-			_ => new Color(v, p, q, byte.MaxValue),
-		};
-	}
 }

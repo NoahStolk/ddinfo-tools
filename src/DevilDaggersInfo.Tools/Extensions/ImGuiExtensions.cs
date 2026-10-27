@@ -100,7 +100,7 @@ internal static class ImGuiExtensions
 			byte g = (byte)((i >> 08) & 0xFF);
 			byte b = (byte)((i >> 16) & 0xFF);
 			byte a = (byte)((i >> 24) & 0xFF);
-			return new Color(r, g, b, a);
+			return new Vector4(r / 255f, g / 255f, b / 255f, a / 255f);
 		}
 	}
 }

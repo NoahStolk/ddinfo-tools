@@ -38,5 +38,29 @@ internal static class Vector4Extensions
 
 			return new Vector4(newR, newG, newB, color.W);
 		}
+
+		public static Vector4 CreateColorFromHsv(float hue, float saturation, float value)
+		{
+			saturation = Math.Clamp(saturation, 0, 1);
+			value = Math.Clamp(value, 0, 1);
+
+			int hi = (int)MathF.Floor(hue / 60) % 6;
+			float f = hue / 60 - MathF.Floor(hue / 60);
+
+			float v = value;
+			float p = value * (1 - saturation);
+			float q = value * (1 - f * saturation);
+			float t = value * (1 - (1 - f) * saturation);
+
+			return hi switch
+			{
+				0 => new Vector4(v, t, p, 1),
+				1 => new Vector4(q, v, p, 1),
+				2 => new Vector4(p, v, t, 1),
+				3 => new Vector4(p, q, v, 1),
+				4 => new Vector4(t, p, v, 1),
+				_ => new Vector4(v, p, q, 1),
+			};
+		}
 	}
 }
