@@ -10,5 +10,6 @@ internal static class CheckIfLeaderboardExists
 		return new Result(hrm.StatusCode != HttpStatusCode.NotFound);
 	}
 
+	// Handler must return a reference type.
 	internal sealed record Result(bool Exists);
 }

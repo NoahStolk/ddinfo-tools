@@ -2,6 +2,7 @@ using DevilDaggersInfo.Core.Replay;
 using DevilDaggersInfo.Core.Replay.Exceptions;
 using DevilDaggersInfo.Tools.EditorFileState;
 using DevilDaggersInfo.Tools.Networking;
+using DevilDaggersInfo.Tools.Networking.TaskHandlers;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.ReplayEditor.Data;
 using Hexa.NET.ImGui;
@@ -42,7 +43,7 @@ internal sealed class LeaderboardReplayBrowser(PopupManager popupManager, FileSt
 			if (ImGui.Button("Download and open"))
 			{
 				_isDownloading = true;
-				AsyncHandler.Run(HandleDownloadedReplay, () => DownloadReplayAsync(_selectedPlayerId));
+				AsyncHandler.Run(HandleDownloadedReplay, () => DownloadReplay.HandleAsync(_selectedPlayerId));
 			}
 
 			ImGui.EndDisabled();
@@ -54,7 +55,7 @@ internal sealed class LeaderboardReplayBrowser(PopupManager popupManager, FileSt
 		ImGui.End();
 	}
 
-	private void HandleDownloadedReplay(ApiResult<Response> responseResult)
+	private void HandleDownloadedReplay(ApiResult<DownloadReplay.LeaderboardReplayResponse> responseResult)
 	{
 		responseResult.Match(
 			onSuccess: response =>
@@ -129,17 +130,4 @@ internal sealed class LeaderboardReplayBrowser(PopupManager popupManager, FileSt
 
 		return sb.ToString();
 	}
-
-	private static async Task<Response> DownloadReplayAsync(int id)
-	{
-		using FormUrlEncodedContent content = new(new List<KeyValuePair<string, string>> { new("replay", id.ToString()) });
-		using HttpClient httpClient = new();
-		using HttpResponseMessage response = await httpClient.PostAsync("http://dd.hasmodai.com/dd3/get_replay.php", content);
-		if (response.IsSuccessStatusCode)
-			return new Response(await response.Content.ReadAsByteArrayAsync(), id);
-
-		throw new HttpRequestException($"The leaderboard servers returned an unsuccessful response (HTTP {(int)response.StatusCode} {response.StatusCode}).");
-	}
-
-	private sealed record Response(byte[] Data, int PlayerId);
 }
