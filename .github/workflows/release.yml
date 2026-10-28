@@ -15,7 +15,7 @@ jobs:
         with:
           dotnet-version: '10.0.100'
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Build and test
         run: dotnet test src/DevilDaggersInfo.Tools.slnx -c Release
       - name: Create encryption.ini
