@@ -71,25 +71,26 @@ internal sealed class ConfigLayout(GameInstallationValidator gameInstallationVal
 				if (userSettings.Model.FieldOfView != fieldOfView)
 					userSettings.Model = userSettings.Model with { FieldOfView = fieldOfView };
 
-				bool showDebug = userSettings.Model.ShowDebug;
-				ImGui.Checkbox("Show debug", ref showDebug);
-				if (userSettings.Model.ShowDebug != showDebug)
-					userSettings.Model = userSettings.Model with { ShowDebug = showDebug };
-
-				bool doNotShowAgainPracticeSpawnsetApplied = userSettings.Model.DoNotShowAgainPracticeSpawnsetApplied;
-				ImGui.Checkbox("Do not show message again when applying practice spawnset", ref doNotShowAgainPracticeSpawnsetApplied);
-				if (userSettings.Model.DoNotShowAgainPracticeSpawnsetApplied != doNotShowAgainPracticeSpawnsetApplied)
-					userSettings.Model = userSettings.Model with { DoNotShowAgainPracticeSpawnsetApplied = doNotShowAgainPracticeSpawnsetApplied };
-
-				bool doNotShowAgainPracticeSpawnsetDeleted = userSettings.Model.DoNotShowAgainPracticeSpawnsetDeleted;
-				ImGui.Checkbox("Do not show message again when deleting practice spawnset", ref doNotShowAgainPracticeSpawnsetDeleted);
-				if (userSettings.Model.DoNotShowAgainPracticeSpawnsetDeleted != doNotShowAgainPracticeSpawnsetDeleted)
-					userSettings.Model = userSettings.Model with { DoNotShowAgainPracticeSpawnsetDeleted = doNotShowAgainPracticeSpawnsetDeleted };
-
-				bool doNotShowAgainPracticeWarning = userSettings.Model.DoNotShowAgainPracticeWarning;
-				ImGui.Checkbox("Do not show practice warning", ref doNotShowAgainPracticeWarning);
-				if (userSettings.Model.DoNotShowAgainPracticeWarning != doNotShowAgainPracticeWarning)
-					userSettings.Model = userSettings.Model with { DoNotShowAgainPracticeWarning = doNotShowAgainPracticeWarning };
+				Checkbox(
+					"Show debug",
+					s => s.ShowDebug,
+					b => userSettings.Model with { ShowDebug = b },
+					"Enables the debug window.");
+				Checkbox(
+					"Do not show message again when applying practice spawnset",
+					s => s.DoNotShowAgainPracticeSpawnsetApplied,
+					b => userSettings.Model with { DoNotShowAgainPracticeSpawnsetApplied = b },
+					null);
+				Checkbox(
+					"Do not show message again when deleting practice spawnset",
+					s => s.DoNotShowAgainPracticeSpawnsetDeleted,
+					b => userSettings.Model with { DoNotShowAgainPracticeSpawnsetDeleted = b },
+					null);
+				Checkbox(
+					"Do not show practice warning",
+					s => s.DoNotShowAgainPracticeWarning,
+					b => userSettings.Model with { DoNotShowAgainPracticeWarning = b },
+					"Prevents showing the practice warning. If the app knows you already have 500 seconds or more, the warning won't show regardless of the setting.");
 			}
 
 			ImGui.EndChild();
@@ -112,6 +113,23 @@ internal sealed class ConfigLayout(GameInstallationValidator gameInstallationVal
 
 		if (ImGui.IsKeyPressed(ImGuiKey.Escape))
 			gameInstallationValidator.ValidateInstallation();
+	}
+
+	private void Checkbox(string label, Func<UserSettingsModel, bool> selector, Func<bool, UserSettingsModel> setter, string? tooltipText)
+	{
+		bool showDebug = selector(userSettings.Model);
+		ImGui.Checkbox(label, ref showDebug);
+
+		if (tooltipText != null)
+		{
+			ImGui.SameLine();
+			ImGui.TextColored(new Vector4(0.7f, 0.7f, 0.7f, 1), "(?)");
+			if (ImGui.IsItemHovered())
+				ImGui.SetTooltip(tooltipText);
+		}
+
+		if (selector(userSettings.Model) != showDebug)
+			userSettings.Model = setter(showDebug);
 	}
 
 	private void OpenInstallationDirectoryCallback(string? directory)
