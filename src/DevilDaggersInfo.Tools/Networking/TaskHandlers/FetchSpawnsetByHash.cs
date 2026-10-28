@@ -6,6 +6,6 @@ internal static class FetchSpawnsetByHash
 {
 	public static async Task<GetSpawnsetByHash> HandleAsync(byte[] hash)
 	{
-		return await AsyncHandler.Client.GetSpawnsetByHash(hash);
+		return await Clients.DevilDaggersInfo.GetSpawnsetByHash(hash);
 	}
 }

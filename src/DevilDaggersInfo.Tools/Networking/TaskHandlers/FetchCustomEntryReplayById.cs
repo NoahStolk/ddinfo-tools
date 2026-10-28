@@ -6,6 +6,6 @@ internal static class FetchCustomEntryReplayById
 {
 	public static async Task<GetCustomEntryReplayBuffer> HandleAsync(int customEntryId)
 	{
-		return await AsyncHandler.Client.GetCustomEntryReplayBufferById(customEntryId);
+		return await Clients.DevilDaggersInfo.GetCustomEntryReplayBufferById(customEntryId);
 	}
 }

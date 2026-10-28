@@ -10,7 +10,7 @@ internal static class UploadSubmission
 {
 	public static async Task<GetUploadResponse> HandleAsync(AddUploadRequest addUploadRequest)
 	{
-		HttpResponseMessage response = await AsyncHandler.Client.SubmitScore(addUploadRequest);
+		HttpResponseMessage response = await Clients.DevilDaggersInfo.SubmitScore(addUploadRequest);
 
 		if (response.StatusCode != HttpStatusCode.OK)
 			throw new HttpRequestException(await response.Content.ReadAsStringAsync(), null, response.StatusCode);

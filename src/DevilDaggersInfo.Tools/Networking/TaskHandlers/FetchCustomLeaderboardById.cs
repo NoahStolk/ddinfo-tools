@@ -6,6 +6,6 @@ internal static class FetchCustomLeaderboardById
 {
 	public static async Task<GetCustomLeaderboard> HandleAsync(int customLeaderboardId)
 	{
-		return await AsyncHandler.Client.GetCustomLeaderboardById(customLeaderboardId);
+		return await Clients.DevilDaggersInfo.GetCustomLeaderboardById(customLeaderboardId);
 	}
 }

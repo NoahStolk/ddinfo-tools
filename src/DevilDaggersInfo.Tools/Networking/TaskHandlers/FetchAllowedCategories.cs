@@ -6,6 +6,6 @@ internal static class FetchAllowedCategories
 {
 	public static async Task<List<GetCustomLeaderboardAllowedCategory>> HandleAsync()
 	{
-		return await AsyncHandler.Client.GetCustomLeaderboardAllowedCategories();
+		return await Clients.DevilDaggersInfo.GetCustomLeaderboardAllowedCategories();
 	}
 }

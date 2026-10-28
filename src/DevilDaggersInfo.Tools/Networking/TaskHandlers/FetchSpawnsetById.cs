@@ -6,6 +6,6 @@ internal static class FetchSpawnsetById
 {
 	public static async Task<GetSpawnset> HandleAsync(int spawnsetId)
 	{
-		return await AsyncHandler.Client.GetSpawnsetById(spawnsetId);
+		return await Clients.DevilDaggersInfo.GetSpawnsetById(spawnsetId);
 	}
 }
