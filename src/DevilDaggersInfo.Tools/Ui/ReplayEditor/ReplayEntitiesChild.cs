@@ -51,17 +51,17 @@ internal sealed class ReplayEntitiesChild(ResourceManager resourceManager)
 			if (ImGui.BeginChild("ReplayEntitiesChild", new Vector2(0, 0)))
 				RenderReplayEntitiesTable(replay, maxIds);
 
-			ImGui.EndChild(); // ReplayEntitiesChild
+			ImGui.EndChild();
 		}
 
-		ImGui.EndChild(); // ReplayEntities
+		ImGui.EndChild();
 
 		ImGui.SameLine();
 
 		if (ImGui.BeginChild("ReplayEnemyHitLog"))
 			RenderEnemyHitLog(replay.StartTime);
 
-		ImGui.EndChild(); // ReplayEnemyHitLog
+		ImGui.EndChild();
 	}
 
 	private void RenderReplayEntitiesTable(EditorReplayModel replay, int maxIds)

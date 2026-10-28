@@ -51,7 +51,7 @@ internal sealed class LeaderboardReplayBrowser(PopupManager popupManager, FileSt
 				ImGui.Text("Downloading...");
 		}
 
-		ImGui.End(); // Leaderboard Replay Browser
+		ImGui.End();
 	}
 
 	private void HandleDownloadedReplay(ApiResult<Response> responseResult)

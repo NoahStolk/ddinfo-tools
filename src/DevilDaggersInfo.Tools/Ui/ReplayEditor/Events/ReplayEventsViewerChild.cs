@@ -78,7 +78,7 @@ internal sealed class ReplayEventsViewerChild(ResourceManager resourceManager)
 				ImGui.Text(Inline.Utf8($"Showing {_startIndex} - {endIndex} of {replay.Cache.Events.Count} events"));
 			}
 
-			ImGui.EndChild(); // TickNavigation
+			ImGui.EndChild();
 
 			ImGui.SameLine();
 
@@ -117,10 +117,10 @@ internal sealed class ReplayEventsViewerChild(ResourceManager resourceManager)
 					ToggleAll(false);
 			}
 
-			ImGui.EndChild(); // EventTypeFiltering
+			ImGui.EndChild();
 		}
 
-		ImGui.EndChild(); // NavigationAndFilteringWrapper
+		ImGui.EndChild();
 
 		ImGui.PopStyleColor();
 
@@ -129,7 +129,7 @@ internal sealed class ReplayEventsViewerChild(ResourceManager resourceManager)
 			RenderEventsTable(replay, maxEvents);
 		}
 
-		ImGui.EndChild(); // ReplayEventsChild
+		ImGui.EndChild();
 	}
 
 	private void RenderEventsTable(EditorReplayModel replay, int maxTicks)

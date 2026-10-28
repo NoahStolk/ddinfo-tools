@@ -47,7 +47,7 @@ internal sealed class ReplayInputsChild(ResourceManager resourceManager)
 				"""));
 		}
 
-		ImGui.EndChild(); // TickNavigation
+		ImGui.EndChild();
 
 		if (ImGui.BeginChild("ReplayInputsChild", new Vector2(0, 0)))
 		{
