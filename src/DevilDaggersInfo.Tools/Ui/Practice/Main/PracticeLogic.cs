@@ -85,9 +85,11 @@ internal sealed class PracticeLogic(PopupManager popupManager, UserSettings user
 			"""
 			Read this is you're practicing for 500!
 
-			The game has an anti-cheat mechanic where you need at least 36,000 seconds (10 hours) of real in-game time before you can submit 500+ runs.
+			The official leaderboards have a mechanic where you need at least 36,000 seconds (10 hours) of real in-game time before you can submit 500+ runs.
 
-			This is counted by the game itself (not Steam hours).
+			This is to prevent cheaters and alt accounts from flooding the leaderboards.
+
+			The total time is counted by the game itself (not Steam hours).
 
 			Using practice (or any spawnset) does not count time towards your total time, and you may end up hitting 500 before hitting the required total time.
 			""";
