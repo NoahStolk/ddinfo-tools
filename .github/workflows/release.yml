@@ -11,7 +11,7 @@ jobs:
         runtime: [ "win-x64", "linux-x64" ]
     steps:
       - name: Set up dotnet
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.100'
       - name: Checkout
