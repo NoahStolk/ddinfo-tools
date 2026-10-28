@@ -113,33 +113,38 @@ internal sealed class CustomTemplatesChild(ResourceManager resourceManager, Prac
 
 		ImGui.EndChild();
 
+		RenamePopup(customTemplate);
+	}
+
+	private void RenamePopup(UserSettingsPracticeTemplate customTemplate)
+	{
 		// Built from the template values rather than from buttonName, which is a slice of the Inline buffer and cannot be
 		// interpolated back into it. The templates are siblings in one window, so the id has to stay unique per template.
 		ReadOnlySpan<byte> renameName = Inline.Utf8($"rename {(int)customTemplate.HandLevel}-{customTemplate.AdditionalGems}-{customTemplate.TimerStart}");
-		if (ImGui.BeginPopupContextItem(renameName, ImGuiPopupFlags.MouseButtonRight))
+		if (!ImGui.BeginPopupContextItem(renameName, ImGuiPopupFlags.MouseButtonRight))
+			return;
+
+		string name = customTemplate.Name ?? string.Empty;
+		ImGui.SetKeyboardFocusHere();
+		if (ImGui.InputText("##name", ref name, 24))
 		{
-			string name = customTemplate.Name ?? string.Empty;
-			ImGui.SetKeyboardFocusHere();
-			if (ImGui.InputText("##name", ref name, 24))
+			UserSettingsPracticeTemplate originalTemplate = userSettings.Model.PracticeTemplates.First(pt => pt == customTemplate);
+			int index = userSettings.Model.PracticeTemplates.IndexOf(originalTemplate);
+
+			List<UserSettingsPracticeTemplate> newPracticeTemplates = [.. userSettings.Model.PracticeTemplates.Where(pt => pt != originalTemplate)];
+
+			newPracticeTemplates.Insert(index, originalTemplate with { Name = name });
+
+			userSettings.Model = userSettings.Model with
 			{
-				UserSettingsPracticeTemplate originalTemplate = userSettings.Model.PracticeTemplates.First(pt => pt == customTemplate);
-				int index = userSettings.Model.PracticeTemplates.IndexOf(originalTemplate);
-
-				List<UserSettingsPracticeTemplate> newPracticeTemplates = [.. userSettings.Model.PracticeTemplates.Where(pt => pt != originalTemplate)];
-
-				newPracticeTemplates.Insert(index, originalTemplate with { Name = name });
-
-				userSettings.Model = userSettings.Model with
-				{
-					PracticeTemplates = newPracticeTemplates,
-				};
-			}
-
-			if (ImGui.IsEnterPressed())
-				ImGui.CloseCurrentPopup();
-
-			ImGui.EndPopup();
+				PracticeTemplates = newPracticeTemplates,
+			};
 		}
+
+		if (ImGui.IsEnterPressed())
+			ImGui.CloseCurrentPopup();
+
+		ImGui.EndPopup();
 	}
 
 	private unsafe void RenderDragIndicator(int i, UserSettingsPracticeTemplate customTemplate)

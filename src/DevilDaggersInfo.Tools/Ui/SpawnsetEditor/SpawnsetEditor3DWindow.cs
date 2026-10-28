@@ -56,7 +56,11 @@ internal sealed unsafe class SpawnsetEditor3DWindow(
 			_framebufferData.RenderArena(isWindowFocused && isMouseOverFramebuffer, isWindowFocused, delta, ArenaScene, arenaRenderer);
 
 			ImDrawListPtr drawList = ImGui.GetWindowDrawList();
-			drawList.AddFramebufferImage(_framebufferData, cursorScreenPos, cursorScreenPos + new Vector2(_framebufferData.Width, _framebufferData.Height), isWindowFocused ? Vector4.One : new Vector4(0.5f, 0.5f, 0.5f, 1));
+			drawList.AddFramebufferImage(
+				framebufferData: _framebufferData,
+				pMin: cursorScreenPos,
+				pMax: cursorScreenPos + new Vector2(_framebufferData.Width, _framebufferData.Height),
+				color: isWindowFocused ? Vector4.One : new Vector4(0.5f, 0.5f, 0.5f, 1));
 
 			if (ArenaScene.CurrentTick != 0)
 			{

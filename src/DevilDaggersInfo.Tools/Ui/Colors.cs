@@ -3,7 +3,6 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui;
 
-// TODO: Simplify color arithmetic.
 internal static class Colors
 {
 	private static readonly Vector4 _unit = new(255f);
@@ -50,10 +49,10 @@ internal static class Colors
 
 	public static ColorConfiguration AssetEditor { get; } = new()
 	{
-		Primary = new Vector4(66, (byte)(150 * 1.25f), 66, 255) / _unit,
-		Secondary = new Vector4(61, (byte)(133 * 1.25f), 61, 255) / _unit,
-		Tertiary = new Vector4(41, (byte)(74 * 1.25f), 41, 255) / _unit,
-		Quaternary = new Vector4(26, (byte)(102 * 1.25f), 26, 255) / _unit,
+		Primary = new Vector4(66, 187, 66, 255) / _unit,
+		Secondary = new Vector4(61, 166, 61, 255) / _unit,
+		Tertiary = new Vector4(41, 92, 41, 255) / _unit,
+		Quaternary = new Vector4(26, 127, 26, 255) / _unit,
 	};
 
 	public static ColorConfiguration ModManager { get; } = new()
@@ -71,15 +70,15 @@ internal static class Colors
 
 	public static void SetColors(ColorConfiguration colorConfiguration)
 	{
-		const float alphaButton = 102 / 255f;
-		const float alphaButtonActive = 191 / 255f;
-		const float alphaHeader = 79 / 255f;
-		const float alphaHeaderHovered = 204 / 255f;
-		const float alphaFrameBackground = 138 / 255f;
-		const float alphaTitleBackgroundActive = 138 / 255f;
-		const float alphaFrameBackgroundHovered = 102 / 255f;
-		const float alphaFrameBackgroundActive = 171 / 255f;
-		const float alphaSeparatorHovered = 199 / 255f;
+		const float alphaButton = 0.4f;
+		const float alphaButtonActive = 0.75f;
+		const float alphaHeader = 0.31f;
+		const float alphaHeaderHovered = 0.8f;
+		const float alphaFrameBackground = 0.54f;
+		const float alphaTitleBackgroundActive = 0.54f;
+		const float alphaFrameBackgroundHovered = 0.4f;
+		const float alphaFrameBackgroundActive = 0.67f;
+		const float alphaSeparatorHovered = 0.78f;
 
 		ImGuiStylePtr style = ImGui.GetStyle();
 		style.Colors[(int)ImGuiCol.CheckMark] = colorConfiguration.Primary;

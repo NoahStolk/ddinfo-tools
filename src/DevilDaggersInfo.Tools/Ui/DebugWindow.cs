@@ -164,7 +164,9 @@ internal sealed class DebugWindow(
 
 	private void RenderPopupDebugInfo()
 	{
-		ImGui.TextColored(popupManager.IsAnyOpen ? Vector4.One : new Vector4(0.4f, 0.4f, 0.4f, 1), popupManager.Popups.Count > 0 ? Inline.Utf8($"{popupManager.Popups.Count} popup(s) active") : "No popups active"u8);
+		ImGui.TextColored(
+			popupManager.IsAnyOpen ? Vector4.One : new Vector4(0.4f, 0.4f, 0.4f, 1),
+			popupManager.Popups.Count > 0 ? Inline.Utf8($"{popupManager.Popups.Count} popup(s) active") : "No popups active"u8);
 
 		if (ImGui.BeginChild("PopupTableWrapper", new Vector2(0, 512)) && ImGui.BeginTable("PopupTable", 3, ImGuiTableFlags.ScrollY))
 		{

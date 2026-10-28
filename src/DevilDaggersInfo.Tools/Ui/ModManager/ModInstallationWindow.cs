@@ -104,7 +104,7 @@ internal sealed class ModInstallationWindow(ModsDirectoryLogic modsDirectoryLogi
 					EffectiveAsset effectiveAsset = kvp.Value[i];
 					bool isOverridden = effectiveAsset.OverriddenByModFileName != null;
 					bool isDisabled = isOverridden || !effectiveAsset.TocEntry.IsEnabled;
-					Vector4 disabledColor = new Vector4(0.4f, 0.4f, 0.4f, 1);
+					Vector4 disabledColor = new(0.4f, 0.4f, 0.4f, 1);
 
 					ImGui.TableNextColumn();
 					ImGui.TextColored(isDisabled ? disabledColor : Vector4.One, effectiveAsset.TocEntry.Name);

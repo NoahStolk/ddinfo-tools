@@ -19,7 +19,6 @@ internal sealed class ArenaCanvas(ResourceManager resourceManager, ArenaWindow a
 		Vector2 origin = ImGui.GetCursorScreenPos();
 		drawList.AddRectFilled(origin, origin + ArenaWindow.ArenaSize, ImGui.GetColorU32(new Vector4(0, 0, 0, 1)));
 
-		// TODO: Optimize this. Maybe we can draw to a texture and then draw that texture instead.
 		for (int i = 0; i < fileStates.Spawnset.Object.ArenaDimension; i++)
 		{
 			for (int j = 0; j < fileStates.Spawnset.Object.ArenaDimension; j++)
