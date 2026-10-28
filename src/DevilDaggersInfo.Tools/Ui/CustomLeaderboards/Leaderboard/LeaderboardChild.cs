@@ -208,6 +208,11 @@ internal sealed class LeaderboardChild(
 		ImGui.TableNextColumn();
 
 		ImGui.TextUnformatted(Inline.Utf8(AccuracyUtils.GetAccuracy(ce.DaggersFired, ce.DaggersHit), StringFormats.AccuracyFormat));
+		if (ImGui.IsItemHovered())
+		{
+			ImGui.SetTooltip(Inline.Utf8($"{ce.DaggersHit:N0} / {ce.DaggersFired:N0}"));
+		}
+
 		ImGui.TableNextColumn();
 
 		Death? death = Deaths.GetDeathByType(GameConstants.CurrentVersion, ce.DeathType);
