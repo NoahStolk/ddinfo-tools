@@ -3,6 +3,7 @@ using DevilDaggersInfo.Core.Wiki;
 using DevilDaggersInfo.Core.Wiki.Objects;
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.GameMemory;
+using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
 using System.Diagnostics;
 using System.Numerics;
@@ -98,7 +99,10 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 
 		_daggersFiredIntensity = b.DaggersFired != p.DaggersFired ? 1 : MathF.Max(0, _daggersFiredIntensity - delta);
 		_daggersHitIntensity = b.DaggersHit != p.DaggersHit ? 1 : MathF.Max(0, _daggersHitIntensity - delta);
-		_accuracyIntensity = Math.Abs(GetAccuracy(b) - GetAccuracy(p)) > tolerance ? 1 : MathF.Max(0, _accuracyIntensity - delta);
+
+		float accuracyCurrent = AccuracyUtils.GetAccuracy(b.DaggersFired, b.DaggersHit);
+		float accuracyPrevious = AccuracyUtils.GetAccuracy(p.DaggersFired, p.DaggersHit);
+		_accuracyIntensity = Math.Abs(accuracyCurrent - accuracyPrevious) > tolerance ? 1 : MathF.Max(0, _accuracyIntensity - delta);
 
 		_enemiesKilledIntensity = b.EnemiesKilled != p.EnemiesKilled ? 1 : MathF.Max(0, _enemiesKilledIntensity - delta);
 		_enemiesAliveIntensity = b.EnemiesAlive != p.EnemiesAlive ? 1 : MathF.Max(0, _enemiesAliveIntensity - delta);
@@ -191,7 +195,7 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 			ImGui.Image(resourceManager.GameResources.IconMaskCrosshairTexture.Id, iconSize, new Vector4(0, 1, 0, 1));
 			RenderValue("Daggers fired"u8, Inline.Utf8(b.DaggersFired), new Vector4(1, 1, 0, 1), _daggersFiredIntensity);
 			RenderValue("Daggers hit"u8, Inline.Utf8(b.DaggersHit), new Vector4(1, 0, 0, 1), _daggersHitIntensity);
-			RenderValue("Accuracy"u8, Inline.Utf8(GetAccuracy(b), "0.00%"), new Vector4(1, 0.5f, 0, 1), _accuracyIntensity);
+			RenderValue("Accuracy"u8, Inline.Utf8(AccuracyUtils.GetAccuracy(b.DaggersFired, b.DaggersHit), "0.00%"), new Vector4(1, 0.5f, 0, 1), _accuracyIntensity);
 
 			ImGui.Spacing();
 			ImGui.Image(resourceManager.GameResources.IconMaskSkullTexture.Id, iconSize, EnemiesV3_2.Skull4.Color.ToVector4());
@@ -257,11 +261,6 @@ internal sealed class RecordingChild(ResourceManager resourceManager, RecordingL
 	private static string GetPlayerText(MainBlock b)
 	{
 		return b.IsReplay ? $"{b.ReplayPlayerName} ({b.ReplayPlayerId})" : $"{b.PlayerName} ({b.PlayerId})";
-	}
-
-	private static float GetAccuracy(MainBlock b)
-	{
-		return b.DaggersFired == 0 ? 0 : b.DaggersHit / (float)b.DaggersFired;
 	}
 
 	private static Upgrade GetUpgrade(MainBlock block)

@@ -10,6 +10,7 @@ using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
+using DevilDaggersInfo.Tools.Utils;
 using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using Hexa.NET.ImGui;
 using Serilog;
@@ -206,7 +207,7 @@ internal sealed class LeaderboardChild(
 		TextDaggerColored(ce.GemsEaten.HasValue ? Inline.Utf8(ce.GemsEaten.Value) : "-"u8, _isGemsEaten);
 		ImGui.TableNextColumn();
 
-		ImGui.TextUnformatted(Inline.Utf8(GetAccuracy(ce), StringFormats.AccuracyFormat));
+		ImGui.TextUnformatted(Inline.Utf8(AccuracyUtils.GetAccuracy(ce.DaggersFired, ce.DaggersHit), StringFormats.AccuracyFormat));
 		ImGui.TableNextColumn();
 
 		Death? death = Deaths.GetDeathByType(GameConstants.CurrentVersion, ce.DeathType);
@@ -256,7 +257,7 @@ internal sealed class LeaderboardChild(
 				LeaderboardSorting.GemsCollected => Sort(sortAscending, ce => ce.GemsCollected),
 				LeaderboardSorting.GemsDespawned => Sort(sortAscending, ce => ce.GemsDespawned),
 				LeaderboardSorting.GemsEaten => Sort(sortAscending, ce => ce.GemsEaten),
-				LeaderboardSorting.Accuracy => Sort(sortAscending, GetAccuracy),
+				LeaderboardSorting.Accuracy => Sort(sortAscending, ce => AccuracyUtils.GetAccuracy(ce.DaggersFired, ce.DaggersHit)),
 				LeaderboardSorting.DeathType => Sort(sortAscending, GetDeathSortingValue),
 				LeaderboardSorting.HomingStored => Sort(sortAscending, ce => ce.HomingStored),
 				LeaderboardSorting.HomingEaten => Sort(sortAscending, ce => ce.HomingEaten),
@@ -277,11 +278,6 @@ internal sealed class LeaderboardChild(
 	private static string? GetDeathSortingValue(GetCustomEntry ce)
 	{
 		return Deaths.GetDeathByType(GameConstants.CurrentVersion, ce.DeathType)?.Name;
-	}
-
-	private static float GetAccuracy(GetCustomEntry ce)
-	{
-		return ce.DaggersFired == 0 ? 0 : ce.DaggersHit / (float)ce.DaggersFired;
 	}
 
 	private void WatchInGame(int id)

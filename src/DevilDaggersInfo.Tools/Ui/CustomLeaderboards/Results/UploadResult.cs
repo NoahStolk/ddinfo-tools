@@ -334,8 +334,8 @@ internal sealed class UploadResult
 			AddScoreState("Daggers fired"u8, daggersFiredState, "0", "+0;-0;+0");
 			AddScoreState("Daggers hit"u8, daggersHitState, "0", "+0;-0;+0");
 
-			double accuracy = GetAccuracy(daggersFiredState.Value, daggersHitState.Value);
-			double oldAccuracy = GetAccuracy(daggersFiredState.Value - daggersFiredState.ValueDifference, daggersHitState.Value - daggersHitState.ValueDifference);
+			double accuracy = AccuracyUtils.GetAccuracy(daggersFiredState.Value, daggersHitState.Value);
+			double oldAccuracy = AccuracyUtils.GetAccuracy(daggersFiredState.Value - daggersFiredState.ValueDifference, daggersHitState.Value - daggersHitState.ValueDifference);
 			GetScoreState<double> accuracyState = new()
 			{
 				Value = accuracy,
@@ -428,10 +428,5 @@ internal sealed class UploadResult
 	{
 		for (int i = 0; i < count; i++)
 			ImGui.TableSetupColumn(""u8, ImGuiTableColumnFlags.WidthFixed | ImGuiTableColumnFlags.NoHeaderLabel, _columnWidth);
-	}
-
-	private static double GetAccuracy(int daggersFired, int daggersHit)
-	{
-		return daggersFired == 0 ? 0 : daggersHit / (double)daggersFired;
 	}
 }
