@@ -1,12 +1,15 @@
+using System.Numerics;
+
 namespace DevilDaggersInfo.Tools.Utils;
 
 internal static class AccuracyUtils
 {
-	public static float GetAccuracy(int fired, int hit)
+	public static float GetAccuracy<T>(T fired, T hit)
+		where T : IBinaryInteger<T>
 	{
-		if (fired == 0)
+		if (fired == T.Zero)
 			return 0;
 
-		return hit / (float)fired;
+		return float.CreateChecked(hit) / float.CreateChecked(fired);
 	}
 }

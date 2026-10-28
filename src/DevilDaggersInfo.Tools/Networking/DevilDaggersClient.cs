@@ -11,4 +11,14 @@ internal sealed class DevilDaggersClient(HttpClient client)
 
 		throw new HttpRequestException($"The leaderboard servers returned an unsuccessful response (HTTP {(int)response.StatusCode} {response.StatusCode}).");
 	}
+
+	public async Task<byte[]> GetPlayerStats(int id)
+	{
+		using FormUrlEncodedContent content = new(new List<KeyValuePair<string, string>> { new("uid", id.ToString()) });
+		using HttpResponseMessage response = await client.SendRequest(HttpMethod.Post, "dd3/get_user_by_id_public.php", content);
+		if (response.IsSuccessStatusCode)
+			return await response.Content.ReadAsByteArrayAsync();
+
+		throw new HttpRequestException($"The leaderboard servers returned an unsuccessful response (HTTP {(int)response.StatusCode} {response.StatusCode}).");
+	}
 }

@@ -4,6 +4,7 @@ using DevilDaggersInfo.Tools.Ui;
 using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
+using DevilDaggersInfo.Tools.User.Stats;
 using Hexa.NET.ImGui;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
@@ -28,6 +29,7 @@ internal sealed unsafe class Application
 	private readonly INativeFileDialog _nativeFileDialog;
 	private readonly UserSettings _userSettings;
 	private readonly UserCache _userCache;
+	private readonly UserStats _userStats;
 
 	private IntPtr _iconPtr;
 
@@ -48,7 +50,8 @@ internal sealed unsafe class Application
 		FrameCounter frameCounter,
 		INativeFileDialog nativeFileDialog,
 		UserSettings userSettings,
-		UserCache userCache)
+		UserCache userCache,
+		UserStats userStats)
 	{
 		_glfw = glfw;
 		_gl = gl;
@@ -62,6 +65,7 @@ internal sealed unsafe class Application
 		_nativeFileDialog = nativeFileDialog;
 		_userSettings = userSettings;
 		_userCache = userCache;
+		_userStats = userStats;
 
 		_currentTime = glfw.GetTime();
 
@@ -150,6 +154,7 @@ internal sealed unsafe class Application
 		_glfw.PollEvents();
 
 		_nativeFileDialog.Update();
+		_userStats.Update();
 		Render();
 
 		_glfw.SwapBuffers(_window);

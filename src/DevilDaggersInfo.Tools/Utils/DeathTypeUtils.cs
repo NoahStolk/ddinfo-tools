@@ -26,4 +26,29 @@ internal static class DeathTypeUtils
 			_ => $"Invalid ({deathType})",
 		};
 	}
+
+	public static ReadOnlySpan<byte> GetDeathTypeSpan(int deathType)
+	{
+		return deathType switch
+		{
+			0 => "FALLEN"u8,
+			1 => "SWARMED"u8,
+			2 => "IMPALED"u8,
+			3 => "GORED"u8,
+			4 => "INFESTED"u8,
+			5 => "OPENED"u8,
+			6 => "PURGED"u8,
+			7 => "DESECRATED"u8,
+			8 => "SACRIFICED"u8,
+			9 => "EVISCERATED"u8,
+			10 => "ANNIHILATED"u8,
+			11 => "INTOXICATED"u8,
+			12 => "ENVENOMATED"u8,
+			13 => "INCARNATED"u8,
+			14 => "DISCARNATED"u8,
+			15 => "ENTANGLED"u8,
+			16 => "HAUNTED"u8,
+			_ => Inline.Utf8($"Invalid ({deathType})"),
+		};
+	}
 }

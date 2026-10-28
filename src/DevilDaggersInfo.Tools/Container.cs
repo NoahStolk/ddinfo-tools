@@ -29,6 +29,7 @@ using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Arena;
 using DevilDaggersInfo.Tools.Ui.SpawnsetEditor.Utils;
 using DevilDaggersInfo.Tools.User.Cache;
 using DevilDaggersInfo.Tools.User.Settings;
+using DevilDaggersInfo.Tools.User.Stats;
 using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
 using Serilog;
@@ -60,6 +61,9 @@ namespace DevilDaggersInfo.Tools;
 // Interop
 [Register<GameInstallationValidator>(Scope.SingleInstance)]
 
+// User
+[Register<UserStats>(Scope.SingleInstance)]
+
 // 3D
 [Register<ArenaRenderer>(Scope.SingleInstance)]
 [Register<MainScene>(Scope.SingleInstance)]
@@ -81,6 +85,7 @@ namespace DevilDaggersInfo.Tools;
 [Register<MainBlockChild>(Scope.SingleInstance)]
 [Register<MainWindow>(Scope.SingleInstance)]
 [Register<UpdateWindow>(Scope.SingleInstance)]
+[Register<UserStatsChild>(Scope.SingleInstance)]
 
 // Spawnset Editor
 [Register<SpawnsetEditorMenu>(Scope.SingleInstance)]

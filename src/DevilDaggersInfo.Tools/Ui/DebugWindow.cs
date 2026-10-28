@@ -3,6 +3,7 @@ using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Dialogs;
 using DevilDaggersInfo.Tools.Encryption;
 using DevilDaggersInfo.Tools.Networking;
+using DevilDaggersInfo.Tools.Ui.Main;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Cache;
 using Hexa.NET.ImGui;
@@ -22,6 +23,7 @@ internal sealed class DebugWindow(
 	ILogger logger,
 #endif
 	UserCache userCache,
+	UserStatsChild userStatsChild,
 	SurvivalFileWatcher survivalFileWatcher,
 	MainBlockChild mainBlockChild)
 {
@@ -86,6 +88,11 @@ internal sealed class DebugWindow(
 			if (ImGui.CollapsingHeader("User cache"))
 			{
 				RenderUserCache();
+			}
+
+			if (ImGui.CollapsingHeader("User stats"))
+			{
+				userStatsChild.Render();
 			}
 
 			if (ImGui.CollapsingHeader("Debug messages"))
