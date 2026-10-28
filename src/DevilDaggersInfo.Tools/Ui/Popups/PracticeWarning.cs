@@ -12,8 +12,6 @@ internal sealed class PracticeWarning(GameTime? totalTime, bool doNotShowAgain, 
 
 	private bool _doNotShowAgain = doNotShowAgain;
 
-	public static readonly GameTime RequiredGameTime = GameTime.FromSeconds(_requiredTimeInSeconds);
-
 	public override bool Render()
 	{
 		ImGui.PushFont(fontService.GoetheBold20);
@@ -22,7 +20,7 @@ internal sealed class PracticeWarning(GameTime? totalTime, bool doNotShowAgain, 
 
 		Separator();
 
-		ImGui.TextWrapped($"You need at least {RequiredGameTime.Seconds:N0} seconds of real in-game time before the game lets you submit 500+ runs.");
+		ImGui.TextWrapped($"You need at least {_requiredTimeInSeconds:N0} seconds of real in-game time before the game lets you submit 500+ runs.");
 
 		Separator();
 
