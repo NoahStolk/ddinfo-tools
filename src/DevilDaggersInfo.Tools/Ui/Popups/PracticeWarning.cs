@@ -20,15 +20,19 @@ internal sealed class PracticeWarning(GameTime? totalTime, bool doNotShowAgain, 
 		ImGui.TextWrapped("IMPORTANT! Read this is you're practicing for 500!");
 		ImGui.PopFont();
 
+		Separator();
+
 		ImGui.TextWrapped($"You need at least {RequiredGameTime.Seconds:N0} seconds of real in-game time before the game lets you submit 500+ runs.");
 
-		ImGui.Spacing();
-		ImGui.Separator();
-		ImGui.Spacing();
+		Separator();
+
+		ImGui.TextWrapped("Using practice (or any spawnset) does not count time towards your total time, and you may end up reaching 500 before having the required total time.");
+
+		Separator();
 
 		Vector4 color = totalTime?.Seconds switch
 		{
-			null => new Vector4(1, 0, 0, 1),
+			null => new Vector4(1, 0.25f, 0, 1),
 			>= _requiredTimeInSeconds => new Vector4(0, 1, 0, 1),
 			_ => new Vector4(1, 0.5f, 0, 1),
 		};
@@ -41,27 +45,25 @@ internal sealed class PracticeWarning(GameTime? totalTime, bool doNotShowAgain, 
 
 		TextColoredWrapped(color, text);
 
-		ImGui.Spacing();
-		ImGui.Separator();
-		ImGui.Spacing();
+		Separator();
 
-		ImGui.TextWrapped(
-			"""
-			This was added to prevent cheaters and alt accounts from flooding the leaderboards.
+		ImGui.PushFont(fontService.GoetheBold20);
+		ImGui.TextWrapped("Your 500+ scores won't submit if you don't have enough time. Make sure you have enough before attempting real runs.");
+		ImGui.PopFont();
 
-			The total time is counted by the game itself (not Steam hours).
-
-			Using practice (or any spawnset) does not count time towards your total time, and you may end up hitting 500 before hitting the required total time.
-			""");
-
-		ImGui.Spacing();
-		ImGui.Separator();
-		ImGui.Spacing();
+		Separator();
 
 		if (ImGui.Checkbox("Do not show again", ref _doNotShowAgain))
 			setDoNotShowAgain(_doNotShowAgain);
 
 		return ImGui.Button("OK", new Vector2(120, 0)) || ImGui.IsEnterPressed();
+	}
+
+	private static void Separator()
+	{
+		ImGui.Spacing();
+		ImGui.Separator();
+		ImGui.Spacing();
 	}
 
 	private static void TextColoredWrapped(Vector4 color, ReadOnlySpan<byte> text)
