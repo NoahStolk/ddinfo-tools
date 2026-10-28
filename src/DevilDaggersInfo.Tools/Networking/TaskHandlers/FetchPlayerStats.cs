@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Core.Common;
 using System.Text;
 
 namespace DevilDaggersInfo.Tools.Networking.TaskHandlers;
@@ -45,13 +46,13 @@ internal sealed class FetchPlayerStats
 			Rank: rank,
 			Id: id,
 			Username: username,
-			Time: time,
+			Time: GameTime.FromGameUnits(time),
 			Kills: kills,
 			Gems: gems,
 			DeathType: deathType,
 			DaggersHit: daggersHit,
 			DaggersFired: daggersFired,
-			TimeTotal: timeTotal,
+			TimeTotal: GameTime.FromGameUnits(timeTotal),
 			KillsTotal: killsTotal,
 			GemsTotal: gemsTotal,
 			DeathsTotal: deathsTotal,
@@ -63,13 +64,13 @@ internal sealed class FetchPlayerStats
 		int Rank,
 		int Id,
 		string Username,
-		int Time,
+		GameTime Time,
 		int Kills,
 		int Gems,
 		int DeathType,
 		int DaggersHit,
 		int DaggersFired,
-		ulong TimeTotal,
+		GameTime TimeTotal,
 		ulong KillsTotal,
 		ulong GemsTotal,
 		ulong DeathsTotal,

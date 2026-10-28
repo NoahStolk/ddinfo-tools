@@ -45,7 +45,7 @@ internal sealed class UserStatsChild(UserStats userStats)
 			ImGui.TableSetupColumn("##right", ImGuiTableColumnFlags.WidthFixed, cellRightWidth);
 
 			NextColumnText("Rank"u8, Inline.Utf8(stats.Rank, "N0"));
-			NextColumnText("Time"u8, FormatTime(stats.Time));
+			NextColumnText("Time"u8, Inline.Utf8(stats.Time.Seconds, "N4"));
 			NextColumnText("Kills"u8, Inline.Utf8(stats.Kills, "N0"));
 			NextColumnText("Gems"u8, Inline.Utf8(stats.Gems, "N0"));
 			NextColumnText("Death"u8, DeathTypeUtils.GetDeathTypeSpan(stats.DeathType));
@@ -60,7 +60,7 @@ internal sealed class UserStatsChild(UserStats userStats)
 			ImGui.TableSetupColumn("##left", ImGuiTableColumnFlags.WidthStretch);
 			ImGui.TableSetupColumn("##right", ImGuiTableColumnFlags.WidthFixed, cellRightWidth);
 
-			NextColumnText("Total Time"u8, FormatTime(stats.TimeTotal));
+			NextColumnText("Total Time"u8, Inline.Utf8(stats.TimeTotal.Seconds, "N4"));
 			NextColumnText("Total Kills"u8, Inline.Utf8(stats.KillsTotal, "N0"));
 			NextColumnText("Total Gems"u8, Inline.Utf8(stats.GemsTotal, "N0"));
 			NextColumnText("Total Deaths"u8, Inline.Utf8(stats.DeathsTotal, "N0"));
@@ -68,13 +68,6 @@ internal sealed class UserStatsChild(UserStats userStats)
 
 			ImGui.EndTable();
 		}
-	}
-
-	private static ReadOnlySpan<byte> FormatTime<T>(T time)
-		where T : IBinaryInteger<T>
-	{
-		float value = float.CreateChecked(time) / 10_000f;
-		return Inline.Utf8(value, "N4");
 	}
 
 	private static ReadOnlySpan<byte> FormatAccuracy<T>(T fired, T hit)
