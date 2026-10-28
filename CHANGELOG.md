@@ -10,6 +10,7 @@
 - Added replay size and header details (username, header size, compressed events size) to the error shown when a leaderboard replay cannot be parsed in the replay editor.
 - Custom leaderboards can now be sorted by criteria.
 - The leaderboard replay browser now shows a clear error when no replay exists for the requested player ID.
+- Added new improved 3D camera system.
 
 ### Fixed
 
