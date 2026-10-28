@@ -1,14 +1,22 @@
+using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Engine.Maths;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.Practice.Main.Data;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.User.Settings.Model;
+using DevilDaggersInfo.Tools.User.Stats;
 using Serilog;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-internal sealed class PracticeLogic(PopupManager popupManager, UserSettings userSettings, SurvivalFileWatcher survivalFileWatcher, ContentManager contentManager, ILogger logger)
+internal sealed class PracticeLogic(
+	PopupManager popupManager,
+	UserSettings userSettings,
+	SurvivalFileWatcher survivalFileWatcher,
+	ContentManager contentManager,
+	ILogger logger,
+	UserStats userStats)
 {
 	public const int SpawnVersion = 6;
 
@@ -63,7 +71,8 @@ internal sealed class PracticeLogic(PopupManager popupManager, UserSettings user
 		if (File.Exists(userSettings.ModsSurvivalPath))
 			File.Delete(userSettings.ModsSurvivalPath);
 
-		const string messageText = """
+		const string messageText =
+			"""
 			The default game has been restored!
 
 			Make sure to press the restart button in-game, or grab the dagger in the lobby, to apply the change.
@@ -76,6 +85,18 @@ internal sealed class PracticeLogic(PopupManager popupManager, UserSettings user
 			messageText,
 			userSettings.Model.DoNotShowAgainPracticeSpawnsetDeleted,
 			b => userSettings.Model = userSettings.Model with { DoNotShowAgainPracticeSpawnsetDeleted = b });
+	}
+
+	public void ShowWarning()
+	{
+		// Skip the warning if the player already has 500.
+		if (userStats.PlayerStats != null && userStats.PlayerStats.Time >= GameTime.FromSeconds(500))
+			return;
+
+		popupManager.ShowPracticeWarning(
+			userStats.PlayerStats?.TimeTotal,
+			userSettings.Model.DoNotShowAgainPracticeWarning,
+			b => userSettings.Model = userSettings.Model with { DoNotShowAgainPracticeWarning = b });
 	}
 
 	public bool IsActive(UserSettingsPracticeTemplate customTemplate)
