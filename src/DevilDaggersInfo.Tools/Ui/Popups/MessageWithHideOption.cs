@@ -4,8 +4,8 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
-internal sealed class MessageWithHideOption(string id, string text, Action<bool> setDoNotShowAgain, bool doNotShowAgain)
-	: Popup(id)
+internal sealed class MessageWithHideOption(string id, Vector2 minSize, string text, bool doNotShowAgain, Action<bool> setDoNotShowAgain)
+	: Popup(id, minSize)
 {
 	private bool _doNotShowAgain = doNotShowAgain;
 

@@ -3,7 +3,8 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
-internal sealed class ErrorMessage(string id, string errorText, string? technicalDetails = null) : Popup(id)
+internal sealed class ErrorMessage(string id, Vector2 minSize, string errorText, string? technicalDetails = null)
+	: Popup(id, minSize)
 {
 	public override bool Render()
 	{

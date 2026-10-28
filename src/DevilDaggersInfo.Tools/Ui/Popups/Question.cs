@@ -3,8 +3,8 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
-internal sealed class Question(string id, string text, Action onConfirm, Action onDeny)
-	: Popup(id)
+internal sealed class Question(string id, Vector2 minSize, string text, Action onConfirm, Action onDeny)
+	: Popup(id, minSize)
 {
 	public override bool Render()
 	{

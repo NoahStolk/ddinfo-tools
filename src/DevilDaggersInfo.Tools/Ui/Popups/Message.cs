@@ -4,7 +4,8 @@ using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
-internal sealed class Message(string id, string text) : Popup(id)
+internal sealed class Message(string id, Vector2 minSize, string text)
+	: Popup(id, minSize)
 {
 	public override bool Render()
 	{

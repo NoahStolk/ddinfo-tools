@@ -1,10 +1,11 @@
+using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Tools.Networking;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
 namespace DevilDaggersInfo.Tools.Ui.Popups;
 
-internal sealed class PopupManager
+internal sealed class PopupManager(FontService fontService)
 {
 	private readonly List<Popup> _popups = [];
 
@@ -36,12 +37,12 @@ internal sealed class PopupManager
 
 	public void ShowError(string errorText, string? technicalDetails = null)
 	{
-		_popups.Add(new ErrorMessage("Error", errorText, technicalDetails));
+		_popups.Add(new ErrorMessage("Error", new Vector2(192, 128), errorText, technicalDetails));
 	}
 
 	public void ShowMessage(string title, string text)
 	{
-		_popups.Add(new Message(title, text));
+		_popups.Add(new Message(title, new Vector2(192, 128), text));
 	}
 
 	public void ShowMessageWithHideOption(string title, string text, bool doNotShowAgain, Action<bool> setDoNotShowAgain)
@@ -49,12 +50,12 @@ internal sealed class PopupManager
 		if (doNotShowAgain)
 			return;
 
-		_popups.Add(new MessageWithHideOption(title, text, setDoNotShowAgain, doNotShowAgain));
+		_popups.Add(new MessageWithHideOption(title, new Vector2(192, 128), text, doNotShowAgain, setDoNotShowAgain));
 	}
 
 	public void ShowQuestion(string title, string text, Action onConfirm, Action onDeny)
 	{
-		_popups.Add(new Question(title, text, onConfirm, onDeny));
+		_popups.Add(new Question(title, new Vector2(192, 128), text, onConfirm, onDeny));
 	}
 
 	public void Render()
@@ -95,7 +96,7 @@ internal sealed class PopupManager
 		Vector2 center = ImGui.GetCenter(ImGui.GetMainViewport());
 		ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new Vector2(0.5f, 0.5f));
 
-		ImGui.SetNextWindowSizeConstraints(new Vector2(192, 128), new Vector2(float.MaxValue, float.MaxValue));
+		ImGui.SetNextWindowSizeConstraints(popup.MinSize, new Vector2(float.MaxValue, float.MaxValue));
 		if (!ImGui.BeginPopupModal(popup.Id))
 			return;
 
