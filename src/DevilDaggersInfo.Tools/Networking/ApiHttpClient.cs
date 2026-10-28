@@ -4,7 +4,6 @@ using DevilDaggersInfo.Web.ApiSpec.Tools.CustomLeaderboards;
 using DevilDaggersInfo.Web.ApiSpec.Tools.ProcessMemory;
 using DevilDaggersInfo.Web.ApiSpec.Tools.Spawnsets;
 using System.Net;
-using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 

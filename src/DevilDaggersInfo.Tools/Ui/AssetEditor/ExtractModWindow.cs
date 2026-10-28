@@ -4,7 +4,6 @@ using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
-using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
@@ -97,56 +96,51 @@ internal sealed class ExtractModWindow(INativeFileDialog nativeFileDialog, Popup
 		try
 		{
 			List<string> errors = await ExtractLogic.ExtractAsync(inputFilePath, outputDirectory);
-			return ExtractionResult.Succeeded(errors);
+			return new ExtractionSucceeded(errors);
 		}
 		catch (InvalidModBinaryException ex)
 		{
-			return ExtractionResult.Failed("Invalid mod compilation.", ex);
+			return new ExtractionFailed("Invalid mod compilation.", ex);
 		}
 		catch (Exception ex) when (ex.IsFileIoException())
 		{
-			return ExtractionResult.Failed("An IO error occurred.", ex);
+			return new ExtractionFailed("An IO error occurred.", ex);
 		}
 		catch (Exception ex)
 		{
-			return ExtractionResult.Failed("An unexpected error occurred.", ex);
+			return new ExtractionFailed("An unexpected error occurred.", ex);
 		}
 	}
 
 	private void ExtractionCompletedCallback(ExtractionResult extractionResult)
 	{
-		if (!extractionResult.Success)
+		switch (extractionResult)
 		{
-			Debug.Assert(extractionResult.Error != null, "Error field must contain a value when Success is false.");
-			Debug.Assert(extractionResult.Exception != null, "Exception field must contain a value when Success is false.");
-			popupManager.ShowError($"Extraction failed: {extractionResult.Error}", extractionResult.Exception.Message);
+			case ExtractionFailed failed:
+				popupManager.ShowError($"Extraction failed: {failed.Error}", failed.Exception.Message);
+				break;
+
+			case ExtractionSucceeded succeeded:
+				if (succeeded.Errors.Count > 0)
+				{
+					popupManager.ShowError(
+						$"""
+						 Extraction completed with {succeeded.Errors.Count} error(s):
+
+						 {string.Join("\n\n", succeeded.Errors)}
+						 """);
+				}
+
+				break;
 		}
 
 		_isExtracting = false;
 		_lastEndTime = DateTime.UtcNow;
-
-		if (extractionResult.Errors.Count > 0)
-		{
-			popupManager.ShowError(
-				$"""
-				Extraction completed with {extractionResult.Errors.Count} error(s):
-
-				{string.Join("\n\n", extractionResult.Errors)}
-				""");
-		}
 	}
 
-	// TODO: Use discriminated unions when finally added to C# (if ever).
-	private sealed record ExtractionResult(bool Success, string? Error, Exception? Exception, List<string> Errors)
-	{
-		public static ExtractionResult Failed(string error, Exception exception)
-		{
-			return new ExtractionResult(false, error, exception, []);
-		}
+	private union ExtractionResult(ExtractionFailed, ExtractionSucceeded);
 
-		public static ExtractionResult Succeeded(List<string> errors)
-		{
-			return new ExtractionResult(true, null, null, errors);
-		}
-	}
+	private sealed record ExtractionFailed(string Error, Exception Exception);
+
+	private sealed record ExtractionSucceeded(List<string> Errors);
 }

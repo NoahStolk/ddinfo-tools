@@ -6,7 +6,6 @@ using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.Utils;
 using Hexa.NET.ImGui;
-using System.Diagnostics;
 
 namespace DevilDaggersInfo.Tools.Ui.AssetEditor;
 
@@ -125,50 +124,41 @@ internal sealed class CompileModWindow(INativeFileDialog nativeFileDialog, Popup
 		try
 		{
 			await CompileLogic.CompileAsync(fileStates.Mod.Object, _outputDirectory, _outputFileName, CreateAudio, CreateDd);
-			return CompilationResult.Succeeded();
+			return new CompilationSucceeded();
 		}
 		catch (InvalidObjException ex)
 		{
-			return CompilationResult.Failed("Invalid OBJ file.", ex);
+			return new CompilationFailed("Invalid OBJ file.", ex);
 		}
 		catch (InvalidModCompilationException ex)
 		{
-			return CompilationResult.Failed("Invalid mod compilation.", ex);
+			return new CompilationFailed("Invalid mod compilation.", ex);
 		}
 		catch (Exception ex) when (ex.IsFileIoException())
 		{
-			return CompilationResult.Failed("An IO error occurred.", ex);
+			return new CompilationFailed("An IO error occurred.", ex);
 		}
 		catch (Exception ex)
 		{
-			return CompilationResult.Failed("An unexpected error occurred.", ex);
+			return new CompilationFailed("An unexpected error occurred.", ex);
 		}
 	}
 
 	private void CompilationCompletedCallback(CompilationResult compilationResult)
 	{
-		if (!compilationResult.Success)
+		switch (compilationResult)
 		{
-			Debug.Assert(compilationResult.Error != null, "Error field must contain a value when Success is false.");
-			Debug.Assert(compilationResult.Exception != null, "Exception field must contain a value when Success is false.");
-			popupManager.ShowError($"Compilation failed: {compilationResult.Error}", compilationResult.Exception.Message);
+			case CompilationFailed failed: popupManager.ShowError($"Compilation failed: {failed.Error}", failed.Exception.Message); break;
+			case CompilationSucceeded _: break;
 		}
 
 		_isCompiling = false;
 		_lastEndTime = DateTime.UtcNow;
 	}
 
-	// TODO: Use discriminated unions when finally added to C# (if ever).
-	private sealed record CompilationResult(bool Success, string? Error, Exception? Exception)
-	{
-		public static CompilationResult Failed(string error, Exception exception)
-		{
-			return new CompilationResult(false, error, exception);
-		}
+	private union CompilationResult(CompilationFailed, CompilationSucceeded);
 
-		public static CompilationResult Succeeded()
-		{
-			return new CompilationResult(true, null, null);
-		}
-	}
+	private sealed record CompilationFailed(string Error, Exception Exception);
+
+	private sealed record CompilationSucceeded;
 }

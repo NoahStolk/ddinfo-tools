@@ -25,22 +25,18 @@ internal sealed class UploadResult
 	private readonly string _spawnsetName;
 	private readonly Death? _death;
 
-	// TODO: Rewrite to use discriminated unions if they ever get added to C#.
-	private readonly GetUploadResponseFirstScore? _firstScore;
-	private readonly GetUploadResponseHighscore? _highscore;
-	private readonly GetUploadResponseNoHighscore? _noHighscore;
-	private readonly GetUploadResponseCriteriaRejection? _criteriaRejection;
+	private readonly UploadResultEntry _entry;
 
 	public UploadResult(ResourceManager resourceManager, GetUploadResponse uploadResponse, bool isAscending, string spawnsetName, byte deathType, DateTime submittedAt)
 	{
 		if (uploadResponse.FirstScore != null)
-			_firstScore = uploadResponse.FirstScore;
+			_entry = uploadResponse.FirstScore;
 		else if (uploadResponse.Highscore != null)
-			_highscore = uploadResponse.Highscore;
+			_entry = uploadResponse.Highscore;
 		else if (uploadResponse.NoHighscore != null)
-			_noHighscore = uploadResponse.NoHighscore;
+			_entry = uploadResponse.NoHighscore;
 		else if (uploadResponse.CriteriaRejection != null)
-			_criteriaRejection = uploadResponse.CriteriaRejection;
+			_entry = uploadResponse.CriteriaRejection;
 		else
 			throw new InvalidOperationException("Invalid upload response returned from server.");
 
@@ -56,16 +52,13 @@ internal sealed class UploadResult
 
 	public void Render()
 	{
-		if (_firstScore != null)
-			RenderFirstScore(_firstScore);
-		else if (_highscore != null)
-			RenderHighscore(_highscore);
-		else if (_noHighscore != null)
-			RenderNoHighscore(_noHighscore);
-		else if (_criteriaRejection != null)
-			RenderCriteriaRejection(_criteriaRejection);
-		else
-			throw new UnreachableException();
+		switch (_entry)
+		{
+			case GetUploadResponseFirstScore firstScore: RenderFirstScore(firstScore); break;
+			case GetUploadResponseHighscore highscore: RenderHighscore(highscore); break;
+			case GetUploadResponseNoHighscore noHighscore: RenderNoHighscore(noHighscore); break;
+			case GetUploadResponseCriteriaRejection criteriaRejection: RenderCriteriaRejection(criteriaRejection); break;
+		}
 	}
 
 	private void RenderFirstScore(GetUploadResponseFirstScore firstScore)
@@ -434,4 +427,10 @@ internal sealed class UploadResult
 	{
 		return daggersFired == 0 ? 0 : daggersHit / (double)daggersFired;
 	}
+
+	private union UploadResultEntry(
+		GetUploadResponseFirstScore,
+		GetUploadResponseHighscore,
+		GetUploadResponseNoHighscore,
+		GetUploadResponseCriteriaRejection);
 }
