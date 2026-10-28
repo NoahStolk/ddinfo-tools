@@ -1,14 +1,22 @@
+using DevilDaggersInfo.Core.Common;
 using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Engine.Maths;
 using DevilDaggersInfo.Tools.Ui.Popups;
 using DevilDaggersInfo.Tools.Ui.Practice.Main.Data;
 using DevilDaggersInfo.Tools.User.Settings;
 using DevilDaggersInfo.Tools.User.Settings.Model;
+using DevilDaggersInfo.Tools.User.Stats;
 using Serilog;
 
 namespace DevilDaggersInfo.Tools.Ui.Practice.Main;
 
-internal sealed class PracticeLogic(PopupManager popupManager, UserSettings userSettings, SurvivalFileWatcher survivalFileWatcher, ContentManager contentManager, ILogger logger)
+internal sealed class PracticeLogic(
+	PopupManager popupManager,
+	UserSettings userSettings,
+	SurvivalFileWatcher survivalFileWatcher,
+	ContentManager contentManager,
+	ILogger logger,
+	UserStats userStats)
 {
 	public const int SpawnVersion = 6;
 
@@ -81,22 +89,12 @@ internal sealed class PracticeLogic(PopupManager popupManager, UserSettings user
 
 	public void ShowWarning()
 	{
-		const string messageText =
-			"""
-			Read this is you're practicing for 500!
+		// Skip the warning if the player already has 500.
+		if (userStats.PlayerStats != null && userStats.PlayerStats.Time >= GameTime.FromSeconds(500))
+			return;
 
-			The official leaderboards have a mechanic where you need at least 36,000 seconds (10 hours) of real in-game time before you can submit 500+ runs.
-
-			This is to prevent cheaters and alt accounts from flooding the leaderboards.
-
-			The total time is counted by the game itself (not Steam hours).
-
-			Using practice (or any spawnset) does not count time towards your total time, and you may end up hitting 500 before hitting the required total time.
-			""";
-
-		popupManager.ShowMessageWithHideOption(
-			"Warning",
-			messageText,
+		popupManager.ShowPracticeWarning(
+			userStats.PlayerStats?.TimeTotal,
 			userSettings.Model.DoNotShowAgainPracticeWarning,
 			b => userSettings.Model = userSettings.Model with { DoNotShowAgainPracticeWarning = b });
 	}

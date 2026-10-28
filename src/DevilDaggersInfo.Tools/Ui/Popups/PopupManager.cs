@@ -58,6 +58,11 @@ internal sealed class PopupManager(FontService fontService)
 		_popups.Add(new Question(title, new Vector2(192, 128), text, onConfirm, onDeny));
 	}
 
+	public void ShowPracticeWarning(GameTime? totalTime, bool doNotShowAgain, Action<bool> setDoNotShowAgain)
+	{
+		_popups.Add(new PracticeWarning(totalTime, doNotShowAgain, setDoNotShowAgain, fontService));
+	}
+
 	public void Render()
 	{
 		// Render all open popups (there should be only one at a time).
