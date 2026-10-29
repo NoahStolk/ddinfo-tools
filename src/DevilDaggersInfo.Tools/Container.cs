@@ -16,6 +16,7 @@ using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Leaderboard;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.Results;
 using DevilDaggersInfo.Tools.Ui.Main;
+using DevilDaggersInfo.Tools.Ui.Main.Previews;
 using DevilDaggersInfo.Tools.Ui.ModManager;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 using DevilDaggersInfo.Tools.Ui.Popups;
@@ -86,6 +87,14 @@ namespace DevilDaggersInfo.Tools;
 [Register<MainWindow>(Scope.SingleInstance)]
 [Register<UpdateWindow>(Scope.SingleInstance)]
 [Register<UserStatsChild>(Scope.SingleInstance)]
+
+[Register<ToolPreviewChild>(Scope.SingleInstance)]
+[Register<SpawnsetEditorPreview>(Scope.SingleInstance)]
+[Register<AssetEditorPreview>(Scope.SingleInstance)]
+[Register<ReplayEditorPreview>(Scope.SingleInstance)]
+[Register<CustomLeaderboardsPreview>(Scope.SingleInstance)]
+[Register<PracticePreview>(Scope.SingleInstance)]
+[Register<ModManagerPreview>(Scope.SingleInstance)]
 
 // Spawnset Editor
 [Register<SpawnsetEditorMenu>(Scope.SingleInstance)]
