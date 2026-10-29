@@ -1,13 +1,14 @@
 # Changelog
 
-## [unreleased]
+## [0.14.0.0] - 2026-10-29
 
 ### Added
 
-- Added support for reading game memory on Linux, which enables live run data (splits, homing usage, gem collection) in the practice tool.
-- Added support for writing game memory on Linux, which enables replay playback from the replay editor and the custom leaderboards.
-- Added support for reading and writing game memory when the Windows version of the game runs on Linux through Proton.
-- Added replay size and header details (username, header size, compressed events size) to the error shown when a leaderboard replay cannot be parsed in the replay editor.
+- Custom leaderboards are now generally supported on Linux.
+  - Added support for reading game memory on Linux, which enables live run data (splits, homing usage, gem collection) in the practice tool.
+  - Added support for writing game memory on Linux, which enables replay playback from the replay editor and the custom leaderboards.
+  - Added support for reading and writing game memory when the Windows version of the game runs on Linux through Proton.
+  - Note that the game's native Linux build is outdated, which means Time Attack and Race leaderboards aren't supported. It's recommended to use Proton.
 - Custom leaderboards can now be sorted by criteria.
 - The leaderboard replay browser now shows a clear error when no replay exists for the requested player ID.
 
@@ -17,14 +18,19 @@
 - Fixed 3D meshes and textures not being reloaded when the Devil Daggers installation directory changes, which could render the dagger, skull and hand using data from the previously loaded installation.
 - Fixed tile hitboxes hiding each other instead of blending, in the 3D views.
 - Fixed the 3D views breaking when their window is made very small.
-- Fixed copying and pasting text between the app and other applications (Linux).
+- Fixed copying and pasting text not working on Linux.
 - Fixed tab navigation not working between the custom leaderboard filter inputs.
 
 ### Miscellaneous
 
-- Switched the UI library from ImGui.NET to Hexa.NET.ImGui, which updates Dear ImGui from 1.91 to 1.92. This adds validation of incorrect UI API usage, which uncovered the color bug listed above.
+- Improved main menu UI and added some additional info about the separate tools.
+- Some UI and performance improvements.
+
+### Tech
+
+- Added replay size and header details (username, header size, compressed events size) to the error shown when a leaderboard replay cannot be parsed in the replay editor.
+- Switched the UI library from ImGui.NET to Hexa.NET.ImGui, which updates Dear ImGui from 1.91 to 1.92. This adds validation of incorrect UI API usage.
 - Rewrote the 3D rendering internals so that all rendering happens in one place, separate from the scene it draws.
-- Small UI improvements.
 - Large amounts of refactoring.
 
 ## [0.13.7.1] - 2026-05-04
