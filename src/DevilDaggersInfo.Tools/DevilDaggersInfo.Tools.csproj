@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <AssemblyName>ddinfo-tools</AssemblyName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Version>0.13.7.1</Version>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
