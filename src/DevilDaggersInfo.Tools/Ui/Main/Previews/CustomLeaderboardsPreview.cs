@@ -44,6 +44,8 @@ internal sealed class CustomLeaderboardsPreview : IToolPreview
 		ImGui.BulletTextWrapped("Time Attack"u8);
 		ImGui.BulletTextWrapped("Race"u8);
 
+		ImGui.Spacing();
+
 		ImGui.Text("Leaderboards can be sorted by:");
 
 		ImGui.BulletTextWrapped("Time"u8);
@@ -54,6 +56,8 @@ internal sealed class CustomLeaderboardsPreview : IToolPreview
 		ImGui.BulletTextWrapped("Enemies alive"u8);
 		ImGui.BulletTextWrapped("Homing stored"u8);
 		ImGui.BulletTextWrapped("Homing eaten"u8);
+
+		ImGui.Spacing();
 
 		ImGui.Text(
 			"""

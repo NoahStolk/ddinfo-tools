@@ -32,6 +32,8 @@ internal sealed class SpawnsetEditorPreview : IToolPreview
 		ImGui.BulletTextWrapped("Give yourself 10,000 homing daggers."u8);
 		ImGui.BulletTextWrapped("Use the Time Attack game mode, where the goal is to kill all enemies as fast as possible."u8);
 
+		ImGui.Spacing();
+
 		ImGui.Text(
 			"""
 			Be sure to check out the custom leaderboards to see what's possible.

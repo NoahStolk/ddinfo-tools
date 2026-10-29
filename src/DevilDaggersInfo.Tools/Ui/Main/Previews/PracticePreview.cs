@@ -32,6 +32,8 @@ internal sealed class PracticePreview : IToolPreview
 		ImGui.BulletTextWrapped("Homing usage"u8);
 		ImGui.BulletTextWrapped("Gem collection"u8);
 
+		ImGui.Spacing();
+
 		ImGui.Text(
 			"""
 			Note that using practice will not submit your score to the official leaderboards.

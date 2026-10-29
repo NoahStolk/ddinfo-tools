@@ -19,13 +19,9 @@ internal sealed class ModManagerPreview : IToolPreview
 
 	public void Render()
 	{
-		ImGui.Text(
-			"""
-			View all currently installed mods.
+		ImGui.Text("Features:");
 
-			Features:
-			""");
-
+		ImGui.BulletTextWrapped("View all currently installed mods."u8);
 		ImGui.BulletTextWrapped("Enable/disable mods and change their load order to further customize the game."u8);
 		ImGui.BulletTextWrapped("Browse and find new mods to install directly from the devildaggers.info website."u8);
 		ImGui.BulletTextWrapped("View which assets are contained in each mod, and which ones are prohibited for 1000+ scores."u8);
