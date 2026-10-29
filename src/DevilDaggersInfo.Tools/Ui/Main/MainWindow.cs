@@ -1,5 +1,6 @@
 using DevilDaggersInfo.Tools.Extensions;
 using DevilDaggersInfo.Tools.Ui.CustomLeaderboards.LeaderboardList;
+using DevilDaggersInfo.Tools.Ui.Main.Previews;
 using DevilDaggersInfo.Tools.Ui.ModManager.ModsDirectory;
 using DevilDaggersInfo.Tools.Ui.Practice.Main;
 using DevilDaggersInfo.Tools.Utils;
@@ -17,11 +18,18 @@ internal sealed class MainWindow(
 	UpdateWindow updateWindow,
 	ModsDirectoryLogic modsDirectoryLogic,
 	FontService fontService,
-	PracticeLogic practiceLogic)
+	PracticeLogic practiceLogic,
+	ToolPreviewChild toolPreviewChild,
+	SpawnsetEditorPreview spawnsetEditorPreview,
+	AssetEditorPreview assetEditorPreview,
+	ReplayEditorPreview replayEditorPreview,
+	CustomLeaderboardsPreview customLeaderboardsPreview,
+	PracticePreview practicePreview,
+	ModManagerPreview modManagerPreview)
 {
 	private readonly string _version = $"{AssemblyUtils.EntryAssemblyVersionString} (ALPHA)";
 
-	private HoverText? _hoverText;
+	private IToolPreview? _toolPreview;
 
 	public bool ShouldClose { get; private set; }
 
@@ -30,7 +38,7 @@ internal sealed class MainWindow(
 		Vector2 center = ImGui.GetCenter(ImGui.GetMainViewport());
 		Vector2 windowSize = new(683, 768);
 		Vector2 mainButtonsSize = new(208, 512);
-		Vector2 previewSize = new(windowSize.X - mainButtonsSize.X - 16, 512);
+		Vector2 previewSize = new(windowSize.X - mainButtonsSize.X - 32, 656);
 
 		ImGui.SetNextWindowPos(center, ImGuiCond.Always, new Vector2(0.5f, 0.5f));
 		ImGui.SetNextWindowSize(windowSize);
@@ -73,53 +81,39 @@ internal sealed class MainWindow(
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 40);
 			if (ImGui.BeginChild("ToolButtons", mainButtonsSize))
 			{
-				if (ToolButton(GetColor(Colors.SpawnsetEditor), "Spawnset Editor", StringResources.DescriptionSpawnsetEditor))
+				if (ToolButton(spawnsetEditorPreview))
 					uiLayoutManager.Layout = LayoutType.SpawnsetEditor;
-				if (ToolButton(GetColor(Colors.AssetEditor), "Asset Editor", StringResources.DescriptionAssetEditor))
+				if (ToolButton(assetEditorPreview))
 					uiLayoutManager.Layout = LayoutType.AssetEditor;
-				if (ToolButton(GetColor(Colors.ReplayEditor), "Replay Editor", StringResources.DescriptionReplayEditor))
+				if (ToolButton(replayEditorPreview))
 					uiLayoutManager.Layout = LayoutType.ReplayEditor;
 
 				ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 16);
-				if (ToolButton(GetColor(Colors.CustomLeaderboards), "Custom Leaderboards", StringResources.DescriptionCustomLeaderboards))
+				if (ToolButton(customLeaderboardsPreview))
 				{
 					uiLayoutManager.Layout = LayoutType.CustomLeaderboards;
 					leaderboardListChild.LoadAll();
 				}
 
-				if (ToolButton(GetColor(Colors.Practice), "Practice", StringResources.DescriptionPractice))
+				if (ToolButton(practicePreview))
 				{
 					uiLayoutManager.Layout = LayoutType.Practice;
 					practiceLogic.ShowWarning();
 				}
 
-				if (ToolButton(GetColor(Colors.ModManager), "Mod Manager", StringResources.DescriptionModManager))
+				if (ToolButton(modManagerPreview))
 				{
 					uiLayoutManager.Layout = LayoutType.ModManager;
 					modsDirectoryLogic.LoadModsDirectory();
-				}
-
-				static Vector4 GetColor(ColorConfiguration colorConfiguration)
-				{
-					const float buttonColorDesaturation = 0.3f;
-					return (Vector4.DesaturateColor(colorConfiguration.Primary, buttonColorDesaturation) * new Vector4(0.8f, 0.8f, 0.8f, 1)) with { W = 0.5f };
 				}
 			}
 
 			ImGui.EndChild();
 
-			if (_hoverText is { } hoverText)
+			if (_toolPreview != null)
 			{
 				ImGui.SameLine();
-				if (ImGui.BeginChild("Preview", previewSize))
-				{
-					ImGui.PushTextWrapPos(previewSize.X - 16);
-					ImGui.Title(hoverText.Title, fontService.GoetheBold30);
-					ImGui.Text(hoverText.Description);
-					ImGui.PopTextWrapPos();
-				}
-
-				ImGui.EndChild();
+				toolPreviewChild.Render(_toolPreview, previewSize);
 			}
 		}
 
@@ -140,8 +134,10 @@ internal sealed class MainWindow(
 		return returnValue;
 	}
 
-	private bool ToolButton(Vector4 color, string title, string description)
+	private bool ToolButton(IToolPreview toolPreview)
 	{
+		Vector4 color = GetColor(toolPreview.ColorConfiguration);
+
 		ImGui.PushStyleColor(ImGuiCol.Button, color);
 		ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color + new Vector4(0, 0, 0, 0.2f));
 		ImGui.PushStyleColor(ImGuiCol.ButtonActive, color + new Vector4(0, 0, 0, 0.3f));
@@ -149,19 +145,23 @@ internal sealed class MainWindow(
 		ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, 2);
 
 		ImGui.PushFont(fontService.GoetheBold20);
-		bool returnValue = ImGui.Button(title, new Vector2(198, 48));
+		bool returnValue = ImGui.Button(toolPreview.Title, new Vector2(198, 48));
 		ImGui.PopFont();
 
 		ImGui.PopStyleColor(4);
 		ImGui.PopStyleVar();
 
 		if (ImGui.IsItemHovered())
-			_hoverText = new HoverText(title, description);
+			_toolPreview = toolPreview;
 
 		ImGui.Spacing();
 
 		return returnValue;
-	}
 
-	private readonly record struct HoverText(string Title, string Description);
+		static Vector4 GetColor(ColorConfiguration colorConfiguration)
+		{
+			const float buttonColorDesaturation = 0.3f;
+			return (Vector4.DesaturateColor(colorConfiguration.Primary, buttonColorDesaturation) * new Vector4(0.8f, 0.8f, 0.8f, 1)) with { W = 0.5f };
+		}
+	}
 }
