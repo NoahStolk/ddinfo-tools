@@ -9,6 +9,7 @@
   - Added support for writing game memory on Linux, which enables replay playback from the replay editor and the custom leaderboards.
   - Added support for reading and writing game memory when the Windows version of the game runs on Linux through Proton.
   - Note that the game's native Linux build is outdated, which means Time Attack and Race leaderboards aren't supported. It's recommended to use Proton.
+- Added warning popup to the practice tool, explaining the total time requirement for 500+ score submissions.
 - Custom leaderboards can now be sorted by criteria.
 - The leaderboard replay browser now shows a clear error when no replay exists for the requested player ID.
 
