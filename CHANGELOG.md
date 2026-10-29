@@ -4,8 +4,8 @@
 
 ### Added
 
-- Custom leaderboards are now generally supported on Linux.
-  - Added support for reading game memory on Linux, which enables live run data (splits, homing usage, gem collection) in the practice tool.
+- Custom leaderboards and live practice data are now generally supported on Linux.
+  - Added support for reading game memory on Linux, which enables custom leaderboards and live run data (splits, homing usage, gem collection) in the practice tool.
   - Added support for writing game memory on Linux, which enables replay playback from the replay editor and the custom leaderboards.
   - Added support for reading and writing game memory when the Windows version of the game runs on Linux through Proton.
   - Note that the game's native Linux build is outdated, which means Time Attack and Race leaderboards aren't supported. It's recommended to use Proton.
