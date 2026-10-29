@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Core.Spawnset;
 using DevilDaggersInfo.Tools.Encryption;
 using DevilDaggersInfo.Tools.GameMemory;
 using DevilDaggersInfo.Tools.Networking;
@@ -112,11 +113,48 @@ internal sealed class RecordingLogic(
 		}
 
 		// Determine whether to upload the run or not.
+		// The player also technically "dies" when TA/Race is finished.
 		bool justDied = !mainBlock.IsPlayerAlive && mainBlockPrevious.IsPlayerAlive;
-		if (justDied && (mainBlock.GameMode == 0 || mainBlock.TimeAttackOrRaceFinished))
+		if (justDied)
 		{
-			_runToUpload = mainBlock;
-			AddTimestamp(mainBlock);
+			TriggerUpload(mainBlock);
+		}
+	}
+
+	private void TriggerUpload(MainBlock mainBlock)
+	{
+		GameMode? gameMode = mainBlock.GetGameMode();
+		if (gameMode.HasValue)
+		{
+			// Happy flow: the memory is valid and complete.
+			// Conditions:
+			// - Always in Survival
+			// - TA/Race only when TimeAttackOrRaceFinished is true
+			if (gameMode.Value == GameMode.Survival || mainBlock.TimeAttackOrRaceFinished)
+			{
+				_runToUpload = mainBlock;
+				AddTimestamp(mainBlock);
+			}
+		}
+
+		// TODO: Remove this else block when/if the Linux build gets an update.
+		else
+		{
+			// Outdated Linux build (or otherwise corrupted game mode):
+			// Neither GameMode nor TimeAttackOrRaceFinished are set properly in this case.
+
+			// We need to patch the memory here to allow (most) uploads.
+
+			// It should *never* upload runs for TA/Race in case of a normal death (this would be an unfinished run).
+			// This is already rejected by the server (it only accepts TA/Race submissions when TimeAttackOrRaceFinished is true).
+			MainBlock patched = mainBlock with
+			{
+				GameMode = (byte)GameMode.Survival, // Pretend everything is Survival, so most leaderboards work.
+				TimeAttackOrRaceFinished = false, // Prevent accidentally uploading TA/Race in case of corrupt memory.
+			};
+
+			_runToUpload = patched;
+			AddTimestamp(patched);
 		}
 	}
 

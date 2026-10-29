@@ -1,8 +1,9 @@
+using DevilDaggersInfo.Core.Spawnset;
 using System.Text;
 
 namespace DevilDaggersInfo.Tools.GameMemory;
 
-internal readonly record struct MainBlock
+internal record struct MainBlock
 {
 	public readonly string Marker = string.Empty;
 
@@ -101,8 +102,9 @@ internal readonly record struct MainBlock
 
 	// These are not available on the latest Linux and Mac builds,
 	// despite FormatVersion being 1 on every build (including Windows).
-	public readonly byte GameMode;
-	public readonly bool TimeAttackOrRaceFinished;
+	// TODO: Once this is resolved, make these readonly again (as well as the struct itself).
+	public byte GameMode;
+	public bool TimeAttackOrRaceFinished;
 
 	public MainBlock(byte[] buffer)
 	{
@@ -220,5 +222,16 @@ internal readonly record struct MainBlock
 	public bool ArePlayersEqual(MainBlock other)
 	{
 		return IsReplay == other.IsReplay && (IsReplay ? ReplayPlayerId == other.ReplayPlayerId : PlayerId == other.PlayerId);
+	}
+
+	public GameMode? GetGameMode()
+	{
+		return GameMode switch
+		{
+			0 => Core.Spawnset.GameMode.Survival,
+			1 => Core.Spawnset.GameMode.TimeAttack,
+			2 => Core.Spawnset.GameMode.Race,
+			_ => null,
+		};
 	}
 }
