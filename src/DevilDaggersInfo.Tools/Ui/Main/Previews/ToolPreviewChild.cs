@@ -57,7 +57,7 @@ internal sealed class ToolPreviewChild(FontService fontService)
 		ImGui.EndTable();
 
 		ImGui.Spacing();
-		ImGui.Separator();
+		ImGui.SeparatorText("Features");
 		ImGui.Spacing();
 
 		toolPreview.Render();

@@ -19,18 +19,16 @@ internal sealed class AssetEditorPreview : IToolPreview
 
 	public void Render()
 	{
-		ImGui.Text(
-			"""
-			Create and edit mods for Devil Daggers.
+		ImGui.Text("Create and edit mods for Devil Daggers.");
+		ImGui.Spacing();
 
-			The following assets can be changed:
-			""");
-
+		ImGui.Text("The following assets can be changed:");
 		ImGui.BulletTextWrapped("Audio"u8);
 		ImGui.BulletTextWrapped("Meshes"u8);
 		ImGui.BulletTextWrapped("Object bindings"u8);
 		ImGui.BulletTextWrapped("Shaders"u8);
 		ImGui.BulletTextWrapped("Textures"u8);
+		ImGui.Spacing();
 
 		ImGui.TextColored(new Vector4(1, 1, 0, 1), "Some mods are prohibited, meaning that you cannot submit scores over 1000 seconds with them.");
 	}

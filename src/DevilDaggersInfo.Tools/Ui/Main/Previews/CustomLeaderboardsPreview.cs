@@ -19,35 +19,28 @@ internal sealed class CustomLeaderboardsPreview : IToolPreview
 		ImGui.TextColored(new Vector4(1, 1, 0, 1), "Partially supported on native Linux");
 		ImGui.SameLine();
 		ImGui.TextColored(new Vector4(0.75f, 0.75f, 0.75f, 1), "(?)");
-		if (ImGui.IsItemHovered())
+		if (ImGui.IsItemHovered() && ImGui.BeginTooltip())
 		{
-			ImGui.SetTooltip(
-				"""
-				Most leaderboards will work, but the Time Attack and Race game modes can't be made to work.
+			ImGui.Text("Most leaderboards will work, but the Time Attack and Race game modes can't be made to work.");
+			ImGui.Text("This is because the game's native Linux build isn't up-to-date and doesn't expose the necessary memory.");
+			ImGui.Text("The Proton build is therefore recommended.");
 
-				This is because the game's native Linux build isn't up-to-date and doesn't expose the necessary memory.
-
-				The Proton build is therefore recommended.
-				""");
+			ImGui.EndTooltip();
 		}
 	}
 
 	public void Render()
 	{
-		ImGui.Text(
-			"""
-			Custom leaderboards are leaderboards for custom spawnsets.
+		ImGui.Text("Custom leaderboards are leaderboards for custom spawnsets.");
+		ImGui.Spacing();
 
-			All game modes are supported:
-			""");
+		ImGui.Text("All game modes are supported:");
 		ImGui.BulletTextWrapped("Survival"u8);
 		ImGui.BulletTextWrapped("Time Attack"u8);
 		ImGui.BulletTextWrapped("Race"u8);
-
 		ImGui.Spacing();
 
 		ImGui.Text("Leaderboards can be sorted by:");
-
 		ImGui.BulletTextWrapped("Time"u8);
 		ImGui.BulletTextWrapped("Gems collected"u8);
 		ImGui.BulletTextWrapped("Gems despawned"u8);
@@ -56,18 +49,15 @@ internal sealed class CustomLeaderboardsPreview : IToolPreview
 		ImGui.BulletTextWrapped("Enemies alive"u8);
 		ImGui.BulletTextWrapped("Homing stored"u8);
 		ImGui.BulletTextWrapped("Homing eaten"u8);
-
 		ImGui.Spacing();
 
-		ImGui.Text(
-			"""
-			Criteria can also be set for custom leaderboards, meaning that in order to submit a score, it has to meet all the criteria.
+		ImGui.Text("Criteria can also be set for custom leaderboards, meaning that in order to submit a score, it has to meet all the criteria.");
+		ImGui.Spacing();
 
-			This applies to almost every stat in the game, including specific enemy kill counts.
+		ImGui.Text("This applies to almost every stat in the game, including specific enemy kill counts.");
+		ImGui.Spacing();
 
-			Examples:
-			""");
-
+		ImGui.Text("Examples:");
 		ImGui.BulletTextWrapped("Gems eaten must be less than 30"u8);
 		ImGui.BulletTextWrapped("Squid I kills must be equal to 0"u8);
 		ImGui.BulletTextWrapped("Skull II kills must be greater than or equal to 3"u8);

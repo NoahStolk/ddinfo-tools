@@ -19,17 +19,16 @@ internal sealed class ReplayEditorPreview : IToolPreview
 
 	public void Render()
 	{
-		ImGui.Text(
-			"""
-			Create, analyze, and edit replays for Devil Daggers.
+		ImGui.Text("Create, analyze, and edit replays for Devil Daggers.");
+		ImGui.Spacing();
 
-			You can download replays from the official leaderboards and save them as a local replay.
+		ImGui.Text("You can download replays from the official leaderboards and save them as a local replay.");
+		ImGui.Spacing();
 
-			This tool will likely not be useful for most players; it is mostly intended to figure out how some things in the game work.
+		ImGui.Text("This tool will likely not be useful for most players; it is mostly intended to figure out how some things in the game work.");
+		ImGui.Spacing();
 
-			It could be used to:
-			""");
-
+		ImGui.Text("It could be used to:");
 		ImGui.BulletTextWrapped("Figure out how homing daggers, gems, or certain enemies behave under certain conditions, since their behavior is implicit and cannot reliably be modified using replays."u8);
 		ImGui.BulletTextWrapped("Figure out how certain movement techniques work in more detail (for optimizing race spawnsets)."u8);
 		ImGui.BulletTextWrapped("Detect cheated replays (for example, shotgun tech intervals could be analyzed to detect if a player is using a macro)."u8);

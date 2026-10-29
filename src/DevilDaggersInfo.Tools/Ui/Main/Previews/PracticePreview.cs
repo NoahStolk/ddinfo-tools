@@ -19,26 +19,21 @@ internal sealed class PracticePreview : IToolPreview
 
 	public void Render()
 	{
-		ImGui.Text(
-			"""
-			Practice the main game by starting at any point in time with any hand upgrade and amount of gems/homing, using custom spawnsets that are automatically generated.
+		ImGui.Text("Practice the main game by starting at any point in time with any hand upgrade and amount of gems/homing, using custom spawnsets that are automatically generated.");
+		ImGui.Spacing();
 
-			Save templates to quickly load your desired practice settings.
+		ImGui.Text("Save templates to quickly load your desired practice settings.");
+		ImGui.Spacing();
 
-			View live data from the current run:
-			""");
-
+		ImGui.Text("View live data from the current run:");
 		ImGui.BulletTextWrapped("Splits"u8);
 		ImGui.BulletTextWrapped("Homing usage"u8);
 		ImGui.BulletTextWrapped("Gem collection"u8);
-
 		ImGui.Spacing();
 
-		ImGui.Text(
-			"""
-			Note that using practice will not submit your score to the official leaderboards.
+		ImGui.TextColored(new Vector4(1, 1, 0, 1), "Note that using practice will not submit your score to the official leaderboards.");
+		ImGui.Spacing();
 
-			Spawnsets can only be used to practice the main game and play custom levels. They cannot be used to cheat and are completely safe to use.
-			""");
+		ImGui.TextColored(new Vector4(1, 1, 0, 1), "Spawnsets can only be used to practice the main game and play custom levels. They cannot be used to cheat and are completely safe to use.");
 	}
 }
