@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Extensions;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -25,11 +26,11 @@ internal sealed class AssetEditorPreview : IToolPreview
 			The following assets can be changed:
 			""");
 
-		ImGui.BulletText("Audio");
-		ImGui.BulletText("Meshes");
-		ImGui.BulletText("Object bindings");
-		ImGui.BulletText("Shaders");
-		ImGui.BulletText("Textures");
+		ImGui.BulletTextWrapped("Audio"u8);
+		ImGui.BulletTextWrapped("Meshes"u8);
+		ImGui.BulletTextWrapped("Object bindings"u8);
+		ImGui.BulletTextWrapped("Shaders"u8);
+		ImGui.BulletTextWrapped("Textures"u8);
 
 		ImGui.TextColored(new Vector4(1, 1, 0, 1), "Some mods are prohibited, meaning that you cannot submit scores over 1000 seconds with them.");
 	}

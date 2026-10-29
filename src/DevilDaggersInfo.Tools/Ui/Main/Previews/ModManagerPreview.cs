@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Extensions;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -25,10 +26,10 @@ internal sealed class ModManagerPreview : IToolPreview
 			Features:
 			""");
 
-		ImGui.BulletText("Enable/disable mods and change their load order to further customize the game.");
-		ImGui.BulletText("Browse and find new mods to install directly from the devildaggers.info website.");
-		ImGui.BulletText("View which assets are contained in each mod, and which ones are prohibited for 1000+ scores.");
-		ImGui.BulletText("Enable/disable prohibited assets for each mod.");
-		ImGui.BulletText("View all effective game assets and their source mod, including whether they're being overridden by another mod.");
+		ImGui.BulletTextWrapped("Enable/disable mods and change their load order to further customize the game."u8);
+		ImGui.BulletTextWrapped("Browse and find new mods to install directly from the devildaggers.info website."u8);
+		ImGui.BulletTextWrapped("View which assets are contained in each mod, and which ones are prohibited for 1000+ scores."u8);
+		ImGui.BulletTextWrapped("Enable/disable prohibited assets for each mod."u8);
+		ImGui.BulletTextWrapped("View all effective game assets and their source mod, including whether they're being overridden by another mod."u8);
 	}
 }

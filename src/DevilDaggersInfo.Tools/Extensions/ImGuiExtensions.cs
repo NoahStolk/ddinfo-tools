@@ -101,5 +101,12 @@ internal static class ImGuiExtensions
 			byte a = (byte)((i >> 24) & 0xFF);
 			return new Vector4(r / 255f, g / 255f, b / 255f, a / 255f);
 		}
+
+		public static void BulletTextWrapped(ReadOnlySpan<byte> text)
+		{
+			ImGui.Bullet();
+			ImGui.SameLine();
+			ImGui.TextWrapped(text);
+		}
 	}
 }

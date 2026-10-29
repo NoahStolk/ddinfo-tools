@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Extensions;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -29,8 +30,8 @@ internal sealed class ReplayEditorPreview : IToolPreview
 			It could be used to:
 			""");
 
-		ImGui.BulletText("Figure out how homing daggers, gems, or certain enemies behave under certain conditions, since their behavior is implicit and cannot reliably be modified using replays.");
-		ImGui.BulletText("Figure out how certain movement techniques work in more detail (for optimizing race spawnsets).");
-		ImGui.BulletText("Detect cheated replays (for example, shotgun tech intervals could be analyzed to detect if a player is using a macro).");
+		ImGui.BulletTextWrapped("Figure out how homing daggers, gems, or certain enemies behave under certain conditions, since their behavior is implicit and cannot reliably be modified using replays."u8);
+		ImGui.BulletTextWrapped("Figure out how certain movement techniques work in more detail (for optimizing race spawnsets)."u8);
+		ImGui.BulletTextWrapped("Detect cheated replays (for example, shotgun tech intervals could be analyzed to detect if a player is using a macro)."u8);
 	}
 }

@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Extensions;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -39,20 +40,20 @@ internal sealed class CustomLeaderboardsPreview : IToolPreview
 
 			All game modes are supported:
 			""");
-		ImGui.BulletText("Survival");
-		ImGui.BulletText("Time Attack");
-		ImGui.BulletText("Race");
+		ImGui.BulletTextWrapped("Survival"u8);
+		ImGui.BulletTextWrapped("Time Attack"u8);
+		ImGui.BulletTextWrapped("Race"u8);
 
 		ImGui.Text("Leaderboards can be sorted by:");
 
-		ImGui.BulletText("Time");
-		ImGui.BulletText("Gems collected");
-		ImGui.BulletText("Gems despawned");
-		ImGui.BulletText("Gems eaten");
-		ImGui.BulletText("Enemies killed");
-		ImGui.BulletText("Enemies alive");
-		ImGui.BulletText("Homing stored");
-		ImGui.BulletText("Homing eaten");
+		ImGui.BulletTextWrapped("Time"u8);
+		ImGui.BulletTextWrapped("Gems collected"u8);
+		ImGui.BulletTextWrapped("Gems despawned"u8);
+		ImGui.BulletTextWrapped("Gems eaten"u8);
+		ImGui.BulletTextWrapped("Enemies killed"u8);
+		ImGui.BulletTextWrapped("Enemies alive"u8);
+		ImGui.BulletTextWrapped("Homing stored"u8);
+		ImGui.BulletTextWrapped("Homing eaten"u8);
 
 		ImGui.Text(
 			"""
@@ -63,10 +64,10 @@ internal sealed class CustomLeaderboardsPreview : IToolPreview
 			Examples:
 			""");
 
-		ImGui.BulletText("Gems eaten must be less than 30");
-		ImGui.BulletText("Squid I kills must be equal to 0");
-		ImGui.BulletText("Skull II kills must be greater than or equal to 3");
-		ImGui.BulletText("Daggers fired must be less than gems collected + 2");
-		ImGui.BulletText("Skull III kills must be greater than Skull I kills + Skull II kills");
+		ImGui.BulletTextWrapped("Gems eaten must be less than 30"u8);
+		ImGui.BulletTextWrapped("Squid I kills must be equal to 0"u8);
+		ImGui.BulletTextWrapped("Skull II kills must be greater than or equal to 3"u8);
+		ImGui.BulletTextWrapped("Daggers fired must be less than gems collected + 2"u8);
+		ImGui.BulletTextWrapped("Skull III kills must be greater than Skull I kills + Skull II kills"u8);
 	}
 }

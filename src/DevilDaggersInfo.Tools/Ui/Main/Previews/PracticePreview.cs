@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Extensions;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -27,9 +28,9 @@ internal sealed class PracticePreview : IToolPreview
 			View live data from the current run:
 			""");
 
-		ImGui.BulletText("Splits");
-		ImGui.BulletText("Homing usage");
-		ImGui.BulletText("Gem collection");
+		ImGui.BulletTextWrapped("Splits"u8);
+		ImGui.BulletTextWrapped("Homing usage"u8);
+		ImGui.BulletTextWrapped("Gem collection"u8);
 
 		ImGui.Text(
 			"""

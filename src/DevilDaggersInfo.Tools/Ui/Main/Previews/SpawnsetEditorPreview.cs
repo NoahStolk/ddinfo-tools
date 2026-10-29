@@ -1,3 +1,4 @@
+using DevilDaggersInfo.Tools.Extensions;
 using Hexa.NET.ImGui;
 using System.Numerics;
 
@@ -25,11 +26,11 @@ internal sealed class SpawnsetEditorPreview : IToolPreview
 			Some things you can do:
 			""");
 
-		ImGui.BulletText("Create your own set of enemy spawns.");
-		ImGui.BulletText("Create a custom arena.");
-		ImGui.BulletText("Start with any hand upgrade.");
-		ImGui.BulletText("Give yourself 10,000 homing daggers.");
-		ImGui.BulletText("Use the Time Attack game mode, where the goal is to kill all enemies as fast as possible.");
+		ImGui.BulletTextWrapped("Create your own set of enemy spawns."u8);
+		ImGui.BulletTextWrapped("Create a custom arena."u8);
+		ImGui.BulletTextWrapped("Start with any hand upgrade."u8);
+		ImGui.BulletTextWrapped("Give yourself 10,000 homing daggers."u8);
+		ImGui.BulletTextWrapped("Use the Time Attack game mode, where the goal is to kill all enemies as fast as possible."u8);
 
 		ImGui.Text(
 			"""
