@@ -15,7 +15,7 @@ internal sealed class PracticeWarning(GameTime? totalTime, bool doNotShowAgain, 
 	public override bool Render()
 	{
 		ImGui.PushFont(fontService.GoetheBold20);
-		ImGui.TextWrapped("IMPORTANT! Read this is you're practicing for 500!");
+		ImGui.TextWrapped("IMPORTANT! Read this if you're practicing for 500!");
 		ImGui.PopFont();
 
 		Separator();
